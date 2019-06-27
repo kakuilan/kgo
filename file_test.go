@@ -9,3 +9,11 @@ func TestIsExist(t *testing.T) {
 		return
 	}
 }
+
+func TestGetExt(t *testing.T) {
+	filename := ""
+	if File.GetExt(filename) !="go" {
+		t.Error("file extension error")
+		return
+	}
+}
