@@ -1,12 +1,37 @@
-# Binaries for programs and plugins
+#dir
+.DS_Store
+.buildpath
+.git
+.gitee
+.idea
+.project
+.settings
+.user.ini
+.vscode
+
+#file
+*.bin
+*.cgo*.c
+*.cgo*.go
+*.dll
+*.dylib
 *.exe
 *.exe~
-*.dll
-*.so
-*.dylib
-
-# Test binary, build with `go test -c`
-*.test
-
-# Output of the go coverage tool, specifically when used with LiteIDE
+*.log
+*.orig
 *.out
+*.patch
+*.pid
+*.pyc
+*.rej
+*.so
+*.test
+*~
+.*.swp
+._*
+.nfs.*
+_cgo_*
+_obj
+_test
+core
+thumbs.db
