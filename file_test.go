@@ -11,7 +11,7 @@ func TestIsExist(t *testing.T) {
 }
 
 func TestGetExt(t *testing.T) {
-	filename := ""
+	filename := "./file.go"
 	if File.GetExt(filename) !="go" {
 		t.Error("file extension error")
 		return
