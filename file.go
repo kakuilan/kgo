@@ -89,3 +89,15 @@ func (kf *LkkFile) IsImg(path string) bool {
 		return false
 	}
 }
+
+// AbsPath returns an absolute representation of path. Works like filepath.Abs
+func (kf *LkkFile) AbsPath(path string) string {
+	fullPath := ""
+	res, err := filepath.Abs(path)
+	if err != nil {
+		fullPath = filepath.Join("/", path)
+	} else {
+		fullPath = res
+	}
+	return fullPath
+}

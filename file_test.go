@@ -147,3 +147,20 @@ func BenchmarkIsImg(b *testing.B) {
 		File.IsImg(filename)
 	}
 }
+
+func TestAbsPath(t *testing.T) {
+	filename := "./testdata/diglett.png"
+	abspath := File.AbsPath(filename)
+	if !File.IsExist(abspath) {
+		t.Error("file not exist")
+		return
+	}
+}
+
+func BenchmarkAbsPath(b *testing.B) {
+	b.ResetTimer()
+	filename := "./testdata/diglett.png"
+	for i:=0;i<b.N;i++{
+		File.AbsPath(filename)
+	}
+}
