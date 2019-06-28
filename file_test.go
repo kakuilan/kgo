@@ -115,3 +115,35 @@ func BenchmarkIsDir(b *testing.B) {
 		File.IsDir(filename)
 	}
 }
+
+func TestIsBinary(t *testing.T) {
+	filename := "./file.go"
+	if File.IsBinary(filename) {
+		t.Error("file isn`t binary")
+		return
+	}
+}
+
+func BenchmarkIsBinary(b *testing.B) {
+	b.ResetTimer()
+	filename := "./README.md"
+	for i:=0;i<b.N;i++{
+		File.IsBinary(filename)
+	}
+}
+
+func TestIsImg(t *testing.T) {
+	filename := "./testdata/diglett.png"
+	if !File.IsImg(filename) {
+		t.Error("file isn`t img")
+		return
+	}
+}
+
+func BenchmarkIsImg(b *testing.B) {
+	b.ResetTimer()
+	filename := "./testdata/diglett.png"
+	for i:=0;i<b.N;i++{
+		File.IsImg(filename)
+	}
+}
