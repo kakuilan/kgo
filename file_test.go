@@ -25,3 +25,11 @@ func TestGetSize(t *testing.T)  {
 		return
 	}
 }
+
+func TestIsWritable(t *testing.T) {
+	filename := "./README.md"
+	if !File.IsWritable(filename) {
+		t.Error("file can not write")
+		return
+	}
+}
