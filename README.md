@@ -10,6 +10,7 @@ go test -bench=. -run=none
 - https://github.com/b3log/gulu
 - https://github.com/nutzam/zgo
 - https://github.com/bitnami/gonit
+- https://github.com/otiai10/copy
 - https://github.com/polaris1119/goutils
 - https://github.com/LyricTian/lib
 - https://github.com/antongulenko/golib

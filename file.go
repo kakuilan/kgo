@@ -9,7 +9,7 @@ import (
 	"syscall"
 )
 
-// GetExt get the file extension without a dot.
+// GetExt 获取文件扩展名,不包括"."
 func (kf *LkkFile) GetExt(path string) string {
 	suffix := filepath.Ext(path)
 	if suffix != "" {
@@ -18,7 +18,7 @@ func (kf *LkkFile) GetExt(path string) string {
 	return suffix
 }
 
-// GetSize get the length in bytes of file of the specified path.
+// GetSize 获取文件大小(bytes字节)
 func (kf *LkkFile) GetSize(path string) int64 {
 	f, err := os.Stat(path)
 	if nil != err {
@@ -27,13 +27,13 @@ func (kf *LkkFile) GetSize(path string) int64 {
 	return f.Size()
 }
 
-// IsExist determines whether the path spcified by the given is exists.
+// IsExist 路径(文件/目录)是否存在
 func (kf *LkkFile) IsExist(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil || os.IsExist(err)
 }
 
-// Writeable determines whether the path spcified by the given path is writeable.
+// Writeable 路径是否可写
 func (kf *LkkFile) IsWritable(path string) bool {
 	err := syscall.Access(path, syscall.O_RDWR)
 	if err != nil {
@@ -42,7 +42,7 @@ func (kf *LkkFile) IsWritable(path string) bool {
 	return true
 }
 
-// IsReadable determines whether the path spcified by the given path is readable.
+// IsReadable 路径是否可读
 func (kf *LkkFile) IsReadable(path string) bool {
 	err := syscall.Access(path, syscall.O_RDONLY)
 	if err != nil {
@@ -51,7 +51,7 @@ func (kf *LkkFile) IsReadable(path string) bool {
 	return true
 }
 
-// IsFile returns true if path exists and is a file (or a link to a file) and false otherwise
+// IsFile 是否正常的文件(或文件链接)
 func (kf *LkkFile) IsFile(path string) bool {
 	stat, err := os.Stat(path)
 	if err != nil {
@@ -60,7 +60,7 @@ func (kf *LkkFile) IsFile(path string) bool {
 	return stat.Mode().IsRegular()
 }
 
-// IsDir determines whether the specified path is a directory.
+// IsDir 是否目录
 func (kf *LkkFile) IsDir(path string) bool {
 	f, err := os.Lstat(path)
 	if os.IsNotExist(err) {
@@ -71,7 +71,7 @@ func (kf *LkkFile) IsDir(path string) bool {
 	return f.IsDir()
 }
 
-// IsBinary determines whether the specified content is a binary file content.
+// IsBinary 是否二进制文件
 func (kf *LkkFile) IsBinary(content string) bool {
 	for _, b := range content {
 		if 0 == b {
@@ -81,7 +81,7 @@ func (kf *LkkFile) IsBinary(content string) bool {
 	return false
 }
 
-// IsImg determines whether the specified path is a image.
+// IsImg 是否图片文件
 func (kf *LkkFile) IsImg(path string) bool {
 	ext := kf.GetExt(path)
 	switch ext {
@@ -104,12 +104,22 @@ func (kf *LkkFile) AbsPath(path string) string {
 	return fullPath
 }
 
-// CopyFile copies the source file to the dest file.
-func (kf *LkkFile) CopyFile(source string, dest string) (int64, error) {
-	sourceFileStat, err := os.Stat(source)
+// CopyFile 拷贝源文件到目标文件,cover为枚举(FCOVER_ALLOW、FCOVER_IGNORE、FCOVER_DENY)
+func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int64, error) {
+	if cover != FCOVER_ALLOW {
+		if _, err := os.Stat(dest); err ==nil {
+			if cover == FCOVER_IGNORE {
+				return 0, nil
+			}else if cover == FCOVER_DENY {
+				return 0, fmt.Errorf("File %s already exists.", dest)
+			}
+		}
+	}
+
+	sourceStat, err := os.Stat(source)
 	if err != nil {
 		return 0, err
-	}else if !sourceFileStat.Mode().IsRegular() {
+	}else if !sourceStat.Mode().IsRegular() {
 		return 0, fmt.Errorf("%s is not a regular file", source)
 	}
 
@@ -127,8 +137,13 @@ func (kf *LkkFile) CopyFile(source string, dest string) (int64, error) {
 
 	nBytes, err := io.Copy(destfile, sourcefile)
 	if err == nil {
-		err = os.Chmod(dest, sourceFileStat.Mode())
+		err = os.Chmod(dest, sourceStat.Mode())
 	}
 
 	return nBytes, err
+}
+
+
+func (kf *LkkFile) FastCopy(source string, dest string, cover LkkFileCover) (int64, error) {
+
 }
