@@ -1,7 +1,9 @@
 package gohelper
 
 import (
+	"io"
 	"os"
+	"fmt"
 	"path/filepath"
 	"strings"
 	"syscall"
@@ -100,4 +102,33 @@ func (kf *LkkFile) AbsPath(path string) string {
 		fullPath = res
 	}
 	return fullPath
+}
+
+// CopyFile copies the source file to the dest file.
+func (kf *LkkFile) CopyFile(source string, dest string) (int64, error) {
+	sourceFileStat, err := os.Stat(source)
+	if err != nil {
+		return 0, err
+	}else if !sourceFileStat.Mode().IsRegular() {
+		return 0, fmt.Errorf("%s is not a regular file", source)
+	}
+
+	sourcefile, err := os.Open(source)
+	if err != nil {
+		return 0, err
+	}
+	defer sourcefile.Close()
+
+	destfile, err := os.Create(dest)
+	if err != nil {
+		return 0, err
+	}
+	defer destfile.Close()
+
+	nBytes, err := io.Copy(destfile, sourcefile)
+	if err == nil {
+		err = os.Chmod(dest, sourceFileStat.Mode())
+	}
+
+	return nBytes, err
 }
