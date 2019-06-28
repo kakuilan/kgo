@@ -1,10 +1,16 @@
 # go-helper
 go 函数库
 
+### 压测
+```shell
+go test -bench=. -run=none
+```
 
 ### 参考项目
 - https://github.com/b3log/gulu
 - https://github.com/nutzam/zgo
+- https://github.com/bitnami/gonit
+- https://github.com/polaris1119/goutils
 - https://github.com/LyricTian/lib
 - https://github.com/antongulenko/golib
 - https://github.com/bocajim/helpers
