@@ -184,3 +184,23 @@ func BenchmarkCopyFile(b *testing.B) {
 		_,_ = File.CopyFile(src, des, FCOVER_ALLOW)
 	}
 }
+
+func TestFastCopy(t *testing.T) {
+	src := "./testdata/diglett.png"
+	des := "./testdata/diglett_copy.png"
+
+	num, err := File.FastCopy(src, des, FCOVER_ALLOW)
+	if err != nil || num ==0 {
+		t.Error("copy file fail")
+		return
+	}
+}
+
+func BenchmarkFastCopy(b *testing.B) {
+	b.ResetTimer()
+	src := "./testdata/diglett.png"
+	des := "./testdata/diglett_copy.png"
+	for i:=0;i<b.N;i++{
+		_,_ = File.FastCopy(src, des, FCOVER_ALLOW)
+	}
+}

@@ -92,7 +92,7 @@ func (kf *LkkFile) IsImg(path string) bool {
 	}
 }
 
-// AbsPath returns an absolute representation of path. Works like filepath.Abs
+// AbsPath 获取绝对路径
 func (kf *LkkFile) AbsPath(path string) string {
 	fullPath := ""
 	res, err := filepath.Abs(path)
@@ -106,14 +106,8 @@ func (kf *LkkFile) AbsPath(path string) string {
 
 // CopyFile 拷贝源文件到目标文件,cover为枚举(FCOVER_ALLOW、FCOVER_IGNORE、FCOVER_DENY)
 func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int64, error) {
-	if cover != FCOVER_ALLOW {
-		if _, err := os.Stat(dest); err ==nil {
-			if cover == FCOVER_IGNORE {
-				return 0, nil
-			}else if cover == FCOVER_DENY {
-				return 0, fmt.Errorf("File %s already exists.", dest)
-			}
-		}
+	if(source == dest) {
+		return 0, nil
 	}
 
 	sourceStat, err := os.Stat(source)
@@ -121,6 +115,17 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 		return 0, err
 	}else if !sourceStat.Mode().IsRegular() {
 		return 0, fmt.Errorf("%s is not a regular file", source)
+	}
+
+	destStat, err := os.Stat(dest)
+	if err == nil {
+		if os.SameFile(sourceStat, destStat) {
+			//return 0, nil
+		}else if cover == FCOVER_IGNORE {
+			return 0, nil
+		}else if cover == FCOVER_DENY {
+			return 0, fmt.Errorf("File %s already exists", dest)
+		}
 	}
 
 	sourcefile, err := os.Open(source)
@@ -143,7 +148,87 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 	return nBytes, err
 }
 
-
 func (kf *LkkFile) FastCopy(source string, dest string, cover LkkFileCover) (int64, error) {
+	if(source == dest) {
+		return 0, nil
+	}
 
+	sourceStat, err := os.Stat(source)
+	if err != nil {
+		return 0, err
+	}else if !sourceStat.Mode().IsRegular() {
+		return 0, fmt.Errorf("%s is not a regular file", source)
+	}
+
+	destStat, err := os.Stat(dest)
+	if err == nil {
+		if os.SameFile(sourceStat, destStat) {
+			//return 0, nil
+		}else if cover == FCOVER_IGNORE {
+			return 0, nil
+		}else if cover == FCOVER_DENY {
+			return 0, fmt.Errorf("File %s already exists", dest)
+		}
+	}
+
+	sourcefile, err := os.Open(source)
+	if err != nil {
+		return 0, err
+	}
+	defer sourcefile.Close()
+
+	destfile, err := os.Create(dest)
+	if err != nil {
+		return 0, err
+	}
+	defer destfile.Close()
+
+	var bufferSize,nBytes int
+	sourceSize := sourceStat.Size()
+	if sourceSize < 524288 {
+		bufferSize = 51200
+	}else if sourceSize < 1048576 {
+		bufferSize = 10240
+	}else if sourceSize < 10485760 {
+		bufferSize = 102400
+	}else{
+		perSize := int(sourceSize / 1000)
+		if perSize > 51200 {
+			bufferSize = 51200
+		}else{
+			bufferSize = perSize
+		}
+	}
+
+	buf := make([]byte, bufferSize)
+	for {
+		n, err := sourcefile.Read(buf)
+		if err != nil && err != io.EOF {
+			return int64(nBytes), err
+		}
+		if n == 0 {
+			break
+		}
+
+		if _, err := destfile.Write(buf[:n]); err != nil {
+			return int64(nBytes), err
+		}
+
+		nBytes += n
+	}
+
+	return int64(nBytes), err
+}
+
+// CopyLink 拷贝链接
+func (kf *LkkFile) CopyLink(source string, dest string) error {
+	if(source == dest) {
+		return nil
+	}
+
+	source, err := os.Readlink(source)
+	if err != nil {
+		return err
+	}
+	return os.Symlink(source, dest)
 }
