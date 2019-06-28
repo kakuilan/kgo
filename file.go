@@ -42,10 +42,11 @@ func(kf *LkkFile) IsWritable(path string) bool {
 
 // IsReadable determines whether the path spcified by the given path is readable.
 func(kf *LkkFile) IsReadable(path string) bool {
-	if !kf.IsExist(path) {
-		return false
+	err := syscall.Access(path, syscall.O_RDONLY)
+	if err != nil {
+		return  false
 	}
-	return syscall.Access(path, syscall.O_RDONLY) == nil
+	return true
 }
 
 // IsFile returns true if path exists and is a file (or a link to a file) and false otherwise
@@ -65,6 +66,5 @@ func (kf *LkkFile) IsDir(path string) bool {
 	}else if nil != err {
 		return false
 	}
-
 	return f.IsDir()
 }
