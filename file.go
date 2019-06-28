@@ -4,11 +4,12 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"syscall"
 )
 
-// IsExist determines whether the file spcified by the given path is exists.
-func(* LkkFile)  IsExist(filepath string) bool {
-	_, err := os.Stat(filepath)
+// IsExist determines whether the path spcified by the given is exists.
+func(* LkkFile)  IsExist(path string) bool {
+	_, err := os.Stat(path)
 	return err == nil || os.IsExist(err)
 }
 
@@ -32,3 +33,12 @@ func(* LkkFile) GetSize(path string) int64 {
 	return f.Size()
 }
 
+// Writeable determines whether the path spcified by the given path is writeable.
+func(* LkkFile) IsWritable(path string) bool {
+	err := syscall.Access(path, syscall.O_RDWR)
+	if err != nil {
+		return false
+	}
+
+	return true
+}
