@@ -17,3 +17,11 @@ func TestGetExt(t *testing.T) {
 		return
 	}
 }
+
+func TestGetSize(t *testing.T)  {
+	filename := "./file.go"
+	if File.GetSize(filename) <=0 {
+		t.Error("file size error")
+		return
+	}
+}
