@@ -1,5 +1,6 @@
-# go-helper
-go 函数库
+# kgo
+k`s golang helper/library/utils  
+golang 函数库/工具集
 
 ### 压测
 ```shell
