@@ -2,8 +2,11 @@
 k`s golang helper/library/utils  
 golang 函数库/工具集
 
-### 压测
+### 测试
 ```shell
+go test
+
+#压测
 time go test -bench=. -run=none
 time go test -v -bench=. -cpu=4 -benchtime="10s" -timeout="15s" -benchmem
 
