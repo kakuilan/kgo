@@ -175,6 +175,7 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 	return nBytes, err
 }
 
+// FastCopy fast copies the source file to the dest file,no safety check.
 func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
 	sourceFile, err := os.Open(source)
 	if err != nil {
