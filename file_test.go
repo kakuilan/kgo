@@ -20,19 +20,19 @@ func BenchmarkGetExt(b *testing.B) {
 	}
 }
 
-func TestGetSize(t *testing.T)  {
+func TestFileSize(t *testing.T)  {
 	filename := "./file.go"
-	if KFile.GetSize(filename) <=0 {
+	if KFile.FileSize(filename) <=0 {
 		t.Error("file size error")
 		return
 	}
 }
 
-func BenchmarkGetSize(b *testing.B) {
+func BenchmarkFileSize(b *testing.B) {
 	b.ResetTimer()
 	filename := "./README.md"
 	for i:=0;i<b.N;i++{
-		KFile.GetSize(filename)
+		KFile.FileSize(filename)
 	}
 }
 
