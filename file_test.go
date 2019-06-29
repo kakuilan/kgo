@@ -38,6 +38,17 @@ func BenchmarkFileSize(b *testing.B) {
 	}
 }
 
+func TestDirSize(t *testing.T)  {
+	dirpath := "./"
+	size := KFile.DirSize(dirpath)
+	println(size)
+	if size==0 {
+		t.Error("dir size error")
+		return
+	}
+}
+
+
 func TestIsExist(t *testing.T) {
 	filename := "./file.go"
 	if !KFile.IsExist(filename) {
@@ -209,7 +220,7 @@ func BenchmarkFastCopy(b *testing.B) {
 }
 
 func TestCopyLink(t *testing.T) {
-	cmd := exec.Command("/bin/bash", "-c", "ln -s ./testdata/diglett.png ./testdata/diglett-lnk")
+	cmd := exec.Command("/bin/bash", "-c", "ln -sf ./testdata/diglett.png ./testdata/diglett-lnk")
 	_ = cmd.Run()
 
 	src := "./testdata/diglett-lnk"
@@ -222,3 +233,12 @@ func TestCopyLink(t *testing.T) {
 	}
 }
 
+func BenchmarkCopyLink(b *testing.B) {
+	b.ResetTimer()
+	src := "./testdata/diglett-lnk"
+	des := ""
+	for i:=0;i<b.N;i++{
+		des = fmt.Sprintf("./testdata/diglett-lnk_%d.copy", i)
+		_ = KFile.CopyLink(src, des)
+	}
+}

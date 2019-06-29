@@ -27,6 +27,22 @@ func (kf *LkkFile) FileSize(path string) int64 {
 	return f.Size()
 }
 
+// DirSize get the length in bytes of the directory.
+func (kf *LkkFile) DirSize(path string) int64 {
+	var size int64
+	_ = filepath.Walk(path, func(_ string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() {
+			size += info.Size()
+		}
+		return err
+	})
+	return size
+}
+
+
 // IsExist determines whether the path is exists.
 func (kf *LkkFile) IsExist(path string) bool {
 	_, err := os.Stat(path)
