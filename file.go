@@ -9,7 +9,7 @@ import (
 	"syscall"
 )
 
-// GetExt 获取文件扩展名,不包括"."
+// GetExt get the file extension without a dot.
 func (kf *LkkFile) GetExt(path string) string {
 	suffix := filepath.Ext(path)
 	if suffix != "" {
@@ -18,8 +18,8 @@ func (kf *LkkFile) GetExt(path string) string {
 	return suffix
 }
 
-// GetSize 获取文件大小(bytes字节)
-func (kf *LkkFile) GetSize(path string) int64 {
+// FileSize get the length in bytes of the file.
+func (kf *LkkFile) FileSize(path string) int64 {
 	f, err := os.Stat(path)
 	if nil != err {
 		return -1
@@ -27,13 +27,13 @@ func (kf *LkkFile) GetSize(path string) int64 {
 	return f.Size()
 }
 
-// IsExist 路径(文件/目录)是否存在
+// IsExist determines whether the path is exists.
 func (kf *LkkFile) IsExist(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil || os.IsExist(err)
 }
 
-// Writeable 路径是否可写
+// Writeable determines whether the path is writeable.
 func (kf *LkkFile) IsWritable(path string) bool {
 	err := syscall.Access(path, syscall.O_RDWR)
 	if err != nil {
@@ -42,7 +42,7 @@ func (kf *LkkFile) IsWritable(path string) bool {
 	return true
 }
 
-// IsReadable 路径是否可读
+// IsReadable determines whether the path is readable.
 func (kf *LkkFile) IsReadable(path string) bool {
 	err := syscall.Access(path, syscall.O_RDONLY)
 	if err != nil {
@@ -51,7 +51,7 @@ func (kf *LkkFile) IsReadable(path string) bool {
 	return true
 }
 
-// IsFile 是否正常的文件(或文件链接)
+// IsFile returns true if path exists and is a file (or a link to a file) and false otherwise
 func (kf *LkkFile) IsFile(path string) bool {
 	stat, err := os.Stat(path)
 	if err != nil {
@@ -60,7 +60,7 @@ func (kf *LkkFile) IsFile(path string) bool {
 	return stat.Mode().IsRegular()
 }
 
-// IsDir 是否目录
+// IsDir determines whether the path is a directory.
 func (kf *LkkFile) IsDir(path string) bool {
 	f, err := os.Lstat(path)
 	if os.IsNotExist(err) {
@@ -71,7 +71,7 @@ func (kf *LkkFile) IsDir(path string) bool {
 	return f.IsDir()
 }
 
-// IsBinary 是否二进制文件
+// IsBinary determines whether the content is a binary file content.
 func (kf *LkkFile) IsBinary(content string) bool {
 	for _, b := range content {
 		if 0 == b {
@@ -81,7 +81,7 @@ func (kf *LkkFile) IsBinary(content string) bool {
 	return false
 }
 
-// IsImg 是否图片文件
+// IsImg determines whether the path is a image.
 func (kf *LkkFile) IsImg(path string) bool {
 	ext := kf.GetExt(path)
 	switch ext {
@@ -92,7 +92,7 @@ func (kf *LkkFile) IsImg(path string) bool {
 	}
 }
 
-// AbsPath 获取绝对路径
+// AbsPath returns an absolute representation of path. Works like filepath.Abs
 func (kf *LkkFile) AbsPath(path string) string {
 	fullPath := ""
 	res, err := filepath.Abs(path)
@@ -104,7 +104,7 @@ func (kf *LkkFile) AbsPath(path string) string {
 	return fullPath
 }
 
-// CopyFile 拷贝源文件到目标文件,cover为枚举(FCOVER_ALLOW、FCOVER_IGNORE、FCOVER_DENY)
+// CopyFile copies the source file to the dest file,cover is enum(FCOVER_ALLOW、FCOVER_IGNORE、FCOVER_DENY)
 func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int64, error) {
 	if(source == dest) {
 		return 0, nil
@@ -220,7 +220,7 @@ func (kf *LkkFile) FastCopy(source string, dest string, cover LkkFileCover) (int
 	return int64(nBytes), err
 }
 
-// CopyLink 拷贝链接
+// CopyLink copy link file.
 func (kf *LkkFile) CopyLink(source string, dest string) error {
 	if(source == dest) {
 		return nil
