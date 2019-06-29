@@ -20,5 +20,5 @@ const (
 
 var (
 	// File utilities
-	File LkkFile
+	KFile LkkFile
 )

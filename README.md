@@ -4,7 +4,7 @@ golang 函数库/工具集
 
 ### 压测
 ```shell
-go test -bench=. -run=none
+time go test -bench=. -run=none
 ```
 
 ### 参考项目
@@ -40,3 +40,4 @@ go test -bench=. -run=none
 - https://github.com/sohaha/zlsgo
 - https://github.com/stephanbaker/go-simpletime
 - https://github.com/vence722/convert
+- https://github.com/keysonZZZ/kgo
