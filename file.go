@@ -72,6 +72,7 @@ func (kf *LkkFile) IsDir(path string) bool {
 }
 
 // IsBinary determines whether the content is a binary file content.
+// TODO 转到字符串中
 func (kf *LkkFile) IsBinary(content string) bool {
 	for _, b := range content {
 		if 0 == b {
@@ -117,100 +118,86 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 		return 0, fmt.Errorf("%s is not a regular file", source)
 	}
 
-	destStat, err := os.Stat(dest)
-	if err == nil {
-		if os.SameFile(sourceStat, destStat) {
-			//return 0, nil
-		}else if cover == FCOVER_IGNORE {
-			return 0, nil
-		}else if cover == FCOVER_DENY {
-			return 0, fmt.Errorf("File %s already exists", dest)
+	if cover != FCOVER_ALLOW {
+		if _, err := os.Stat(dest); err == nil {
+			if cover == FCOVER_IGNORE {
+				return 0, nil
+			}else if cover == FCOVER_DENY {
+				return 0, fmt.Errorf("File %s already exists", dest)
+			}
 		}
 	}
 
-	sourcefile, err := os.Open(source)
+	sourceFile, err := os.Open(source)
 	if err != nil {
 		return 0, err
 	}
-	defer sourcefile.Close()
+	defer sourceFile.Close()
 
-	destfile, err := os.Create(dest)
+	destFile, err := os.Create(dest)
 	if err != nil {
 		return 0, err
 	}
-	defer destfile.Close()
+	defer destFile.Close()
 
-	nBytes, err := io.Copy(destfile, sourcefile)
-	if err == nil {
-		err = os.Chmod(dest, sourceStat.Mode())
+	var nBytes int64
+	sourceSize := sourceStat.Size()
+	if(sourceSize <= 1048576) { //1M以内小文件使用buffer拷贝
+		var total int  =0
+		var bufferSize int = 102400
+		if sourceSize < 524288 {
+			bufferSize = 51200
+		}
+
+		buf := make([]byte, bufferSize)
+		for {
+			n, err := sourceFile.Read(buf)
+			if err != nil && err != io.EOF {
+				return int64(total), err
+			}else if n == 0 {
+				break
+			}
+
+			if _, err := destFile.Write(buf[:n]); err != nil {
+				return int64(total), err
+			}
+
+			total += n
+		}
+		nBytes = int64(total)
+	}else{
+		nBytes, err = io.Copy(destFile, sourceFile)
+		if err == nil {
+			err = os.Chmod(dest, sourceStat.Mode())
+		}
 	}
 
 	return nBytes, err
 }
 
-func (kf *LkkFile) FastCopy(source string, dest string, cover LkkFileCover) (int64, error) {
-	if(source == dest) {
-		return 0, nil
-	}
-
-	sourceStat, err := os.Stat(source)
-	if err != nil {
-		return 0, err
-	}else if !sourceStat.Mode().IsRegular() {
-		return 0, fmt.Errorf("%s is not a regular file", source)
-	}
-
-	destStat, err := os.Stat(dest)
-	if err == nil {
-		if os.SameFile(sourceStat, destStat) {
-			//return 0, nil
-		}else if cover == FCOVER_IGNORE {
-			return 0, nil
-		}else if cover == FCOVER_DENY {
-			return 0, fmt.Errorf("File %s already exists", dest)
-		}
-	}
-
-	sourcefile, err := os.Open(source)
+func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
+	sourceFile, err := os.Open(source)
 	if err != nil {
 		return 0, err
 	}
-	defer sourcefile.Close()
 
-	destfile, err := os.Create(dest)
+	destFile, err := os.Create(dest)
 	if err != nil {
 		return 0, err
 	}
-	defer destfile.Close()
 
-	var bufferSize,nBytes int
-	sourceSize := sourceStat.Size()
-	if sourceSize < 524288 {
-		bufferSize = 51200
-	}else if sourceSize < 1048576 {
-		bufferSize = 10240
-	}else if sourceSize < 10485760 {
-		bufferSize = 102400
-	}else{
-		perSize := int(sourceSize / 1000)
-		if perSize > 51200 {
-			bufferSize = 51200
-		}else{
-			bufferSize = perSize
-		}
-	}
-
+	var bufferSize int = 32768
+	var nBytes int = 0
 	buf := make([]byte, bufferSize)
 	for {
-		n, err := sourcefile.Read(buf)
+		n, err := sourceFile.Read(buf)
 		if err != nil && err != io.EOF {
 			return int64(nBytes), err
-		}
-		if n == 0 {
+		}else if n == 0 {
 			break
 		}
 
-		if _, err := destfile.Write(buf[:n]); err != nil {
+		if _, err := destFile.Write(buf[:n]); err != nil {
 			return int64(nBytes), err
 		}
 
