@@ -56,3 +56,4 @@ go tool pprof -http=":8081" [binary] [profile]
 - https://socketloop.com/tutorials/golang-find-file-size-disk-usage-with-filepath-walk
 - https://github.com/karrick/godirwalk
 - http://xahlee.info/golang/golang_walk_dir.html
+- https://github.com/missedone/dugo/blob/master/du.go
