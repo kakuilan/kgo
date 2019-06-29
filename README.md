@@ -5,6 +5,12 @@ golang 函数库/工具集
 ### 压测
 ```shell
 time go test -bench=. -run=none
+time go test -v -bench=. -cpu=4 -benchtime="10s" -timeout="15s" -benchmem
+
+#性能分析
+time go test -bench=. -benchmem -memprofile memprofile.out -cpuprofile profile.out
+go tool pprof profile.out
+go tool pprof -http=":8081" [binary] [profile]
 ```
 
 ### 参考项目
@@ -41,3 +47,9 @@ time go test -bench=. -run=none
 - https://github.com/stephanbaker/go-simpletime
 - https://github.com/vence722/convert
 - https://github.com/keysonZZZ/kgo
+
+- https://stackoverflow.com/questions/32482673/how-to-get-directory-total-size
+- https://www.codesd.com/item/golang-how-to-get-the-total-size-of-the-directory.html
+- https://socketloop.com/tutorials/golang-find-file-size-disk-usage-with-filepath-walk
+- https://github.com/karrick/godirwalk
+- http://xahlee.info/golang/golang_walk_dir.html
