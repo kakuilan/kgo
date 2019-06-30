@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 	"syscall"
+	"github.com/karrick/godirwalk"
 )
 
 // GetExt get the file extension without a dot.
@@ -30,6 +31,7 @@ func (kf *LkkFile) FileSize(path string) int64 {
 // DirSize get the length in bytes of the directory.
 func (kf *LkkFile) DirSize(path string) int64 {
 	var size int64
+	//filepath.Walk压测很慢
 	_ = filepath.Walk(path, func(_ string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -41,6 +43,34 @@ func (kf *LkkFile) DirSize(path string) int64 {
 	})
 	return size
 }
+
+
+func (kf *LkkFile) FastDirSize(path string) int64 {
+	var size int64
+
+	_ = godirwalk.Walk(path, &godirwalk.Options{
+		Callback: func(osPathname string, de *godirwalk.Dirent) error {
+			if de.IsDir() {
+				return nil
+			}
+
+			st, err := os.Stat(osPathname)
+			if err != nil {
+				return err
+			}
+
+			size += st.Size()
+			return nil
+		},
+		ErrorCallback: func(osPathname string, err error) godirwalk.ErrorAction {
+			return godirwalk.SkipNode
+		},
+		Unsorted: true,
+	})
+
+	return size
+}
+
 
 
 // IsExist determines whether the path is exists.
