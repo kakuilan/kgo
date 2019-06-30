@@ -41,6 +41,7 @@ func BenchmarkFileSize(b *testing.B) {
 func TestDirSize(t *testing.T)  {
 	dirpath := "./"
 	size := KFile.DirSize(dirpath)
+	println(size)
 	if size==0 {
 		t.Error("dir size error")
 		return
@@ -52,6 +53,24 @@ func BenchmarkDirSize(b *testing.B) {
 	dirpath := "./"
 	for i:=0;i<b.N;i++{
 		_ = KFile.DirSize(dirpath)
+	}
+}
+
+func TestFastDirSize(t *testing.T)  {
+	dirpath := "./"
+	size := KFile.FastDirSize(dirpath)
+	println(size)
+	if size==0 {
+		t.Error("dir size error")
+		return
+	}
+}
+
+func BenchmarkFastDirSize(b *testing.B) {
+	b.ResetTimer()
+	dirpath := "./"
+	for i:=0;i<b.N;i++{
+		_ = KFile.FastDirSize(dirpath)
 	}
 }
 
