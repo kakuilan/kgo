@@ -48,3 +48,19 @@ func BenchmarkStripTags(b *testing.B) {
 		_ = KStr.StripTags(str)
 	}
 }
+
+func TestStringIsBinary(t *testing.T) {
+	filename := "./file.go"
+	if KFile.IsBinary(filename) {
+		t.Error("file isn`t binary")
+		return
+	}
+}
+
+func BenchmarkStringIsBinary(b *testing.B) {
+	b.ResetTimer()
+	filename := "./README.md"
+	for i:=0;i<b.N;i++{
+		KFile.IsBinary(filename)
+	}
+}

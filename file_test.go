@@ -152,7 +152,7 @@ func BenchmarkIsDir(b *testing.B) {
 	}
 }
 
-func TestIsBinary(t *testing.T) {
+func TestFileIsBinary(t *testing.T) {
 	filename := "./file.go"
 	if KFile.IsBinary(filename) {
 		t.Error("file isn`t binary")
@@ -160,7 +160,7 @@ func TestIsBinary(t *testing.T) {
 	}
 }
 
-func BenchmarkIsBinary(b *testing.B) {
+func BenchmarkFileIsBinary(b *testing.B) {
 	b.ResetTimer()
 	filename := "./README.md"
 	for i:=0;i<b.N;i++{
