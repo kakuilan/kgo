@@ -236,3 +236,63 @@ func (kf *LkkFile) CopyLink(source string, dest string) error {
 	}
 	return os.Symlink(source, dest)
 }
+
+// CopyDir copies the source directory to the dest directory,cover is enum(FCOVER_ALLOW、FCOVER_IGNORE、FCOVER_DENY)
+func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int64, error) {
+	sourceInfo, err := os.Stat(source)
+	if err != nil {
+		return 0, err
+	}else if !sourceInfo.IsDir() {
+		return 0, fmt.Errorf("%s is not a directory", source)
+	}
+
+	// create dest dir
+	err = os.MkdirAll(dest, sourceInfo.Mode())
+	if err != nil {
+		return 0, err
+	}
+
+	directory, err := os.Open(source)
+	if err != nil {
+		return 0, err
+	}
+	defer directory.Close()
+
+	objects, err := directory.Readdir(-1)
+	if err != nil {
+		return 0, err
+	}
+
+	var total, nBytes int64
+	for _, obj := range objects {
+		srcFilePath := filepath.Join(source, obj.Name())
+		destFilePath := filepath.Join(dest, obj.Name())
+
+		if obj.IsDir() {
+			// create sub-directories - recursively
+			nBytes, err = kf.CopyDir(srcFilePath, destFilePath, cover)
+		}else {
+			destFileInfo, err := os.Stat(destFilePath)
+			if err == nil {
+				if cover != FCOVER_ALLOW {
+					continue
+				}else if os.SameFile(obj, destFileInfo) {
+					continue
+				}
+			}
+
+			if obj.Mode()&os.ModeSymlink != 0 {
+				// a link
+				_ = kf.CopyLink(srcFilePath, destFilePath)
+			}  else {
+				nBytes, err = kf.CopyFile(srcFilePath, destFilePath, cover)
+			}
+		}
+
+		if err == nil {
+			total += nBytes
+		}
+	}
+
+	return total, err
+}
