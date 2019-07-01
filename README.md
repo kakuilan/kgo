@@ -54,3 +54,4 @@ go tool pprof -http=":8081" [binary] [profile]
 - https://github.com/stephanbaker/go-simpletime
 - https://github.com/vence722/convert
 - https://github.com/keysonZZZ/kgo
+- https://github.com/denisbrodbeck/machineid
