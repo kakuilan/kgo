@@ -8,6 +8,7 @@ import (
 	"strings"
 	"syscall"
 	"io/ioutil"
+	"encoding/base64"
 )
 
 // GetExt get the file extension without a dot.
@@ -301,4 +302,19 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 	}
 
 	return total, err
+}
+
+// Img2Base64 read the image file, and turn to base64 string.
+func (kf *LkkFile) Img2Base64(path string) (string, error) {
+	if !kf.IsImg(path) {
+		return "", fmt.Errorf("%s is not a image", path)
+	}
+
+	imgBuffer,err := ioutil.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+
+	ext := kf.GetExt(path)
+	return fmt.Sprintf("data:image/%s;base64,%s", ext, base64.StdEncoding.EncodeToString(imgBuffer)),nil
 }

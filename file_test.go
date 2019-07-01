@@ -286,3 +286,21 @@ func BenchmarkCopyDir(b *testing.B) {
 		_,_ = KFile.CopyDir(src, des, FCOVER_ALLOW)
 	}
 }
+
+func TestImg2Base64(t *testing.T) {
+	img := "./testdata/diglett.png"
+	str, err := KFile.Img2Base64(img)
+	println(str)
+	if err != nil || str =="" {
+		t.Error("Img2Base64 fail")
+		return
+	}
+}
+
+func BenchmarkImg2Base64(b *testing.B) {
+	b.ResetTimer()
+	img := "./testdata/diglett.png"
+	for i:=0;i<b.N;i++{
+		_,_ = KFile.Img2Base64(img)
+	}
+}
