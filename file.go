@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 	"syscall"
+	"io/ioutil"
 )
 
 // GetExt get the file extension without a dot.
@@ -16,6 +17,12 @@ func (kf *LkkFile) GetExt(path string) string {
 		return strings.ToLower(suffix[1:])
 	}
 	return suffix
+}
+
+// GetContents reads entire file into a string.
+func (kf *LkkFile) GetContents(path string) (string, error) {
+	data, err := ioutil.ReadFile(path)
+	return string(data), err
 }
 
 // FileSize get the length in bytes of the file.
