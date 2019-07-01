@@ -41,7 +41,6 @@ func BenchmarkFileSize(b *testing.B) {
 func TestDirSize(t *testing.T)  {
 	dirpath := "./"
 	size := KFile.DirSize(dirpath)
-	println(size)
 	if size==0 {
 		t.Error("dir size error")
 		return
@@ -247,5 +246,26 @@ func BenchmarkCopyLink(b *testing.B) {
 	for i:=0;i<b.N;i++{
 		des = fmt.Sprintf("./testdata/diglett-lnk_%d.copy", i)
 		_ = KFile.CopyLink(src, des)
+	}
+}
+
+func TestCopyDir(t *testing.T) {
+	src := "./testdata"
+	des := "./test"
+
+	num, err := KFile.CopyDir(src, des, FCOVER_ALLOW)
+	if err != nil || num ==0 {
+		t.Error("copy directory fail")
+		return
+	}
+}
+
+func BenchmarkCopyDir(b *testing.B) {
+	b.ResetTimer()
+	src := "./testdata"
+	des := "./test"
+	for i:=0;i<b.N;i++{
+		des = fmt.Sprintf("./test/copy_%d", i)
+		_,_ = KFile.CopyDir(src, des, FCOVER_ALLOW)
 	}
 }
