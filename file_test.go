@@ -22,6 +22,24 @@ func BenchmarkGetExt(b *testing.B) {
 	}
 }
 
+func TestGetGetContents(t *testing.T) {
+	filename := "./file.go"
+	cont,_ := KFile.GetContents(filename)
+	println(cont)
+	if  cont=="" {
+		t.Error("file get contents error")
+		return
+	}
+}
+
+func BenchmarkGetContents(b *testing.B) {
+	b.ResetTimer()
+	filename := "./README.md"
+	for i:=0;i<b.N;i++{
+		_,_ = KFile.GetContents(filename)
+	}
+}
+
 func TestFileSize(t *testing.T)  {
 	filename := "./file.go"
 	if KFile.FileSize(filename) <=0 {
