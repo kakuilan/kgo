@@ -9,6 +9,8 @@ import (
 	"syscall"
 	"io/ioutil"
 	"encoding/base64"
+	"mime"
+	"net/http"
 )
 
 // GetExt get the file extension without a dot.
@@ -25,6 +27,31 @@ func (kf *LkkFile) GetContents(path string) (string, error) {
 	data, err := ioutil.ReadFile(path)
 	return string(data), err
 }
+
+// GetMime get the file mime type.
+func (kf *LkkFile) GetMime(path string, fast bool) string {
+	var res string
+	if fast {
+		suffix := filepath.Ext(path)
+		res = mime.TypeByExtension(suffix)
+	}else{
+		srcFile, err := os.Open(path)
+		if err != nil {
+			return res
+		}
+
+		buffer := make([]byte, 512)
+		_, err = srcFile.Read(buffer)
+		if err != nil {
+			return res
+		}
+
+		res = http.DetectContentType(buffer)
+	}
+
+	return res
+}
+
 
 // FileSize get the length in bytes of the file.
 func (kf *LkkFile) FileSize(path string) int64 {
