@@ -3,6 +3,8 @@ package gohelper
 type (
 	// LkkFile is the receiver of file utilities
 	LkkFile byte
+	// LkkStr is the receiver of string utilities
+	LkkString byte
 	// 枚举类型,文件是否覆盖
 	LkkFileCover int8
 )
@@ -19,6 +21,8 @@ const (
 )
 
 var (
-	// File utilities
+	// KFile utilities
 	KFile LkkFile
+	// KStr utilities
+	KStr LkkString
 )
