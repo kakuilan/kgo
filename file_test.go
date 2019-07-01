@@ -22,7 +22,7 @@ func BenchmarkGetExt(b *testing.B) {
 	}
 }
 
-func TestGetGetContents(t *testing.T) {
+func TestGetContents(t *testing.T) {
 	filename := "./file.go"
 	cont,_ := KFile.GetContents(filename)
 	if  cont=="" {
@@ -36,6 +36,32 @@ func BenchmarkGetContents(b *testing.B) {
 	filename := "./README.md"
 	for i:=0;i<b.N;i++{
 		_,_ = KFile.GetContents(filename)
+	}
+}
+
+func TestGetMime(t *testing.T) {
+	filename := "./testdata/diglett.png"
+	mime1 := KFile.GetMime(filename, true)
+	mime2 := KFile.GetMime(filename, false)
+	if  mime1!=mime2 {
+		t.Error("GetMime fail")
+		return
+	}
+}
+
+func BenchmarkGetMimeFast(b *testing.B) {
+	b.ResetTimer()
+	filename := "./testdata/diglett.png"
+	for i:=0;i<b.N;i++{
+		_ = KFile.GetMime(filename, true)
+	}
+}
+
+func BenchmarkGetMimeReal(b *testing.B) {
+	b.ResetTimer()
+	filename := "./testdata/diglett.png"
+	for i:=0;i<b.N;i++{
+		_ = KFile.GetMime(filename, false)
 	}
 }
 
@@ -290,7 +316,6 @@ func BenchmarkCopyDir(b *testing.B) {
 func TestImg2Base64(t *testing.T) {
 	img := "./testdata/diglett.png"
 	str, err := KFile.Img2Base64(img)
-	println(str)
 	if err != nil || str =="" {
 		t.Error("Img2Base64 fail")
 		return
