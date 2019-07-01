@@ -94,15 +94,14 @@ func (kf *LkkFile) IsDir(path string) bool {
 	return f.IsDir()
 }
 
-// IsBinary determines whether the content is a binary file content.
-// TODO 转到字符串中
-func (kf *LkkFile) IsBinary(content string) bool {
-	for _, b := range content {
-		if 0 == b {
-			return true
-		}
+// IsBinary determines whether the file is a binary file.
+func (kf *LkkFile) IsBinary(path string) bool {
+	cont, err := kf.GetContents(path)
+	if err != nil {
+		return false
 	}
-	return false
+
+	return KStr.IsBinary(cont)
 }
 
 // IsImg determines whether the path is a image.
