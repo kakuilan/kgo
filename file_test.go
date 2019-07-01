@@ -25,7 +25,6 @@ func BenchmarkGetExt(b *testing.B) {
 func TestGetGetContents(t *testing.T) {
 	filename := "./file.go"
 	cont,_ := KFile.GetContents(filename)
-	println(cont)
 	if  cont=="" {
 		t.Error("file get contents error")
 		return
