@@ -56,24 +56,6 @@ func BenchmarkDirSize(b *testing.B) {
 	}
 }
 
-func TestFastDirSize(t *testing.T)  {
-	dirpath := "./"
-	size := KFile.FastDirSize(dirpath)
-	println(size)
-	if size==0 {
-		t.Error("dir size error")
-		return
-	}
-}
-
-func BenchmarkFastDirSize(b *testing.B) {
-	b.ResetTimer()
-	dirpath := "./"
-	for i:=0;i<b.N;i++{
-		_ = KFile.FastDirSize(dirpath)
-	}
-}
-
 func TestIsExist(t *testing.T) {
 	filename := "./file.go"
 	if !KFile.IsExist(filename) {
