@@ -55,3 +55,17 @@ go tool pprof -http=":8081" [binary] [profile]
 - https://github.com/vence722/convert
 - https://github.com/keysonZZZ/kgo
 - https://github.com/denisbrodbeck/machineid
+- https://github.com/jinzhu/now
+
+### 其他库
+- https://github.com/lalamove/konfig
+- https://github.com/jinzhu/configor
+
+
+### 包
+file
+string
+time
+os
+config
+
