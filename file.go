@@ -15,7 +15,7 @@ import (
 	"net/http"
 )
 
-// GetExt 获取文件扩展名,不包括点"."
+// 获取文件扩展名,不包括点"."
 func (kf *LkkFile) GetExt(path string) string {
 	suffix := filepath.Ext(path)
 	if suffix != "" {
@@ -24,13 +24,13 @@ func (kf *LkkFile) GetExt(path string) string {
 	return suffix
 }
 
-// GetContents 获取文件内容作为字符串
+// 获取文件内容作为字符串
 func (kf *LkkFile) GetContents(path string) (string, error) {
 	data, err := ioutil.ReadFile(path)
 	return string(data), err
 }
 
-// GetMime 获取文件mime类型
+// 获取文件mime类型
 func (kf *LkkFile) GetMime(path string, fast bool) string {
 	var res string
 	if fast {
@@ -54,7 +54,7 @@ func (kf *LkkFile) GetMime(path string, fast bool) string {
 	return res
 }
 
-// FileSize 获取文件大小(bytes字节)
+// 获取文件大小(bytes字节)
 func (kf *LkkFile) FileSize(path string) int64 {
 	f, err := os.Stat(path)
 	if nil != err {
@@ -63,7 +63,7 @@ func (kf *LkkFile) FileSize(path string) int64 {
 	return f.Size()
 }
 
-// DirSize 获取目录大小(bytes字节)
+// 获取目录大小(bytes字节)
 func (kf *LkkFile) DirSize(path string) int64 {
 	var size int64
 	//filepath.Walk压测很慢
@@ -79,13 +79,13 @@ func (kf *LkkFile) DirSize(path string) int64 {
 	return size
 }
 
-// IsExist 路径(文件/目录)是否存在
+// 路径(文件/目录)是否存在
 func (kf *LkkFile) IsExist(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil || os.IsExist(err)
 }
 
-// Writeable 路径是否可写
+// 路径是否可写
 func (kf *LkkFile) IsWritable(path string) bool {
 	err := syscall.Access(path, syscall.O_RDWR)
 	if err != nil {
@@ -94,7 +94,7 @@ func (kf *LkkFile) IsWritable(path string) bool {
 	return true
 }
 
-// IsReadable 路径是否可读
+// 路径是否可读
 func (kf *LkkFile) IsReadable(path string) bool {
 	err := syscall.Access(path, syscall.O_RDONLY)
 	if err != nil {
@@ -103,7 +103,7 @@ func (kf *LkkFile) IsReadable(path string) bool {
 	return true
 }
 
-// IsFile 是否常规文件
+// 是否常规文件(且存在)
 func (kf *LkkFile) IsFile(path string) bool {
 	stat, err := os.Stat(path)
 	if err != nil {
@@ -113,7 +113,7 @@ func (kf *LkkFile) IsFile(path string) bool {
 	return stat.Mode().IsRegular()
 }
 
-// IsLink 是否链接文件
+// 是否链接文件(且存在)
 func (kf *LkkFile) IsLink(path string) bool {
 	f, err := os.Lstat(path)
 	if err != nil {
@@ -123,7 +123,7 @@ func (kf *LkkFile) IsLink(path string) bool {
 	return f.Mode() & os.ModeSymlink == os.ModeSymlink
 }
 
-// IsDir 是否目录
+// 是否目录(且存在)
 func (kf *LkkFile) IsDir(path string) bool {
 	f, err := os.Lstat(path)
 	if os.IsNotExist(err) {
@@ -134,7 +134,7 @@ func (kf *LkkFile) IsDir(path string) bool {
 	return f.IsDir()
 }
 
-// IsBinary 是否二进制文件
+// 是否二进制文件(且存在)
 func (kf *LkkFile) IsBinary(path string) bool {
 	cont, err := kf.GetContents(path)
 	if err != nil {
@@ -144,7 +144,7 @@ func (kf *LkkFile) IsBinary(path string) bool {
 	return KStr.IsBinary(cont)
 }
 
-// IsImg 是否图片文件
+// 是否图片文件
 func (kf *LkkFile) IsImg(path string) bool {
 	ext := kf.GetExt(path)
 	switch ext {
@@ -155,7 +155,7 @@ func (kf *LkkFile) IsImg(path string) bool {
 	}
 }
 
-// AbsPath 获取绝对路径
+// 获取绝对路径
 func (kf *LkkFile) AbsPath(path string) string {
 	fullPath := ""
 	res, err := filepath.Abs(path)
@@ -167,7 +167,7 @@ func (kf *LkkFile) AbsPath(path string) string {
 	return fullPath
 }
 
-// CopyFile 拷贝源文件到目标文件,cover为枚举(FILE_COVER_ALLOW、FILE_COVER_IGNORE、FILE_COVER_DENY)
+// 拷贝源文件到目标文件,cover为枚举(FILE_COVER_ALLOW、FILE_COVER_IGNORE、FILE_COVER_DENY)
 func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int64, error) {
 	if(source == dest) {
 		return 0, nil
@@ -245,7 +245,7 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 	return nBytes, err
 }
 
-// FastCopy 快速拷贝源文件到目标文件,不做安全检查
+// 快速拷贝源文件到目标文件,不做安全检查
 func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
 	sourceFile, err := os.Open(source)
 	if err != nil {
@@ -286,7 +286,7 @@ func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
 	return int64(nBytes), err
 }
 
-// CopyLink 拷贝链接
+// 拷贝链接
 func (kf *LkkFile) CopyLink(source string, dest string) error {
 	if(source == dest) {
 		return nil
@@ -313,7 +313,7 @@ func (kf *LkkFile) CopyLink(source string, dest string) error {
 	return os.Symlink(source, dest)
 }
 
-// CopyDir 拷贝源目录到目标目录,cover为枚举(FILE_COVER_ALLOW、FILE_COVER_IGNORE、FILE_COVER_DENY)
+// 拷贝源目录到目标目录,cover为枚举(FILE_COVER_ALLOW、FILE_COVER_IGNORE、FILE_COVER_DENY)
 func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int64, error) {
 	sourceInfo, err := os.Stat(source)
 	if err != nil {
@@ -373,7 +373,7 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 	return total, err
 }
 
-// Img2Base64 读取图片文件,并转换为base64字符串
+// 读取图片文件,并转换为base64字符串
 func (kf *LkkFile) Img2Base64(path string) (string, error) {
 	if !kf.IsImg(path) {
 		return "", fmt.Errorf("%s is not a image", path)
@@ -388,7 +388,7 @@ func (kf *LkkFile) Img2Base64(path string) (string, error) {
 	return fmt.Sprintf("data:image/%s;base64,%s", ext, base64.StdEncoding.EncodeToString(imgBuffer)),nil
 }
 
-// DelDir 删除目录;delRoot为true时连该目录一起删除;为false时只清空该目录
+// 删除目录;delRoot为true时连该目录一起删除;为false时只清空该目录
 func (kf *LkkFile) DelDir(dir string, delRoot bool) error {
 	realPath := kf.AbsPath(dir)
 	if !kf.IsDir(realPath) {
@@ -413,7 +413,7 @@ func (kf *LkkFile) DelDir(dir string, delRoot bool) error {
 	return err
 }
 
-// FileTree 获取目录的文件列表;ftype为枚举(FILE_TREE_ALL、FILE_TREE_DIR、FILE_TREE_FILE);recursive为是否递归
+// 获取目录的文件列表;ftype为枚举(FILE_TREE_ALL、FILE_TREE_DIR、FILE_TREE_FILE);recursive为是否递归
 func (kf *LkkFile) FileTree(path string, ftype LkkFileTree, recursive bool) []string {
 	var trees []string
 	if path == "" {
@@ -455,7 +455,7 @@ func (kf *LkkFile) FileTree(path string, ftype LkkFileTree, recursive bool) []st
 	return trees
 }
 
-// FormatDir 格式化路径,将"\","//"替换为"/",且以"/"结尾
+// 格式化路径,将"\","//"替换为"/",且以"/"结尾
 func (kf *LkkFile) FormatDir(path string) string {
 	if path=="" {
 		return ""
