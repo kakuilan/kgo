@@ -166,7 +166,7 @@ func (kf *LkkFile) AbsPath(path string) string {
 	return fullPath
 }
 
-// CopyFile copies the source file to the dest file,cover is enum(FCOVER_ALLOW、FCOVER_IGNORE、FCOVER_DENY)
+// CopyFile copies the source file to the dest file,cover is enum(FILE_COVER_ALLOW、FILE_COVER_IGNORE、FILE_COVER_DENY)
 func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int64, error) {
 	if(source == dest) {
 		return 0, nil
@@ -179,11 +179,11 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 		return 0, fmt.Errorf("%s is not a regular file", source)
 	}
 
-	if cover != FCOVER_ALLOW {
+	if cover != FILE_COVER_ALLOW {
 		if _, err := os.Stat(dest); err == nil {
-			if cover == FCOVER_IGNORE {
+			if cover == FILE_COVER_IGNORE {
 				return 0, nil
-			}else if cover == FCOVER_DENY {
+			}else if cover == FILE_COVER_DENY {
 				return 0, fmt.Errorf("File %s already exists", dest)
 			}
 		}
@@ -312,7 +312,7 @@ func (kf *LkkFile) CopyLink(source string, dest string) error {
 	return os.Symlink(source, dest)
 }
 
-// CopyDir copies the source directory to the dest directory,cover is enum(FCOVER_ALLOW、FCOVER_IGNORE、FCOVER_DENY)
+// CopyDir copies the source directory to the dest directory,cover is enum(FILE_COVER_ALLOW、FILE_COVER_IGNORE、FILE_COVER_DENY)
 func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int64, error) {
 	sourceInfo, err := os.Stat(source)
 	if err != nil {
@@ -349,7 +349,7 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 		}else {
 			destFileInfo, err := os.Stat(destFilePath)
 			if err == nil {
-				if cover != FCOVER_ALLOW {
+				if cover != FILE_COVER_ALLOW {
 					continue
 				}else if os.SameFile(obj, destFileInfo) {
 					continue
@@ -410,4 +410,44 @@ func (kf *LkkFile) DelDir(dir string, delRoot bool) error {
 	}
 
 	return err
+}
+
+// FileTree get the path file tree,ftype is enum(FILE_TREE_ALL、FILE_TREE_DIR、FILE_TREE_FILE)
+func (kf *LkkFile) FileTree(path string, ftype LkkFileTree, recursive bool) []string {
+	var trees []string
+	if path == "" {
+		return trees
+	}
+
+	if kf.IsFile(path) || kf.IsLink(path) {
+		trees = append(trees, path)
+		return trees
+	}
+
+	path = strings.TrimRight(path, "/")
+	files, err := filepath.Glob(filepath.Join(path, "*"))
+	if err != nil {
+		return trees
+	}
+
+	for _, file := range files {
+		if kf.IsDir(file) {
+			if file=="." || file==".." {
+				continue
+			}
+
+			if ftype != FILE_TREE_FILE {
+				trees = append(trees, file)
+			}
+
+			if recursive {
+				subs := kf.FileTree(file, ftype, recursive)
+				trees = append(trees, subs...)
+			}
+		}else if ftype != FILE_TREE_DIR {
+			trees = append(trees, file)
+		}
+	}
+
+	return trees
 }

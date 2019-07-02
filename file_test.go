@@ -248,7 +248,7 @@ func BenchmarkAbsPath(b *testing.B) {
 func TestCopyFile(t *testing.T) {
 	src := "./testdata/diglett.png"
 	des := "./testdata/sub/diglett_copy.png"
-	num, err := KFile.CopyFile(src, des, FCOVER_ALLOW)
+	num, err := KFile.CopyFile(src, des, FILE_COVER_ALLOW)
 	if err != nil || num ==0 {
 		t.Error("copy file fail")
 		return
@@ -261,7 +261,7 @@ func BenchmarkCopyFile(b *testing.B) {
 	des := ""
 	for i:=0;i<b.N;i++{
 		des = fmt.Sprintf("./testdata/sub/diglett_copy_%d.png", i)
-		_,_ = KFile.CopyFile(src, des, FCOVER_ALLOW)
+		_,_ = KFile.CopyFile(src, des, FILE_COVER_ALLOW)
 	}
 }
 
@@ -311,7 +311,7 @@ func TestCopyDir(t *testing.T) {
 	src := "./testdata"
 	des := "./test/copy"
 
-	num, err := KFile.CopyDir(src, des, FCOVER_ALLOW)
+	num, err := KFile.CopyDir(src, des, FILE_COVER_ALLOW)
 	if err != nil || num ==0 {
 		t.Error("copy directory fail")
 		return
@@ -324,7 +324,7 @@ func BenchmarkCopyDir(b *testing.B) {
 	des := ""
 	for i:=0;i<b.N;i++{
 		des = fmt.Sprintf("./test/copy_%d", i)
-		_,_ = KFile.CopyDir(src, des, FCOVER_ALLOW)
+		_,_ = KFile.CopyDir(src, des, FILE_COVER_ALLOW)
 	}
 }
 
@@ -359,5 +359,23 @@ func BenchmarkDelDir(b *testing.B) {
 	dir := "./test"
 	for i:=0;i<b.N;i++{
 		_ = KFile.DelDir(dir, true)
+	}
+}
+
+func TestFileTree(t *testing.T) {
+	dir := "./"
+	tree := KFile.FileTree(dir, FILE_TREE_ALL, true)
+	//fmt.Printf("%v", tree)
+	if len(tree) ==0 {
+		t.Error("FileTree fail")
+		return
+	}
+}
+
+func BenchmarkFileTree(b *testing.B) {
+	b.ResetTimer()
+	dir := "./"
+	for i:=0;i<b.N;i++{
+		_ = KFile.FileTree(dir, FILE_TREE_ALL, true)
 	}
 }
