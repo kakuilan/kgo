@@ -5,7 +5,7 @@ import (
 	"regexp"
 )
 
-// Nl2br 将换行符转换为br标签
+// 将换行符转换为br标签
 func (ks *LkkString) Nl2br(html string) string {
 	if html == "" {
 		return ""
@@ -14,7 +14,7 @@ func (ks *LkkString) Nl2br(html string) string {
 	}
 }
 
-// StripTags 过滤html和php标签
+// 过滤html和php标签
 func (ks *LkkString) StripTags(html string) string {
 	if html == "" {
 		return ""
@@ -24,7 +24,7 @@ func (ks *LkkString) StripTags(html string) string {
 	}
 }
 
-// IsBinary 是否二进制的字符串
+// 是否二进制的字符串
 func (kf *LkkString) IsBinary(content string) bool {
 	for _, b := range content {
 		if 0 == b {
