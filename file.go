@@ -13,6 +13,8 @@ import (
 	"encoding/base64"
 	"mime"
 	"net/http"
+	"crypto/md5"
+	"encoding/hex"
 )
 
 // 获取文件扩展名,不包括点"."
@@ -464,4 +466,30 @@ func (kf *LkkFile) FormatDir(path string) string {
 	re := regexp.MustCompile(`(/){2,}|(\\){1,}`)
 	str := re.ReplaceAllString(path,"/")
 	return strings.TrimRight(str, "/") + "/"
+}
+
+// 获取文件md5值,length指定结果长度32/16
+func (kf *LkkFile) Md5(path string, length uint8) (string, error) {
+	var res string
+	f,err := os.Open(path)
+	if err != nil {
+		return res, err
+	}
+	defer f.Close()
+
+	hash := md5.New()
+	if _, err := io.Copy(hash, f); err != nil {
+		return res, err
+	}
+
+	hashInBytes := hash.Sum(nil)
+	if length>0 && length<32 {
+		dst := make([]byte, hex.EncodedLen(len(hashInBytes)))
+		hex.Encode(dst, hashInBytes)
+		res = string(dst[:length])
+	}else{
+		res = hex.EncodeToString(hashInBytes)
+	}
+
+	return res, nil
 }

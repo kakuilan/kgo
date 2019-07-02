@@ -397,3 +397,22 @@ func BenchmarkFormatDir(b *testing.B) {
 		_ = KFile.FormatDir(dir)
 	}
 }
+
+func TestFileMd5(t *testing.T) {
+	file := `./file.go`
+	res1,_ := KFile.Md5(file, 0)
+	res2,_ := KFile.Md5(file, 16)
+	if len(res1)!= 32 || !strings.Contains(res1, res2) {
+		t.Error("File Md5 fail")
+		return
+	}
+}
+
+func BenchmarkFileMd5(b *testing.B) {
+	b.ResetTimer()
+	file := `./file.go`
+	for i:=0;i<b.N;i++{
+		_,_ = KFile.Md5(file, 32)
+	}
+}
+
