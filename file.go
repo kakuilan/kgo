@@ -281,6 +281,16 @@ func (kf *LkkFile) CopyLink(source string, dest string) error {
 		return nil
 	}
 
+	source, err := os.Readlink(source)
+	if err != nil {
+		return err
+	}
+
+	_, err = os.Lstat(dest)
+	if err == nil {
+		_ = os.Remove(dest)
+	}
+
 	//创建目录
 	destDir := filepath.Dir(dest)
 	if !kf.IsDir(destDir) {
@@ -289,10 +299,6 @@ func (kf *LkkFile) CopyLink(source string, dest string) error {
 		}
 	}
 
-	source, err := os.Readlink(source)
-	if err != nil {
-		return err
-	}
 	return os.Symlink(source, dest)
 }
 
@@ -371,14 +377,27 @@ func (kf *LkkFile) Img2Base64(path string) (string, error) {
 	return fmt.Sprintf("data:image/%s;base64,%s", ext, base64.StdEncoding.EncodeToString(imgBuffer)),nil
 }
 
-func (kf *LkkFile) DelDir(dir string, delself bool) error {
-	names, err := ioutil.ReadDir(dir)
+// DelDir delete the directory;
+func (kf *LkkFile) DelDir(dir string, delRoot bool) error {
+	realPath := kf.AbsPath(dir)
+	if !kf.IsDir(realPath) {
+		return fmt.Errorf("Dir %s not exists", dir)
+	}
+
+	names, err := ioutil.ReadDir(realPath)
 	if err != nil {
 		return err
 	}
+
 	for _, entery := range names {
-		file := path.Join([]string{dir, entery.Name()}...)
-		println(file)
+		file := path.Join([]string{realPath, entery.Name()}...)
+		err = os.RemoveAll(file)
 	}
-	return nil
+
+	//删除根节点(指定的目录)
+	if delRoot {
+		err = os.RemoveAll(realPath)
+	}
+
+	return err
 }

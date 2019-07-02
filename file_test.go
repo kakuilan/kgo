@@ -233,7 +233,6 @@ func TestCopyFile(t *testing.T) {
 	num, err := KFile.CopyFile(src, des, FCOVER_ALLOW)
 	if err != nil || num ==0 {
 		t.Error("copy file fail")
-		println(err.Error())
 		return
 	}
 }
@@ -278,7 +277,7 @@ func TestCopyLink(t *testing.T) {
 
 	err := KFile.CopyLink(src, des)
 	if err != nil {
-		t.Error("copy link fail" + err.Error())
+		t.Error("copy link fail:" + err.Error())
 		return
 	}
 }
@@ -332,6 +331,6 @@ func BenchmarkImg2Base64(b *testing.B) {
 }
 
 func TestDelDir(t *testing.T) {
-	dir := "./"
-	_ = KFile.DelDir(dir, false)
+	dir := "./test"
+	_ = KFile.DelDir(dir, true)
 }
