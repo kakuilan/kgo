@@ -7,17 +7,30 @@ type (
 	LkkString byte
 	// 枚举类型,文件是否覆盖
 	LkkFileCover int8
+	// 枚举类型,文件树查找类型
+	LkkFileTree int8
+
 )
 
 const (
 	// 版本号
 	Version = "0.0.1"
-	// 允许文件覆盖
-	FCOVER_ALLOW LkkFileCover = 1
-	// 忽略文件覆盖
-	FCOVER_IGNORE LkkFileCover = 0
-	// 禁止文件覆盖
-	FCOVER_DENY LkkFileCover = -1
+
+	// 文件覆盖,允许
+	FILE_COVER_ALLOW LkkFileCover = 1
+	// 文件覆盖,忽略
+	FILE_COVER_IGNORE LkkFileCover = 0
+	// 文件覆盖,禁止
+	FILE_COVER_DENY LkkFileCover = -1
+
+	// 文件树,查找所有(包括目录和文件)
+	FILE_TREE_ALL LkkFileTree = 3
+	// 文件树,仅查找目录
+	FILE_TREE_DIR LkkFileTree = 2
+	// 文件树,仅查找文件
+	FILE_TREE_FILE LkkFileTree = 1
+
+
 )
 
 var (
