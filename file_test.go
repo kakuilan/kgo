@@ -229,10 +229,11 @@ func BenchmarkAbsPath(b *testing.B) {
 
 func TestCopyFile(t *testing.T) {
 	src := "./testdata/diglett.png"
-	des := "./testdata/diglett_copy.png"
+	des := "./testdata/sub/diglett_copy.png"
 	num, err := KFile.CopyFile(src, des, FCOVER_ALLOW)
 	if err != nil || num ==0 {
 		t.Error("copy file fail")
+		println(err.Error())
 		return
 	}
 }
@@ -242,18 +243,18 @@ func BenchmarkCopyFile(b *testing.B) {
 	src := "./testdata/diglett.png"
 	des := ""
 	for i:=0;i<b.N;i++{
-		des = fmt.Sprintf("./testdata/diglett_copy_%d.png", i)
+		des = fmt.Sprintf("./testdata/sub/diglett_copy_%d.png", i)
 		_,_ = KFile.CopyFile(src, des, FCOVER_ALLOW)
 	}
 }
 
 func TestFastCopy(t *testing.T) {
 	src := "./testdata/diglett.png"
-	des := "./testdata/diglett_copy.png"
+	des := "./testdata/fast/diglett_copy.png"
 
 	num, err := KFile.FastCopy(src, des)
 	if err != nil || num ==0 {
-		t.Error("copy file fail")
+		t.Error("fast copy file fail")
 		return
 	}
 }
@@ -263,7 +264,7 @@ func BenchmarkFastCopy(b *testing.B) {
 	src := "./testdata/diglett.png"
 	des := ""
 	for i:=0;i<b.N;i++{
-		des = fmt.Sprintf("./testdata/diglett_fast_%d.png", i)
+		des = fmt.Sprintf("./testdata/fast/diglett_fast_%d.png", i)
 		_,_ = KFile.FastCopy(src, des)
 	}
 }
@@ -273,7 +274,7 @@ func TestCopyLink(t *testing.T) {
 	_ = cmd.Run()
 
 	src := "./testdata/diglett-lnk"
-	des := "./testdata/diglett-lnk.copy"
+	des := "./testdata/link/diglett-lnk.copy"
 
 	err := KFile.CopyLink(src, des)
 	if err != nil {
@@ -287,14 +288,14 @@ func BenchmarkCopyLink(b *testing.B) {
 	src := "./testdata/diglett-lnk"
 	des := ""
 	for i:=0;i<b.N;i++{
-		des = fmt.Sprintf("./testdata/diglett-lnk_%d.copy", i)
+		des = fmt.Sprintf("./testdata/link/diglett-lnk_%d.copy", i)
 		_ = KFile.CopyLink(src, des)
 	}
 }
 
 func TestCopyDir(t *testing.T) {
 	src := "./testdata"
-	des := "./test"
+	des := "./test/copy"
 
 	num, err := KFile.CopyDir(src, des, FCOVER_ALLOW)
 	if err != nil || num ==0 {
@@ -306,7 +307,7 @@ func TestCopyDir(t *testing.T) {
 func BenchmarkCopyDir(b *testing.B) {
 	b.ResetTimer()
 	src := "./testdata"
-	des := "./test"
+	des := ""
 	for i:=0;i<b.N;i++{
 		des = fmt.Sprintf("./test/copy_%d", i)
 		_,_ = KFile.CopyDir(src, des, FCOVER_ALLOW)
@@ -328,4 +329,9 @@ func BenchmarkImg2Base64(b *testing.B) {
 	for i:=0;i<b.N;i++{
 		_,_ = KFile.Img2Base64(img)
 	}
+}
+
+func TestDelDir(t *testing.T) {
+	dir := "./"
+	_ = KFile.DelDir(dir, false)
 }
