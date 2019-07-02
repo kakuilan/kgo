@@ -68,4 +68,7 @@ string
 time
 os
 config
+array
+number
+url
 

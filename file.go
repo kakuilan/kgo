@@ -4,6 +4,7 @@ import (
 	"io"
 	"os"
 	"fmt"
+	"path"
 	"path/filepath"
 	"strings"
 	"syscall"
@@ -28,7 +29,7 @@ func (kf *LkkFile) GetContents(path string) (string, error) {
 	return string(data), err
 }
 
-// GetMime get the file mime type.
+// GetMime get mime type of the file.
 func (kf *LkkFile) GetMime(path string, fast bool) string {
 	var res string
 	if fast {
@@ -184,6 +185,14 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 	}
 	defer sourceFile.Close()
 
+	//创建目录
+	destDir := filepath.Dir(dest)
+	if !kf.IsDir(destDir) {
+		if err = os.MkdirAll(destDir, 0766); err != nil {
+			return 0, err
+		}
+	}
+
 	destFile, err := os.Create(dest)
 	if err != nil {
 		return 0, err
@@ -232,6 +241,14 @@ func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
 		return 0, err
 	}
 
+	//创建目录
+	destDir := filepath.Dir(dest)
+	if !kf.IsDir(destDir) {
+		if err = os.MkdirAll(destDir, 0766); err != nil {
+			return 0, err
+		}
+	}
+
 	destFile, err := os.Create(dest)
 	if err != nil {
 		return 0, err
@@ -262,6 +279,14 @@ func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
 func (kf *LkkFile) CopyLink(source string, dest string) error {
 	if(source == dest) {
 		return nil
+	}
+
+	//创建目录
+	destDir := filepath.Dir(dest)
+	if !kf.IsDir(destDir) {
+		if err := os.MkdirAll(destDir, 0766); err != nil {
+			return err
+		}
 	}
 
 	source, err := os.Readlink(source)
@@ -344,4 +369,16 @@ func (kf *LkkFile) Img2Base64(path string) (string, error) {
 
 	ext := kf.GetExt(path)
 	return fmt.Sprintf("data:image/%s;base64,%s", ext, base64.StdEncoding.EncodeToString(imgBuffer)),nil
+}
+
+func (kf *LkkFile) DelDir(dir string, delself bool) error {
+	names, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return err
+	}
+	for _, entery := range names {
+		file := path.Join([]string{dir, entery.Name()}...)
+		println(file)
+	}
+	return nil
 }
