@@ -2,6 +2,9 @@
 k`s golang helper/library/utils  
 golang 函数库/工具集
 
+### 文档
+[![GoDoc](https://godoc.org/github.com/kakuilan/kgo?status.svg)](https://godoc.org/github.com/kakuilan/kgo)
+
 ### 测试
 ```shell
 go test
