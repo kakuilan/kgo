@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"path"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"syscall"
 	"io/ioutil"
@@ -450,4 +451,15 @@ func (kf *LkkFile) FileTree(path string, ftype LkkFileTree, recursive bool) []st
 	}
 
 	return trees
+}
+
+// FormatDir format dir path,replace "\","//" to "/",and end with "/"
+func (kf *LkkFile) FormatDir(path string) string {
+	if path=="" {
+		return ""
+	}
+
+	re := regexp.MustCompile(`(/){2,}|(\\){1,}`)
+	str := re.ReplaceAllString(path,"/")
+	return strings.TrimRight(str, "/") + "/"
 }

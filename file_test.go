@@ -1,6 +1,7 @@
 package gohelper
 
 import (
+	"strings"
 	"testing"
 	"fmt"
 	"os/exec"
@@ -377,5 +378,22 @@ func BenchmarkFileTree(b *testing.B) {
 	dir := "./"
 	for i:=0;i<b.N;i++{
 		_ = KFile.FileTree(dir, FILE_TREE_ALL, true)
+	}
+}
+
+func TestFormatDir(t *testing.T) {
+	dir := `/usr\bin\\golang//fmt`
+	res := KFile.FormatDir(dir)
+	if strings.Contains(res, `\`) {
+		t.Error("FormatDir fail")
+		return
+	}
+}
+
+func BenchmarkFormatDir(b *testing.B) {
+	b.ResetTimer()
+	dir := `/usr\bin\\golang//fmt`
+	for i:=0;i<b.N;i++{
+		_ = KFile.FormatDir(dir)
 	}
 }
