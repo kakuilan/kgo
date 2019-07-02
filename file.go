@@ -53,7 +53,6 @@ func (kf *LkkFile) GetMime(path string, fast bool) string {
 	return res
 }
 
-
 // FileSize get the length in bytes of the file.
 func (kf *LkkFile) FileSize(path string) int64 {
 	f, err := os.Stat(path)
@@ -111,6 +110,8 @@ func (kf *LkkFile) IsFile(path string) bool {
 	}
 	return stat.Mode().IsRegular()
 }
+
+//TODO IsLink()
 
 // IsDir determines whether the path is a directory.
 func (kf *LkkFile) IsDir(path string) bool {
@@ -377,7 +378,7 @@ func (kf *LkkFile) Img2Base64(path string) (string, error) {
 	return fmt.Sprintf("data:image/%s;base64,%s", ext, base64.StdEncoding.EncodeToString(imgBuffer)),nil
 }
 
-// DelDir delete the directory;
+// DelDir delete the directory;if delRoot==true,delete the dir;otherwise del all sub items.
 func (kf *LkkFile) DelDir(dir string, delRoot bool) error {
 	realPath := kf.AbsPath(dir)
 	if !kf.IsDir(realPath) {
