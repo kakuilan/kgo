@@ -421,7 +421,9 @@ func (kf *LkkFile) FileTree(path string, ftype LkkFileTree, recursive bool) []st
 	}
 
 	if kf.IsFile(path) || kf.IsLink(path) {
-		trees = append(trees, path)
+		if ftype != FILE_TREE_DIR {
+			trees = append(trees, path)
+		}
 		return trees
 	}
 
