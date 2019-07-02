@@ -162,6 +162,24 @@ func BenchmarkIsFile(b *testing.B) {
 	}
 }
 
+func TestIsLink(t *testing.T) {
+	cmd := exec.Command("/bin/bash", "-c", "ln -sf ./testdata/diglett.png ./testdata/diglett-lnk")
+	_ = cmd.Run()
+	filename := "./testdata/diglett-lnk"
+	if !KFile.IsLink(filename) {
+		t.Error("isn`t a link")
+		return
+	}
+}
+
+func BenchmarkIsLink(b *testing.B) {
+	b.ResetTimer()
+	filename := "./testdata/diglett-lnk"
+	for i:=0;i<b.N;i++{
+		KFile.IsLink(filename)
+	}
+}
+
 func TestIsDir(t *testing.T) {
 	dirname := "./"
 	if !KFile.IsDir(dirname) {
@@ -269,9 +287,6 @@ func BenchmarkFastCopy(b *testing.B) {
 }
 
 func TestCopyLink(t *testing.T) {
-	cmd := exec.Command("/bin/bash", "-c", "ln -sf ./testdata/diglett.png ./testdata/diglett-lnk")
-	_ = cmd.Run()
-
 	src := "./testdata/diglett-lnk"
 	des := "./testdata/link/diglett-lnk.copy"
 
@@ -332,5 +347,17 @@ func BenchmarkImg2Base64(b *testing.B) {
 
 func TestDelDir(t *testing.T) {
 	dir := "./test"
-	_ = KFile.DelDir(dir, true)
+	err := KFile.DelDir(dir, true)
+	if err != nil || KFile.IsDir(dir) {
+		t.Error("DelDir fail")
+		return
+	}
+}
+
+func BenchmarkDelDir(b *testing.B) {
+	b.ResetTimer()
+	dir := "./test"
+	for i:=0;i<b.N;i++{
+		_ = KFile.DelDir(dir, true)
+	}
 }
