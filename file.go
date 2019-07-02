@@ -30,7 +30,7 @@ func (kf *LkkFile) GetContents(path string) (string, error) {
 	return string(data), err
 }
 
-// 获取文件mime类型
+// 获取文件mime类型;fast为true时根据后缀快速获取;为false时读取文件头获取
 func (kf *LkkFile) GetMime(path string, fast bool) string {
 	var res string
 	if fast {
@@ -413,7 +413,7 @@ func (kf *LkkFile) DelDir(dir string, delRoot bool) error {
 	return err
 }
 
-// 获取目录的文件列表;ftype为枚举(FILE_TREE_ALL、FILE_TREE_DIR、FILE_TREE_FILE);recursive为是否递归
+// 获取目录的文件树列表;ftype为枚举(FILE_TREE_ALL、FILE_TREE_DIR、FILE_TREE_FILE);recursive为是否递归
 func (kf *LkkFile) FileTree(path string, ftype LkkFileTree, recursive bool) []string {
 	var trees []string
 	if path == "" {
