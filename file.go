@@ -102,16 +102,25 @@ func (kf *LkkFile) IsReadable(path string) bool {
 	return true
 }
 
-// IsFile returns true if path exists and is a file (or a link to a file) and false otherwise
+// IsFile returns true if path exists and is a file (not a link file) and false otherwise
 func (kf *LkkFile) IsFile(path string) bool {
 	stat, err := os.Stat(path)
 	if err != nil {
 		return false
 	}
+	//常规文件,不包括链接
 	return stat.Mode().IsRegular()
 }
 
-//TODO IsLink()
+// IsLink returns true if path exists and is a link file;and false otherwise
+func (kf *LkkFile) IsLink(path string) bool {
+	f, err := os.Lstat(path)
+	if err != nil {
+		return false
+	}
+
+	return f.Mode() & os.ModeSymlink == os.ModeSymlink
+}
 
 // IsDir determines whether the path is a directory.
 func (kf *LkkFile) IsDir(path string) bool {
