@@ -3,15 +3,15 @@ package gohelper
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"strings"
 	"regexp"
+	"strings"
 )
 
 // 将换行符转换为br标签
 func (ks *LkkString) Nl2br(html string) string {
 	if html == "" {
 		return ""
-	}else{
+	} else {
 		return strings.Replace(html, "\n", "<br />", -1)
 	}
 }
@@ -20,9 +20,9 @@ func (ks *LkkString) Nl2br(html string) string {
 func (ks *LkkString) StripTags(html string) string {
 	if html == "" {
 		return ""
-	}else{
+	} else {
 		re := regexp.MustCompile(`<(.|\n)*?>`)
-		return re.ReplaceAllString(html,"")
+		return re.ReplaceAllString(html, "")
 	}
 }
 
@@ -43,11 +43,11 @@ func (kf *LkkString) Md5(str string, length uint8) string {
 	hash.Write([]byte(str))
 
 	hashInBytes := hash.Sum(nil)
-	if length>0 && length<32 {
+	if length > 0 && length < 32 {
 		dst := make([]byte, hex.EncodedLen(len(hashInBytes)))
 		hex.Encode(dst, hashInBytes)
 		res = string(dst[:length])
-	}else{
+	} else {
 		res = hex.EncodeToString(hashInBytes)
 	}
 
