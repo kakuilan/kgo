@@ -25,7 +25,7 @@ func (ks *LkkString) StripTags(html string) string {
 }
 
 // IsBinary 是否二进制的字符串
-func (kf *LkkString) IsBinary(content string) bool {
+func (ks *LkkString) IsBinary(content string) bool {
 	for _, b := range content {
 		if 0 == b {
 			return true
@@ -35,7 +35,7 @@ func (kf *LkkString) IsBinary(content string) bool {
 }
 
 // Md5 获取字符串md5值,length指定结果长度32/16
-func (kf *LkkString) Md5(str string, length uint8) string {
+func (ks *LkkString) Md5(str string, length uint8) string {
 	var res string
 	hash := md5.New()
 	hash.Write([]byte(str))
