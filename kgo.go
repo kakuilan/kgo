@@ -3,7 +3,7 @@ package gohelper
 type (
 	// LkkFile is the receiver of file utilities
 	LkkFile byte
-	// LkkStr is the receiver of string utilities
+	// LkkString is the receiver of string utilities
 	LkkString byte
 	// LkkArray is the receiver of array utilities
 	LkkArray byte
@@ -12,28 +12,28 @@ type (
 	// LkkConvert is the receiver of convert utilities
 	LkkConvert byte
 
-	// 枚举类型,文件是否覆盖
+	// LkkFileCover 枚举类型,文件是否覆盖
 	LkkFileCover int8
-	// 枚举类型,文件树查找类型
+	// LkkFileTree 枚举类型,文件树查找类型
 	LkkFileTree int8
 )
 
 const (
-	// 版本号
+	// Version 版本号
 	Version = "0.0.1"
 
-	// 文件覆盖,允许
+	// FILE_COVER_ALLOW 文件覆盖,允许
 	FILE_COVER_ALLOW LkkFileCover = 1
-	// 文件覆盖,忽略
+	// FILE_COVER_IGNORE 文件覆盖,忽略
 	FILE_COVER_IGNORE LkkFileCover = 0
-	// 文件覆盖,禁止
+	// FILE_COVER_DENY 文件覆盖,禁止
 	FILE_COVER_DENY LkkFileCover = -1
 
-	// 文件树,查找所有(包括目录和文件)
+	// FILE_TREE_ALL 文件树,查找所有(包括目录和文件)
 	FILE_TREE_ALL LkkFileTree = 3
-	// 文件树,仅查找目录
+	// FILE_TREE_DIR 文件树,仅查找目录
 	FILE_TREE_DIR LkkFileTree = 2
-	// 文件树,仅查找文件
+	// FILE_TREE_FILE 文件树,仅查找文件
 	FILE_TREE_FILE LkkFileTree = 1
 )
 
