@@ -1,8 +1,8 @@
 package gohelper
 
 import (
-	"testing"
 	"strings"
+	"testing"
 )
 
 func TestNl2br(t *testing.T) {
@@ -21,7 +21,7 @@ func BenchmarkNl2br(b *testing.B) {
 	str := `hello
 world!
 你好！`
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		_ = KStr.Nl2br(str)
 	}
 }
@@ -44,7 +44,7 @@ func BenchmarkStripTags(b *testing.B) {
 <h1>Hello world!</h1>
 <script>alert('你好！')</scripty>
 `
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		_ = KStr.StripTags(str)
 	}
 }
@@ -60,7 +60,7 @@ func TestStringIsBinary(t *testing.T) {
 func BenchmarkStringIsBinary(b *testing.B) {
 	b.ResetTimer()
 	filename := "./README.md"
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		KFile.IsBinary(filename)
 	}
 }
@@ -77,7 +77,7 @@ func TestStringMd5(t *testing.T) {
 func BenchmarkStringMd5(b *testing.B) {
 	b.ResetTimer()
 	str := "hello world!"
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		_ = KStr.Md5(str, 32)
 	}
 }

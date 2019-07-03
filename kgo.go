@@ -14,7 +14,6 @@ type (
 	LkkFileCover int8
 	// 枚举类型,文件树查找类型
 	LkkFileTree int8
-
 )
 
 const (
@@ -34,8 +33,6 @@ const (
 	FILE_TREE_DIR LkkFileTree = 2
 	// 文件树,仅查找文件
 	FILE_TREE_FILE LkkFileTree = 1
-
-
 )
 
 var (

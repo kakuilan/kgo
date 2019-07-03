@@ -1,15 +1,15 @@
 package gohelper
 
 import (
-	"strings"
-	"testing"
 	"fmt"
 	"os/exec"
+	"strings"
+	"testing"
 )
 
 func TestGetExt(t *testing.T) {
 	filename := "./file.go"
-	if KFile.GetExt(filename) !="go" {
+	if KFile.GetExt(filename) != "go" {
 		t.Error("file extension error")
 		return
 	}
@@ -18,15 +18,15 @@ func TestGetExt(t *testing.T) {
 func BenchmarkGetExt(b *testing.B) {
 	b.ResetTimer()
 	filename := "./README.md"
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		KFile.GetExt(filename)
 	}
 }
 
 func TestGetContents(t *testing.T) {
 	filename := "./file.go"
-	cont,_ := KFile.GetContents(filename)
-	if  cont=="" {
+	cont, _ := KFile.GetContents(filename)
+	if cont == "" {
 		t.Error("file get contents error")
 		return
 	}
@@ -35,8 +35,8 @@ func TestGetContents(t *testing.T) {
 func BenchmarkGetContents(b *testing.B) {
 	b.ResetTimer()
 	filename := "./README.md"
-	for i:=0;i<b.N;i++{
-		_,_ = KFile.GetContents(filename)
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.GetContents(filename)
 	}
 }
 
@@ -44,7 +44,7 @@ func TestGetMime(t *testing.T) {
 	filename := "./testdata/diglett.png"
 	mime1 := KFile.GetMime(filename, true)
 	mime2 := KFile.GetMime(filename, false)
-	if  mime1!=mime2 {
+	if mime1 != mime2 {
 		t.Error("GetMime fail")
 		return
 	}
@@ -53,7 +53,7 @@ func TestGetMime(t *testing.T) {
 func BenchmarkGetMimeFast(b *testing.B) {
 	b.ResetTimer()
 	filename := "./testdata/diglett.png"
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		_ = KFile.GetMime(filename, true)
 	}
 }
@@ -61,14 +61,14 @@ func BenchmarkGetMimeFast(b *testing.B) {
 func BenchmarkGetMimeReal(b *testing.B) {
 	b.ResetTimer()
 	filename := "./testdata/diglett.png"
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		_ = KFile.GetMime(filename, false)
 	}
 }
 
-func TestFileSize(t *testing.T)  {
+func TestFileSize(t *testing.T) {
 	filename := "./file.go"
-	if KFile.FileSize(filename) <=0 {
+	if KFile.FileSize(filename) <= 0 {
 		t.Error("file size error")
 		return
 	}
@@ -77,15 +77,15 @@ func TestFileSize(t *testing.T)  {
 func BenchmarkFileSize(b *testing.B) {
 	b.ResetTimer()
 	filename := "./README.md"
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		KFile.FileSize(filename)
 	}
 }
 
-func TestDirSize(t *testing.T)  {
+func TestDirSize(t *testing.T) {
 	dirpath := "./"
 	size := KFile.DirSize(dirpath)
-	if size==0 {
+	if size == 0 {
 		t.Error("dir size error")
 		return
 	}
@@ -94,7 +94,7 @@ func TestDirSize(t *testing.T)  {
 func BenchmarkDirSize(b *testing.B) {
 	b.ResetTimer()
 	dirpath := "./"
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		_ = KFile.DirSize(dirpath)
 	}
 }
@@ -110,7 +110,7 @@ func TestIsExist(t *testing.T) {
 func BenchmarkIsExist(b *testing.B) {
 	b.ResetTimer()
 	filename := "./README.md"
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		KFile.IsExist(filename)
 	}
 }
@@ -126,7 +126,7 @@ func TestIsWritable(t *testing.T) {
 func BenchmarkIsWritable(b *testing.B) {
 	b.ResetTimer()
 	filename := "./README.md"
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		KFile.IsWritable(filename)
 	}
 }
@@ -142,7 +142,7 @@ func TestIsReadable(t *testing.T) {
 func BenchmarkIsReadable(b *testing.B) {
 	b.ResetTimer()
 	filename := "./README.md"
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		KFile.IsReadable(filename)
 	}
 }
@@ -158,7 +158,7 @@ func TestIsFile(t *testing.T) {
 func BenchmarkIsFile(b *testing.B) {
 	b.ResetTimer()
 	filename := "./README.md"
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		KFile.IsFile(filename)
 	}
 }
@@ -176,7 +176,7 @@ func TestIsLink(t *testing.T) {
 func BenchmarkIsLink(b *testing.B) {
 	b.ResetTimer()
 	filename := "./testdata/diglett-lnk"
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		KFile.IsLink(filename)
 	}
 }
@@ -192,7 +192,7 @@ func TestIsDir(t *testing.T) {
 func BenchmarkIsDir(b *testing.B) {
 	b.ResetTimer()
 	filename := "./README.md"
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		KFile.IsDir(filename)
 	}
 }
@@ -208,7 +208,7 @@ func TestFileIsBinary(t *testing.T) {
 func BenchmarkFileIsBinary(b *testing.B) {
 	b.ResetTimer()
 	filename := "./README.md"
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		KFile.IsBinary(filename)
 	}
 }
@@ -224,7 +224,7 @@ func TestIsImg(t *testing.T) {
 func BenchmarkIsImg(b *testing.B) {
 	b.ResetTimer()
 	filename := "./testdata/diglett.png"
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		KFile.IsImg(filename)
 	}
 }
@@ -241,7 +241,7 @@ func TestAbsPath(t *testing.T) {
 func BenchmarkAbsPath(b *testing.B) {
 	b.ResetTimer()
 	filename := "./testdata/diglett.png"
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		KFile.AbsPath(filename)
 	}
 }
@@ -250,7 +250,7 @@ func TestCopyFile(t *testing.T) {
 	src := "./testdata/diglett.png"
 	des := "./testdata/sub/diglett_copy.png"
 	num, err := KFile.CopyFile(src, des, FILE_COVER_ALLOW)
-	if err != nil || num ==0 {
+	if err != nil || num == 0 {
 		t.Error("copy file fail")
 		return
 	}
@@ -260,9 +260,9 @@ func BenchmarkCopyFile(b *testing.B) {
 	b.ResetTimer()
 	src := "./testdata/diglett.png"
 	des := ""
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		des = fmt.Sprintf("./testdata/sub/diglett_copy_%d.png", i)
-		_,_ = KFile.CopyFile(src, des, FILE_COVER_ALLOW)
+		_, _ = KFile.CopyFile(src, des, FILE_COVER_ALLOW)
 	}
 }
 
@@ -271,7 +271,7 @@ func TestFastCopy(t *testing.T) {
 	des := "./testdata/fast/diglett_copy.png"
 
 	num, err := KFile.FastCopy(src, des)
-	if err != nil || num ==0 {
+	if err != nil || num == 0 {
 		t.Error("fast copy file fail")
 		return
 	}
@@ -281,9 +281,9 @@ func BenchmarkFastCopy(b *testing.B) {
 	b.ResetTimer()
 	src := "./testdata/diglett.png"
 	des := ""
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		des = fmt.Sprintf("./testdata/fast/diglett_fast_%d.png", i)
-		_,_ = KFile.FastCopy(src, des)
+		_, _ = KFile.FastCopy(src, des)
 	}
 }
 
@@ -302,7 +302,7 @@ func BenchmarkCopyLink(b *testing.B) {
 	b.ResetTimer()
 	src := "./testdata/diglett-lnk"
 	des := ""
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		des = fmt.Sprintf("./testdata/link/diglett-lnk_%d.copy", i)
 		_ = KFile.CopyLink(src, des)
 	}
@@ -313,7 +313,7 @@ func TestCopyDir(t *testing.T) {
 	des := "./test/copy"
 
 	num, err := KFile.CopyDir(src, des, FILE_COVER_ALLOW)
-	if err != nil || num ==0 {
+	if err != nil || num == 0 {
 		t.Error("copy directory fail")
 		return
 	}
@@ -323,16 +323,16 @@ func BenchmarkCopyDir(b *testing.B) {
 	b.ResetTimer()
 	src := "./testdata"
 	des := ""
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		des = fmt.Sprintf("./test/copy_%d", i)
-		_,_ = KFile.CopyDir(src, des, FILE_COVER_ALLOW)
+		_, _ = KFile.CopyDir(src, des, FILE_COVER_ALLOW)
 	}
 }
 
 func TestImg2Base64(t *testing.T) {
 	img := "./testdata/diglett.png"
 	str, err := KFile.Img2Base64(img)
-	if err != nil || str =="" {
+	if err != nil || str == "" {
 		t.Error("Img2Base64 fail")
 		return
 	}
@@ -341,8 +341,8 @@ func TestImg2Base64(t *testing.T) {
 func BenchmarkImg2Base64(b *testing.B) {
 	b.ResetTimer()
 	img := "./testdata/diglett.png"
-	for i:=0;i<b.N;i++{
-		_,_ = KFile.Img2Base64(img)
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.Img2Base64(img)
 	}
 }
 
@@ -358,7 +358,7 @@ func TestDelDir(t *testing.T) {
 func BenchmarkDelDir(b *testing.B) {
 	b.ResetTimer()
 	dir := "./test"
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		_ = KFile.DelDir(dir, true)
 	}
 }
@@ -367,7 +367,7 @@ func TestFileTree(t *testing.T) {
 	dir := "./"
 	tree := KFile.FileTree(dir, FILE_TREE_ALL, true)
 	//fmt.Printf("%v", tree)
-	if len(tree) ==0 {
+	if len(tree) == 0 {
 		t.Error("FileTree fail")
 		return
 	}
@@ -376,7 +376,7 @@ func TestFileTree(t *testing.T) {
 func BenchmarkFileTree(b *testing.B) {
 	b.ResetTimer()
 	dir := "./"
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		_ = KFile.FileTree(dir, FILE_TREE_ALL, true)
 	}
 }
@@ -393,16 +393,16 @@ func TestFormatDir(t *testing.T) {
 func BenchmarkFormatDir(b *testing.B) {
 	b.ResetTimer()
 	dir := `/usr\bin\\golang//fmt`
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		_ = KFile.FormatDir(dir)
 	}
 }
 
 func TestFileMd5(t *testing.T) {
 	file := `./file.go`
-	res1,_ := KFile.Md5(file, 0)
-	res2,_ := KFile.Md5(file, 16)
-	if len(res1)!= 32 || !strings.Contains(res1, res2) {
+	res1, _ := KFile.Md5(file, 0)
+	res2, _ := KFile.Md5(file, 16)
+	if len(res1) != 32 || !strings.Contains(res1, res2) {
 		t.Error("File Md5 fail")
 		return
 	}
@@ -411,8 +411,7 @@ func TestFileMd5(t *testing.T) {
 func BenchmarkFileMd5(b *testing.B) {
 	b.ResetTimer()
 	file := `./file.go`
-	for i:=0;i<b.N;i++{
-		_,_ = KFile.Md5(file, 32)
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.Md5(file, 32)
 	}
 }
-

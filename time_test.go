@@ -15,7 +15,7 @@ func TestTime(t *testing.T) {
 
 func BenchmarkTime(b *testing.B) {
 	b.ResetTimer()
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		KTime.Time()
 	}
 }
@@ -30,7 +30,7 @@ func TestMilliTime(t *testing.T) {
 
 func BenchmarkMilliTime(b *testing.B) {
 	b.ResetTimer()
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		KTime.MilliTime()
 	}
 }
@@ -45,7 +45,7 @@ func TestMicroTime(t *testing.T) {
 
 func BenchmarkMicroTime(b *testing.B) {
 	b.ResetTimer()
-	for i:=0;i<b.N;i++{
+	for i := 0; i < b.N; i++ {
 		KTime.MicroTime()
 	}
 }
