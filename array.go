@@ -2,7 +2,7 @@ package gohelper
 
 import "reflect"
 
-// 元素是否在数组(切片/字典)内
+//InArray 元素是否在数组(切片/字典)内
 func (ka *LkkArray) InArray(needle interface{}, haystack interface{}) bool {
 	val := reflect.ValueOf(haystack)
 	switch val.Kind() {
