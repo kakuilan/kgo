@@ -56,7 +56,6 @@ go tool pprof -http=":8081" [binary] [profile]
 - https://github.com/sohaha/zlsgo
 - https://github.com/stephanbaker/go-simpletime
 - https://github.com/vence722/convert
-- https://github.com/keysonZZZ/kgo
 - https://github.com/jinzhu/now
 
 ### 其他库
@@ -64,14 +63,16 @@ go tool pprof -http=":8081" [binary] [profile]
 - https://github.com/jinzhu/configor
 - https://github.com/denisbrodbeck/machineid
 - github.com/karrick/godirwalk
+- https://github.com/keysonZZZ/kgo
 
 ### 包
 file
 string
 time
 os
-config
 array
 number
 url
+convert
+
 
