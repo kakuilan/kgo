@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-// 将整数转换为字符串
+// Int2Str 将整数转换为字符串
 func (kc *LkkConvert) Int2Str(val interface{}) string {
 	switch val.(type) {
 	// Integers
@@ -17,7 +17,7 @@ func (kc *LkkConvert) Int2Str(val interface{}) string {
 	}
 }
 
-// 将浮点数转换为字符串,length为小数位数
+// Float2Str 将浮点数转换为字符串,length为小数位数
 func (kc *LkkConvert) Float2Str(val interface{}, length int) string {
 	switch val.(type) {
 	// Floats
