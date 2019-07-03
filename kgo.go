@@ -9,6 +9,8 @@ type (
 	LkkArray byte
 	// LkkTime is the receiver of time utilities
 	LkkTime byte
+	// LkkConvert is the receiver of convert utilities
+	LkkConvert byte
 
 	// 枚举类型,文件是否覆盖
 	LkkFileCover int8
@@ -47,4 +49,7 @@ var (
 
 	// KTime utilities
 	KTime LkkTime
+
+	// KConv utilities
+	KConv LkkConvert
 )
