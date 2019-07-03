@@ -64,3 +64,20 @@ func BenchmarkStringIsBinary(b *testing.B) {
 		KFile.IsBinary(filename)
 	}
 }
+
+func TestStringMd5(t *testing.T) {
+	str := ""
+	res := KStr.Md5(str, 32)
+	if res != "d41d8cd98f00b204e9800998ecf8427e" {
+		t.Error("string Md5 fail")
+		return
+	}
+}
+
+func BenchmarkStringMd5(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!"
+	for i:=0;i<b.N;i++{
+		_ = KStr.Md5(str, 32)
+	}
+}
