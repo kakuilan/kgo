@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-// 将换行符转换为br标签
+// Nl2br 将换行符转换为br标签
 func (ks *LkkString) Nl2br(html string) string {
 	if html == "" {
 		return ""
@@ -16,7 +16,7 @@ func (ks *LkkString) Nl2br(html string) string {
 	}
 }
 
-// 过滤html和php标签
+// StripTags 过滤html和php标签
 func (ks *LkkString) StripTags(html string) string {
 	if html == "" {
 		return ""
@@ -26,7 +26,7 @@ func (ks *LkkString) StripTags(html string) string {
 	}
 }
 
-// 是否二进制的字符串
+// IsBinary 是否二进制的字符串
 func (kf *LkkString) IsBinary(content string) bool {
 	for _, b := range content {
 		if 0 == b {
@@ -36,7 +36,7 @@ func (kf *LkkString) IsBinary(content string) bool {
 	return false
 }
 
-// 获取字符串md5值,length指定结果长度32/16
+// Md5 获取字符串md5值,length指定结果长度32/16
 func (kf *LkkString) Md5(str string, length uint8) string {
 	var res string
 	hash := md5.New()
