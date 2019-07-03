@@ -215,7 +215,7 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 	var nBytes int64
 	sourceSize := sourceStat.Size()
 	if sourceSize <= 1048576 { //1M以内小文件使用buffer拷贝
-		var total int = 0
+		var total int
 		var bufferSize int = 102400
 		if sourceSize < 524288 {
 			bufferSize = 51200
@@ -268,7 +268,7 @@ func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
 	}
 
 	var bufferSize int = 32768
-	var nBytes int = 0
+	var nBytes int
 	buf := make([]byte, bufferSize)
 	for {
 		n, err := sourceFile.Read(buf)
@@ -391,7 +391,7 @@ func (kf *LkkFile) Img2Base64(path string) (string, error) {
 	return fmt.Sprintf("data:image/%s;base64,%s", ext, base64.StdEncoding.EncodeToString(imgBuffer)), nil
 }
 
-// 删除目录;delRoot为true时连该目录一起删除;为false时只清空该目录
+// DelDir 删除目录;delRoot为true时连该目录一起删除;为false时只清空该目录
 func (kf *LkkFile) DelDir(dir string, delRoot bool) error {
 	realPath := kf.AbsPath(dir)
 	if !kf.IsDir(realPath) {

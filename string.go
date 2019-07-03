@@ -11,19 +11,17 @@ import (
 func (ks *LkkString) Nl2br(html string) string {
 	if html == "" {
 		return ""
-	} else {
-		return strings.Replace(html, "\n", "<br />", -1)
 	}
+	return strings.Replace(html, "\n", "<br />", -1)
 }
 
 // StripTags 过滤html和php标签
 func (ks *LkkString) StripTags(html string) string {
 	if html == "" {
 		return ""
-	} else {
-		re := regexp.MustCompile(`<(.|\n)*?>`)
-		return re.ReplaceAllString(html, "")
 	}
+	re := regexp.MustCompile(`<(.|\n)*?>`)
+	return re.ReplaceAllString(html, "")
 }
 
 // IsBinary 是否二进制的字符串
