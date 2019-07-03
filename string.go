@@ -1,6 +1,8 @@
 package gohelper
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"strings"
 	"regexp"
 )
@@ -32,4 +34,22 @@ func (kf *LkkString) IsBinary(content string) bool {
 		}
 	}
 	return false
+}
+
+// 获取字符串md5值,length指定结果长度32/16
+func (kf *LkkString) Md5(str string, length uint8) string {
+	var res string
+	hash := md5.New()
+	hash.Write([]byte(str))
+
+	hashInBytes := hash.Sum(nil)
+	if length>0 && length<32 {
+		dst := make([]byte, hex.EncodedLen(len(hashInBytes)))
+		hex.Encode(dst, hashInBytes)
+		res = string(dst[:length])
+	}else{
+		res = hex.EncodeToString(hashInBytes)
+	}
+
+	return res
 }
