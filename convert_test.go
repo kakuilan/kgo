@@ -12,6 +12,13 @@ func TestInt2Str(t *testing.T) {
 		t.Error("Int2Str fail")
 		return
 	}
+
+	//非整型的转为空
+	res := KConv.Int2Str(1.23)
+	if res != "" {
+		t.Error("Int2Str fail")
+		return
+	}
 }
 
 func BenchmarkInt2Str(b *testing.B) {
@@ -29,6 +36,13 @@ func TestIntFloat2Str(t *testing.T) {
 	res2 := KConv.Float2Str(f2, 8)
 	if fmt.Sprint(reflect.TypeOf(res1)) != fmt.Sprint(reflect.TypeOf(res2)) {
 		t.Error("Int2Str fail")
+		return
+	}
+
+	//非浮点的转为空
+	res := KConv.Float2Str(123, 2)
+	if res != "" {
+		t.Error("Float2Str fail")
 		return
 	}
 }
@@ -65,6 +79,20 @@ func BenchmarkBool2Str(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Bool2Str(true)
+	}
+}
+
+func TestStrictStr2Int(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	res := KConv.StrictStr2Int("abc123", 8, true)
+	if fmt.Sprint(reflect.TypeOf(res)) != "int8" {
+		t.Error("Str2Int fail")
+		return
 	}
 }
 
