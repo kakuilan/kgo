@@ -48,3 +48,105 @@ func Benchmark64Float2Str(b *testing.B) {
 		KConv.Float2Str(f2, 8)
 	}
 }
+
+func TestBool2Str(t *testing.T) {
+	res1 := KConv.Bool2Str(true)
+	res2 := KConv.Bool2Str(false)
+	if res1 != "true" {
+		t.Error("Bool2Str fail")
+		return
+	} else if res2 != "false" {
+		t.Error("Bool2Str fail")
+		return
+	}
+}
+
+func BenchmarkBool2Str(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Bool2Str(true)
+	}
+}
+
+func TestStr2Int(t *testing.T) {
+	res := KConv.Str2Int("123")
+	if fmt.Sprint(reflect.TypeOf(res)) != "int" {
+		t.Error("Str2Int fail")
+		return
+	}
+}
+
+func BenchmarkStr2Int(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Int("-123")
+	}
+}
+
+func TestStr2Int8(t *testing.T) {
+	tim := KConv.Int2Str(KTime.MicroTime())
+	res := KConv.Str2Int8(tim)
+	if res > 127 {
+		t.Error("Str2Int8 fail")
+		return
+	}
+}
+
+func BenchmarkStr2Int8(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Int8("128")
+	}
+}
+
+func TestStr2Int16(t *testing.T) {
+	tim := KConv.Int2Str(KTime.MicroTime())
+	res := KConv.Str2Int16(tim)
+	if res > 32767 {
+		t.Error("Str2Int16 fail")
+		return
+	}
+}
+
+func BenchmarkStr2Int16(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Int16("32768")
+	}
+}
+
+func TestStr2Int32(t *testing.T) {
+	tim := KConv.Int2Str(KTime.MicroTime())
+	res := KConv.Str2Int32(tim)
+	if res > 2147483647 {
+		t.Error("Str2Int32 fail")
+		return
+	}
+}
+
+func BenchmarkStr2Int32(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Int32("2147483647")
+	}
+}
+
+func TestStr2Int64(t *testing.T) {
+	tim := KConv.Int2Str(KTime.MicroTime())
+	res := KConv.Str2Int64(tim)
+	println(UINT_MAX)
+	println(UINT_MIN)
+	println(INT_MAX)
+	println(INT_MIN)
+	if res > 9223372036854775807 {
+		t.Error("Str2Int64 fail")
+		return
+	}
+}
+
+func BenchmarkStr2Int64(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Int64("9223372036854775808")
+	}
+}

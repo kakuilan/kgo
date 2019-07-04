@@ -14,6 +14,14 @@ golang 函数库/工具集
 ```shell
 go test
 
+#代码覆盖率
+go test -cover #概览
+
+go test -coverprofile=coverage.out #生成统计信息
+go tool cover -func=coverage.out #查看统计信息
+go tool cover -html=coverage.out #将统计信息转换为html
+
+
 #压测
 time go test -bench=. -run=none
 time go test -v -bench=. -cpu=4 -benchtime="10s" -timeout="15s" -benchmem
@@ -21,7 +29,7 @@ time go test -v -bench=. -cpu=4 -benchtime="10s" -timeout="15s" -benchmem
 #性能分析
 time go test -bench=. -benchmem -memprofile memprofile.out -cpuprofile profile.out
 go tool pprof profile.out
-go tool pprof -http=":8081" [binary] [profile]
+go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 ```
 
 ### 参考项目

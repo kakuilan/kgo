@@ -22,6 +22,18 @@ const (
 	// Version 版本号
 	Version = "0.0.1"
 
+	//UINT_MAX 无符号整型uint最大值
+	UINT_MAX uint = ^uint(0)
+
+	//UINT_MIN 无符号整型uint最小值
+	UINT_MIN uint = 0
+
+	//INT_MAX 有符号整型int最大值
+	INT_MAX = int(^uint(0) >> 1)
+
+	//INT_MIN 有符号整型int最小值
+	INT_MIN = ^INT_MAX
+
 	// FILE_COVER_ALLOW 文件覆盖,允许
 	FILE_COVER_ALLOW LkkFileCover = 1
 	// FILE_COVER_IGNORE 文件覆盖,忽略
