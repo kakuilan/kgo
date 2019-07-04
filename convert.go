@@ -39,7 +39,7 @@ func (kc *LkkConvert) Bool2Str(val bool) string {
 	return "false"
 }
 
-// StrictStr2Int 严格将字符串转换为有符号整型,bitSize为整型位数,strict为是否严格检查
+// StrictStr2Int 严格将字符串转换为有符号整型,bitSize为类型位数,strict为是否严格检查
 func (kc *LkkConvert) StrictStr2Int(val string, bitSize int, strict bool) int64 {
 	res, err := strconv.ParseInt(val, 0, bitSize)
 	if err != nil {
@@ -74,4 +74,81 @@ func (kc *LkkConvert) Str2Int32(val string) int32 {
 // Str2Int64 将字符串转换为int64
 func (kc *LkkConvert) Str2Int64(val string) int64 {
 	return kc.StrictStr2Int(val, 64, false)
+}
+
+// StrictStr2Uint 严格将字符串转换为无符号整型,bitSize为类型位数,strict为是否严格检查
+func (kc *LkkConvert) StrictStr2Uint(val string, bitSize int, strict bool) uint64 {
+	res, err := strconv.ParseUint(val, 0, bitSize)
+	if err != nil {
+		if strict {
+			panic(err)
+		}
+	}
+	return res
+}
+
+// Str2Uint 将字符串转换为uint
+func (kc *LkkConvert) Str2Uint(val string) uint {
+	return uint(kc.StrictStr2Uint(val, 0, false))
+}
+
+// Str2Uint8 将字符串转换为uint8
+func (kc *LkkConvert) Str2Uint8(val string) uint8 {
+	return uint8(kc.StrictStr2Uint(val, 8, false))
+}
+
+// Str2Uint16 将字符串转换为uint16
+func (kc *LkkConvert) Str2Uint16(val string) uint16 {
+	return uint16(kc.StrictStr2Uint(val, 16, false))
+}
+
+// Str2Uint32 将字符串转换为uint32
+func (kc *LkkConvert) Str2Uint32(val string) uint32 {
+	return uint32(kc.StrictStr2Uint(val, 32, false))
+}
+
+// Str2Uint64 将字符串转换为uint64
+func (kc *LkkConvert) Str2Uint64(val string) uint64 {
+	return uint64(kc.StrictStr2Uint(val, 64, false))
+}
+
+// StrictStr2Float 严格将字符串转换为浮点型,bitSize为类型位数,strict为是否严格检查
+func (kc *LkkConvert) StrictStr2Float(val string, bitSize int, strict bool) float64 {
+	res, err := strconv.ParseFloat(val, bitSize)
+	if err != nil {
+		if strict {
+			panic(err)
+		}
+	}
+	return res
+}
+
+// Str2Float32 将字符串转换为float32
+func (kc *LkkConvert) Str2Float32(val string) float32 {
+	return float32(kc.StrictStr2Float(val, 32, false))
+}
+
+// Str2Float64 将字符串转换为float64
+func (kc *LkkConvert) Str2Float64(val string) float64 {
+	return float64(kc.StrictStr2Float(val, 64, false))
+}
+
+// Str2Bool 将字符串转换为布尔值
+func (kc *LkkConvert) Str2Bool(val string) bool {
+	if val == "true" || val == "True" || val == "TRUE" {
+		return true
+	}
+	return false
+}
+
+// Int2Bool 将整数转换为布尔值
+func (kc *LkkConvert) Int2Bool(val interface{}) bool {
+	switch val.(type) {
+	case int, int8, int16, int32, int64:
+		return (val.(int64) > 0)
+	case uint, uint8, uint16, uint32, uint64:
+		return !(val == 0)
+	default:
+		return false
+	}
 }
