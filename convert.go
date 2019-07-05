@@ -2,7 +2,9 @@ package gohelper
 
 import (
 	"fmt"
+	"reflect"
 	"strconv"
+	"unsafe"
 )
 
 // Int2Str 将整数转换为字符串
@@ -167,4 +169,19 @@ func (kc *LkkConvert) Int2Bool(val interface{}) bool {
 	default:
 		return false
 	}
+}
+
+// Str2ByteSlice 将字符串转换为字节切片;该方法零拷贝,但不安全,仅当临时需将长字符串转换且不长时间保存时可以使用.
+func (kc *LkkConvert) Str2ByteSlice(val string) []byte {
+	pSliceHeader := &reflect.SliceHeader{}
+	strHeader := (*reflect.StringHeader)(unsafe.Pointer(&val))
+	pSliceHeader.Data = strHeader.Data
+	pSliceHeader.Len = strHeader.Len
+	pSliceHeader.Cap = strHeader.Len
+	return *(*[]byte)(unsafe.Pointer(pSliceHeader))
+}
+
+// BytesSlice2Str 将字节切片转换为字符串,零拷贝
+func (kc *LkkConvert) BytesSlice2Str(val []byte) string {
+	return *(*string)(unsafe.Pointer(&val))
 }
