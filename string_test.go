@@ -1,6 +1,7 @@
 package gohelper
 
 import (
+	"os"
 	"strings"
 	"testing"
 )
@@ -58,7 +59,8 @@ func TestStringIsBinary(t *testing.T) {
 		return
 	}
 
-	file2 := "/usr/lib/golang/bin/go"
+	goroot := os.Getenv("GOROOT")
+	file2 := goroot + "/bin/go"
 	if !KFile.IsBinary(file2) {
 		t.Error("file isn`t binary")
 		return
