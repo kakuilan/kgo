@@ -23,16 +23,24 @@ const (
 	Version = "0.0.1"
 
 	//UINT_MAX 无符号整型uint最大值
-	UINT_MAX uint = ^uint(0)
-
+	UINT_MAX = ^uint(0)
 	//UINT_MIN 无符号整型uint最小值
 	UINT_MIN uint = 0
 
+	//UINT64_MAX 无符号整型uint64最大值, 18446744073709551615
+	UINT64_MAX = ^uint64(0)
+	//UINT64_MIN 无符号整型uint64最小值
+	UINT64_MIN uint64 = 0
+
 	//INT_MAX 有符号整型int最大值
 	INT_MAX = int(^uint(0) >> 1)
-
 	//INT_MIN 有符号整型int最小值
 	INT_MIN = ^INT_MAX
+
+	//INT64_MAX 有符号整型int64最大值, 9223372036854775807
+	INT64_MAX = int64(^uint(0) >> 1)
+	//INT64_MIN 有符号整型int64最小值, -9223372036854775808
+	INT64_MIN = ^INT64_MAX
 
 	// FILE_COVER_ALLOW 文件覆盖,允许
 	FILE_COVER_ALLOW LkkFileCover = 1

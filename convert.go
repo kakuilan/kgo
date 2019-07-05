@@ -144,10 +144,26 @@ func (kc *LkkConvert) Str2Bool(val string) bool {
 // Int2Bool 将整数转换为布尔值
 func (kc *LkkConvert) Int2Bool(val interface{}) bool {
 	switch val.(type) {
-	case int, int8, int16, int32, int64:
+	case int:
+		return (val.(int) > 0)
+	case int8:
+		return (val.(int8) > 0)
+	case int16:
+		return (val.(int16) > 0)
+	case int32:
+		return (val.(int32) > 0)
+	case int64:
 		return (val.(int64) > 0)
-	case uint, uint8, uint16, uint32, uint64:
-		return !(val == 0)
+	case uint:
+		return (val.(uint) > 0)
+	case uint8:
+		return (val.(uint8) > 0)
+	case uint16:
+		return (val.(uint16) > 0)
+	case uint32:
+		return (val.(uint32) > 0)
+	case uint64:
+		return (val.(uint64) > 0)
 	default:
 		return false
 	}
