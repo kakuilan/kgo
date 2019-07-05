@@ -14,6 +14,7 @@ world!
 		t.Error("Nl2br fail")
 		return
 	}
+	_ = KStr.Nl2br("")
 }
 
 func BenchmarkNl2br(b *testing.B) {
@@ -36,6 +37,7 @@ func TestStripTags(t *testing.T) {
 		t.Error("StripTags fail")
 		return
 	}
+	_ = KStr.StripTags("")
 }
 
 func BenchmarkStripTags(b *testing.B) {
@@ -55,6 +57,12 @@ func TestStringIsBinary(t *testing.T) {
 		t.Error("file isn`t binary")
 		return
 	}
+
+	file2 := "/usr/lib/golang/bin/go"
+	if !KFile.IsBinary(file2) {
+		t.Error("file isn`t binary")
+		return
+	}
 }
 
 func BenchmarkStringIsBinary(b *testing.B) {
@@ -67,8 +75,13 @@ func BenchmarkStringIsBinary(b *testing.B) {
 
 func TestStringMd5(t *testing.T) {
 	str := ""
-	res := KStr.Md5(str, 32)
-	if res != "d41d8cd98f00b204e9800998ecf8427e" {
+	res1 := KStr.Md5(str, 32)
+	res2 := KStr.Md5(str, 16)
+	if res1 != "d41d8cd98f00b204e9800998ecf8427e" {
+		t.Error("string Md5 fail")
+		return
+	}
+	if !strings.Contains(res1, res2) {
 		t.Error("string Md5 fail")
 		return
 	}
