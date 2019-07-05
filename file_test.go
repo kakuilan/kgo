@@ -13,6 +13,8 @@ func TestGetExt(t *testing.T) {
 		t.Error("file extension error")
 		return
 	}
+
+	KFile.GetExt("./testdata/gitkeep")
 }
 
 func BenchmarkGetExt(b *testing.B) {
@@ -48,6 +50,9 @@ func TestGetMime(t *testing.T) {
 		t.Error("GetMime fail")
 		return
 	}
+
+	KFile.GetMime("./testdata/diglett-lnk", false)
+	KFile.GetMime("./", false)
 }
 
 func BenchmarkGetMimeFast(b *testing.B) {
@@ -72,6 +77,8 @@ func TestFileSize(t *testing.T) {
 		t.Error("file size error")
 		return
 	}
+
+	KFile.FileSize("./hello")
 }
 
 func BenchmarkFileSize(b *testing.B) {
@@ -89,6 +96,7 @@ func TestDirSize(t *testing.T) {
 		t.Error("dir size error")
 		return
 	}
+	KFile.DirSize("./hello")
 }
 
 func BenchmarkDirSize(b *testing.B) {
@@ -121,6 +129,7 @@ func TestIsWritable(t *testing.T) {
 		t.Error("file can not write")
 		return
 	}
+	KFile.IsWritable("./hello")
 }
 
 func BenchmarkIsWritable(b *testing.B) {
@@ -137,6 +146,7 @@ func TestIsReadable(t *testing.T) {
 		t.Error("file can not read")
 		return
 	}
+	KFile.IsReadable("./hello")
 }
 
 func BenchmarkIsReadable(b *testing.B) {
@@ -161,6 +171,7 @@ func BenchmarkIsFile(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		KFile.IsFile(filename)
 	}
+	KFile.IsFile("./hello")
 }
 
 func TestIsLink(t *testing.T) {
@@ -179,6 +190,7 @@ func BenchmarkIsLink(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		KFile.IsLink(filename)
 	}
+	KFile.IsLink("./hello")
 }
 
 func TestIsDir(t *testing.T) {
@@ -187,6 +199,8 @@ func TestIsDir(t *testing.T) {
 		t.Error("isn`t a dir")
 		return
 	}
+	KFile.IsDir("./hello")
+	KFile.IsDir("/root/.bashrc")
 }
 
 func BenchmarkIsDir(b *testing.B) {
@@ -203,6 +217,7 @@ func TestFileIsBinary(t *testing.T) {
 		t.Error("file isn`t binary")
 		return
 	}
+	KFile.IsBinary("./hello")
 }
 
 func BenchmarkFileIsBinary(b *testing.B) {
@@ -219,6 +234,7 @@ func TestIsImg(t *testing.T) {
 		t.Error("file isn`t img")
 		return
 	}
+	KFile.IsImg("./hello")
 }
 
 func BenchmarkIsImg(b *testing.B) {
@@ -236,6 +252,7 @@ func TestAbsPath(t *testing.T) {
 		t.Error("file not exist")
 		return
 	}
+	KFile.AbsPath("/root/.bashrc")
 }
 
 func BenchmarkAbsPath(b *testing.B) {
