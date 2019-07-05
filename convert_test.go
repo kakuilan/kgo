@@ -381,3 +381,45 @@ func BenchmarkInt2Bool(b *testing.B) {
 		KConv.Int2Bool(1)
 	}
 }
+
+func TestStr2ByteSlice(t *testing.T) {
+	str := `hello world!`
+	res := KConv.Str2ByteSlice(str)
+	if fmt.Sprint(reflect.TypeOf(res)) != "[]uint8" {
+		t.Error("Str2ByteSlice fail")
+		return
+	}
+}
+
+func BenchmarkStr2ByteSlice(b *testing.B) {
+	b.ResetTimer()
+	str := `hello world!
+// Convert different types to byte slice using types and functions in unsafe and reflect package. 
+// It has higher performance, but notice that it may be not safe when garbage collection happens.
+// Use it when you need to temporary convert a long string to a byte slice and won't keep it for long time.
+`
+	for i := 0; i < b.N; i++ {
+		KConv.Str2ByteSlice(str)
+	}
+}
+
+func TestBytesSlice2Str(t *testing.T) {
+	sli := []byte("hello world!")
+	res := KConv.BytesSlice2Str(sli)
+	if fmt.Sprint(reflect.TypeOf(res)) != "string" {
+		t.Error("BytesSlice2Str fail")
+		return
+	}
+}
+
+func BenchmarkBytesSlice2Str(b *testing.B) {
+	b.ResetTimer()
+	sli := []byte(`hello world!
+// Convert different types to byte slice using types and functions in unsafe and reflect package. 
+// It has higher performance, but notice that it may be not safe when garbage collection happens.
+// Use it when you need to temporary convert a long string to a byte slice and won't keep it for long time.
+`)
+	for i := 0; i < b.N; i++ {
+		KConv.BytesSlice2Str(sli)
+	}
+}
