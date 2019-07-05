@@ -91,7 +91,7 @@ func TestStrictStr2Int(t *testing.T) {
 
 	res := KConv.StrictStr2Int("abc123", 8, true)
 	if fmt.Sprint(reflect.TypeOf(res)) != "int8" {
-		t.Error("Str2Int fail")
+		t.Error("StrictStr2Int fail")
 		return
 	}
 }
@@ -162,11 +162,7 @@ func BenchmarkStr2Int32(b *testing.B) {
 func TestStr2Int64(t *testing.T) {
 	tim := KConv.Int2Str(KTime.MicroTime())
 	res := KConv.Str2Int64(tim)
-	println(UINT_MAX)
-	println(UINT_MIN)
-	println(INT_MAX)
-	println(INT_MIN)
-	if res > 9223372036854775807 {
+	if res > INT64_MAX {
 		t.Error("Str2Int64 fail")
 		return
 	}
@@ -176,5 +172,212 @@ func BenchmarkStr2Int64(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Int64("9223372036854775808")
+	}
+}
+
+func TestStrictStr2Uint(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+	res := KConv.StrictStr2Uint("abc123", 8, true)
+	if fmt.Sprint(reflect.TypeOf(res)) != "uint8" {
+		t.Error("StrictStr2Uint fail")
+		return
+	}
+}
+
+func TestStr2Uint(t *testing.T) {
+	res := KConv.Str2Uint("-123")
+	if fmt.Sprint(reflect.TypeOf(res)) != "uint" {
+		t.Error("Str2Uint fail")
+		return
+	}
+}
+
+func BenchmarkStr2Uint(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Uint("123")
+	}
+}
+
+func TestStr2Uint8(t *testing.T) {
+	tim := KConv.Int2Str(KTime.MicroTime())
+	res := KConv.Str2Uint8(tim)
+	if res > 255 {
+		t.Error("Str2Uint8 fail")
+		return
+	}
+}
+
+func BenchmarkStr2Uint8(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Uint8("256")
+	}
+}
+
+func TestStr2Uint16(t *testing.T) {
+	tim := KConv.Int2Str(KTime.MicroTime())
+	res := KConv.Str2Uint16(tim)
+	if res > 65535 {
+		t.Error("Str2Uint16 fail")
+		return
+	}
+}
+
+func BenchmarkStr2Uint16(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Uint16("65536")
+	}
+}
+
+func TestStr2Uint32(t *testing.T) {
+	tim := KConv.Int2Str(KTime.MicroTime())
+	res := KConv.Str2Uint32(tim)
+	if res > 4294967295 {
+		t.Error("Str2Uint32 fail")
+		return
+	}
+}
+
+func BenchmarkStr2Uint32(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Uint32("4294967296")
+	}
+}
+
+func TestStr2Uint64(t *testing.T) {
+	tim := KConv.Int2Str(KTime.MicroTime())
+	res := KConv.Str2Uint64(tim)
+	if res > UINT64_MAX {
+		t.Error("Str2Uint64 fail")
+		return
+	}
+}
+
+func BenchmarkStr2Uint64(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Uint64("9223372036854775808")
+	}
+}
+
+func TestStrictStr2Float(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	res := KConv.StrictStr2Float("abc123", 32, true)
+	if fmt.Sprint(reflect.TypeOf(res)) != "float32" {
+		t.Error("StrictStr2Float fail")
+		return
+	}
+}
+
+func TestStr2Float32(t *testing.T) {
+	res := KConv.Str2Float32("123.456")
+	if fmt.Sprint(reflect.TypeOf(res)) != "float32" {
+		t.Error("Str2Float32 fail")
+		return
+	}
+}
+
+func BenchmarkStr2Float32(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Float32("123.456")
+	}
+}
+
+func TestStr2Float64(t *testing.T) {
+	res := KConv.Str2Float64("123.456")
+	if fmt.Sprint(reflect.TypeOf(res)) != "float64" {
+		t.Error("Str2Float64 fail")
+		return
+	}
+}
+
+func BenchmarkStr2Float64(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Float64("123.456")
+	}
+}
+
+func TestStr2Bool(t *testing.T) {
+	res1 := KConv.Str2Bool("true")
+	res2 := KConv.Str2Bool("True")
+	res3 := KConv.Str2Bool("TRUE")
+	res4 := KConv.Str2Bool("Hello")
+
+	if !res1 || !res2 || !res3 {
+		t.Error("Str2Bool fail")
+		return
+	} else if res4 {
+		t.Error("Str2Bool fail")
+		return
+	}
+}
+
+func BenchmarkStr2Bool(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Bool("123.456")
+	}
+}
+
+func TestInt2Bool(t *testing.T) {
+	var (
+		it1 int   = -1
+		it2 int8  = 0
+		it3 int16 = 1
+		it4 int32 = 2
+		it5 int64 = 3
+
+		ui1 uint   = 0
+		ui2 uint8  = 1
+		ui3 uint16 = 2
+		ui4 uint32 = 3
+		ui5 uint64 = 4
+
+		it6 string = "1"
+	)
+
+	res1 := KConv.Int2Bool(it1)
+	res2 := KConv.Int2Bool(it2)
+	res3 := KConv.Int2Bool(it3)
+	res4 := KConv.Int2Bool(it4)
+	res5 := KConv.Int2Bool(it5)
+
+	res6 := KConv.Int2Bool(ui1)
+	res7 := KConv.Int2Bool(ui2)
+	res8 := KConv.Int2Bool(ui3)
+	res9 := KConv.Int2Bool(ui4)
+	res10 := KConv.Int2Bool(ui5)
+	res11 := KConv.Int2Bool(it6)
+
+	if res1 || res2 || res6 || res11 {
+		t.Error("Int2Bool fail")
+		return
+	}
+
+	if !(res3 && res4 && res5 && res7 && res8 && res9 && res10) {
+		t.Error("Int2Bool fail")
+		return
+	}
+
+}
+
+func BenchmarkInt2Bool(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Int2Bool(1)
 	}
 }
