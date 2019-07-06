@@ -160,13 +160,38 @@ func (kf *LkkFile) IsImg(path string) bool {
 // AbsPath 获取绝对路径
 func (kf *LkkFile) AbsPath(path string) string {
 	fullPath := ""
-	res, err := filepath.Abs(path)
-	if err != nil {
+	res, _ := filepath.Abs(path)
+	if res == "" || !strings.HasPrefix(res, "/") {
 		fullPath = filepath.Join("/", path)
 	} else {
 		fullPath = res
 	}
+
 	return fullPath
+}
+
+// QuickFile 快速创建指定大小的文件,size为字节
+func (kf *LkkFile) QuickFile(path string, size int64) bool {
+	//创建目录
+	destDir := filepath.Dir(path)
+	if destDir != "" && !kf.IsDir(destDir) {
+		if err := os.MkdirAll(destDir, 0766); err != nil {
+			return false
+		}
+	}
+
+	fd, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0666)
+	if err != nil {
+		return false
+	}
+	defer fd.Close()
+
+	if size > 1 {
+		_, _ = fd.Seek(size-1, 0)
+		_, _ = fd.Write([]byte{0})
+	}
+
+	return true
 }
 
 // CopyFile 拷贝源文件到目标文件,cover为枚举(FILE_COVER_ALLOW、FILE_COVER_IGNORE、FILE_COVER_DENY)
@@ -177,8 +202,10 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 
 	sourceStat, err := os.Stat(source)
 	if err != nil {
+		println(1111, err.Error())
 		return 0, err
 	} else if !sourceStat.Mode().IsRegular() {
+		println(2222, source, "not a regular file")
 		return 0, fmt.Errorf("%s is not a regular file", source)
 	}
 
@@ -192,22 +219,21 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 		}
 	}
 
-	sourceFile, err := os.Open(source)
-	if err != nil {
-		return 0, err
-	}
+	sourceFile, _ := os.Open(source)
 	defer sourceFile.Close()
 
 	//创建目录
 	destDir := filepath.Dir(dest)
-	if !kf.IsDir(destDir) {
+	if destDir != "" && !kf.IsDir(destDir) {
 		if err = os.MkdirAll(destDir, 0766); err != nil {
+			println(3333, err.Error())
 			return 0, err
 		}
 	}
 
 	destFile, err := os.Create(dest)
 	if err != nil {
+		println(4444, err.Error())
 		return 0, err
 	}
 	defer destFile.Close()
