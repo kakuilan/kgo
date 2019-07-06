@@ -202,10 +202,8 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 
 	sourceStat, err := os.Stat(source)
 	if err != nil {
-		println(1111, err.Error())
 		return 0, err
 	} else if !sourceStat.Mode().IsRegular() {
-		println(2222, source, "not a regular file")
 		return 0, fmt.Errorf("%s is not a regular file", source)
 	}
 
@@ -226,14 +224,12 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 	destDir := filepath.Dir(dest)
 	if destDir != "" && !kf.IsDir(destDir) {
 		if err = os.MkdirAll(destDir, 0766); err != nil {
-			println(3333, err.Error())
 			return 0, err
 		}
 	}
 
 	destFile, err := os.Create(dest)
 	if err != nil {
-		println(4444, err.Error())
 		return 0, err
 	}
 	defer destFile.Close()
@@ -347,25 +343,26 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 	var err error
 	sourceInfo, err := os.Stat(source)
 	if err != nil {
+		println(1111, err.Error())
 		return 0, err
 	} else if !sourceInfo.IsDir() {
+		println(2222, source, "not a directory")
 		return 0, fmt.Errorf("%s is not a directory", source)
 	}
 
 	// create dest dir
 	err = os.MkdirAll(dest, sourceInfo.Mode())
 	if err != nil {
+		println(3333, err.Error())
 		return 0, err
 	}
 
-	directory, err := os.Open(source)
-	if err != nil {
-		return 0, err
-	}
+	directory, _ := os.Open(source)
 	defer directory.Close()
 
 	objects, err := directory.Readdir(-1)
 	if err != nil {
+		println(4444, err.Error())
 		return 0, err
 	}
 
