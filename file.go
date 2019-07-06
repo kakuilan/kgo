@@ -160,8 +160,8 @@ func (kf *LkkFile) IsImg(path string) bool {
 // AbsPath 获取绝对路径
 func (kf *LkkFile) AbsPath(path string) string {
 	fullPath := ""
-	res, _ := filepath.Abs(path)
-	if res == "" || !strings.HasPrefix(res, "/") {
+	res, err := filepath.Abs(path)
+	if err != nil {
 		fullPath = filepath.Join("/", path)
 	} else {
 		fullPath = res
@@ -343,17 +343,14 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 	var err error
 	sourceInfo, err := os.Stat(source)
 	if err != nil {
-		println(1111, err.Error())
 		return 0, err
 	} else if !sourceInfo.IsDir() {
-		println(2222, source, "not a directory")
 		return 0, fmt.Errorf("%s is not a directory", source)
 	}
 
 	// create dest dir
 	err = os.MkdirAll(dest, sourceInfo.Mode())
 	if err != nil {
-		println(3333, err.Error())
 		return 0, err
 	}
 
@@ -362,7 +359,6 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 
 	objects, err := directory.Readdir(-1)
 	if err != nil {
-		println(4444, err.Error())
 		return 0, err
 	}
 
@@ -418,6 +414,7 @@ func (kf *LkkFile) Img2Base64(path string) (string, error) {
 func (kf *LkkFile) DelDir(dir string, delRoot bool) error {
 	realPath := kf.AbsPath(dir)
 	if !kf.IsDir(realPath) {
+		println(1111, dir, "not exists")
 		return fmt.Errorf("Dir %s not exists", dir)
 	}
 
