@@ -163,6 +163,7 @@ func TestIsFile(t *testing.T) {
 		t.Error("isn`t a file")
 		return
 	}
+	KFile.IsFile("./hello")
 }
 
 func BenchmarkIsFile(b *testing.B) {
@@ -171,7 +172,6 @@ func BenchmarkIsFile(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		KFile.IsFile(filename)
 	}
-	KFile.IsFile("./hello")
 }
 
 func TestIsLink(t *testing.T) {
@@ -182,6 +182,7 @@ func TestIsLink(t *testing.T) {
 		t.Error("isn`t a link")
 		return
 	}
+	KFile.IsLink("./hello")
 }
 
 func BenchmarkIsLink(b *testing.B) {
@@ -190,7 +191,6 @@ func BenchmarkIsLink(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		KFile.IsLink(filename)
 	}
-	KFile.IsLink("./hello")
 }
 
 func TestIsDir(t *testing.T) {
@@ -252,7 +252,7 @@ func TestAbsPath(t *testing.T) {
 		t.Error("file not exist")
 		return
 	}
-	KFile.AbsPath("/root/.bashrc")
+	KFile.AbsPath("")
 }
 
 func BenchmarkAbsPath(b *testing.B) {
@@ -260,6 +260,30 @@ func BenchmarkAbsPath(b *testing.B) {
 	filename := "./testdata/diglett.png"
 	for i := 0; i < b.N; i++ {
 		KFile.AbsPath(filename)
+	}
+}
+
+func TestQuickFile(t *testing.T) {
+	file1 := "./testdata/empty/zero"
+	file2 := "./testdata/empty/2m"
+
+	res1 := KFile.QuickFile(file1, 0)
+	res2 := KFile.QuickFile(file2, 2097152)
+	if !res1 || !res2 {
+		t.Error("QuickFile fail")
+		return
+	}
+
+	KFile.QuickFile("/root/test/empty_zero", 0)
+	KFile.QuickFile("/root/empty_zero", 0)
+}
+
+func BenchmarkQuickFile(b *testing.B) {
+	b.ResetTimer()
+	filename := ""
+	for i := 0; i < b.N; i++ {
+		filename = fmt.Sprintf("./testdata/empty/zero_%d", i)
+		KFile.QuickFile(filename, 0)
 	}
 }
 
@@ -271,6 +295,17 @@ func TestCopyFile(t *testing.T) {
 		t.Error("copy file fail")
 		return
 	}
+
+	_, _ = KFile.CopyFile("abc", "abc", FILE_COVER_ALLOW)
+	_, _ = KFile.CopyFile("./hello", "", FILE_COVER_ALLOW)
+	_, _ = KFile.CopyFile(".", "", FILE_COVER_ALLOW)
+	_, _ = KFile.CopyFile("./testdata/diglett.png", "./testdata/.gitkeep", FILE_COVER_IGNORE)
+	_, _ = KFile.CopyFile("./testdata/diglett.png", "./testdata/.gitkeep", FILE_COVER_DENY)
+
+	_, _ = KFile.CopyFile("./testdata/diglett.png", "/root/test/diglett.png", FILE_COVER_ALLOW)
+	_, _ = KFile.CopyFile("./testdata/diglett.png", "/root/diglett.png", FILE_COVER_ALLOW)
+	_, _ = KFile.CopyFile("./testdata/empty/2m", "./testdata/empty/2m_copy", FILE_COVER_ALLOW)
+
 }
 
 func BenchmarkCopyFile(b *testing.B) {
@@ -292,6 +327,10 @@ func TestFastCopy(t *testing.T) {
 		t.Error("fast copy file fail")
 		return
 	}
+
+	_, _ = KFile.FastCopy("./hello", "")
+	_, _ = KFile.FastCopy("./testdata/diglett.png", "/root/test/diglett.png")
+	_, _ = KFile.FastCopy("./testdata/diglett.png", "/root/diglett.png")
 }
 
 func BenchmarkFastCopy(b *testing.B) {
@@ -313,6 +352,11 @@ func TestCopyLink(t *testing.T) {
 		t.Error("copy link fail:" + err.Error())
 		return
 	}
+
+	_ = KFile.CopyLink("abc", "abc")
+	_ = KFile.CopyLink("./helloe", "abc")
+	_ = KFile.CopyLink(src, "/root/test/abc")
+
 }
 
 func BenchmarkCopyLink(b *testing.B) {
@@ -334,6 +378,11 @@ func TestCopyDir(t *testing.T) {
 		t.Error("copy directory fail")
 		return
 	}
+
+	_, _ = KFile.CopyDir("./hello", des, FILE_COVER_ALLOW)
+	_, _ = KFile.CopyDir("./file.go", des, FILE_COVER_ALLOW)
+	_, _ = KFile.CopyDir(src, "/root/test/tdir", FILE_COVER_ALLOW)
+	_, _ = KFile.CopyDir("/root/", des, FILE_COVER_ALLOW)
 }
 
 func BenchmarkCopyDir(b *testing.B) {
