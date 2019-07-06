@@ -353,6 +353,7 @@ func TestCopyLink(t *testing.T) {
 		return
 	}
 
+	_ = KFile.CopyLink(src, des)
 	_ = KFile.CopyLink("abc", "abc")
 	_ = KFile.CopyLink("./helloe", "abc")
 	_ = KFile.CopyLink(src, "/root/test/abc")
@@ -372,6 +373,7 @@ func BenchmarkCopyLink(b *testing.B) {
 func TestCopyDir(t *testing.T) {
 	src := "./testdata"
 	des := "./test/copy"
+	des2 := "./test/copy2"
 
 	num, err := KFile.CopyDir(src, des, FILE_COVER_ALLOW)
 	if err != nil || num == 0 {
@@ -383,6 +385,9 @@ func TestCopyDir(t *testing.T) {
 	_, _ = KFile.CopyDir("./file.go", des, FILE_COVER_ALLOW)
 	_, _ = KFile.CopyDir(src, "/root/test/tdir", FILE_COVER_ALLOW)
 	_, _ = KFile.CopyDir("/root/", des, FILE_COVER_ALLOW)
+	_, _ = KFile.CopyDir(src, des2, FILE_COVER_ALLOW)
+	_, _ = KFile.CopyDir(des, des2, FILE_COVER_IGNORE)
+	_, _ = KFile.CopyDir(des, des2, FILE_COVER_ALLOW)
 }
 
 func BenchmarkCopyDir(b *testing.B) {
@@ -402,6 +407,10 @@ func TestImg2Base64(t *testing.T) {
 		t.Error("Img2Base64 fail")
 		return
 	}
+
+	_, _ = KFile.Img2Base64("./testdata/.gitkeep")
+	_, _ = KFile.Img2Base64("./testdata/hello.png")
+
 }
 
 func BenchmarkImg2Base64(b *testing.B) {
@@ -419,6 +428,9 @@ func TestDelDir(t *testing.T) {
 		t.Error("DelDir fail")
 		return
 	}
+
+	_ = KFile.DelDir("./hello", true)
+
 }
 
 func BenchmarkDelDir(b *testing.B) {
@@ -437,6 +449,9 @@ func TestFileTree(t *testing.T) {
 		t.Error("FileTree fail")
 		return
 	}
+
+	KFile.FileTree("", FILE_TREE_ALL, true)
+	KFile.FileTree("./README.md", FILE_TREE_ALL, true)
 }
 
 func BenchmarkFileTree(b *testing.B) {
@@ -454,6 +469,8 @@ func TestFormatDir(t *testing.T) {
 		t.Error("FormatDir fail")
 		return
 	}
+
+	KFile.FormatDir("")
 }
 
 func BenchmarkFormatDir(b *testing.B) {
@@ -472,6 +489,8 @@ func TestFileMd5(t *testing.T) {
 		t.Error("File Md5 fail")
 		return
 	}
+	_, _ = KFile.Md5("./hello", 32)
+	_, _ = KFile.Md5("/tmp", 32)
 }
 
 func BenchmarkFileMd5(b *testing.B) {
