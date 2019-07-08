@@ -414,7 +414,6 @@ func (kf *LkkFile) Img2Base64(path string) (string, error) {
 func (kf *LkkFile) DelDir(dir string, delRoot bool) error {
 	realPath := kf.AbsPath(dir)
 	if !kf.IsDir(realPath) {
-		println(1111, dir, "not exists")
 		return fmt.Errorf("Dir %s not exists", dir)
 	}
 
