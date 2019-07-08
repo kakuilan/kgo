@@ -73,6 +73,7 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/vence722/convert
 - https://github.com/jinzhu/now
 - https://github.com/thinkeridea/go-extend
+- https://github.com/lalamove/nui
 
 ### 其他库
 - https://github.com/lalamove/konfig
