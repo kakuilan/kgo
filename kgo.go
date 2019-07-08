@@ -11,6 +11,8 @@ type (
 	LkkTime byte
 	// LkkConvert is the receiver of convert utilities
 	LkkConvert byte
+	// LkkOS is the receiver of OS utilities
+	LkkOS byte
 
 	// LkkFileCover 枚举类型,文件是否覆盖
 	LkkFileCover int8
@@ -72,4 +74,7 @@ var (
 
 	// KConv utilities
 	KConv LkkConvert
+
+	// KOS utilities
+	KOS LkkOS
 )

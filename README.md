@@ -1,6 +1,6 @@
 # kgo
 k`s golang helper/library/utils  
-golang 函数库/工具集
+golang 函数库/工具集,仅测试支持64位linux
 
 ### 文档
 [![GoDoc](https://godoc.org/github.com/kakuilan/kgo?status.svg)](https://godoc.org/github.com/kakuilan/kgo)
@@ -72,6 +72,7 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/stephanbaker/go-simpletime
 - https://github.com/vence722/convert
 - https://github.com/jinzhu/now
+- https://github.com/thinkeridea/go-extend
 
 ### 其他库
 - https://github.com/lalamove/konfig
