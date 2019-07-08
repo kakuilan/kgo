@@ -78,19 +78,3 @@ func BenchmarkHomeDir(b *testing.B) {
 		_, _ = KOS.HomeDir()
 	}
 }
-
-func TestHomeUnix(t *testing.T) {
-	_, err := homeUnix()
-	if err != nil {
-		t.Error("homeUnix fail")
-		return
-	}
-}
-
-func TestHomeWindows(t *testing.T) {
-	_, err := homeWindows()
-	if err == nil {
-		t.Error("homeWindows fail")
-		return
-	}
-}

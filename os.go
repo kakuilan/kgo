@@ -34,24 +34,14 @@ func (ko *LkkOS) Pwd() string {
 	return filepath.Dir(pwd)
 }
 
-// HomeDir 获取当前用户的主目录
+// HomeDir 获取当前用户的主目录(仅支持Unix-like system)
 func (ko *LkkOS) HomeDir() (string, error) {
 	usr, err := user.Current()
 	if nil == err {
 		return usr.HomeDir, nil
 	}
 
-	// cross compile support
-	if ko.IsWindows() {
-		return homeWindows()
-	}
-
 	// Unix-like system, so just assume Unix
-	return homeUnix()
-}
-
-// homeUnix 获取unix系统的用户主目录
-func homeUnix() (string, error) {
 	// First prefer the HOME environmental variable
 	if home := os.Getenv("HOME"); home != "" {
 		return home, nil
@@ -71,19 +61,4 @@ func homeUnix() (string, error) {
 	}
 
 	return result, nil
-}
-
-// homeWindows 获取windos系统的用户主目录
-func homeWindows() (string, error) {
-	drive := os.Getenv("HOMEDRIVE")
-	path := os.Getenv("HOMEPATH")
-	home := drive + path
-	if drive == "" || path == "" {
-		home = os.Getenv("USERPROFILE")
-	}
-	if home == "" {
-		return "", errors.New("HOMEDRIVE, HOMEPATH, and USERPROFILE are blank")
-	}
-
-	return home, nil
 }
