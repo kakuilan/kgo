@@ -314,6 +314,7 @@ func TestCopyFile(t *testing.T) {
 	_, _ = KFile.CopyFile("./testdata/diglett.png", "/root/test/diglett.png", FILE_COVER_ALLOW)
 	_, _ = KFile.CopyFile("./testdata/diglett.png", "/root/diglett.png", FILE_COVER_ALLOW)
 	_, _ = KFile.CopyFile("./testdata/empty/2m", "./testdata/empty/2m_copy", FILE_COVER_ALLOW)
+	_, _ = KFile.CopyFile("./testdata/empty/2m", "./testdata/empty/2m_copy", FILE_COVER_IGNORE)
 
 }
 
@@ -439,6 +440,7 @@ func TestDelDir(t *testing.T) {
 	}
 
 	_ = KFile.DelDir("./hello", true)
+	_ = KFile.DelDir("/root", true)
 
 }
 
@@ -461,6 +463,7 @@ func TestFileTree(t *testing.T) {
 
 	KFile.FileTree("", FILE_TREE_ALL, true)
 	KFile.FileTree("./README.md", FILE_TREE_ALL, true)
+	KFile.FileTree("/root", FILE_TREE_ALL, true)
 }
 
 func BenchmarkFileTree(b *testing.B) {
