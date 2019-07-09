@@ -85,7 +85,8 @@ func BenchmarkIsLetter(b *testing.B) {
 
 func TestIsNumeric(t *testing.T) {
 	res := KStr.IsNumeric("123.456")
-	if !res {
+	res2 := KStr.IsNumeric("123")
+	if !res || !res2 {
 		t.Error("IsNumeric fail")
 		return
 	}
@@ -95,6 +96,22 @@ func BenchmarkIsNumeric(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KStr.IsNumeric("123.456")
+	}
+}
+
+func TestIsInt(t *testing.T) {
+	res := KStr.IsInt("123.456")
+	res2 := KStr.IsInt("123")
+	if res || !res2 {
+		t.Error("IsInt fail")
+		return
+	}
+}
+
+func BenchmarkIsInt(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsInt("123")
 	}
 }
 

@@ -53,6 +53,12 @@ func (ks *LkkString) IsNumeric(s string) bool {
 	return err == nil
 }
 
+// IsNumeric 字符串是否整数
+func (ks *LkkString) IsInt(s string) bool {
+	_, err := strconv.Atoi(s)
+	return err == nil
+}
+
 // Md5 获取字符串md5值,length指定结果长度32/16
 func (ks *LkkString) Md5(str string, length uint8) string {
 	var res string
