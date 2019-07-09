@@ -73,6 +73,7 @@ func TestIsLetter(t *testing.T) {
 		t.Error("IsLetter fail")
 		return
 	}
+	KStr.IsLetter("123")
 }
 
 func BenchmarkIsLetter(b *testing.B) {
