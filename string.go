@@ -84,6 +84,15 @@ func (ks *LkkString) HasChinese(s string) bool {
 	return false
 }
 
+// IsChinese 字符串是否全部中文
+func (ks *LkkString) IsChinese(s string) bool {
+	if s == "" {
+		return false
+	}
+
+	return regexp.MustCompile("^[\u4e00-\u9fa5]+$").MatchString(s)
+}
+
 // Md5 获取字符串md5值,length指定结果长度32/16
 func (ks *LkkString) Md5(str string, length uint8) string {
 	var res string

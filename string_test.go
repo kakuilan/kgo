@@ -129,6 +129,23 @@ func BenchmarkHasChinese(b *testing.B) {
 	}
 }
 
+func TestIsChinese(t *testing.T) {
+	res := KStr.IsChinese("hello你好")
+	res2 := KStr.IsChinese("你好世界")
+	if res || !res2 {
+		t.Error("IsChinese fail")
+		return
+	}
+	KStr.IsChinese("")
+}
+
+func BenchmarkIsChinese(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsChinese("你好世界")
+	}
+}
+
 func BenchmarkIsInt(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
