@@ -1,7 +1,6 @@
 package gohelper
 
 import (
-	"os"
 	"strings"
 	"testing"
 )
@@ -53,25 +52,48 @@ func BenchmarkStripTags(b *testing.B) {
 }
 
 func TestStringIsBinary(t *testing.T) {
-	filename := "./file.go"
-	if KFile.IsBinary(filename) {
-		t.Error("file isn`t binary")
-		return
-	}
-
-	goroot := os.Getenv("GOROOT")
-	file2 := goroot + "/bin/go"
-	if !KFile.IsBinary(file2) {
-		t.Error("file isn`t binary")
+	cont, _ := KFile.GetContents("./file.go")
+	if KStr.IsBinary(cont) {
+		t.Error("str isn`t binary")
 		return
 	}
 }
 
 func BenchmarkStringIsBinary(b *testing.B) {
 	b.ResetTimer()
-	filename := "./README.md"
+	str := "hello"
 	for i := 0; i < b.N; i++ {
-		KFile.IsBinary(filename)
+		KFile.IsBinary(str)
+	}
+}
+
+func TestIsLetter(t *testing.T) {
+	res := KStr.IsLetter("hello")
+	if !res {
+		t.Error("IsLetter fail")
+		return
+	}
+}
+
+func BenchmarkIsLetter(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsLetter("hello")
+	}
+}
+
+func TestIsNumeric(t *testing.T) {
+	res := KStr.IsNumeric("123.456")
+	if !res {
+		t.Error("IsNumeric fail")
+		return
+	}
+}
+
+func BenchmarkIsNumeric(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsNumeric("123.456")
 	}
 }
 
@@ -94,5 +116,79 @@ func BenchmarkStringMd5(b *testing.B) {
 	str := "hello world!"
 	for i := 0; i < b.N; i++ {
 		_ = KStr.Md5(str, 32)
+	}
+}
+
+func TestRandomAlpha(t *testing.T) {
+	res := KStr.Random(8, RAND_STRING_ALPHA)
+	if !KStr.IsLetter(res) {
+		t.Error("RandomAlpha fail")
+		return
+	}
+	KStr.Random(0, RAND_STRING_ALPHA)
+	KStr.Random(1, 99)
+}
+
+func BenchmarkRandomAlpha(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Random(8, RAND_STRING_ALPHA)
+	}
+}
+
+func TestRandomNumeric(t *testing.T) {
+	str := KStr.Random(8, RAND_STRING_NUMERIC)
+	if !KStr.IsNumeric(str) {
+		t.Error("RandomNumeric fail")
+		return
+	}
+}
+
+func BenchmarkRandomNumeric(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Random(8, RAND_STRING_NUMERIC)
+	}
+}
+
+func TestRandomAlphanum(t *testing.T) {
+	res := KStr.Random(8, RAND_STRING_ALPHANUM)
+	if len(res) != 8 {
+		t.Error("RandomAlphanum fail")
+		return
+	}
+}
+
+func BenchmarkRandomAlphanum(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Random(8, RAND_STRING_ALPHANUM)
+	}
+}
+
+func TestRandomSpecial(t *testing.T) {
+	res := KStr.Random(8, RAND_STRING_SPECIAL)
+	if len(res) != 8 {
+		t.Error("RandomSpecial fail")
+		return
+	}
+}
+
+func BenchmarkRandomSpecial(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Random(8, RAND_STRING_SPECIAL)
+	}
+}
+
+func TestRandomChinese(t *testing.T) {
+	res := KStr.Random(8, RAND_STRING_CHINESE)
+	println(res)
+}
+
+func BenchmarkRandomChinese(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Random(8, RAND_STRING_CHINESE)
 	}
 }

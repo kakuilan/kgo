@@ -18,6 +18,8 @@ type (
 	LkkFileCover int8
 	// LkkFileTree 枚举类型,文件树查找类型
 	LkkFileTree int8
+	// LkkRandString 枚举类型,随机字符串类型
+	LkkRandString uint8
 )
 
 const (
@@ -57,6 +59,17 @@ const (
 	FILE_TREE_DIR LkkFileTree = 2
 	// FILE_TREE_FILE 文件树,仅查找文件
 	FILE_TREE_FILE LkkFileTree = 1
+
+	// RAND_STRING_ALPHA 随机字符串类型,字母
+	RAND_STRING_ALPHA LkkRandString = 0
+	// RAND_STRING_NUMERIC 随机字符串类型,数值
+	RAND_STRING_NUMERIC LkkRandString = 1
+	// RAND_STRING_ALPHANUM 随机字符串类型,字母+数值
+	RAND_STRING_ALPHANUM LkkRandString = 2
+	// RAND_STRING_SPECIAL 随机字符串类型,字母+数值+特殊字符
+	RAND_STRING_SPECIAL LkkRandString = 3
+	// RAND_STRING_CHINESE 随机字符串类型,仅中文
+	RAND_STRING_CHINESE LkkRandString = 4
 )
 
 var (

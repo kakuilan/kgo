@@ -93,3 +93,9 @@ url
 convert
 
 
+### 临时
+https://www.calhoun.io/creating-random-strings-in-go/
+http://ju.outofmemory.cn/entry/221647
+https://www.golangnote.com/topic/90.html
+https://stackoverflow.com/questions/38554353/how-to-check-if-a-string-only-contains-alphabetic-characters-in-go
+https://socketloop.com/tutorials/golang-regular-expression-alphanumeric-underscore
