@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode"
 )
 
 // Nl2br 将换行符转换为br标签
@@ -28,8 +29,8 @@ func (ks *LkkString) StripTags(html string) string {
 }
 
 // IsBinary 字符串是否二进制
-func (ks *LkkString) IsBinary(content string) bool {
-	for _, b := range content {
+func (ks *LkkString) IsBinary(s string) bool {
+	for _, b := range s {
 		if 0 == b {
 			return true
 		}
@@ -39,6 +40,9 @@ func (ks *LkkString) IsBinary(content string) bool {
 
 // IsLetter 字符串是否字母
 func (ks *LkkString) IsLetter(s string) bool {
+	if s == "" {
+		return false
+	}
 	for _, r := range s {
 		if (r < 'a' || r > 'z') && (r < 'A' || r > 'Z') {
 			return false
@@ -49,14 +53,35 @@ func (ks *LkkString) IsLetter(s string) bool {
 
 // IsNumeric 字符串是否数值
 func (ks *LkkString) IsNumeric(s string) bool {
+	if s == "" {
+		return false
+	}
 	_, err := strconv.ParseFloat(s, 64)
 	return err == nil
 }
 
 // IsNumeric 字符串是否整数
 func (ks *LkkString) IsInt(s string) bool {
+	if s == "" {
+		return false
+	}
 	_, err := strconv.Atoi(s)
 	return err == nil
+}
+
+// HasChinese 字符串是否含有中文
+func (ks *LkkString) HasChinese(s string) bool {
+	if s == "" {
+		return false
+	}
+
+	for _, r := range s {
+		if unicode.Is(unicode.Scripts["Han"], r) {
+			return true
+		}
+	}
+
+	return false
 }
 
 // Md5 获取字符串md5值,length指定结果长度32/16
