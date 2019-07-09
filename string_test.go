@@ -57,6 +57,7 @@ func TestStringIsBinary(t *testing.T) {
 		t.Error("str isn`t binary")
 		return
 	}
+	_, _ = KFile.GetContents("")
 }
 
 func BenchmarkStringIsBinary(b *testing.B) {
@@ -73,6 +74,7 @@ func TestIsLetter(t *testing.T) {
 		t.Error("IsLetter fail")
 		return
 	}
+	KStr.IsLetter("")
 	KStr.IsLetter("123")
 }
 
@@ -90,6 +92,7 @@ func TestIsNumeric(t *testing.T) {
 		t.Error("IsNumeric fail")
 		return
 	}
+	KStr.IsNumeric("")
 }
 
 func BenchmarkIsNumeric(b *testing.B) {
@@ -105,6 +108,24 @@ func TestIsInt(t *testing.T) {
 	if res || !res2 {
 		t.Error("IsInt fail")
 		return
+	}
+	KStr.IsInt("")
+}
+
+func TestHasChinese(t *testing.T) {
+	res := KStr.HasChinese("123.456")
+	res2 := KStr.HasChinese("hello你好")
+	if res || !res2 {
+		t.Error("HasChinese fail")
+		return
+	}
+	KStr.HasChinese("")
+}
+
+func BenchmarkHasChinese(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.HasChinese("hello你好")
 	}
 }
 
