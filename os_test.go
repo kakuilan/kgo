@@ -1,6 +1,7 @@
 package gohelper
 
 import (
+	"net"
 	"testing"
 )
 
@@ -76,5 +77,84 @@ func BenchmarkHomeDir(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _ = KOS.HomeDir()
+	}
+}
+
+func TestLocalIP(t *testing.T) {
+	_, err := KOS.LocalIP()
+	if err != nil {
+		t.Error("LocalIP fail")
+		return
+	}
+}
+
+func BenchmarkLocalIP(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KOS.LocalIP()
+	}
+}
+
+func TestOutboundIP(t *testing.T) {
+	_, err := KOS.OutboundIP()
+	if err != nil {
+		t.Error("OutboundIP fail")
+		return
+	}
+}
+
+func BenchmarkOutboundIP(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KOS.OutboundIP()
+	}
+}
+
+func TestIsPublicIP(t *testing.T) {
+	ipStr, _ := KOS.LocalIP()
+	ipAddr := net.ParseIP(ipStr)
+	if KOS.IsPublicIP(ipAddr) {
+		t.Error("IsPublicIP fail")
+		return
+	}
+}
+
+func BenchmarkIsPublicIP(b *testing.B) {
+	b.ResetTimer()
+	ipStr, _ := KOS.LocalIP()
+	ipAddr := net.ParseIP(ipStr)
+	for i := 0; i < b.N; i++ {
+		KOS.IsPublicIP(ipAddr)
+	}
+}
+
+func TestGetIPs(t *testing.T) {
+	ips := KOS.GetIPs()
+	if len(ips) == 0 {
+		t.Error("GetIPs fail")
+		return
+	}
+}
+
+func BenchmarkGetIPs(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetIPs()
+	}
+}
+
+func TestGetMacAddrs(t *testing.T) {
+	macs := KOS.GetMacAddrs()
+	//fmt.Printf("%v", macs)
+	if len(macs) == 0 {
+		t.Error("GetMacAddrs fail")
+		return
+	}
+}
+
+func BenchmarkGetMacAddrs(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetMacAddrs()
 	}
 }
