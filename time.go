@@ -18,7 +18,7 @@ func (kt *LkkTime) MicroTime() int64 {
 }
 
 // Strtotime 字符串转时间戳
-// KTime.Strtotime("2019-07-11 10:11:23") == 1562839883
+// 例如KTime.Strtotime("2019-07-11 10:11:23") == 1562839883
 func (kt *LkkTime) Strtotime(str string) (int64, error) {
 	layout := "2006-01-02 15:04:05"
 	t, err := time.Parse(layout, str)
@@ -29,7 +29,7 @@ func (kt *LkkTime) Strtotime(str string) (int64, error) {
 }
 
 // Date 格式化时间戳
-// KTime.Date(1562811851, "2006-01-02 15:04:05") == "2019-07-11 10:24:11"
+// 例如KTime.Date(1562811851, "2006-01-02 15:04:05") == "2019-07-11 10:24:11"
 func (kt *LkkTime) Date(timestamp int64, format string) string {
 	return time.Unix(timestamp, 0).Format(format)
 }
