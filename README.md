@@ -36,7 +36,7 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 
 ### 参考项目
 - https://www.php2golang.com/
-- https://github.com/b3log/gulu
+- https://github.com/b3log/gulu -x
 - https://github.com/syyongx/php2go
 - https://github.com/openset/php2go
 - https://github.com/yioio/fun
@@ -91,6 +91,7 @@ array
 number
 url
 convert
+validate
 
 
 ### 临时
