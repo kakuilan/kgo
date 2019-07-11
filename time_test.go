@@ -95,7 +95,7 @@ func TestCheckdate(t *testing.T) {
 		return
 	}
 	KTime.Checkdate(0, 31, 2019)
-	KTime.Checkdate(4, 32, 2019)
+	KTime.Checkdate(4, 31, 2019)
 	KTime.Checkdate(2, 30, 2008)
 }
 
