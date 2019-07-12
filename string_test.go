@@ -159,6 +159,7 @@ func TestStrpos(t *testing.T) {
 		return
 	}
 	KStr.Strpos("", "world", 0)
+	KStr.Strpos(str, "world", -1)
 }
 
 func BenchmarkStrpos(b *testing.B) {
@@ -177,7 +178,9 @@ func TestStripos(t *testing.T) {
 		t.Error("Stripos fail")
 		return
 	}
-	KStr.Strpos("", "world", 0)
+	KStr.Stripos("", "world", 0)
+	KStr.Stripos(str, "world", -1)
+	KStr.Stripos(str, "haha", 0)
 }
 
 func BenchmarkStripos(b *testing.B) {
@@ -235,6 +238,7 @@ func TestSubstr(t *testing.T) {
 		t.Error("Substr fail")
 		return
 	}
+	KStr.Substr(str, 10, 50)
 }
 
 func BenchmarkSubstr(b *testing.B) {
