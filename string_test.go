@@ -149,3 +149,116 @@ func BenchmarkRandomChinese(b *testing.B) {
 		KStr.Random(8, RAND_STRING_CHINESE)
 	}
 }
+
+func TestStrpos(t *testing.T) {
+	str := "hello world!"
+	res1 := KStr.Strpos(str, "world", 0)
+	res2 := KStr.Strpos(str, "World", 0)
+	if res1 < 0 || res2 > 0 {
+		t.Error("Strpos fail")
+		return
+	}
+	KStr.Strpos("", "world", 0)
+}
+
+func BenchmarkStrpos(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!"
+	for i := 0; i < b.N; i++ {
+		KStr.Strpos(str, "world", 0)
+	}
+}
+
+func TestStripos(t *testing.T) {
+	str := "hello world!"
+	res1 := KStr.Stripos(str, "world", 0)
+	res2 := KStr.Stripos(str, "World", 0)
+	if res1 < 0 || res2 < 0 {
+		t.Error("Stripos fail")
+		return
+	}
+	KStr.Strpos("", "world", 0)
+}
+
+func BenchmarkStripos(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!"
+	for i := 0; i < b.N; i++ {
+		KStr.Stripos(str, "World", 0)
+	}
+}
+
+func TestUcfirst(t *testing.T) {
+	str := "hello world!"
+	res := KStr.Ucfirst(str)
+	if res[0] != 'H' {
+		t.Error("Ucfirst fail")
+		return
+	}
+	KStr.Ucfirst("")
+}
+
+func BenchmarkUcfirst(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!"
+	for i := 0; i < b.N; i++ {
+		KStr.Ucfirst(str)
+	}
+}
+
+func TestLcfirst(t *testing.T) {
+	str := "HELLOW WORLD!"
+	res := KStr.Lcfirst(str)
+	if res[0] != 'h' {
+		t.Error("Lcfirst fail")
+		return
+	}
+	KStr.Lcfirst("")
+}
+
+func BenchmarkLcfirst(b *testing.B) {
+	b.ResetTimer()
+	str := "HELLOW WORLD!"
+	for i := 0; i < b.N; i++ {
+		KStr.Lcfirst(str)
+	}
+}
+
+func TestSubstr(t *testing.T) {
+	str := "hello world,welcome to golang!"
+	res1 := KStr.Substr(str, 5, 10)
+	res2 := KStr.Substr(str, 0, -5)
+	res3 := KStr.Substr(str, 5, -1)
+	res4 := KStr.Substr(str, 5, 0)
+
+	if len(res1) != 10 || res2 != str || !strings.Contains(str, res3) || res4 != "" {
+		t.Error("Substr fail")
+		return
+	}
+}
+
+func BenchmarkSubstr(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!"
+	for i := 0; i < b.N; i++ {
+		KStr.Substr(str, 5, 10)
+	}
+}
+
+func TestStrrev(t *testing.T) {
+	str := "hello world!"
+	res1 := KStr.Strrev(str)
+	res2 := KStr.Strrev(res1)
+	if res2 != str {
+		t.Error("Strrev fail")
+		return
+	}
+}
+
+func BenchmarkStrrev(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!"
+	for i := 0; i < b.N; i++ {
+		KStr.Strrev(str)
+	}
+}
