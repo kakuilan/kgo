@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"strings"
 	"time"
+	"unicode"
 )
 
 // Nl2br 将换行符转换为br标签
@@ -80,4 +81,84 @@ func (ks *LkkString) Random(length uint8, stype LkkRandString) string {
 	}
 
 	return string(b)
+}
+
+// Strpos 查找字符串首次出现的位置
+func (ks *LkkString) Strpos(haystack, needle string, offset int) int {
+	length := len(haystack)
+	if length == 0 || offset > length || -offset > length {
+		return -1
+	}
+
+	if offset < 0 {
+		offset += length
+	}
+	pos := strings.Index(haystack[offset:], needle)
+	if pos == -1 {
+		return -1
+	}
+	return pos + offset
+}
+
+// Stripos  查找字符串首次出现的位置（不区分大小写）
+func (ks *LkkString) Stripos(haystack, needle string, offset int) int {
+	length := len(haystack)
+	if length == 0 || offset > length || -offset > length {
+		return -1
+	}
+
+	haystack = haystack[offset:]
+	if offset < 0 {
+		offset += length
+	}
+	pos := strings.Index(strings.ToLower(haystack), strings.ToLower(needle))
+	if pos == -1 {
+		return -1
+	}
+	return pos + offset
+}
+
+// Ucfirst 将字符串的首字母转换为大写
+func (ks *LkkString) Ucfirst(str string) string {
+	for _, v := range str {
+		u := string(unicode.ToUpper(v))
+		return u + str[len(u):]
+	}
+	return ""
+}
+
+// Lcfirst 使一个字符串的第一个字符小写
+func (ks *LkkString) Lcfirst(str string) string {
+	for _, v := range str {
+		u := string(unicode.ToLower(v))
+		return u + str[len(u):]
+	}
+	return ""
+}
+
+// Substr 返回字符串的子串
+func (ks *LkkString) Substr(str string, start uint, length int) string {
+	if start < 0 || length < -1 {
+		return str
+	}
+	switch {
+	case length == -1:
+		return str[start:]
+	case length == 0:
+		return ""
+	}
+	end := int(start) + length
+	if end > len(str) {
+		end = len(str)
+	}
+	return str[start:end]
+}
+
+// Strrev 反转字符串
+func (ks *LkkString) Strrev(str string) string {
+	runes := []rune(str)
+	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+		runes[i], runes[j] = runes[j], runes[i]
+	}
+	return string(runes)
 }
