@@ -5,6 +5,8 @@ type (
 	LkkFile byte
 	// LkkString is the receiver of string utilities
 	LkkString byte
+	// LkkNumber is the receiver of number utilities
+	LkkNumber byte
 	// LkkArray is the receiver of array utilities
 	LkkArray byte
 	// LkkTime is the receiver of time utilities
@@ -78,6 +80,9 @@ var (
 
 	// KStr utilities
 	KStr LkkString
+
+	// KNum utilities
+	KNum LkkNumber
 
 	// KArr utilities
 	KArr LkkArray

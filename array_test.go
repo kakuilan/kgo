@@ -6,6 +6,13 @@ import (
 )
 
 func TestInArray(t *testing.T) {
+	//haystack类型不对
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
 	//数组
 	arr := [5]int{1, 2, 3, 4, 5}
 	it := 2
@@ -29,12 +36,6 @@ func TestInArray(t *testing.T) {
 		return
 	}
 
-	//haystack类型不对
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
 	if KArr.InArray(it2, "abc") {
 		t.Error("InArray fail")
 		return
