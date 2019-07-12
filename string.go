@@ -107,10 +107,10 @@ func (ks *LkkString) Stripos(haystack, needle string, offset int) int {
 		return -1
 	}
 
-	haystack = haystack[offset:]
 	if offset < 0 {
 		offset += length
 	}
+	haystack = haystack[offset:]
 	pos := strings.Index(strings.ToLower(haystack), strings.ToLower(needle))
 	if pos == -1 {
 		return -1
