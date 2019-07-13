@@ -80,6 +80,10 @@ func (ku *LkkUrl) ParseStr(encodedString string, result map[string]interface{}) 
 	}
 
 	// split encodedString.
+	if encodedString[0] == '?' {
+		encodedString = strings.TrimLeft(encodedString, "?")
+	}
+
 	parts := strings.Split(encodedString, "&")
 	for _, part := range parts {
 		pos := strings.Index(part, "=")
