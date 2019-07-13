@@ -1,4 +1,4 @@
-package gohelper
+package kgo
 
 import (
 	"net"
