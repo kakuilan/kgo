@@ -94,7 +94,7 @@ func (ku *LkkUrl) ParseStr(encodedString string, result map[string]interface{}) 
 		if err != nil {
 			return err
 		}
-		for key[0] == ' ' {
+		for key[0] == ' ' && key[1:] != "" {
 			key = key[1:]
 		}
 		if key == "" || key[0] == '[' {
