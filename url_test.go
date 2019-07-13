@@ -66,7 +66,10 @@ func TestParseStr(t *testing.T) {
 	_ = KUrl.ParseStr("f[][a]=&f[][b]=", arr9)
 	_ = KUrl.ParseStr("he&a=1", arr9)
 	_ = KUrl.ParseStr("he& =2", arr9)
+	_ = KUrl.ParseStr("he& g=2", arr9)
 	_ = KUrl.ParseStr("he&=3", arr9)
+	_ = KUrl.ParseStr("he&[=4", arr9)
+	_ = KUrl.ParseStr("he&]=5", arr9)
 	err9 = KUrl.ParseStr("he&e=%&b=4", arr9) //nvalid URL escape "%"
 	if err9 == nil {
 		t.Error("ParseStr fail")
