@@ -15,6 +15,8 @@ type (
 	LkkConvert byte
 	// LkkOS is the receiver of OS utilities
 	LkkOS byte
+	// LkkUrl is the receiver of url utilities
+	LkkUrl byte
 
 	// LkkFileCover 枚举类型,文件是否覆盖
 	LkkFileCover int8
@@ -95,4 +97,7 @@ var (
 
 	// KOS utilities
 	KOS LkkOS
+
+	// KUrl utilities
+	KUrl LkkUrl
 )
