@@ -49,6 +49,20 @@ func TestParseStr(t *testing.T) {
 		t.Error("ParseStr fail")
 		return
 	}
+
+	err9 = KUrl.ParseStr("f=n&f[a][]=m&", arr9)
+	if err9 == nil {
+		t.Error("ParseStr fail")
+		return
+	}
+	err9 = KUrl.ParseStr("f=n&f[][a]=m&", arr9)
+	if err9 == nil {
+		t.Error("ParseStr fail")
+		return
+	}
+
+	_ = KUrl.ParseStr("?first=value&arr[]=foo+bar&arr[]=baz&arr[][a]=aaa", arr9)
+	_ = KUrl.ParseStr("f[][a]=m&f[][b]=h", arr9)
 }
 
 func BenchmarkParseStr(b *testing.B) {
