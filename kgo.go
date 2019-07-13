@@ -1,4 +1,4 @@
-package gohelper
+package kgo
 
 type (
 	// LkkFile is the receiver of file utilities
