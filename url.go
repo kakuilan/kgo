@@ -33,7 +33,7 @@ func (ku *LkkUrl) ParseStr(encodedString string, result map[string]interface{}) 
 			}
 			children, ok := val.([]interface{})
 			if !ok {
-				return fmt.Errorf("expected type '[]interface{}' for key '%s', but got '%T'", key, val)
+				return fmt.Errorf("1111expected type '[]interface{}' for key '%s', but got '%T'", key, val)
 			}
 			result[key] = append(children, value)
 			return nil
@@ -48,7 +48,7 @@ func (ku *LkkUrl) ParseStr(encodedString string, result map[string]interface{}) 
 			}
 			children, ok := val.([]interface{})
 			if !ok {
-				return fmt.Errorf("expected type '[]interface{}' for key '%s', but got '%T'", key, val)
+				return fmt.Errorf("2222expected type '[]interface{}' for key '%s', but got '%T'", key, val)
 			}
 			if l := len(children); l > 0 {
 				if child, ok := children[l-1].(map[string]interface{}); ok {
