@@ -61,9 +61,10 @@ func TestParseStr(t *testing.T) {
 		return
 	}
 
+	arr9 = make(map[string]interface{})
+	_ = KUrl.ParseStr("f[][a]=&f[][b]=", arr9)
 	_ = KUrl.ParseStr("?first=value&arr[]=foo+bar&arr[]=baz&arr[][a]=aaa", arr9)
 	_ = KUrl.ParseStr("f[][a]=m&f[][b]=h", arr9)
-	_ = KUrl.ParseStr("f[][a]=&f[][b]=", arr9)
 	_ = KUrl.ParseStr("he&a=1", arr9)
 	_ = KUrl.ParseStr("he& =2", arr9)
 	_ = KUrl.ParseStr("he& g=2", arr9)
@@ -72,8 +73,15 @@ func TestParseStr(t *testing.T) {
 	_ = KUrl.ParseStr("he&]=5", arr9)
 	_ = KUrl.ParseStr("f[a].=m&f=n&", arr9)
 	_ = KUrl.ParseStr("f=n&f[a][]b=m&", arr9)
-	err8 = KUrl.ParseStr("f=n&f[a][]=m&", arr9)
-	println("err8 111", err8.Error())
+	_ = KUrl.ParseStr("f=n&f[a][]=m&", arr9)
+
+	err5 = KUrl.ParseStr("f[a][]=12&f[a][]=1.2&f[a][]=abc", arr5)
+	err6 = KUrl.ParseStr("f[][b]=&f[][a]=12&f[][a]=1.2&f[][a]=abc", arr6)
+	err7 = KUrl.ParseStr("f=n&f[a][]=m&", arr7)
+	if err5 == nil || err6 == nil || err7 == nil {
+		t.Error("ParseStr fail")
+		return
+	}
 
 	err8 = KUrl.ParseStr("%=%gg&b=4", arr9)  //key nvalid URL escape "%"
 	err9 = KUrl.ParseStr("he&e=%&b=4", arr9) //value nvalid URL escape "%"
