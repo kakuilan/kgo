@@ -8,6 +8,7 @@ import (
 
 // ParseStr 将查询字符串转换为字典
 func (ku *LkkUrl) ParseStr(encodedString string, result map[string]interface{}) error {
+	println("encodedString", encodedString)
 	// build nested map.
 	var build func(map[string]interface{}, []string, interface{}) error
 
@@ -22,6 +23,7 @@ func (ku *LkkUrl) ParseStr(encodedString string, result map[string]interface{}) 
 
 		// The end is slice. like f[], f[a][]
 		if keys[1] == "" && length == 2 {
+			fmt.Printf("keys %d %+v %+v\n", length, keys, value)
 			// todo nested slice
 			if key == "" {
 				return nil
@@ -32,6 +34,7 @@ func (ku *LkkUrl) ParseStr(encodedString string, result map[string]interface{}) 
 				return nil
 			}
 			children, ok := val.([]interface{})
+			fmt.Printf("children %+v\n", children)
 			if !ok {
 				return fmt.Errorf("1111expected type '[]interface{}' for key '%s', but got '%T'", key, val)
 			}
@@ -73,7 +76,7 @@ func (ku *LkkUrl) ParseStr(encodedString string, result map[string]interface{}) 
 		}
 		children, ok := val.(map[string]interface{})
 		if !ok {
-			return fmt.Errorf("expected type 'map[string]interface{}' for key '%s', but got '%T'", key, val)
+			return fmt.Errorf("333 expected type 'map[string]interface{}' for key '%s', but got '%T'", key, val)
 		}
 
 		return build(children, keys[1:], value)
