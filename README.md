@@ -75,6 +75,8 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/thinkeridea/go-extend
 - https://github.com/lalamove/nui
 - https://github.com/go-eyas/toolkit
+- https://github.com/hwholiday/learning_tools
+- https://github.com/nothollyhigh/kiss
 
 ### 其他库
 - https://github.com/lalamove/konfig
