@@ -103,3 +103,7 @@ http://ju.outofmemory.cn/entry/221647
 https://www.golangnote.com/topic/90.html
 https://stackoverflow.com/questions/38554353/how-to-check-if-a-string-only-contains-alphabetic-characters-in-go
 https://socketloop.com/tutorials/golang-regular-expression-alphanumeric-underscore
+
+password_hash
+https://gowebexamples.com/password-hashing/
+https://www.njphper.com/posts/f3f0ab9c.html#more
