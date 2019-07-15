@@ -275,6 +275,8 @@ func TestChunkSplit(t *testing.T) {
 		return
 	}
 	_ = KStr.ChunkSplit(str, 4, "")
+	_ = KStr.ChunkSplit("a", 4, "")
+	_ = KStr.ChunkSplit("ab", 4, "")
 }
 
 func BenchmarkChunkSplit(b *testing.B) {
