@@ -95,6 +95,7 @@ number
 url
 convert
 validate
+encrypt
 
 
 ### 临时

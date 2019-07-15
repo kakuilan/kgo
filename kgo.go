@@ -17,6 +17,8 @@ type (
 	LkkOS byte
 	// LkkUrl is the receiver of url utilities
 	LkkUrl byte
+	// LkkEncrypt is the receiver of encrypt utilities
+	LkkEncrypt byte
 
 	// LkkFileCover 枚举类型,文件是否覆盖
 	LkkFileCover int8
@@ -100,4 +102,7 @@ var (
 
 	// KUrl utilities
 	KUrl LkkUrl
+
+	// KEncr utilities
+	KEncr LkkEncrypt
 )
