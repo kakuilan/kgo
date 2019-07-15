@@ -276,7 +276,7 @@ func TestChunkSplit(t *testing.T) {
 	}
 	_ = KStr.ChunkSplit(str, 4, "")
 	_ = KStr.ChunkSplit("a", 4, "")
-	_ = KStr.ChunkSplit("ab", 4, "")
+	_ = KStr.ChunkSplit("ab", 64, "")
 }
 
 func BenchmarkChunkSplit(b *testing.B) {
@@ -318,5 +318,22 @@ func BenchmarkMbStrlen(b *testing.B) {
 	str := "hello world!你好 世界！"
 	for i := 0; i < b.N; i++ {
 		KStr.MbStrlen(str)
+	}
+}
+
+func TestMbStrShuffle(t *testing.T) {
+	str := "hello world!你好 世界！"
+	res := KStr.StrShuffle(str)
+	if res == str {
+		t.Error("StrShuffle fail")
+		return
+	}
+}
+
+func BenchmarkStrShuffle(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!你好 世界！"
+	for i := 0; i < b.N; i++ {
+		KStr.StrShuffle(str)
 	}
 }
