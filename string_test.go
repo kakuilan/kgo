@@ -266,3 +266,55 @@ func BenchmarkStrrev(b *testing.B) {
 		KStr.Strrev(str)
 	}
 }
+
+func TestChunkSplit(t *testing.T) {
+	str := "Yar?m kilo ?ay, yar?m kilo ?eker"
+	res := KStr.ChunkSplit(str, 4, "\r\n")
+	if len(res) == 0 {
+		t.Error("ChunkSplit fail")
+		return
+	}
+	_ = KStr.ChunkSplit(str, 4, "")
+}
+
+func BenchmarkChunkSplit(b *testing.B) {
+	b.ResetTimer()
+	str := "Yar?m kilo ?ay, yar?m kilo ?eker"
+	for i := 0; i < b.N; i++ {
+		KStr.ChunkSplit(str, 4, "")
+	}
+}
+
+func TestStrlen(t *testing.T) {
+	str := "hello world!你好 世界！"
+	res := KStr.Strlen(str)
+	if res != 28 {
+		t.Error("Strlen fail")
+		return
+	}
+}
+
+func BenchmarkStrlen(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!你好 世界！"
+	for i := 0; i < b.N; i++ {
+		KStr.Strlen(str)
+	}
+}
+
+func TestMbStrlen(t *testing.T) {
+	str := "hello world!你好 世界！"
+	res := KStr.MbStrlen(str)
+	if res != 18 {
+		t.Error("MbStrlen fail")
+		return
+	}
+}
+
+func BenchmarkMbStrlen(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!你好 世界！"
+	for i := 0; i < b.N; i++ {
+		KStr.MbStrlen(str)
+	}
+}

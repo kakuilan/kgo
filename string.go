@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 	"unicode"
+	"unicode/utf8"
 )
 
 // Nl2br 将换行符转换为br标签
@@ -161,4 +162,37 @@ func (ks *LkkString) Strrev(str string) string {
 		runes[i], runes[j] = runes[j], runes[i]
 	}
 	return string(runes)
+}
+
+// ChunkSplit 将字符串分割成小块.body为要分割的字符,chunklen为分割的尺寸,end为行尾序列符号
+func (ks *LkkString) ChunkSplit(body string, chunklen uint, end string) string {
+	if end == "" {
+		end = "\r\n"
+	}
+	runes, erunes := []rune(body), []rune(end)
+	l := uint(len(runes))
+	if l <= 1 || l < chunklen {
+		return body + end
+	}
+	ns := make([]rune, 0, len(runes)+len(erunes))
+	var i uint
+	for i = 0; i < l; i += chunklen {
+		if i+chunklen > l {
+			ns = append(ns, runes[i:]...)
+		} else {
+			ns = append(ns, runes[i:i+chunklen]...)
+		}
+		ns = append(ns, erunes...)
+	}
+	return string(ns)
+}
+
+// Strlen 获取字符串长度
+func (ks *LkkString) Strlen(str string) int {
+	return len(str)
+}
+
+// MbStrlen 获取字符串的长度,多字节的字符被计为 1
+func (ks *LkkString) MbStrlen(str string) int {
+	return utf8.RuneCountInString(str)
 }
