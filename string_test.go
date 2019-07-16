@@ -337,3 +337,21 @@ func BenchmarkStrShuffle(b *testing.B) {
 		KStr.StrShuffle(str)
 	}
 }
+
+func TestTrim(t *testing.T) {
+	str := " hello world!你好 世界！　"
+	res := KStr.Trim(str)
+	if res[0] != 'h' {
+		t.Error("Trim fail")
+		return
+	}
+	KStr.Trim(str, "\n")
+}
+
+func BenchmarkTrim(b *testing.B) {
+	b.ResetTimer()
+	str := " hello world!你好 世界！　"
+	for i := 0; i < b.N; i++ {
+		KStr.Trim(str)
+	}
+}
