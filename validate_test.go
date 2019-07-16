@@ -4,7 +4,7 @@ import "testing"
 
 func TestStringIsBinary(t *testing.T) {
 	cont, _ := KFile.GetContents("./file.go")
-	if KStr.IsBinary(cont) {
+	if KStr.IsBinary(string(cont)) {
 		t.Error("str isn`t binary")
 		return
 	}

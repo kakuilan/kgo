@@ -29,7 +29,7 @@ func BenchmarkGetExt(b *testing.B) {
 func TestGetContents(t *testing.T) {
 	filename := "./file.go"
 	cont, _ := KFile.GetContents(filename)
-	if cont == "" {
+	if string(cont) == "" {
 		t.Error("file get contents error")
 		return
 	}
@@ -40,6 +40,24 @@ func BenchmarkGetContents(b *testing.B) {
 	filename := "./README.md"
 	for i := 0; i < b.N; i++ {
 		_, _ = KFile.GetContents(filename)
+	}
+}
+
+func TestPutContents(t *testing.T) {
+	str := []byte("Hello World!")
+	err := KFile.PutContents("./testdata/putfile", str)
+	if err != nil {
+		t.Error("file get contents error")
+		return
+	}
+}
+
+func BenchmarkPutContents(b *testing.B) {
+	b.ResetTimer()
+	str := []byte("Hello World!")
+	for i := 0; i < b.N; i++ {
+		filename := fmt.Sprintf("./testdata/file/putfile_%d", i)
+		_ = KFile.PutContents(filename, str)
 	}
 }
 
