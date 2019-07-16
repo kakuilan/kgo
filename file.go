@@ -27,9 +27,19 @@ func (kf *LkkFile) GetExt(path string) string {
 }
 
 // GetContents 获取文件内容作为字符串
-func (kf *LkkFile) GetContents(path string) (string, error) {
+func (kf *LkkFile) GetContents(path string) ([]byte, error) {
 	data, err := ioutil.ReadFile(path)
-	return string(data), err
+	return data, err
+}
+
+// PutContents 将一个字符串写入文件
+func (kf *LkkFile) PutContents(fpath string, data []byte) error {
+	if dir := path.Dir(fpath); dir != "" {
+		if err := os.MkdirAll(dir, 0755); err != nil {
+			return err
+		}
+	}
+	return ioutil.WriteFile(fpath, data, 0644)
 }
 
 // GetMime 获取文件mime类型;fast为true时根据后缀快速获取;为false时读取文件头获取
@@ -143,7 +153,7 @@ func (kf *LkkFile) IsBinary(path string) bool {
 		return false
 	}
 
-	return KStr.IsBinary(cont)
+	return KStr.IsBinary(string(cont))
 }
 
 // IsImg 是否图片文件
