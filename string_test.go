@@ -510,3 +510,35 @@ func BenchmarkQuotemeta(b *testing.B) {
 		KStr.Quotemeta(str)
 	}
 }
+
+func TestHtmlentitiesEncodeDecode(t *testing.T) {
+	str := "A 'quote' is <b>bold</b>"
+	res1 := KStr.Htmlentities(str)
+	println("res1", res1)
+	if !strings.Contains(res1, "&") {
+		t.Error("Htmlentities fail")
+		return
+	}
+
+	res2 := KStr.HtmlentityDecode(res1)
+	if res2 != str {
+		t.Error("HtmlentityDecode fail")
+		return
+	}
+}
+
+func BenchmarkHtmlentities(b *testing.B) {
+	b.ResetTimer()
+	str := "A 'quote' is <b>bold</b>"
+	for i := 0; i < b.N; i++ {
+		KStr.Htmlentities(str)
+	}
+}
+
+func BenchmarkHtmlentityDecode(b *testing.B) {
+	b.ResetTimer()
+	str := `A &#39;quote&#39; is &lt;b&gt;bold&lt;/b&gt;`
+	for i := 0; i < b.N; i++ {
+		KStr.HtmlentityDecode(str)
+	}
+}
