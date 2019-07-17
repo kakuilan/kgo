@@ -5,6 +5,7 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
+	"html"
 	"math/rand"
 	"regexp"
 	"strings"
@@ -306,4 +307,14 @@ func (ks *LkkString) Quotemeta(str string) string {
 		buf.WriteRune(char)
 	}
 	return buf.String()
+}
+
+// Htmlentities 将字符转换为 HTML 转义字符
+func (ks *LkkString) Htmlentities(str string) string {
+	return html.EscapeString(str)
+}
+
+// HTMLEntityDecode 将HTML实体转换为它们对应的字符
+func (ks *LkkString) HtmlentityDecode(str string) string {
+	return html.UnescapeString(str)
 }
