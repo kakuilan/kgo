@@ -355,3 +355,69 @@ func BenchmarkTrim(b *testing.B) {
 		KStr.Trim(str)
 	}
 }
+
+func TestLtrim(t *testing.T) {
+	str := " hello world!你好 世界！　"
+	res := KStr.Ltrim(str)
+	if res[0] != 'h' {
+		t.Error("Ltrim fail")
+		return
+	}
+	KStr.Ltrim(str, "\n")
+}
+
+func BenchmarkLtrim(b *testing.B) {
+	b.ResetTimer()
+	str := " hello world!你好 世界！　"
+	for i := 0; i < b.N; i++ {
+		KStr.Ltrim(str)
+	}
+}
+
+func TestRtrim(t *testing.T) {
+	str := " hello world!你好 世界！　"
+	res := KStr.Rtrim(str, "　")
+	if strings.HasSuffix(res, "　") {
+		t.Error("Rtrim fail")
+		return
+	}
+	KStr.Rtrim(str)
+}
+
+func BenchmarkRtrim(b *testing.B) {
+	b.ResetTimer()
+	str := " hello world!你好 世界！　"
+	for i := 0; i < b.N; i++ {
+		KStr.Rtrim(str)
+	}
+}
+
+func TestChr(t *testing.T) {
+	res := KStr.Chr(65)
+	if res != "A" {
+		t.Error("Chr fail")
+		return
+	}
+}
+
+func BenchmarkChr(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Chr(int(i))
+	}
+}
+
+func TestOrd(t *testing.T) {
+	res := KStr.Ord("b")
+	if res != 98 {
+		t.Error("Ord fail")
+		return
+	}
+}
+
+func BenchmarkOrd(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Ord("c")
+	}
+}
