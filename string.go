@@ -3,6 +3,7 @@ package kgo
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"encoding/json"
 	"math/rand"
 	"regexp"
 	"strings"
@@ -250,4 +251,14 @@ func (ks *LkkString) Chr(ascii int) string {
 func (ks *LkkString) Ord(char string) rune {
 	r, _ := utf8.DecodeRune([]byte(char))
 	return r
+}
+
+// JsonEncode 对变量进行 JSON 编码
+func (ks *LkkString) JsonEncode(val interface{}) ([]byte, error) {
+	return json.Marshal(val)
+}
+
+// JsonDecode 对 JSON 格式的字符串进行解码,注意val使用指针
+func (ks *LkkString) JsonDecode(data []byte, val interface{}) error {
+	return json.Unmarshal(data, val)
 }

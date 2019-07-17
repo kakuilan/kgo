@@ -421,3 +421,42 @@ func BenchmarkOrd(b *testing.B) {
 		KStr.Ord("c")
 	}
 }
+
+func TestJsonEncodeDecode(t *testing.T) {
+	obj := make(map[string]interface{})
+	obj["k1"] = "abc"
+	obj["k2"] = 123
+	obj["k3"] = false
+	jstr, err := KStr.JsonEncode(obj)
+	if err != nil {
+		t.Error("JsonEncode fail")
+		return
+	}
+
+	mp := make(map[string]interface{})
+	err2 := KStr.JsonDecode(jstr, &mp)
+	if err2 != nil {
+		t.Error("JsonDecode fail")
+		return
+	}
+}
+
+func BenchmarkJsonEncode(b *testing.B) {
+	b.ResetTimer()
+	obj := make(map[string]interface{})
+	obj["k1"] = "abc"
+	obj["k2"] = 123
+	obj["k3"] = false
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.JsonEncode(obj)
+	}
+}
+
+func BenchmarkJsonDecode(b *testing.B) {
+	b.ResetTimer()
+	str := []byte(`{"k1":"abc","k2":123,"k3":false}`)
+	mp := make(map[string]interface{})
+	for i := 0; i < b.N; i++ {
+		_ = KStr.JsonDecode(str, &mp)
+	}
+}
