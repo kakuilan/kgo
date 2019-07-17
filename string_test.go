@@ -460,3 +460,53 @@ func BenchmarkJsonDecode(b *testing.B) {
 		_ = KStr.JsonDecode(str, &mp)
 	}
 }
+
+func TestAddslashesStripslashes(t *testing.T) {
+	str := "Is your name O'reilly?"
+	res1 := KStr.Addslashes(str)
+	println("res1", res1)
+	if !strings.Contains(res1, "\\") {
+		t.Error("Addslashes fail")
+		return
+	}
+
+	res2 := KStr.Stripslashes(res1)
+	println("res2", res2)
+	if strings.Contains(res2, "\\") {
+		t.Error("Stripslashes fail")
+		return
+	}
+}
+
+func BenchmarkAddslashes(b *testing.B) {
+	b.ResetTimer()
+	str := "Is your name O'reilly?"
+	for i := 0; i < b.N; i++ {
+		KStr.Addslashes(str)
+	}
+}
+
+func BenchmarkStripslashes(b *testing.B) {
+	b.ResetTimer()
+	str := `Is your name O\'reilly?`
+	for i := 0; i < b.N; i++ {
+		KStr.Stripslashes(str)
+	}
+}
+
+func TestQuotemeta(t *testing.T) {
+	str := "Hello world. (can you hear me?)"
+	res := KStr.Quotemeta(str)
+	if !strings.Contains(res, "\\") {
+		t.Error("Quotemeta fail")
+		return
+	}
+}
+
+func BenchmarkQuotemeta(b *testing.B) {
+	b.ResetTimer()
+	str := "Hello world. (can you hear me?)"
+	for i := 0; i < b.N; i++ {
+		KStr.Quotemeta(str)
+	}
+}
