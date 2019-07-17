@@ -212,9 +212,42 @@ func (ks *LkkString) StrShuffle(str string) string {
 func (ks *LkkString) Trim(str string, characterMask ...string) string {
 	mask := ""
 	if len(characterMask) == 0 {
-		mask = " \\t\\n\\r\\0\\x0B"
+		mask = " \\t\\n\\r\\0\\x0B　"
 	} else {
 		mask = characterMask[0]
 	}
 	return strings.Trim(str, mask)
+}
+
+// Ltrim 删除字符串开头的空白字符（或其他字符）
+func (ks *LkkString) Ltrim(str string, characterMask ...string) string {
+	mask := ""
+	if len(characterMask) == 0 {
+		mask = " \\t\\n\\r\\0\\x0B　"
+	} else {
+		mask = characterMask[0]
+	}
+	return strings.TrimLeft(str, mask)
+}
+
+// Rtrim 删除字符串末端的空白字符（或者其他字符）
+func (ks *LkkString) Rtrim(str string, characterMask ...string) string {
+	mask := ""
+	if len(characterMask) == 0 {
+		mask = " \\t\\n\\r\\0\\x0B　"
+	} else {
+		mask = characterMask[0]
+	}
+	return strings.TrimRight(str, mask)
+}
+
+// Chr 返回相对应于 ascii 所指定的单个字符
+func (ks *LkkString) Chr(ascii int) string {
+	return string(ascii)
+}
+
+// Ord 将首字符转换为rune
+func (ks *LkkString) Ord(char string) rune {
+	r, _ := utf8.DecodeRune([]byte(char))
+	return r
 }
