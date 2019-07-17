@@ -537,6 +537,7 @@ func TestFileSha1(t *testing.T) {
 		t.Error("File Sha1 fail")
 		return
 	}
+	_, _ = KFile.Sha1("./testdata/hello")
 }
 
 func BenchmarkFileSha1(b *testing.B) {

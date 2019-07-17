@@ -557,3 +557,20 @@ func BenchmarkStringSha1(b *testing.B) {
 		KStr.Sha1(str)
 	}
 }
+
+func TestCrc32(t *testing.T) {
+	str := "The quick brown fox jumped over the lazy dog"
+	res := KStr.Crc32(str)
+	if res <= 0 {
+		t.Error("Crc32 fail")
+		return
+	}
+}
+
+func BenchmarkCrc32(b *testing.B) {
+	b.ResetTimer()
+	str := "The quick brown fox jumped over the lazy dog"
+	for i := 0; i < b.N; i++ {
+		KStr.Crc32(str)
+	}
+}
