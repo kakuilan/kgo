@@ -40,7 +40,6 @@ func TestInArray(t *testing.T) {
 		t.Error("InArray fail")
 		return
 	}
-
 }
 
 func BenchmarkInArray(b *testing.B) {

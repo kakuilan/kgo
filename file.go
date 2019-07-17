@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"crypto/md5"
+	"crypto/sha1"
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
@@ -522,4 +523,15 @@ func (kf *LkkFile) Md5(path string, length uint8) (string, error) {
 	}
 
 	return res, nil
+}
+
+// Sha1 sha1_file()
+func (kf *LkkFile) Sha1(path string) (string, error) {
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+	hash := sha1.New()
+	hash.Write([]byte(data))
+	return hex.EncodeToString(hash.Sum(nil)), nil
 }

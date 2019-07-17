@@ -464,18 +464,17 @@ func BenchmarkJsonDecode(b *testing.B) {
 func TestAddslashesStripslashes(t *testing.T) {
 	str := "Is your name O'reilly?"
 	res1 := KStr.Addslashes(str)
-	println("res1", res1)
 	if !strings.Contains(res1, "\\") {
 		t.Error("Addslashes fail")
 		return
 	}
 
 	res2 := KStr.Stripslashes(res1)
-	println("res2", res2)
 	if strings.Contains(res2, "\\") {
 		t.Error("Stripslashes fail")
 		return
 	}
+	KStr.Stripslashes(`Is \ your \\name O\'reilly?`)
 }
 
 func BenchmarkAddslashes(b *testing.B) {
@@ -514,7 +513,6 @@ func BenchmarkQuotemeta(b *testing.B) {
 func TestHtmlentitiesEncodeDecode(t *testing.T) {
 	str := "A 'quote' is <b>bold</b>"
 	res1 := KStr.Htmlentities(str)
-	println("res1", res1)
 	if !strings.Contains(res1, "&") {
 		t.Error("Htmlentities fail")
 		return
@@ -540,5 +538,22 @@ func BenchmarkHtmlentityDecode(b *testing.B) {
 	str := `A &#39;quote&#39; is &lt;b&gt;bold&lt;/b&gt;`
 	for i := 0; i < b.N; i++ {
 		KStr.HtmlentityDecode(str)
+	}
+}
+
+func TestStringSha1(t *testing.T) {
+	str := "apple"
+	res := KStr.Sha1(str)
+	if res != "d0be2dc421be4fcd0172e5afceea3970e2f3d940" {
+		t.Error("String Sha1 fail")
+		return
+	}
+}
+
+func BenchmarkStringSha1(b *testing.B) {
+	b.ResetTimer()
+	str := "Hello world. (can you hear me?)"
+	for i := 0; i < b.N; i++ {
+		KStr.Sha1(str)
 	}
 }
