@@ -34,6 +34,8 @@ func TestBase64Decode(t *testing.T) {
 		t.Error("Base64Decode fail")
 		return
 	}
+	_, err = KEncr.Base64Decode("VGhpcy")
+	_, err = KEncr.Base64Decode("VGhpcyB")
 }
 
 func BenchmarkBase64Decode(b *testing.B) {
