@@ -585,6 +585,8 @@ func TestSimilarText(t *testing.T) {
 		t.Error("Crc32 fail")
 		return
 	}
+	KStr.SimilarText("PHP IS GREAT", "WITH MYSQL", &percent)
+	KStr.SimilarText("", "", &percent)
 }
 
 func BenchmarkSimilarText(b *testing.B) {
