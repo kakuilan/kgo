@@ -89,7 +89,6 @@ func TestParseStr(t *testing.T) {
 		t.Error("ParseStr fail")
 		return
 	}
-
 }
 
 func BenchmarkParseStr(b *testing.B) {
@@ -98,5 +97,30 @@ func BenchmarkParseStr(b *testing.B) {
 	arr := make(map[string]interface{})
 	for i := 0; i < b.N; i++ {
 		_ = KUrl.ParseStr(str, arr)
+	}
+}
+
+func TestParseURL(t *testing.T) {
+	url := `https://www.google.com/search?source=hp&ei=tDUwXejNGs6DoATYkqCYCA&q=golang&oq=golang&gs_l=psy-ab.3..35i39l2j0i67l8.1729.2695..2888...1.0..0.126.771.2j5......0....1..gws-wiz.....10..0.fFQmXkC_LcQ&ved=0ahUKEwjo9-H7jb7jAhXOAYgKHVgJCIMQ4dUDCAU&uact=5`
+	_, err := KUrl.ParseURL(url, -1)
+	if err != nil {
+		t.Error("ParseURL fail")
+		return
+	}
+	_, _ = KUrl.ParseURL(url, 1)
+	_, _ = KUrl.ParseURL(url, 2)
+	_, _ = KUrl.ParseURL(url, 4)
+	_, _ = KUrl.ParseURL(url, 8)
+	_, _ = KUrl.ParseURL(url, 16)
+	_, _ = KUrl.ParseURL(url, 32)
+	_, _ = KUrl.ParseURL(url, 64)
+	_, _ = KUrl.ParseURL(url, 128)
+}
+
+func BenchmarkParseURL(b *testing.B) {
+	b.ResetTimer()
+	url := `https://www.google.com/search?source=hp&ei=tDUwXejNGs6DoATYkqCYCA&q=golang&oq=golang&gs_l=psy-ab.3..35i39l2j0i67l8.1729.2695..2888...1.0..0.126.771.2j5......0....1..gws-wiz.....10..0.fFQmXkC_LcQ&ved=0ahUKEwjo9-H7jb7jAhXOAYgKHVgJCIMQ4dUDCAU&uact=5`
+	for i := 0; i < b.N; i++ {
+		_, _ = KUrl.ParseURL(url, -1)
 	}
 }
