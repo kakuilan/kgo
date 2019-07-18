@@ -198,3 +198,13 @@ func (ku *LkkUrl) UrlEncode(str string) string {
 func (ku *LkkUrl) UrlDecode(str string) (string, error) {
 	return url.QueryUnescape(str)
 }
+
+// RawurlEncode 按照 RFC 3986 对 URL 进行编码
+func (ku *LkkUrl) RawurlEncode(str string) string {
+	return strings.Replace(url.QueryEscape(str), "+", "%20", -1)
+}
+
+// RawurlDecode 对已编码的 URL 字符串进行解码
+func (ku *LkkUrl) RawurlDecode(str string) (string, error) {
+	return url.QueryUnescape(strings.Replace(str, "%20", "+", -1))
+}

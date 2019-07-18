@@ -165,3 +165,37 @@ func BenchmarkUrlDecode(b *testing.B) {
 		_, _ = KUrl.UrlDecode(str)
 	}
 }
+
+func TestRawurlEncode(t *testing.T) {
+	str := "'foo @+%/'你好"
+	res := KUrl.RawurlEncode(str)
+	if !strings.Contains(res, "%") {
+		t.Error("UrlEncode fail")
+		return
+	}
+}
+
+func BenchmarkRawurlEncode(b *testing.B) {
+	b.ResetTimer()
+	str := "'foo @+%/'你好"
+	for i := 0; i < b.N; i++ {
+		KUrl.RawurlEncode(str)
+	}
+}
+
+func TestRawurlDecode(t *testing.T) {
+	str := "foo%20bar%40baz"
+	_, err := KUrl.RawurlDecode(str)
+	if err != nil {
+		t.Error("RawurlDecode fail")
+		return
+	}
+}
+
+func BenchmarkRawurlDecode(b *testing.B) {
+	b.ResetTimer()
+	str := "foo%20bar%40baz"
+	for i := 0; i < b.N; i++ {
+		_, _ = KUrl.RawurlDecode(str)
+	}
+}
