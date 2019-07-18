@@ -151,9 +151,9 @@ func (ku *LkkUrl) ParseStr(encodedString string, result map[string]interface{}) 
 	return nil
 }
 
-// ParseURL 解析 URL,返回其组成部分,component为需要返回的组成
+// ParseUrl 解析 URL,返回其组成部分,component为需要返回的组成.
 // -1: all; 1: scheme; 2: host; 4: port; 8: user; 16: pass; 32: path; 64: query; 128: fragment
-func (ku *LkkUrl) ParseURL(str string, component int) (map[string]string, error) {
+func (ku *LkkUrl) ParseUrl(str string, component int) (map[string]string, error) {
 	u, err := url.Parse(str)
 	if err != nil {
 		return nil, err
@@ -187,4 +187,14 @@ func (ku *LkkUrl) ParseURL(str string, component int) (map[string]string, error)
 		components["fragment"] = u.Fragment
 	}
 	return components, nil
+}
+
+// UrlEncode 编码 URL 字符串
+func (ku *LkkUrl) UrlEncode(str string) string {
+	return url.QueryEscape(str)
+}
+
+// UrlDecode 解码已编码的 URL 字符串
+func (ku *LkkUrl) UrlDecode(str string) (string, error) {
+	return url.QueryUnescape(str)
 }
