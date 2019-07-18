@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"net/url"
 	"strings"
 	"testing"
 )
@@ -197,5 +198,29 @@ func BenchmarkRawurlDecode(b *testing.B) {
 	str := "foo%20bar%40baz"
 	for i := 0; i < b.N; i++ {
 		_, _ = KUrl.RawurlDecode(str)
+	}
+}
+
+func TestHttpBuildQuery(t *testing.T) {
+	params := url.Values{}
+	params.Add("a", "abc")
+	params.Add("b", "123")
+	params.Add("c", "你好")
+
+	res := KUrl.HttpBuildQuery(params)
+	if !strings.Contains(res, "&") {
+		t.Error("HttpBuildQuery fail")
+		return
+	}
+}
+
+func BenchmarkHttpBuildQuery(b *testing.B) {
+	b.ResetTimer()
+	params := url.Values{}
+	params.Add("a", "abc")
+	params.Add("b", "123")
+	params.Add("c", "你好")
+	for i := 0; i < b.N; i++ {
+		KUrl.HttpBuildQuery(params)
 	}
 }
