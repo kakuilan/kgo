@@ -574,3 +574,25 @@ func BenchmarkCrc32(b *testing.B) {
 		KStr.Crc32(str)
 	}
 }
+
+func TestSimilarText(t *testing.T) {
+	str1 := "The quick brown fox jumped over the lazy dog"
+	str2 := "The quick brown fox jumped over the lazy dog"
+	var percent float64
+
+	res := KStr.SimilarText(str1, str2, &percent)
+	if res <= 0 || percent <= 0 {
+		t.Error("Crc32 fail")
+		return
+	}
+}
+
+func BenchmarkSimilarText(b *testing.B) {
+	b.ResetTimer()
+	str1 := "The quick brown fox jumped over the lazy dog"
+	str2 := "The quick brown fox jumped over the lazy dog"
+	var percent float64
+	for i := 0; i < b.N; i++ {
+		KStr.SimilarText(str1, str2, &percent)
+	}
+}
