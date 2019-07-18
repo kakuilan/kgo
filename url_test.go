@@ -116,6 +116,12 @@ func TestParseUrl(t *testing.T) {
 	_, _ = KUrl.ParseUrl(url, 32)
 	_, _ = KUrl.ParseUrl(url, 64)
 	_, _ = KUrl.ParseUrl(url, 128)
+	_, _ = KUrl.ParseUrl("123456789", -1)
+	_, err = KUrl.ParseUrl("sg>g://asdf43123412341234", -1)
+	if err == nil {
+		t.Error("ParseUrl fail")
+		return
+	}
 }
 
 func BenchmarkParseUrl(b *testing.B) {
