@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -100,27 +101,61 @@ func BenchmarkParseStr(b *testing.B) {
 	}
 }
 
-func TestParseURL(t *testing.T) {
+func TestParseUrl(t *testing.T) {
 	url := `https://www.google.com/search?source=hp&ei=tDUwXejNGs6DoATYkqCYCA&q=golang&oq=golang&gs_l=psy-ab.3..35i39l2j0i67l8.1729.2695..2888...1.0..0.126.771.2j5......0....1..gws-wiz.....10..0.fFQmXkC_LcQ&ved=0ahUKEwjo9-H7jb7jAhXOAYgKHVgJCIMQ4dUDCAU&uact=5`
-	_, err := KUrl.ParseURL(url, -1)
+	_, err := KUrl.ParseUrl(url, -1)
 	if err != nil {
-		t.Error("ParseURL fail")
+		t.Error("ParseUrl fail")
 		return
 	}
-	_, _ = KUrl.ParseURL(url, 1)
-	_, _ = KUrl.ParseURL(url, 2)
-	_, _ = KUrl.ParseURL(url, 4)
-	_, _ = KUrl.ParseURL(url, 8)
-	_, _ = KUrl.ParseURL(url, 16)
-	_, _ = KUrl.ParseURL(url, 32)
-	_, _ = KUrl.ParseURL(url, 64)
-	_, _ = KUrl.ParseURL(url, 128)
+	_, _ = KUrl.ParseUrl(url, 1)
+	_, _ = KUrl.ParseUrl(url, 2)
+	_, _ = KUrl.ParseUrl(url, 4)
+	_, _ = KUrl.ParseUrl(url, 8)
+	_, _ = KUrl.ParseUrl(url, 16)
+	_, _ = KUrl.ParseUrl(url, 32)
+	_, _ = KUrl.ParseUrl(url, 64)
+	_, _ = KUrl.ParseUrl(url, 128)
 }
 
-func BenchmarkParseURL(b *testing.B) {
+func BenchmarkParseUrl(b *testing.B) {
 	b.ResetTimer()
 	url := `https://www.google.com/search?source=hp&ei=tDUwXejNGs6DoATYkqCYCA&q=golang&oq=golang&gs_l=psy-ab.3..35i39l2j0i67l8.1729.2695..2888...1.0..0.126.771.2j5......0....1..gws-wiz.....10..0.fFQmXkC_LcQ&ved=0ahUKEwjo9-H7jb7jAhXOAYgKHVgJCIMQ4dUDCAU&uact=5`
 	for i := 0; i < b.N; i++ {
-		_, _ = KUrl.ParseURL(url, -1)
+		_, _ = KUrl.ParseUrl(url, -1)
+	}
+}
+
+func TestUrlEncode(t *testing.T) {
+	str := "'test-bla-bla-4>2-y-3<6'"
+	res := KUrl.UrlEncode(str)
+	if !strings.Contains(res, "%") {
+		t.Error("UrlEncode fail")
+		return
+	}
+}
+
+func BenchmarkUrlEncode(b *testing.B) {
+	b.ResetTimer()
+	str := "'test-bla-bla-4>2-y-3<6'"
+	for i := 0; i < b.N; i++ {
+		KUrl.UrlEncode(str)
+	}
+}
+
+func TestUrlUrlDecode(t *testing.T) {
+	str := "one%20%26%20two"
+	_, err := KUrl.UrlDecode(str)
+	if err != nil {
+		t.Error("UrlDecode fail")
+		return
+	}
+}
+
+func BenchmarkUrlDecode(b *testing.B) {
+	b.ResetTimer()
+	str := "one%20%26%20two"
+	for i := 0; i < b.N; i++ {
+		_, _ = KUrl.UrlDecode(str)
 	}
 }
