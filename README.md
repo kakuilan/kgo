@@ -112,6 +112,7 @@ https://www.njphper.com/posts/f3f0ab9c.html#more
 encrypt
 https://www.ctolib.com/topics-4140.html
 https://www.cnblogs.com/lavin/p/5373188.html
+https://github.com/sinlov/fastEncryptDecode
 http://www.voidcn.com/article/p-pmecifun-bod.html
 https://blog.csdn.net/yue7603835/article/details/73395580
 https://gist.github.com/yinheli/3370e0e901329b639be4
