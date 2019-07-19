@@ -525,7 +525,7 @@ func (kf *LkkFile) Md5(path string, length uint8) (string, error) {
 	return res, nil
 }
 
-// Sha1 sha1_file()
+// Sha1 计算文件的 sha1 散列值
 func (kf *LkkFile) Sha1(path string) (string, error) {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
