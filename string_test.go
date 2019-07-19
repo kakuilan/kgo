@@ -558,6 +558,23 @@ func BenchmarkStringSha1(b *testing.B) {
 	}
 }
 
+func TestStringSha256(t *testing.T) {
+	str := "apple"
+	res := KStr.Sha256(str)
+	if res != "3a7bd3e2360a3d29eea436fcfb7e44c735d117c42d1c1835420b6b9942dd4f1b" {
+		t.Error("String Sha256 fail")
+		return
+	}
+}
+
+func BenchmarkStringSha256(b *testing.B) {
+	b.ResetTimer()
+	str := "Hello world. (can you hear me?)"
+	for i := 0; i < b.N; i++ {
+		KStr.Sha256(str)
+	}
+}
+
 func TestCrc32(t *testing.T) {
 	str := "The quick brown fox jumped over the lazy dog"
 	res := KStr.Crc32(str)

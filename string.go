@@ -40,6 +40,11 @@ func (ks *LkkString) Sha1(str string) string {
 	return sha1Str([]byte(str))
 }
 
+// Sha256 计算字符串的 sha256 散列值
+func (ks *LkkString) Sha256(str string) string {
+	return sha256Str([]byte(str))
+}
+
 // Random 生成随机字符串;length为长度,stype为枚举(RAND_STRING_ALPHA,RAND_STRING_NUMERIC,RAND_STRING_ALPHANUM,RAND_STRING_SPECIAL,RAND_STRING_CHINESE)
 func (ks *LkkString) Random(length uint8, stype LkkRandString) string {
 	if length == 0 {

@@ -546,3 +546,19 @@ func BenchmarkFileSha1(b *testing.B) {
 		_, _ = KFile.Sha1("./testdata/diglett.png")
 	}
 }
+
+func TestFileSha256(t *testing.T) {
+	_, err := KFile.Sha256("./testdata/diglett.png")
+	if err != nil {
+		t.Error("File Sha1 fail")
+		return
+	}
+	_, _ = KFile.Sha256("./testdata/hello")
+}
+
+func BenchmarkFileSha256(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.Sha256("./testdata/diglett.png")
+	}
+}

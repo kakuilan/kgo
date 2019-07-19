@@ -3,6 +3,7 @@ package kgo
 import (
 	"crypto/md5"
 	"crypto/sha1"
+	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
@@ -532,6 +533,17 @@ func (kf *LkkFile) Sha1(path string) (string, error) {
 		return "", err
 	}
 	hash := sha1.New()
+	hash.Write([]byte(data))
+	return hex.EncodeToString(hash.Sum(nil)), nil
+}
+
+// Sha256 计算文件的 sha256 散列值
+func (kf *LkkFile) Sha256(path string) (string, error) {
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+	hash := sha256.New()
 	hash.Write([]byte(data))
 	return hex.EncodeToString(hash.Sum(nil)), nil
 }
