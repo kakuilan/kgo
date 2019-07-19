@@ -2,9 +2,6 @@ package kgo
 
 import (
 	"bytes"
-	"crypto/md5"
-	"crypto/sha1"
-	"encoding/hex"
 	"encoding/json"
 	"hash/crc32"
 	"html"
@@ -35,27 +32,12 @@ func (ks *LkkString) StripTags(html string) string {
 
 // Md5 获取字符串md5值,length指定结果长度32/16
 func (ks *LkkString) Md5(str string, length uint8) string {
-	var res string
-	hash := md5.New()
-	hash.Write([]byte(str))
-
-	hashInBytes := hash.Sum(nil)
-	if length > 0 && length < 32 {
-		dst := make([]byte, hex.EncodedLen(len(hashInBytes)))
-		hex.Encode(dst, hashInBytes)
-		res = string(dst[:length])
-	} else {
-		res = hex.EncodeToString(hashInBytes)
-	}
-
-	return res
+	return md5Str([]byte(str), length)
 }
 
 // Sha1 计算字符串的 sha1 散列值
 func (ks *LkkString) Sha1(str string) string {
-	hash := sha1.New()
-	hash.Write([]byte(str))
-	return hex.EncodeToString(hash.Sum(nil))
+	return sha1Str([]byte(str))
 }
 
 // Random 生成随机字符串;length为长度,stype为枚举(RAND_STRING_ALPHA,RAND_STRING_NUMERIC,RAND_STRING_ALPHANUM,RAND_STRING_SPECIAL,RAND_STRING_CHINESE)
