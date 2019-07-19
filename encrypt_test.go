@@ -45,3 +45,34 @@ func BenchmarkBase64Decode(b *testing.B) {
 		_, _ = KEncr.Base64Decode(str)
 	}
 }
+
+func TestBase64UrlEncodeDecode(t *testing.T) {
+	str := []byte("This is an string to encod")
+	res := KEncr.Base64UrlEncode(str)
+	if strings.HasSuffix(res, "=") {
+		t.Error("Base64UrlEncode fail")
+		return
+	}
+
+	_, err := KEncr.Base64UrlDecode(res)
+	if err != nil {
+		t.Error("Base64UrlDecode fail")
+		return
+	}
+}
+
+func BenchmarkBase64UrlEncode(b *testing.B) {
+	b.ResetTimer()
+	str := []byte("This is an string to encod")
+	for i := 0; i < b.N; i++ {
+		KEncr.Base64UrlEncode(str)
+	}
+}
+
+func BenchmarkBase64UrlDecode(b *testing.B) {
+	b.ResetTimer()
+	str := "VGhpcyBpcyBhbiBzdHJpbmcgdG8gZW5jb2Q"
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.Base64UrlDecode(str)
+	}
+}
