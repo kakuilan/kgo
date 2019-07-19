@@ -3,6 +3,7 @@ package kgo
 import (
 	"crypto/md5"
 	"crypto/sha1"
+	"crypto/sha256"
 	"encoding/hex"
 )
 
@@ -27,6 +28,13 @@ func md5Str(str []byte, length uint8) string {
 // sha1Str 计算字符串的 sha1 散列值
 func sha1Str(str []byte) string {
 	hash := sha1.New()
+	hash.Write(str)
+	return hex.EncodeToString(hash.Sum(nil))
+}
+
+// sha256Str 计算字符串的 sha256 散列值
+func sha256Str(str []byte) string {
+	hash := sha256.New()
 	hash.Write(str)
 	return hex.EncodeToString(hash.Sum(nil))
 }
