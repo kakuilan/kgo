@@ -92,9 +92,15 @@ func TestAuthCode(t *testing.T) {
 		t.Error("AuthCode Decode fail")
 		return
 	}
-	KEncr.AuthCode(str, key, true, 1800)
+
+	res = KEncr.AuthCode(str, key, true, -3600)
+	KEncr.AuthCode(res, key, false, 0)
+
 	KEncr.AuthCode("", key, true, 0)
 	KEncr.AuthCode("", "", true, 0)
+	KEncr.AuthCode("7caeNfPt/N1zHdj5k/7i7pol6NHsVs0Cji7c15h4by1RYcrBoo7EEw==", key, false, 0)
+	KEncr.AuthCode("123456", "", false, 0)
+	KEncr.AuthCode("1234#iu3498r", "", false, 0)
 }
 
 func BenchmarkAuthCodeEncode(b *testing.B) {

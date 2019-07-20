@@ -13,9 +13,9 @@ func md5Str(str []byte, length uint8) []byte {
 	hash := md5.New()
 	hash.Write(str)
 
-	hashInBytes := hash.Sum(nil)
-	dst := make([]byte, hex.EncodedLen(len(hashInBytes)))
-	hex.Encode(dst, hashInBytes)
+	hBytes := hash.Sum(nil)
+	dst := make([]byte, hex.EncodedLen(len(hBytes)))
+	hex.Encode(dst, hBytes)
 	if length > 0 && length < 32 {
 		res = dst[:length]
 	} else {
@@ -26,15 +26,23 @@ func md5Str(str []byte, length uint8) []byte {
 }
 
 // sha1Str 计算字符串的 sha1 散列值
-func sha1Str(str []byte) string {
+func sha1Str(str []byte) []byte {
 	hash := sha1.New()
 	hash.Write(str)
-	return hex.EncodeToString(hash.Sum(nil))
+
+	hBytes := hash.Sum(nil)
+	res := make([]byte, hex.EncodedLen(len(hBytes)))
+	hex.Encode(res, hBytes)
+	return res
 }
 
 // sha256Str 计算字符串的 sha256 散列值
-func sha256Str(str []byte) string {
+func sha256Str(str []byte) []byte {
 	hash := sha256.New()
 	hash.Write(str)
-	return hex.EncodeToString(hash.Sum(nil))
+
+	hBytes := hash.Sum(nil)
+	res := make([]byte, hex.EncodedLen(len(hBytes)))
+	hex.Encode(res, hBytes)
+	return res
 }

@@ -533,7 +533,7 @@ func (kf *LkkFile) Sha1(path string) (string, error) {
 		return "", err
 	}
 	hash := sha1.New()
-	hash.Write([]byte(data))
+	hash.Write(data)
 	return hex.EncodeToString(hash.Sum(nil)), nil
 }
 
@@ -544,6 +544,6 @@ func (kf *LkkFile) Sha256(path string) (string, error) {
 		return "", err
 	}
 	hash := sha256.New()
-	hash.Write([]byte(data))
+	hash.Write(data)
 	return hex.EncodeToString(hash.Sum(nil)), nil
 }
