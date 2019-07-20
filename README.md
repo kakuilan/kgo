@@ -105,10 +105,6 @@ https://www.golangnote.com/topic/90.html
 https://stackoverflow.com/questions/38554353/how-to-check-if-a-string-only-contains-alphabetic-characters-in-go
 https://socketloop.com/tutorials/golang-regular-expression-alphanumeric-underscore
 
-auth_code
-https://my.oschina.net/u/234255/blog/175097
-https://github.com/starten/go-authcode
-
 
 password_hash
 https://gowebexamples.com/password-hashing/

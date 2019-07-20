@@ -95,10 +95,10 @@ func TestAuthCode(t *testing.T) {
 
 	res = KEncr.AuthCode(str, key, true, -3600)
 	KEncr.AuthCode(res, key, false, 0)
-
 	KEncr.AuthCode("", key, true, 0)
 	KEncr.AuthCode("", "", true, 0)
 	KEncr.AuthCode("7caeNfPt/N1zHdj5k/7i7pol6NHsVs0Cji7c15h4by1RYcrBoo7EEw==", key, false, 0)
+	KEncr.AuthCode("7caeNfPt/N1zHdj5k/7i7pol6N", key, false, 0)
 	KEncr.AuthCode("123456", "", false, 0)
 	KEncr.AuthCode("1234#iu3498r", "", false, 0)
 }
@@ -118,5 +118,40 @@ func BenchmarkAuthCodeDecode(b *testing.B) {
 	str := "a79b5do3C9nbaZsAz5j3NQRj4e/L6N+y5fs2U9r1mO0LinOWtxmscg=="
 	for i := 0; i < b.N; i++ {
 		KEncr.AuthCode(str, key, false, 0)
+	}
+}
+
+func TestPasswordHashVerify(t *testing.T) {
+	pwd := []byte("123456")
+	has, err := KEncr.PasswordHash(pwd)
+	if err != nil {
+		t.Error("PasswordHash fail")
+		return
+	}
+
+	chk := KEncr.PasswordVerify(pwd, has)
+	if !chk {
+		t.Error("PasswordVerify fail")
+		return
+	}
+
+	_, _ = KEncr.PasswordHash(pwd, 1)
+	_, _ = KEncr.PasswordHash(pwd, 32)
+}
+
+func BenchmarkPasswordHash(b *testing.B) {
+	b.ResetTimer()
+	pwd := []byte("123456")
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.PasswordHash(pwd)
+	}
+}
+
+func BenchmarkPasswordVerify(b *testing.B) {
+	b.ResetTimer()
+	pwd := []byte("123456")
+	has := []byte("$2a$10$kCv6ljsVuTSI54oPkWulreEmUNTW/zj0Dgh6qF4Vz0w4C3gVf/w7a")
+	for i := 0; i < b.N; i++ {
+		KEncr.PasswordVerify(pwd, has)
 	}
 }
