@@ -3,6 +3,7 @@ package kgo
 import (
 	"encoding/base64"
 	"fmt"
+	"golang.org/x/crypto/bcrypt"
 	"strconv"
 	"strings"
 	"time"
@@ -150,4 +151,28 @@ func (ke *LkkEncrypt) AuthCode(str, key string, encode bool, expiry int64) strin
 		result = string(keyc) + base64.StdEncoding.EncodeToString([]byte(result))
 		return result
 	}
+}
+
+// PasswordHash 创建密码的散列值;costs为算法的cost,范围4~31,默认10
+func (ke *LkkEncrypt) PasswordHash(password []byte, costs ...int) ([]byte, error) {
+	var cost int
+	if len(costs) == 0 {
+		cost = 10
+	} else {
+		cost = costs[0]
+		if cost < 4 {
+			cost = 4
+		} else if cost > 31 {
+			cost = 31
+		}
+	}
+
+	bytes, err := bcrypt.GenerateFromPassword(password, cost)
+	return bytes, err
+}
+
+// PasswordVerify 验证密码是否和散列值匹配
+func (ke *LkkEncrypt) PasswordVerify(password, hash []byte) bool {
+	err := bcrypt.CompareHashAndPassword(hash, password)
+	return err == nil
 }
