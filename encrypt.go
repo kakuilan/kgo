@@ -87,7 +87,6 @@ func (ke *LkkEncrypt) AuthCode(str, key string, encode bool, expiry int64) strin
 	if encode == false {
 		strByte, err := base64.StdEncoding.DecodeString(str[ckeyLength:])
 		if err != nil {
-			println(err.Error())
 			return ""
 		}
 		str = string(strByte)
@@ -136,6 +135,10 @@ func (ke *LkkEncrypt) AuthCode(str, key string, encode bool, expiry int64) strin
 		// substr($result, 0, 10) - time() > 0 验证数据有效性
 		// substr($result, 10, 16) == substr(md5(substr($result, 26).$keyb), 0, 16) 验证数据完整性
 		// 验证数据有效性，请看未加密明文的格式
+		if len(result) <= 26 {
+			return ""
+		}
+
 		frontTen, _ := strconv.ParseInt(result[:10], 10, 0)
 		if (frontTen == 0 || frontTen-time.Now().Unix() > 0) && result[10:26] == string(md5Str(append(resdata[26:], keyb...), 16)) {
 			return result[26:]
