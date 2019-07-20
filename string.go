@@ -32,7 +32,7 @@ func (ks *LkkString) StripTags(html string) string {
 
 // Md5 获取字符串md5值,length指定结果长度32/16
 func (ks *LkkString) Md5(str string, length uint8) string {
-	return md5Str([]byte(str), length)
+	return string(md5Str([]byte(str), length))
 }
 
 // Sha1 计算字符串的 sha1 散列值

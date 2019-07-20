@@ -8,18 +8,18 @@ import (
 )
 
 // md5Str 计算字符串的 MD5 散列值
-func md5Str(str []byte, length uint8) string {
-	var res string
+func md5Str(str []byte, length uint8) []byte {
+	var res []byte
 	hash := md5.New()
 	hash.Write(str)
 
 	hashInBytes := hash.Sum(nil)
+	dst := make([]byte, hex.EncodedLen(len(hashInBytes)))
+	hex.Encode(dst, hashInBytes)
 	if length > 0 && length < 32 {
-		dst := make([]byte, hex.EncodedLen(len(hashInBytes)))
-		hex.Encode(dst, hashInBytes)
-		res = string(dst[:length])
+		res = dst[:length]
 	} else {
-		res = hex.EncodeToString(hashInBytes)
+		res = dst
 	}
 
 	return res
