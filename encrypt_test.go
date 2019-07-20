@@ -76,3 +76,41 @@ func BenchmarkBase64UrlDecode(b *testing.B) {
 		_, _ = KEncr.Base64UrlDecode(str)
 	}
 }
+
+func TestAuthCode(t *testing.T) {
+	key := "123456"
+	str := "hello world"
+
+	res := KEncr.AuthCode(str, key, true, 0)
+	if res == "" {
+		t.Error("AuthCode Encode fail")
+		return
+	}
+
+	res2 := KEncr.AuthCode(res, key, false, 0)
+	if res2 == "" {
+		t.Error("AuthCode Decode fail")
+		return
+	}
+	KEncr.AuthCode(str, key, true, 1800)
+	KEncr.AuthCode("", key, true, 0)
+	KEncr.AuthCode("", "", true, 0)
+}
+
+func BenchmarkAuthCodeEncode(b *testing.B) {
+	b.ResetTimer()
+	key := "123456"
+	str := "hello world"
+	for i := 0; i < b.N; i++ {
+		KEncr.AuthCode(str, key, true, 0)
+	}
+}
+
+func BenchmarkAuthCodeDecode(b *testing.B) {
+	b.ResetTimer()
+	key := "123456"
+	str := "a79b5do3C9nbaZsAz5j3NQRj4e/L6N+y5fs2U9r1mO0LinOWtxmscg=="
+	for i := 0; i < b.N; i++ {
+		KEncr.AuthCode(str, key, false, 0)
+	}
+}
