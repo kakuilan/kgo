@@ -86,7 +86,7 @@ func (ke *LkkEncrypt) AuthCode(str, key string, encode bool, expiry int64) strin
 	// 明文，前10位用来保存时间戳，解密时验证数据有效性，10到26位用来保存keyb(密钥b)，解密时会通过这个密钥验证数据完整性
 	// 如果是解码的话，会从第ckeyLength位开始，因为密文前ckeyLength位保存 动态密钥，以保证解密正确
 	if encode == false {
-		strByte, err := base64.StdEncoding.DecodeString(str[ckeyLength:])
+		strByte, err := ke.Base64UrlDecode(str[ckeyLength:])
 		if err != nil {
 			return ""
 		}
@@ -148,7 +148,7 @@ func (ke *LkkEncrypt) AuthCode(str, key string, encode bool, expiry int64) strin
 		}
 	} else {
 		// 把动态密钥保存在密文里，这也是为什么同样的明文，生产不同密文后能解密的原因
-		result = string(keyc) + base64.StdEncoding.EncodeToString(resdata)
+		result = string(keyc) + ke.Base64UrlEncode(resdata)
 		return result
 	}
 }

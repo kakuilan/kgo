@@ -155,3 +155,42 @@ func BenchmarkPasswordVerify(b *testing.B) {
 		KEncr.PasswordVerify(pwd, has)
 	}
 }
+
+func TestEasyEncryptDecrypt(t *testing.T) {
+	key := "123456"
+	str := "hello world你好"
+	enc := KEncr.EasyEncrypt(str, key)
+	if enc == "" {
+		t.Error("EasyEncrypt fail")
+		return
+	}
+
+	dec := KEncr.EasyDecrypt(enc, key)
+	if dec == "" {
+		t.Error("EasyDecrypt fail")
+		return
+	}
+
+	KEncr.EasyEncrypt("", key)
+	KEncr.EasyEncrypt("", "")
+	KEncr.EasyDecrypt(enc, "1qwer")
+	KEncr.EasyDecrypt("123", key)
+}
+
+func BenchmarkEasyEncrypt(b *testing.B) {
+	b.ResetTimer()
+	key := "123456"
+	str := "hello world你好"
+	for i := 0; i < b.N; i++ {
+		KEncr.EasyEncrypt(str, key)
+	}
+}
+
+func BenchmarkEasyDecrypt(b *testing.B) {
+	b.ResetTimer()
+	key := "123456"
+	str := "e10azZaczdODqqimpcY"
+	for i := 0; i < b.N; i++ {
+		KEncr.EasyDecrypt(str, key)
+	}
+}
