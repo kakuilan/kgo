@@ -23,6 +23,7 @@ go mod tidy
 go test -cover #概览
 
 go test -coverprofile=coverage.out #生成统计信息
+go test -v -covermode=count -coverprofile=coverage.out
 go tool cover -func=coverage.out #查看统计信息
 go tool cover -html=coverage.out #将统计信息转换为html
 
