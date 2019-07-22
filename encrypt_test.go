@@ -143,6 +143,10 @@ func BenchmarkPasswordHash(b *testing.B) {
 	b.ResetTimer()
 	pwd := []byte("123456")
 	for i := 0; i < b.N; i++ {
+		//太耗时,只测试少量的
+		if i > 10 {
+			break
+		}
 		_, _ = KEncr.PasswordHash(pwd)
 	}
 }
@@ -152,6 +156,10 @@ func BenchmarkPasswordVerify(b *testing.B) {
 	pwd := []byte("123456")
 	has := []byte("$2a$10$kCv6ljsVuTSI54oPkWulreEmUNTW/zj0Dgh6qF4Vz0w4C3gVf/w7a")
 	for i := 0; i < b.N; i++ {
+		//太耗时,只测试少量的
+		if i > 10 {
+			break
+		}
 		KEncr.PasswordVerify(pwd, has)
 	}
 }
