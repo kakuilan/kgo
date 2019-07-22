@@ -16,6 +16,9 @@ golang 函数库/工具集,仅测试支持64位linux
 ```shell
 go test
 
+#清理包
+go mod tidy
+
 #代码覆盖率
 go test -cover #概览
 
