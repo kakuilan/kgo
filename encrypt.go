@@ -153,7 +153,7 @@ func (ke *LkkEncrypt) AuthCode(str, key string, encode bool, expiry int64) strin
 	}
 }
 
-// PasswordHash 创建密码的散列值;costs为算法的cost,范围4~31,默认10
+// PasswordHash 创建密码的散列值;costs为算法的cost,范围4~31,默认10,注意值越大越耗时
 func (ke *LkkEncrypt) PasswordHash(password []byte, costs ...int) ([]byte, error) {
 	var cost int
 	if len(costs) == 0 {
