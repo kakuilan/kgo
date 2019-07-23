@@ -103,3 +103,22 @@ func BenchmarkIsChinese(b *testing.B) {
 		KStr.IsChinese("你好世界")
 	}
 }
+
+func TestIsJSON(t *testing.T) {
+	chk1 := KStr.IsJSON("hello你好")
+	chk2 := KStr.IsJSON(`{"id":"1"}`)
+	println("chk", chk1, chk2)
+	if chk1 || !chk2 {
+		t.Error("IsJSON fail")
+		return
+	}
+	KStr.IsJSON("")
+}
+
+func BenchmarkIsJSON(b *testing.B) {
+	b.ResetTimer()
+	str := `{"key1": "value1"}, {"key2": "value2"}`
+	for i := 0; i < b.N; i++ {
+		KStr.IsJSON(str)
+	}
+}

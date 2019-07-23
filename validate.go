@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"encoding/json"
 	"regexp"
 	"strconv"
 	"unicode"
@@ -69,4 +70,16 @@ func (ks *LkkString) IsChinese(s string) bool {
 	}
 
 	return regexp.MustCompile("^[\u4e00-\u9fa5]+$").MatchString(s)
+}
+
+// IsJSON 字符串是否合法的json格式
+func (ks *LkkString) IsJSON(str string) bool {
+	if str == "" {
+		return false
+	} else if str[0] != '{' || str[len(str)-1] != '}' {
+		return false
+	}
+
+	var js json.RawMessage
+	return json.Unmarshal([]byte(str), &js) == nil
 }
