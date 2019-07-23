@@ -6,7 +6,7 @@ import (
 )
 
 func TestInArray(t *testing.T) {
-	//haystack类型不对
+	//类型不对
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("recover...:", r)
@@ -69,9 +69,9 @@ func BenchmarkArrayFill(b *testing.B) {
 }
 
 func TestArrayFlip(t *testing.T) {
-	mp := map[interface{}]interface{}{"a": 1, "b": 2, "c": 3}
+	mp := map[string]int{"a": 1, "b": 2, "c": 3}
 	mp2 := KArr.ArrayFlip(mp)
-	if val, ok := mp2[1]; !ok || val != "a" {
+	if val, ok := mp2[1]; !ok || fmt.Sprintf("%v", val) != "a" {
 		t.Error("ArrayFlip fail")
 		return
 	}
@@ -79,7 +79,7 @@ func TestArrayFlip(t *testing.T) {
 
 func BenchmarkArrayFlip(b *testing.B) {
 	b.ResetTimer()
-	mp := map[interface{}]interface{}{"a": 1, "b": 2, "c": 3}
+	mp := map[string]int{"a": 1, "b": 2, "c": 3}
 	for i := 0; i < b.N; i++ {
 		KArr.ArrayFlip(mp)
 	}

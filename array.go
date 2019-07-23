@@ -19,7 +19,7 @@ func (ka *LkkArray) InArray(needle interface{}, haystack interface{}) bool {
 			}
 		}
 	default:
-		panic("haystack: haystack type muset be slice, array or map")
+		panic("[InArray]haystack type muset be slice, array or map")
 	}
 
 	return false
@@ -37,10 +37,21 @@ func (ka *LkkArray) ArrayFill(startIndex int, num uint, value interface{}) map[i
 }
 
 // ArrayFlip 交换数组中的键和值
-func (ka *LkkArray) ArrayFlip(m map[interface{}]interface{}) map[interface{}]interface{} {
-	n := make(map[interface{}]interface{})
-	for i, v := range m {
-		n[v] = i
+func (ka *LkkArray) ArrayFlip(arr interface{}) map[interface{}]interface{} {
+	res := make(map[interface{}]interface{})
+	val := reflect.ValueOf(arr)
+	switch val.Kind() {
+	case reflect.Slice, reflect.Array:
+		for i := 0; i < val.Len(); i++ {
+			res[val.Index(i).Interface()] = i
+		}
+	case reflect.Map:
+		for _, k := range val.MapKeys() {
+			res[val.MapIndex(k).Interface()] = k
+		}
+	default:
+		panic("[ArrayFlip]arr type muset be slice, array or map")
 	}
-	return n
+
+	return res
 }
