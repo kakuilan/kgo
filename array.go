@@ -24,3 +24,14 @@ func (ka *LkkArray) InArray(needle interface{}, haystack interface{}) bool {
 
 	return false
 }
+
+// ArrayFill 用给定的值填充数组
+func (ka *LkkArray) ArrayFill(startIndex int, num uint, value interface{}) map[int]interface{} {
+	m := make(map[int]interface{})
+	var i uint
+	for i = 0; i < num; i++ {
+		m[startIndex] = value
+		startIndex++
+	}
+	return m
+}

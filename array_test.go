@@ -50,3 +50,20 @@ func BenchmarkInArray(b *testing.B) {
 		KArr.InArray(it, sli)
 	}
 }
+
+func TestArrayFill(t *testing.T) {
+	num := uint(4)
+	res := KArr.ArrayFill(0, num, "abc")
+	if len(res) != int(num) {
+		t.Error("InArray fail")
+		return
+	}
+}
+
+func BenchmarkArrayFill(b *testing.B) {
+	b.ResetTimer()
+	num := uint(4)
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayFill(0, num, "abc")
+	}
+}
