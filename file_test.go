@@ -290,27 +290,27 @@ func BenchmarkAbsPath(b *testing.B) {
 	}
 }
 
-func TestQuickFile(t *testing.T) {
+func TestTouch(t *testing.T) {
 	file1 := "./testdata/empty/zero"
 	file2 := "./testdata/empty/2m"
 
-	res1 := KFile.QuickFile(file1, 0)
-	res2 := KFile.QuickFile(file2, 2097152)
+	res1 := KFile.Touch(file1, 0)
+	res2 := KFile.Touch(file2, 2097152)
 	if !res1 || !res2 {
-		t.Error("QuickFile fail")
+		t.Error("Touch fail")
 		return
 	}
 
-	KFile.QuickFile("/root/test/empty_zero", 0)
-	KFile.QuickFile("/root/empty_zero", 0)
+	KFile.Touch("/root/test/empty_zero", 0)
+	KFile.Touch("/root/empty_zero", 0)
 }
 
-func BenchmarkQuickFile(b *testing.B) {
+func BenchmarkTouch(b *testing.B) {
 	b.ResetTimer()
 	filename := ""
 	for i := 0; i < b.N; i++ {
 		filename = fmt.Sprintf("./testdata/empty/zero_%d", i)
-		KFile.QuickFile(filename, 0)
+		KFile.Touch(filename, 0)
 	}
 }
 
