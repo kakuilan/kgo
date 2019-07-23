@@ -128,7 +128,3 @@ https://heroims.github.io/2018/11/21/AES-128-CBC%20Base64%E5%8A%A0%E5%AF%86%E2%8
 https://smalltowntechblog.wordpress.com/2014/12/28/%E5%A6%82%E4%BD%95%E8%AE%93-aes-%E5%9C%A8-golang-%E8%88%87-androidjava-%E5%BE%97%E5%88%B0%E4%B8%80%E8%87%B4%E7%9A%84%E5%8A%A0%E8%A7%A3%E5%AF%86%E7%B5%90%E6%9E%9C/comment-page-1/
 https://www.itread01.com/content/1547577396.html
 https://stackoverflow.com/questions/18817336/golang-encrypting-a-string-with-aes-and-base64
-
-is json
-https://stackoverflow.com/questions/22128282/how-to-check-string-is-in-json-format
-
