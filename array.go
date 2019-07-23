@@ -35,3 +35,12 @@ func (ka *LkkArray) ArrayFill(startIndex int, num uint, value interface{}) map[i
 	}
 	return m
 }
+
+// ArrayFlip 交换数组中的键和值
+func (ka *LkkArray) ArrayFlip(m map[interface{}]interface{}) map[interface{}]interface{} {
+	n := make(map[interface{}]interface{})
+	for i, v := range m {
+		n[v] = i
+	}
+	return n
+}

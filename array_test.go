@@ -67,3 +67,20 @@ func BenchmarkArrayFill(b *testing.B) {
 		KArr.ArrayFill(0, num, "abc")
 	}
 }
+
+func TestArrayFlip(t *testing.T) {
+	mp := map[interface{}]interface{}{"a": 1, "b": 2, "c": 3}
+	mp2 := KArr.ArrayFlip(mp)
+	if val, ok := mp2[1]; !ok || val != "a" {
+		t.Error("ArrayFlip fail")
+		return
+	}
+}
+
+func BenchmarkArrayFlip(b *testing.B) {
+	b.ResetTimer()
+	mp := map[interface{}]interface{}{"a": 1, "b": 2, "c": 3}
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayFlip(mp)
+	}
+}

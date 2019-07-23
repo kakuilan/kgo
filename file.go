@@ -182,8 +182,8 @@ func (kf *LkkFile) AbsPath(path string) string {
 	return fullPath
 }
 
-// QuickFile 快速创建指定大小的文件,size为字节
-func (kf *LkkFile) QuickFile(path string, size int64) bool {
+// Touch 快速创建指定大小的文件,size为字节
+func (kf *LkkFile) Touch(path string, size int64) bool {
 	//创建目录
 	destDir := filepath.Dir(path)
 	if destDir != "" && !kf.IsDir(destDir) {
