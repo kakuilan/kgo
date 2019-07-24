@@ -107,7 +107,7 @@ func TestArrayKeys(t *testing.T) {
 
 	mp := map[string]int{"a": 1, "b": 2, "c": 3}
 	res := KArr.ArrayKeys(mp)
-	if fmt.Sprintf("%v", res[0]) != "a" {
+	if len(res) != 3 {
 		t.Error("ArrayKeys fail")
 		return
 	}
