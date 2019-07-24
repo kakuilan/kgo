@@ -81,7 +81,7 @@ func TestArrayFlip(t *testing.T) {
 		return
 	}
 
-	var sli []string = make([]string, 10)
+	var sli []string = make([]string, 5)
 	sli[0] = "aaa"
 	sli[2] = "ccc"
 	sli[3] = "ddd"
@@ -95,5 +95,75 @@ func BenchmarkArrayFlip(b *testing.B) {
 	mp := map[string]int{"a": 1, "b": 2, "c": 3}
 	for i := 0; i < b.N; i++ {
 		KArr.ArrayFlip(mp)
+	}
+}
+
+func TestArrayKeys(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	mp := map[string]int{"a": 1, "b": 2, "c": 3}
+	res := KArr.ArrayKeys(mp)
+	if fmt.Sprintf("%v", res[0]) != "a" {
+		t.Error("ArrayKeys fail")
+		return
+	}
+
+	var sli []string = make([]string, 5)
+	sli[0] = "aaa"
+	sli[2] = "ccc"
+	sli[3] = "ddd"
+	res = KArr.ArrayKeys(sli)
+	if len(res) != 5 {
+		t.Error("ArrayKeys fail")
+		return
+	}
+
+	KArr.ArrayKeys("hello")
+}
+
+func BenchmarkArrayKeys(b *testing.B) {
+	b.ResetTimer()
+	mp := map[string]int{"a": 1, "b": 2, "c": 3}
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayKeys(mp)
+	}
+}
+
+func TestArrayValues(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	mp := map[string]int{"a": 1, "b": 2, "c": 3}
+	res := KArr.ArrayValues(mp)
+	if len(res) != 3 {
+		t.Error("ArrayValues fail")
+		return
+	}
+
+	var sli []string = make([]string, 5)
+	sli[0] = "aaa"
+	sli[2] = "ccc"
+	sli[3] = "ddd"
+	res = KArr.ArrayValues(sli)
+	if len(res) != 5 {
+		t.Error("ArrayValues fail")
+		return
+	}
+
+	KArr.ArrayValues("hello")
+}
+
+func BenchmarkArrayValues(b *testing.B) {
+	b.ResetTimer()
+	mp := map[string]int{"a": 1, "b": 2, "c": 3}
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayValues(mp)
 	}
 }

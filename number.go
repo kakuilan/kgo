@@ -47,3 +47,12 @@ func (kn *LkkNumber) NumberFormat(number float64, decimals uint, decPoint, thous
 
 	return s
 }
+
+// Range 根据范围创建数组，包含指定的元素
+func (kn *LkkNumber) Range(min, max int) []int {
+	a := make([]int, max-min+1)
+	for i := range a {
+		a[i] = min + i
+	}
+	return a
+}

@@ -61,18 +61,18 @@ func (ka *LkkArray) ArrayFlip(arr interface{}) map[interface{}]interface{} {
 	return res
 }
 
-// ArrayValues array_values()
+// ArrayKeys 返回数组中所有的键名
 func (ka *LkkArray) ArrayKeys(arr interface{}) []interface{} {
 	val := reflect.ValueOf(arr)
 	res := make([]interface{}, val.Len())
 	switch val.Kind() {
 	case reflect.Slice, reflect.Array:
 		for i := 0; i < val.Len(); i++ {
-			res[i] = val.Index(i).Interface()
+			res[i] = i
 		}
 	case reflect.Map:
 		for i, k := range val.MapKeys() {
-			res[i] = val.MapIndex(k).Interface()
+			res[i] = k
 		}
 	default:
 		panic("[ArrayValues]arr type muset be slice, array or map")
@@ -81,7 +81,7 @@ func (ka *LkkArray) ArrayKeys(arr interface{}) []interface{} {
 	return res
 }
 
-// ArrayValues array_values()
+// ArrayValues 返回数组中所有的值
 func (ka *LkkArray) ArrayValues(arr interface{}) []interface{} {
 	val := reflect.ValueOf(arr)
 	res := make([]interface{}, val.Len())
