@@ -6,7 +6,6 @@ import (
 )
 
 func TestInArray(t *testing.T) {
-	//类型不对
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("recover...:", r)
@@ -69,12 +68,26 @@ func BenchmarkArrayFill(b *testing.B) {
 }
 
 func TestArrayFlip(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
 	mp := map[string]int{"a": 1, "b": 2, "c": 3}
-	mp2 := KArr.ArrayFlip(mp)
-	if val, ok := mp2[1]; !ok || fmt.Sprintf("%v", val) != "a" {
+	res := KArr.ArrayFlip(mp)
+	if val, ok := res[1]; !ok || fmt.Sprintf("%v", val) != "a" {
 		t.Error("ArrayFlip fail")
 		return
 	}
+
+	var sli []string = make([]string, 10)
+	sli[0] = "aaa"
+	sli[2] = "ccc"
+	sli[3] = "ddd"
+	res = KArr.ArrayFlip(sli)
+
+	KArr.ArrayFlip("hello")
 }
 
 func BenchmarkArrayFlip(b *testing.B) {

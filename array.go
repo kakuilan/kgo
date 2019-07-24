@@ -1,6 +1,9 @@
 package kgo
 
-import "reflect"
+import (
+	"fmt"
+	"reflect"
+)
 
 // InArray 元素是否在数组(切片/字典)内
 func (ka *LkkArray) InArray(needle interface{}, haystack interface{}) bool {
@@ -43,7 +46,9 @@ func (ka *LkkArray) ArrayFlip(arr interface{}) map[interface{}]interface{} {
 	switch val.Kind() {
 	case reflect.Slice, reflect.Array:
 		for i := 0; i < val.Len(); i++ {
-			res[val.Index(i).Interface()] = i
+			if val.Index(i).Interface() != nil && fmt.Sprintf("%v", val.Index(i).Interface()) != "" {
+				res[val.Index(i).Interface()] = i
+			}
 		}
 	case reflect.Map:
 		for _, k := range val.MapKeys() {
@@ -51,6 +56,46 @@ func (ka *LkkArray) ArrayFlip(arr interface{}) map[interface{}]interface{} {
 		}
 	default:
 		panic("[ArrayFlip]arr type muset be slice, array or map")
+	}
+
+	return res
+}
+
+// ArrayValues array_values()
+func (ka *LkkArray) ArrayKeys(arr interface{}) []interface{} {
+	val := reflect.ValueOf(arr)
+	res := make([]interface{}, val.Len())
+	switch val.Kind() {
+	case reflect.Slice, reflect.Array:
+		for i := 0; i < val.Len(); i++ {
+			res[i] = val.Index(i).Interface()
+		}
+	case reflect.Map:
+		for i, k := range val.MapKeys() {
+			res[i] = val.MapIndex(k).Interface()
+		}
+	default:
+		panic("[ArrayValues]arr type muset be slice, array or map")
+	}
+
+	return res
+}
+
+// ArrayValues array_values()
+func (ka *LkkArray) ArrayValues(arr interface{}) []interface{} {
+	val := reflect.ValueOf(arr)
+	res := make([]interface{}, val.Len())
+	switch val.Kind() {
+	case reflect.Slice, reflect.Array:
+		for i := 0; i < val.Len(); i++ {
+			res[i] = val.Index(i).Interface()
+		}
+	case reflect.Map:
+		for i, k := range val.MapKeys() {
+			res[i] = val.MapIndex(k).Interface()
+		}
+	default:
+		panic("[ArrayValues]arr type muset be slice, array or map")
 	}
 
 	return res
