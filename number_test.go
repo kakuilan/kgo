@@ -24,3 +24,21 @@ func BenchmarkNumberFormat(b *testing.B) {
 		KNum.NumberFormat(num, 3, ".", "")
 	}
 }
+
+func TestRange(t *testing.T) {
+	min := 1
+	max := 5
+	res := KNum.Range(min, max)
+	if len(res) != max-min+1 {
+		t.Error("Range fail")
+		return
+	}
+
+}
+
+func BenchmarkRange(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.Range(0, 9)
+	}
+}
