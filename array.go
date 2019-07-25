@@ -102,7 +102,7 @@ func (ka *LkkArray) ArrayValues(arr interface{}) []interface{} {
 }
 
 // SliceMerge 合并一个或多个数组/切片
-func (ka *LkkArray) SliceMerge(ss ...[]interface{}) []interface{} {
+func (ka *LkkArray) SliceMerge0(ss ...[]interface{}) []interface{} {
 	var res []interface{}
 	switch len(ss) {
 	case 0:
@@ -120,5 +120,39 @@ func (ka *LkkArray) SliceMerge(ss ...[]interface{}) []interface{} {
 		}
 	}
 
+	return res
+}
+
+func (ka *LkkArray) SliceMerge(ss ...interface{}) []interface{} {
+	var res []interface{}
+	switch len(ss) {
+	case 0:
+		break
+	case 1:
+		if isArrayOrSlice(ss[0], 3) == -1 {
+			panic("[SliceMerge]ss type muset be array or slice")
+		} else {
+			res = append(res, ss[0])
+		}
+	default:
+		n := 0
+		for i, v := range ss {
+			chkLen := isArrayOrSlice(v, 3)
+			if chkLen == -1 {
+				msg := fmt.Sprintf("[SliceMerge]ss type muset be array or slice, but [%d] item not is.", i)
+				panic(msg)
+			} else {
+				n += chkLen
+			}
+		}
+		res = make([]interface{}, 0, n)
+		for _, v := range ss {
+			val := reflect.ValueOf(v)
+			switch val.Kind() {
+			case reflect.Slice, reflect.Array:
+				//TODO
+			}
+		}
+	}
 	return res
 }
