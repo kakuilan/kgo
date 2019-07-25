@@ -100,3 +100,25 @@ func (ka *LkkArray) ArrayValues(arr interface{}) []interface{} {
 
 	return res
 }
+
+// SliceMerge 合并一个或多个数组/切片
+func (ka *LkkArray) SliceMerge(ss ...[]interface{}) []interface{} {
+	var res []interface{}
+	switch len(ss) {
+	case 0:
+		break
+	case 1:
+		res = ss[0]
+	default:
+		n := 0
+		for _, v := range ss {
+			n += len(v)
+		}
+		res = make([]interface{}, 0, n)
+		for _, v := range ss {
+			res = append(res, v...)
+		}
+	}
+
+	return res
+}
