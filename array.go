@@ -9,7 +9,7 @@ import (
 func (ka *LkkArray) InArray(needle interface{}, haystack interface{}) bool {
 	val := reflect.ValueOf(haystack)
 	switch val.Kind() {
-	case reflect.Slice, reflect.Array:
+	case reflect.Array, reflect.Slice:
 		for i := 0; i < val.Len(); i++ {
 			if reflect.DeepEqual(needle, val.Index(i).Interface()) {
 				return true
@@ -22,7 +22,7 @@ func (ka *LkkArray) InArray(needle interface{}, haystack interface{}) bool {
 			}
 		}
 	default:
-		panic("[InArray]haystack type muset be slice, array or map")
+		panic("[InArray]haystack type muset be array, slice or map")
 	}
 
 	return false
@@ -44,7 +44,7 @@ func (ka *LkkArray) ArrayFlip(arr interface{}) map[interface{}]interface{} {
 	res := make(map[interface{}]interface{})
 	val := reflect.ValueOf(arr)
 	switch val.Kind() {
-	case reflect.Slice, reflect.Array:
+	case reflect.Array, reflect.Slice:
 		for i := 0; i < val.Len(); i++ {
 			if val.Index(i).Interface() != nil && fmt.Sprintf("%v", val.Index(i).Interface()) != "" {
 				res[val.Index(i).Interface()] = i
@@ -55,7 +55,7 @@ func (ka *LkkArray) ArrayFlip(arr interface{}) map[interface{}]interface{} {
 			res[val.MapIndex(k).Interface()] = k
 		}
 	default:
-		panic("[ArrayFlip]arr type muset be slice, array or map")
+		panic("[ArrayFlip]arr type muset be array, slice or map")
 	}
 
 	return res
@@ -66,7 +66,7 @@ func (ka *LkkArray) ArrayKeys(arr interface{}) []interface{} {
 	val := reflect.ValueOf(arr)
 	res := make([]interface{}, val.Len())
 	switch val.Kind() {
-	case reflect.Slice, reflect.Array:
+	case reflect.Array, reflect.Slice:
 		for i := 0; i < val.Len(); i++ {
 			res[i] = i
 		}
@@ -75,7 +75,7 @@ func (ka *LkkArray) ArrayKeys(arr interface{}) []interface{} {
 			res[i] = k
 		}
 	default:
-		panic("[ArrayValues]arr type muset be slice, array or map")
+		panic("[ArrayValues]arr type muset be array, slice or map")
 	}
 
 	return res
@@ -86,7 +86,7 @@ func (ka *LkkArray) ArrayValues(arr interface{}) []interface{} {
 	val := reflect.ValueOf(arr)
 	res := make([]interface{}, val.Len())
 	switch val.Kind() {
-	case reflect.Slice, reflect.Array:
+	case reflect.Array, reflect.Slice:
 		for i := 0; i < val.Len(); i++ {
 			res[i] = val.Index(i).Interface()
 		}
@@ -95,62 +95,41 @@ func (ka *LkkArray) ArrayValues(arr interface{}) []interface{} {
 			res[i] = val.MapIndex(k).Interface()
 		}
 	default:
-		panic("[ArrayValues]arr type muset be slice, array or map")
+		panic("[ArrayValues]arr type muset be array, slice or map")
 	}
 
 	return res
 }
 
-// SliceMerge 合并一个或多个数组/切片
-func (ka *LkkArray) SliceMerge0(ss ...[]interface{}) []interface{} {
+// SliceMerge 合并一个或多个数组/切片;filterNil是否过滤空元素(nil,''),true时排除空元素,false时保留空元素
+func (ka *LkkArray) SliceMerge(filterNil bool, ss ...interface{}) []interface{} {
 	var res []interface{}
 	switch len(ss) {
 	case 0:
 		break
-	case 1:
-		res = ss[0]
-	default:
-		n := 0
-		for _, v := range ss {
-			n += len(v)
-		}
-		res = make([]interface{}, 0, n)
-		for _, v := range ss {
-			res = append(res, v...)
-		}
-	}
-
-	return res
-}
-
-func (ka *LkkArray) SliceMerge(ss ...interface{}) []interface{} {
-	var res []interface{}
-	switch len(ss) {
-	case 0:
-		break
-	case 1:
-		if isArrayOrSlice(ss[0], 3) == -1 {
-			panic("[SliceMerge]ss type muset be array or slice")
-		} else {
-			res = append(res, ss[0])
-		}
 	default:
 		n := 0
 		for i, v := range ss {
 			chkLen := isArrayOrSlice(v, 3)
 			if chkLen == -1 {
-				msg := fmt.Sprintf("[SliceMerge]ss type muset be array or slice, but [%d] item not is.", i)
+				msg := fmt.Sprintf("[SliceMerge]ss type muset be array or slice, but [%d]th item not is.", i)
 				panic(msg)
 			} else {
 				n += chkLen
 			}
 		}
 		res = make([]interface{}, 0, n)
+		var item interface{}
 		for _, v := range ss {
 			val := reflect.ValueOf(v)
 			switch val.Kind() {
-			case reflect.Slice, reflect.Array:
-				//TODO
+			case reflect.Array, reflect.Slice:
+				for i := 0; i < val.Len(); i++ {
+					item = val.Index(i).Interface()
+					if !filterNil || (filterNil && item != nil && fmt.Sprintf("%v", item) != "") {
+						res = append(res, item)
+					}
+				}
 			}
 		}
 	}
