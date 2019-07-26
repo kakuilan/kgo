@@ -87,22 +87,22 @@ func BenchmarkDate(b *testing.B) {
 	}
 }
 
-func TestCheckdate(t *testing.T) {
-	chk1 := KTime.Checkdate(7, 31, 2019)
-	chk2 := KTime.Checkdate(2, 31, 2019)
+func TestCheckDate(t *testing.T) {
+	chk1 := KTime.CheckDate(7, 31, 2019)
+	chk2 := KTime.CheckDate(2, 31, 2019)
 	if !chk1 || chk2 {
-		t.Error("Checkdate fail")
+		t.Error("CheckDate fail")
 		return
 	}
-	KTime.Checkdate(0, 31, 2019)
-	KTime.Checkdate(4, 31, 2019)
-	KTime.Checkdate(2, 30, 2008)
+	KTime.CheckDate(0, 31, 2019)
+	KTime.CheckDate(4, 31, 2019)
+	KTime.CheckDate(2, 30, 2008)
 }
 
-func BenchmarkCheckdate(b *testing.B) {
+func BenchmarkCheckDate(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KTime.Checkdate(7, 31, 2019)
+		KTime.CheckDate(7, 31, 2019)
 	}
 }
 
