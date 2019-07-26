@@ -167,3 +167,43 @@ func BenchmarkArrayValues(b *testing.B) {
 		KArr.ArrayValues(mp)
 	}
 }
+
+func TestSliceMerge(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	var arr = [10]int{1, 2, 3, 4, 5, 6}
+	var sli []string = make([]string, 5)
+	sli[0] = "aaa"
+	sli[2] = "ccc"
+	sli[3] = "ddd"
+
+	res1 := KArr.SliceMerge(false, arr, sli)
+	if len(res1) != 15 {
+		t.Error("SliceMerge fail")
+		return
+	}
+
+	res2 := KArr.SliceMerge(true, arr, sli)
+	if len(res2) != 13 {
+		t.Error("SliceMerge fail")
+		return
+	}
+	KArr.SliceMerge(true)
+	KArr.SliceMerge(false, "hellow")
+}
+
+func BenchmarkSliceMerge(b *testing.B) {
+	b.ResetTimer()
+	var arr = [10]int{1, 2, 3, 4, 5, 6}
+	var sli []string = make([]string, 5)
+	sli[0] = "aaa"
+	sli[2] = "ccc"
+	sli[3] = "ddd"
+	for i := 0; i < b.N; i++ {
+		KArr.SliceMerge(false, arr, sli)
+	}
+}
