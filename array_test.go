@@ -269,20 +269,44 @@ func BenchmarkSliceMerge(b *testing.B) {
 }
 
 func TestMapMerge(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
 
 	mp1 := map[string]string{
 		"a": "aa",
 		"b": "bb",
 	}
-
 	mp2 := map[string]int{
 		"h": 1,
 		"i": 2,
 		"j": 3,
 	}
 
-	res := KArr.MapMerge(mp1, mp2)
-	str, err := KStr.JsonEncode(res)
-	println(string(str), err)
+	res := KArr.MapMerge(true, mp1, mp2)
+	_, err := KStr.JsonEncode(res)
+	if err != nil {
+		t.Error("MapMerge fail")
+		return
+	}
+	KArr.MapMerge(false, mp1, mp2)
+	KArr.MapMerge(false, mp1, mp2, "hello")
+}
 
+func BenchmarkMapMerge(b *testing.B) {
+	b.ResetTimer()
+	mp1 := map[string]string{
+		"a": "aa",
+		"b": "bb",
+	}
+	mp2 := map[string]int{
+		"h": 1,
+		"i": 2,
+		"j": 3,
+	}
+	for i := 0; i < b.N; i++ {
+		KArr.MapMerge(true, mp1, mp2)
+	}
 }

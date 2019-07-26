@@ -146,8 +146,8 @@ func (ka *LkkArray) SliceMerge(filterNil bool, ss ...interface{}) []interface{} 
 	return res
 }
 
-// MapMerge 合并字典,相同的键名后面的值将覆盖前一个值
-func (ka *LkkArray) MapMerge(ss ...interface{}) map[interface{}]interface{} {
+// MapMerge 合并字典,相同的键名后面的值将覆盖前一个值;key2Str是否将键转换为字符串
+func (ka *LkkArray) MapMerge(key2Str bool, ss ...interface{}) map[interface{}]interface{} {
 	res := make(map[interface{}]interface{})
 	switch len(ss) {
 	case 0:
@@ -158,7 +158,11 @@ func (ka *LkkArray) MapMerge(ss ...interface{}) map[interface{}]interface{} {
 			switch val.Kind() {
 			case reflect.Map:
 				for _, k := range val.MapKeys() {
-					res[k] = val.MapIndex(k).Interface()
+					if key2Str {
+						res[k.String()] = val.MapIndex(k).Interface()
+					} else {
+						res[k] = val.MapIndex(k).Interface()
+					}
 				}
 			default:
 				msg := fmt.Sprintf("[MapMerge]ss type muset be map, but [%d]th item not is.", i)

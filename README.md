@@ -141,3 +141,6 @@ https://github.com/gobwas/pool
 
 json库
 https://github.com/json-iterator/go
+https://github.com/tidwall/gjson
+https://github.com/mailru/easyjson
+https://github.com/buger/jsonparser
