@@ -45,6 +45,26 @@ func BenchmarkIsArrayOrSlice(b *testing.B) {
 	}
 }
 
+func TestIsMap(t *testing.T) {
+	mp := map[string]string{
+		"a": "aa",
+		"b": "bb",
+	}
+	res1 := KArr.IsMap(mp)
+	res2 := KArr.IsMap(123)
+	if !res1 || res2 {
+		t.Error("IsMap fail")
+		return
+	}
+}
+
+func BenchmarkIsMap(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.IsMap("hello")
+	}
+}
+
 func TestInArray(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
