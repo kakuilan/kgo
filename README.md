@@ -136,3 +136,5 @@ https://maxbittker.com/merging-maps
 https://www.golangnote.com/topic/209.html
 https://stackoverflow.com/questions/12172215/merging-maps-in-go
 
+pool
+https://github.com/gobwas/pool
