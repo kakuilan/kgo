@@ -267,3 +267,22 @@ func BenchmarkSliceMerge(b *testing.B) {
 		KArr.SliceMerge(false, arr, sli)
 	}
 }
+
+func TestMapMerge(t *testing.T) {
+
+	mp1 := map[string]string{
+		"a": "aa",
+		"b": "bb",
+	}
+
+	mp2 := map[string]int{
+		"h": 1,
+		"i": 2,
+		"j": 3,
+	}
+
+	res := KArr.MapMerge(mp1, mp2)
+	str, err := KStr.JsonEncode(res)
+	println(string(str), err)
+
+}
