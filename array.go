@@ -135,3 +135,9 @@ func (ka *LkkArray) SliceMerge(filterNil bool, ss ...interface{}) []interface{} 
 	}
 	return res
 }
+
+// MapMerge 合并字典
+func MapMerge(ss ...interface{}) map[interface{}]interface{} {
+	//TODO
+	return nil
+}
