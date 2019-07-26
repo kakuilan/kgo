@@ -10,6 +10,11 @@ func (ka *LkkArray) IsArrayOrSlice(data interface{}, chkType uint8) int {
 	return isArrayOrSlice(data, chkType)
 }
 
+// IsMap 检查变量是否字典
+func (ka *LkkArray) IsMap(data interface{}) bool {
+	return isMap(data)
+}
+
 // InArray 元素是否在数组(切片/字典)内
 func (ka *LkkArray) InArray(needle interface{}, haystack interface{}) bool {
 	val := reflect.ValueOf(haystack)
@@ -141,8 +146,25 @@ func (ka *LkkArray) SliceMerge(filterNil bool, ss ...interface{}) []interface{} 
 	return res
 }
 
-// MapMerge 合并字典
+// MapMerge 合并字典,相同的键名后面的值将覆盖前一个值
 func (ka *LkkArray) MapMerge(ss ...interface{}) map[interface{}]interface{} {
-	//TODO
-	return nil
+	res := make(map[interface{}]interface{})
+	switch len(ss) {
+	case 0:
+		break
+	default:
+		for i, v := range ss {
+			val := reflect.ValueOf(v)
+			switch val.Kind() {
+			case reflect.Map:
+				for _, k := range val.MapKeys() {
+					res[k] = val.MapIndex(k).Interface()
+				}
+			default:
+				msg := fmt.Sprintf("[MapMerge]ss type muset be map, but [%d]th item not is.", i)
+				panic(msg)
+			}
+		}
+	}
+	return res
 }

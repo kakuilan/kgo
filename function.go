@@ -71,3 +71,8 @@ func isArrayOrSlice(data interface{}, chkType uint8) int {
 
 	return res
 }
+
+// isMap 检查变量是否字典
+func isMap(data interface{}) bool {
+	return reflect.ValueOf(data).Kind() == reflect.Map
+}
