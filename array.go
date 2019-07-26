@@ -5,6 +5,11 @@ import (
 	"reflect"
 )
 
+// IsArrayOrSlice 检查变量是否数组或切片;chkType检查类型,枚举值有(1仅数组,2仅切片,3数组或切片);结果为-1表示非,>=0表示是
+func (ka *LkkArray) IsArrayOrSlice(data interface{}, chkType uint8) int {
+	return isArrayOrSlice(data, chkType)
+}
+
 // InArray 元素是否在数组(切片/字典)内
 func (ka *LkkArray) InArray(needle interface{}, haystack interface{}) bool {
 	val := reflect.ValueOf(haystack)
@@ -137,7 +142,7 @@ func (ka *LkkArray) SliceMerge(filterNil bool, ss ...interface{}) []interface{} 
 }
 
 // MapMerge 合并字典
-func MapMerge(ss ...interface{}) map[interface{}]interface{} {
+func (ka *LkkArray) MapMerge(ss ...interface{}) map[interface{}]interface{} {
 	//TODO
 	return nil
 }

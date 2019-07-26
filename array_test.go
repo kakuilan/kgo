@@ -5,6 +5,46 @@ import (
 	"testing"
 )
 
+func TestIsArrayOrSlice(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	var arr = [10]int{1, 2, 3, 4, 5, 6}
+	var sli []string = make([]string, 5)
+	sli[0] = "aaa"
+	sli[2] = "ccc"
+	sli[3] = "ddd"
+
+	res1 := KArr.IsArrayOrSlice(arr, 1)
+	res2 := KArr.IsArrayOrSlice(arr, 2)
+	res3 := KArr.IsArrayOrSlice(arr, 3)
+	if res1 != 10 || res2 != -1 || res3 != 10 {
+		t.Error("IsArrayOrSlice fail")
+		return
+	}
+
+	res4 := KArr.IsArrayOrSlice(sli, 1)
+	res5 := KArr.IsArrayOrSlice(sli, 2)
+	res6 := KArr.IsArrayOrSlice(sli, 3)
+	if res4 != -1 || res5 != 5 || res6 != 5 {
+		t.Error("IsArrayOrSlice fail")
+		return
+	}
+
+	KArr.IsArrayOrSlice(sli, 6)
+}
+
+func BenchmarkIsArrayOrSlice(b *testing.B) {
+	b.ResetTimer()
+	var arr = [10]int{1, 2, 3, 4, 5, 6}
+	for i := 0; i < b.N; i++ {
+		KArr.IsArrayOrSlice(arr, 1)
+	}
+}
+
 func TestInArray(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
