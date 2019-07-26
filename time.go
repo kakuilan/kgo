@@ -34,8 +34,8 @@ func (kt *LkkTime) Date(timestamp int64, format string) string {
 	return time.Unix(timestamp, 0).Format(format)
 }
 
-// Checkdate 检查是否正常的日期
-func (kt *LkkTime) Checkdate(month, day, year int) bool {
+// CheckDate 检查是否正常的日期
+func (kt *LkkTime) CheckDate(month, day, year int) bool {
 	if month < 1 || month > 12 || day < 1 || day > 31 || year < 1 || year > 32767 {
 		return false
 	}
