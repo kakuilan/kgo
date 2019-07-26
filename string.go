@@ -2,7 +2,7 @@ package kgo
 
 import (
 	"bytes"
-	"encoding/json"
+	"github.com/json-iterator/go"
 	"hash/crc32"
 	"html"
 	"math/rand"
@@ -252,12 +252,16 @@ func (ks *LkkString) Ord(char string) rune {
 }
 
 // JsonEncode 对变量进行 JSON 编码
+// 依赖库github.com/json-iterator/go
 func (ks *LkkString) JsonEncode(val interface{}) ([]byte, error) {
+	var json = jsoniter.ConfigCompatibleWithStandardLibrary
 	return json.Marshal(val)
 }
 
 // JsonDecode 对 JSON 格式的字符串进行解码,注意val使用指针
+// 依赖库github.com/json-iterator/go
 func (ks *LkkString) JsonDecode(data []byte, val interface{}) error {
+	var json = jsoniter.ConfigCompatibleWithStandardLibrary
 	return json.Unmarshal(data, val)
 }
 
