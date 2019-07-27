@@ -292,6 +292,7 @@ func TestMapMerge(t *testing.T) {
 		t.Error("MapMerge fail")
 		return
 	}
+	KArr.MapMerge(false)
 	KArr.MapMerge(false, mp1, mp2)
 	KArr.MapMerge(false, mp1, mp2, "hello")
 }
@@ -313,12 +314,6 @@ func BenchmarkMapMerge(b *testing.B) {
 }
 
 func TestArrayChunk(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
 	size := 3
 	var arr = [11]string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"}
 	res1 := KArr.ArrayChunk(arr, size)
@@ -326,11 +321,27 @@ func TestArrayChunk(t *testing.T) {
 		t.Error("ArrayChunk fail")
 		return
 	}
+}
 
+func TestArrayChunkPanicSize(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	var arr = [11]string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"}
 	KArr.ArrayChunk(arr, 0)
+}
 
-	var myslice []int
-	KArr.ArrayChunk(myslice, 1)
+func TestArrayChunkPanicType(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	KArr.ArrayChunk("hello", 1)
 }
 
 func BenchmarkArrayChunk(b *testing.B) {
