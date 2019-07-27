@@ -112,18 +112,19 @@ func BenchmarkInArray(b *testing.B) {
 
 func TestArrayFill(t *testing.T) {
 	num := uint(4)
-	res := KArr.ArrayFill(0, num, "abc")
+	res := KArr.ArrayFill("abc", num)
 	if len(res) != int(num) {
 		t.Error("InArray fail")
 		return
 	}
+	KArr.ArrayFill("abc", 0)
 }
 
 func BenchmarkArrayFill(b *testing.B) {
 	b.ResetTimer()
-	num := uint(4)
+	num := uint(10)
 	for i := 0; i < b.N; i++ {
-		KArr.ArrayFill(0, num, "abc")
+		KArr.ArrayFill("abc", num)
 	}
 }
 

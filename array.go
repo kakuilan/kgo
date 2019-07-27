@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"fmt"
+	"math"
 	"reflect"
 )
 
@@ -38,15 +39,19 @@ func (ka *LkkArray) InArray(needle interface{}, haystack interface{}) bool {
 	return false
 }
 
-// ArrayFill 用给定的值填充数组
-func (ka *LkkArray) ArrayFill(startIndex int, num uint, value interface{}) map[int]interface{} {
-	m := make(map[int]interface{})
+// ArrayFill 用给定的值value填充数组,num为插入元素的数量
+func (ka *LkkArray) ArrayFill(value interface{}, num uint) []interface{} {
+	if num == 0 {
+		return nil
+	}
+
+	var res []interface{} = make([]interface{}, num)
 	var i uint
 	for i = 0; i < num; i++ {
-		m[startIndex] = value
-		startIndex++
+		res[i] = value
 	}
-	return m
+
+	return res
 }
 
 // ArrayFlip 交换数组中的键和值
@@ -111,7 +116,7 @@ func (ka *LkkArray) ArrayValues(arr interface{}) []interface{} {
 	return res
 }
 
-// SliceMerge 合并一个或多个数组/切片;filterNil是否过滤空元素(nil,''),true时排除空元素,false时保留空元素
+// SliceMerge 合并一个或多个数组/切片;filterNil是否过滤空元素(nil,''),true时排除空元素,false时保留空元素;ss是元素为数组/切片的切片
 func (ka *LkkArray) SliceMerge(filterNil bool, ss ...interface{}) []interface{} {
 	var res []interface{}
 	switch len(ss) {
@@ -146,7 +151,7 @@ func (ka *LkkArray) SliceMerge(filterNil bool, ss ...interface{}) []interface{} 
 	return res
 }
 
-// MapMerge 合并字典,相同的键名后面的值将覆盖前一个值;key2Str是否将键转换为字符串
+// MapMerge 合并字典,相同的键名后面的值将覆盖前一个值;key2Str是否将键转换为字符串;ss是元素为数组/切片的切片
 func (ka *LkkArray) MapMerge(key2Str bool, ss ...interface{}) map[interface{}]interface{} {
 	res := make(map[interface{}]interface{})
 	switch len(ss) {
@@ -171,4 +176,23 @@ func (ka *LkkArray) MapMerge(key2Str bool, ss ...interface{}) map[interface{}]in
 		}
 	}
 	return res
+}
+
+// ArrayChunk array_chunk()
+func ArrayChunk(s []interface{}, size int) [][]interface{} {
+	if size < 1 {
+		panic("size: cannot be less than 1")
+	}
+	length := len(s)
+	chunks := int(math.Ceil(float64(length) / float64(size)))
+	var n [][]interface{}
+	for i, end := 0, 0; chunks > 0; chunks-- {
+		end = (i + 1) * size
+		if end > length {
+			end = length
+		}
+		n = append(n, s[i*size:end])
+		i++
+	}
+	return n
 }
