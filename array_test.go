@@ -321,6 +321,9 @@ func TestArrayChunk(t *testing.T) {
 		t.Error("ArrayChunk fail")
 		return
 	}
+
+	var myslice []int
+	KArr.ArrayChunk(myslice, 1)
 }
 
 func TestArrayChunkPanicSize(t *testing.T) {
