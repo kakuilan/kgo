@@ -6,16 +6,6 @@ import (
 	"reflect"
 )
 
-// IsArrayOrSlice 检查变量是否数组或切片;chkType检查类型,枚举值有(1仅数组,2仅切片,3数组或切片);结果为-1表示非,>=0表示是
-func (ka *LkkArray) IsArrayOrSlice(data interface{}, chkType uint8) int {
-	return isArrayOrSlice(data, chkType)
-}
-
-// IsMap 检查变量是否字典
-func (ka *LkkArray) IsMap(data interface{}) bool {
-	return isMap(data)
-}
-
 // InArray 元素是否在数组(切片/字典)内
 func (ka *LkkArray) InArray(needle interface{}, haystack interface{}) bool {
 	val := reflect.ValueOf(haystack)
@@ -40,14 +30,13 @@ func (ka *LkkArray) InArray(needle interface{}, haystack interface{}) bool {
 }
 
 // ArrayFill 用给定的值value填充数组,num为插入元素的数量
-func (ka *LkkArray) ArrayFill(value interface{}, num uint) []interface{} {
-	if num == 0 {
+func (ka *LkkArray) ArrayFill(value interface{}, num int) []interface{} {
+	if num <= 0 {
 		return nil
 	}
 
 	var res []interface{} = make([]interface{}, num)
-	var i uint
-	for i = 0; i < num; i++ {
+	for i := 0; i < num; i++ {
 		res[i] = value
 	}
 
@@ -217,5 +206,44 @@ func (ka *LkkArray) ArrayChunk(arr interface{}, size int) [][]interface{} {
 		return res
 	default:
 		panic("[ArrayChunk]arr type muset be array or slice")
+	}
+}
+
+// ArrayPad 以指定长度将一个值item填充进数组
+// 如果 size 为正，则填补到数组的右侧，如果为负则从左侧开始填补。如果 size 的绝对值小于或等于 arr 数组的长度则没有任何填补
+func (ka *LkkArray) ArrayPad(arr interface{}, size int, item interface{}) []interface{} {
+	val := reflect.ValueOf(arr)
+	switch val.Kind() {
+	case reflect.Array, reflect.Slice:
+		length := val.Len()
+		if length == 0 && size > 0 {
+			return ka.ArrayFill(item, size)
+		}
+
+		orig := make([]interface{}, length)
+		for i := 0; i < length; i++ {
+			orig[i] = val.Index(i).Interface()
+		}
+
+		if size == 0 || (size > 0 && size < length) || (size < 0 && size > -length) {
+			return orig
+		}
+
+		n := size
+		if size < 0 {
+			n = -size
+		}
+		n -= length
+		items := make([]interface{}, n)
+		for i := 0; i < n; i++ {
+			items[i] = item
+		}
+
+		if size > 0 {
+			return append(orig, items...)
+		}
+		return append(items, orig...)
+	default:
+		panic("[ArrayPad]arr type muset be array, slice")
 	}
 }

@@ -5,66 +5,6 @@ import (
 	"testing"
 )
 
-func TestIsArrayOrSlice(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
-	var arr = [10]int{1, 2, 3, 4, 5, 6}
-	var sli []string = make([]string, 5)
-	sli[0] = "aaa"
-	sli[2] = "ccc"
-	sli[3] = "ddd"
-
-	res1 := KArr.IsArrayOrSlice(arr, 1)
-	res2 := KArr.IsArrayOrSlice(arr, 2)
-	res3 := KArr.IsArrayOrSlice(arr, 3)
-	if res1 != 10 || res2 != -1 || res3 != 10 {
-		t.Error("IsArrayOrSlice fail")
-		return
-	}
-
-	res4 := KArr.IsArrayOrSlice(sli, 1)
-	res5 := KArr.IsArrayOrSlice(sli, 2)
-	res6 := KArr.IsArrayOrSlice(sli, 3)
-	if res4 != -1 || res5 != 5 || res6 != 5 {
-		t.Error("IsArrayOrSlice fail")
-		return
-	}
-
-	KArr.IsArrayOrSlice(sli, 6)
-}
-
-func BenchmarkIsArrayOrSlice(b *testing.B) {
-	b.ResetTimer()
-	var arr = [10]int{1, 2, 3, 4, 5, 6}
-	for i := 0; i < b.N; i++ {
-		KArr.IsArrayOrSlice(arr, 1)
-	}
-}
-
-func TestIsMap(t *testing.T) {
-	mp := map[string]string{
-		"a": "aa",
-		"b": "bb",
-	}
-	res1 := KArr.IsMap(mp)
-	res2 := KArr.IsMap(123)
-	if !res1 || res2 {
-		t.Error("IsMap fail")
-		return
-	}
-}
-
-func BenchmarkIsMap(b *testing.B) {
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		KArr.IsMap("hello")
-	}
-}
-
 func TestInArray(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -111,9 +51,9 @@ func BenchmarkInArray(b *testing.B) {
 }
 
 func TestArrayFill(t *testing.T) {
-	num := uint(4)
+	num := 4
 	res := KArr.ArrayFill("abc", num)
-	if len(res) != int(num) {
+	if len(res) != num {
 		t.Error("InArray fail")
 		return
 	}
@@ -122,7 +62,7 @@ func TestArrayFill(t *testing.T) {
 
 func BenchmarkArrayFill(b *testing.B) {
 	b.ResetTimer()
-	num := uint(10)
+	num := 10
 	for i := 0; i < b.N; i++ {
 		KArr.ArrayFill("abc", num)
 	}
