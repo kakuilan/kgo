@@ -56,7 +56,9 @@ func (ka *LkkArray) ArrayFlip(arr interface{}) map[interface{}]interface{} {
 		}
 	case reflect.Map:
 		for _, k := range val.MapKeys() {
-			res[val.MapIndex(k).Interface()] = k
+			if val.MapIndex(k).Interface() != nil && fmt.Sprintf("%v", val.MapIndex(k).Interface()) != "" {
+				res[val.MapIndex(k).Interface()] = k
+			}
 		}
 	default:
 		panic("[ArrayFlip]arr type muset be array, slice or map")
