@@ -178,21 +178,44 @@ func (ka *LkkArray) MapMerge(key2Str bool, ss ...interface{}) map[interface{}]in
 	return res
 }
 
-// ArrayChunk array_chunk()
-func ArrayChunk(s []interface{}, size int) [][]interface{} {
+// ArrayChunk 将一个数组分割成多个,size为每个子数组的长度
+func (ka *LkkArray) ArrayChunk(arr interface{}, size int) [][]interface{} {
 	if size < 1 {
-		panic("size: cannot be less than 1")
+		panic("[ArrayChunk]size: cannot be less than 1")
 	}
-	length := len(s)
-	chunks := int(math.Ceil(float64(length) / float64(size)))
-	var n [][]interface{}
-	for i, end := 0, 0; chunks > 0; chunks-- {
-		end = (i + 1) * size
-		if end > length {
-			end = length
+
+	val := reflect.ValueOf(arr)
+	switch val.Kind() {
+	case reflect.Array, reflect.Slice:
+		length := val.Len()
+		if length == 0 {
+			return nil
 		}
-		n = append(n, s[i*size:end])
-		i++
+
+		chunks := int(math.Ceil(float64(length) / float64(size)))
+		var res [][]interface{}
+		var item []interface{}
+		var start int
+		for i, end := 0, 0; chunks > 0; chunks-- {
+			end = (i + 1) * size
+			if end > length {
+				end = length
+			}
+
+			item = nil
+			start = i * size
+			for ; start < end; start++ {
+				item = append(item, val.Index(start).Interface())
+			}
+			if item != nil {
+				res = append(res, item)
+			}
+
+			i++
+		}
+
+		return res
+	default:
+		panic("[ArrayChunk]arr type muset be array or slice")
 	}
-	return n
 }

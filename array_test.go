@@ -311,3 +311,33 @@ func BenchmarkMapMerge(b *testing.B) {
 		KArr.MapMerge(true, mp1, mp2)
 	}
 }
+
+func TestArrayChunk(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	size := 3
+	var arr = [11]string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"}
+	res1 := KArr.ArrayChunk(arr, size)
+	if len(res1) != 4 {
+		t.Error("ArrayChunk fail")
+		return
+	}
+
+	KArr.ArrayChunk(arr, 0)
+
+	var myslice []int
+	KArr.ArrayChunk(myslice, 1)
+}
+
+func BenchmarkArrayChunk(b *testing.B) {
+	b.ResetTimer()
+	size := 3
+	var arr = [11]string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"}
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayChunk(arr, size)
+	}
+}
