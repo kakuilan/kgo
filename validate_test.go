@@ -110,7 +110,6 @@ func BenchmarkIsChinese(b *testing.B) {
 func TestIsJSON(t *testing.T) {
 	chk1 := KStr.IsJSON("hello你好")
 	chk2 := KStr.IsJSON(`{"id":"1"}`)
-	println("chk", chk1, chk2)
 	if chk1 || !chk2 {
 		t.Error("IsJSON fail")
 		return
