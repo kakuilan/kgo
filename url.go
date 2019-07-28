@@ -22,7 +22,6 @@ func (ku *LkkUrl) ParseStr(encodedString string, result map[string]interface{}) 
 
 		// The end is slice. like f[], f[a][]
 		if keys[1] == "" && length == 2 {
-			// todo nested slice
 			if key == "" {
 				return nil
 			}
