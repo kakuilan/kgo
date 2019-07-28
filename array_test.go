@@ -296,7 +296,7 @@ func BenchmarkArrayChunk(b *testing.B) {
 	}
 }
 
-func TestArrayArrayPad(t *testing.T) {
+func TestArrayPad(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("recover...:", r)
@@ -314,6 +314,7 @@ func TestArrayArrayPad(t *testing.T) {
 		t.Error("ArrayPad fail")
 		return
 	}
+
 	KArr.ArrayPad("hello", 2, "d")
 }
 
@@ -322,5 +323,48 @@ func BenchmarkArrayPad(b *testing.B) {
 	var arr = [3]string{"a", "b", "c"}
 	for i := 0; i < b.N; i++ {
 		KArr.ArrayPad(arr, 10, "d")
+	}
+}
+
+func TestArraySlice(t *testing.T) {
+	var sli []int
+	var arr = [6]string{"a", "b", "c", "d", "e", "f"}
+
+	res1 := KArr.ArraySlice(sli, 0, 1)
+	res2 := KArr.ArraySlice(arr, 1, 2)
+	res3 := KArr.ArraySlice(arr, -3, 2)
+	res4 := KArr.ArraySlice(arr, -3, 4)
+	if len(res1) != 0 || len(res2) != 2 || len(res3) != 2 || len(res4) != 3 {
+		t.Error("ArraySlice fail")
+		return
+	}
+}
+
+func TestArraySlicePanicSize(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	var sli []int
+	KArr.ArraySlice(sli, 0, 0)
+}
+
+func TestArraySlicePanicType(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	KArr.ArraySlice("hello", 0, 2)
+}
+
+func BenchmarkArraySlice(b *testing.B) {
+	b.ResetTimer()
+	var arr = [6]string{"a", "b", "c", "d", "e", "f"}
+	for i := 0; i < b.N; i++ {
+		KArr.ArraySlice(arr, 1, 4)
 	}
 }
