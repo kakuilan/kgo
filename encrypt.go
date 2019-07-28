@@ -47,10 +47,10 @@ func (ke *LkkEncrypt) Base64UrlDecode(data string) ([]byte, error) {
 	return base64.URLEncoding.DecodeString(data)
 }
 
-// AuthCode 授权码编码或解码;encode为true时编码,为false解码;expiry为有效期,秒;
-func (ke *LkkEncrypt) AuthCode(str, key string, encode bool, expiry int64) string {
+// AuthCode 授权码编码或解码;encode为true时编码,为false解码;expiry为有效期,秒;返回结果为加密/解密的字符串和有效期时间戳
+func (ke *LkkEncrypt) AuthCode(str, key string, encode bool, expiry int64) (string, int64) {
 	if str == "" {
-		return ""
+		return "", 0
 	}
 
 	// 动态密钥长度，相同的明文会生成不同密文就是依靠动态密钥
@@ -88,7 +88,7 @@ func (ke *LkkEncrypt) AuthCode(str, key string, encode bool, expiry int64) strin
 	if encode == false {
 		strByte, err := ke.Base64UrlDecode(str[ckeyLength:])
 		if err != nil {
-			return ""
+			return "", 0
 		}
 		str = string(strByte)
 	} else {
@@ -131,25 +131,25 @@ func (ke *LkkEncrypt) AuthCode(str, key string, encode bool, expiry int64) strin
 		resdata = append(resdata, byte(int(str[i])^box[(box[a]+box[j])%256]))
 	}
 	result := string(resdata)
-	if encode == false {
+	if encode == false { //解密
 		// substr($result, 0, 10) == 0 验证数据有效性
 		// substr($result, 0, 10) - time() > 0 验证数据有效性
 		// substr($result, 10, 16) == substr(md5(substr($result, 26).$keyb), 0, 16) 验证数据完整性
 		// 验证数据有效性，请看未加密明文的格式
 		if len(result) <= 26 {
-			return ""
+			return "", 0
 		}
 
-		frontTen, _ := strconv.ParseInt(result[:10], 10, 0)
-		if (frontTen == 0 || frontTen-time.Now().Unix() > 0) && result[10:26] == string(md5Str(append(resdata[26:], keyb...), 16)) {
-			return result[26:]
+		expTime, _ := strconv.ParseInt(result[:10], 10, 0)
+		if (expTime == 0 || expTime-time.Now().Unix() > 0) && result[10:26] == string(md5Str(append(resdata[26:], keyb...), 16)) {
+			return result[26:], expTime
 		} else {
-			return ""
+			return "", expTime
 		}
-	} else {
+	} else { //加密
 		// 把动态密钥保存在密文里，这也是为什么同样的明文，生产不同密文后能解密的原因
 		result = string(keyc) + ke.Base64UrlEncode(resdata)
-		return result
+		return result, expiry
 	}
 }
 
