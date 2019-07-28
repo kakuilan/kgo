@@ -68,12 +68,13 @@ func TestParseStr(t *testing.T) {
 	_ = KUrl.ParseStr("f[a].=m&f=n&", arr9)
 	_ = KUrl.ParseStr("f=n&f[a][]b=m&", arr9)
 	_ = KUrl.ParseStr("f=n&f[a][]=m&", arr9)
-	_ = KUrl.ParseStr("f[a][]=1&f[a][]=c&f[a][]=&f[b][]=bb&f[]=3&f[]=4", arr9)
 
+	err4 = KUrl.ParseStr("f[a][]=1&f[a][]=c&f[a][]=&f[b][]=bb&f[]=3&f[]=4", arr4)
 	err5 = KUrl.ParseStr("f[a][]=12&f[a][]=1.2&f[a][]=abc", arr5)
 	err6 = KUrl.ParseStr("f[][b]=&f[][a]=12&f[][a]=1.2&f[][a]=abc", arr6)
 	err7 = KUrl.ParseStr("f=n&f[a][]=m&", arr7)
-	if err5 == nil || err6 == nil || err7 == nil {
+
+	if err4 == nil || err5 == nil || err6 == nil || err7 == nil {
 		t.Error("ParseStr fail")
 		return
 	}
