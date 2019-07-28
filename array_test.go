@@ -295,3 +295,32 @@ func BenchmarkArrayChunk(b *testing.B) {
 		KArr.ArrayChunk(arr, size)
 	}
 }
+
+func TestArrayArrayPad(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	var sli []int
+	var arr = [3]string{"a", "b", "c"}
+
+	res1 := KArr.ArrayPad(sli, 5, 1)
+	res2 := KArr.ArrayPad(arr, 6, "d")
+	res3 := KArr.ArrayPad(arr, -6, "d")
+	res4 := KArr.ArrayPad(arr, 2, "d")
+	if len(res1) != 5 || len(res2) != 6 || fmt.Sprintf("%v", res3[0]) != "d" || len(res4) != 3 {
+		t.Error("ArrayPad fail")
+		return
+	}
+	KArr.ArrayPad("hello", 2, "d")
+}
+
+func BenchmarkArrayPad(b *testing.B) {
+	b.ResetTimer()
+	var arr = [3]string{"a", "b", "c"}
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayPad(arr, 10, "d")
+	}
+}
