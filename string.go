@@ -169,14 +169,14 @@ func (ks *LkkString) ChunkSplit(body string, chunklen uint, end string) string {
 		end = "\r\n"
 	}
 	runes, erunes := []rune(body), []rune(end)
-	l := uint(len(runes))
-	if l <= 1 || l < chunklen {
+	length := uint(len(runes))
+	if length <= 1 || length < chunklen {
 		return body + end
 	}
 	ns := make([]rune, 0, len(runes)+len(erunes))
 	var i uint
-	for i = 0; i < l; i += chunklen {
-		if i+chunklen > l {
+	for i = 0; i < length; i += chunklen {
+		if i+chunklen > length {
 			ns = append(ns, runes[i:]...)
 		} else {
 			ns = append(ns, runes[i:i+chunklen]...)
