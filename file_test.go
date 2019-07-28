@@ -50,6 +50,7 @@ func TestPutContents(t *testing.T) {
 		t.Error("file get contents error")
 		return
 	}
+	_ = KFile.PutContents("/root/hello/world", str)
 }
 
 func BenchmarkPutContents(b *testing.B) {
