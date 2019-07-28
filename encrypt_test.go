@@ -81,19 +81,19 @@ func TestAuthCode(t *testing.T) {
 	key := "123456"
 	str := "hello world"
 
-	res := KEncr.AuthCode(str, key, true, 0)
+	res, _ := KEncr.AuthCode(str, key, true, 0)
 	if res == "" {
 		t.Error("AuthCode Encode fail")
 		return
 	}
 
-	res2 := KEncr.AuthCode(res, key, false, 0)
+	res2, _ := KEncr.AuthCode(res, key, false, 0)
 	if res2 == "" {
 		t.Error("AuthCode Decode fail")
 		return
 	}
 
-	res = KEncr.AuthCode(str, key, true, -3600)
+	res, _ = KEncr.AuthCode(str, key, true, -3600)
 	KEncr.AuthCode(res, key, false, 0)
 	KEncr.AuthCode("", key, true, 0)
 	KEncr.AuthCode("", "", true, 0)
