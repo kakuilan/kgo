@@ -274,9 +274,10 @@ func TestChunkSplit(t *testing.T) {
 		t.Error("ChunkSplit fail")
 		return
 	}
-	_ = KStr.ChunkSplit(str, 4, "")
+	_ = KStr.ChunkSplit(str, 5, "")
 	_ = KStr.ChunkSplit("a", 4, "")
 	_ = KStr.ChunkSplit("ab", 64, "")
+	_ = KStr.ChunkSplit("abc", 1, "")
 }
 
 func BenchmarkChunkSplit(b *testing.B) {
