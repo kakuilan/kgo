@@ -35,14 +35,6 @@ func TestParseStr(t *testing.T) {
 	err7 := KUrl.ParseStr(str7, arr7)
 	err8 := KUrl.ParseStr(str8, arr8)
 	err9 := KUrl.ParseStr(str9, arr9)
-	//fmt.Printf("%+v\n", arr1)
-	//fmt.Printf("%+v\n", arr2)
-	//fmt.Printf("%+v\n", arr3)
-	//fmt.Printf("%+v\n", arr4)
-	//fmt.Printf("%+v\n", arr5)
-	//fmt.Printf("%+v\n", arr6)
-	//fmt.Printf("%+v\n", arr7)
-	//fmt.Printf("%+v\n", arr9)
 
 	if err1 != nil || err2 != nil || err3 != nil || err4 != nil || err5 != nil || err6 != nil || err7 != nil || err9 != nil {
 		t.Error("ParseStr fail")
@@ -76,6 +68,7 @@ func TestParseStr(t *testing.T) {
 	_ = KUrl.ParseStr("f[a].=m&f=n&", arr9)
 	_ = KUrl.ParseStr("f=n&f[a][]b=m&", arr9)
 	_ = KUrl.ParseStr("f=n&f[a][]=m&", arr9)
+	_ = KUrl.ParseStr("f[a][]=1&f[a][]=c&f[a][]=&f[b][]=bb&f[]=3&f[]=4", arr9)
 
 	err5 = KUrl.ParseStr("f[a][]=12&f[a][]=1.2&f[a][]=abc", arr5)
 	err6 = KUrl.ParseStr("f[][b]=&f[][a]=12&f[][a]=1.2&f[][a]=abc", arr6)
