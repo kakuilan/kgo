@@ -25,7 +25,7 @@ func (ka *LkkArray) InArray(needle interface{}, haystack interface{}) bool {
 			}
 		}
 	default:
-		panic("[InArray]haystack type muset be array, slice or map")
+		panic("[InArray]haystack type must be array, slice or map")
 	}
 
 	return false
@@ -63,7 +63,7 @@ func (ka *LkkArray) ArrayFlip(arr interface{}) map[interface{}]interface{} {
 			}
 		}
 	default:
-		panic("[ArrayFlip]arr type muset be array, slice or map")
+		panic("[ArrayFlip]arr type must be array, slice or map")
 	}
 
 	return res
@@ -83,7 +83,7 @@ func (ka *LkkArray) ArrayKeys(arr interface{}) []interface{} {
 			res[i] = k
 		}
 	default:
-		panic("[ArrayValues]arr type muset be array, slice or map")
+		panic("[ArrayValues]arr type must be array, slice or map")
 	}
 
 	return res
@@ -103,7 +103,7 @@ func (ka *LkkArray) ArrayValues(arr interface{}) []interface{} {
 			res[i] = val.MapIndex(k).Interface()
 		}
 	default:
-		panic("[ArrayValues]arr type muset be array, slice or map")
+		panic("[ArrayValues]arr type must be array, slice or map")
 	}
 
 	return res
@@ -120,7 +120,7 @@ func (ka *LkkArray) SliceMerge(filterNil bool, ss ...interface{}) []interface{} 
 		for i, v := range ss {
 			chkLen := isArrayOrSlice(v, 3)
 			if chkLen == -1 {
-				msg := fmt.Sprintf("[SliceMerge]ss type muset be array or slice, but [%d]th item not is.", i)
+				msg := fmt.Sprintf("[SliceMerge]ss type must be array or slice, but [%d]th item not is.", i)
 				panic(msg)
 			} else {
 				n += chkLen
@@ -163,7 +163,7 @@ func (ka *LkkArray) MapMerge(key2Str bool, ss ...interface{}) map[interface{}]in
 					}
 				}
 			default:
-				msg := fmt.Sprintf("[MapMerge]ss type muset be map, but [%d]th item not is.", i)
+				msg := fmt.Sprintf("[MapMerge]ss type must be map, but [%d]th item not is.", i)
 				panic(msg)
 			}
 		}
@@ -209,7 +209,7 @@ func (ka *LkkArray) ArrayChunk(arr interface{}, size int) [][]interface{} {
 
 		return res
 	default:
-		panic("[ArrayChunk]arr type muset be array or slice")
+		panic("[ArrayChunk]arr type must be array or slice")
 	}
 }
 
@@ -248,7 +248,7 @@ func (ka *LkkArray) ArrayPad(arr interface{}, size int, item interface{}) []inte
 		}
 		return append(items, orig...)
 	default:
-		panic("[ArrayPad]arr type muset be array, slice")
+		panic("[ArrayPad]arr type must be array, slice")
 	}
 }
 
@@ -280,7 +280,7 @@ func (ka *LkkArray) ArraySlice(arr interface{}, offset, size int) []interface{} 
 		}
 		return items[offset:]
 	default:
-		panic("[ArraySlice]arr type muset be array or slice")
+		panic("[ArraySlice]arr type must be array or slice")
 	}
 }
 
@@ -311,6 +311,51 @@ func (ka *LkkArray) ArrayRand(arr interface{}, num int) []interface{} {
 		}
 		return res
 	default:
-		panic("[ArrayRand]arr type muset be array or slice")
+		panic("[ArrayRand]arr type must be array or slice")
 	}
+}
+
+// ArrayColumn 返回数组中指定的一列,arr的元素必须是字典;该方法效率低,因为嵌套了两层反射和遍历
+func (ka *LkkArray) ArrayColumn(arr interface{}, columnKey string) []interface{} {
+	val := reflect.ValueOf(arr)
+	var res []interface{}
+	var item interface{}
+	switch val.Kind() {
+	case reflect.Array, reflect.Slice:
+		for i := 0; i < val.Len(); i++ {
+			item = val.Index(i).Interface()
+			itemVal := reflect.ValueOf(item)
+			switch itemVal.Kind() {
+			case reflect.Map:
+				for _, subKey := range itemVal.MapKeys() {
+					if fmt.Sprintf("%s", subKey) == columnKey {
+						res = append(res, val.MapIndex(subKey).Interface())
+						break
+					}
+				}
+			default:
+				panic("[ArrayColumn]arr`s item must be map")
+			}
+		}
+	case reflect.Map:
+		for _, k := range val.MapKeys() {
+			item = val.MapIndex(k).Interface()
+			itemVal := reflect.ValueOf(item)
+			switch itemVal.Kind() {
+			case reflect.Map:
+				for _, subKey := range itemVal.MapKeys() {
+					if fmt.Sprintf("%s", subKey) == columnKey {
+						res = append(res, val.MapIndex(subKey).Interface())
+						break
+					}
+				}
+			default:
+				panic("[ArrayColumn]arr`s item must be map")
+			}
+		}
+	default:
+		panic("[ArrayColumn]arr type must be array, slice or map")
+	}
+
+	return res
 }
