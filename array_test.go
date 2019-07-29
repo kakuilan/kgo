@@ -368,3 +368,46 @@ func BenchmarkArraySlice(b *testing.B) {
 		KArr.ArraySlice(arr, 1, 4)
 	}
 }
+
+func TestArrayRand(t *testing.T) {
+	var arr = [8]string{"a", "b", "c", "d", "e", "f", "g", "h"}
+	var sli []int
+
+	res1 := KArr.ArrayRand(sli, 1)
+	res2 := KArr.ArrayRand(arr, 3)
+	res3 := KArr.ArrayRand(arr, 9)
+
+	if len(res1) != 0 || len(res2) != 3 || len(res3) != 8 {
+		t.Error("ArraySlice fail")
+		return
+	}
+}
+
+func TestArrayRandPanicNum(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	var sli []int
+	KArr.ArrayRand(sli, 0)
+}
+
+func TestArrayRandPanicType(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	KArr.ArrayRand("hello", 2)
+}
+
+func BenchmarkArrayRand(b *testing.B) {
+	b.ResetTimer()
+	var arr = [8]string{"a", "b", "c", "d", "e", "f", "g", "h"}
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayRand(arr, 6)
+	}
+}
