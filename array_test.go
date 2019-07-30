@@ -411,3 +411,94 @@ func BenchmarkArrayRand(b *testing.B) {
 		KArr.ArrayRand(arr, 6)
 	}
 }
+
+func TestArrayColumn(t *testing.T) {
+	//数组切片
+	jsonStr := `[{"name":"zhang3","age":23,"sex":1},{"name":"li4","age":30,"sex":1},{"name":"wang5","age":25,"sex":0},{"name":"zhao6","age":50,"sex":0}]`
+	var arr interface{}
+	err := KStr.JsonDecode([]byte(jsonStr), &arr)
+	if err != nil {
+		t.Error("JsonDecode fail")
+		return
+	}
+
+	res := KArr.ArrayColumn(arr, "name")
+	if len(res) != 4 {
+		t.Error("ArrayColumn fail")
+		return
+	}
+
+	//字典
+	jsonStr = `{"person1":{"name":"zhang3","age":23,"sex":1},"person2":{"name":"li4","age":30,"sex":1},"person3":{"name":"wang5","age":25,"sex":0},"person4":{"name":"zhao6","age":50,"sex":0}}`
+	err = KStr.JsonDecode([]byte(jsonStr), &arr)
+	if err != nil {
+		t.Error("JsonDecode fail")
+		return
+	}
+
+	res = KArr.ArrayColumn(arr, "name")
+	if len(res) != 4 {
+		t.Error("ArrayColumn fail")
+		return
+	}
+}
+
+func TestArrayColumnPanicSlice(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	//数组切片
+	jsonStr := `[{"name":"zhang3","age":23,"sex":1},{"name":"li4","age":30,"sex":1},{"name":"wang5","age":25,"sex":0},{"name":"zhao6","age":50,"sex":0}]`
+	var arr []interface{}
+	err := KStr.JsonDecode([]byte(jsonStr), &arr)
+	if err != nil {
+		t.Error("JsonDecode fail")
+		return
+	}
+
+	arr = append(arr, "hello")
+	KArr.ArrayColumn(arr, "name")
+}
+
+func TestArrayColumnPanicMap(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	//数组切片
+	jsonStr := `{"person1":{"name":"zhang3","age":23,"sex":1},"person2":{"name":"li4","age":30,"sex":1},"person3":{"name":"wang5","age":25,"sex":0},"person4":{"name":"zhao6","age":50,"sex":0}}`
+	var arr map[string]interface{}
+	err := KStr.JsonDecode([]byte(jsonStr), &arr)
+	if err != nil {
+		t.Error("JsonDecode fail")
+		return
+	}
+
+	arr["person5"] = "hello"
+	KArr.ArrayColumn(arr, "name")
+}
+
+func TestArrayColumnPanicType(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	KArr.ArrayColumn("hello", "name")
+}
+
+func BenchmarkArrayColumn(b *testing.B) {
+	b.ResetTimer()
+	jsonStr := `[{"name":"zhang3","age":23,"sex":1},{"name":"li4","age":30,"sex":1},{"name":"wang5","age":25,"sex":0},{"name":"zhao6","age":50,"sex":0}]`
+	var arr interface{}
+	_ = KStr.JsonDecode([]byte(jsonStr), &arr)
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayColumn(arr, "name")
+	}
+}

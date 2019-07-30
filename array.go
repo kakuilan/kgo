@@ -329,12 +329,12 @@ func (ka *LkkArray) ArrayColumn(arr interface{}, columnKey string) []interface{}
 			case reflect.Map:
 				for _, subKey := range itemVal.MapKeys() {
 					if fmt.Sprintf("%s", subKey) == columnKey {
-						res = append(res, val.MapIndex(subKey).Interface())
+						res = append(res, itemVal.MapIndex(subKey).Interface())
 						break
 					}
 				}
 			default:
-				panic("[ArrayColumn]arr`s item must be map")
+				panic("[ArrayColumn]arr`s slice item must be map")
 			}
 		}
 	case reflect.Map:
@@ -345,12 +345,12 @@ func (ka *LkkArray) ArrayColumn(arr interface{}, columnKey string) []interface{}
 			case reflect.Map:
 				for _, subKey := range itemVal.MapKeys() {
 					if fmt.Sprintf("%s", subKey) == columnKey {
-						res = append(res, val.MapIndex(subKey).Interface())
+						res = append(res, itemVal.MapIndex(subKey).Interface())
 						break
 					}
 				}
 			default:
-				panic("[ArrayColumn]arr`s item must be map")
+				panic("[ArrayColumn]arr`s map item must be map")
 			}
 		}
 	default:
