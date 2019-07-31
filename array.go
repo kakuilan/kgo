@@ -359,3 +359,20 @@ func (ka *LkkArray) ArrayColumn(arr interface{}, columnKey string) []interface{}
 
 	return res
 }
+
+// ArrayPush 将一个或多个单元压入数组的末尾（入栈）
+func (ka *LkkArray) ArrayPush(s *[]interface{}, elements ...interface{}) int {
+	*s = append(*s, elements...)
+	return len(*s)
+}
+
+// ArrayPop 弹出数组最后一个单元（出栈）
+func (ka *LkkArray) ArrayPop(s *[]interface{}) interface{} {
+	if len(*s) == 0 {
+		return nil
+	}
+	ep := len(*s) - 1
+	e := (*s)[ep]
+	*s = (*s)[:ep]
+	return e
+}

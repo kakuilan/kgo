@@ -502,3 +502,36 @@ func BenchmarkArrayColumn(b *testing.B) {
 		KArr.ArrayColumn(arr, "name")
 	}
 }
+
+func TestArrayPushPop(t *testing.T) {
+	var arr []interface{}
+	length := KArr.ArrayPush(&arr, 1, 2, 3, "a", "b", "c")
+	if length != 6 {
+		t.Error("ArrayPush fail")
+		return
+	}
+
+	last := KArr.ArrayPop(&arr)
+	if fmt.Sprintf("%v", last) != "c" {
+		t.Error("ArrayPop fail")
+		return
+	}
+	arr = nil
+	KArr.ArrayPop(&arr)
+}
+
+func BenchmarkArrayPush(b *testing.B) {
+	b.ResetTimer()
+	var arr []interface{}
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayPush(&arr, 1, 2, 3, "a", "b", "c")
+	}
+}
+
+func BenchmarkArrayPop(b *testing.B) {
+	b.ResetTimer()
+	var arr = []interface{}{"a", "b", "c", "d", "e"}
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayPop(&arr)
+	}
+}
