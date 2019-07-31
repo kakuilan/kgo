@@ -376,3 +376,19 @@ func (ka *LkkArray) ArrayPop(s *[]interface{}) interface{} {
 	*s = (*s)[:ep]
 	return e
 }
+
+// ArrayUnshift 在数组开头插入一个或多个单元
+func (ka *LkkArray) ArrayUnshift(s *[]interface{}, elements ...interface{}) int {
+	*s = append(elements, *s...)
+	return len(*s)
+}
+
+// ArrayShift 将数组开头的单元移出数组
+func (ka *LkkArray) ArrayShift(s *[]interface{}) interface{} {
+	if len(*s) == 0 {
+		return nil
+	}
+	f := (*s)[0]
+	*s = (*s)[1:]
+	return f
+}

@@ -535,3 +535,36 @@ func BenchmarkArrayPop(b *testing.B) {
 		KArr.ArrayPop(&arr)
 	}
 }
+
+func TestArrayShiftUnshift(t *testing.T) {
+	var arr []interface{}
+	length := KArr.ArrayUnshift(&arr, 1, 2, 3, "a", "b", "c")
+	if length != 6 {
+		t.Error("ArrayUnshift fail")
+		return
+	}
+
+	first := KArr.ArrayShift(&arr)
+	if fmt.Sprintf("%v", first) != "1" {
+		t.Error("ArrayPop fail")
+		return
+	}
+	arr = nil
+	KArr.ArrayShift(&arr)
+}
+
+func BenchmarkArrayUnshift(b *testing.B) {
+	b.ResetTimer()
+	var arr []interface{}
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayUnshift(&arr, 1, 2, 3, "a", "b", "c")
+	}
+}
+
+func BenchmarkArrayShift(b *testing.B) {
+	b.ResetTimer()
+	var arr = []interface{}{"a", "b", "c", "d", "e"}
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayShift(&arr)
+	}
+}
