@@ -412,16 +412,12 @@ func (ka *LkkArray) ArrayKeyExists(key interface{}, arr interface{}) bool {
 		if keyIsInt && length > 0 && keyInt >= 0 && keyInt < length {
 			return true
 		}
-
-		return false
 	case reflect.Map:
 		for _, k := range val.MapKeys() {
 			if fmt.Sprintf("%s", key) == fmt.Sprintf("%s", k) || reflect.DeepEqual(key, k) {
 				return true
 			}
 		}
-
-		return false
 	default:
 		panic("[ArrayKeyExists]arr type must be array, slice or map")
 	}
