@@ -629,3 +629,34 @@ func BenchmarkArrayKeyExistsMap(b *testing.B) {
 		KArr.ArrayKeyExists("person2", arr)
 	}
 }
+
+func TestArrayReverse(t *testing.T) {
+	var arr = []interface{}{"a", "b", "c", "d", "e"}
+	res := KArr.ArrayReverse(arr)
+
+	if len(res) != 5 || fmt.Sprintf("%s", res[2]) != "c" {
+		t.Error("ArrayReverse fail")
+		return
+	}
+
+	var myslice []int
+	KArr.ArrayReverse(myslice)
+}
+
+func TestArrayReversePanic(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	KArr.ArrayReverse("hello")
+}
+
+func BenchmarkArrayReverse(b *testing.B) {
+	b.ResetTimer()
+	var arr = []interface{}{"a", "b", "c", "d", "e"}
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayReverse(arr)
+	}
+}
