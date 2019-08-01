@@ -568,3 +568,61 @@ func BenchmarkArrayShift(b *testing.B) {
 		KArr.ArrayShift(&arr)
 	}
 }
+
+func TestArrayKeyExistsArr(t *testing.T) {
+	var arr []interface{}
+	KArr.ArrayPush(&arr, 1, 2, 3, "a", "b", "c")
+
+	chk1 := KArr.ArrayKeyExists(1, arr)
+	chk2 := KArr.ArrayKeyExists(-1, arr)
+	chk3 := KArr.ArrayKeyExists(6, arr)
+	if !chk1 || chk2 || chk3 {
+		t.Error("ArrayKeyExists fail")
+		return
+	}
+
+	arr = nil
+	KArr.ArrayKeyExists(1, arr)
+}
+
+func TestArrayKeyExistsMap(t *testing.T) {
+	jsonStr := `{"person1":{"name":"zhang3","age":23,"sex":1},"person2":{"name":"li4","age":30,"sex":1},"person3":{"name":"wang5","age":25,"sex":0},"person4":{"name":"zhao6","age":50,"sex":0}}`
+	var arr map[string]interface{}
+	_ = KStr.JsonDecode([]byte(jsonStr), &arr)
+
+	chk1 := KArr.ArrayKeyExists("person2", arr)
+	chk2 := KArr.ArrayKeyExists("test", arr)
+	if !chk1 || chk2 {
+		t.Error("ArrayKeyExists fail")
+		return
+	}
+}
+
+func TestArrayKeyExistsPanic(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	KArr.ArrayKeyExists("abc", "hello")
+}
+
+func BenchmarkArrayKeyExistsArr(b *testing.B) {
+	b.ResetTimer()
+	var arr []interface{}
+	KArr.ArrayPush(&arr, 1, 2, 3, "a", "b", "c")
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayKeyExists(3, arr)
+	}
+}
+
+func BenchmarkArrayKeyExistsMap(b *testing.B) {
+	b.ResetTimer()
+	jsonStr := `{"person1":{"name":"zhang3","age":23,"sex":1},"person2":{"name":"li4","age":30,"sex":1},"person3":{"name":"wang5","age":25,"sex":0},"person4":{"name":"zhao6","age":50,"sex":0}}`
+	var arr map[string]interface{}
+	_ = KStr.JsonDecode([]byte(jsonStr), &arr)
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayKeyExists("person2", arr)
+	}
+}

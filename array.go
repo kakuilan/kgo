@@ -416,7 +416,7 @@ func (ka *LkkArray) ArrayKeyExists(key interface{}, arr interface{}) bool {
 		return false
 	case reflect.Map:
 		for _, k := range val.MapKeys() {
-			if reflect.DeepEqual(key, k) {
+			if fmt.Sprintf("%s", key) == fmt.Sprintf("%s", k) || reflect.DeepEqual(key, k) {
 				return true
 			}
 		}
