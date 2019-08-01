@@ -392,3 +392,38 @@ func (ka *LkkArray) ArrayShift(s *[]interface{}) interface{} {
 	*s = (*s)[1:]
 	return f
 }
+
+// ArrayKeyExists 检查数组里是否有指定的键名或索引
+func (ka *LkkArray) ArrayKeyExists(key interface{}, arr interface{}) bool {
+	if key == nil {
+		return false
+	}
+
+	val := reflect.ValueOf(arr)
+	switch val.Kind() {
+	case reflect.Array, reflect.Slice:
+		var keyInt int
+		var keyIsInt, ok bool
+		if keyInt, ok = key.(int); ok {
+			keyIsInt = true
+		}
+
+		length := val.Len()
+		if keyIsInt && length > 0 && keyInt >= 0 && keyInt < length {
+			return true
+		}
+
+		return false
+	case reflect.Map:
+		for _, k := range val.MapKeys() {
+			if reflect.DeepEqual(key, k) {
+				return true
+			}
+		}
+
+		return false
+	default:
+		panic("[ArrayKeyExists]arr type must be array, slice or map")
+	}
+	return false
+}
