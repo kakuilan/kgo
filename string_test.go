@@ -616,3 +616,18 @@ func BenchmarkSimilarText(b *testing.B) {
 		KStr.SimilarText(str1, str2, &percent)
 	}
 }
+
+func TestExplode(t *testing.T) {
+	res := KStr.Explode(",", "hello,world,welcome,golang")
+	if len(res) != 4 {
+		t.Error("Explode fail")
+		return
+	}
+}
+
+func BenchmarkExplode(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Explode(",", "hello,world,welcome,golang")
+	}
+}
