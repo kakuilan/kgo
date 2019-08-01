@@ -581,9 +581,11 @@ func TestArrayKeyExistsArr(t *testing.T) {
 		return
 	}
 
+	var key interface{}
+	KArr.ArrayKeyExists(key, arr)
+
 	arr = nil
 	KArr.ArrayKeyExists(1, arr)
-	KArr.ArrayKeyExists(arr, arr)
 }
 
 func TestArrayKeyExistsMap(t *testing.T) {
