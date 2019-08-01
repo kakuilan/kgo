@@ -660,3 +660,33 @@ func BenchmarkArrayReverse(b *testing.B) {
 		KArr.ArrayReverse(arr)
 	}
 }
+
+func TestImplode(t *testing.T) {
+	var arr = []string{"a", "b", "c", "d", "e"}
+	res := KArr.Implode(",", arr)
+
+	arr = nil
+	res = KArr.Implode(",", arr)
+	if res != "" {
+		t.Error("Implode fail")
+		return
+	}
+}
+
+func TestImplodePanic(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	KArr.Implode(",", "hello")
+}
+
+func BenchmarkImplode(b *testing.B) {
+	b.ResetTimer()
+	sli := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
+	for i := 0; i < b.N; i++ {
+		KArr.Implode(",", sli)
+	}
+}
