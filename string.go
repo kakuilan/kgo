@@ -368,3 +368,8 @@ func (ks *LkkString) SimilarText(first, second string, percent *float64) int {
 	}
 	return sim
 }
+
+// Explode 使用一个字符串分割另一个字符串
+func (ks *LkkString) Explode(delimiter, str string) []string {
+	return strings.Split(str, delimiter)
+}
