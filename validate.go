@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"encoding/json"
+	"math"
 	"regexp"
 	"strconv"
 	"unicode"
@@ -92,4 +93,9 @@ func (ka *LkkArray) IsArrayOrSlice(data interface{}, chkType uint8) int {
 // IsMap 检查变量是否字典
 func (ka *LkkArray) IsMap(data interface{}) bool {
 	return isMap(data)
+}
+
+// IsNan 是否为“非数值”
+func (kn *LkkNumber) IsNan(val float64) bool {
+	return math.IsNaN(val)
 }

@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"fmt"
+	"math"
 	"testing"
 )
 
@@ -182,5 +183,22 @@ func BenchmarkIsMap(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KArr.IsMap("hello")
+	}
+}
+
+func TestIsNan(t *testing.T) {
+	res1 := KNum.IsNan(math.Acos(1.01))
+	res2 := KNum.IsNan(123.456)
+
+	if !res1 || res2 {
+		t.Error("IsNan fail")
+		return
+	}
+}
+
+func BenchmarkIsNan(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.IsNan(123.456)
 	}
 }

@@ -547,3 +547,19 @@ func BenchmarkOct2dec(b *testing.B) {
 		_, _ = KConv.Oct2dec("726746425")
 	}
 }
+
+func TestBaseConvert(t *testing.T) {
+	_, err := KConv.BaseConvert("726746425", 10, 16)
+	if err != nil {
+		t.Error("BaseConvert fail")
+		return
+	}
+	_, _ = KConv.BaseConvert("hello", 10, 16)
+}
+
+func BenchmarkBaseConvert(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KConv.BaseConvert("726746425", 10, 16)
+	}
+}

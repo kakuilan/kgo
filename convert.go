@@ -237,3 +237,12 @@ func (kc *LkkConvert) Dec2oct(number int64) string {
 func (kc *LkkConvert) Oct2dec(str string) (int64, error) {
 	return strconv.ParseInt(str, 8, 0)
 }
+
+// BaseConvert 进制转换,在任意进制之间转换数字
+func (kc *LkkConvert) BaseConvert(number string, frombase, tobase int) (string, error) {
+	i, err := strconv.ParseInt(number, frombase, 0)
+	if err != nil {
+		return "", err
+	}
+	return strconv.FormatInt(i, tobase), nil
+}
