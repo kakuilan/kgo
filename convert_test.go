@@ -423,3 +423,35 @@ func BenchmarkBytesSlice2Str(b *testing.B) {
 		KConv.BytesSlice2Str(sli)
 	}
 }
+
+func TestDecbin(t *testing.T) {
+	var num int64 = 8
+	res := KConv.Decbin(num)
+	if res != "1000" {
+		t.Error("Decbin fail")
+		return
+	}
+}
+
+func BenchmarkDecbin(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Decbin(10)
+	}
+}
+
+func TestBindec(t *testing.T) {
+	res, err := KConv.Bindec("1000")
+	if err != nil || res != 8 {
+		t.Error("Bindec fail")
+		return
+	}
+	_, _ = KConv.Bindec("hello")
+}
+
+func BenchmarkBindec(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KConv.Bindec("1000")
+	}
+}
