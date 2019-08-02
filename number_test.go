@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -40,5 +41,50 @@ func BenchmarkRange(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KNum.Range(0, 9)
+	}
+}
+
+func TestAbs(t *testing.T) {
+	num := -123.456
+	res := KNum.Abs(num)
+	if res < 0 {
+		t.Error("Abs fail")
+		return
+	}
+}
+
+func BenchmarkAbs(b *testing.B) {
+	b.ResetTimer()
+	num := -123.456
+	for i := 0; i < b.N; i++ {
+		KNum.Abs(num)
+	}
+}
+
+func TestRandPanicMin(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	KNum.Rand(5, 1)
+}
+
+func TestRandPanicMax(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	KNum.Rand(1, 2147483648)
+}
+
+func BenchmarkRand(b *testing.B) {
+	b.ResetTimer()
+	num := -123.456
+	for i := 0; i < b.N; i++ {
+		KNum.Abs(num)
 	}
 }
