@@ -95,3 +95,8 @@ func (kn *LkkNumber) Floor(value float64) float64 {
 func (kn *LkkNumber) Ceil(value float64) float64 {
 	return math.Ceil(value)
 }
+
+// Pi 得到圆周率值
+func (kn *LkkNumber) Pi() float64 {
+	return math.Pi
+}
