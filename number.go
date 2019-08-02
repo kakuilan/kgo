@@ -85,3 +85,13 @@ func (kn *LkkNumber) Rand(min, max int) int {
 func (kn *LkkNumber) Round(value float64) float64 {
 	return math.Floor(value + 0.5)
 }
+
+// Floor 向下取整
+func (kn *LkkNumber) Floor(value float64) float64 {
+	return math.Floor(value)
+}
+
+// Ceil 向上取整
+func (kn *LkkNumber) Ceil(value float64) float64 {
+	return math.Ceil(value)
+}
