@@ -118,3 +118,41 @@ func BenchmarkRound(b *testing.B) {
 		KNum.Round(num)
 	}
 }
+
+func TestFloor(t *testing.T) {
+	num1 := 0.3
+	num2 := 0.6
+	res1 := KNum.Floor(num1)
+	res2 := KNum.Floor(num2)
+	if int(res1) != 0 || int(res2) != 0 {
+		t.Error("Floor fail")
+		return
+	}
+}
+
+func BenchmarkFloor(b *testing.B) {
+	b.ResetTimer()
+	num := -123.456
+	for i := 0; i < b.N; i++ {
+		KNum.Floor(num)
+	}
+}
+
+func TestCeil(t *testing.T) {
+	num1 := 0.3
+	num2 := 1.6
+	res1 := KNum.Ceil(num1)
+	res2 := KNum.Ceil(num2)
+	if int(res1) != 1 || int(res2) != 2 {
+		t.Error("Ceil fail")
+		return
+	}
+}
+
+func BenchmarkCeil(b *testing.B) {
+	b.ResetTimer()
+	num := -123.456
+	for i := 0; i < b.N; i++ {
+		KNum.Ceil(num)
+	}
+}
