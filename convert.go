@@ -186,13 +186,13 @@ func (kc *LkkConvert) BytesSlice2Str(val []byte) string {
 	return *(*string)(unsafe.Pointer(&val))
 }
 
-// Decbin 将十进制转换为二进制
-func (kc *LkkConvert) Decbin(number int64) string {
+// Dec2bin 将十进制转换为二进制
+func (kc *LkkConvert) Dec2bin(number int64) string {
 	return strconv.FormatInt(number, 2)
 }
 
-// Bindec 将二进制转换为十进制
-func (kc *LkkConvert) Bindec(str string) (int64, error) {
+// Bin2dec 将二进制转换为十进制
+func (kc *LkkConvert) Bin2dec(str string) (int64, error) {
 	i, err := strconv.ParseInt(str, 2, 0)
 	if err != nil {
 		return 0, err

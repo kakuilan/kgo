@@ -424,35 +424,35 @@ func BenchmarkBytesSlice2Str(b *testing.B) {
 	}
 }
 
-func TestDecbin(t *testing.T) {
+func TestDec2bin(t *testing.T) {
 	var num int64 = 8
-	res := KConv.Decbin(num)
+	res := KConv.Dec2bin(num)
 	if res != "1000" {
-		t.Error("Decbin fail")
+		t.Error("Dec2bin fail")
 		return
 	}
 }
 
-func BenchmarkDecbin(b *testing.B) {
+func BenchmarkDec2bin(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KConv.Decbin(10)
+		KConv.Dec2bin(10)
 	}
 }
 
-func TestBindec(t *testing.T) {
-	res, err := KConv.Bindec("1000")
+func TestBin2dec(t *testing.T) {
+	res, err := KConv.Bin2dec("1000")
 	if err != nil || res != 8 {
-		t.Error("Bindec fail")
+		t.Error("Bin2dec fail")
 		return
 	}
-	_, _ = KConv.Bindec("hello")
+	_, _ = KConv.Bin2dec("hello")
 }
 
-func BenchmarkBindec(b *testing.B) {
+func BenchmarkBin2dec(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = KConv.Bindec("1000")
+		_, _ = KConv.Bin2dec("1000")
 	}
 }
 
