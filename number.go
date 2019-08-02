@@ -100,3 +100,27 @@ func (kn *LkkNumber) Ceil(value float64) float64 {
 func (kn *LkkNumber) Pi() float64 {
 	return math.Pi
 }
+
+// Max 取出最大值
+func (kn *LkkNumber) Max(nums ...float64) float64 {
+	if len(nums) < 2 {
+		panic("[Max]: the nums length is less than 2")
+	}
+	max := nums[0]
+	for i := 1; i < len(nums); i++ {
+		max = math.Max(max, nums[i])
+	}
+	return max
+}
+
+// Min 取出最小值
+func (kn *LkkNumber) Min(nums ...float64) float64 {
+	if len(nums) < 2 {
+		panic("[Min]: the nums length is less than 2")
+	}
+	min := nums[0]
+	for i := 1; i < len(nums); i++ {
+		min = math.Min(min, nums[i])
+	}
+	return min
+}
