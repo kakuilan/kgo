@@ -690,3 +690,18 @@ func BenchmarkImplode(b *testing.B) {
 		KArr.Implode(",", sli)
 	}
 }
+
+func TestAbs(t *testing.T) {
+	num := -123.456
+	res := KNum.Abs(num)
+	println(res)
+
+}
+
+func BenchmarkAbs(b *testing.B) {
+	b.ResetTimer()
+	num := -123.456
+	for i := 0; i < b.N; i++ {
+		KNum.Abs(num)
+	}
+}

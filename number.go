@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 )
 
@@ -55,4 +56,9 @@ func (kn *LkkNumber) Range(min, max int) []int {
 		a[i] = min + i
 	}
 	return a
+}
+
+// Abs 取绝对值
+func (kn *LkkNumber) Abs(number float64) float64 {
+	return math.Abs(number)
 }
