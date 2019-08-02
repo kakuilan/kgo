@@ -517,3 +517,33 @@ func BenchmarkHex2dec(b *testing.B) {
 		_, _ = KConv.Hex2dec("123abf")
 	}
 }
+
+func TestDec2oct(t *testing.T) {
+	res := KConv.Dec2oct(123456789)
+	if res != "726746425" {
+		t.Error("Dec2oct fail")
+		return
+	}
+}
+
+func BenchmarkDec2oct(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Dec2oct(123456789)
+	}
+}
+
+func TestOct2dec(t *testing.T) {
+	_, err := KConv.Oct2dec("726746425")
+	if err != nil {
+		t.Error("Oct2dec fail")
+		return
+	}
+}
+
+func BenchmarkOct2dec(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KConv.Oct2dec("726746425")
+	}
+}
