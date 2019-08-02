@@ -455,3 +455,35 @@ func BenchmarkBindec(b *testing.B) {
 		_, _ = KConv.Bindec("1000")
 	}
 }
+
+func TestHex2bin(t *testing.T) {
+	_, err := KConv.Hex2bin("123abff")
+	if err != nil {
+		t.Error("Hex2bin fail")
+		return
+	}
+	_, _ = KConv.Hex2bin("hello")
+}
+
+func BenchmarkHex2bin(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KConv.Hex2bin("123abff")
+	}
+}
+
+func TestBin2hex(t *testing.T) {
+	_, err := KConv.Bin2hex("1001000111010101111111111")
+	if err != nil {
+		t.Error("Bin2hex fail")
+		return
+	}
+	_, _ = KConv.Hex2bin("hello")
+}
+
+func BenchmarkBin2hex(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KConv.Bin2hex("1001000111010101111111111")
+	}
+}

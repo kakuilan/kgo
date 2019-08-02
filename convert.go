@@ -199,3 +199,21 @@ func (kc *LkkConvert) Bindec(str string) (int64, error) {
 	}
 	return i, nil
 }
+
+// Hex2bin 将十六进制字符串转换为二进制字符串
+func (kc *LkkConvert) Hex2bin(data string) (string, error) {
+	i, err := strconv.ParseInt(data, 16, 0)
+	if err != nil {
+		return "", err
+	}
+	return strconv.FormatInt(i, 2), nil
+}
+
+// Bin2hex 将二进制字符串转换为十六进制字符串
+func (kc *LkkConvert) Bin2hex(str string) (string, error) {
+	i, err := strconv.ParseInt(str, 2, 0)
+	if err != nil {
+		return "", err
+	}
+	return strconv.FormatInt(i, 16), nil
+}
