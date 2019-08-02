@@ -3,7 +3,9 @@ package kgo
 import (
 	"fmt"
 	"math"
+	"math/rand"
 	"strconv"
+	"time"
 )
 
 // NumberFormat 以千位分隔符方式格式化一个数字;decimals为要保留的小数位数,decPoint为小数点显示的字符,thousandsSep为千位分隔符显示的字符
@@ -61,4 +63,20 @@ func (kn *LkkNumber) Range(min, max int) []int {
 // Abs 取绝对值
 func (kn *LkkNumber) Abs(number float64) float64 {
 	return math.Abs(number)
+}
+
+// Rand 产生一个随机整数,范围: [0, 2147483647]
+func (kn *LkkNumber) Rand(min, max int) int {
+	if min > max {
+		panic("[Rand]: min cannot be greater than max")
+	}
+	// PHP: getrandmax()
+	if int31 := 1<<31 - 1; max > int31 {
+		panic("[Rand]: max can not be greater than " + strconv.Itoa(int31))
+	}
+	if min == max {
+		return min
+	}
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	return r.Intn(max+1-min) + min
 }

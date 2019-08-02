@@ -691,17 +691,13 @@ func BenchmarkImplode(b *testing.B) {
 	}
 }
 
-func TestAbs(t *testing.T) {
-	num := -123.456
-	res := KNum.Abs(num)
-	println(res)
+func TestRand(t *testing.T) {
+	min := 1
+	max := 66666
+	res := KNum.Rand(min, max)
 
-}
-
-func BenchmarkAbs(b *testing.B) {
-	b.ResetTimer()
-	num := -123.456
-	for i := 0; i < b.N; i++ {
-		KNum.Abs(num)
+	if res < min || res > max {
+		t.Error("Rand fail")
+		return
 	}
 }
