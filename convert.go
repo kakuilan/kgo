@@ -217,3 +217,13 @@ func (kc *LkkConvert) Bin2hex(str string) (string, error) {
 	}
 	return strconv.FormatInt(i, 16), nil
 }
+
+// Dec2hex 将十进制转换为十六进制
+func (kc *LkkConvert) Dec2hex(number int64) string {
+	return strconv.FormatInt(number, 16)
+}
+
+// Hex2dec 将十六进制转换为十进制
+func (kc *LkkConvert) Hex2dec(str string) (int64, error) {
+	return strconv.ParseInt(str, 16, 0)
+}
