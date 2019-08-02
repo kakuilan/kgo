@@ -156,3 +156,19 @@ func BenchmarkCeil(b *testing.B) {
 		KNum.Ceil(num)
 	}
 }
+
+func TestPi(t *testing.T) {
+	res := KNum.Pi()
+	num := KNum.NumberFormat(res, 2, ".", "")
+	if num != "3.14" {
+		t.Error("Pi fail")
+		return
+	}
+}
+
+func BenchmarkPi(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.Pi()
+	}
+}
