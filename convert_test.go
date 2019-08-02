@@ -487,3 +487,33 @@ func BenchmarkBin2hex(b *testing.B) {
 		_, _ = KConv.Bin2hex("1001000111010101111111111")
 	}
 }
+
+func TestDec2hex(t *testing.T) {
+	res := KConv.Dec2hex(1234567890)
+	if res != "499602d2" {
+		t.Error("Dec2hex fail")
+		return
+	}
+}
+
+func BenchmarkDec2hex(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Dec2hex(1234567890)
+	}
+}
+
+func TestHex2dec(t *testing.T) {
+	_, err := KConv.Hex2dec("123abf")
+	if err != nil {
+		t.Error("Hex2dec fail")
+		return
+	}
+}
+
+func BenchmarkHex2dec(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KConv.Hex2dec("123abf")
+	}
+}
