@@ -478,7 +478,7 @@ func TestBin2hex(t *testing.T) {
 		t.Error("Bin2hex fail")
 		return
 	}
-	_, _ = KConv.Hex2bin("hello")
+	_, _ = KConv.Bin2hex("hello")
 }
 
 func BenchmarkBin2hex(b *testing.B) {
