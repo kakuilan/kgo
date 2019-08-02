@@ -690,14 +690,3 @@ func BenchmarkImplode(b *testing.B) {
 		KArr.Implode(",", sli)
 	}
 }
-
-func TestRand(t *testing.T) {
-	min := 1
-	max := 66666
-	res := KNum.Rand(min, max)
-
-	if res < min || res > max {
-		t.Error("Rand fail")
-		return
-	}
-}

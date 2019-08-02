@@ -80,3 +80,8 @@ func (kn *LkkNumber) Rand(min, max int) int {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	return r.Intn(max+1-min) + min
 }
+
+// Round 对浮点数进行四舍五入
+func (kn *LkkNumber) Round(value float64) float64 {
+	return math.Floor(value + 0.5)
+}

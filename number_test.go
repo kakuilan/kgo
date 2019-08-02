@@ -61,6 +61,17 @@ func BenchmarkAbs(b *testing.B) {
 	}
 }
 
+func TestRand(t *testing.T) {
+	min := 1
+	max := 66666
+	res := KNum.Rand(min, max)
+
+	if res < min || res > max {
+		t.Error("Rand fail")
+		return
+	}
+}
+
 func TestRandPanicMin(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -86,5 +97,24 @@ func BenchmarkRand(b *testing.B) {
 	num := -123.456
 	for i := 0; i < b.N; i++ {
 		KNum.Abs(num)
+	}
+}
+
+func TestRound(t *testing.T) {
+	num1 := 0.3
+	num2 := 0.6
+	res1 := KNum.Round(num1)
+	res2 := KNum.Round(num2)
+	if int(res1) != 0 || int(res2) != 1 {
+		t.Error("Round fail")
+		return
+	}
+}
+
+func BenchmarkRound(b *testing.B) {
+	b.ResetTimer()
+	num := -123.456
+	for i := 0; i < b.N; i++ {
+		KNum.Round(num)
 	}
 }
