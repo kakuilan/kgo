@@ -227,3 +227,13 @@ func (kc *LkkConvert) Dec2hex(number int64) string {
 func (kc *LkkConvert) Hex2dec(str string) (int64, error) {
 	return strconv.ParseInt(str, 16, 0)
 }
+
+// Dec2oct 将十进制转换为八进制
+func (kc *LkkConvert) Dec2oct(number int64) string {
+	return strconv.FormatInt(number, 8)
+}
+
+// Oct2dec 将八进制转换为十进制
+func (kc *LkkConvert) Oct2dec(str string) (int64, error) {
+	return strconv.ParseInt(str, 8, 0)
+}
