@@ -140,9 +140,7 @@ func (kf *LkkFile) IsLink(path string) bool {
 // IsDir 是否目录(且存在)
 func (kf *LkkFile) IsDir(path string) bool {
 	f, err := os.Lstat(path)
-	if os.IsNotExist(err) {
-		return false
-	} else if nil != err {
+	if os.IsNotExist(err) || nil != err {
 		return false
 	}
 	return f.IsDir()
