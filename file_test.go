@@ -563,3 +563,45 @@ func BenchmarkFileSha256(b *testing.B) {
 		_, _ = KFile.Sha256("./testdata/diglett.png")
 	}
 }
+
+func TestPathinfo(t *testing.T) {
+	filename := "./testdata/diglett.png"
+	res1 := KFile.Pathinfo(filename, -1)
+	res2 := KFile.Pathinfo(filename, 1)
+	res3 := KFile.Pathinfo(filename, 2)
+	res4 := KFile.Pathinfo(filename, 4)
+	res5 := KFile.Pathinfo(filename, 8)
+	res6 := KFile.Pathinfo("./testdata/.gitkeep", -1)
+	res7 := KFile.Pathinfo("./testdata/hello", -1)
+
+	if len(res1) != 4 {
+		t.Error("Pathinfo[all] fail")
+		return
+	} else if _, ok := res2["dirname"]; !ok {
+		t.Error("Pathinfo[dirname] fail")
+		return
+	} else if _, ok := res3["basename"]; !ok {
+		t.Error("Pathinfo[basename] fail")
+		return
+	} else if _, ok := res4["extension"]; !ok {
+		t.Error("Pathinfo[extension] fail")
+		return
+	} else if _, ok := res5["filename"]; !ok {
+		t.Error("Pathinfo[filename] fail")
+		return
+	} else if ext, _ := res6["extension"]; ext != "gitkeep" {
+		t.Error("Pathinfo fail")
+		return
+	} else if ext, _ := res7["extension"]; ext != "" {
+		t.Error("Pathinfo fail")
+		return
+	}
+}
+
+func BenchmarkPathinfo(b *testing.B) {
+	b.ResetTimer()
+	filename := "./testdata/diglett.png"
+	for i := 0; i < b.N; i++ {
+		KFile.Pathinfo(filename, -1)
+	}
+}
