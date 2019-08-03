@@ -68,7 +68,7 @@ func (kf *LkkFile) GetMime(path string, fast bool) string {
 	return res
 }
 
-// FileSize 获取文件大小(bytes字节)
+// FileSize 获取文件大小(bytes字节),注意:文件不存在或无法访问返回-1
 func (kf *LkkFile) FileSize(path string) int64 {
 	f, err := os.Stat(path)
 	if nil != err {
@@ -202,6 +202,11 @@ func (kf *LkkFile) Touch(path string, size int64) bool {
 	}
 
 	return true
+}
+
+// Unlink 删除文件
+func (kf *LkkFile) Unlink(filename string) error {
+	return os.Remove(filename)
 }
 
 // CopyFile 拷贝源文件到目标文件,cover为枚举(FILE_COVER_ALLOW、FILE_COVER_IGNORE、FILE_COVER_DENY)
