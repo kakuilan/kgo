@@ -291,10 +291,13 @@ func BenchmarkAbsPath(b *testing.B) {
 	}
 }
 
-func TestTouch(t *testing.T) {
+func TestTouchUnlink(t *testing.T) {
 	file1 := "./testdata/empty/zero"
 	file2 := "./testdata/empty/2m"
+	file3 := "/root/test/empty_zero"
+	file4 := "/root/empty_zero"
 
+	//创建文件
 	res1 := KFile.Touch(file1, 0)
 	res2 := KFile.Touch(file2, 2097152)
 	if !res1 || !res2 {
@@ -302,8 +305,16 @@ func TestTouch(t *testing.T) {
 		return
 	}
 
-	KFile.Touch("/root/test/empty_zero", 0)
-	KFile.Touch("/root/empty_zero", 0)
+	//删除文件
+	err1 := KFile.Unlink(file1)
+	err2 := KFile.Unlink(file2)
+	if err1 != nil || err2 != nil {
+		t.Error("Unlink fail")
+		return
+	}
+
+	KFile.Touch(file3, 0)
+	KFile.Touch(file4, 0)
 }
 
 func BenchmarkTouch(b *testing.B) {
@@ -312,6 +323,15 @@ func BenchmarkTouch(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		filename = fmt.Sprintf("./testdata/empty/zero_%d", i)
 		KFile.Touch(filename, 0)
+	}
+}
+
+func BenchmarkUnlink(b *testing.B) {
+	b.ResetTimer()
+	filename := ""
+	for i := 0; i < b.N; i++ {
+		filename = fmt.Sprintf("./testdata/empty/zero_%d", i)
+		_ = KFile.Unlink(filename)
 	}
 }
 
