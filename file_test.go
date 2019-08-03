@@ -291,7 +291,7 @@ func BenchmarkAbsPath(b *testing.B) {
 	}
 }
 
-func TestTouchUnlink(t *testing.T) {
+func TestTouchRenameUnlink(t *testing.T) {
 	file1 := "./testdata/empty/zero"
 	file2 := "./testdata/empty/2m"
 	file3 := "/root/test/empty_zero"
@@ -305,10 +305,20 @@ func TestTouchUnlink(t *testing.T) {
 		return
 	}
 
-	//删除文件
-	err1 := KFile.Unlink(file1)
-	err2 := KFile.Unlink(file2)
+	//重命名
+	file5 := "./testdata/empty/zero_re"
+	file6 := "./testdata/empty/2m_re"
+	err1 := KFile.Rename(file1, file5)
+	err2 := KFile.Rename(file2, file6)
 	if err1 != nil || err2 != nil {
+		t.Error("Unlink fail")
+		return
+	}
+
+	//删除文件
+	err3 := KFile.Unlink(file5)
+	err4 := KFile.Unlink(file6)
+	if err3 != nil || err4 != nil {
 		t.Error("Unlink fail")
 		return
 	}
@@ -326,11 +336,22 @@ func BenchmarkTouch(b *testing.B) {
 	}
 }
 
+func BenchmarkRename(b *testing.B) {
+	b.ResetTimer()
+	filename1 := ""
+	filename2 := ""
+	for i := 0; i < b.N; i++ {
+		filename1 = fmt.Sprintf("./testdata/empty/zero_%d", i)
+		filename2 = fmt.Sprintf("./testdata/empty/zero_re%d", i)
+		_ = KFile.Rename(filename1, filename2)
+	}
+}
+
 func BenchmarkUnlink(b *testing.B) {
 	b.ResetTimer()
 	filename := ""
 	for i := 0; i < b.N; i++ {
-		filename = fmt.Sprintf("./testdata/empty/zero_%d", i)
+		filename = fmt.Sprintf("./testdata/empty/zero_re%d", i)
 		_ = KFile.Unlink(filename)
 	}
 }

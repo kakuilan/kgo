@@ -204,6 +204,11 @@ func (kf *LkkFile) Touch(path string, size int64) bool {
 	return true
 }
 
+// Rename 重命名一个文件或目录
+func (kf *LkkFile) Rename(oldname, newname string) error {
+	return os.Rename(oldname, newname)
+}
+
 // Unlink 删除文件
 func (kf *LkkFile) Unlink(filename string) error {
 	return os.Remove(filename)
