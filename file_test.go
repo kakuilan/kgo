@@ -646,3 +646,19 @@ func BenchmarkPathinfo(b *testing.B) {
 		KFile.Pathinfo(filename, -1)
 	}
 }
+
+func TestGetcwd(t *testing.T) {
+	res, err := KFile.Getcwd()
+	println(res)
+	if err != nil {
+		t.Error("Getcwd fail")
+		return
+	}
+}
+
+func BenchmarkGetcwd(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.Getcwd()
+	}
+}
