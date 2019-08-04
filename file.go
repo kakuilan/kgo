@@ -599,3 +599,8 @@ func (kf *LkkFile) Getcwd() (string, error) {
 	dir, err := os.Getwd()
 	return dir, err
 }
+
+// Basename 返回路径中的文件名部分
+func (kf *LkkFile) Basename(path string) string {
+	return filepath.Base(path)
+}

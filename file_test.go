@@ -662,3 +662,20 @@ func BenchmarkGetcwd(b *testing.B) {
 		_, _ = KFile.Getcwd()
 	}
 }
+
+func TestBasename(t *testing.T) {
+	path := "./testdata/diglett.png"
+	res := KFile.Basename(path)
+	if res != "diglett.png" {
+		t.Error("Basename fail")
+		return
+	}
+}
+
+func BenchmarkBasename(b *testing.B) {
+	b.ResetTimer()
+	path := "./testdata/diglett.png"
+	for i := 0; i < b.N; i++ {
+		KFile.Basename(path)
+	}
+}
