@@ -593,3 +593,9 @@ func (kf *LkkFile) Pathinfo(path string, options int) map[string]string {
 	}
 	return info
 }
+
+// Getcwd 取得当前工作目录
+func (kf *LkkFile) Getcwd() (string, error) {
+	dir, err := os.Getwd()
+	return dir, err
+}
