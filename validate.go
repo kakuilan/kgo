@@ -32,13 +32,23 @@ func (ks *LkkString) IsLetter(s string) bool {
 	return true
 }
 
-// IsNumeric 字符串是否数值
-func (ks *LkkString) IsNumeric(s string) bool {
-	if s == "" {
-		return false
+// IsNumeric 变量是否数值
+func (ks *LkkString) IsNumeric(val interface{}) bool {
+	switch val.(type) {
+	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
+		return true
+	case float32, float64, complex64, complex128:
+		return true
+	case string:
+		str := val.(string)
+		if str == "" {
+			return false
+		}
+		_, err := strconv.ParseFloat(str, 64)
+		return err == nil
 	}
-	_, err := strconv.ParseFloat(s, 64)
-	return err == nil
+
+	return false
 }
 
 // IsNumeric 字符串是否整数
