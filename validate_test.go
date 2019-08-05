@@ -44,11 +44,15 @@ func TestIsNumeric(t *testing.T) {
 	res1 := KConv.IsNumeric(123)
 	res2 := KConv.IsNumeric("123.456")
 	res3 := KConv.IsNumeric("-0.56")
-	if !res1 || !res2 || !res3 {
+	res4 := KConv.IsNumeric(45.678)
+	if !res1 || !res2 || !res3 || !res4 {
 		t.Error("IsNumeric fail")
 		return
 	}
+
+	var sli []int
 	KConv.IsNumeric("")
+	KConv.IsNumeric(sli)
 }
 
 func BenchmarkIsNumeric(b *testing.B) {
@@ -66,13 +70,36 @@ func TestIsInt(t *testing.T) {
 		t.Error("IsInt fail")
 		return
 	}
+	var sli []int
 	KConv.IsInt("")
+	KConv.IsInt(sli)
 }
 
 func BenchmarkIsInt(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.IsInt("123")
+	}
+}
+
+func TestIsFloat(t *testing.T) {
+	res1 := KConv.IsFloat(123.0)
+	res2 := KConv.IsFloat("123.4")
+	res3 := KConv.IsFloat("-45.6")
+	if !res1 || !res2 || !res3 {
+		t.Error("IsFloat IsFloat")
+		return
+	}
+
+	var sli []int
+	KConv.IsFloat("")
+	KConv.IsFloat(sli)
+}
+
+func BenchmarkIsFloat(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsFloat("123.45")
 	}
 }
 
@@ -231,23 +258,5 @@ func BenchmarkIsEmpty(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.IsEmpty("")
-	}
-}
-
-func TestIsFloat(t *testing.T) {
-	res1 := KConv.IsFloat(123.0)
-	res2 := KConv.IsFloat("123.4")
-	res3 := KConv.IsFloat("-45.6")
-	if !res1 || !res2 || !res3 {
-		t.Error("IsFloat IsFloat")
-		return
-	}
-	KConv.IsInt("")
-}
-
-func BenchmarkIsFloat(b *testing.B) {
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		KConv.IsInt("123.45")
 	}
 }
