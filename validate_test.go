@@ -202,3 +202,32 @@ func BenchmarkIsNan(b *testing.B) {
 		KNum.IsNan(123.456)
 	}
 }
+
+func TestIsEmpty(t *testing.T) {
+	var sli []int
+	mp := make(map[string]int)
+	var i uint = 0
+	var val interface{} = &sli
+
+	res1 := KConv.IsEmpty(nil)
+	res2 := KConv.IsEmpty("")
+	res3 := KConv.IsEmpty(sli)
+	res4 := KConv.IsEmpty(mp)
+	res5 := KConv.IsEmpty(false)
+	res6 := KConv.IsEmpty(0)
+	res7 := KConv.IsEmpty(i)
+	res8 := KConv.IsEmpty(0.0)
+	res9 := KConv.IsEmpty(val)
+
+	if !res1 || !res2 || !res3 || !res4 || !res5 || !res6 || !res7 || !res8 || res9 {
+		t.Error("IsEmpty fail")
+		return
+	}
+}
+
+func BenchmarkIsEmpty(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsEmpty("")
+	}
+}
