@@ -32,12 +32,12 @@ func (ks *LkkString) IsLetter(s string) bool {
 	return true
 }
 
-// IsNumeric 变量是否数值
-func (ks *LkkString) IsNumeric(val interface{}) bool {
+// IsNumeric 变量是否数值(不包含复数和科学计数法)
+func (kc *LkkConvert) IsNumeric(val interface{}) bool {
 	switch val.(type) {
 	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
 		return true
-	case float32, float64, complex64, complex128:
+	case float32, float64:
 		return true
 	case string:
 		str := val.(string)
@@ -51,13 +51,39 @@ func (ks *LkkString) IsNumeric(val interface{}) bool {
 	return false
 }
 
-// IsNumeric 字符串是否整数
-func (ks *LkkString) IsInt(s string) bool {
-	if s == "" {
-		return false
+// IsNumeric 变量是否整型数值
+func (kc *LkkConvert) IsInt(val interface{}) bool {
+	switch val.(type) {
+	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
+		return true
+	case string:
+		str := val.(string)
+		if str == "" {
+			return false
+		}
+		_, err := strconv.Atoi(str)
+		return err == nil
 	}
-	_, err := strconv.Atoi(s)
-	return err == nil
+
+	return false
+}
+
+// IsFloat 变量是否浮点数值
+func (kc *LkkConvert) IsFloat(val interface{}) bool {
+	switch val.(type) {
+	case float32, float64:
+		return true
+	case string:
+		str := val.(string)
+		if str == "" {
+			return false
+		}
+		if ok, _ := regexp.MatchString(`^(-?\d+)(\.\d+)?`, str); ok {
+			return true
+		}
+	}
+
+	return false
 }
 
 // HasChinese 字符串是否含有中文

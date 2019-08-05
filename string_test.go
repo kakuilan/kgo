@@ -92,7 +92,7 @@ func BenchmarkRandomAlpha(b *testing.B) {
 
 func TestRandomNumeric(t *testing.T) {
 	str := KStr.Random(8, RAND_STRING_NUMERIC)
-	if !KStr.IsNumeric(str) {
+	if !KConv.IsNumeric(str) {
 		t.Error("RandomNumeric fail")
 		return
 	}
