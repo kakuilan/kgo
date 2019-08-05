@@ -696,3 +696,20 @@ func BenchmarkFilemtime(b *testing.B) {
 		_, _ = KFile.Filemtime(path)
 	}
 }
+
+func TestGlob(t *testing.T) {
+	pattern := "*test.go"
+	res, err := KFile.Glob(pattern)
+	if err != nil || len(res) == 0 {
+		t.Error("Glob fail")
+		return
+	}
+}
+
+func BenchmarkGlob(b *testing.B) {
+	b.ResetTimer()
+	pattern := "*test.go"
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.Glob(pattern)
+	}
+}

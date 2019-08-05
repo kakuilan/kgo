@@ -618,3 +618,8 @@ func (kf *LkkFile) Filemtime(filename string) (int64, error) {
 	}
 	return fileinfo.ModTime().Unix(), nil
 }
+
+// Glob 寻找与模式匹配的文件路径
+func (kf *LkkFile) Glob(pattern string) ([]string, error) {
+	return filepath.Glob(pattern)
+}
