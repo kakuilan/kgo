@@ -679,3 +679,20 @@ func BenchmarkBasename(b *testing.B) {
 		KFile.Basename(path)
 	}
 }
+
+func TestFilemtime(t *testing.T) {
+	path := "./testdata/diglett.png"
+	res, err := KFile.Filemtime(path)
+	if err != nil || res == 0 {
+		t.Error("Filemtime fail")
+		return
+	}
+}
+
+func BenchmarkFilemtime(b *testing.B) {
+	b.ResetTimer()
+	path := "./testdata/diglett.png"
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.Filemtime(path)
+	}
+}
