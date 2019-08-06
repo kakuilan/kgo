@@ -184,3 +184,12 @@ func (ko *LkkOS) GetIpsByDomain(domain string) ([]string, error) {
 	}
 	return nil, err
 }
+
+// GetHostByIp 获取指定的IP地址对应的主机名
+func (ko *LkkOS) GetHostByIp(ipAddress string) (string, error) {
+	names, err := net.LookupAddr(ipAddress)
+	if names != nil {
+		return strings.TrimRight(names[0], "."), nil
+	}
+	return "", err
+}

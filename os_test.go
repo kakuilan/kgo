@@ -208,3 +208,20 @@ func BenchmarkGetIpsByDomain(b *testing.B) {
 		_, _ = KOS.GetIpsByDomain(name)
 	}
 }
+
+func TestGetHostByIp(t *testing.T) {
+	ip := "127.0.0.1"
+	host, err := KOS.GetHostByIp(ip)
+	if err != nil || host == "" {
+		t.Error("GetHostByIp fail")
+		return
+	}
+}
+
+func BenchmarkGetHostByIp(b *testing.B) {
+	b.ResetTimer()
+	ip := "127.0.0.1"
+	for i := 0; i < b.N; i++ {
+		_, _ = KOS.GetHostByIp(ip)
+	}
+}
