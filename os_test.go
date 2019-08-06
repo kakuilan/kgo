@@ -230,9 +230,10 @@ func TestGetHostByIp(t *testing.T) {
 		return
 	}
 
-	ip, err = KOS.GetHostByIp("192.168.1.1")
+	_, err = KOS.GetHostByIp("192.168.1.1")
 	if err != nil {
-		println(err.Error())
+		t.Error("GetHostByIp fail")
+		return
 	}
 }
 
