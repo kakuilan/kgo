@@ -240,3 +240,35 @@ func BenchmarkMemoryUsage(b *testing.B) {
 		KOS.MemoryUsage()
 	}
 }
+
+func TestSetenvGetenv(t *testing.T) {
+	name1 := "HELLO"
+	name2 := "HOME"
+
+	err := KOS.Setenv(name1, "world")
+	if err != nil {
+		t.Error("Setenv fail")
+		return
+	}
+
+	val1 := KOS.Getenv(name1)
+	val2 := KOS.Getenv(name2)
+	if val1 != "world" || val2 == "" {
+		t.Error("Getenv fail")
+		return
+	}
+}
+
+func BenchmarkSetenv(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = KOS.Setenv("HELLO", "world")
+	}
+}
+
+func BenchmarkGetenv(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.Getenv("HELLO")
+	}
+}
