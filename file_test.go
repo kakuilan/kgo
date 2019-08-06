@@ -649,8 +649,7 @@ func BenchmarkPathinfo(b *testing.B) {
 
 func TestGetcwd(t *testing.T) {
 	res, err := KFile.Getcwd()
-	println(res)
-	if err != nil {
+	if err != nil || res == "" {
 		t.Error("Getcwd fail")
 		return
 	}
