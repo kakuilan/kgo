@@ -225,3 +225,18 @@ func BenchmarkGetHostByIp(b *testing.B) {
 		_, _ = KOS.GetHostByIp(ip)
 	}
 }
+
+func TestMemoryUsage(t *testing.T) {
+	mem := KOS.MemoryUsage()
+	if mem == 0 {
+		t.Error("MemoryUsage fail")
+		return
+	}
+}
+
+func BenchmarkMemoryUsage(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.MemoryUsage()
+	}
+}
