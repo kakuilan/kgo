@@ -237,7 +237,12 @@ func TestIsEmpty(t *testing.T) {
 	mp := make(map[string]int)
 	var i uint = 0
 	var val1 interface{} = &sli
-	var val2 LkkFileCover
+
+	type myStru struct {
+		conv LkkFileCover
+		name string
+	}
+	var val2 myStru
 
 	res1 := KConv.IsEmpty(nil)
 	res2 := KConv.IsEmpty("")
