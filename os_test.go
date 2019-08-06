@@ -120,6 +120,10 @@ func TestIsPublicIP(t *testing.T) {
 	KOS.IsPublicIP(net.ParseIP("127.0.0.1"))
 	KOS.IsPublicIP(net.ParseIP("172.16.0.1"))
 	KOS.IsPublicIP(net.ParseIP("192.168.0.1"))
+	//google
+	KOS.IsPublicIP(net.ParseIP("172.217.26.142"))
+	//google IPv6
+	KOS.IsPublicIP(net.ParseIP("2404:6800:4005:80f::200e"))
 }
 
 func BenchmarkIsPublicIP(b *testing.B) {
