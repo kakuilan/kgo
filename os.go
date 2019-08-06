@@ -200,3 +200,13 @@ func (ko *LkkOS) MemoryUsage() uint64 {
 	runtime.ReadMemStats(stat)
 	return stat.Alloc
 }
+
+// Setenv 设置一个环境变量的值
+func (ko *LkkOS) Setenv(varname, data string) error {
+	return os.Setenv(varname, data)
+}
+
+// Getenv 获取一个环境变量的值
+func (ko *LkkOS) Getenv(varname string) string {
+	return os.Getenv(varname)
+}
