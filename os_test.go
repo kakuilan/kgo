@@ -173,3 +173,21 @@ func BenchmarkHostname(b *testing.B) {
 		_, _ = KOS.Hostname()
 	}
 }
+
+func TestGetIpByHostname(t *testing.T) {
+	name := "localhost"
+	ip, err := KOS.GetIpByHostname(name)
+	if err != nil || ip != "127.0.0.1" {
+		t.Error("GetIpByHostname fail")
+		return
+	}
+
+}
+
+func BenchmarkGetIpByHostname(b *testing.B) {
+	b.ResetTimer()
+	name := "localhost"
+	for i := 0; i < b.N; i++ {
+		_, _ = KOS.GetIpByHostname(name)
+	}
+}
