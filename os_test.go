@@ -117,6 +117,9 @@ func TestIsPublicIP(t *testing.T) {
 		t.Error("IsPublicIP fail")
 		return
 	}
+	KOS.IsPublicIP(net.ParseIP("127.0.0.1"))
+	KOS.IsPublicIP(net.ParseIP("172.16.0.1"))
+	KOS.IsPublicIP(net.ParseIP("192.168.0.1"))
 }
 
 func BenchmarkIsPublicIP(b *testing.B) {
