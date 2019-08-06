@@ -158,3 +158,18 @@ func BenchmarkGetMacAddrs(b *testing.B) {
 		KOS.GetMacAddrs()
 	}
 }
+
+func TestHostname(t *testing.T) {
+	res, err := KOS.Hostname()
+	if err != nil || res == "" {
+		t.Error("Hostname fail")
+		return
+	}
+}
+
+func BenchmarkHostname(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KOS.Hostname()
+	}
+}

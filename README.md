@@ -147,3 +147,9 @@ https://github.com/json-iterator/go
 https://github.com/tidwall/gjson
 https://github.com/mailru/easyjson
 https://github.com/buger/jsonparser
+
+TODO
+Exec
+System
+Passthru
+
