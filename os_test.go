@@ -182,6 +182,13 @@ func TestGetIpByHostname(t *testing.T) {
 		return
 	}
 
+	_, _ = KOS.GetIpByHostname("::1")
+	_, err = KOS.GetIpByHostname("hello")
+	if err != nil {
+		t.Error("GetIpByHostname fail")
+		return
+	}
+
 }
 
 func BenchmarkGetIpByHostname(b *testing.B) {
@@ -194,8 +201,14 @@ func BenchmarkGetIpByHostname(b *testing.B) {
 
 func TestGetIpsByDomain(t *testing.T) {
 	name := "google.com"
-	_, err := KOS.GetIpsByDomain(name)
-	if err != nil {
+	ips, err := KOS.GetIpsByDomain(name)
+	if err != nil || len(ips) == 0 {
+		t.Error("GetIpsByDomain fail")
+		return
+	}
+
+	ips, err = KOS.GetIpsByDomain("hello")
+	if err == nil || len(ips) > 0 {
 		t.Error("GetIpsByDomain fail")
 		return
 	}
@@ -215,6 +228,11 @@ func TestGetHostByIp(t *testing.T) {
 	if err != nil || host == "" {
 		t.Error("GetHostByIp fail")
 		return
+	}
+
+	ip, err = KOS.GetHostByIp("192.168.1.1")
+	if err != nil {
+		println(err.Error())
 	}
 }
 
