@@ -191,3 +191,20 @@ func BenchmarkGetIpByHostname(b *testing.B) {
 		_, _ = KOS.GetIpByHostname(name)
 	}
 }
+
+func TestGetIpsByDomain(t *testing.T) {
+	name := "google.com"
+	_, err := KOS.GetIpsByDomain(name)
+	if err != nil {
+		t.Error("GetIpsByDomain fail")
+		return
+	}
+}
+
+func BenchmarkGetIpsByDomain(b *testing.B) {
+	b.ResetTimer()
+	name := "google.com"
+	for i := 0; i < b.N; i++ {
+		_, _ = KOS.GetIpsByDomain(name)
+	}
+}
