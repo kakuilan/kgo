@@ -579,3 +579,18 @@ func BenchmarkIp2long(b *testing.B) {
 		KConv.Ip2long("127.0.0.1")
 	}
 }
+
+func TestLong2ip(t *testing.T) {
+	res := KConv.Long2ip(2130706433)
+	if res != "127.0.0.1" {
+		t.Error("Long2ip fail")
+		return
+	}
+}
+
+func BenchmarkLong2ip(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Long2ip(2130706433)
+	}
+}
