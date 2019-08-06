@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"bytes"
+	"fmt"
 	"github.com/json-iterator/go"
 	"hash/crc32"
 	"html"
@@ -372,4 +373,10 @@ func (ks *LkkString) SimilarText(first, second string, percent *float64) int {
 // Explode 使用一个字符串分割另一个字符串
 func (ks *LkkString) Explode(delimiter, str string) []string {
 	return strings.Split(str, delimiter)
+}
+
+// Uniqid 获取一个带前缀、基于当前时间微秒数的唯一ID
+func (ks *LkkString) Uniqid(prefix string) string {
+	now := time.Now()
+	return fmt.Sprintf("%s%08x%05x", prefix, now.Unix(), now.UnixNano()%0x100000)
 }

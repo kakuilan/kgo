@@ -631,3 +631,18 @@ func BenchmarkExplode(b *testing.B) {
 		KStr.Explode(",", "hello,world,welcome,golang")
 	}
 }
+
+func TestUniqid(t *testing.T) {
+	res := KStr.Uniqid("test_")
+	if len(res) <= 5 {
+		t.Error("Uniqid fail")
+		return
+	}
+}
+
+func BenchmarkUniqid(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Uniqid("hello_")
+	}
+}
