@@ -566,11 +566,11 @@ func BenchmarkBaseConvert(b *testing.B) {
 
 func TestIp2long(t *testing.T) {
 	res := KConv.Ip2long("127.0.0.1")
-	println(res)
 	if res == 0 {
 		t.Error("Ip2long fail")
 		return
 	}
+	KConv.Ip2long("1")
 }
 
 func BenchmarkIp2long(b *testing.B) {
