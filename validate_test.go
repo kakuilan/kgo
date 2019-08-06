@@ -236,7 +236,8 @@ func TestIsEmpty(t *testing.T) {
 	var sli []int
 	mp := make(map[string]int)
 	var i uint = 0
-	var val interface{} = &sli
+	var val1 interface{} = &sli
+	var val2 LkkFileCover
 
 	res1 := KConv.IsEmpty(nil)
 	res2 := KConv.IsEmpty("")
@@ -246,9 +247,10 @@ func TestIsEmpty(t *testing.T) {
 	res6 := KConv.IsEmpty(0)
 	res7 := KConv.IsEmpty(i)
 	res8 := KConv.IsEmpty(0.0)
-	res9 := KConv.IsEmpty(val)
+	res9 := KConv.IsEmpty(val1)
+	res10 := KConv.IsEmpty(val2)
 
-	if !res1 || !res2 || !res3 || !res4 || !res5 || !res6 || !res7 || !res8 || res9 {
+	if !res1 || !res2 || !res3 || !res4 || !res5 || !res6 || !res7 || !res8 || res9 || !res10 {
 		t.Error("IsEmpty fail")
 		return
 	}
