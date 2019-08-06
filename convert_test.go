@@ -563,3 +563,19 @@ func BenchmarkBaseConvert(b *testing.B) {
 		_, _ = KConv.BaseConvert("726746425", 10, 16)
 	}
 }
+
+func TestIp2long(t *testing.T) {
+	res := KConv.Ip2long("127.0.0.1")
+	println(res)
+	if res == 0 {
+		t.Error("Ip2long fail")
+		return
+	}
+}
+
+func BenchmarkIp2long(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Ip2long("127.0.0.1")
+	}
+}

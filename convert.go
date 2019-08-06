@@ -1,7 +1,9 @@
 package kgo
 
 import (
+	"encoding/binary"
 	"fmt"
+	"net"
 	"reflect"
 	"strconv"
 	"unsafe"
@@ -245,4 +247,13 @@ func (kc *LkkConvert) BaseConvert(number string, frombase, tobase int) (string, 
 		return "", err
 	}
 	return strconv.FormatInt(i, tobase), nil
+}
+
+// Ip2long 将 IPV4 的字符串互联网协议转换成长整型数字
+func (kc *LkkConvert) Ip2long(ipAddress string) uint32 {
+	ip := net.ParseIP(ipAddress)
+	if ip == nil {
+		return 0
+	}
+	return binary.BigEndian.Uint32(ip.To4())
 }
