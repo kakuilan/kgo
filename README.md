@@ -163,6 +163,12 @@ https://studygolang.com/articles/2791
 https://golangtc.com/t/55237dd8421aa9704b0000cb
 https://stackoverflow.com/questions/8039552/byte-endian-convert-by-using-encoding-binary-in-go
 
+versionCompare
+https://github.com/sridharavinash/versionCompare/blob/master/versionCompare.go
+https://github.com/mcuadros/go-version/blob/master/compare.go
+https://blog.csdn.net/weixin_34341117/article/details/92067090
+
+
 
 
 

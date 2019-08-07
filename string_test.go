@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -644,5 +645,58 @@ func BenchmarkUniqid(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KStr.Uniqid("hello_")
+	}
+}
+
+func TestVersionCompare(t *testing.T) {
+	res1 := KStr.VersionCompare("", "", "=")
+	res2 := KStr.VersionCompare("", "1.0", "=")
+	res3 := KStr.VersionCompare("0.9", "", "=")
+
+	if !res1 || res2 || res3 {
+		t.Error("VersionCompare fail")
+		return
+	}
+
+	KStr.VersionCompare("#09", "#10", "=")
+	KStr.VersionCompare("0.9", "1.0", "=")
+	KStr.VersionCompare("11.0", "2.0", "=")
+	KStr.VersionCompare("dev11.0", "dev2.0", "=")
+	KStr.VersionCompare("11.0", "dev2.0", "=")
+	KStr.VersionCompare("a21.0", "2.0", "=")
+
+	KStr.VersionCompare("dev-21.0", "1.0", "=")
+	KStr.VersionCompare("dev-21.0", "1.0", "=")
+	KStr.VersionCompare("dev-21.0.summer", "1.0", "=")
+	KStr.VersionCompare("dev-12.0", "dev-12.0", "=")
+	KStr.VersionCompare("beta-11.0", "dev-12.0", "=")
+
+	res4 := KStr.VersionCompare("beta-12.0", "dev-12.0", "<")
+	res5 := KStr.VersionCompare("beta-12.0", "dev-12.0", "<=")
+	res6 := KStr.VersionCompare("beta-12.0", "dev-12.0", ">")
+	res7 := KStr.VersionCompare("beta-12.0", "dev-12.0", ">=")
+	res8 := KStr.VersionCompare("beta-12.0", "dev-12.0", "=")
+	res9 := KStr.VersionCompare("beta-12.0", "dev-12.0", "!=")
+
+	if res4 || res5 || !res6 || !res7 || res8 || !res9 {
+		t.Error("VersionCompare fail")
+		return
+	}
+}
+
+func TestVersionComparePanic(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	KStr.VersionCompare("1.0", "1.2", "dd")
+}
+
+func BenchmarkVersionCompare(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.VersionCompare("2.3.1", "2.1.3.4", ">=")
 	}
 }
