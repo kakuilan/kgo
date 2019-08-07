@@ -153,3 +153,17 @@ Exec
 System
 Passthru
 
+pack/unpack
+https://stackoverflow.com/questions/40182289/golang-equivalent-of-pythons-struct-pack-struct-unpack
+https://gist.github.com/cloveryume/9a59e8d77f5836f11720#file-golang_struct_packed-go
+https://github.com/lunixbochs/struc
+https://github.com/roman-kachanovsky/go-binary-pack
+https://learnku.com/articles/31460
+https://studygolang.com/articles/2791
+https://golangtc.com/t/55237dd8421aa9704b0000cb
+https://stackoverflow.com/questions/8039552/byte-endian-convert-by-using-encoding-binary-in-go
+
+
+
+
+

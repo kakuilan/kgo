@@ -1,7 +1,6 @@
 package kgo
 
 import (
-	"bytes"
 	"encoding/binary"
 	"fmt"
 	"net"
@@ -265,28 +264,4 @@ func (kc *LkkConvert) Long2ip(properAddress uint32) string {
 	binary.BigEndian.PutUint32(ipByte, properAddress)
 	ip := net.IP(ipByte)
 	return ip.String()
-}
-
-// Pack 将数据打包成二进制字符串
-// 注意：data必须是固定大小的数据类型（uint8, int64...)，或者由固定大小的数据类型组成的复合类型（如[]byte）
-func (kc *LkkConvert) Pack(order binary.ByteOrder, data interface{}) (string, error) {
-	buf := new(bytes.Buffer)
-	err := binary.Write(buf, order, data)
-	if err != nil {
-		return "", err
-	}
-
-	return buf.String(), nil
-}
-
-// Unpack 将数据从二进制字符串解包
-func (kc *LkkConvert) Unpack(order binary.ByteOrder, data string) (interface{}, error) {
-	var result []byte
-	r := bytes.NewReader([]byte(data))
-	err := binary.Read(r, order, &result)
-	if err != nil {
-		return nil, err
-	}
-
-	return result, nil
 }
