@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"bytes"
+	"encoding/binary"
 	"errors"
 	"net"
 	"os"
@@ -209,4 +210,14 @@ func (ko *LkkOS) Setenv(varname, data string) error {
 // Getenv 获取一个环境变量的值
 func (ko *LkkOS) Getenv(varname string) string {
 	return os.Getenv(varname)
+}
+
+// GetEndian 获取系统字节序类型,小端返回binary.LittleEndian,大端返回binary.BigEndian
+func (ko *LkkOS) GetEndian() binary.ByteOrder {
+	return getEndian()
+}
+
+// IsLittleEndian 系统字节序类型是否小端存储
+func (ko *LkkOS) IsLittleEndian() bool {
+	return isLittleEndian()
 }

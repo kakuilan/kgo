@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"fmt"
 	"net"
 	"testing"
 )
@@ -287,5 +288,38 @@ func BenchmarkGetenv(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KOS.Getenv("HELLO")
+	}
+}
+
+func TestGetEndian_IsLittleEndian(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	endi := KOS.GetEndian()
+	isLit := KOS.IsLittleEndian()
+
+	if fmt.Sprintf("%v", endi) == "" {
+		t.Error("GetEndian fail")
+		return
+	} else if isLit && fmt.Sprintf("%v", endi) != "LittleEndian" {
+		t.Error("IsLittleEndian fail")
+		return
+	}
+}
+
+func BenchmarkGetEndian(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetEndian()
+	}
+}
+
+func BenchmarkIsLittleEndian(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.IsLittleEndian()
 	}
 }
