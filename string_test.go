@@ -688,6 +688,7 @@ func TestVersionCompare(t *testing.T) {
 	KStr.VersionCompare("1.2.3-alpha", "1.2.3alph.num", "=")
 	KStr.VersionCompare("1.2.3alph.123", "1.2.3-alpha", "=")
 	KStr.VersionCompare("1.2.3alph.sum", "1.2.3-alpha", "=")
+	KStr.VersionCompare("1.2.3alph.sum", "1.2.3-alpha.", "=")
 }
 
 func TestVersionComparePanic(t *testing.T) {
