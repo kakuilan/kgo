@@ -607,12 +607,7 @@ func (kf *LkkFile) Basename(path string) string {
 
 // Filemtime 取得文件修改时间
 func (kf *LkkFile) Filemtime(filename string) (int64, error) {
-	fd, err := os.Open(filename)
-	if err != nil {
-		return 0, err
-	}
-	defer fd.Close()
-	fileinfo, err := fd.Stat()
+	fileinfo, err := os.Stat(filename)
 	if err != nil {
 		return 0, err
 	}
