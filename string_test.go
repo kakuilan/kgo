@@ -682,6 +682,12 @@ func TestVersionCompare(t *testing.T) {
 		t.Error("VersionCompare fail")
 		return
 	}
+
+	KStr.VersionCompare("dev11.-1200", "dev11.-1200", "=")
+	KStr.VersionCompare("1.2.3-alpha", "1.2.3alph.123", "=")
+	KStr.VersionCompare("1.2.3-alpha", "1.2.3alph.num", "=")
+	KStr.VersionCompare("1.2.3alph.123", "1.2.3-alpha", "=")
+	KStr.VersionCompare("1.2.3alph.sum", "1.2.3-alpha", "=")
 }
 
 func TestVersionComparePanic(t *testing.T) {
