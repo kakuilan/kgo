@@ -486,9 +486,6 @@ func (ks *LkkString) VersionCompare(version1, version2, operator string) bool {
 	canonicalize = func(version string) string {
 		ver := []byte(version)
 		l := len(ver)
-		if l == 0 {
-			return ""
-		}
 		var buf = make([]byte, l*2)
 		j := 0
 		for i, v := range ver {
