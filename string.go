@@ -434,6 +434,10 @@ func (ks *LkkString) VersionCompare(version1, version2, operator string) bool {
 				p2, ver2 = ver2[:n2], ver2[n2+1:]
 			}
 
+			if p1 == "" || p2 == "" {
+				break
+			}
+
 			if (p1[0] >= '0' && p1[0] <= '9') && (p2[0] >= '0' && p2[0] <= '9') { // all is digit
 				l1, _ := strconv.Atoi(p1)
 				l2, _ := strconv.Atoi(p2)
@@ -462,18 +466,14 @@ func (ks *LkkString) VersionCompare(version1, version2, operator string) bool {
 		if compare == 0 {
 			if ver1 != "" {
 				if ver1[0] >= '0' && ver1[0] <= '9' {
-					println("cpp-1111")
 					compare = 1
 				} else {
-					println("cpp-2222")
 					compare = vcompare(ver1, "#N#")
 				}
 			} else if ver2 != "" {
 				if ver2[0] >= '0' && ver2[0] <= '9' {
-					println("cpp-33333")
 					compare = -1
 				} else {
-					println("cpp-4444")
 					compare = vcompare("#N#", ver2)
 				}
 			}
@@ -526,7 +526,7 @@ func (ks *LkkString) VersionCompare(version1, version2, operator string) bool {
 		return string(buf[:j])
 	}
 
-	// compare special version forms
+	// compare special version forms 特殊版本号
 	special = func(form1, form2 string) int {
 		found1, found2, len1, len2 := -1, -1, len(form1), len(form2)
 		// (Any string not found) < dev < alpha = a < beta = b < RC = rc < # < pl = p
