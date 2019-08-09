@@ -39,6 +39,11 @@ func (ko *LkkOS) Pwd() string {
 	return filepath.Dir(pwd)
 }
 
+// Chdir 改变/进入新的工作目录
+func (ko *LkkOS) Chdir(dir string) error {
+	return os.Chdir(dir)
+}
+
 // HomeDir 获取当前用户的主目录(仅支持Unix-like system)
 func (ko *LkkOS) HomeDir() (string, error) {
 	usr, err := user.Current()
