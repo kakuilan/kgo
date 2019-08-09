@@ -682,7 +682,6 @@ func BenchmarkBasename(b *testing.B) {
 func TestFilemtime(t *testing.T) {
 	path := "./testdata/diglett.png"
 	res, err := KFile.Filemtime(path)
-	println(res)
 	if err != nil || res == 0 {
 		t.Error("Filemtime fail")
 		return

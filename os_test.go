@@ -343,3 +343,44 @@ func BenchmarkExec(b *testing.B) {
 		_, _, _ = KOS.Exec(cmd)
 	}
 }
+
+func TestSystem(t *testing.T) {
+	cmd := " ls -a -h"
+	ret, _, _ := KOS.System(cmd)
+	if ret == 1 {
+		t.Error("System fail")
+		return
+	}
+
+	cmd = "123"
+	_, _, _ = KOS.System(cmd)
+
+	cmd = " ls -a\"\" -h 'hehe'"
+	_, _, _ = KOS.System(cmd)
+
+	cmd = "ls -a /root/"
+	_, _, _ = KOS.System(cmd)
+
+	filename := ""
+	for i := 0; i < 100000; i++ {
+		filename = fmt.Sprintf("./testdata/empty/zero_%d", i)
+		KFile.Touch(filename, 0)
+	}
+
+	cmd = "ls -a -h ./testdata/empty"
+	_, _, _ = KOS.System(cmd)
+	_, _, _ = KOS.System(cmd)
+	_, _, _ = KOS.System(cmd)
+
+	cmd = "touch /root/hello"
+	_, _, _ = KOS.System(cmd)
+	_ = KFile.DelDir("./testdata/empty", false)
+}
+
+func BenchmarkSystem(b *testing.B) {
+	b.ResetTimer()
+	cmd := " ls -a -h"
+	for i := 0; i < b.N; i++ {
+		_, _, _ = KOS.System(cmd)
+	}
+}
