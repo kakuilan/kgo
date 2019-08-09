@@ -323,3 +323,23 @@ func BenchmarkIsLittleEndian(b *testing.B) {
 		KOS.IsLittleEndian()
 	}
 }
+
+func TestExec(t *testing.T) {
+	cmd := " ls -a -h"
+	ret, _, _ := KOS.Exec(cmd)
+	if ret == 1 {
+		t.Error("Exec fail")
+		return
+	}
+
+	cmd = " ls -a\"\" -h 'hehe'"
+	_, _, _ = KOS.Exec(cmd)
+}
+
+func BenchmarkExec(b *testing.B) {
+	b.ResetTimer()
+	cmd := " ls -a -h"
+	for i := 0; i < b.N; i++ {
+		_, _, _ = KOS.Exec(cmd)
+	}
+}
