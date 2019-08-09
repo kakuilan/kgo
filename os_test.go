@@ -66,6 +66,30 @@ func BenchmarkPwd(b *testing.B) {
 	}
 }
 
+func TestChdir(t *testing.T) {
+	err := KOS.Chdir("./testdata")
+	if err != nil {
+		println(err.Error())
+		t.Error("Chdir fail")
+		return
+	}
+
+	err = KOS.Chdir("../")
+	if err != nil {
+		println(err.Error())
+		t.Error("Chdir fail")
+		return
+	}
+}
+
+func BenchmarkChdir(b *testing.B) {
+	b.ResetTimer()
+	dir := KOS.Pwd()
+	for i := 0; i < b.N; i++ {
+		_ = KOS.Chdir(dir)
+	}
+}
+
 func TestHomeDir(t *testing.T) {
 	_, err := KOS.HomeDir()
 	if err != nil {
