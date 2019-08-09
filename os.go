@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
+	"fmt"
+	"io"
 	"net"
 	"os"
 	"os/exec"
@@ -228,6 +230,7 @@ func (ko *LkkOS) IsLittleEndian() bool {
 // "ls -a"
 // "/bin/bash -c \"ls -a\""
 func (ko *LkkOS) Exec(command string) (retInt int, outStr, errStr []byte) {
+	// split command
 	q := rune(0)
 	parts := strings.FieldsFunc(command, func(r rune) bool {
 		switch {
@@ -266,5 +269,82 @@ func (ko *LkkOS) Exec(command string) (retInt int, outStr, errStr []byte) {
 		outStr, errStr = stdout.Bytes(), stderr.Bytes()
 	}
 
+	return
+}
+
+// System 与Exec相同,但会同时打印标准输出和标准错误
+func (ko *LkkOS) System(command string) (retInt int, outStr, errStr []byte) {
+	// split command
+	q := rune(0)
+	parts := strings.FieldsFunc(command, func(r rune) bool {
+		switch {
+		case r == q:
+			q = rune(0)
+			return false
+		case q != rune(0):
+			return false
+		case unicode.In(r, unicode.Quotation_Mark):
+			q = r
+			return false
+		default:
+			return unicode.IsSpace(r)
+		}
+	})
+
+	// remove the " and ' on both sides
+	for i, v := range parts {
+		f, l := v[0], len(v)
+		if l >= 2 && (f == '"' || f == '\'') {
+			parts[i] = v[1 : l-1]
+		}
+	}
+
+	var stdout, stderr bytes.Buffer
+	var err, err1, err2, err3 error
+
+	cmd := exec.Command(parts[0], parts[1:]...)
+	stdoutIn, _ := cmd.StdoutPipe()
+	stderrIn, _ := cmd.StderrPipe()
+	outWr := io.MultiWriter(os.Stdout, &stdout)
+	errWr := io.MultiWriter(os.Stderr, &stderr)
+
+	err = cmd.Start()
+	if err != nil {
+		retInt = 1 //失败
+		stderr.WriteString(err.Error())
+		errStr = stderr.Bytes()
+		fmt.Printf("%s\n", errStr)
+		return
+	}
+
+	go func() {
+		_, err1 = io.Copy(outWr, stdoutIn)
+	}()
+	go func() {
+		_, err2 = io.Copy(errWr, stderrIn)
+	}()
+
+	err3 = cmd.Wait()
+	if err1 != nil || err2 != nil || err3 != nil {
+		if err1 != nil {
+			stderr.WriteString(err1.Error())
+			errStr = stderr.Bytes()
+			fmt.Println(2222, err1)
+		}
+		if err2 != nil {
+			stderr.WriteString(err2.Error())
+			errStr = stderr.Bytes()
+			fmt.Println(3333, err2)
+		}
+		if err3 != nil {
+			stderr.WriteString(err3.Error())
+			errStr = stderr.Bytes()
+			fmt.Println(4444, err3)
+		}
+		retInt = 1 //失败
+	} else {
+		retInt = 0 //成功
+		outStr, errStr = stdout.Bytes(), stderr.Bytes()
+	}
 	return
 }
