@@ -8,6 +8,8 @@ import (
 	"encoding/hex"
 	"fmt"
 	"reflect"
+	"regexp"
+	"strconv"
 	"unsafe"
 )
 
@@ -111,4 +113,58 @@ func isLittleEndian() bool {
 	// 小端: 04 (03 02 01)
 	// 大端: 01 (02 03 04)
 	return (b == 0x04)
+}
+
+// isInt 变量是否整型数值
+func isInt(val interface{}) bool {
+	switch val.(type) {
+	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
+		return true
+	case string:
+		str := val.(string)
+		if str == "" {
+			return false
+		}
+		_, err := strconv.Atoi(str)
+		return err == nil
+	}
+
+	return false
+}
+
+// isFloat 变量是否浮点数值
+func isFloat(val interface{}) bool {
+	switch val.(type) {
+	case float32, float64:
+		return true
+	case string:
+		str := val.(string)
+		if str == "" {
+			return false
+		}
+		if ok, _ := regexp.MatchString(`^(-?\d+)(\.\d+)?`, str); ok {
+			return true
+		}
+	}
+
+	return false
+}
+
+// isNumeric 变量是否数值(不包含复数和科学计数法)
+func isNumeric(val interface{}) bool {
+	switch val.(type) {
+	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
+		return true
+	case float32, float64:
+		return true
+	case string:
+		str := val.(string)
+		if str == "" {
+			return false
+		}
+		_, err := strconv.ParseFloat(str, 64)
+		return err == nil
+	}
+
+	return false
 }

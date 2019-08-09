@@ -3,6 +3,7 @@ package kgo
 import (
 	"fmt"
 	"testing"
+	"time"
 )
 
 func TestTime(t *testing.T) {
@@ -72,9 +73,17 @@ func BenchmarkStrtotime(b *testing.B) {
 }
 
 func TestDate(t *testing.T) {
-	date1 := KTime.Date(1562811851, "2006-01-02 15:04:05")
-	date2 := KTime.Date(1562811851, "02/01/2006 15:04:05")
-	if date1 == "" || date2 == "" {
+	date1 := KTime.Date("Y-m-d H:i:s", 1562811851)
+	date2 := KTime.Date("y-n-j H:i:s", int64(1562811851))
+	date3 := KTime.Date("m/d/y h-i-s", time.Now())
+	if date1 == "" || date2 == "" || date3 == "" {
+		t.Error("Date fail")
+		return
+	}
+
+	date4 := KTime.Date("Y-m-d H:i:s")
+	date5 := KTime.Date("Y-m-d H:i:s", "hello")
+	if date4 == "" || date5 != "" {
 		t.Error("Date fail")
 		return
 	}
@@ -83,7 +92,7 @@ func TestDate(t *testing.T) {
 func BenchmarkDate(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KTime.Date(1562811851, "2006-01-02 15:04:05")
+		KTime.Date("Y-m-d H:i:s", 1562811851)
 	}
 }
 
