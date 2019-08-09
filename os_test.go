@@ -80,6 +80,7 @@ func TestChdir(t *testing.T) {
 		t.Error("Chdir fail")
 		return
 	}
+	_ = KOS.Chdir("")
 }
 
 func BenchmarkChdir(b *testing.B) {
