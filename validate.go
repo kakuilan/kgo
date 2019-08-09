@@ -5,7 +5,6 @@ import (
 	"math"
 	"reflect"
 	"regexp"
-	"strconv"
 	"unicode"
 )
 
@@ -34,56 +33,17 @@ func (ks *LkkString) IsLetter(s string) bool {
 
 // IsNumeric 变量是否数值(不包含复数和科学计数法)
 func (kc *LkkConvert) IsNumeric(val interface{}) bool {
-	switch val.(type) {
-	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
-		return true
-	case float32, float64:
-		return true
-	case string:
-		str := val.(string)
-		if str == "" {
-			return false
-		}
-		_, err := strconv.ParseFloat(str, 64)
-		return err == nil
-	}
-
-	return false
+	return isNumeric(val)
 }
 
-// IsNumeric 变量是否整型数值
+// IsInt 变量是否整型数值
 func (kc *LkkConvert) IsInt(val interface{}) bool {
-	switch val.(type) {
-	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
-		return true
-	case string:
-		str := val.(string)
-		if str == "" {
-			return false
-		}
-		_, err := strconv.Atoi(str)
-		return err == nil
-	}
-
-	return false
+	return isInt(val)
 }
 
 // IsFloat 变量是否浮点数值
 func (kc *LkkConvert) IsFloat(val interface{}) bool {
-	switch val.(type) {
-	case float32, float64:
-		return true
-	case string:
-		str := val.(string)
-		if str == "" {
-			return false
-		}
-		if ok, _ := regexp.MatchString(`^(-?\d+)(\.\d+)?`, str); ok {
-			return true
-		}
-	}
-
-	return false
+	return isFloat(val)
 }
 
 // HasChinese 字符串是否含有中文
