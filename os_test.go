@@ -403,7 +403,7 @@ func TestSystem(t *testing.T) {
 	_, _, _ = KOS.System(cmd)
 
 	filename := ""
-	for i := 0; i < 40000; i++ {
+	for i := 0; i < 30000; i++ {
 		filename = fmt.Sprintf("./testdata/empty/zero_%d", i)
 		KFile.Touch(filename, 0)
 	}
