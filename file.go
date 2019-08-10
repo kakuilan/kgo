@@ -172,17 +172,39 @@ func (kf *LkkFile) Mkdir(filename string, mode os.FileMode) error {
 	return os.MkdirAll(filename, mode)
 }
 
-// AbsPath 获取绝对路径
+// AbsPath 获取绝对路径,path可允许不存在
 func (kf *LkkFile) AbsPath(path string) string {
 	fullPath := ""
 	res, err := filepath.Abs(path)
 	if err != nil {
-		fullPath = filepath.Join("/", path)
+		fullPath = filepath.Join(`/`, path)
 	} else {
 		fullPath = res
 	}
 
 	return fullPath
+}
+
+// Realpath 返回规范化的真实绝对路径名,path必须存在
+func (kf *LkkFile) Realpath(path string) string {
+	_, err := os.Stat(path)
+	if err != nil {
+		println(1111)
+		return ""
+	}
+
+	if filepath.IsAbs(path) {
+		println(2222)
+		return path
+	}
+
+	wd, err := os.Getwd()
+	if err != nil {
+		println(3333)
+		return ""
+	}
+
+	return filepath.Clean(wd + `/` + path)
 }
 
 // Touch 快速创建指定大小的文件,size为字节
