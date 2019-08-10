@@ -67,6 +67,21 @@ func BenchmarkPwd(b *testing.B) {
 	}
 }
 
+func TestGetcwd(t *testing.T) {
+	res, err := KOS.Getcwd()
+	if err != nil || res == "" {
+		t.Error("Getcwd fail")
+		return
+	}
+}
+
+func BenchmarkGetcwd(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KOS.Getcwd()
+	}
+}
+
 func TestChdir(t *testing.T) {
 	err := KOS.Chdir("./testdata")
 	if err != nil {
