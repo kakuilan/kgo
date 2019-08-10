@@ -240,3 +240,18 @@ func BenchmarkExp(b *testing.B) {
 		KNum.Exp(2.34)
 	}
 }
+
+func TestExpm1(t *testing.T) {
+	res := KNum.Expm1(0.1)
+	if res < 0 {
+		t.Error("Exp fail")
+		return
+	}
+}
+
+func BenchmarkExpm1(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.Expm1(0.01)
+	}
+}

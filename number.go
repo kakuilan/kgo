@@ -129,3 +129,8 @@ func (kn *LkkNumber) Min(nums ...float64) float64 {
 func (kn *LkkNumber) Exp(x float64) float64 {
 	return math.Exp(x)
 }
+
+// Expm1 返回 exp(number) - 1，甚至当 number 的值接近零也能计算出准确结果
+func (kn *LkkNumber) Expm1(x float64) float64 {
+	return math.Exp(x) - 1
+}
