@@ -273,6 +273,24 @@ func BenchmarkIsImg(b *testing.B) {
 	}
 }
 
+func TestMkdir(t *testing.T) {
+	dir := "./testdata/hello/world"
+	err := KFile.Mkdir(dir, 0777)
+
+	if err != nil {
+		t.Error("Mkdir fail")
+		return
+	}
+}
+
+func BenchmarkMkdir(b *testing.B) {
+	b.ResetTimer()
+	dir := "./testdata/hello/world"
+	for i := 0; i < b.N; i++ {
+		_ = KFile.Mkdir(dir, 0777)
+	}
+}
+
 func TestAbsPath(t *testing.T) {
 	filename := "./testdata/diglett.png"
 	abspath := KFile.AbsPath(filename)

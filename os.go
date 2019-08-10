@@ -334,17 +334,17 @@ func (ko *LkkOS) System(command string) (retInt int, outStr, errStr []byte) {
 		if err1 != nil {
 			stderr.WriteString(err1.Error())
 			errStr = stderr.Bytes()
-			fmt.Println(2222, err1)
+			fmt.Println(err1)
 		}
 		if err2 != nil {
 			stderr.WriteString(err2.Error())
 			errStr = stderr.Bytes()
-			fmt.Println(3333, err2)
+			fmt.Println(err2)
 		}
 		if err3 != nil {
 			stderr.WriteString(err3.Error())
 			errStr = stderr.Bytes()
-			fmt.Println(4444, err3)
+			fmt.Println(err3)
 		}
 		retInt = 1 //失败
 	} else {

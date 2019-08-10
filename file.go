@@ -167,6 +167,11 @@ func (kf *LkkFile) IsImg(path string) bool {
 	}
 }
 
+// Mkdir 新建目录
+func (kf *LkkFile) Mkdir(filename string, mode os.FileMode) error {
+	return os.MkdirAll(filename, mode)
+}
+
 // AbsPath 获取绝对路径
 func (kf *LkkFile) AbsPath(path string) string {
 	fullPath := ""
