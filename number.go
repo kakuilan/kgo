@@ -124,3 +124,8 @@ func (kn *LkkNumber) Min(nums ...float64) float64 {
 	}
 	return min
 }
+
+// Exp 计算 e 的指数
+func (kn *LkkNumber) Exp(x float64) float64 {
+	return math.Exp(x)
+}
