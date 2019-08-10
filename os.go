@@ -33,8 +33,8 @@ func (ko *LkkOS) IsMac() bool {
 
 // Pwd 获取当前程序运行所在的路径,注意和Getwd有所不同
 func (ko *LkkOS) Pwd() string {
-	file, _ := exec.LookPath(os.Args[0])
-	pwd, _ := filepath.Abs(file)
+	dir, _ := exec.LookPath(os.Args[0])
+	pwd, _ := filepath.Abs(dir)
 
 	return filepath.Dir(pwd)
 }

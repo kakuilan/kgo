@@ -177,7 +177,7 @@ func (kf *LkkFile) AbsPath(path string) string {
 	fullPath := ""
 	res, err := filepath.Abs(path)
 	if err != nil {
-		fullPath = filepath.Join(`/`, path)
+		fullPath = filepath.Clean(filepath.Join(`/`, path))
 	} else {
 		fullPath = res
 	}
@@ -189,18 +189,15 @@ func (kf *LkkFile) AbsPath(path string) string {
 func (kf *LkkFile) Realpath(path string) string {
 	_, err := os.Stat(path)
 	if err != nil {
-		println(1111)
 		return ""
 	}
 
 	if filepath.IsAbs(path) {
-		println(2222)
 		return path
 	}
 
 	wd, err := os.Getwd()
 	if err != nil {
-		println(3333)
 		return ""
 	}
 
@@ -624,6 +621,11 @@ func (kf *LkkFile) Pathinfo(path string, options int) map[string]string {
 // Basename 返回路径中的文件名部分
 func (kf *LkkFile) Basename(path string) string {
 	return filepath.Base(path)
+}
+
+// Dirname 返回路径中的目录部分,注意空路径或无目录的返回"."
+func (kf *LkkFile) Dirname(path string) string {
+	return filepath.Dir(path)
 }
 
 // Filemtime 取得文件修改时间

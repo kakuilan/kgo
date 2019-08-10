@@ -705,6 +705,33 @@ func BenchmarkBasename(b *testing.B) {
 	}
 }
 
+func TestDirname(t *testing.T) {
+	path1 := "/home/arnie/amelia.jpg"
+	path2 := "/mnt/photos/"
+	path3 := "rabbit.jpg"
+	path4 := "/usr/local//go"
+	path5 := ""
+
+	res1 := KFile.Dirname(path1)
+	res2 := KFile.Dirname(path2)
+	res3 := KFile.Dirname(path3) //返回"."
+	res4 := KFile.Dirname(path4)
+	res5 := KFile.Dirname(path5) //返回"."
+
+	if res1 == "" || res2 == "" || res4 == "" || res3 != res5 || res5 != "." {
+		t.Error("Dirname fail")
+		return
+	}
+}
+
+func BenchmarkDirname(b *testing.B) {
+	b.ResetTimer()
+	path := "/home/arnie/amelia.jpg"
+	for i := 0; i < b.N; i++ {
+		KFile.Dirname(path)
+	}
+}
+
 func TestFilemtime(t *testing.T) {
 	path := "./testdata/diglett.png"
 	res, err := KFile.Filemtime(path)
