@@ -225,3 +225,18 @@ func BenchmarkMin(b *testing.B) {
 		KNum.Min(nums...)
 	}
 }
+
+func TestExp(t *testing.T) {
+	res := KNum.Exp(1.2)
+	if res < 1 {
+		t.Error("Exp fail")
+		return
+	}
+}
+
+func BenchmarkExp(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.Exp(2.34)
+	}
+}
