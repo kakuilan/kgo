@@ -39,6 +39,12 @@ func (ko *LkkOS) Pwd() string {
 	return filepath.Dir(pwd)
 }
 
+// Getcwd 取得当前工作目录
+func (ko *LkkOS) Getcwd() (string, error) {
+	dir, err := os.Getwd()
+	return dir, err
+}
+
 // Chdir 改变/进入新的工作目录
 func (ko *LkkOS) Chdir(dir string) error {
 	return os.Chdir(dir)

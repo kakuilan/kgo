@@ -310,7 +310,7 @@ func BenchmarkAbsPath(b *testing.B) {
 }
 
 func TestRealpath(t *testing.T) {
-	pwd, _ := KFile.Getcwd()
+	pwd, _ := KOS.Getcwd()
 	path1 := "testdata/diglett.png"
 	path2 := "./testdata/diglett.png"
 	path3 := pwd + `/` + path1
@@ -685,21 +685,6 @@ func BenchmarkPathinfo(b *testing.B) {
 	filename := "./testdata/diglett.png"
 	for i := 0; i < b.N; i++ {
 		KFile.Pathinfo(filename, -1)
-	}
-}
-
-func TestGetcwd(t *testing.T) {
-	res, err := KFile.Getcwd()
-	if err != nil || res == "" {
-		t.Error("Getcwd fail")
-		return
-	}
-}
-
-func BenchmarkGetcwd(b *testing.B) {
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		_, _ = KFile.Getcwd()
 	}
 }
 
