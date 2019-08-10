@@ -255,3 +255,18 @@ func BenchmarkExpm1(b *testing.B) {
 		KNum.Expm1(0.01)
 	}
 }
+
+func TestPow(t *testing.T) {
+	res := KNum.Pow(10, 2)
+	if int(res) != 100 {
+		t.Error("Pow fail")
+		return
+	}
+}
+
+func BenchmarkPow(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.Pow(10, 2)
+	}
+}
