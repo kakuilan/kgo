@@ -412,7 +412,6 @@ func TestSystem(t *testing.T) {
 	_, _, _ = KOS.System(cmd)
 	_, _, _ = KOS.System(cmd)
 	_, _, _ = KOS.System(cmd)
-	_, _, _ = KOS.System(cmd)
 
 	cmd = "touch /root/hello"
 	_, _, _ = KOS.System(cmd)
