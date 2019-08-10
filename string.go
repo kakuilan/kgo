@@ -209,36 +209,31 @@ func (ks *LkkString) StrShuffle(str string) string {
 	return string(s)
 }
 
-// Trim 去除字符串首尾处的空白字符（或者其他字符）
-func (ks *LkkString) Trim(str string, characterMask ...string) string {
+func getTrimMask(characterMask []string) string {
 	mask := ""
 	if len(characterMask) == 0 {
 		mask = " \\t\\n\\r\\0\\x0B　"
 	} else {
 		mask = characterMask[0]
 	}
+	return mask
+}
+
+// Trim 去除字符串首尾处的空白字符（或者其他字符）
+func (ks *LkkString) Trim(str string, characterMask ...string) string {
+	mask := getTrimMask(characterMask)
 	return strings.Trim(str, mask)
 }
 
 // Ltrim 删除字符串开头的空白字符（或其他字符）
 func (ks *LkkString) Ltrim(str string, characterMask ...string) string {
-	mask := ""
-	if len(characterMask) == 0 {
-		mask = " \\t\\n\\r\\0\\x0B　"
-	} else {
-		mask = characterMask[0]
-	}
+	mask := getTrimMask(characterMask)
 	return strings.TrimLeft(str, mask)
 }
 
 // Rtrim 删除字符串末端的空白字符（或者其他字符）
 func (ks *LkkString) Rtrim(str string, characterMask ...string) string {
-	mask := ""
-	if len(characterMask) == 0 {
-		mask = " \\t\\n\\r\\0\\x0B　"
-	} else {
-		mask = characterMask[0]
-	}
+	mask := getTrimMask(characterMask)
 	return strings.TrimRight(str, mask)
 }
 
