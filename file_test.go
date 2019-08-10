@@ -309,6 +309,29 @@ func BenchmarkAbsPath(b *testing.B) {
 	}
 }
 
+func TestRealpath(t *testing.T) {
+	pwd, _ := KFile.Getcwd()
+	path1 := "testdata/diglett.png"
+	path2 := "./testdata/diglett.png"
+	path3 := pwd + `/` + path1
+
+	res1 := KFile.Realpath("./hello/nothing")
+	res2 := KFile.Realpath(path3)
+	res3 := KFile.Realpath(path2)
+	if res1 != "" || res2 != res3 {
+		t.Error("Realpath fail")
+		return
+	}
+}
+
+func BenchmarkRealpath(b *testing.B) {
+	b.ResetTimer()
+	path := "testdata/diglett.png"
+	for i := 0; i < b.N; i++ {
+		KFile.Realpath(path)
+	}
+}
+
 func TestTouchRenameUnlink(t *testing.T) {
 	file1 := "./testdata/empty/zero"
 	file2 := "./testdata/empty/2m"
