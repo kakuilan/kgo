@@ -406,6 +406,12 @@ func TestCopyFile(t *testing.T) {
 		return
 	}
 
+	//拷贝大文件
+	src = "./testdata/2mfile"
+	des = "./testdata/2mfile_copy"
+	KFile.Touch(src, 2097152)
+	_, _ = KFile.CopyFile(src, des, FILE_COVER_ALLOW)
+
 	_, _ = KFile.CopyFile("abc", "abc", FILE_COVER_ALLOW)
 	_, _ = KFile.CopyFile("./hello", "", FILE_COVER_ALLOW)
 	_, _ = KFile.CopyFile(".", "", FILE_COVER_ALLOW)
