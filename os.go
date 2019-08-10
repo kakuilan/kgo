@@ -353,3 +353,13 @@ func (ko *LkkOS) System(command string) (retInt int, outStr, errStr []byte) {
 	}
 	return
 }
+
+// Chmod 改变文件模式
+func (ko *LkkOS) Chmod(filename string, mode os.FileMode) bool {
+	return os.Chmod(filename, mode) == nil
+}
+
+// Chown 改变文件的所有者
+func (ko *LkkOS) Chown(filename string, uid, gid int) bool {
+	return os.Chown(filename, uid, gid) == nil
+}

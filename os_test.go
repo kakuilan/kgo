@@ -3,6 +3,7 @@ package kgo
 import (
 	"fmt"
 	"net"
+	"os/user"
 	"testing"
 )
 
@@ -407,5 +408,40 @@ func BenchmarkSystem(b *testing.B) {
 	cmd := " ls -a -h"
 	for i := 0; i < b.N; i++ {
 		_, _, _ = KOS.System(cmd)
+	}
+}
+
+func TestChmodChown(t *testing.T) {
+	file := "./testdata"
+	res1 := KOS.Chmod(file, 0777)
+
+	usr, _ := user.Current()
+	uid := KConv.Str2Int(usr.Uid)
+	guid := KConv.Str2Int(usr.Gid)
+
+	res2 := KOS.Chown(file, uid, guid)
+
+	if !res1 || !res2 {
+		t.Error("Chmod fail")
+		return
+	}
+}
+
+func BenchmarkChmod(b *testing.B) {
+	b.ResetTimer()
+	file := "./testdata"
+	for i := 0; i < b.N; i++ {
+		KOS.Chmod(file, 0777)
+	}
+}
+
+func BenchmarkChown(b *testing.B) {
+	b.ResetTimer()
+	file := "./testdata"
+	usr, _ := user.Current()
+	uid := KConv.Str2Int(usr.Uid)
+	guid := KConv.Str2Int(usr.Gid)
+	for i := 0; i < b.N; i++ {
+		KOS.Chown(file, uid, guid)
 	}
 }
