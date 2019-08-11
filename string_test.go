@@ -192,6 +192,47 @@ func BenchmarkStripos(b *testing.B) {
 	}
 }
 
+func TestStrrpos(t *testing.T) {
+	str := "hello world!"
+	res1 := KStr.Strrpos(str, "world", 0)
+	res2 := KStr.Strrpos(str, "World", 0)
+	if res1 < 0 || res2 > 0 {
+		t.Error("Strrpos fail")
+		return
+	}
+	KStr.Strrpos("", "world", 0)
+	KStr.Strrpos(str, "world", -1)
+}
+
+func BenchmarkStrrpos(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!"
+	for i := 0; i < b.N; i++ {
+		KStr.Strrpos(str, "world", 0)
+	}
+}
+
+func TestStrripos(t *testing.T) {
+	str := "hello world!"
+	res1 := KStr.Strripos(str, "world", 0)
+	res2 := KStr.Strripos(str, "World", 0)
+	if res1 < 0 || res2 < 0 {
+		t.Error("Strripos fail")
+		return
+	}
+	KStr.Strripos("", "world", 0)
+	KStr.Strripos(str, "world", -1)
+	KStr.Strripos(str, "haha", 0)
+}
+
+func BenchmarkStrripos(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!"
+	for i := 0; i < b.N; i++ {
+		KStr.Strripos(str, "World", 0)
+	}
+}
+
 func TestUcfirst(t *testing.T) {
 	str := "hello world!"
 	res := KStr.Ucfirst(str)
