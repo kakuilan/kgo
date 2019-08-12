@@ -291,6 +291,28 @@ func BenchmarkSubstr(b *testing.B) {
 	}
 }
 
+func TestMbSubstr(t *testing.T) {
+	str := "hello world,你好世界welcome to golang!"
+	res1 := KStr.MbSubstr(str, 6, 10)
+	res2 := KStr.MbSubstr(str, 0, -5)
+	res3 := KStr.MbSubstr(str, 6, -1)
+	res4 := KStr.MbSubstr(str, 6, 0)
+
+	if KStr.MbStrlen(res1) != 10 || res2 != str || !strings.Contains(str, res3) || res4 != "" {
+		t.Error("MbSubstr fail")
+		return
+	}
+	KStr.MbSubstr(str, 10, 50)
+}
+
+func BenchmarkMbSubstr(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world你好世界!"
+	for i := 0; i < b.N; i++ {
+		KStr.MbSubstr(str, 6, 10)
+	}
+}
+
 func TestStrrev(t *testing.T) {
 	str := "hello world!"
 	res1 := KStr.Strrev(str)
