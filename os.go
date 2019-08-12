@@ -369,3 +369,8 @@ func (ko *LkkOS) Chmod(filename string, mode os.FileMode) bool {
 func (ko *LkkOS) Chown(filename string, uid, gid int) bool {
 	return os.Chown(filename, uid, gid) == nil
 }
+
+// GetTempDir 返回用于临时文件的目录
+func (ko *LkkOS) GetTempDir() string {
+	return os.TempDir()
+}

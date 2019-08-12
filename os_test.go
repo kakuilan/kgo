@@ -460,3 +460,18 @@ func BenchmarkChown(b *testing.B) {
 		KOS.Chown(file, uid, guid)
 	}
 }
+
+func TestGetTempDir(t *testing.T) {
+	res := KOS.GetTempDir()
+	if res == "" {
+		t.Error("GetTempDir fail")
+		return
+	}
+}
+
+func BenchmarkGetTempDir(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetTempDir()
+	}
+}
