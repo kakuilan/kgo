@@ -217,6 +217,11 @@ func (ks *LkkString) MbSubstr(str string, start uint, length int) string {
 	return string(runes[start:end])
 }
 
+// SubstrCount 计算字符串出现的次数
+func (ks *LkkString) SubstrCount(str, substr string) int {
+	return strings.Count(str, substr)
+}
+
 // Strrev 反转字符串
 func (ks *LkkString) Strrev(str string) string {
 	runes := []rune(str)
