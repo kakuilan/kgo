@@ -187,11 +187,34 @@ func (ks *LkkString) Substr(str string, start uint, length int) string {
 	case length == 0:
 		return ""
 	}
+	num := len(str)
 	end := int(start) + length
-	if end > len(str) {
-		end = len(str)
+	if end > num {
+		end = num
 	}
 	return str[start:end]
+}
+
+// MbSubstr 返回(宽字符)字符串的子串
+func (ks *LkkString) MbSubstr(str string, start uint, length int) string {
+	if start < 0 || length < -1 {
+		return str
+	}
+
+	runes := []rune(str)
+	switch {
+	case length == -1:
+		return string(runes[start:])
+	case length == 0:
+		return ""
+	}
+
+	num := len(runes)
+	end := int(start) + length
+	if end > num {
+		end = num
+	}
+	return string(runes[start:end])
 }
 
 // Strrev 反转字符串
