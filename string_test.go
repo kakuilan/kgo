@@ -313,6 +313,23 @@ func BenchmarkMbSubstr(b *testing.B) {
 	}
 }
 
+func TestSubstrCount(t *testing.T) {
+	str := "hello world!welcome to golang,go go go!"
+	res := KStr.SubstrCount(str, "go")
+	if res != 4 {
+		t.Error("SubstrCount fail")
+		return
+	}
+}
+
+func BenchmarkSubstrCount(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!welcome to golang,go go go!"
+	for i := 0; i < b.N; i++ {
+		KStr.SubstrCount(str, "go")
+	}
+}
+
 func TestStrrev(t *testing.T) {
 	str := "hello world!"
 	res1 := KStr.Strrev(str)
