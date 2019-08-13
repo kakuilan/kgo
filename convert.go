@@ -265,3 +265,8 @@ func (kc *LkkConvert) Long2ip(properAddress uint32) string {
 	ip := net.IP(ipByte)
 	return ip.String()
 }
+
+// Gettype 获取变量类型
+func (kc *LkkConvert) Gettype(v interface{}) string {
+	return fmt.Sprintf("%T", v)
+}
