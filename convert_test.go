@@ -594,3 +594,20 @@ func BenchmarkLong2ip(b *testing.B) {
 		KConv.Long2ip(2130706433)
 	}
 }
+
+func TestGettype(t *testing.T) {
+	res1 := KConv.Gettype(1)
+	res2 := KConv.Gettype("hello")
+	res3 := KConv.Gettype(false)
+	if res1 != "int" || res2 != "string" || res3 != "bool" {
+		t.Error("Gettype fail")
+		return
+	}
+}
+
+func BenchmarkGettype(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Gettype("hello")
+	}
+}
