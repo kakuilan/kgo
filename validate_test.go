@@ -267,3 +267,20 @@ func BenchmarkIsEmpty(b *testing.B) {
 		KConv.IsEmpty("")
 	}
 }
+
+func TestIsBool(t *testing.T) {
+	res1 := KConv.IsBool(1)
+	res2 := KConv.IsBool("hello")
+	res3 := KConv.IsBool(false)
+	if res1 || res2 || !res3 {
+		t.Error("IsBool fail")
+		return
+	}
+}
+
+func BenchmarkIsBool(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsBool("hello")
+	}
+}

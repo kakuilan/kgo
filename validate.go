@@ -122,3 +122,8 @@ func (kc *LkkConvert) IsEmpty(val interface{}) bool {
 
 	return reflect.DeepEqual(val, reflect.Zero(v.Type()).Interface())
 }
+
+// IsBool 是否布尔值
+func (kc *LkkConvert) IsBool(v interface{}) bool {
+	return v == true || v == false
+}
