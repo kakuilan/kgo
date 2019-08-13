@@ -270,3 +270,8 @@ func (kc *LkkConvert) Long2ip(properAddress uint32) string {
 func (kc *LkkConvert) Gettype(v interface{}) string {
 	return fmt.Sprintf("%T", v)
 }
+
+// ToStr 将变量转换为字符串
+func (kc *LkkConvert) ToStr(val interface{}) string {
+	return fmt.Sprintf("%v", val)
+}

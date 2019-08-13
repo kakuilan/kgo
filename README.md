@@ -42,7 +42,7 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://www.php2golang.com/
 - https://github.com/b3log/gulu -x
 - https://github.com/syyongx/php2go
-- https://github.com/openset/php2go
+- https://github.com/openset/php2go -x
 - https://github.com/yioio/fun
 - https://github.com/henrylee2cn/goutil
 - https://github.com/nutzam/zgo

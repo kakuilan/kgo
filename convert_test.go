@@ -611,3 +611,20 @@ func BenchmarkGettype(b *testing.B) {
 		KConv.Gettype("hello")
 	}
 }
+
+func TestToStr(t *testing.T) {
+	res1 := KConv.ToStr(1)
+	res2 := KConv.ToStr(false)
+	res3 := KConv.ToStr(UINT64_MAX)
+	if res1 != "1" || res2 != "false" || res3 != "18446744073709551615" {
+		t.Error("ToStr fail")
+		return
+	}
+}
+
+func BenchmarkToStr(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.ToStr(UINT64_MAX)
+	}
+}
