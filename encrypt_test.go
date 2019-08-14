@@ -139,6 +139,7 @@ func TestPasswordHashVerify(t *testing.T) {
 	_, _ = KEncr.PasswordHash(pwd, 1)
 	//慎用20以上,太耗时
 	_, _ = KEncr.PasswordHash(pwd, 15)
+	_, _ = KEncr.PasswordHash(pwd, 33)
 }
 
 func BenchmarkPasswordHash(b *testing.B) {

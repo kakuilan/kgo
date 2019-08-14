@@ -169,7 +169,7 @@ func (ke *LkkEncrypt) PasswordHash(password []byte, costs ...int) ([]byte, error
 		if cost < 4 {
 			cost = 4
 		} else if cost > 31 {
-			cost = 31
+			cost = 15
 		}
 	}
 
