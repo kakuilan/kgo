@@ -1,9 +1,15 @@
 package kgo
 
 import (
+	"crypto/hmac"
+	"crypto/sha1"
+	"crypto/sha256"
+	"crypto/sha512"
 	"encoding/base64"
+	"encoding/hex"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
+	"hash"
 	"strconv"
 	"strings"
 	"time"
@@ -244,4 +250,31 @@ func (ke *LkkEncrypt) EasyDecrypt(val, key string) string {
 	}
 
 	return string(str)
+}
+
+// HmacShaX HmacSHA-x加密,x为1/256/512
+func (ke *LkkEncrypt) HmacShaX(data, secret []byte, x uint16) string {
+	// Create a new HMAC by defining the hash type and the key (as byte array)
+	var h hash.Hash
+	switch x {
+	case 1:
+		h = hmac.New(sha1.New, secret)
+		break
+	case 256:
+		h = hmac.New(sha256.New, secret)
+		break
+	case 512:
+		h = hmac.New(sha512.New, secret)
+		break
+	default:
+		panic("[HmacShaX] x must be in [1, 256, 512]")
+	}
+
+	// Write Data to it
+	h.Write(data)
+
+	// Get result and encode as hexadecimal string
+	sha := hex.EncodeToString(h.Sum(nil))
+
+	return sha
 }

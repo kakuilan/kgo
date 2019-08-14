@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 )
@@ -201,5 +202,38 @@ func BenchmarkEasyDecrypt(b *testing.B) {
 	str := "e10azZaczdODqqimpcY"
 	for i := 0; i < b.N; i++ {
 		KEncr.EasyDecrypt(str, key)
+	}
+}
+
+func TestHmacShaX(t *testing.T) {
+	str := []byte("hello world")
+	key := []byte("123456")
+	res1 := KEncr.HmacShaX(str, key, 1)
+	res2 := KEncr.HmacShaX(str, key, 256)
+	res3 := KEncr.HmacShaX(str, key, 512)
+	if res1 == "" || res2 == "" || res3 == "" {
+		t.Error("HmacShaX fail")
+		return
+	}
+}
+
+func TestHmacShaXPanic(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	str := []byte("hello world")
+	key := []byte("123456")
+	KEncr.HmacShaX(str, key, 4)
+}
+
+func BenchmarkHmacShaX(b *testing.B) {
+	b.ResetTimer()
+	str := []byte("hello world")
+	key := []byte("123456")
+	for i := 0; i < b.N; i++ {
+		KEncr.HmacShaX(str, key, 256)
 	}
 }
