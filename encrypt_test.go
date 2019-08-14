@@ -186,6 +186,7 @@ func TestEasyEncryptDecrypt(t *testing.T) {
 	KEncr.EasyEncrypt("", "")
 	KEncr.EasyDecrypt(enc, "1qwer")
 	KEncr.EasyDecrypt("123", key)
+	KEncr.EasyDecrypt("1234#iu3498r", key)
 }
 
 func BenchmarkEasyEncrypt(b *testing.B) {
