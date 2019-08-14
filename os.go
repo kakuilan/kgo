@@ -58,25 +58,11 @@ func (ko *LkkOS) HomeDir() (string, error) {
 	}
 
 	// Unix-like system, so just assume Unix
-	// First prefer the HOME environmental variable
 	if home := os.Getenv("HOME"); home != "" {
 		return home, nil
 	}
 
-	// If that fails, try the shell
-	var stdout bytes.Buffer
-	cmd := exec.Command("sh", "-c", "eval echo ~$USER")
-	cmd.Stdout = &stdout
-	if err := cmd.Run(); err != nil {
-		return "", err
-	}
-
-	result := strings.TrimSpace(stdout.String())
-	if result == "" {
-		return "", errors.New("blank output when reading home directory")
-	}
-
-	return result, nil
+	return "", err
 }
 
 // LocalIP 获取本机第一个NIC's IP
