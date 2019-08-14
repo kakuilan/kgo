@@ -169,7 +169,7 @@ func BenchmarkPasswordVerify(b *testing.B) {
 
 func TestEasyEncryptDecrypt(t *testing.T) {
 	key := "123456"
-	str := "hello world你好"
+	str := "hello world你好!hello world你好!hello world你好!hello world你好!"
 	enc := KEncr.EasyEncrypt(str, key)
 	if enc == "" {
 		t.Error("EasyEncrypt fail")
