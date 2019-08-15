@@ -454,8 +454,8 @@ func (ka *LkkArray) Implode(glue string, arr interface{}) string {
 	}
 }
 
-// ArrayDiff 计算数组/切片/字典的差集,返回在 arr1 中但是不在 arr2 里的值;filterNil是否过滤空元素(nil,''),true时排除空元素,false时保留空元素.
-func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, filterNil bool) []interface{} {
+// ArrayDiff 计算数组/切片/字典的差集,返回在 arr1 中但是不在 arr2 里,且非空元素(nil,'')的值.
+func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}) []interface{} {
 	valA := reflect.ValueOf(arr1)
 	valB := reflect.ValueOf(arr2)
 	var diffArr []interface{}
@@ -467,7 +467,7 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, filterNil bool) []interfac
 		if valA.Len() == 0 {
 			return nil
 		} else if valB.Len() == 0 {
-			return arrayValues(arr1, filterNil)
+			return arrayValues(arr1, true)
 		}
 
 		for i := 0; i < valA.Len(); i++ {
@@ -480,7 +480,7 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, filterNil bool) []interfac
 				}
 			}
 
-			if notInB && (!filterNil || (filterNil && item != nil && fmt.Sprintf("%v", item) != "")) {
+			if notInB {
 				diffArr = append(diffArr, item)
 			}
 		}
@@ -489,7 +489,7 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, filterNil bool) []interfac
 		if valA.Len() == 0 {
 			return nil
 		} else if len(valB.MapKeys()) == 0 {
-			return arrayValues(arr1, filterNil)
+			return arrayValues(arr1, true)
 		}
 
 		for i := 0; i < valA.Len(); i++ {
@@ -502,7 +502,7 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, filterNil bool) []interfac
 				}
 			}
 
-			if notInB && (!filterNil || (filterNil && item != nil && fmt.Sprintf("%v", item) != "")) {
+			if notInB {
 				diffArr = append(diffArr, item)
 			}
 		}
@@ -511,7 +511,7 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, filterNil bool) []interfac
 		if len(valA.MapKeys()) == 0 {
 			return nil
 		} else if valB.Len() == 0 {
-			return arrayValues(arr1, filterNil)
+			return arrayValues(arr1, true)
 		}
 
 		for _, k := range valA.MapKeys() {
@@ -524,7 +524,7 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, filterNil bool) []interfac
 				}
 			}
 
-			if notInB && (!filterNil || (filterNil && item != nil && fmt.Sprintf("%v", item) != "")) {
+			if notInB {
 				diffArr = append(diffArr, item)
 			}
 		}
@@ -533,7 +533,7 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, filterNil bool) []interfac
 		if len(valA.MapKeys()) == 0 {
 			return nil
 		} else if len(valB.MapKeys()) == 0 {
-			return arrayValues(arr1, filterNil)
+			return arrayValues(arr1, true)
 		}
 
 		for _, k := range valA.MapKeys() {
@@ -546,7 +546,7 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, filterNil bool) []interfac
 				}
 			}
 
-			if notInB && (!filterNil || (filterNil && item != nil && fmt.Sprintf("%v", item) != "")) {
+			if notInB {
 				diffArr = append(diffArr, item)
 			}
 		}
