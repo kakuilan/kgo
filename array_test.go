@@ -690,3 +690,67 @@ func BenchmarkImplode(b *testing.B) {
 		KArr.Implode(",", sli)
 	}
 }
+
+func TestArrayDiff(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	ar1 := []string{"aa", "bb", "cc", "dd", ""}
+	ar2 := []string{"bb", "cc", "ff", "gg", ""}
+	mp1 := map[string]string{"a": "1", "b": "2", "c": "3", "d": "4", "e": ""}
+	mp2 := map[string]string{"a": "0", "b": "2", "c": "4", "g": "4", "h": ""}
+
+	var ar3 []string
+	var mp3 = make(map[string]string)
+
+	res1 := KArr.ArrayDiff(ar1, ar2)
+	res2 := KArr.ArrayDiff(mp1, mp2)
+	if len(res1) != len(res2) {
+		t.Error("ArrayDiff fail")
+		return
+	}
+
+	res5 := KArr.ArrayDiff(ar3, ar1)
+	res6 := KArr.ArrayDiff(ar1, ar3)
+	if len(res5) != 0 || len(res6) != 4 {
+		t.Error("ArrayDiff fail")
+		return
+	}
+
+	res7 := KArr.ArrayDiff(mp3, mp1)
+	res8 := KArr.ArrayDiff(mp1, mp3)
+	if len(res7) != 0 || len(res8) != 4 {
+		t.Error("ArrayDiff fail")
+		return
+	}
+
+	res9 := KArr.ArrayDiff(ar3, mp1)
+	res10 := KArr.ArrayDiff(ar1, mp3)
+	res11 := KArr.ArrayDiff(ar1, mp1)
+	if len(res9) != 0 || len(res10) != len(res11) {
+		t.Error("ArrayDiff fail")
+		return
+	}
+
+	res12 := KArr.ArrayDiff(mp3, ar1)
+	res13 := KArr.ArrayDiff(mp1, ar3)
+	res14 := KArr.ArrayDiff(mp1, ar1)
+	if len(res12) != 0 || len(res13) != len(res14) {
+		t.Error("ArrayDiff fail")
+		return
+	}
+
+	KArr.ArrayDiff("hello", ar1)
+}
+
+func BenchmarkArrayDiff(b *testing.B) {
+	b.ResetTimer()
+	ar1 := []string{"aa", "bb", "cc", "dd", ""}
+	ar2 := []string{"bb", "cc", "ff", "gg", ""}
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayDiff(ar1, ar2)
+	}
+}
