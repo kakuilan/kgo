@@ -38,7 +38,7 @@ func (ka *LkkArray) ArrayFill(value interface{}, num int) []interface{} {
 		return nil
 	}
 
-	var res []interface{} = make([]interface{}, num)
+	var res = make([]interface{}, num)
 	for i := 0; i < num; i++ {
 		res[i] = value
 	}
@@ -90,24 +90,9 @@ func (ka *LkkArray) ArrayKeys(arr interface{}) []interface{} {
 	return res
 }
 
-// ArrayValues 返回数组中所有的值
-func (ka *LkkArray) ArrayValues(arr interface{}) []interface{} {
-	val := reflect.ValueOf(arr)
-	res := make([]interface{}, val.Len())
-	switch val.Kind() {
-	case reflect.Array, reflect.Slice:
-		for i := 0; i < val.Len(); i++ {
-			res[i] = val.Index(i).Interface()
-		}
-	case reflect.Map:
-		for i, k := range val.MapKeys() {
-			res[i] = val.MapIndex(k).Interface()
-		}
-	default:
-		panic("[ArrayValues]arr type must be array, slice or map")
-	}
-
-	return res
+// ArrayValues 返回数组/切片/字典中所有的值;filterNil是否过滤空元素(nil,''),true时排除空元素,false时保留空元素.
+func (ka *LkkArray) ArrayValues(arr interface{}, filterNil bool) []interface{} {
+	return arrayValues(arr, filterNil)
 }
 
 // SliceMerge 合并一个或多个数组/切片;filterNil是否过滤空元素(nil,''),true时排除空元素,false时保留空元素;ss是元素为数组/切片的切片
@@ -467,4 +452,107 @@ func (ka *LkkArray) Implode(glue string, arr interface{}) string {
 	default:
 		panic("[Implode]arr type must be array, slice")
 	}
+}
+
+// ArrayDiff 计算数组/切片/字典的差集,返回在 arr1 中但是不在 arr2 里的值;filterNil是否过滤空元素(nil,''),true时排除空元素,false时保留空元素.
+func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, filterNil bool) []interface{} {
+	valA := reflect.ValueOf(arr1)
+	valB := reflect.ValueOf(arr2)
+	var diffArr []interface{}
+	var item interface{}
+	var notInB bool
+
+	if (valA.Kind() == reflect.Array || valA.Kind() == reflect.Slice) && (valB.Kind() == reflect.Array || valB.Kind() == reflect.Slice) {
+		//两者都是数组/切片
+		if valA.Len() == 0 {
+			return nil
+		} else if valB.Len() == 0 {
+			return arrayValues(arr1, filterNil)
+		}
+
+		for i := 0; i < valA.Len(); i++ {
+			item = valA.Index(i).Interface()
+			notInB = true
+			for j := 0; j < valB.Len(); j++ {
+				if reflect.DeepEqual(item, valB.Index(j).Interface()) {
+					notInB = false
+					break
+				}
+			}
+
+			if notInB && (!filterNil || (filterNil && item != nil && fmt.Sprintf("%v", item) != "")) {
+				diffArr = append(diffArr, item)
+			}
+		}
+	} else if (valA.Kind() == reflect.Array || valA.Kind() == reflect.Slice) && (valB.Kind() == reflect.Map) {
+		//A是数组/切片,B是字典
+		if valA.Len() == 0 {
+			return nil
+		} else if len(valB.MapKeys()) == 0 {
+			return arrayValues(arr1, filterNil)
+		}
+
+		for i := 0; i < valA.Len(); i++ {
+			item = valA.Index(i).Interface()
+			notInB = true
+			for _, k := range valB.MapKeys() {
+				if reflect.DeepEqual(item, valB.MapIndex(k).Interface()) {
+					notInB = false
+					break
+				}
+			}
+
+			if notInB && (!filterNil || (filterNil && item != nil && fmt.Sprintf("%v", item) != "")) {
+				diffArr = append(diffArr, item)
+			}
+		}
+	} else if (valA.Kind() == reflect.Map) && (valB.Kind() == reflect.Array || valB.Kind() == reflect.Slice) {
+		//A是字典,B是数组/切片
+		if len(valA.MapKeys()) == 0 {
+			return nil
+		} else if valB.Len() == 0 {
+			return arrayValues(arr1, filterNil)
+		}
+
+		for _, k := range valA.MapKeys() {
+			item = valA.MapIndex(k).Interface()
+			notInB = true
+			for i := 0; i < valB.Len(); i++ {
+				if reflect.DeepEqual(item, valB.Index(i).Interface()) {
+					notInB = false
+					break
+				}
+			}
+
+			if notInB && (!filterNil || (filterNil && item != nil && fmt.Sprintf("%v", item) != "")) {
+				diffArr = append(diffArr, item)
+			}
+		}
+	} else if (valA.Kind() == reflect.Map) && (valB.Kind() == reflect.Map) {
+		//两者都是字典
+		if len(valA.MapKeys()) == 0 {
+			return nil
+		} else if len(valB.MapKeys()) == 0 {
+			return arrayValues(arr1, filterNil)
+		}
+
+		for _, k := range valA.MapKeys() {
+			item = valA.MapIndex(k).Interface()
+			notInB = true
+			for _, k2 := range valB.MapKeys() {
+				if reflect.DeepEqual(item, valB.MapIndex(k2).Interface()) {
+					notInB = false
+					break
+				}
+			}
+
+			if notInB && (!filterNil || (filterNil && item != nil && fmt.Sprintf("%v", item) != "")) {
+				diffArr = append(diffArr, item)
+			}
+		}
+	} else {
+		panic("[ArrayDiff]arr1, arr2 type must be array, slice or map")
+	}
+
+	return diffArr
 }

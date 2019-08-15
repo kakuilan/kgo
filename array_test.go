@@ -142,7 +142,7 @@ func TestArrayValues(t *testing.T) {
 	}()
 
 	mp := map[string]int{"a": 1, "b": 2, "c": 3}
-	res := KArr.ArrayValues(mp)
+	res := KArr.ArrayValues(mp, false)
 	if len(res) != 3 {
 		t.Error("ArrayValues fail")
 		return
@@ -152,20 +152,20 @@ func TestArrayValues(t *testing.T) {
 	sli[0] = "aaa"
 	sli[2] = "ccc"
 	sli[3] = "ddd"
-	res = KArr.ArrayValues(sli)
+	res = KArr.ArrayValues(sli, false)
 	if len(res) != 5 {
 		t.Error("ArrayValues fail")
 		return
 	}
 
-	KArr.ArrayValues("hello")
+	KArr.ArrayValues("hello", false)
 }
 
 func BenchmarkArrayValues(b *testing.B) {
 	b.ResetTimer()
 	mp := map[string]int{"a": 1, "b": 2, "c": 3}
 	for i := 0; i < b.N; i++ {
-		KArr.ArrayValues(mp)
+		KArr.ArrayValues(mp, false)
 	}
 }
 
