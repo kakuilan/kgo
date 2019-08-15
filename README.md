@@ -83,6 +83,7 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/hwholiday/learning_tools
 - https://github.com/nothollyhigh/kiss
 - https://github.com/thinkeridea/go-extend
+- https://github.com/huandu/xstrings
 
 
 ### 其他库
