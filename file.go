@@ -558,26 +558,14 @@ func (kf *LkkFile) Md5(path string, length uint8) (string, error) {
 	return res, nil
 }
 
-// Sha1 计算文件的 sha1 散列值
-func (kf *LkkFile) Sha1(path string) (string, error) {
+// ShaX 计算文件的 shaX 散列值,x为1/256/512
+func (kf *LkkFile) ShaX(path string, x uint16) (string, error) {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		return "", err
 	}
-	hash := sha1.New()
-	hash.Write(data)
-	return hex.EncodeToString(hash.Sum(nil)), nil
-}
 
-// Sha256 计算文件的 sha256 散列值
-func (kf *LkkFile) Sha256(path string) (string, error) {
-	data, err := ioutil.ReadFile(path)
-	if err != nil {
-		return "", err
-	}
-	hash := sha256.New()
-	hash.Write(data)
-	return hex.EncodeToString(hash.Sum(nil)), nil
+	return string(shaXStr(data, x)), nil
 }
 
 // Pathinfo 获取文件路径的信息,options的值为-1: all; 1: dirname; 2: basename; 4: extension; 8: filename
