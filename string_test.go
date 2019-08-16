@@ -74,6 +74,43 @@ func BenchmarkStringMd5(b *testing.B) {
 	}
 }
 
+func TestStringShaX(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	str := "apple"
+
+	res1 := KStr.ShaX(str, 1)
+	if res1 != "d0be2dc421be4fcd0172e5afceea3970e2f3d940" {
+		t.Error("String ShaX[1] fail")
+		return
+	}
+
+	res2 := KStr.ShaX(str, 256)
+	if res2 != "3a7bd3e2360a3d29eea436fcfb7e44c735d117c42d1c1835420b6b9942dd4f1b" {
+		t.Error("String ShaX[256] fail")
+		return
+	}
+
+	res3 := KStr.ShaX(str, 512)
+	if res3 != "844d8779103b94c18f4aa4cc0c3b4474058580a991fba85d3ca698a0bc9e52c5940feb7a65a3a290e17e6b23ee943ecc4f73e7490327245b4fe5d5efb590feb2" {
+		t.Error("String ShaX[512] fail")
+		return
+	}
+	KStr.ShaX(str, 16)
+}
+
+func BenchmarkStringShaX(b *testing.B) {
+	b.ResetTimer()
+	str := "Hello world. (can you hear me?)"
+	for i := 0; i < b.N; i++ {
+		KStr.ShaX(str, 256)
+	}
+}
+
 func TestRandomAlpha(t *testing.T) {
 	res := KStr.Random(8, RAND_STRING_ALPHA)
 	if !KStr.IsLetter(res) {
@@ -620,40 +657,6 @@ func BenchmarkHtmlentityDecode(b *testing.B) {
 	str := `A &#39;quote&#39; is &lt;b&gt;bold&lt;/b&gt;`
 	for i := 0; i < b.N; i++ {
 		KStr.HtmlentityDecode(str)
-	}
-}
-
-func TestStringSha1(t *testing.T) {
-	str := "apple"
-	res := KStr.Sha1(str)
-	if res != "d0be2dc421be4fcd0172e5afceea3970e2f3d940" {
-		t.Error("String Sha1 fail")
-		return
-	}
-}
-
-func BenchmarkStringSha1(b *testing.B) {
-	b.ResetTimer()
-	str := "Hello world. (can you hear me?)"
-	for i := 0; i < b.N; i++ {
-		KStr.Sha1(str)
-	}
-}
-
-func TestStringSha256(t *testing.T) {
-	str := "apple"
-	res := KStr.Sha256(str)
-	if res != "3a7bd3e2360a3d29eea436fcfb7e44c735d117c42d1c1835420b6b9942dd4f1b" {
-		t.Error("String Sha256 fail")
-		return
-	}
-}
-
-func BenchmarkStringSha256(b *testing.B) {
-	b.ResetTimer()
-	str := "Hello world. (can you hear me?)"
-	for i := 0; i < b.N; i++ {
-		KStr.Sha256(str)
 	}
 }
 
