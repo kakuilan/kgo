@@ -620,35 +620,41 @@ func BenchmarkFileMd5(b *testing.B) {
 	}
 }
 
-func TestFileSha1(t *testing.T) {
-	_, err := KFile.Sha1("./testdata/diglett.png")
+func TestFileShaX(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	file := "./testdata/diglett.png"
+
+	_, err := KFile.ShaX(file, 1)
 	if err != nil {
-		t.Error("File Sha1 fail")
+		t.Error("File ShaX[1] fail")
 		return
 	}
-	_, _ = KFile.Sha1("./testdata/hello")
-}
 
-func BenchmarkFileSha1(b *testing.B) {
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		_, _ = KFile.Sha1("./testdata/diglett.png")
-	}
-}
-
-func TestFileSha256(t *testing.T) {
-	_, err := KFile.Sha256("./testdata/diglett.png")
+	_, err = KFile.ShaX(file, 256)
 	if err != nil {
-		t.Error("File Sha1 fail")
+		t.Error("File ShaX[256] fail")
 		return
 	}
-	_, _ = KFile.Sha256("./testdata/hello")
+
+	_, err = KFile.ShaX(file, 512)
+	if err != nil {
+		t.Error("File ShaX[512] fail")
+		return
+	}
+
+	_, _ = KFile.ShaX("./testdata/hello", 256)
+	_, _ = KFile.ShaX(file, 32)
 }
 
-func BenchmarkFileSha256(b *testing.B) {
+func BenchmarkFileShaX(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = KFile.Sha256("./testdata/diglett.png")
+		_, _ = KFile.ShaX("./testdata/diglett.png", 256)
 	}
 }
 
