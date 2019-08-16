@@ -2,8 +2,6 @@ package kgo
 
 import (
 	"crypto/md5"
-	"crypto/sha1"
-	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"

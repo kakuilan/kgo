@@ -6,6 +6,7 @@ import (
 	"net"
 	"reflect"
 	"strconv"
+	"strings"
 	"unsafe"
 )
 
@@ -271,7 +272,33 @@ func (kc *LkkConvert) Gettype(v interface{}) string {
 	return fmt.Sprintf("%T", v)
 }
 
-// ToStr 将变量转换为字符串
-func (kc *LkkConvert) ToStr(val interface{}) string {
-	return fmt.Sprintf("%v", val)
+// ToStr 强制将变量转换为字符串
+func (kc *LkkConvert) ToStr(val interface{}) (res string) {
+	switch val.(type) {
+	case []byte:
+		res = fmt.Sprintf("%s", (string(val.([]byte))))
+	default:
+		res = fmt.Sprintf("%v", val)
+	}
+	return
+}
+
+// ToInt 强制将变量转换为整型;其中true或"true"为1
+func (kc *LkkConvert) ToInt(val interface{}) int {
+	str := strings.ToLower(fmt.Sprintf("%v", val))
+	if str == "true" {
+		return 1
+	} else {
+		return kc.Str2Int(str)
+	}
+}
+
+// ToFloat 强制将变量转换为浮点型;其中true或"true"为1.0
+func (kc *LkkConvert) ToFloat(val interface{}) float64 {
+	str := strings.ToLower(fmt.Sprintf("%v", val))
+	if str == "true" {
+		return 1.0
+	} else {
+		return kc.Str2Float64(str)
+	}
 }
