@@ -43,7 +43,7 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/b3log/gulu -x
 - https://github.com/syyongx/php2go
 - https://github.com/openset/php2go -x
-- https://github.com/yioio/fun
+- https://github.com/yioio/fun  -x
 - https://github.com/henrylee2cn/goutil
 - https://github.com/nutzam/zgo
 - https://github.com/bitnami/gonit
@@ -114,6 +114,7 @@ https://stackoverflow.com/questions/38554353/how-to-check-if-a-string-only-conta
 https://socketloop.com/tutorials/golang-regular-expression-alphanumeric-underscore
 
 encrypt
+https://github.com/henrylee2cn/goutil/blob/master/encrypt.go
 https://www.ctolib.com/topics-4140.html
 https://www.cnblogs.com/lavin/p/5373188.html
 https://github.com/sinlov/fastEncryptDecode
@@ -133,14 +134,6 @@ https://smalltowntechblog.wordpress.com/2014/12/28/%E5%A6%82%E4%BD%95%E8%AE%93-a
 https://www.itread01.com/content/1547577396.html
 https://stackoverflow.com/questions/18817336/golang-encrypting-a-string-with-aes-and-base64
 
-map merge
-https://github.com/imdario/mergo
-https://gist.github.com/wuriyanto48/d35d7e0d322cb08a567a5305a41732dd
-https://maxbittker.com/merging-maps
-https://www.golangnote.com/topic/209.html
-https://stackoverflow.com/questions/12172215/merging-maps-in-go
-
-pool
 https://github.com/gobwas/pool
 
 json库
@@ -163,11 +156,6 @@ https://learnku.com/articles/31460
 https://studygolang.com/articles/2791
 https://golangtc.com/t/55237dd8421aa9704b0000cb
 https://stackoverflow.com/questions/8039552/byte-endian-convert-by-using-encoding-binary-in-go
-
-versionCompare
-https://github.com/sridharavinash/versionCompare/blob/master/versionCompare.go
-https://github.com/mcuadros/go-version/blob/master/compare.go
-https://blog.csdn.net/weixin_34341117/article/details/92067090
 
 
 
