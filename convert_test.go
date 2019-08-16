@@ -616,7 +616,8 @@ func TestToStr(t *testing.T) {
 	res1 := KConv.ToStr(1)
 	res2 := KConv.ToStr(false)
 	res3 := KConv.ToStr(UINT64_MAX)
-	if res1 != "1" || res2 != "false" || res3 != "18446744073709551615" {
+	res4 := KConv.ToStr([]byte("hello"))
+	if res1 != "1" || res2 != "false" || res3 != "18446744073709551615" || res4 != "hello" {
 		t.Error("ToStr fail")
 		return
 	}
@@ -626,5 +627,41 @@ func BenchmarkToStr(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.ToStr(UINT64_MAX)
+	}
+}
+
+func TestToInt(t *testing.T) {
+	res1 := KConv.ToInt("")
+	res2 := KConv.ToInt(true)
+	res3 := KConv.ToInt(UINT64_MAX)
+	res4 := KConv.ToInt("123")
+	if res1 != 0 || res2 != 1 || res3 != INT_MAX || res4 != 123 {
+		t.Error("ToInt fail")
+		return
+	}
+}
+
+func BenchmarkToInt(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.ToInt("123")
+	}
+}
+
+func TestToFloat(t *testing.T) {
+	res1 := KConv.ToFloat("")
+	res2 := KConv.ToFloat(true)
+	res3 := KConv.ToFloat(UINT64_MAX)
+	res4 := KConv.ToFloat("123")
+	if res1 != 0 || res2 != 1 || res3 < 1 || res4 != 123.0 {
+		t.Error("ToFloat fail")
+		return
+	}
+}
+
+func BenchmarkToFloat(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.ToFloat("123")
 	}
 }

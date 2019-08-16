@@ -65,7 +65,7 @@ func isArrayOrSlice(data interface{}, chkType uint8) int {
 		panic(msg)
 	}
 
-	var res int = -1
+	var res = -1
 	val := reflect.ValueOf(data)
 	switch val.Kind() {
 	case reflect.Array:
