@@ -231,7 +231,7 @@ func BenchmarkStripos(b *testing.B) {
 
 func TestStrrpos(t *testing.T) {
 	str := "hello world!"
-	res1 := KStr.Strrpos(str, "world", 0)
+	res1 := KStr.Strrpos(str, "world", 1)
 	res2 := KStr.Strrpos(str, "World", 0)
 	if res1 < 0 || res2 > 0 {
 		t.Error("Strrpos fail")
@@ -251,8 +251,8 @@ func BenchmarkStrrpos(b *testing.B) {
 
 func TestStrripos(t *testing.T) {
 	str := "hello world!"
-	res1 := KStr.Strripos(str, "world", 0)
-	res2 := KStr.Strripos(str, "World", 0)
+	res1 := KStr.Strripos(str, "world", 1)
+	res2 := KStr.Strripos(str, "World", 2)
 	if res1 < 0 || res2 < 0 {
 		t.Error("Strripos fail")
 		return
