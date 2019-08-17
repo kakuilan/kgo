@@ -425,6 +425,19 @@ func TestCopyFile(t *testing.T) {
 
 }
 
+func BenchmarkCopyFileErrorRead(b *testing.B) {
+	b.ResetTimer()
+	src := "./testdata/diglett.png"
+	des := ""
+	for i := 0; i < 100; i++ {
+		des = fmt.Sprintf("./testdata/sub/diglett_copy_%d.png", i)
+		go func(src, des string) {
+			_, _ = KFile.CopyFile(src, des, FILE_COVER_ALLOW)
+			_ = KFile.Unlink(src)
+		}(src, des)
+	}
+}
+
 func BenchmarkCopyFile(b *testing.B) {
 	b.ResetTimer()
 	src := "./testdata/diglett.png"
@@ -448,6 +461,19 @@ func TestFastCopy(t *testing.T) {
 	_, _ = KFile.FastCopy("./hello", "")
 	_, _ = KFile.FastCopy("./testdata/diglett.png", "/root/test/diglett.png")
 	_, _ = KFile.FastCopy("./testdata/diglett.png", "/root/diglett.png")
+}
+
+func BenchmarkFastCopyErrorRead(b *testing.B) {
+	b.ResetTimer()
+	src := "./testdata/diglett.png"
+	des := ""
+	for i := 0; i < b.N; i++ {
+		des = fmt.Sprintf("./testdata/fast/diglett_fast_%d.png", i)
+		go func(src, des string) {
+			_, _ = KFile.FastCopy(src, des)
+			_ = KFile.Unlink(src)
+		}(src, des)
+	}
 }
 
 func BenchmarkFastCopy(b *testing.B) {
