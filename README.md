@@ -164,6 +164,9 @@ https://blog.51cto.com/superzhangqiang/2326682
 https://gist.github.com/svett/424e6784facc0ba907ae
 
 
+检查端口绑定
+https://golangnote.com/topic/241.html
+https://www.jianshu.com/p/b4ce0794fa32
 
 
 
