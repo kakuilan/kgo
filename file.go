@@ -515,10 +515,6 @@ func (kf *LkkFile) FileTree(path string, ftype LkkFileTree, recursive bool, filt
 		}
 
 		if kf.IsDir(file) {
-			if file == "." || file == ".." {
-				continue
-			}
-
 			if ftype != FILE_TREE_FILE {
 				trees = append(trees, file)
 			}
