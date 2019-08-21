@@ -586,8 +586,7 @@ func BenchmarkDelDir(b *testing.B) {
 }
 
 func TestFileTree(t *testing.T) {
-	dir := "./"
-	tree := KFile.FileTree(dir, FILE_TREE_ALL, true)
+	tree := KFile.FileTree("./", FILE_TREE_ALL, true)
 	if len(tree) == 0 {
 		t.Error("FileTree fail")
 		return
@@ -596,6 +595,9 @@ func TestFileTree(t *testing.T) {
 	KFile.FileTree("", FILE_TREE_ALL, true)
 	KFile.FileTree("./README.md", FILE_TREE_ALL, true)
 	KFile.FileTree("/root", FILE_TREE_ALL, true)
+
+	home, _ := KOS.HomeDir()
+	KFile.FileTree(home, FILE_TREE_ALL, true)
 }
 
 func BenchmarkFileTree(b *testing.B) {
