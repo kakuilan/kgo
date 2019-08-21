@@ -805,27 +805,49 @@ func BenchmarkGlob(b *testing.B) {
 	}
 }
 
-func TestTarGz(t *testing.T) {
+func TestTarGzUnTarGz(t *testing.T) {
+	//打包
 	patterns := []string{".*_test.go", ".*.yml", "*_test"}
-	_, err := KFile.TarGz("./", "./test.tar.gz", patterns...)
+	_, err := KFile.TarGz("./", "./targz/test.tar.gz", patterns...)
 	if err != nil {
+		println(err.Error())
 		t.Error("TarGz fail")
 		return
 	}
 
+	//解压
+	_, err = KFile.UnTarGz("./targz/test.tar.gz", "./targz/tmp")
+	if err != nil {
+		println(err.Error())
+		t.Error("UnTarGz fail")
+		return
+	}
+
 	go func(patterns ...string) {
-		_, _ = KFile.TarGz("./", "./test.tar.gz", patterns...)
-		_, _ = KFile.TarGz("./", "./test.tar.gz", patterns...)
+		_, _ = KFile.TarGz("./", "./targz/test.tar.gz", patterns...)
+		_, _ = KFile.TarGz("./", "./targz/test.tar.gz", patterns...)
 	}(patterns...)
 
-	_, _ = KFile.TarGz("", "./test.tar.gz")
+	_, _ = KFile.TarGz("", "./targz/test.tar.gz")
 	_, _ = KFile.TarGz("./", "/root/test.tar.gz", patterns...)
+	_, _ = KFile.UnTarGz("./targz/test.tar.gz", "/root/targz/tmp")
 }
 
 func BenchmarkTarGz(b *testing.B) {
 	b.ResetTimer()
 	src := "./README.md"
 	for i := 0; i < b.N; i++ {
-		_, _ = KFile.TarGz(src, "./test.tar.gz")
+		dst := fmt.Sprintf("./targz/test_%d.tar.gz", i)
+		_, _ = KFile.TarGz(src, dst)
+	}
+}
+
+func BenchmarkUnTarGz(b *testing.B) {
+	b.ResetTimer()
+	var src, dst string
+	for i := 0; i < b.N; i++ {
+		src = fmt.Sprintf("./targz/test_%d.tar.gz", i)
+		dst = fmt.Sprintf("./targz/test_%d", i)
+		_, _ = KFile.UnTarGz(src, dst)
 	}
 }
