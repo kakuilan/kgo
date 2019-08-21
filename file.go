@@ -647,7 +647,7 @@ func (kf *LkkFile) Glob(pattern string) ([]string, error) {
 	return filepath.Glob(pattern)
 }
 
-// TarGz 打包压缩tar.gz;src为源文件/目录,dstTar为压缩包名,ignorePatterns为要忽略的文件正则
+// TarGz 打包压缩tar.gz;src为源文件或目录,dstTar为打包的路径名,ignorePatterns为要忽略的文件正则
 func (kf *LkkFile) TarGz(src string, dstTar string, ignorePatterns ...string) (bool, error) {
 	//过滤器,检查要忽略的文件
 	var filter = func(file string) bool {
@@ -668,6 +668,12 @@ func (kf *LkkFile) TarGz(src string, dstTar string, ignorePatterns ...string) (b
 
 	src = kf.Realpath(src)
 	dstTar = kf.AbsPath(dstTar)
+
+	dstDir := kf.Dirname(dstTar)
+	if !kf.IsExist(dstDir) {
+		_ = kf.Mkdir(dstDir, os.ModePerm)
+	}
+
 	files := kf.FileTree(src, FILE_TREE_ALL, true, filter)
 	if len(files) == 0 {
 		return false, fmt.Errorf("src no files to tar.gz")
@@ -749,6 +755,58 @@ func (kf *LkkFile) TarGz(src string, dstTar string, ignorePatterns ...string) (b
 	return true, nil
 }
 
+// UnTarGz 将tar.gz文件解压缩;srcTar为压缩包,dstDir为解压目录
 func (kf *LkkFile) UnTarGz(srcTar, dstDir string) (bool, error) {
-	return false, nil
+	fr, err := os.Open(srcTar)
+	if err != nil {
+		return false, err
+	}
+	defer fr.Close()
+
+	dstDir = strings.TrimRight(kf.AbsPath(dstDir), "/\\")
+	if !kf.IsExist(dstDir) {
+		err := kf.Mkdir(dstDir, os.ModePerm)
+		if err != nil {
+			return false, err
+		}
+	}
+
+	// Gzip reader
+	gr, err := gzip.NewReader(fr)
+
+	// Tar reader
+	tr := tar.NewReader(gr)
+	for {
+		hdr, err := tr.Next()
+		if err == io.EOF {
+			// End of tar archive
+			break
+		} else if err != nil {
+			return false, err
+		}
+
+		// Create diretory before create file
+		newPath := dstDir + "/" + strings.TrimLeft(hdr.Name, "/\\")
+		parentDir := path.Dir(newPath)
+		if !kf.IsExist(parentDir) {
+			_ = os.MkdirAll(parentDir, os.ModePerm)
+		}
+
+		if hdr.Typeflag != tar.TypeDir {
+			// Write data to file
+			fw, err := os.Create(newPath)
+			if err != nil {
+				return false, fmt.Errorf("CreateErr: %s file:%s\n", err.Error(), newPath)
+			}
+
+			_, err = io.Copy(fw, tr)
+			if err != nil {
+				return false, fmt.Errorf("CopyErr: %s file:%s\n", err.Error(), newPath)
+			}
+
+			_ = fw.Close()
+		}
+	}
+
+	return true, nil
 }
