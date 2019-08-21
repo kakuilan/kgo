@@ -1,6 +1,8 @@
 package kgo
 
 import (
+	"archive/tar"
+	"compress/gzip"
 	"crypto/md5"
 	"encoding/base64"
 	"encoding/hex"
@@ -477,8 +479,11 @@ func (kf *LkkFile) DelDir(dir string, delRoot bool) error {
 	return err
 }
 
-// FileTree 获取目录的文件树列表;ftype为枚举(FILE_TREE_ALL、FILE_TREE_DIR、FILE_TREE_FILE);recursive为是否递归
-func (kf *LkkFile) FileTree(path string, ftype LkkFileTree, recursive bool) []string {
+// FileTree 获取目录的文件树列表;
+// ftype为枚举(FILE_TREE_ALL、FILE_TREE_DIR、FILE_TREE_FILE);
+// recursive为是否递归;
+// filters为一个或多个文件过滤器函数,FileFilter类型
+func (kf *LkkFile) FileTree(path string, ftype LkkFileTree, recursive bool, filters ...FileFilter) []string {
 	var trees []string
 	if path == "" {
 		return trees
@@ -498,6 +503,20 @@ func (kf *LkkFile) FileTree(path string, ftype LkkFileTree, recursive bool) []st
 	}
 
 	for _, file := range files {
+		//文件过滤
+		chk := true
+		if len(filters) > 0 {
+			for _, filter := range filters {
+				chk = filter(file)
+				if !chk {
+					break
+				}
+			}
+		}
+		if !chk {
+			continue
+		}
+
 		if kf.IsDir(file) {
 			if file == "." || file == ".." {
 				continue
@@ -626,4 +645,111 @@ func (kf *LkkFile) Filemtime(filename string) (int64, error) {
 // Glob 寻找与模式匹配的文件路径
 func (kf *LkkFile) Glob(pattern string) ([]string, error) {
 	return filepath.Glob(pattern)
+}
+
+// TarGz 打包压缩tar.gz;src为源文件/目录,dstTar为压缩包名,ignorePatterns为要忽略的文件正则
+func (kf *LkkFile) TarGz(src string, dstTar string, ignorePatterns ...string) (bool, error) {
+	//过滤器,检查要忽略的文件
+	var filter = func(file string) bool {
+		res := true
+		for _, pattern := range ignorePatterns {
+			re, err := regexp.Compile(pattern)
+			if err != nil {
+				continue
+			}
+			chk := re.MatchString(file)
+			if chk {
+				res = false
+				break
+			}
+		}
+		return res
+	}
+
+	src = kf.Realpath(src)
+	dstTar = kf.AbsPath(dstTar)
+	files := kf.FileTree(src, FILE_TREE_ALL, true, filter)
+	if len(files) == 0 {
+		return false, fmt.Errorf("src no files to tar.gz")
+	}
+
+	// dest file write
+	fw, err := os.Create(dstTar)
+	if err != nil {
+		return false, err
+	}
+	defer fw.Close()
+
+	// gzip write
+	gw := gzip.NewWriter(fw)
+	defer gw.Close()
+
+	// tar write
+	tw := tar.NewWriter(gw)
+	defer tw.Close()
+
+	parentDir := filepath.Dir(src)
+	for _, file := range files {
+		if file == dstTar {
+			continue
+		}
+		fi, err := os.Stat(file)
+		if err != nil {
+			continue
+		}
+		newName := strings.Replace(file, parentDir, "", -1)
+
+		// Create tar header
+		hdr := new(tar.Header)
+		hdr.Format = tar.FormatGNU
+
+		if fi.IsDir() {
+			// if last character of header name is '/' it also can be directory
+			// but if you don't set Typeflag, error will occur when you untargz
+			hdr.Name = newName + "/"
+			hdr.Typeflag = tar.TypeDir
+			hdr.Size = 0
+			//hdr.Mode = 0755 | c_ISDIR
+			hdr.Mode = int64(fi.Mode())
+			hdr.ModTime = fi.ModTime()
+
+			// Write hander
+			err := tw.WriteHeader(hdr)
+			if err != nil {
+				return false, fmt.Errorf("DirErr: %s file:%s\n", err.Error(), file)
+			}
+		} else if fi.Mode().IsRegular() { //正常文件,不包含链接
+			// File reader
+			fr, err := os.Open(file)
+			if err != nil {
+				return false, fmt.Errorf("OpenErr: %s file:%s\n", err.Error(), file)
+			}
+			defer fr.Close()
+
+			hdr.Name = newName
+			hdr.Size = fi.Size()
+			hdr.Mode = int64(fi.Mode())
+			hdr.ModTime = fi.ModTime()
+
+			// Write hander
+			err = tw.WriteHeader(hdr)
+			if err != nil {
+				return false, fmt.Errorf("FileErr: %s file:%s\n", err.Error(), file)
+			}
+
+			// Write file data
+			_, err = io.Copy(tw, fr)
+			if err != nil {
+				println(tw, fr)
+				return false, fmt.Errorf("CopyErr: %s file:%s\n", err.Error(), file)
+			}
+			_ = fr.Close()
+		}
+	}
+
+	return true, nil
+}
+
+func (kf *LkkFile) UnTarGz(srcTar, dstDir string) (bool, error) {
+	return false, nil
 }
