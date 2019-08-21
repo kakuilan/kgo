@@ -158,10 +158,24 @@ https://golangtc.com/t/55237dd8421aa9704b0000cb
 https://stackoverflow.com/questions/8039552/byte-endian-convert-by-using-encoding-binary-in-go
 
 zip/tar.gz
-https://studygolang.com/articles/7471
-http://www.01happy.com/golang-zip/
-https://blog.51cto.com/superzhangqiang/2326682
-https://gist.github.com/svett/424e6784facc0ba907ae
+https://www.socketloop.com/tutorials/golang-archive-directory-with-tar-and-gzip
+https://medium.com/@skdomino/taring-untaring-files-in-go-6b07cf56bc07
+https://studygolang.com/articles/7481
+http://outofmemory.cn/code-snippet/11518/Go-language-achieve-tar-gz-solution
+https://stackoverflow.com/questions/13611100/how-to-write-a-directory-not-just-the-files-in-it-to-a-tar-gz-file-in-golang
+http://blog.ralch.com/tutorial/golang-working-with-tar-and-gzip/
+https://www.cnblogs.com/golove/p/3454630.html
+http://www.nljb.net/default/Golang-%E5%8E%8B%E7%BC%A9-%E8%A7%A3%E5%8E%8B-Tar.Gz/
+https://gist.github.com/indraniel/1a91458984179ab4cf80
+https://stackoverflow.com/questions/23629080/how-to-implement-tar-cvfz-xxx-tar-gz-in-golang
+https://www.kancloud.cn/uvohp5na133/golang/934062
+https://my.oschina.net/websec/blog/186339
+https://codeday.me/bug/20190118/535681.html
+https://darkwingboy.iteye.com/blog/2113233
+https://blog.csdn.net/dismispres/article/details/90812693
+
+
+
 
 
 检查端口绑定

@@ -718,7 +718,7 @@ func (kf *LkkFile) TarGz(src string, dstTar string, ignorePatterns ...string) (b
 			if err != nil {
 				return false, fmt.Errorf("DirErr: %s file:%s\n", err.Error(), file)
 			}
-		} else if fi.Mode().IsRegular() { //正常文件,不包含链接
+		} else {
 			// File reader
 			fr, err := os.Open(file)
 			if err != nil {
@@ -740,7 +740,6 @@ func (kf *LkkFile) TarGz(src string, dstTar string, ignorePatterns ...string) (b
 			// Write file data
 			_, err = io.Copy(tw, fr)
 			if err != nil {
-				println(tw, fr)
 				return false, fmt.Errorf("CopyErr: %s file:%s\n", err.Error(), file)
 			}
 			_ = fr.Close()
