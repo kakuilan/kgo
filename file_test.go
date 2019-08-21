@@ -831,6 +831,7 @@ func TestTarGzUnTarGz(t *testing.T) {
 
 	_, _ = KFile.TarGz("", "./targz/test.tar.gz")
 	_, _ = KFile.TarGz("./", "/root/test.tar.gz", patterns...)
+	_, _ = KFile.UnTarGz("./targz/hello.tar.gz", "/root/targz/tmp")
 	_, _ = KFile.UnTarGz("./targz/test.tar.gz", "/root/targz/tmp")
 }
 
