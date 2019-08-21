@@ -485,9 +485,6 @@ func (kf *LkkFile) DelDir(dir string, delRoot bool) error {
 // filters为一个或多个文件过滤器函数,FileFilter类型
 func (kf *LkkFile) FileTree(path string, ftype LkkFileTree, recursive bool, filters ...FileFilter) []string {
 	var trees []string
-	if path == "" {
-		return trees
-	}
 
 	if kf.IsFile(path) || kf.IsLink(path) {
 		if ftype != FILE_TREE_DIR {
@@ -498,7 +495,7 @@ func (kf *LkkFile) FileTree(path string, ftype LkkFileTree, recursive bool, filt
 
 	path = strings.TrimRight(path, "/")
 	files, err := filepath.Glob(filepath.Join(path, "*"))
-	if err != nil {
+	if err != nil || len(files) == 0 {
 		return trees
 	}
 
