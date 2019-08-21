@@ -429,7 +429,7 @@ func BenchmarkCopyFileErrorRead(b *testing.B) {
 	b.ResetTimer()
 	src := "./testdata/diglett.png"
 	des := ""
-	for i := 0; i < 100; i++ {
+	for i := 0; i < b.N; i++ {
 		des = fmt.Sprintf("./testdata/sub/diglett_copy_%d.png", i)
 		go func(src, des string) {
 			_, _ = KFile.CopyFile(src, des, FILE_COVER_ALLOW)
