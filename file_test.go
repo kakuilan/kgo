@@ -806,14 +806,20 @@ func BenchmarkGlob(b *testing.B) {
 }
 
 func TestTarGz(t *testing.T) {
-	_, err := KFile.TarGz("./", "./test.tar.gz")
+	patterns := []string{".*_test.go", ".*.yml", "*_test"}
+	_, err := KFile.TarGz("./", "./test.tar.gz", patterns...)
 	if err != nil {
 		t.Error("TarGz fail")
 		return
 	}
-	patterns := []string{".*_test.go", ".*.yml"}
+
+	go func(patterns ...string) {
+		_, _ = KFile.TarGz("./", "./test.tar.gz", patterns...)
+		_, _ = KFile.TarGz("./", "./test.tar.gz", patterns...)
+	}(patterns...)
+
 	_, _ = KFile.TarGz("", "./test.tar.gz")
-	_, _ = KFile.TarGz("./", "./test.tar.gz", patterns...)
+	_, _ = KFile.TarGz("./", "/root/test.tar.gz", patterns...)
 }
 
 func BenchmarkTarGz(b *testing.B) {
