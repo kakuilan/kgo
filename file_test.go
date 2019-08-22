@@ -817,22 +817,32 @@ func TestTarGzUnTarGz(t *testing.T) {
 	}
 
 	//解压
-	_, err = KFile.UnTarGz("./targz/test.tar.gz", "./targz/tmp")
+	_, err = KFile.UnTarGz("./targz/test.tar.gz", "/tmp/targz/tmp")
 	if err != nil {
 		println(err.Error())
 		t.Error("UnTarGz fail")
 		return
 	}
 
-	go func(patterns ...string) {
-		_, _ = KFile.TarGz("./", "./targz/test.tar.gz", patterns...)
-		_, _ = KFile.TarGz("./", "./targz/test.tar.gz", patterns...)
-	}(patterns...)
-
 	_, _ = KFile.TarGz("", "./targz/test.tar.gz")
+	_, _ = KFile.TarGz("/root/hello", "./targz/test.tar.gz", patterns...)
 	_, _ = KFile.TarGz("./", "/root/test.tar.gz", patterns...)
 	_, _ = KFile.UnTarGz("./targz/hello.tar.gz", "/root/targz/tmp")
 	_, _ = KFile.UnTarGz("./targz/test.tar.gz", "/root/targz/tmp")
+}
+
+func TestTarGzUnTarGzError(t *testing.T) {
+	tarDir := "/tmp/targz/limit"
+	go func(tarDir string) {
+		_, _ = KFile.TarGz("/tmp/targz/tmp", tarDir+"/test.tar.gz")
+	}(tarDir)
+	go func(tarDir string) {
+		tarDir = "/tmp/targz/tmp"
+		KOS.Chmod(tarDir, 0111)
+	}(tarDir)
+	go func(tarDir string) {
+		_, _ = KFile.TarGz("/tmp/targz/tmp", tarDir+"/test.tar.gz")
+	}(tarDir)
 }
 
 func BenchmarkTarGz(b *testing.B) {

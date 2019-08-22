@@ -659,7 +659,7 @@ func (kf *LkkFile) TarGz(src string, dstTar string, ignorePatterns ...string) (b
 		return res
 	}
 
-	src = kf.Realpath(src)
+	src = kf.AbsPath(src)
 	dstTar = kf.AbsPath(dstTar)
 
 	dstDir := kf.Dirname(dstTar)
