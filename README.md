@@ -44,8 +44,8 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/syyongx/php2go
 - https://github.com/openset/php2go -x
 - https://github.com/yioio/fun  -x
-- https://github.com/henrylee2cn/goutil
-- https://github.com/nutzam/zgo
+- https://github.com/henrylee2cn/goutil -x
+- https://github.com/nutzam/zgo -x
 - https://github.com/bitnami/gonit
 - https://github.com/otiai10/copy
 - https://github.com/polaris1119/goutils
@@ -84,6 +84,7 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/nothollyhigh/kiss
 - https://github.com/thinkeridea/go-extend
 - https://github.com/huandu/xstrings
+- https://github.com/bytedance/go-tagexpr
 
 
 ### 其他库
@@ -107,11 +108,6 @@ encrypt
 
 
 ### 临时
-https://www.calhoun.io/creating-random-strings-in-go/
-http://ju.outofmemory.cn/entry/221647
-https://www.golangnote.com/topic/90.html
-https://stackoverflow.com/questions/38554353/how-to-check-if-a-string-only-contains-alphabetic-characters-in-go
-https://socketloop.com/tutorials/golang-regular-expression-alphanumeric-underscore
 
 encrypt
 https://github.com/henrylee2cn/goutil/blob/master/encrypt.go
@@ -142,11 +138,6 @@ https://github.com/tidwall/gjson
 https://github.com/mailru/easyjson
 https://github.com/buger/jsonparser
 
-TODO
-Exec
-System
-Passthru
-
 pack/unpack
 https://stackoverflow.com/questions/40182289/golang-equivalent-of-pythons-struct-pack-struct-unpack
 https://gist.github.com/cloveryume/9a59e8d77f5836f11720#file-golang_struct_packed-go
@@ -161,6 +152,8 @@ https://stackoverflow.com/questions/8039552/byte-endian-convert-by-using-encodin
 https://golangnote.com/topic/241.html
 https://www.jianshu.com/p/b4ce0794fa32
 
-
+pid
+https://github.com/bitnami/gonit/blob/master/utils/process.go
+https://github.com/henrylee2cn/goutil/blob/master/pid_file.go
 
 
