@@ -49,7 +49,7 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/bitnami/gonit  -x
 - https://github.com/otiai10/copy   -x
 - https://github.com/polaris1119/goutils    -x
-- https://github.com/LyricTian/lib
+- https://github.com/LyricTian/lib  -x
 - https://github.com/antongulenko/golib
 - https://github.com/bocajim/helpers
 - https://github.com/divinerapier/go-tools

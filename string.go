@@ -42,8 +42,13 @@ func (ks *LkkString) ShaX(str string, x uint16) string {
 	return string(shaXStr([]byte(str), x))
 }
 
-// Random 生成随机字符串;length为长度,stype为枚举(RAND_STRING_ALPHA,RAND_STRING_NUMERIC,RAND_STRING_ALPHANUM,RAND_STRING_SPECIAL,RAND_STRING_CHINESE)
-func (ks *LkkString) Random(length uint8, stype LkkRandString) string {
+// Random 生成随机字符串;length为长度,rtype为枚举:
+// RAND_STRING_ALPHA 字母
+// RAND_STRING_NUMERIC 数值
+// RAND_STRING_ALPHANUM 字母+数值
+// RAND_STRING_SPECIAL 字母+数值+特殊字符
+// RAND_STRING_CHINESE 仅中文
+func (ks *LkkString) Random(length uint8, rtype LkkRandString) string {
 	if length == 0 {
 		return ""
 	}
@@ -56,7 +61,7 @@ func (ks *LkkString) Random(length uint8, stype LkkRandString) string {
 	rand.Seed(time.Now().UTC().UnixNano())
 	time.Sleep(time.Nanosecond)
 
-	switch stype {
+	switch rtype {
 	case RAND_STRING_ALPHA:
 		letter = []rune(alphas)
 	case RAND_STRING_NUMERIC:
