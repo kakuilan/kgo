@@ -24,6 +24,8 @@ type (
 	LkkUrl byte
 	// LkkEncrypt is the receiver of encrypt utilities
 	LkkEncrypt byte
+	// LkkDebug is the receiver of debug utilities
+	LkkDebug byte
 
 	// LkkFileCover 枚举类型,文件是否覆盖
 	LkkFileCover int8
@@ -115,6 +117,9 @@ var (
 
 	// KEncr utilities
 	KEncr LkkEncrypt
+
+	// KDbug utilities
+	KDbug LkkDebug
 
 	// KPrivCidrs 私有网段的CIDR数组
 	KPrivCidrs []*net.IPNet

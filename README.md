@@ -55,9 +55,9 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/elimisteve/fun -x
 - https://github.com/emirozer/go-helpers    -x
 - https://github.com/evilsocket/islazy  -x
-- https://github.com/fatih-yavuz/go-helpers
-- https://github.com/fingerQin/gophp
-- https://github.com/hhxsv5/go-helpers
+- https://github.com/fatih-yavuz/go-helpers -x
+- https://github.com/fingerQin/gophp    -x
+- https://github.com/hhxsv5/go-helpers  -x
 - https://github.com/idoall/TokenExchangeCommon/tree/master/commonutils
 - https://github.com/jiazhoulvke/goutil
 - https://github.com/jimmykuu/webhelpers
@@ -108,6 +108,7 @@ convert
 validate
 encrypt
 net
+debug
 
 
 ### 临时
@@ -177,5 +178,9 @@ https://github.com/h2non/gentleman
 
 queue
 https://github.com/evilsocket/islazy/blob/master/async/queue.go
+
+ismail
+https://github.com/idoall/TokenExchangeCommon/blob/master/commonutils/checkmail/checkmail.go
+array_unit
 
 
