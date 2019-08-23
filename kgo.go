@@ -1,6 +1,9 @@
 package kgo
 
-import "net"
+import (
+	"net"
+	"time"
+)
 
 type (
 	// LkkFile is the receiver of file utilities
@@ -83,6 +86,9 @@ const (
 )
 
 var (
+	//Kuptime 当前服务启动时间
+	Kuptime = time.Now()
+
 	// KFile utilities
 	KFile LkkFile
 

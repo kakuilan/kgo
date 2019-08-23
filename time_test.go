@@ -136,3 +136,35 @@ func TestUsleep(t *testing.T) {
 		return
 	}
 }
+
+func TestServiceStartime(t *testing.T) {
+	res := KTime.ServiceStartime()
+	println(KTime.Date("Y-m-d H:i:s", res))
+	if res <= 0 {
+		t.Error("ServiceStartime fail")
+		return
+	}
+}
+
+func BenchmarkServiceStartime(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.ServiceStartime()
+	}
+}
+
+func TestServiceUptime(t *testing.T) {
+	res := KTime.ServiceUptime()
+	println("ServiceUptime", res)
+	if res <= 0 {
+		t.Error("ServiceUptime fail")
+		return
+	}
+}
+
+func BenchmarkServiceUptime(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.ServiceUptime()
+	}
+}
