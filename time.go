@@ -136,6 +136,6 @@ func (kt *LkkTime) ServiceStartime() int64 {
 }
 
 // ServiceUptime 获取当前服务运行时间,纳秒
-func (kt *LkkTime) ServiceUptime() int64 {
-	return int64(time.Since(Kuptime))
+func (kt *LkkTime) ServiceUptime() time.Duration {
+	return time.Since(Kuptime)
 }

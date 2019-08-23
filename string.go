@@ -672,3 +672,29 @@ func (ks *LkkString) UnderscoreName(name string) string {
 
 	return buf.String()
 }
+
+// RemoveBefore 移除before之前的字符串;include为是否移除包括before本身
+func (ks *LkkString) RemoveBefore(str, before string, include bool) string {
+	i := strings.Index(str, before)
+	if i > 0 {
+		if include {
+			str = str[i+len(before):]
+		} else {
+			str = str[i:]
+		}
+	}
+	return str
+}
+
+// RemoveAfter 移除after之后的字符串;include为是否移除包括after本身
+func (ks *LkkString) RemoveAfter(str, after string, include bool) string {
+	i := strings.Index(str, after)
+	if i > 0 {
+		if include {
+			str = str[0:i]
+		} else {
+			str = str[0 : i+len(after)]
+		}
+	}
+	return str
+}

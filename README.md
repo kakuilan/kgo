@@ -51,11 +51,10 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/polaris1119/goutils    -x
 - https://github.com/LyricTian/lib  -x
 - https://github.com/antongulenko/golib -x
-- https://github.com/bocajim/helpers
-- https://github.com/divinerapier/go-tools
-- https://github.com/elimisteve/fun
-- https://github.com/emirozer/go-helpers
-- https://github.com/evilsocket/islazy
+- https://github.com/bocajim/helpers    -x
+- https://github.com/elimisteve/fun -x
+- https://github.com/emirozer/go-helpers    -x
+- https://github.com/evilsocket/islazy  -x
 - https://github.com/fatih-yavuz/go-helpers
 - https://github.com/fingerQin/gophp
 - https://github.com/hhxsv5/go-helpers
@@ -108,6 +107,7 @@ url
 convert
 validate
 encrypt
+net
 
 
 ### 临时
@@ -163,5 +163,19 @@ https://github.com/henrylee2cn/goutil/blob/master/pid_file.go
 
 ping
 https://github.com/bocajim/helpers/blob/master/ping.go
+
+http/curl
+https://github.com/mreiferson/go-httpclient
+https://github.com/elimisteve/fun/blob/master/fetch.go
+https://github.com/nareix/curl
+https://github.com/andelf/go-curl
+https://github.com/parnurzeal/gorequest
+https://github.com/go-resty/resty
+https://github.com/gojek/heimdall
+https://github.com/dghubble/sling
+https://github.com/h2non/gentleman
+
+queue
+https://github.com/evilsocket/islazy/blob/master/async/queue.go
 
 
