@@ -643,3 +643,27 @@ func (ks *LkkString) VersionCompare(version1, version2, operator string) bool {
 		panic("[VersionCompare] operator: invalid")
 	}
 }
+
+// CamelName 下划线写法转为驼峰写法
+func (ks *LkkString) CamelName(name string) string {
+	name = strings.Replace(name, "_", " ", -1)
+	name = strings.Title(name)
+	return strings.Replace(name, " ", "", -1)
+}
+
+// UnderscoreName 驼峰写法转为下划线写法
+func (ks *LkkString) UnderscoreName(name string) string {
+	buf := bytes.NewBufferString("")
+	for i, r := range name {
+		if unicode.IsUpper(r) {
+			if i != 0 {
+				buf.WriteRune('_')
+			}
+			buf.WriteRune(unicode.ToLower(r))
+		} else {
+			buf.WriteRune(r)
+		}
+	}
+
+	return buf.String()
+}
