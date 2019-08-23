@@ -46,8 +46,8 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/yioio/fun  -x
 - https://github.com/henrylee2cn/goutil -x
 - https://github.com/nutzam/zgo -x
-- https://github.com/bitnami/gonit
-- https://github.com/otiai10/copy
+- https://github.com/bitnami/gonit  -x
+- https://github.com/otiai10/copy   -x
 - https://github.com/polaris1119/goutils
 - https://github.com/LyricTian/lib
 - https://github.com/antongulenko/golib
@@ -155,5 +155,13 @@ https://www.jianshu.com/p/b4ce0794fa32
 pid
 https://github.com/bitnami/gonit/blob/master/utils/process.go
 https://github.com/henrylee2cn/goutil/blob/master/pid_file.go
+
+ip
+https://github.com/polaris1119/goutils/blob/master/ip.go
+https://stackoverflow.com/questions/27234861/correct-way-of-getting-clients-ip-addresses-from-http-request
+https://codeday.me/bug/20180706/188888.html
+https://www.dyxmq.cn/code/golang/golang-http-request-remote-addr-questions.html
+https://github.com/astaxie/beego/blob/master/context/input.go#L205-L221
+https://github.com/tomasen/realip/blob/master/realip.go
 
 

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"net/http"
 	"os"
 	"os/exec"
 	"os/user"
@@ -359,4 +360,84 @@ func (ko *LkkOS) Chown(filename string, uid, gid int) bool {
 // GetTempDir 返回用于临时文件的目录
 func (ko *LkkOS) GetTempDir() string {
 	return os.TempDir()
+}
+
+// PrivateCIDR 获取私有网段的CIDR(无类别域间路由)
+func (ko *LkkOS) PrivateCIDR() []*net.IPNet {
+	maxCidrBlocks := []string{
+		"127.0.0.1/8",    // localhost
+		"10.0.0.0/8",     // 24-bit block
+		"172.16.0.0/12",  // 20-bit block
+		"192.168.0.0/16", // 16-bit block
+		"169.254.0.0/16", // link local address
+		"::1/128",        // localhost IPv6
+		"fc00::/7",       // unique local address IPv6
+		"fe80::/10",      // link local address IPv6
+	}
+
+	res := make([]*net.IPNet, len(maxCidrBlocks))
+	for i, maxCidrBlock := range maxCidrBlocks {
+		_, cidr, _ := net.ParseCIDR(maxCidrBlock)
+		res[i] = cidr
+	}
+
+	return res
+}
+
+// IsPrivateIp 是否私有IP地址
+func (ko *LkkOS) IsPrivateIp(address string) (bool, error) {
+	ip := net.ParseIP(address)
+	if ip == nil {
+		return false, errors.New("address is not valid ip")
+	}
+
+	if KPivCidrs == nil {
+		KPivCidrs = ko.PrivateCIDR()
+	}
+	for i := range KPivCidrs {
+		if KPivCidrs[i].Contains(ip) {
+			return true, nil
+		}
+	}
+
+	return false, nil
+}
+
+// ClientIp 获取客户端真实IP
+func (ko *LkkOS) ClientIp(req *http.Request) string {
+	// 获取头部信息,有可能是代理
+	xRealIP := req.Header.Get("X-Real-Ip")
+	xForwardedFor := req.Header.Get("X-Forwarded-For")
+
+	// If both empty, return IP from remote address
+	if xRealIP == "" && xForwardedFor == "" {
+		var remoteIP string
+
+		// If there are colon in remote address, remove the port number
+		// otherwise, return remote address as is
+		if strings.ContainsRune(req.RemoteAddr, ':') {
+			remoteIP, _, _ = net.SplitHostPort(req.RemoteAddr)
+		} else {
+			remoteIP = req.RemoteAddr
+		}
+
+		return remoteIP
+	}
+
+	// Check list of IP in X-Forwarded-For and return the first global address
+	// X-Forwarded-For是逗号分隔的IP地址列表,如"10.0.0.1, 10.0.0.2, 10.0.0.3"
+	for _, address := range strings.Split(xForwardedFor, ",") {
+		address = strings.TrimSpace(address)
+		isPrivate, err := ko.IsPrivateIp(address)
+		if !isPrivate && err == nil {
+			return address
+		}
+	}
+
+	if xRealIP == "::1" {
+		xRealIP = "127.0.0.1"
+	}
+
+	// If nothing succeed, return X-Real-IP
+	return xRealIP
 }

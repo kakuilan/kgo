@@ -475,3 +475,51 @@ func BenchmarkGetTempDir(b *testing.B) {
 		KOS.GetTempDir()
 	}
 }
+
+func TestPrivateCIDR(t *testing.T) {
+	res := KOS.PrivateCIDR()
+	if len(res) == 0 {
+		t.Error("PrivateCIDR fail")
+		return
+	}
+}
+
+func BenchmarkPrivateCIDR(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.PrivateCIDR()
+	}
+}
+
+func TestIsPrivateIp(t *testing.T) {
+	res, err := KOS.IsPrivateIp("hello")
+	if res || err == nil {
+		t.Error("IsPrivateIp fail")
+		return
+	}
+
+	if len(KPivCidrs) != 0 {
+		t.Error("IsPrivateIp fail")
+		return
+	}
+
+	res, err = KOS.IsPrivateIp("172.17.0.1")
+	if !res || err != nil {
+		t.Error("IsPrivateIp fail")
+		return
+	}
+
+	res, err = KOS.IsPrivateIp("220.181.38.148")
+	if res || err != nil {
+		t.Error("IsPrivateIp fail")
+		return
+	}
+
+}
+
+func BenchmarkIsPrivateIp(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KOS.IsPrivateIp("172.17.0.1")
+	}
+}
