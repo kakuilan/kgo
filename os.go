@@ -403,7 +403,7 @@ func (ko *LkkOS) IsPrivateIp(address string) (bool, error) {
 	return false, nil
 }
 
-// ClientIp 获取客户端真实IP
+// ClientIp 获取客户端真实IP,req为http请求
 func (ko *LkkOS) ClientIp(req *http.Request) string {
 	// 获取头部信息,有可能是代理
 	xRealIP := req.Header.Get("X-Real-Ip")

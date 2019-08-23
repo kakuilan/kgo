@@ -3,7 +3,9 @@ package kgo
 import (
 	"fmt"
 	"net"
+	"net/http"
 	"os/user"
+	"strings"
 	"testing"
 )
 
@@ -492,34 +494,132 @@ func BenchmarkPrivateCIDR(b *testing.B) {
 }
 
 func TestIsPrivateIp(t *testing.T) {
+	//无效Ip
 	res, err := KOS.IsPrivateIp("hello")
 	if res || err == nil {
 		t.Error("IsPrivateIp fail")
 		return
 	}
 
+	//KPrivCidrs未初始化数据
 	if len(KPrivCidrs) != 0 {
 		t.Error("IsPrivateIp fail")
 		return
 	}
 
+	//docker ip
 	res, err = KOS.IsPrivateIp("172.17.0.1")
 	if !res || err != nil {
 		t.Error("IsPrivateIp fail")
 		return
 	}
 
+	//外网ip
 	res, err = KOS.IsPrivateIp("220.181.38.148")
 	if res || err != nil {
 		t.Error("IsPrivateIp fail")
 		return
 	}
 
+	//KPrivCidrs已初始化数据
+	if len(KPrivCidrs) == 0 {
+		t.Error("IsPrivateIp fail")
+		return
+	}
 }
 
 func BenchmarkIsPrivateIp(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _ = KOS.IsPrivateIp("172.17.0.1")
+	}
+}
+
+func TestClientIp(t *testing.T) {
+	// Create type and function for testing
+	type testIP struct {
+		name     string
+		request  *http.Request
+		expected string
+	}
+
+	newRequest := func(remoteAddr, xRealIP string, xForwardedFor ...string) *http.Request {
+		h := http.Header{}
+		h.Set("X-Real-IP", xRealIP)
+		for _, address := range xForwardedFor {
+			h.Set("X-Forwarded-For", address)
+		}
+
+		return &http.Request{
+			RemoteAddr: remoteAddr,
+			Header:     h,
+		}
+	}
+
+	// Create test data
+	publicAddr1 := "144.12.54.87"
+	publicAddr2 := "119.14.55.11"
+	publicAddr3 := "8.8.8.8:8080"
+	localAddr1 := "127.0.0.0"
+	localAddr2 := "::1"
+
+	testData := []testIP{
+		{
+			name:     "No header,no port",
+			request:  newRequest(publicAddr1, ""),
+			expected: publicAddr1,
+		}, {
+			name:     "No header,has port",
+			request:  newRequest(publicAddr3, ""),
+			expected: publicAddr3,
+		}, {
+			name:     "Has X-Forwarded-For",
+			request:  newRequest("", "", publicAddr1),
+			expected: publicAddr1,
+		}, {
+			name:     "Has multiple X-Forwarded-For",
+			request:  newRequest("", "", localAddr1, publicAddr1, publicAddr2),
+			expected: publicAddr2,
+		}, {
+			name:     "Has X-Real-IP",
+			request:  newRequest("", publicAddr1),
+			expected: publicAddr1,
+		}, {
+			name:     "Local ip",
+			request:  newRequest("", localAddr2),
+			expected: localAddr2,
+		},
+	}
+
+	// Run test
+	var actual string
+	for _, v := range testData {
+		actual = KOS.ClientIp(v.request)
+		if v.expected == "::1" {
+			if actual != "127.0.0.1" {
+				t.Errorf("%s: expected %s but get %s", v.name, v.expected, actual)
+			}
+		} else {
+			if strings.Contains(v.expected, ":") {
+				ip, _, _ := net.SplitHostPort(v.expected)
+				if ip != actual {
+					t.Errorf("%s: expected %s but get %s", v.name, v.expected, actual)
+				}
+			} else {
+				if v.expected != actual {
+					t.Errorf("%s: expected %s but get %s", v.name, v.expected, actual)
+				}
+			}
+		}
+	}
+}
+
+func BenchmarkClientIp(b *testing.B) {
+	b.ResetTimer()
+	req := &http.Request{
+		RemoteAddr: "216.58.199.14",
+	}
+	for i := 0; i < b.N; i++ {
+		KOS.ClientIp(req)
 	}
 }
