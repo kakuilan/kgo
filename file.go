@@ -117,6 +117,12 @@ func (kf *LkkFile) IsReadable(path string) bool {
 	return true
 }
 
+// IsExecutable 是否可执行文件
+func (kf *LkkFile) IsExecutable(file string) bool {
+	info, err := os.Stat(file)
+	return err == nil && info.Mode().IsRegular() && (info.Mode()&0111) != 0
+}
+
 // IsFile 是否常规文件(且存在)
 func (kf *LkkFile) IsFile(path string) bool {
 	stat, err := os.Stat(path)
