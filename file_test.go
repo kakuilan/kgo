@@ -177,6 +177,23 @@ func BenchmarkIsReadable(b *testing.B) {
 	}
 }
 
+func TestIsExecutable(t *testing.T) {
+	filename := "./hello"
+	res := KFile.IsExecutable(filename)
+	if res {
+		t.Error("file can not execute")
+		return
+	}
+}
+
+func BenchmarkIsExecutable(b *testing.B) {
+	b.ResetTimer()
+	filename := "./README.md"
+	for i := 0; i < b.N; i++ {
+		KFile.IsExecutable(filename)
+	}
+}
+
 func TestIsFile(t *testing.T) {
 	filename := "./file.go"
 	if !KFile.IsFile(filename) {
