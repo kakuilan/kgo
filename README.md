@@ -50,7 +50,7 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/otiai10/copy   -x
 - https://github.com/polaris1119/goutils    -x
 - https://github.com/LyricTian/lib  -x
-- https://github.com/antongulenko/golib
+- https://github.com/antongulenko/golib -x
 - https://github.com/bocajim/helpers
 - https://github.com/divinerapier/go-tools
 - https://github.com/elimisteve/fun
@@ -93,6 +93,9 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/denisbrodbeck/machineid
 - github.com/karrick/godirwalk
 - https://github.com/keysonZZZ/kgo
+- https://github.com/gobwas/pool
+- https://github.com/shirou/gopsutil
+
 
 ### 包
 file
@@ -108,6 +111,7 @@ encrypt
 
 
 ### 临时
+
 
 encrypt
 https://github.com/henrylee2cn/goutil/blob/master/encrypt.go
@@ -129,8 +133,9 @@ https://heroims.github.io/2018/11/21/AES-128-CBC%20Base64%E5%8A%A0%E5%AF%86%E2%8
 https://smalltowntechblog.wordpress.com/2014/12/28/%E5%A6%82%E4%BD%95%E8%AE%93-aes-%E5%9C%A8-golang-%E8%88%87-androidjava-%E5%BE%97%E5%88%B0%E4%B8%80%E8%87%B4%E7%9A%84%E5%8A%A0%E8%A7%A3%E5%AF%86%E7%B5%90%E6%9E%9C/comment-page-1/
 https://www.itread01.com/content/1547577396.html
 https://stackoverflow.com/questions/18817336/golang-encrypting-a-string-with-aes-and-base64
+https://github.com/bocajim/helpers/blob/master/crypt.go
 
-https://github.com/gobwas/pool
+
 
 json库
 https://github.com/json-iterator/go
@@ -155,3 +160,8 @@ https://www.jianshu.com/p/b4ce0794fa32
 pid
 https://github.com/bitnami/gonit/blob/master/utils/process.go
 https://github.com/henrylee2cn/goutil/blob/master/pid_file.go
+
+ping
+https://github.com/bocajim/helpers/blob/master/ping.go
+
+
