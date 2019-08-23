@@ -68,15 +68,13 @@ func (ko *LkkOS) HomeDir() (string, error) {
 
 // LocalIP 获取本机第一个NIC's IP
 func (ko *LkkOS) LocalIP() (string, error) {
-	addrs, err := net.InterfaceAddrs()
-	if nil != err {
-		return "", err
-	}
-
-	for _, address := range addrs {
-		if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
-			if nil != ipnet.IP.To4() {
-				return ipnet.IP.String(), nil
+	addrs, _ := net.InterfaceAddrs()
+	if len(addrs) > 0 {
+		for _, addr := range addrs {
+			if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+				if nil != ipnet.IP.To4() {
+					return ipnet.IP.String(), nil
+				}
 			}
 		}
 	}
@@ -118,16 +116,14 @@ func (ko *LkkOS) IsPublicIP(ip net.IP) bool {
 
 // GetIPs 获取本机的IP列表
 func (ko *LkkOS) GetIPs() (ips []string) {
-	interfaceAddr, err := net.InterfaceAddrs()
-	if err != nil {
-		return
-	}
-
-	for _, address := range interfaceAddr {
-		ipNet, isValidIpNet := address.(*net.IPNet)
-		if isValidIpNet && !ipNet.IP.IsLoopback() {
-			if ipNet.IP.To4() != nil {
-				ips = append(ips, ipNet.IP.String())
+	interfaceAddrs, _ := net.InterfaceAddrs()
+	if len(interfaceAddrs) > 0 {
+		for _, addr := range interfaceAddrs {
+			ipNet, isValidIpNet := addr.(*net.IPNet)
+			if isValidIpNet && !ipNet.IP.IsLoopback() {
+				if ipNet.IP.To4() != nil {
+					ips = append(ips, ipNet.IP.String())
+				}
 			}
 		}
 	}
@@ -137,17 +133,15 @@ func (ko *LkkOS) GetIPs() (ips []string) {
 
 // GetMacAddrs 获取本机的Mac网卡地址列表
 func (ko *LkkOS) GetMacAddrs() (macAddrs []string) {
-	netInterfaces, err := net.Interfaces()
-	if err != nil {
-		return
-	}
-
-	for _, netInterface := range netInterfaces {
-		macAddr := netInterface.HardwareAddr.String()
-		if len(macAddr) == 0 {
-			continue
+	netInterfaces, _ := net.Interfaces()
+	if len(netInterfaces) > 0 {
+		for _, netInterface := range netInterfaces {
+			macAddr := netInterface.HardwareAddr.String()
+			if len(macAddr) == 0 {
+				continue
+			}
+			macAddrs = append(macAddrs, macAddr)
 		}
-		macAddrs = append(macAddrs, macAddr)
 	}
 
 	return
