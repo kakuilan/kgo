@@ -58,9 +58,9 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/fatih-yavuz/go-helpers -x
 - https://github.com/fingerQin/gophp    -x
 - https://github.com/hhxsv5/go-helpers  -x
-- https://github.com/idoall/TokenExchangeCommon/tree/master/commonutils
-- https://github.com/jiazhoulvke/goutil
-- https://github.com/jimmykuu/webhelpers
+- https://github.com/idoall/TokenExchangeCommon/tree/master/commonutils -x
+- https://github.com/jiazhoulvke/goutil -x
+- https://github.com/jimmykuu/webhelpers    -x
 - https://github.com/kooksee/cmn
 - https://github.com/kooksee/common
 - https://github.com/leifengyao/go2php
@@ -94,6 +94,7 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/keysonZZZ/kgo
 - https://github.com/gobwas/pool
 - https://github.com/shirou/gopsutil
+- https://github.com/sunmi-OS/gocore
 
 
 ### 包
@@ -112,6 +113,9 @@ debug
 
 
 ### 临时
+https://github.com/jimmykuu/webhelpers/blob/master/gravatar.go
+https://github.com/jimmykuu/webhelpers/blob/master/text.go
+
 
 
 encrypt
