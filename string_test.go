@@ -825,3 +825,41 @@ func BenchmarkUnderscoreName(b *testing.B) {
 		KStr.UnderscoreName(str)
 	}
 }
+
+func TestRemoveBefore(t *testing.T) {
+	str := "hello world learn golang"
+	res1 := KStr.RemoveBefore(str, "world", false)
+	res2 := KStr.RemoveBefore(str, "world", true)
+	res3 := KStr.RemoveBefore(str, "World", false)
+	if !strings.Contains(res1, "world") || strings.Contains(res2, "world") || res3 != str {
+		t.Error("RemoveBefore fail")
+		return
+	}
+}
+
+func BenchmarkRemoveBefore(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world learn golang"
+	for i := 0; i < b.N; i++ {
+		KStr.RemoveBefore(str, "world", true)
+	}
+}
+
+func TestRemoveAfter(t *testing.T) {
+	str := "hello world learn golang"
+	res1 := KStr.RemoveAfter(str, "learn", false)
+	res2 := KStr.RemoveAfter(str, "learn", true)
+	res3 := KStr.RemoveAfter(str, "Learn", false)
+	if !strings.Contains(res1, "learn") || strings.Contains(res2, "learn") || res3 != str {
+		t.Error("RemoveAfter fail")
+		return
+	}
+}
+
+func BenchmarkRemoveAfter(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world learn golang"
+	for i := 0; i < b.N; i++ {
+		KStr.RemoveAfter(str, "learn", true)
+	}
+}

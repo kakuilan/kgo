@@ -139,7 +139,6 @@ func TestUsleep(t *testing.T) {
 
 func TestServiceStartime(t *testing.T) {
 	res := KTime.ServiceStartime()
-	println(KTime.Date("Y-m-d H:i:s", res))
 	if res <= 0 {
 		t.Error("ServiceStartime fail")
 		return
@@ -155,8 +154,7 @@ func BenchmarkServiceStartime(b *testing.B) {
 
 func TestServiceUptime(t *testing.T) {
 	res := KTime.ServiceUptime()
-	println("ServiceUptime", res)
-	if res <= 0 {
+	if int64(res) <= 0 {
 		t.Error("ServiceUptime fail")
 		return
 	}
