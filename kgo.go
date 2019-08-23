@@ -1,5 +1,7 @@
 package kgo
 
+import "net"
+
 type (
 	// LkkFile is the receiver of file utilities
 	LkkFile byte
@@ -107,4 +109,7 @@ var (
 
 	// KEncr utilities
 	KEncr LkkEncrypt
+
+	// KPivCidrs 私有网段的CIDR数组
+	KPivCidrs []*net.IPNet
 )
