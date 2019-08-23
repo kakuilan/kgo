@@ -790,3 +790,38 @@ func BenchmarkVersionCompare(b *testing.B) {
 		KStr.VersionCompare("2.3.1", "2.1.3.4", ">=")
 	}
 }
+
+func TestCamelNameUnderscoreName(t *testing.T) {
+	str := "hello world learn_golang"
+	res := KStr.CamelName(str)
+	res1 := KStr.CamelName("device_id ")
+	res2 := KStr.CamelName("create_time ")
+	res3 := KStr.CamelName("location ")
+
+	if strings.Contains(res, "_") || strings.Contains(res1, "_") || strings.Contains(res2, "_") || strings.Contains(res3, " ") {
+		t.Error("CamelName fail")
+		return
+	}
+
+	str = KStr.UnderscoreName(res)
+	if !strings.Contains(str, "_") {
+		t.Error("UnderscoreName fail")
+		return
+	}
+}
+
+func BenchmarkCamelName(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world learn_golang"
+	for i := 0; i < b.N; i++ {
+		KStr.CamelName(str)
+	}
+}
+
+func BenchmarkUnderscoreName(b *testing.B) {
+	b.ResetTimer()
+	str := "HelloWorldLearnGolang"
+	for i := 0; i < b.N; i++ {
+		KStr.UnderscoreName(str)
+	}
+}

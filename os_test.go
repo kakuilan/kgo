@@ -498,7 +498,7 @@ func TestIsPrivateIp(t *testing.T) {
 		return
 	}
 
-	if len(KPivCidrs) != 0 {
+	if len(KPrivCidrs) != 0 {
 		t.Error("IsPrivateIp fail")
 		return
 	}

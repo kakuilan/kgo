@@ -391,11 +391,11 @@ func (ko *LkkOS) IsPrivateIp(address string) (bool, error) {
 		return false, errors.New("address is not valid ip")
 	}
 
-	if KPivCidrs == nil {
-		KPivCidrs = ko.PrivateCIDR()
+	if KPrivCidrs == nil {
+		KPrivCidrs = ko.PrivateCIDR()
 	}
-	for i := range KPivCidrs {
-		if KPivCidrs[i].Contains(ip) {
+	for i := range KPrivCidrs {
+		if KPrivCidrs[i].Contains(ip) {
 			return true, nil
 		}
 	}
