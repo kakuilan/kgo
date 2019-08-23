@@ -184,3 +184,11 @@ https://github.com/idoall/TokenExchangeCommon/blob/master/commonutils/checkmail/
 array_unit
 
 
+debug
+https://colobu.com/2018/11/03/get-function-name-in-go/
+https://colobu.com/2016/12/21/how-to-dump-goroutine-stack-traces/
+https://stackoverflow.com/questions/19094099/how-to-dump-goroutine-stacktraces
+https://github.com/rfyiamcool/stack_dump
+https://www.jianshu.com/p/abbe6663b672
+https://github.com/go-delve/delve
+

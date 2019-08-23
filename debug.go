@@ -8,7 +8,7 @@ import (
 )
 
 // GetFunctionName 获取调用方法的名称;f为目标方法;onlyFun为true时仅返回方法,不包括包名
-func (kd *LkkDebug) GetFunctionName(f interface{}, onlyFun ...bool) string {
+func (kd *LkkDebug) GetFuncName(f interface{}, onlyFun ...bool) string {
 	var funcObj *runtime.Func
 	if f == nil {
 		// Skip this function, and fetch the PC and file for its parent
@@ -26,4 +26,11 @@ func (kd *LkkDebug) GetFunctionName(f interface{}, onlyFun ...bool) string {
 	}
 
 	return name
+}
+
+// GetFuncLine 获取调用方法的行号
+func (kd *LkkDebug) GetFuncLine() int {
+	// Skip this function, and fetch the PC and file for its parent
+	_, _, line, _ := runtime.Caller(1)
+	return line
 }
