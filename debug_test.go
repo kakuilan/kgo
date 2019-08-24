@@ -38,3 +38,14 @@ func BenchmarkGetFuncLine(b *testing.B) {
 		KDbug.GetFuncLine()
 	}
 }
+
+func TestDumpStacks(t *testing.T) {
+	KDbug.DumpStacks()
+}
+
+func BenchmarkDumpStacks(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < 100; i++ {
+		KDbug.DumpStacks()
+	}
+}
