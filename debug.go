@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"fmt"
 	"path/filepath"
 	"reflect"
 	"runtime"
@@ -33,4 +34,11 @@ func (kd *LkkDebug) GetFuncLine() int {
 	// Skip this function, and fetch the PC and file for its parent
 	_, _, line, _ := runtime.Caller(1)
 	return line
+}
+
+// DumpStacks 打印堆栈信息
+func (kd *LkkDebug) DumpStacks() {
+	buf := make([]byte, 16384)
+	buf = buf[:runtime.Stack(buf, true)]
+	fmt.Printf("=== BEGIN goroutine stack dump ===\n%s\n=== END goroutine stack dump ===", buf)
 }
