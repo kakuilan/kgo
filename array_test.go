@@ -754,3 +754,30 @@ func BenchmarkArrayDiff(b *testing.B) {
 		KArr.ArrayDiff(ar1, ar2)
 	}
 }
+
+func TestArrayUnique(t *testing.T) {
+	arr := map[string]string{"a": "green", "0": "red", "b": "green", "1": "blue", "2": "red"}
+	res := KArr.ArrayUnique(arr)
+	if len(res) == 0 {
+		t.Error("ArrayUnique fail")
+		return
+	}
+}
+
+func TestArrayUniquePanic(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	_ = KArr.ArrayUnique("hello")
+}
+
+func BenchmarkArrayUnique(b *testing.B) {
+	b.ResetTimer()
+	arr := map[string]string{"a": "green", "0": "red", "b": "green", "1": "blue", "2": "red"}
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayUnique(arr)
+	}
+}
