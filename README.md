@@ -185,7 +185,7 @@ https://github.com/evilsocket/islazy/blob/master/async/queue.go
 
 ismail
 https://github.com/idoall/TokenExchangeCommon/blob/master/commonutils/checkmail/checkmail.go
-array_unit
+
 
 
 debug
@@ -196,3 +196,10 @@ https://github.com/rfyiamcool/stack_dump
 https://www.jianshu.com/p/abbe6663b672
 https://github.com/go-delve/delve
 
+array_unique
+https://www.cnblogs.com/52php/p/7428854.html
+https://www.dotnetperls.com/duplicates-go
+https://stackoverflow.com/questions/9251234/go-append-if-unique
+https://stackoverflow.com/questions/21399728/is-there-a-way-to-unique-a-mapstringinterface-for-golang
+http://cn.voidcc.com/question/p-ukiesdfs-bbp.html
+https://stackoverflow.com/questions/24512112/how-to-print-struct-variables-in-console
