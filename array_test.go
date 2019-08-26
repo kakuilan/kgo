@@ -756,9 +756,11 @@ func BenchmarkArrayDiff(b *testing.B) {
 }
 
 func TestArrayUnique(t *testing.T) {
-	arr := map[string]string{"a": "green", "0": "red", "b": "green", "1": "blue", "2": "red"}
-	res := KArr.ArrayUnique(arr)
-	if len(res) == 0 {
+	arr1 := map[string]string{"a": "green", "0": "red", "b": "green", "1": "blue", "2": "red"}
+	arr2 := []string{"aa", "bb", "cc", "", "bb", "aa"}
+	res1 := KArr.ArrayUnique(arr1)
+	res2 := KArr.ArrayUnique(arr2)
+	if len(res1) == 0 || len(res2) == 0 {
 		t.Error("ArrayUnique fail")
 		return
 	}
