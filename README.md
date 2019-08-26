@@ -195,3 +195,10 @@ https://stackoverflow.com/questions/19094099/how-to-dump-goroutine-stacktraces
 https://github.com/rfyiamcool/stack_dump
 https://www.jianshu.com/p/abbe6663b672
 https://github.com/go-delve/delve
+
+array sort
+https://stackoverflow.com/questions/36122668/how-to-sort-struct-with-multiple-sort-parameters
+https://yourbasic.org/golang/how-to-sort-in-go/
+https://itimetraveler.github.io/2016/09/07/%E3%80%90Go%E8%AF%AD%E8%A8%80%E3%80%91%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E6%8E%92%E5%BA%8F%E5%92%8C%20slice%20%E6%8E%92%E5%BA%8F/
+https://blog.csdn.net/chenbaoke/article/details/42340301
+https://stackoverflow.com/questions/37695209/golang-sort-slice-ascending-or-descending
