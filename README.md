@@ -179,6 +179,9 @@ https://github.com/go-resty/resty
 https://github.com/gojek/heimdall
 https://github.com/dghubble/sling
 https://github.com/h2non/gentleman
+https://github.com/guonaihong/gout
+https://github.com/levigross/grequests
+
 
 queue
 https://github.com/evilsocket/islazy/blob/master/async/queue.go
