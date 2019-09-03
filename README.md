@@ -84,6 +84,7 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/thinkeridea/go-extend
 - https://github.com/huandu/xstrings
 - https://github.com/bytedance/go-tagexpr
+- https://github.com/pibigstar/go-demo
 
 
 ### 其他库
