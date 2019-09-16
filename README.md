@@ -84,6 +84,7 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/thinkeridea/go-extend
 - https://github.com/huandu/xstrings
 - https://github.com/bytedance/go-tagexpr
+- https://github.com/pibigstar/go-demo
 
 
 ### 其他库
@@ -139,7 +140,6 @@ https://smalltowntechblog.wordpress.com/2014/12/28/%E5%A6%82%E4%BD%95%E8%AE%93-a
 https://www.itread01.com/content/1547577396.html
 https://stackoverflow.com/questions/18817336/golang-encrypting-a-string-with-aes-and-base64
 https://github.com/bocajim/helpers/blob/master/crypt.go
-
 
 
 json库
