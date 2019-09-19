@@ -61,7 +61,8 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/idoall/TokenExchangeCommon/tree/master/commonutils -x
 - https://github.com/jiazhoulvke/goutil -x
 - https://github.com/jimmykuu/webhelpers    -x
-- https://github.com/kooksee/cmn utils
+- https://github.com/kooksee/cmn    -x
+- https://github.com/kooksee/g
 - https://github.com/kooksee/common
 - https://github.com/leifengyao/go2php  -x
 - https://github.com/leizongmin/go-utils

@@ -665,3 +665,71 @@ func BenchmarkToFloat(b *testing.B) {
 		KConv.ToFloat("123")
 	}
 }
+
+func TestFloat64ToByte(t *testing.T) {
+	var num float64 = 12345.6
+	res := KConv.Float64ToByte(num)
+	if len(res) == 0 {
+		t.Error("Float64ToByte fail")
+		return
+	}
+}
+
+func BenchmarkFloat64ToByte(b *testing.B) {
+	b.ResetTimer()
+	var num float64 = 12345.6
+	for i := 0; i < b.N; i++ {
+		KConv.Float64ToByte(num)
+	}
+}
+
+func TestByteToFloat64(t *testing.T) {
+	bs := []byte{205, 204, 204, 204, 204, 28, 200, 64}
+	res := KConv.ByteToFloat64(bs)
+	if res != 12345.6 {
+		t.Error("ByteToFloat64 fail")
+		return
+	}
+}
+
+func BenchmarkByteToFloat64(b *testing.B) {
+	b.ResetTimer()
+	bs := []byte{205, 204, 204, 204, 204, 28, 200, 64}
+	for i := 0; i < b.N; i++ {
+		KConv.ByteToFloat64(bs)
+	}
+}
+
+func TestInt64ToByte(t *testing.T) {
+	var num int64 = 12345
+	res := KConv.Int64ToByte(num)
+	if len(res) == 0 {
+		t.Error("Int64ToByte fail")
+		return
+	}
+}
+
+func BenchmarkInt64ToByte(b *testing.B) {
+	b.ResetTimer()
+	var num int64 = 12345
+	for i := 0; i < b.N; i++ {
+		KConv.Int64ToByte(num)
+	}
+}
+
+func TestByteToInt64(t *testing.T) {
+	bs := []byte{0, 0, 0, 0, 0, 0, 48, 57}
+	res := KConv.ByteToInt64(bs)
+	if res != 12345 {
+		t.Error("ByteToFloat64 fail")
+		return
+	}
+}
+
+func BenchmarkByteToInt64(b *testing.B) {
+	b.ResetTimer()
+	bs := []byte{0, 0, 0, 0, 0, 0, 48, 57}
+	for i := 0; i < b.N; i++ {
+		KConv.ByteToInt64(bs)
+	}
+}
