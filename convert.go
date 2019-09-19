@@ -3,6 +3,7 @@ package kgo
 import (
 	"encoding/binary"
 	"fmt"
+	"math"
 	"net"
 	"reflect"
 	"strconv"
@@ -301,4 +302,33 @@ func (kc *LkkConvert) ToFloat(val interface{}) float64 {
 	} else {
 		return kc.Str2Float64(str)
 	}
+}
+
+// Float64ToByte 64位浮点数转字节切片
+func (kc *LkkConvert) Float64ToByte(val float64) []byte {
+	bits := math.Float64bits(val)
+	res := make([]byte, 8)
+	binary.LittleEndian.PutUint64(res, bits)
+
+	return res
+}
+
+// ByteToFloat64 字节切片转64位浮点数
+func (kc *LkkConvert) ByteToFloat64(bytes []byte) float64 {
+	bits := binary.LittleEndian.Uint64(bytes)
+
+	return math.Float64frombits(bits)
+}
+
+// Int64ToByte 64位整型转字节切片
+func (kc *LkkConvert) Int64ToByte(val int64) []byte {
+	res := make([]byte, 8)
+	binary.BigEndian.PutUint64(res, uint64(val))
+
+	return res
+}
+
+// ByteToInt64 字节切片转64位整型
+func (kc *LkkConvert) ByteToInt64(val []byte) int64 {
+	return int64(binary.BigEndian.Uint64(val))
 }
