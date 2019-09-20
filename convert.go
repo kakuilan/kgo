@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"encoding/binary"
+	"encoding/hex"
 	"fmt"
 	"math"
 	"net"
@@ -331,4 +332,15 @@ func (kc *LkkConvert) Int64ToByte(val int64) []byte {
 // ByteToInt64 字节切片转64位整型
 func (kc *LkkConvert) ByteToInt64(val []byte) int64 {
 	return int64(binary.BigEndian.Uint64(val))
+}
+
+// Byte2Hex 字节切片转16进制字符串
+func (kc *LkkConvert) Byte2Hex(val []byte) string {
+	return hex.EncodeToString(val)
+}
+
+// Hex2Byte 16进制字符串转字节切片
+func (kc *LkkConvert) Hex2Byte(str string) []byte {
+	h, _ := hex.DecodeString(str)
+	return h
 }

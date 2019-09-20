@@ -733,3 +733,37 @@ func BenchmarkByteToInt64(b *testing.B) {
 		KConv.ByteToInt64(bs)
 	}
 }
+
+func TestByte2Hex(t *testing.T) {
+	bs := []byte("hello")
+	res := KConv.Byte2Hex(bs)
+	if res != "68656c6c6f" {
+		t.Error("Byte2Hex fail")
+		return
+	}
+}
+
+func BenchmarkByte2Hex(b *testing.B) {
+	b.ResetTimer()
+	bs := []byte("hello")
+	for i := 0; i < b.N; i++ {
+		KConv.Byte2Hex(bs)
+	}
+}
+
+func TestHex2Byte(t *testing.T) {
+	str := "68656c6c6f"
+	res := KConv.Hex2Byte(str)
+	if string(res) != "hello" {
+		t.Error("Hex2Byte fail")
+		return
+	}
+}
+
+func BenchmarkHex2Byte(b *testing.B) {
+	b.ResetTimer()
+	str := "68656c6c6f"
+	for i := 0; i < b.N; i++ {
+		KConv.Hex2Byte(str)
+	}
+}
