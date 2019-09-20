@@ -63,7 +63,7 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/jimmykuu/webhelpers    -x
 - https://github.com/kooksee/cmn    -x
 - https://github.com/kooksee/g  -x
-- https://github.com/kooksee/common
+- https://github.com/kooksee/common -x
 - https://github.com/leifengyao/go2php  -x
 - https://github.com/leizongmin/go-utils   -x
 - https://github.com/lets-go-go/helper  -x
