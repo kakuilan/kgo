@@ -113,7 +113,7 @@ func BenchmarkStringShaX(b *testing.B) {
 
 func TestRandomAlpha(t *testing.T) {
 	res := KStr.Random(8, RAND_STRING_ALPHA)
-	if !KStr.IsLetter(res) {
+	if !KStr.IsLetters(res) {
 		t.Error("RandomAlpha fail")
 		return
 	}
