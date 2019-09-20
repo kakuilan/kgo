@@ -159,7 +159,7 @@ func (kf *LkkFile) IsBinary(path string) bool {
 		return false
 	}
 
-	return KStr.IsBinary(string(cont))
+	return KConv.IsBinary(string(cont))
 }
 
 // IsImg 是否图片文件

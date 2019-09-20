@@ -8,7 +8,7 @@ import (
 
 func TestStringIsBinary(t *testing.T) {
 	cont, _ := KFile.GetContents("./file.go")
-	if KStr.IsBinary(string(cont)) {
+	if KConv.IsBinary(string(cont)) {
 		t.Error("str isn`t binary")
 		return
 	}
@@ -23,20 +23,20 @@ func BenchmarkStringIsBinary(b *testing.B) {
 	}
 }
 
-func TestIsLetter(t *testing.T) {
-	res := KStr.IsLetter("hello")
+func TestIsLetters(t *testing.T) {
+	res := KStr.IsLetters("hello")
 	if !res {
-		t.Error("IsLetter fail")
+		t.Error("IsLetters fail")
 		return
 	}
-	KStr.IsLetter("")
-	KStr.IsLetter("123")
+	KStr.IsLetters("")
+	KStr.IsLetters("123")
 }
 
-func BenchmarkIsLetter(b *testing.B) {
+func BenchmarkIsLetters(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KStr.IsLetter("hello")
+		KStr.IsLetters("hello")
 	}
 }
 
@@ -282,5 +282,25 @@ func BenchmarkIsBool(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.IsBool("hello")
+	}
+}
+
+func TestIsHex(t *testing.T) {
+	num1 := KConv.Dec2hex(1234)
+	num2 := "0x" + num1
+	res1 := KConv.IsHex(num1)
+	res2 := KConv.IsHex(num2)
+	res3 := KConv.IsHex("hello")
+	res4 := KConv.IsHex("")
+	if !res1 || !res2 || res3 || res4 {
+		t.Error("IsHex fail")
+		return
+	}
+}
+
+func BenchmarkIsHex(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsHex("4d2")
 	}
 }

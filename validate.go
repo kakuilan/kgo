@@ -5,21 +5,12 @@ import (
 	"math"
 	"reflect"
 	"regexp"
+	"strconv"
 	"unicode"
 )
 
-// IsBinary 字符串是否二进制
-func (ks *LkkString) IsBinary(s string) bool {
-	for _, b := range s {
-		if 0 == b {
-			return true
-		}
-	}
-	return false
-}
-
-// IsLetter 字符串是否字母
-func (ks *LkkString) IsLetter(s string) bool {
+// IsLetters 字符串是否纯字母组成
+func (ks *LkkString) IsLetters(s string) bool {
 	if s == "" {
 		return false
 	}
@@ -29,21 +20,6 @@ func (ks *LkkString) IsLetter(s string) bool {
 		}
 	}
 	return true
-}
-
-// IsNumeric 变量是否数值(不包含复数和科学计数法)
-func (kc *LkkConvert) IsNumeric(val interface{}) bool {
-	return isNumeric(val)
-}
-
-// IsInt 变量是否整型数值
-func (kc *LkkConvert) IsInt(val interface{}) bool {
-	return isInt(val)
-}
-
-// IsFloat 变量是否浮点数值
-func (kc *LkkConvert) IsFloat(val interface{}) bool {
-	return isFloat(val)
 }
 
 // HasChinese 字符串是否含有中文
@@ -97,6 +73,31 @@ func (kn *LkkNumber) IsNan(val float64) bool {
 	return math.IsNaN(val)
 }
 
+// IsBinary 字符串是否二进制
+func (kc *LkkConvert) IsBinary(s string) bool {
+	for _, b := range s {
+		if 0 == b {
+			return true
+		}
+	}
+	return false
+}
+
+// IsNumeric 变量是否数值(不包含复数和科学计数法)
+func (kc *LkkConvert) IsNumeric(val interface{}) bool {
+	return isNumeric(val)
+}
+
+// IsInt 变量是否整型数值
+func (kc *LkkConvert) IsInt(val interface{}) bool {
+	return isInt(val)
+}
+
+// IsFloat 变量是否浮点数值
+func (kc *LkkConvert) IsFloat(val interface{}) bool {
+	return isFloat(val)
+}
+
 // IsEmpty 检查一个变量是否为空
 func (kc *LkkConvert) IsEmpty(val interface{}) bool {
 	if val == nil {
@@ -126,4 +127,15 @@ func (kc *LkkConvert) IsEmpty(val interface{}) bool {
 // IsBool 是否布尔值
 func (kc *LkkConvert) IsBool(v interface{}) bool {
 	return v == true || v == false
+}
+
+// IsHex 是否十六进制字符串
+func (kc *LkkConvert) IsHex(str string) bool {
+	start := 0
+	if len(str) > 2 && str[0:2] == "0x" {
+		start = 2
+	}
+
+	_, err := strconv.ParseUint(str[start:], 16, 64)
+	return err == nil
 }
