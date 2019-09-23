@@ -8,10 +8,10 @@ import (
 func TestGetFuncName(t *testing.T) {
 	res1 := KDbug.GetFuncName(nil, false)
 	res2 := KDbug.GetFuncName(nil, true)
-	res3 := KDbug.GetFuncName(KArr.ArrayDiff, true) //ArrayDiff-fm
-	res4 := KDbug.GetFuncName(KArr.ArrayDiff, true) //ArrayDiff-fm
+	res3 := KDbug.GetFuncName(KArr.ArrayDiff, false) // ...ArrayDiff-fm
+	res4 := KDbug.GetFuncName(KArr.ArrayDiff, true)  // ArrayDiff-fm
 
-	if !strings.Contains(res1, "TestGetFuncName") || res2 != "TestGetFuncName" || !strings.Contains(res3, "ArrayDiff") || !strings.Contains(res4, "ArrayDiff") {
+	if !strings.Contains(res1, "TestGetFuncName") || res2 != "TestGetFuncName" || !strings.Contains(res3, "ArrayDiff") || !strings.HasPrefix(res4, "ArrayDiff") {
 		t.Error("GetFuncName fail")
 		return
 	}
