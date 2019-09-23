@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 )
 
@@ -276,8 +277,9 @@ func TestByteFormat(t *testing.T) {
 	res2 := KNum.ByteFormat(1024000, 2)
 	res3 := KNum.ByteFormat(1024000000, 3)
 	res4 := KNum.ByteFormat(1024000000000, 4)
+	res5 := KNum.ByteFormat(1024000000000000000000000000000000000, 4)
 
-	if res1 == "" || res2 == "" || res3 == "" || res4 == "" {
+	if res1 == "" || res2 == "" || res3 == "" || res4 == "" || !strings.HasSuffix(res5, "UnKnown") {
 		t.Error("ByteFormat fail")
 		return
 	}

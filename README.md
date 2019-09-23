@@ -70,7 +70,7 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/mylxsw/go-toolkit  -未完成
 - https://github.com/nletech/go-func    -x
 - https://github.com/orivil/helper  -x
-- https://github.com/relunctance/goutils
+- https://github.com/relunctance/goutils -x
 - https://github.com/seiflotfy/do
 - https://github.com/shuangdeyu/helper_go
 - https://github.com/sohaha/zlsgo
