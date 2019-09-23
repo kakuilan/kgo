@@ -71,7 +71,7 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/nletech/go-func    -x
 - https://github.com/orivil/helper  -x
 - https://github.com/relunctance/goutils -x
-- https://github.com/seiflotfy/do
+- https://github.com/seiflotfy/do   -x
 - https://github.com/shuangdeyu/helper_go
 - https://github.com/sohaha/zlsgo
 - https://github.com/stephanbaker/go-simpletime
@@ -86,6 +86,7 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/huandu/xstrings
 - https://github.com/bytedance/go-tagexpr
 - https://github.com/pibigstar/go-demo
+- https://github.com/techoner/gophp
 
 
 ### 其他库
@@ -210,4 +211,26 @@ https://stackoverflow.com/questions/37695209/golang-sort-slice-ascending-or-desc
 setInterval
 https://www.loxodrome.io/post/set-timeout-interval-go/
 https://stackoverflow.com/questions/16466320/is-there-a-way-to-do-repetitive-tasks-at-intervals
+
+serialize
+https://segmentfault.com/q/1010000010690732
+https://github.com/yvasiyarov/php_session_decoder/tree/master/php_serialize
+https://segmentfault.com/a/1190000016818544
+https://stackoverflow.com/questions/28020070/golang-serialize-and-deserialize-back
+https://github.com/techoner/gophp/tree/master/serialize
+
+net 简单http请求方法
+https://github.com/shuangdeyu/helper_go/blob/master/nethelper/http.go
+
+base58
+https://godoc.org/github.com/btcsuite/btcutil/base58
+https://github.com/itchyny/base58-go
+https://blog.csdn.net/idwtwt/article/details/80740474
+https://studygolang.com/articles/16870
+https://github.com/mr-tron/base58
+https://github.com/itchyny/base58-go
+https://github.com/shuangdeyu/helper_go/blob/master/pwdhelper/base58.go
+https://blog.csdn.net/jason_cuijiahui/article/details/79280362
+
+
 
