@@ -9,7 +9,7 @@ import (
 )
 
 // NumberFormat 以千位分隔符方式格式化一个数字;decimals为要保留的小数位数,decPoint为小数点显示的字符,thousandsSep为千位分隔符显示的字符
-func (kn *LkkNumber) NumberFormat(number float64, decimals uint, decPoint, thousandsSep string) string {
+func (kn *LkkNumber) NumberFormat(number float64, decimals uint8, decPoint, thousandsSep string) string {
 	neg := false
 	if number < 0 {
 		number = -number
@@ -138,4 +138,25 @@ func (kn *LkkNumber) Expm1(x float64) float64 {
 // Pow 指数表达式
 func (kn *LkkNumber) Pow(x, y float64) float64 {
 	return math.Pow(x, y)
+}
+
+// ByteFormat 格式化文件比特大小.size为文件大小,decimals为要保留的小数位数.
+func (kn *LkkNumber) ByteFormat(size float64, decimals uint8) string {
+	var arr = []string{"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB", "UnKnown"}
+	var pos int = 0
+	var j float64 = float64(i)
+	for {
+		if size >= 1024 {
+			size = size / 1024
+			j = j / 1024
+			pos++
+		} else {
+			break
+		}
+	}
+	if pos >= len(arr) { // fixed out index bug
+		pos = len(arr) - 1
+	}
+
+	return fmt.Sprintf("%."+strconv.Itoa(int(decimals))+"f%s", j, arr[pos])
 }

@@ -275,16 +275,6 @@ func (ks *LkkString) StrShuffle(str string) string {
 	return string(s)
 }
 
-func getTrimMask(characterMask []string) string {
-	mask := ""
-	if len(characterMask) == 0 {
-		mask = " \\t\\n\\r\\0\\x0B　"
-	} else {
-		mask = characterMask[0]
-	}
-	return mask
-}
-
 // Trim 去除字符串首尾处的空白字符（或者其他字符）
 func (ks *LkkString) Trim(str string, characterMask ...string) string {
 	mask := getTrimMask(characterMask)
