@@ -144,7 +144,7 @@ func (kn *LkkNumber) Pow(x, y float64) float64 {
 func (kn *LkkNumber) ByteFormat(size float64, decimals uint8) string {
 	var arr = []string{"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB", "UnKnown"}
 	var pos int = 0
-	var j float64 = float64(i)
+	var j float64 = float64(size)
 	for {
 		if size >= 1024 {
 			size = size / 1024
