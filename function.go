@@ -200,3 +200,14 @@ func arrayValues(arr interface{}, filterNil bool) []interface{} {
 
 	return res
 }
+
+// 去除mask字符
+func getTrimMask(characterMask []string) string {
+	mask := ""
+	if len(characterMask) == 0 {
+		mask = " \\t\\n\\r\\0\\x0B　"
+	} else {
+		mask = characterMask[0]
+	}
+	return mask
+}
