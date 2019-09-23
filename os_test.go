@@ -302,6 +302,26 @@ func BenchmarkMemoryUsage(b *testing.B) {
 	}
 }
 
+func TestCpuUsage(t *testing.T) {
+	usr, idle, total := KOS.CpuUsage()
+
+	// 注意: usr/total,两个整数相除，结果是整数，取整数部分为0
+	usedRate := float64(usr) / float64(total)
+	freeRate := float64(idle) / float64(total)
+
+	if usedRate == 0 || freeRate == 0 {
+		t.Error("CpuUsage fail")
+		return
+	}
+}
+
+func BenchmarkCpuUsage(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.CpuUsage()
+	}
+}
+
 func TestSetenvGetenv(t *testing.T) {
 	name1 := "HELLO"
 	name2 := "HOME"
