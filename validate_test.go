@@ -155,6 +155,46 @@ func BenchmarkIsJSON(b *testing.B) {
 	}
 }
 
+func TestIsIPv4(t *testing.T) {
+	res1 := KStr.IsIPv4("")
+	res2 := KStr.IsIPv4("8.9.10.11")
+	res3 := KStr.IsIPv4("192.168.0.1:80")
+	res4 := KStr.IsIPv4("::FFFF:C0A8:1")
+	res5 := KStr.IsIPv4("fe80::2c04:f7ff:feaa:33b7")
+
+	if res1 || !res2 || res3 || res4 || res5 {
+		t.Error("IsIPv4 fail")
+		return
+	}
+}
+
+func BenchmarkIsIPv4(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsIPv4("8.9.10.11")
+	}
+}
+
+func TestIsIPv6(t *testing.T) {
+	res1 := KStr.IsIPv6("")
+	res2 := KStr.IsIPv6("8.9.10.11")
+	res3 := KStr.IsIPv6("192.168.0.1:80")
+	res4 := KStr.IsIPv6("::FFFF:C0A8:1")
+	res5 := KStr.IsIPv6("fe80::2c04:f7ff:feaa:33b7")
+
+	if res1 || res2 || res3 || !res4 || !res5 {
+		t.Error("IsIPv6 fail")
+		return
+	}
+}
+
+func BenchmarkIsIPv6(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsIPv6("fe80::2c04:f7ff:feaa:33b7")
+	}
+}
+
 func TestIsArrayOrSlice(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
