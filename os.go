@@ -203,7 +203,7 @@ func (ko *LkkOS) GoMemory() uint64 {
 // MemoryUsage 获取内存使用率(仅支持linux),单位字节.参数virtual,是否取虚拟内存.
 // used为已用,
 // free为空闲,
-// total为总内存.
+// total为总数.
 func (ko *LkkOS) MemoryUsage(virtual bool) (used, free, total uint64) {
 	if virtual {
 		// 虚拟机的内存
@@ -267,6 +267,22 @@ func (ko *LkkOS) CpuUsage() (user, idle, total uint64) {
 				return
 			}
 		}
+	}
+
+	return
+}
+
+// DiskUsage 获取磁盘/目录使用情况,单位字节.参数path为目录.
+// used为已用,
+// free为空闲,
+// total为总数.
+func (ko *LkkOS) DiskUsage(path string) (used, free, total uint64) {
+	fs := &syscall.Statfs_t{}
+	err := syscall.Statfs(path, fs)
+	if err == nil {
+		total = fs.Blocks * uint64(fs.Bsize)
+		free = fs.Bfree * uint64(fs.Bsize)
+		used = total - free
 	}
 
 	return
