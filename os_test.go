@@ -354,6 +354,21 @@ func BenchmarkCpuUsage(b *testing.B) {
 	}
 }
 
+func TestDiskUsage(t *testing.T) {
+	used, free, total := KOS.DiskUsage("/")
+	if used <= 0 || free <= 0 || total <= 0 {
+		t.Error("DiskUsage fail")
+		return
+	}
+}
+
+func BenchmarkDiskUsage(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.DiskUsage("/")
+	}
+}
+
 func TestSetenvGetenv(t *testing.T) {
 	name1 := "HELLO"
 	name2 := "HOME"
