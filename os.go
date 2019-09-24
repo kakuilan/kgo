@@ -192,8 +192,8 @@ func (ko *LkkOS) GetHostByIp(ipAddress string) (string, error) {
 	return "", err
 }
 
-// MemoryGetUsage 获取当前程序的内存使用率,返回字节数
-func (ko *LkkOS) MemoryUsage() uint64 {
+// MemoryGetUsage 获取当前go程序的内存使用率,返回字节数
+func (ko *LkkOS) GoMemory() uint64 {
 	stat := new(runtime.MemStats)
 	runtime.ReadMemStats(stat)
 	return stat.Alloc
