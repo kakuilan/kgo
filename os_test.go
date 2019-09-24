@@ -302,6 +302,38 @@ func BenchmarkGoMemory(b *testing.B) {
 	}
 }
 
+func TestMemoryUsage(t *testing.T) {
+	// 虚拟内存
+	used1, free1, total1 := KOS.MemoryUsage(true)
+	//usedRate1 := float64(used1) / float64(total1)
+	if used1 <= 0 || free1 <= 0 || total1 <= 0 {
+		t.Error("MemoryUsage(true) fail")
+		return
+	}
+
+	// 真实物理内存
+	used2, free2, total2 := KOS.MemoryUsage(false)
+	//usedRate2 := float64(used2) / float64(total2)
+	if used2 <= 0 || free2 <= 0 || total2 <= 0 {
+		t.Error("MemoryUsage(false) fail")
+		return
+	}
+}
+
+func BenchmarkMemoryUsageVirtual(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.MemoryUsage(true)
+	}
+}
+
+func BenchmarkMemoryUsagePhysic(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.MemoryUsage(false)
+	}
+}
+
 func TestCpuUsage(t *testing.T) {
 	usr, idle, total := KOS.CpuUsage()
 
