@@ -690,3 +690,15 @@ func BenchmarkClientIp(b *testing.B) {
 		KOS.ClientIp(req)
 	}
 }
+
+func TestGetSystemInfo(t *testing.T) {
+	info := KOS.GetSystemInfo()
+	fmt.Printf("%+v\n", info)
+}
+
+func BenchmarkGetSystemInfo(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetSystemInfo()
+	}
+}
