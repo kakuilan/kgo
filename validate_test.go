@@ -376,3 +376,54 @@ func BenchmarkIsByte(b *testing.B) {
 		KConv.IsByte([]byte("hello"))
 	}
 }
+
+func TestIsStruct(t *testing.T) {
+	type sutTest struct {
+		test string
+	}
+	sut := sutTest{test: "T"}
+
+	chk1 := KConv.IsStruct("hello")
+	chk2 := KConv.IsStruct(sut)
+	chk3 := KConv.IsStruct(&sut)
+
+	if chk1 || !chk2 || !chk3 {
+		t.Error("IsStruct fail")
+		return
+	}
+}
+
+func BenchmarkIsStruct(b *testing.B) {
+	b.ResetTimer()
+	type sutTest struct {
+		test string
+	}
+	sut := sutTest{test: "T"}
+	for i := 0; i < b.N; i++ {
+		KConv.IsStruct(&sut)
+	}
+}
+
+func TestIsInterface(t *testing.T) {
+	type inTest interface {
+	}
+	var in inTest
+
+	chk1 := KConv.IsInterface("hello")
+	chk2 := KConv.IsInterface(in)
+
+	if chk1 || !chk2 {
+		t.Error("IsInterface fail")
+		return
+	}
+}
+
+func BenchmarkIsInterface(b *testing.B) {
+	b.ResetTimer()
+	type inTest interface {
+	}
+	var in inTest
+	for i := 0; i < b.N; i++ {
+		KConv.IsInterface(in)
+	}
+}
