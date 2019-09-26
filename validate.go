@@ -163,3 +163,8 @@ func (kc *LkkConvert) IsHex(str string) bool {
 	_, err := strconv.ParseUint(str[start:], 16, 64)
 	return err == nil
 }
+
+// IsByte 变量是否字节切片
+func (kc *LkkConvert) IsByte(v interface{}) bool {
+	return kc.Gettype(v) == "[]uint8"
+}

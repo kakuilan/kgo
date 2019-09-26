@@ -360,3 +360,19 @@ func BenchmarkIsString(b *testing.B) {
 		KConv.IsString("hello")
 	}
 }
+
+func TestIsByte(t *testing.T) {
+	chk1 := KConv.IsByte("hello")
+	chk2 := KConv.IsByte([]byte("hello"))
+	if chk1 || !chk2 {
+		t.Error("IsByte fail")
+		return
+	}
+}
+
+func BenchmarkIsByte(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsByte([]byte("hello"))
+	}
+}
