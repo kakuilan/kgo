@@ -73,14 +73,14 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/relunctance/goutils -x
 - https://github.com/seiflotfy/do   -x
 - https://github.com/shuangdeyu/helper_go   -x
-- https://github.com/sohaha/zlsgo
-- https://github.com/stephanbaker/go-simpletime
-- https://github.com/vence722/convert
-- https://github.com/jinzhu/now
-- https://github.com/thinkeridea/go-extend
-- https://github.com/lalamove/nui
-- https://github.com/go-eyas/toolkit
-- https://github.com/hwholiday/learning_tools
+- https://github.com/sohaha/zlsgo   -x
+- https://github.com/stephanbaker/go-simpletime -x
+- https://github.com/vence722/convert   -x
+- https://github.com/jinzhu/now -x
+- https://github.com/thinkeridea/go-extend -x
+- https://github.com/lalamove/nui   -x
+- https://github.com/go-eyas/toolkit    -x
+- https://github.com/hwholiday/learning_tools   -x
 - https://github.com/nothollyhigh/kiss
 - https://github.com/thinkeridea/go-extend
 - https://github.com/huandu/xstrings
@@ -142,6 +142,7 @@ https://smalltowntechblog.wordpress.com/2014/12/28/%E5%A6%82%E4%BD%95%E8%AE%93-a
 https://www.itread01.com/content/1547577396.html
 https://stackoverflow.com/questions/18817336/golang-encrypting-a-string-with-aes-and-base64
 https://github.com/bocajim/helpers/blob/master/crypt.go
+https://github.com/nothollyhigh/kiss/tree/master/crypto
 
 
 json库
@@ -222,6 +223,7 @@ https://github.com/techoner/gophp/tree/master/serialize
 net 简单http请求方法
 https://github.com/shuangdeyu/helper_go/blob/master/nethelper/http.go
 https://github.com/sohaha/zlsgo/blob/master/zhttp/client.go
+https://github.com/go-eyas/toolkit/tree/master/http
 
 
 base58
@@ -236,7 +238,12 @@ https://blog.csdn.net/jason_cuijiahui/article/details/79280362
 
 validate
 https://github.com/shuangdeyu/helper_go/blob/master/verhelper/verify.go
+https://github.com/sohaha/zlsgo/blob/master/zvalidator/validator.go
+https://github.com/nothollyhigh/kiss/blob/master/util/regexp.go
 
+
+mutex
+https://github.com/nothollyhigh/kiss/blob/master/sync/mutex.go
 
 
 
