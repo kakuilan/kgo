@@ -168,3 +168,15 @@ func (kc *LkkConvert) IsHex(str string) bool {
 func (kc *LkkConvert) IsByte(v interface{}) bool {
 	return kc.Gettype(v) == "[]uint8"
 }
+
+// IsStruct 变量是否结构体
+func (kc *LkkConvert) IsStruct(v interface{}) bool {
+	r := reflectPtr(reflect.ValueOf(v))
+	return r.Kind() == reflect.Struct
+}
+
+// IsInterface 变量是否接口
+func (kc *LkkConvert) IsInterface(v interface{}) bool {
+	r := reflectPtr(reflect.ValueOf(v))
+	return r.Kind() == reflect.Invalid
+}

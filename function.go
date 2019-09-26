@@ -201,7 +201,7 @@ func arrayValues(arr interface{}, filterNil bool) []interface{} {
 	return res
 }
 
-// 去除mask字符
+// getTrimMask 去除mask字符
 func getTrimMask(characterMask []string) string {
 	mask := ""
 	if len(characterMask) == 0 {
@@ -210,4 +210,13 @@ func getTrimMask(characterMask []string) string {
 		mask = characterMask[0]
 	}
 	return mask
+}
+
+// reflectPtr 获取反射的指向
+func reflectPtr(r reflect.Value) reflect.Value {
+	// 如果是指针，则获取其所指向的元素
+	if r.Kind() == reflect.Ptr {
+		r = r.Elem()
+	}
+	return r
 }
