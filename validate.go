@@ -92,6 +92,11 @@ func (kn *LkkNumber) IsNan(val float64) bool {
 	return math.IsNaN(val)
 }
 
+// IsString 变量是否字符串
+func (kc *LkkConvert) IsString(v interface{}) bool {
+	return kc.Gettype(v) == "string"
+}
+
 // IsBinary 字符串是否二进制
 func (kc *LkkConvert) IsBinary(s string) bool {
 	for _, b := range s {
