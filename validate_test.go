@@ -344,3 +344,19 @@ func BenchmarkIsHex(b *testing.B) {
 		KConv.IsHex("4d2")
 	}
 }
+
+func TestIsString(t *testing.T) {
+	chk1 := KConv.IsString(123)
+	chk2 := KConv.IsString("hello")
+	if chk1 || !chk2 {
+		t.Error("IsString fail")
+		return
+	}
+}
+
+func BenchmarkIsString(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsString("hello")
+	}
+}
