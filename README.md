@@ -81,12 +81,11 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/lalamove/nui   -x
 - https://github.com/go-eyas/toolkit    -x
 - https://github.com/hwholiday/learning_tools   -x
-- https://github.com/nothollyhigh/kiss
-- https://github.com/thinkeridea/go-extend
-- https://github.com/huandu/xstrings
-- https://github.com/bytedance/go-tagexpr
-- https://github.com/pibigstar/go-demo
-- https://github.com/techoner/gophp
+- https://github.com/nothollyhigh/kiss  -x
+- https://github.com/huandu/xstrings    -x
+- https://github.com/bytedance/go-tagexpr   -x
+- https://github.com/pibigstar/go-demo  -x
+- https://github.com/techoner/gophp -x
 
 
 ### 其他库
@@ -94,7 +93,6 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/jinzhu/configor
 - https://github.com/denisbrodbeck/machineid
 - github.com/karrick/godirwalk
-- https://github.com/keysonZZZ/kgo
 - https://github.com/gobwas/pool
 - https://github.com/shirou/gopsutil
 - https://github.com/sunmi-OS/gocore
@@ -212,6 +210,12 @@ https://stackoverflow.com/questions/37695209/golang-sort-slice-ascending-or-desc
 setInterval
 https://www.loxodrome.io/post/set-timeout-interval-go/
 https://stackoverflow.com/questions/16466320/is-there-a-way-to-do-repetitive-tasks-at-intervals
+https://github.com/giuseppesalvo/tm
+https://github.com/coreybutler/go-timer
+https://github.com/cube-group/go-timer
+https://github.com/goinstant/delayd
+https://zhuanlan.zhihu.com/p/55295257
+
 
 serialize
 https://segmentfault.com/q/1010000010690732
@@ -240,6 +244,7 @@ validate
 https://github.com/shuangdeyu/helper_go/blob/master/verhelper/verify.go
 https://github.com/sohaha/zlsgo/blob/master/zvalidator/validator.go
 https://github.com/nothollyhigh/kiss/blob/master/util/regexp.go
+https://github.com/bytedance/go-tagexpr
 
 
 mutex
