@@ -33,8 +33,12 @@ type (
 	LkkFileTree int8
 	// LkkRandString 枚举类型,随机字符串类型
 	LkkRandString uint8
+
 	// FileFilter 文件过滤函数
 	FileFilter func(string) bool
+
+	// CallBack 回调执行函数,无参数且无返回值
+	CallBack func()
 )
 
 const (
