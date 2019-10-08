@@ -6,7 +6,6 @@ import (
 	"net"
 	"reflect"
 	"regexp"
-	"strconv"
 	"strings"
 	"unicode"
 )
@@ -155,12 +154,7 @@ func (kc *LkkConvert) IsBool(v interface{}) bool {
 
 // IsHex 是否十六进制字符串
 func (kc *LkkConvert) IsHex(str string) bool {
-	start := 0
-	if len(str) > 2 && str[0:2] == "0x" {
-		start = 2
-	}
-
-	_, err := strconv.ParseUint(str[start:], 16, 64)
+	_, err := kc.Hex2dec(str)
 	return err == nil
 }
 
