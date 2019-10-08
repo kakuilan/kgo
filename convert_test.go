@@ -504,8 +504,12 @@ func BenchmarkDec2hex(b *testing.B) {
 }
 
 func TestHex2dec(t *testing.T) {
-	_, err := KConv.Hex2dec("123abf")
+	res1, err := KConv.Hex2dec("123abf")
+	res2, _ := KConv.Hex2dec("0x123abf")
 	if err != nil {
+		t.Error("Hex2dec fail")
+		return
+	} else if res1 != res2 {
 		t.Error("Hex2dec fail")
 		return
 	}
@@ -534,8 +538,12 @@ func BenchmarkDec2oct(b *testing.B) {
 }
 
 func TestOct2dec(t *testing.T) {
-	_, err := KConv.Oct2dec("726746425")
+	res1, err := KConv.Oct2dec("726746425")
+	res2, _ := KConv.Oct2dec("0726746425")
 	if err != nil {
+		t.Error("Oct2dec fail")
+		return
+	} else if res1 != res2 {
 		t.Error("Oct2dec fail")
 		return
 	}

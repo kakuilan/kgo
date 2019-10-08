@@ -230,7 +230,13 @@ func (kc *LkkConvert) Dec2hex(number int64) string {
 
 // Hex2dec 将十六进制转换为十进制
 func (kc *LkkConvert) Hex2dec(str string) (int64, error) {
-	return strconv.ParseInt(str, 16, 0)
+	start := 0
+	if len(str) > 2 && str[0:2] == "0x" {
+		start = 2
+	}
+
+	// bitSize 表示结果的位宽（包括符号位），0 表示最大位宽
+	return strconv.ParseInt(str[start:], 16, 0)
 }
 
 // Dec2oct 将十进制转换为八进制
@@ -240,7 +246,12 @@ func (kc *LkkConvert) Dec2oct(number int64) string {
 
 // Oct2dec 将八进制转换为十进制
 func (kc *LkkConvert) Oct2dec(str string) (int64, error) {
-	return strconv.ParseInt(str, 8, 0)
+	start := 0
+	if len(str) > 1 && str[0:1] == "0" {
+		start = 1
+	}
+
+	return strconv.ParseInt(str[start:], 8, 0)
 }
 
 // BaseConvert 进制转换,在任意进制之间转换数字
