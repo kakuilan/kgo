@@ -215,6 +215,14 @@ https://github.com/coreybutler/go-timer
 https://github.com/cube-group/go-timer
 https://github.com/goinstant/delayd
 https://zhuanlan.zhihu.com/p/55295257
+https://github.com/segmentio/timers
+https://github.com/noaway/heartbeat
+https://github.com/liberalman/timer_server
+https://github.com/alex023/clock
+https://github.com/henrylee2cn/timer
+https://github.com/RussellLuo/timingwheel
+https://github.com/zhangwei1234/go-timer-wheel
+
 
 
 serialize
@@ -252,3 +260,18 @@ https://github.com/nothollyhigh/kiss/blob/master/sync/mutex.go
 
 
 
+type ITimer interface {
+	SetAfter()
+	ClearAfter()
+	ClearAfterAll()
+	SetInterval()
+	ClearInterval()
+	ClearIntervalAll()
+	Start()
+	Stop()
+	Reset()
+	Clear()
+	CountOnces()
+	CountCycles()
+	CountTimers()
+}
