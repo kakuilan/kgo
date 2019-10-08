@@ -355,3 +355,9 @@ func (kc *LkkConvert) Hex2Byte(str string) []byte {
 	h, _ := hex.DecodeString(str)
 	return h
 }
+
+// GetPointerAddrInt 获取指针地址整型值.variable为变量.
+func (kc *LkkConvert) GetPointerAddrInt(variable interface{}) int64 {
+	res, _ := kc.Hex2dec(fmt.Sprintf("%p", &variable))
+	return res
+}

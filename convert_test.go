@@ -775,3 +775,23 @@ func BenchmarkHex2Byte(b *testing.B) {
 		KConv.Hex2Byte(str)
 	}
 }
+
+func TestGetPointerAddrInt(t *testing.T) {
+	v1 := 1
+	v2 := []byte("hello")
+
+	res1 := KConv.GetPointerAddrInt(v1)
+	res2 := KConv.GetPointerAddrInt(v2)
+	if res1 <= 0 || res2 <= 0 {
+		t.Error("GetPointerAddrInt fail")
+		return
+	}
+}
+
+func BenchmarkGetPointerAddrInt(b *testing.B) {
+	b.ResetTimer()
+	v := []byte("hello")
+	for i := 0; i < b.N; i++ {
+		KConv.GetPointerAddrInt(v)
+	}
+}
