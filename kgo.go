@@ -42,11 +42,12 @@ type (
 
 	// TimerOnce 一次性定时器
 	TimerOnce struct {
-		Pt    *time.Timer               // 定时器指针
-		Dr    time.Duration             // 时间间隔
-		Fn    func(args ...interface{}) // 执行函数
-		Args  interface{}               // 执行函数的参数
-		Count int                       // 已执行次数
+		Pt      *time.Timer               // 定时器指针
+		Dr      time.Duration             // 时间间隔
+		Fn      func(args ...interface{}) // 执行函数
+		Args    interface{}               // 执行函数的参数
+		Count   int                       // 已执行次数
+		running bool                      // 是否在运行
 	}
 	// TimerCycle 循环定时器
 	TimerCycle struct {
@@ -57,13 +58,14 @@ type (
 		Max      int                       // 最大执行次数
 		Count    int                       // 已执行次数
 		LastTime time.Time                 // 上次执行时间
+		running  bool                      // 是否在运行
 	}
 	// LkkTimers 定时器容器
 	LkkTimers struct {
-		Onces     []*TimerOnce  // 一次性定时器切片
-		Cycles    []*TimerCycle // 循环定时器切片
-		OnceRuns  uint          // 一次性定时器已执行次数
-		CycleRuns uint          // 循环定时器已执行次数
+		Onces     map[int64]*TimerOnce  // 一次性定时器字典
+		Cycles    map[int64]*TimerCycle // 循环定时器字典
+		OnceRuns  uint                  // 一次性定时器已执行次数
+		CycleRuns uint                  // 循环定时器已执行次数
 	}
 )
 
