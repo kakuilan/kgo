@@ -863,3 +863,43 @@ func BenchmarkRemoveAfter(b *testing.B) {
 		KStr.RemoveAfter(str, "learn", true)
 	}
 }
+
+func TestDBC2SBC(t *testing.T) {
+	str := "hello world!"
+	res := KStr.DBC2SBC(str)
+	for i := 0; i < len(str); i++ {
+		ch := str[i] //此处是数字而非字符
+		if strings.Contains(res, string(ch)) {
+			t.Error("DBC2SBC fail")
+			return
+		}
+	}
+}
+
+func BenchmarkDBC2SBC(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!"
+	for i := 0; i < b.N; i++ {
+		KStr.DBC2SBC(str)
+	}
+}
+
+func TestSBC2DBC(t *testing.T) {
+	str := "１２３４５６７８９ａｂｃ！"
+	res := KStr.SBC2DBC(str)
+	for i := 0; i < len(str); i++ {
+		ch := str[i] //此处是数字而非字符
+		if strings.Contains(res, string(ch)) {
+			t.Error("SBC2DBC fail")
+			return
+		}
+	}
+}
+
+func BenchmarkSBC2DBC(b *testing.B) {
+	b.ResetTimer()
+	str := "１２３４５６７８９ａｂｃ！"
+	for i := 0; i < b.N; i++ {
+		KStr.SBC2DBC(str)
+	}
+}

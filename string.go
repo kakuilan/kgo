@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/json-iterator/go"
+	"golang.org/x/text/width"
 	"hash/crc32"
 	"html"
 	"math/rand"
@@ -687,4 +688,14 @@ func (ks *LkkString) RemoveAfter(str, after string, include bool) string {
 		}
 	}
 	return str
+}
+
+// DBC2SBC 半角转全角
+func (ks *LkkString) DBC2SBC(s string) string {
+	return width.Widen.String(s)
+}
+
+// SBC2DBC 全角转半角
+func (ks *LkkString) SBC2DBC(s string) string {
+	return width.Narrow.String(s)
 }

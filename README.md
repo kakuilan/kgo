@@ -191,11 +191,6 @@ https://github.com/levigross/grequests
 queue
 https://github.com/evilsocket/islazy/blob/master/async/queue.go
 
-ismail
-https://github.com/idoall/TokenExchangeCommon/blob/master/commonutils/checkmail/checkmail.go
-
-
-
 debug
 https://colobu.com/2018/11/03/get-function-name-in-go/
 https://colobu.com/2016/12/21/how-to-dump-goroutine-stack-traces/
@@ -257,6 +252,9 @@ https://github.com/shuangdeyu/helper_go/blob/master/verhelper/verify.go
 https://github.com/sohaha/zlsgo/blob/master/zvalidator/validator.go
 https://github.com/nothollyhigh/kiss/blob/master/util/regexp.go
 https://github.com/bytedance/go-tagexpr
+
+ismail
+https://github.com/idoall/TokenExchangeCommon/blob/master/commonutils/checkmail/checkmail.go
 
 
 mutex
