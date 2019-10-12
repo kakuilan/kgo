@@ -260,6 +260,22 @@ https://github.com/idoall/TokenExchangeCommon/blob/master/commonutils/checkmail/
 mutex
 https://github.com/nothollyhigh/kiss/blob/master/sync/mutex.go
 
+levenshtein
+https://syslog.ravelin.com/searching-for-levenshtein-eff8093b11d4
+https://www.socketloop.com/tutorials/golang-levenshtein-distance-example
+https://www.golangprograms.com/golang-program-for-implementation-of-levenshtein-distance.html
+https://github.com/philpearl/levenshtein/blob/master/levenshtein.go
+https://github.com/lithammer/fuzzysearch/blob/master/fuzzy/levenshtein.go
+https://github.com/schollz/closestmatch/blob/master/levenshtein/levenshtein.go
+https://github.com/agnivade/levenshtein/blob/master/levenshtein.go
+https://github.com/arbovm/levenshtein/blob/master/levenshtein.go
+https://github.com/texttheater/golang-levenshtein/blob/master/levenshtein/levenshtein.go
+https://github.com/ferhatelmas/levenshtein/blob/master/levenshtein.go
+https://github.com/jbowles/disfun/blob/master/levenshtein.go
+
+
+
+
 
 
 type ITimer interface {
@@ -276,4 +292,11 @@ type ITimer interface {
 	CountOnces()
 	CountCycles()
 	CountTimers()
+}
+
+func (kt *LkkTime) GetTimer() *LkkTimers {
+	if KTimer == nil {
+		KTimer = &LkkTimers{}
+	}
+	return KTimer
 }

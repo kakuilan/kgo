@@ -139,10 +139,3 @@ func (kt *LkkTime) ServiceStartime() int64 {
 func (kt *LkkTime) ServiceUptime() time.Duration {
 	return time.Since(Kuptime)
 }
-
-func (kt *LkkTime) GetTimer() *LkkTimers {
-	if KTimer == nil {
-		KTimer = &LkkTimers{}
-	}
-	return KTimer
-}
