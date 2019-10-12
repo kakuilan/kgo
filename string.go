@@ -707,6 +707,8 @@ func (ks *LkkString) Levenshtein(a, b *string) int {
 
 	if *a == *b {
 		return 0
+	} else if la > 255 || lb > 255 {
+		return -1
 	}
 
 	d := make([]int, la+1)
