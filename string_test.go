@@ -921,11 +921,13 @@ func TestLevenshtein(t *testing.T) {
 	s4 := "中华人民共和国"
 	s5 := "中华"
 	s6 := ""
+	s7 := strings.Repeat(s4, 15)
 	res4 := KStr.Levenshtein(&s3, &s4)
 	res5 := KStr.Levenshtein(&s4, &s5)
 	res6 := KStr.Levenshtein(&s5, &s6)
+	res7 := KStr.Levenshtein(&s5, &s7)
 
-	if res4 != res5 || res6 <= 0 {
+	if res4 != res5 || res6 <= 0 || res7 != -1 {
 		t.Error("Levenshtein fail")
 		return
 	}
