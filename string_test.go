@@ -903,3 +903,39 @@ func BenchmarkSBC2DBC(b *testing.B) {
 		KStr.SBC2DBC(str)
 	}
 }
+
+func TestLevenshtein(t *testing.T) {
+	s1 := "frederick"
+	s2 := "fredelstick"
+
+	res1 := KStr.Levenshtein(&s1, &s2)
+	res2 := KStr.Levenshtein(&s2, &s1)
+	res3 := KStr.Levenshtein(&s1, &s1)
+
+	if res1 != res2 || res3 != 0 {
+		t.Error("Levenshtein fail")
+		return
+	}
+
+	s3 := "中国"
+	s4 := "中华人民共和国"
+	s5 := "中华"
+	s6 := ""
+	res4 := KStr.Levenshtein(&s3, &s4)
+	res5 := KStr.Levenshtein(&s4, &s5)
+	res6 := KStr.Levenshtein(&s5, &s6)
+
+	if res4 != res5 || res6 <= 0 {
+		t.Error("Levenshtein fail")
+		return
+	}
+}
+
+func BenchmarkLevenshtein(b *testing.B) {
+	b.ResetTimer()
+	s1 := "Asheville"
+	s2 := "Arizona"
+	for i := 0; i < b.N; i++ {
+		KStr.Levenshtein(&s1, &s2)
+	}
+}
