@@ -941,3 +941,29 @@ func BenchmarkLevenshtein(b *testing.B) {
 		KStr.Levenshtein(&s1, &s2)
 	}
 }
+
+func TestClosestWord(t *testing.T) {
+	word := "hello,golang"
+	searchs := []string{"hehe,php lang", "Hello,go language", "HeLlo,python!", "haha,java", "I`m going."}
+	res, dis := KStr.ClosestWord(word, searchs)
+	if res == "" || dis == 0 {
+		t.Error("ClosestWord fail")
+		return
+	}
+
+	searchs = append(searchs, word)
+	res2, dis2 := KStr.ClosestWord(word, searchs)
+	if res2 != word || dis2 != 0 {
+		t.Error("ClosestWord fail")
+		return
+	}
+}
+
+func BenchmarkClosestWord(b *testing.B) {
+	b.ResetTimer()
+	word := "hello,golang"
+	searchs := []string{"hehe,php lang", "Hello,go language", "HeLlo,python!", "haha,java", "I`m going."}
+	for i := 0; i < b.N; i++ {
+		KStr.ClosestWord(word, searchs)
+	}
+}
