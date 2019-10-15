@@ -967,3 +967,70 @@ func BenchmarkClosestWord(b *testing.B) {
 		KStr.ClosestWord(word, searchs)
 	}
 }
+
+func TestUtf8GbkTrans(t *testing.T) {
+	// 测试utf-8和gbk编码互转
+	str := "你好，世界！"
+	gbk, err0 := KStr.Utf8ToGbk([]byte(str))
+	if err0 != nil {
+		t.Error("Utf8ToGbk fail")
+		return
+	}
+
+	// "你好，世界！"的GBK编码
+	gbkBytes := []byte{0xC4, 0xE3, 0xBA, 0xC3, 0xA3, 0xAC, 0xCA, 0xC0, 0xBD, 0xE7, 0xA3, 0xA1}
+	utf1, err1 := KStr.GbkToUtf8(gbk)
+	utf2, err2 := KStr.GbkToUtf8(gbkBytes)
+	if err1 != nil || err2 != nil || string(utf1) != str || string(utf2) != str {
+		t.Error("GbkToUtf8 fail")
+		return
+	}
+}
+
+func BenchmarkUtf8ToGbk(b *testing.B) {
+	b.ResetTimer()
+	str := []byte("你好，世界！")
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.Utf8ToGbk(str)
+	}
+}
+
+func BenchmarkGbkToUtf8(b *testing.B) {
+	b.ResetTimer()
+	gbk, _ := KStr.Utf8ToGbk([]byte("你好，世界！"))
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.GbkToUtf8(gbk)
+	}
+}
+
+func TestUtf8Big5Trans(t *testing.T) {
+	// 测试utf-8和big5编码互转
+	str := "你好，世界！"
+	big, err1 := KStr.Utf8ToBig5([]byte(str))
+	if err1 != nil {
+		t.Error("Utf8ToBig5 fail")
+		return
+	}
+
+	utf, err2 := KStr.Big5ToUtf8(big)
+	if err2 != nil || string(utf) != str {
+		t.Error("Big5ToUtf8 fail")
+		return
+	}
+}
+
+func BenchmarkUtf8ToBig5(b *testing.B) {
+	b.ResetTimer()
+	str := []byte("你好，世界！")
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.Utf8ToBig5(str)
+	}
+}
+
+func BenchmarkBig5ToUtf8(b *testing.B) {
+	b.ResetTimer()
+	gbk, _ := KStr.Utf8ToBig5([]byte("你好，世界！"))
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.Big5ToUtf8(gbk)
+	}
+}
