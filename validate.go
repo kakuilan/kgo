@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 )
 
 // IsLetters 字符串是否纯字母组成
@@ -23,12 +24,13 @@ func (ks *LkkString) IsLetters(s string) bool {
 	return true
 }
 
+// IsUtf8 字符串是否UTF-8编码
+func (ks *LkkString) IsUtf8(s string) bool {
+	return utf8.ValidString(s)
+}
+
 // HasChinese 字符串是否含有中文
 func (ks *LkkString) HasChinese(s string) bool {
-	if s == "" {
-		return false
-	}
-
 	for _, r := range s {
 		if unicode.Is(unicode.Scripts["Han"], r) {
 			return true
