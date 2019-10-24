@@ -770,40 +770,28 @@ func (ks *LkkString) ClosestWord(word string, searchs []string) (string, int) {
 func (ks *LkkString) Utf8ToGbk(s []byte) ([]byte, error) {
 	reader := transform.NewReader(bytes.NewReader(s), simplifiedchinese.GBK.NewEncoder())
 	d, e := ioutil.ReadAll(reader)
-	if e != nil {
-		return nil, e
-	}
-	return d, nil
+	return d, e
 }
 
 // GbkToUtf8 GBK转UTF-8编码
 func (ks *LkkString) GbkToUtf8(s []byte) ([]byte, error) {
 	reader := transform.NewReader(bytes.NewReader(s), simplifiedchinese.GBK.NewDecoder())
 	d, e := ioutil.ReadAll(reader)
-	if e != nil {
-		return nil, e
-	}
-	return d, nil
+	return d, e
 }
 
 // Utf8ToBig5 UTF-8转BIG5编码
 func (ks *LkkString) Utf8ToBig5(s []byte) ([]byte, error) {
 	reader := transform.NewReader(bytes.NewReader(s), traditionalchinese.Big5.NewEncoder())
 	d, e := ioutil.ReadAll(reader)
-	if e != nil {
-		return nil, e
-	}
-	return d, nil
+	return d, e
 }
 
 // Big5ToUtf8 BIG5转UTF-8编码
 func (ks *LkkString) Big5ToUtf8(s []byte) ([]byte, error) {
 	reader := transform.NewReader(bytes.NewReader(s), traditionalchinese.Big5.NewDecoder())
 	d, e := ioutil.ReadAll(reader)
-	if e != nil {
-		return nil, e
-	}
-	return d, nil
+	return d, e
 }
 
 // FirstLetter 获取字符串首字母
