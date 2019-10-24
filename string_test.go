@@ -1034,3 +1034,53 @@ func BenchmarkBig5ToUtf8(b *testing.B) {
 		_, _ = KStr.Big5ToUtf8(gbk)
 	}
 }
+
+func TestFirstLetter(t *testing.T) {
+	str1 := "hello world"
+	str2 := "你好，世界"
+	str3 := "hello，世界"
+	str4 := "啊哈，world"
+
+	res1 := KStr.FirstLetter(str1)
+	res2 := KStr.FirstLetter(str2)
+	res3 := KStr.FirstLetter(str3)
+	res4 := KStr.FirstLetter(str4)
+	res5 := KStr.FirstLetter("")
+	res6 := KStr.FirstLetter("~！@")
+
+	if res1 != "h" || res2 != "N" || res3 != "h" || res4 != "A" || res5 != "" || res6 != "" {
+		t.Error("FirstLetter fail")
+		return
+	}
+
+	//其他
+	KStr.FirstLetter("布料")
+	KStr.FirstLetter("从来")
+	KStr.FirstLetter("到达")
+	KStr.FirstLetter("饿了")
+	KStr.FirstLetter("发展")
+	KStr.FirstLetter("改革")
+	KStr.FirstLetter("好啊")
+	KStr.FirstLetter("将来")
+	KStr.FirstLetter("开心")
+	KStr.FirstLetter("里面")
+	KStr.FirstLetter("名字")
+	KStr.FirstLetter("哪里")
+	KStr.FirstLetter("欧洲")
+	KStr.FirstLetter("品尝")
+	KStr.FirstLetter("前进")
+	KStr.FirstLetter("人类")
+	KStr.FirstLetter("是的")
+	KStr.FirstLetter("天天")
+	KStr.FirstLetter("问题")
+	KStr.FirstLetter("西安")
+	KStr.FirstLetter("用途")
+	KStr.FirstLetter("这里")
+}
+
+func BenchmarkFirstLetter(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.FirstLetter("你好")
+	}
+}
