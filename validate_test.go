@@ -40,6 +40,31 @@ func BenchmarkIsLetters(b *testing.B) {
 	}
 }
 
+func TestIsUtf8(t *testing.T) {
+	str := "你好，世界！"
+	chk1 := KStr.IsUtf8(str)
+
+	if !chk1 {
+		t.Error("IsUtf8 fail")
+		return
+	}
+
+	gbk, _ := KStr.Utf8ToGbk([]byte(str))
+	chk2 := KStr.IsUtf8(string(gbk))
+	if chk2 {
+		t.Error("IsUtf8 fail")
+		return
+	}
+}
+
+func BenchmarkIsUtf8(b *testing.B) {
+	b.ResetTimer()
+	str := "你好，世界！"
+	for i := 0; i < b.N; i++ {
+		KStr.IsUtf8(str)
+	}
+}
+
 func TestIsNumeric(t *testing.T) {
 	res1 := KConv.IsNumeric(123)
 	res2 := KConv.IsNumeric("123.456")
