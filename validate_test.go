@@ -452,3 +452,25 @@ func BenchmarkIsInterface(b *testing.B) {
 		KConv.IsInterface(in)
 	}
 }
+
+func TestHasSpecialChar(t *testing.T) {
+	str := "`~!@#$%^&*()_+-=:'|<>?,./\""
+	res1 := KStr.HasSpecialChar(str)
+	res2 := KStr.HasSpecialChar(str)
+	// 掩码
+	res3 := KStr.HasSpecialChar("Hello ៉៊់៌៍！")
+	res4 := KStr.HasSpecialChar("hello world")
+	res5 := KStr.HasSpecialChar("")
+
+	if !res1 || !res2 || !res3 || res4 || res5 {
+		t.Error("HasSpecialChar fail")
+		return
+	}
+}
+
+func BenchmarkHasSpecialChar(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.HasSpecialChar("Hello ៉៊់៌៍！")
+	}
+}

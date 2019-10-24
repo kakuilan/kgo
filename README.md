@@ -88,6 +88,7 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/techoner/gophp -x
 - https://github.com/m3ng9i/go-utils
 - github.com/mikunalpha/paws
+- https://golang.hotexamples.com/examples/unicode/-/IsControl/golang-iscontrol-function-examples.html
 
 
 ### 其他库
@@ -331,4 +332,18 @@ func (kt *LkkTime) GetTimer() *LkkTimers {
 		KTimer = &LkkTimers{}
 	}
 	return KTimer
+}
+
+emoji表情的处理
+import "unicode/utf8"
+
+func FilterEmoji(content string) string {
+    new_content := ""
+    for _, value := range content {
+        _, size := utf8.DecodeRuneInString(string(value))
+        if size <= 3 {
+            new_content += string(value)
+        }
+    }
+    return new_content
 }

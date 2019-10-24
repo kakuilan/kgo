@@ -49,6 +49,25 @@ func (ks *LkkString) IsChinese(s string) bool {
 	return regexp.MustCompile("^[\u4e00-\u9fa5]+$").MatchString(s)
 }
 
+// HasSpecialChar 字符串是否含有特殊字符
+func (ks *LkkString) HasSpecialChar(str string) (res bool) {
+	if str == "" {
+		return
+	}
+
+	for _, r := range str {
+		// IsPunct 判断 r 是否为一个标点字符 (类别 P)
+		// IsSymbol 判断 r 是否为一个符号字符
+		// IsMark 判断 r 是否为一个 mark 字符 (类别 M)
+		if unicode.IsPunct(r) || unicode.IsSymbol(r) || unicode.IsMark(r) {
+			res = true
+			return
+		}
+	}
+
+	return
+}
+
 // IsJSON 字符串是否合法的json格式
 func (ks *LkkString) IsJSON(str string) bool {
 	if str == "" {
