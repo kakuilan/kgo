@@ -41,7 +41,7 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 ### 参考项目
 - https://www.php2golang.com/
 - https://github.com/b3log/gulu -x
-- https://github.com/syyongx/php2go
+- https://github.com/syyongx/php2go -x
 - https://github.com/openset/php2go -x
 - https://github.com/yioio/fun  -x
 - https://github.com/henrylee2cn/goutil -x
@@ -274,6 +274,20 @@ https://github.com/arbovm/levenshtein/blob/master/levenshtein.go
 https://github.com/texttheater/golang-levenshtein/blob/master/levenshtein/levenshtein.go
 https://github.com/ferhatelmas/levenshtein/blob/master/levenshtein.go
 https://github.com/jbowles/disfun/blob/master/levenshtein.go
+
+binary pack
+https://github.com/roman-kachanovsky/go-binary-pack
+https://github.com/syyongx/php2go/blob/master/php.go
+https://www.reddit.com/r/golang/comments/7pwlh6/binary_string_to_readable_string/
+https://stackoverflow.com/questions/37349071/golang-how-to-convert-string-to-binary-representation/37350639
+https://stackoverflow.com/questions/32685687/convert-string-to-binary-in-go
+https://learnku.com/articles/31460
+https://studygolang.com/articles/2791
+https://stackoverflow.com/questions/40182289/golang-equivalent-of-pythons-struct-pack-struct-unpack
+https://github.com/lunixbochs/struc
+https://juejin.im/entry/5a9cec4ff265da239c7ad86d
+
+
 
 
 
