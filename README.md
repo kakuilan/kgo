@@ -155,16 +155,6 @@ https://github.com/tidwall/gjson
 https://github.com/mailru/easyjson
 https://github.com/buger/jsonparser
 
-pack/unpack
-https://stackoverflow.com/questions/40182289/golang-equivalent-of-pythons-struct-pack-struct-unpack
-https://gist.github.com/cloveryume/9a59e8d77f5836f11720#file-golang_struct_packed-go
-https://github.com/lunixbochs/struc
-https://github.com/roman-kachanovsky/go-binary-pack
-https://learnku.com/articles/31460
-https://studygolang.com/articles/2791
-https://golangtc.com/t/55237dd8421aa9704b0000cb
-https://stackoverflow.com/questions/8039552/byte-endian-convert-by-using-encoding-binary-in-go
-
 检查端口绑定
 https://golangnote.com/topic/241.html
 https://www.jianshu.com/p/b4ce0794fa32
@@ -224,8 +214,6 @@ https://github.com/henrylee2cn/timer
 https://github.com/RussellLuo/timingwheel
 https://github.com/zhangwei1234/go-timer-wheel
 
-
-
 serialize
 https://segmentfault.com/q/1010000010690732
 https://github.com/yvasiyarov/php_session_decoder/tree/master/php_serialize
@@ -237,7 +225,6 @@ net 简单http请求方法
 https://github.com/shuangdeyu/helper_go/blob/master/nethelper/http.go
 https://github.com/sohaha/zlsgo/blob/master/zhttp/client.go
 https://github.com/go-eyas/toolkit/tree/master/http
-
 
 base58
 https://godoc.org/github.com/btcsuite/btcutil/base58
@@ -275,18 +262,20 @@ https://github.com/texttheater/golang-levenshtein/blob/master/levenshtein/levens
 https://github.com/ferhatelmas/levenshtein/blob/master/levenshtein.go
 https://github.com/jbowles/disfun/blob/master/levenshtein.go
 
-binary pack
+pack/unpack binary pack
+https://gist.github.com/cloveryume/9a59e8d77f5836f11720#file-golang_struct_packed-go
+https://github.com/lunixbochs/struc
 https://github.com/roman-kachanovsky/go-binary-pack
 https://github.com/syyongx/php2go/blob/master/php.go
-https://www.reddit.com/r/golang/comments/7pwlh6/binary_string_to_readable_string/
-https://stackoverflow.com/questions/37349071/golang-how-to-convert-string-to-binary-representation/37350639
-https://stackoverflow.com/questions/32685687/convert-string-to-binary-in-go
-https://learnku.com/articles/31460
-https://studygolang.com/articles/2791
-https://stackoverflow.com/questions/40182289/golang-equivalent-of-pythons-struct-pack-struct-unpack
-https://github.com/lunixbochs/struc
+https://golangtc.com/t/55237dd8421aa9704b0000cb
 https://juejin.im/entry/5a9cec4ff265da239c7ad86d
-
+https://learnku.com/articles/31460
+https://stackoverflow.com/questions/32685687/convert-string-to-binary-in-go
+https://stackoverflow.com/questions/37349071/golang-how-to-convert-string-to-binary-representation/37350639
+https://stackoverflow.com/questions/40182289/golang-equivalent-of-pythons-struct-pack-struct-unpack
+https://stackoverflow.com/questions/8039552/byte-endian-convert-by-using-encoding-binary-in-go
+https://studygolang.com/articles/2791
+https://www.reddit.com/r/golang/comments/7pwlh6/binary_string_to_readable_string/
 
 
 
