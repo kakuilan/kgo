@@ -954,3 +954,47 @@ func (ks *LkkString) Dstrpos(str string, arr []string, chkCase bool) (bool, stri
 
 	return false, ""
 }
+
+// LowerCaseFirstWords 将每个单词的首字母小写.
+func (ks *LkkString) LowerCaseFirstWords(str string) string {
+	upper := 1
+	bufbyteStr := []byte(str)
+	retval := make([]byte, len(bufbyteStr))
+	for k, v := range bufbyteStr {
+		if upper == 1 && v >= 65 && v <= 90 {
+			v = v + 32
+		}
+
+		upper = 0
+
+		if v >= 9 && v <= 13 || v == 32 {
+			upper = 1
+		}
+		retval[k] = v
+	}
+
+	return string(retval)
+}
+
+// UpperCaseFirstWords 将每个单词的首字母大写.
+func (ks *LkkString) UpperCaseFirstWords(str string) string {
+
+	upper := 1
+	bufbyteStr := []byte(str)
+	retval := make([]byte, len(bufbyteStr))
+	for k, v := range bufbyteStr {
+
+		if upper == 1 && v >= 97 && v <= 122 {
+			v = v - 32
+		}
+
+		upper = 0
+
+		if v >= 9 && v <= 13 || v == 32 {
+			upper = 1
+		}
+		retval[k] = v
+	}
+
+	return string(retval)
+}
