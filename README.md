@@ -87,6 +87,7 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/pibigstar/go-demo  -x
 - https://github.com/techoner/gophp -x
 - https://github.com/m3ng9i/go-utils -x
+- https://github.com/torden/go-strutil
 - https://golang.hotexamples.com/examples/unicode/-/IsControl/golang-iscontrol-function-examples.html
 
 
@@ -192,11 +193,15 @@ https://www.jianshu.com/p/abbe6663b672
 https://github.com/go-delve/delve
 
 array sort
+https://loesspie.com/2018/05/07/go-sort-with-multiple-parameters/
 https://stackoverflow.com/questions/36122668/how-to-sort-struct-with-multiple-sort-parameters
 https://yourbasic.org/golang/how-to-sort-in-go/
 https://itimetraveler.github.io/2016/09/07/%E3%80%90Go%E8%AF%AD%E8%A8%80%E3%80%91%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E6%8E%92%E5%BA%8F%E5%92%8C%20slice%20%E6%8E%92%E5%BA%8F/
 https://blog.csdn.net/chenbaoke/article/details/42340301
 https://stackoverflow.com/questions/37695209/golang-sort-slice-ascending-or-descending
+https://www.cnblogs.com/kaixinyufeng/p/9609160.html
+https://www.cnblogs.com/chenpingzhao/p/4688526.html
+https://github.com/torden/go-strutil
 
 setInterval
 https://www.loxodrome.io/post/set-timeout-interval-go/
