@@ -28,6 +28,39 @@ world!
 	}
 }
 
+func TestBr2nl(t *testing.T) {
+	html := `
+hello world<br>
+hello world<br/>
+你好，世界<br />
+hello world<BR>
+hello world<BR/>
+你好，世界<BR />
+the end.
+`
+	res := KStr.Br2nl(html)
+	if strings.Contains(res, "br") || strings.Contains(res, "BR") {
+		t.Error("Br2nl fail")
+		return
+	}
+}
+
+func BenchmarkBr2nl(b *testing.B) {
+	b.ResetTimer()
+	html := `
+hello world<br>
+hello world<br/>
+你好，世界<br />
+hello world<BR>
+hello world<BR/>
+你好，世界<BR />
+the end.
+`
+	for i := 0; i < b.N; i++ {
+		KStr.Br2nl(html)
+	}
+}
+
 func TestStripTags(t *testing.T) {
 	str := `
 <h1>Hello world!</h1>
