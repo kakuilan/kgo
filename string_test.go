@@ -1142,6 +1142,13 @@ func TestDstrpos(t *testing.T) {
 		t.Error("Dstrpos fail")
 		return
 	}
+
+	arr = []string{"呵呵", "时间", "gogo"}
+	chk4, itm4 := KStr.Dstrpos(str, arr, true)
+	if chk4 || itm4 != "" {
+		t.Error("Dstrpos fail")
+		return
+	}
 }
 
 func BenchmarkDstrpos(b *testing.B) {
