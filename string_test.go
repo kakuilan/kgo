@@ -1084,3 +1084,38 @@ func BenchmarkFirstLetter(b *testing.B) {
 		KStr.FirstLetter("你好")
 	}
 }
+
+func TestDstrpos(t *testing.T) {
+	var str string
+	var arr []string
+
+	chk1, itm1 := KStr.Dstrpos(str, arr, false)
+	if chk1 || itm1 != "" {
+		t.Error("Dstrpos fail")
+		return
+	}
+
+	str = "Hello 你好, World 世界！"
+	arr = []string{"he", "好", "world"}
+
+	chk2, itm2 := KStr.Dstrpos(str, arr, false)
+	if !chk2 || itm2 == "" {
+		t.Error("Dstrpos fail")
+		return
+	}
+
+	chk3, itm3 := KStr.Dstrpos(str, arr, true)
+	if !chk3 || itm3 != "好" {
+		t.Error("Dstrpos fail")
+		return
+	}
+}
+
+func BenchmarkDstrpos(b *testing.B) {
+	b.ResetTimer()
+	str := "Hello 你好, World 世界！"
+	arr := []string{"he", "好", "world"}
+	for i := 0; i < b.N; i++ {
+		KStr.Dstrpos(str, arr, false)
+	}
+}

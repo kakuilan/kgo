@@ -91,7 +91,7 @@ func (ks *LkkString) Random(length uint8, rtype LkkRandString) string {
 	return string(b)
 }
 
-// Strpos 查找字符串首次出现的位置
+// Strpos 查找字符串首次出现的位置.haystack在该字符串中进行查找,needle要查找的字符串,offset起始位置.
 func (ks *LkkString) Strpos(haystack, needle string, offset int) int {
 	length := len(haystack)
 	if length == 0 || offset > length || -offset > length {
@@ -108,7 +108,7 @@ func (ks *LkkString) Strpos(haystack, needle string, offset int) int {
 	return pos + offset
 }
 
-// Stripos  查找字符串首次出现的位置（不区分大小写）
+// Stripos  查找字符串首次出现的位置（不区分大小写）.haystack在该字符串中进行查找,needle要查找的字符串,offset起始位置.
 func (ks *LkkString) Stripos(haystack, needle string, offset int) int {
 	length := len(haystack)
 	if length == 0 || offset > length || -offset > length {
@@ -888,4 +888,19 @@ func (ks *LkkString) FirstLetter(str string) string {
 	}
 
 	return ""
+}
+
+// Dstrpos 检查字符串str是否包含数组arr的元素之一.chkCase为是否检查大小写.返回检查结果和匹配的字符串.
+func (ks *LkkString) Dstrpos(str string, arr []string, chkCase bool) (bool, string) {
+	if len(str) == 0 || len(arr) == 0 {
+		return false, ""
+	}
+
+	for _, v := range arr {
+		if (chkCase && ks.Strpos(str, v, 0) != -1) || (!chkCase && ks.Stripos(str, v, 0) != -1) {
+			return true, v
+		}
+	}
+
+	return false, ""
 }
