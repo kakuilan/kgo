@@ -70,7 +70,6 @@ func (ks *LkkString) Br2nl(str string) string {
 					continue
 				}
 			}
-			fallthrough
 		default:
 			buf = append(buf, str[i])
 		}
