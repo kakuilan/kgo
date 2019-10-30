@@ -115,7 +115,9 @@ func (ks *LkkString) IsEmail(email string, validateTrue bool) (bool, error) {
 
 		// MX records
 		mx, err := net.LookupMX(host)
+		fmt.Printf("mx res: %+v\n", mx)
 		if err != nil {
+			println("mx err:", err.Error())
 			return false, err
 		}
 
