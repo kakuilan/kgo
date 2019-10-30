@@ -87,8 +87,10 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/pibigstar/go-demo  -x
 - https://github.com/techoner/gophp -x
 - https://github.com/m3ng9i/go-utils -x
-- https://github.com/torden/go-strutil
+- https://github.com/torden/go-strutil  -x
 - https://golang.hotexamples.com/examples/unicode/-/IsControl/golang-iscontrol-function-examples.html
+- https://github.com/idoall/TokenExchangeCommon/blob/master/commonutils/utils.go
+
 
 
 ### 其他库
@@ -247,11 +249,6 @@ https://github.com/sohaha/zlsgo/blob/master/zvalidator/validator.go
 https://github.com/nothollyhigh/kiss/blob/master/util/regexp.go
 https://github.com/bytedance/go-tagexpr
 
-ismail
-https://github.com/idoall/TokenExchangeCommon/blob/master/commonutils/checkmail/checkmail.go
-https://github.com/badoux/checkmail/blob/master/checkmail.go
-
-
 mutex
 https://github.com/nothollyhigh/kiss/blob/master/sync/mutex.go
 
@@ -283,6 +280,10 @@ https://stackoverflow.com/questions/8039552/byte-endian-convert-by-using-encodin
 https://studygolang.com/articles/2791
 https://www.reddit.com/r/golang/comments/7pwlh6/binary_string_to_readable_string/
 
+check url
+https://stackoverflow.com/questions/42226947/check-if-a-url-is-reachable-using-golang
+https://www.socketloop.com/tutorials/golang-check-a-web-page-existence-with-head-request-example
+https://codereview.stackexchange.com/questions/64254/golang-http-status-checker
 
 
 
