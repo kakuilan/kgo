@@ -220,6 +220,50 @@ func BenchmarkIsIPv6(b *testing.B) {
 	}
 }
 
+func TestIsEmail(t *testing.T) {
+	//无效的邮箱格式
+	res1, _ := KStr.IsEmail("ç$€§/az@gmail.com", false)
+	if res1 {
+		t.Error("IsEmail fail")
+		return
+	}
+
+	//有效的邮箱格式
+	res2, _ := KStr.IsEmail("abc@abc123.com", false)
+	if !res2 {
+		t.Error("IsEmail fail")
+		return
+	}
+
+	//无效的域名
+	res3, _ := KStr.IsEmail("email@x-unkown-domain.com", true)
+	if res3 {
+		t.Error("IsEmail fail")
+		return
+	}
+
+	//无效的账号
+	res4, _ := KStr.IsEmail("unknown-user-123456789@gmail.com", true)
+	if res4 {
+		t.Error("IsEmail fail")
+		return
+	}
+
+	//有效的账号
+	res5, _ := KStr.IsEmail("copyright@github.com", true)
+	if !res5 {
+		t.Error("IsEmail fail")
+		return
+	}
+}
+
+func BenchmarkIsEmail(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.IsEmail("abc@abc123.com", false)
+	}
+}
+
 func TestIsArrayOrSlice(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
