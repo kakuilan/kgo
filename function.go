@@ -147,7 +147,7 @@ func isFloat(val interface{}) bool {
 		if str == "" {
 			return false
 		}
-		if ok, _ := regexp.MatchString(`^(-?\d+)(\.\d+)?`, str); ok {
+		if ok, _ := regexp.MatchString(PatternFloat, str); ok {
 			return true
 		}
 	}

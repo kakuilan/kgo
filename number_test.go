@@ -291,3 +291,32 @@ func BenchmarkByteFormat(b *testing.B) {
 		KNum.ByteFormat(1024000000000, 4)
 	}
 }
+
+func TestIsOddIsEven(t *testing.T) {
+	res1 := KNum.IsOdd(-1)
+	res2 := KNum.IsOdd(0)
+	res3 := KNum.IsEven(2)
+	res4 := KNum.IsEven(-3)
+
+	if !res1 || res2 {
+		t.Error("IsOdd fail")
+		return
+	} else if !res3 || res4 {
+		t.Error("IsEven fail")
+		return
+	}
+}
+
+func BenchmarkIsOdd(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.IsOdd(-1)
+	}
+}
+
+func BenchmarkIsEven(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.IsEven(2)
+	}
+}

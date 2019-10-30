@@ -46,6 +46,14 @@ func (kc *LkkConvert) Bool2Str(val bool) string {
 	return "false"
 }
 
+// Bool2Int 将布尔值转换为整型.
+func (kc *LkkConvert) Bool2Int(val bool) int {
+	if val {
+		return 1
+	}
+	return 0
+}
+
 // StrictStr2Int 严格将字符串转换为有符号整型,bitSize为类型位数,strict为是否严格检查
 func (kc *LkkConvert) StrictStr2Int(val string, bitSize int, strict bool) int64 {
 	res, err := strconv.ParseInt(val, 0, bitSize)
