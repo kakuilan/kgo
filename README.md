@@ -244,6 +244,7 @@ https://github.com/shuangdeyu/helper_go/blob/master/pwdhelper/base58.go
 https://blog.csdn.net/jason_cuijiahui/article/details/79280362
 
 validate
+https://github.com/asaskevich/govalidator
 https://github.com/shuangdeyu/helper_go/blob/master/verhelper/verify.go
 https://github.com/sohaha/zlsgo/blob/master/zvalidator/validator.go
 https://github.com/nothollyhigh/kiss/blob/master/util/regexp.go
