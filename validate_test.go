@@ -3,6 +3,7 @@ package kgo
 import (
 	"fmt"
 	"math"
+	"strings"
 	"testing"
 )
 
@@ -217,6 +218,45 @@ func BenchmarkIsIPv6(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KStr.IsIPv6("fe80::2c04:f7ff:feaa:33b7")
+	}
+}
+
+func TestIsEmail(t *testing.T) {
+	//无效的邮箱格式
+	res1, _ := KStr.IsEmail("ç$€§/az@gmail.com", false)
+	if res1 {
+		t.Error("IsEmail fail")
+		return
+	}
+
+	//有效的邮箱格式
+	res2, _ := KStr.IsEmail("abc@abc123.com", false)
+	if !res2 {
+		t.Error("IsEmail fail")
+		return
+	}
+
+	//无效的域名
+	res3, _ := KStr.IsEmail("email@x-unkown-domain.com", true)
+	if res3 {
+		t.Error("IsEmail fail")
+		return
+	}
+
+	//无效的账号
+	res4, _ := KStr.IsEmail("unknown-user-123456789@gmail.com", true)
+	if res4 {
+		t.Error("IsEmail fail")
+		return
+	}
+
+	//有效的账号
+	res5, _ := KStr.IsEmail("copyright@github.com", true)
+	host, _ := KOS.Hostname()
+	//travis-ci不允许出站SMTP通信
+	if !res5 && strings.Contains(host, "travis") == false {
+		t.Error("IsEmail fail")
+		return
 	}
 }
 
