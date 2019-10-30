@@ -90,10 +90,17 @@ const (
 	// RAND_STRING_CHINESE 随机字符串类型,仅中文
 	RAND_STRING_CHINESE LkkRandString = 4
 
+	//检查连接超时的时间
+	CHECK_CONNECT_TIMEOUT = time.Second * 5
+
 	// 正则模式-全中文
-	PatternAllChinese = "^[\u4e00-\u9fa5]+$"
+	PATTERN_ALL_CHINESE = "^[\u4e00-\u9fa5]+$"
+
 	// 正则模式-浮点数
-	PatternFloat = `^(-?\d+)(\.\d+)?`
+	PATTERN_FLOAT = `^(-?\d+)(\.\d+)?`
+
+	// 正则模式-邮箱
+	PATTERN_EMAIL = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
 )
 
 var (

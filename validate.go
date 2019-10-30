@@ -2,21 +2,24 @@ package kgo
 
 import (
 	"encoding/json"
+	"fmt"
 	"math"
 	"net"
+	"net/smtp"
 	"reflect"
 	"regexp"
 	"strings"
+	"time"
 	"unicode"
 	"unicode/utf8"
 )
 
 // IsLetters 字符串是否纯字母组成
-func (ks *LkkString) IsLetters(s string) bool {
-	if s == "" {
+func (ks *LkkString) IsLetters(str string) bool {
+	if str == "" {
 		return false
 	}
-	for _, r := range s {
+	for _, r := range str {
 		if (r < 'a' || r > 'z') && (r < 'A' || r > 'Z') {
 			return false
 		}
@@ -25,13 +28,13 @@ func (ks *LkkString) IsLetters(s string) bool {
 }
 
 // IsUtf8 字符串是否UTF-8编码
-func (ks *LkkString) IsUtf8(s string) bool {
-	return utf8.ValidString(s)
+func (ks *LkkString) IsUtf8(str string) bool {
+	return utf8.ValidString(str)
 }
 
 // HasChinese 字符串是否含有中文
-func (ks *LkkString) HasChinese(s string) bool {
-	for _, r := range s {
+func (ks *LkkString) HasChinese(str string) bool {
+	for _, r := range str {
 		if unicode.Is(unicode.Scripts["Han"], r) {
 			return true
 		}
@@ -41,12 +44,12 @@ func (ks *LkkString) HasChinese(s string) bool {
 }
 
 // IsChinese 字符串是否全部中文
-func (ks *LkkString) IsChinese(s string) bool {
-	if s == "" {
+func (ks *LkkString) IsChinese(str string) bool {
+	if str == "" {
 		return false
 	}
 
-	return regexp.MustCompile(PatternAllChinese).MatchString(s)
+	return regexp.MustCompile(PATTERN_ALL_CHINESE).MatchString(str)
 }
 
 // HasSpecialChar 字符串是否含有特殊字符
@@ -95,6 +98,57 @@ func (ks *LkkString) IsIPv4(str string) bool {
 func (ks *LkkString) IsIPv6(str string) bool {
 	ipAddr := net.ParseIP(str)
 	return ipAddr != nil && strings.Contains(str, ":")
+}
+
+// IsEmail 检查字符串是否邮箱.参数validateTrue,是否验证邮箱的真实性.
+func (ks *LkkString) IsEmail(email string, validateTrue bool) (bool, error) {
+	//验证邮箱格式
+	chkFormat := regexp.MustCompile(PATTERN_EMAIL).MatchString(email)
+	if !chkFormat {
+		return false, fmt.Errorf("invalid email format")
+	}
+
+	//验证真实性
+	if validateTrue {
+		i := strings.LastIndexByte(email, '@')
+		host := email[i+1:]
+
+		// MX records
+		mx, err := net.LookupMX(host)
+		if err != nil {
+			return false, err
+		}
+
+		server := fmt.Sprintf("%s:%d", mx[0].Host, 25)
+		conn, err := net.DialTimeout("tcp", server, CHECK_CONNECT_TIMEOUT)
+		if err != nil {
+			return false, err
+		}
+
+		t := time.AfterFunc(CHECK_CONNECT_TIMEOUT, func() { conn.Close() })
+		defer t.Stop()
+
+		client, err := smtp.NewClient(conn, host)
+		if err != nil {
+			return false, err
+		}
+		defer client.Close()
+
+		err = client.Hello("checkmail.me")
+		if err != nil {
+			return false, err
+		}
+		err = client.Mail("kakuilan@gmail.com")
+		if err != nil {
+			return false, err
+		}
+		err = client.Rcpt(email)
+		if err != nil {
+			return false, err
+		}
+	}
+
+	return true, nil
 }
 
 // IsArrayOrSlice 检查变量是否数组或切片;chkType检查类型,枚举值有(1仅数组,2仅切片,3数组或切片);结果为-1表示非,>=0表示是

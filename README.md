@@ -249,6 +249,7 @@ https://github.com/bytedance/go-tagexpr
 
 ismail
 https://github.com/idoall/TokenExchangeCommon/blob/master/commonutils/checkmail/checkmail.go
+https://github.com/badoux/checkmail/blob/master/checkmail.go
 
 
 mutex
