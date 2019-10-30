@@ -250,7 +250,7 @@ func TestIsEmail(t *testing.T) {
 	}
 
 	//有效的账号
-	res5, err := KStr.IsEmail("info@openresty.org", true)
+	res5, err := KStr.IsEmail("copyright@github.com", true)
 	if err != nil {
 		println("IsEmail has error:", err.Error())
 	}
