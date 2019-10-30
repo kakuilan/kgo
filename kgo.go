@@ -89,6 +89,11 @@ const (
 	RAND_STRING_SPECIAL LkkRandString = 3
 	// RAND_STRING_CHINESE 随机字符串类型,仅中文
 	RAND_STRING_CHINESE LkkRandString = 4
+
+	// 正则模式-全中文
+	PatternAllChinese = "^[\u4e00-\u9fa5]+$"
+	// 正则模式-浮点数
+	PatternFloat = `^(-?\d+)(\.\d+)?`
 )
 
 var (

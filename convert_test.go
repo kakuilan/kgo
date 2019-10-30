@@ -82,6 +82,22 @@ func BenchmarkBool2Str(b *testing.B) {
 	}
 }
 
+func TestBool2Int(t *testing.T) {
+	res1 := KConv.Bool2Int(true)
+	res2 := KConv.Bool2Int(false)
+	if res1 != 1 || res2 != 0 {
+		t.Error("Bool2Int fail")
+		return
+	}
+}
+
+func BenchmarkBool2Int(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Bool2Int(true)
+	}
+}
+
 func TestStrictStr2Int(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {

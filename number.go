@@ -160,3 +160,13 @@ func (kn *LkkNumber) ByteFormat(size float64, decimals uint8) string {
 
 	return fmt.Sprintf("%."+strconv.Itoa(int(decimals))+"f%s", j, arr[pos])
 }
+
+// IsOdd 变量是否奇数.
+func (kn *LkkNumber) IsOdd(val int) bool {
+	return val%2 != 0
+}
+
+// IsEven 变量是否偶数.
+func (kn *LkkNumber) IsEven(val int) bool {
+	return val%2 == 0
+}

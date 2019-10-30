@@ -46,7 +46,7 @@ func (ks *LkkString) IsChinese(s string) bool {
 		return false
 	}
 
-	return regexp.MustCompile("^[\u4e00-\u9fa5]+$").MatchString(s)
+	return regexp.MustCompile(PatternAllChinese).MatchString(s)
 }
 
 // HasSpecialChar 字符串是否含有特殊字符
