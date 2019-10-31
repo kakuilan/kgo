@@ -88,13 +88,13 @@ func (ks *LkkString) IsIPv4(str string) bool {
 		return false
 	}
 
-	return ipAddr.To4() != nil && strings.Contains(str, ".")
+	return ipAddr.To4() != nil && strings.ContainsRune(str, '.')
 }
 
 // IsIPv6 检查字符串是否IPv6地址
 func (ks *LkkString) IsIPv6(str string) bool {
 	ipAddr := net.ParseIP(str)
-	return ipAddr != nil && strings.Contains(str, ":")
+	return ipAddr != nil && strings.ContainsRune(str, '.')
 }
 
 // IsEmail 检查字符串是否邮箱.参数validateTrue,是否验证邮箱的真实性.
@@ -172,12 +172,52 @@ func (ks *LkkString) IsMobile(str string) bool {
 
 // IsTel 是否固定电话或400/800电话.
 func (ks *LkkString) IsTel(str string) bool {
-	return str != "" && (regexp.MustCompile(PATTERN_TELEPHONE).MatchString(str))
+	return str != "" && regexp.MustCompile(PATTERN_TELEPHONE).MatchString(str)
 }
 
 // IsPhone 是否电话号码(手机或固话).
 func (ks *LkkString) IsPhone(str string) bool {
-	return str != "" && (regexp.MustCompile(PATTERN_PHONE).MatchString(str))
+	return str != "" && regexp.MustCompile(PATTERN_PHONE).MatchString(str)
+}
+
+// IsDate2time 检查字符串是否日期格式,并转换为时间戳.注意,时间戳可能为负数(小于1970年时).
+// 匹配如:
+//	0000
+//	0000-00
+//	0000/00
+//	0000-00-00
+//	0000/00/00
+//	0000-00-00 00
+//	0000/00/00 00
+//	0000-00-00 00:00
+//	0000/00/00 00:00
+//	0000-00-00 00:00:00
+//	0000/00/00 00:00:00
+// 等日期格式.
+func (ks *LkkString) IsDate2time(str string) (bool, int64) {
+	if str == "" {
+		return false, 0
+	} else if strings.ContainsRune(str, '/') {
+		str = strings.Replace(str, "/", "-", -1)
+	}
+
+	chk := regexp.MustCompile(PATTERN_DATETIME).MatchString(str)
+	if !chk {
+		return false, 0
+	}
+
+	leng := len(str)
+	if leng < 19 {
+		reference := "1970-01-01 00:00:00"
+		str = str + reference[leng:19]
+	}
+
+	tim, err := KTime.Strtotime(str)
+	if err != nil {
+		return false, 0
+	}
+
+	return true, tim
 }
 
 // IsArrayOrSlice 检查变量是否数组或切片;chkType检查类型,枚举值有(1仅数组,2仅切片,3数组或切片);结果为-1表示非,>=0表示是
