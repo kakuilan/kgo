@@ -46,11 +46,7 @@ func (ks *LkkString) HasChinese(str string) bool {
 
 // IsChinese 字符串是否全部中文
 func (ks *LkkString) IsChinese(str string) bool {
-	if str == "" {
-		return false
-	}
-
-	return regexp.MustCompile(PATTERN_ALL_CHINESE).MatchString(str)
+	return str != "" && regexp.MustCompile(PATTERN_ALL_CHINESE).MatchString(str)
 }
 
 // HasSpecialChar 字符串是否含有特殊字符
@@ -167,6 +163,11 @@ func (ks *LkkString) IsUrl(str string) bool {
 	}
 
 	return true
+}
+
+// IsMobile 检查字符串是否手机号
+func (ks *LkkString) IsMobile(str string) bool {
+	return str != "" && regexp.MustCompile(PATTERN_MOBILE).MatchString(str)
 }
 
 // IsArrayOrSlice 检查变量是否数组或切片;chkType检查类型,枚举值有(1仅数组,2仅切片,3数组或切片);结果为-1表示非,>=0表示是

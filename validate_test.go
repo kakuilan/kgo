@@ -576,3 +576,20 @@ func BenchmarkIsUrl(b *testing.B) {
 		KStr.IsUrl("http//google.com")
 	}
 }
+
+func TestIsMobile(t *testing.T) {
+	res1 := KStr.IsMobile("12345678901")
+	res2 := KStr.IsMobile("13712345678")
+	res3 := KStr.IsMobile("")
+
+	if res1 || !res2 || res3 {
+		t.Error("IsMobile fail")
+	}
+}
+
+func BenchmarkIsMobile(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsMobile("13712345678")
+	}
+}
