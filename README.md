@@ -90,6 +90,8 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://github.com/torden/go-strutil  -x
 - https://golang.hotexamples.com/examples/unicode/-/IsControl/golang-iscontrol-function-examples.html
 - https://github.com/idoall/TokenExchangeCommon/blob/master/commonutils/utils.go
+- https://github.com/afanti-com/utils-go
+
 
 
 
@@ -249,6 +251,18 @@ https://github.com/shuangdeyu/helper_go/blob/master/verhelper/verify.go
 https://github.com/sohaha/zlsgo/blob/master/zvalidator/validator.go
 https://github.com/nothollyhigh/kiss/blob/master/util/regexp.go
 https://github.com/bytedance/go-tagexpr
+
+身份证号码
+https://www.5-wow.com/article/detail/76
+https://github.com/luopotaotao/IdValidator/blob/master/src/idvalidator/idvalidator.go
+https://www.cnblogs.com/sn-dnv-aps/p/3735567.html
+https://github.com/sndnvaps/CheckID_card
+https://www.jianshu.com/p/267f726f1c46
+https://www.bbsmax.com/A/6pdDLE3qdw/
+https://leokongwq.github.io/2016/10/13/IDCardNo-algo.html
+https://github.com/afanti-com/utils-go/blob/master/idCardNo/idCardNo.go
+
+
 
 mutex
 https://github.com/nothollyhigh/kiss/blob/master/sync/mutex.go
