@@ -172,7 +172,12 @@ func (ks *LkkString) IsMobile(str string) bool {
 
 // IsTel 是否固定电话或400/800电话.
 func (ks *LkkString) IsTel(str string) bool {
-	return str != "" && (regexp.MustCompile(PATTERN_TEL).MatchString(str) || regexp.MustCompile(PATTERN_TEL4800).MatchString(str))
+	return str != "" && (regexp.MustCompile(PATTERN_TELEPHONE).MatchString(str))
+}
+
+// IsPhone 是否电话号码(手机或固话).
+func (ks *LkkString) IsPhone(str string) bool {
+	return str != "" && (regexp.MustCompile(PATTERN_PHONE).MatchString(str))
 }
 
 // IsArrayOrSlice 检查变量是否数组或切片;chkType检查类型,枚举值有(1仅数组,2仅切片,3数组或切片);结果为-1表示非,>=0表示是

@@ -105,11 +105,17 @@ const (
 	// 正则模式-大陆手机号
 	PATTERN_MOBILE = `^1[3-9]\d{9}$`
 
-	// 正则模式-座机号
-	PATTERN_TEL = `^(010|02\d{1}|0[3-9]\d{2})-\d{7,9}(-\d+)?$`
+	// 正则模式-固定电话
+	PATTERN_TEL_FIX = `(010|02\d{1}|0[3-9]\d{2})-\d{7,9}(-\d+)?`
 
-	// 正则模式-座机号400或800
-	PATTERN_TEL4800 = `^[48]00\d?(-?\d{3,4}){2}$`
+	// 正则模式-400或800
+	PATTERN_TEL_4800 = `[48]00\d?(-?\d{3,4}){2}`
+
+	// 正则模式-座机号(固定电话或400或800)
+	PATTERN_TELEPHONE = `(` + PATTERN_TEL_FIX + `)|(` + PATTERN_TEL_4800 + `)`
+
+	// 正则模式-电话(手机或固话)
+	PATTERN_PHONE = `(` + PATTERN_MOBILE + `)|(` + PATTERN_TEL_FIX + `)`
 )
 
 var (
