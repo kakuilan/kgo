@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math"
 	"net"
+	"net/http"
 	"net/smtp"
 	"net/url"
 	"reflect"
@@ -94,7 +95,7 @@ func (ks *LkkString) IsIPv4(str string) bool {
 // IsIPv6 检查字符串是否IPv6地址
 func (ks *LkkString) IsIPv6(str string) bool {
 	ipAddr := net.ParseIP(str)
-	return ipAddr != nil && strings.ContainsRune(str, '.')
+	return ipAddr != nil && strings.ContainsRune(str, ':')
 }
 
 // IsEmail 检查字符串是否邮箱.参数validateTrue,是否验证邮箱的真实性.
@@ -146,23 +147,6 @@ func (ks *LkkString) IsEmail(email string, validateTrue bool) (bool, error) {
 	}
 
 	return true, nil
-}
-
-// IsUrl 检查字符串是否URL.
-func (ks *LkkString) IsUrl(str string) bool {
-	if str == "" || len(str) <= 3 || utf8.RuneCountInString(str) >= 2083 || strings.HasPrefix(str, ".") {
-		return false
-	}
-
-	res, err := url.ParseRequestURI(str)
-	if err != nil {
-		return false //Couldn't even parse the url
-	}
-	if len(res.Scheme) == 0 {
-		return false //No Scheme found
-	}
-
-	return true
 }
 
 // IsMobile 检查字符串是否手机号
@@ -218,6 +202,40 @@ func (ks *LkkString) IsDate2time(str string) (bool, int64) {
 	}
 
 	return true, tim
+}
+
+// IsUrl 检查字符串是否URL.
+func (ku *LkkUrl) IsUrl(str string) bool {
+	if str == "" || len(str) <= 3 || utf8.RuneCountInString(str) >= 2083 || strings.HasPrefix(str, ".") {
+		return false
+	}
+
+	res, err := url.ParseRequestURI(str)
+	if err != nil {
+		return false //Couldn't even parse the url
+	}
+	if len(res.Scheme) == 0 {
+		return false //No Scheme found
+	}
+
+	return true
+}
+
+// IsUrlExists 检查URL是否存在.
+func (ku *LkkUrl) IsUrlExists(str string) bool {
+	if !ku.IsUrl(str) {
+		return false
+	}
+
+	client := &http.Client{}
+	resp, err := client.Head(str)
+	if err != nil {
+		return false
+	} else if resp.StatusCode == 404 {
+		return false
+	}
+
+	return true
 }
 
 // IsArrayOrSlice 检查变量是否数组或切片;chkType检查类型,枚举值有(1仅数组,2仅切片,3数组或切片);结果为-1表示非,>=0表示是
