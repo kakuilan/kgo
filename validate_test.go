@@ -593,3 +593,42 @@ func BenchmarkIsMobile(b *testing.B) {
 		KStr.IsMobile("13712345678")
 	}
 }
+
+func TestIsTel(t *testing.T) {
+	t.Parallel()
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{"10086", false},
+		{"010-88888888", true},
+		{"021-87888822", true},
+		{"0511-4405222", true},
+		{"021-44055520-555", true},
+		{"020-89571800-125", true},
+		{"400-020-9800", true},
+		{"400-999-0000", true},
+		{"4006-589-589", true},
+		{"4007005606", true},
+		{"4000631300", true},
+		{"400-6911195", true},
+		{"800-4321", true},
+		{"8004-321", true},
+		{"8004321999", true},
+		{"8008676014", true},
+	}
+	for _, test := range tests {
+		actual := KStr.IsTel(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected IsTel(%q) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkIsTel(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsTel("021-44055520-555")
+	}
+}
