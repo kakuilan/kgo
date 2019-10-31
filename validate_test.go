@@ -581,8 +581,9 @@ func TestIsMobile(t *testing.T) {
 	res1 := KStr.IsMobile("12345678901")
 	res2 := KStr.IsMobile("13712345678")
 	res3 := KStr.IsMobile("")
+	res4 := KStr.IsMobile("hello")
 
-	if res1 || !res2 || res3 {
+	if res1 || !res2 || res3 || res4 {
 		t.Error("IsMobile fail")
 	}
 }
@@ -595,7 +596,6 @@ func BenchmarkIsMobile(b *testing.B) {
 }
 
 func TestIsTel(t *testing.T) {
-	t.Parallel()
 	var tests = []struct {
 		param    string
 		expected bool
@@ -613,8 +613,8 @@ func TestIsTel(t *testing.T) {
 		{"4007005606", true},
 		{"4000631300", true},
 		{"400-6911195", true},
-		{"800-4321", true},
-		{"8004-321", true},
+		{"800-4321", false},
+		{"8004-321", false},
 		{"8004321999", true},
 		{"8008676014", true},
 	}
@@ -622,6 +622,7 @@ func TestIsTel(t *testing.T) {
 		actual := KStr.IsTel(test.param)
 		if actual != test.expected {
 			t.Errorf("Expected IsTel(%q) to be %v, got %v", test.param, test.expected, actual)
+			return
 		}
 	}
 }
@@ -630,5 +631,32 @@ func BenchmarkIsTel(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KStr.IsTel("021-44055520-555")
+	}
+}
+
+func TestIsPhone(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{"10086", false},
+		{"010-88888888", true},
+		{"13712345678", true},
+		{"hello", false},
+	}
+	for _, test := range tests {
+		actual := KStr.IsPhone(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected IsPhone(%q) to be %v, got %v", test.param, test.expected, actual)
+			return
+		}
+	}
+}
+
+func BenchmarkIsPhone(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsPhone("13712345678")
 	}
 }
