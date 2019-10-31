@@ -680,6 +680,7 @@ func TestIsDate2time(t *testing.T) {
 		{"1990/01/02 03:14", true},
 		{"1990-01-02 03:14:59", true},
 		{"1990/01/02 03:14:59", true},
+		{"2990-00-00 03:14:59", false},
 	}
 	for _, test := range tests {
 		actual, tim := KStr.IsDate2time(test.param)

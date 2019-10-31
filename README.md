@@ -295,12 +295,6 @@ https://stackoverflow.com/questions/8039552/byte-endian-convert-by-using-encodin
 https://studygolang.com/articles/2791
 https://www.reddit.com/r/golang/comments/7pwlh6/binary_string_to_readable_string/
 
-check url
-https://stackoverflow.com/questions/42226947/check-if-a-url-is-reachable-using-golang
-https://www.socketloop.com/tutorials/golang-check-a-web-page-existence-with-head-request-example
-https://codereview.stackexchange.com/questions/64254/golang-http-status-checker
-
-
 
 
 
