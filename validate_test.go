@@ -706,6 +706,7 @@ func TestIsUrlExists(t *testing.T) {
 	}{
 		{"", false},
 		{"bing.com", false},
+		{"http://none.localhost/", false},
 		{"https://github.com/", true},
 		{"https://github.com/dsfasdfasd/adsfasdfasdf", false},
 	}
