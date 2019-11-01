@@ -106,6 +106,12 @@ const (
 	// 正则模式-全中文
 	PATTERN_ALL_CHINESE = "^[\u4e00-\u9fa5]+$"
 
+	// 正则模式-多字节字符
+	PATTERN_MULTIBYTE = "[^\x00-\x7F]"
+
+	// 正则模式-ASCII字符
+	PATTERN_ASCII = "^[\x00-\x7F]+$"
+
 	// 正则模式-浮点数
 	PATTERN_FLOAT = `^(-?\d+)(\.\d+)?`
 

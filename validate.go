@@ -44,6 +44,11 @@ func (ks *LkkString) IsUtf8(str string) bool {
 	return utf8.ValidString(str)
 }
 
+// IsASCII 是否IsASCII字符.
+func (ks *LkkString) IsASCII(str string) bool {
+	return str != "" && regexp.MustCompile(PATTERN_ASCII).MatchString(str)
+}
+
 // IsEnglish 字符串是否纯英文.letterCase是否检查大小写,枚举值(CASE_NONE,CASE_LOWER,CASE_UPPER).
 func (ks *LkkString) IsEnglish(str string, letterCase LkkCaseSwitch) bool {
 	switch letterCase {

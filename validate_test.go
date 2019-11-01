@@ -993,3 +993,33 @@ func BenchmarkHasWhitespace(b *testing.B) {
 		KStr.HasWhitespace("x\n\t\t\t\t")
 	}
 }
+
+func TestIsASCII(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{"ｆｏｏbar", false},
+		{"ｘｙｚ０９８", false},
+		{"１２３456", false},
+		{"你好，世界", false},
+		{"foobar", true},
+		{"0987654321", true},
+		{"test@example.com", true},
+		{"1234abcDEF", true},
+	}
+	for _, test := range tests {
+		actual := KStr.IsASCII(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected IsASCII(%q) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkIsASCII(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsASCII("1234abcDEF")
+	}
+}
