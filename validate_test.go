@@ -1023,3 +1023,34 @@ func BenchmarkIsASCII(b *testing.B) {
 		KStr.IsASCII("1234abcDEF")
 	}
 }
+
+func TestIsMultibyte(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{"abc", false},
+		{"123", false},
+		{"<>@;.-=", false},
+		{"ひらがな・カタカナ、．漢字", true},
+		{"你好，世界 foobar", true},
+		{"test＠example.com", true},
+		{"test＠example.com", true},
+		{"1234abcDEｘｙｚ", true},
+		{"안녕하세요", true},
+	}
+	for _, test := range tests {
+		actual := KStr.IsMultibyte(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected IsMultibyte(%q) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkIsMultibyte(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsMultibyte("你好，世界 foobar")
+	}
+}
