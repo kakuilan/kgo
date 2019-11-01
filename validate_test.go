@@ -102,8 +102,9 @@ func TestIsEnglish(t *testing.T) {
 	res5 := KStr.IsEnglish("hellWorld", CASE_UPPER)
 	res6 := KStr.IsEnglish("hellworld", CASE_LOWER)
 	res7 := KStr.IsEnglish("HELLOWORLD", CASE_UPPER)
+	res8 := KStr.IsEnglish("hehe", 9)
 
-	if res1 || res2 || !res3 || res4 || res5 || !res6 || !res7 {
+	if res1 || res2 || !res3 || res4 || res5 || !res6 || !res7 || !res8 {
 		t.Error("IsEnglish fail")
 		return
 	}
