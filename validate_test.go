@@ -1084,3 +1084,34 @@ func BenchmarkHasFullWidth(b *testing.B) {
 		KStr.HasFullWidth("test@＠example.com")
 	}
 }
+
+func TestHasHalfWidth(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{"abc", true},
+		{"123", true},
+		{"hello world", true},
+		{"!\"#$%&()<>/+=-_? ~^|.,@`{}[]", true},
+		{"ひらがな・カタカナ、．漢字", false},
+		{"你好，世界 foobar", true},
+		{"test@＠example.com", true},
+		{"1234abcDEｘｙｚ", true},
+		{"안녕하세요", false},
+	}
+	for _, test := range tests {
+		actual := KStr.HasHalfWidth(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected HasHalfWidth(%q) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkHasHalfWidth(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.HasHalfWidth("test@＠example.com")
+	}
+}
