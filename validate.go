@@ -54,7 +54,7 @@ func (ks *LkkString) IsEnglish(str string, letterCase LkkCaseSwitch) bool {
 	case CASE_UPPER:
 		return str != "" && regexp.MustCompile(PATTERN_ALPHA_UPPER).MatchString(str)
 	default:
-		return false
+		return ks.IsLetters(str)
 	}
 }
 
