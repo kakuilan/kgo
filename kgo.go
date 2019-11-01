@@ -165,6 +165,9 @@ const (
 
 	// 正则模式-带空白字符
 	PATTERN_WHITESPACE_HAS = ".*[[:space:]]"
+
+	// 正则模式-base64串
+	PATTERN_BASE64 = "^(?:[A-Za-z0-9+\\/]{4})*(?:[A-Za-z0-9+\\/]{2}==|[A-Za-z0-9+\\/]{3}=|[A-Za-z0-9+\\/]{4})$"
 )
 
 var (
