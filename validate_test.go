@@ -1035,8 +1035,7 @@ func TestIsMultibyte(t *testing.T) {
 		{"<>@;.-=", false},
 		{"ひらがな・カタカナ、．漢字", true},
 		{"你好，世界 foobar", true},
-		{"test＠example.com", true},
-		{"test＠example.com", true},
+		{"test@＠example.com", true},
 		{"1234abcDEｘｙｚ", true},
 		{"안녕하세요", true},
 	}
@@ -1052,5 +1051,36 @@ func BenchmarkIsMultibyte(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KStr.IsMultibyte("你好，世界 foobar")
+	}
+}
+
+func TestHasFullWidth(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{"abc", false},
+		{"123", false},
+		{"hello world", false},
+		{"!\"#$%&()<>/+=-_? ~^|.,@`{}[]", false},
+		{"ひらがな・カタカナ、．漢字", true},
+		{"你好，世界 foobar", true},
+		{"test@＠example.com", true},
+		{"1234abcDEｘｙｚ", true},
+		{"안녕하세요", true},
+	}
+	for _, test := range tests {
+		actual := KStr.HasFullWidth(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected HasFullWidth(%q) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkHasFullWidth(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.HasFullWidth("test@＠example.com")
 	}
 }

@@ -112,6 +112,12 @@ const (
 	// 正则模式-ASCII字符
 	PATTERN_ASCII = "^[\x00-\x7F]+$"
 
+	// 正则模式-全角字符
+	PATTERN_FULLWIDTH = "[^\u0020-\u007E\uFF61-\uFF9F\uFFA0-\uFFDC\uFFE8-\uFFEE0-9a-zA-Z]"
+
+	// 正则模式-半角字符
+	PATTERN_HALFWIDTH = "[\u0020-\u007E\uFF61-\uFF9F\uFFA0-\uFFDC\uFFE8-\uFFEE0-9a-zA-Z]"
+
 	// 正则模式-浮点数
 	PATTERN_FLOAT = `^(-?\d+)(\.\d+)?`
 
