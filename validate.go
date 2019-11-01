@@ -164,44 +164,52 @@ func (ks *LkkString) IsPhone(str string) bool {
 	return str != "" && regexp.MustCompile(PATTERN_PHONE).MatchString(str)
 }
 
-// IsDate2time 检查字符串是否日期格式,并转换为时间戳.注意,时间戳可能为负数(小于1970年时).
-// 匹配如:
-//	0000
-//	0000-00
-//	0000/00
-//	0000-00-00
-//	0000/00/00
-//	0000-00-00 00
-//	0000/00/00 00
-//	0000-00-00 00:00
-//	0000/00/00 00:00
-//	0000-00-00 00:00:00
-//	0000/00/00 00:00:00
-// 等日期格式.
-func (ks *LkkString) IsDate2time(str string) (bool, int64) {
-	if str == "" {
-		return false, 0
-	} else if strings.ContainsRune(str, '/') {
-		str = strings.Replace(str, "/", "-", -1)
-	}
-
-	chk := regexp.MustCompile(PATTERN_DATETIME).MatchString(str)
+// IsCreditNo 检查是否(15或18位)身份证号码,并返回经校验的号码.
+func (ks *LkkString) IsCreditNo(str string) (bool, string) {
+	chk := str != "" && regexp.MustCompile(PATTERN_CREDIT_NO).MatchString(str)
 	if !chk {
-		return false, 0
+		return false, ""
 	}
 
+	// 检查省份代码
+	if _, chk = CreditArea[str[0:2]]; !chk {
+		return false, ""
+	}
+
+	// 将15位身份证升级到18位
 	leng := len(str)
-	if leng < 19 {
-		reference := "1970-01-01 00:00:00"
-		str = str + reference[leng:19]
+	if leng == 15 {
+		// 先转为17位,如果身份证顺序码是996 997 998 999,这些是为百岁以上老人的特殊编码
+		if chk, _ = ks.Dstrpos(str[12:], []string{"996", "997", "998", "999"}, false); chk {
+			str = str[0:6] + "18" + str[6:]
+		} else {
+			str = str[0:6] + "19" + str[6:]
+		}
+
+		// 再加上校验码
+		code := append([]byte{}, creditChecksum(str))
+		str += string(code)
 	}
 
-	tim, err := KTime.Strtotime(str)
-	if err != nil {
-		return false, 0
+	// 检查生日
+	birthday := str[6:10] + "-" + str[10:12] + "-" + str[12:14]
+	chk, tim := KTime.IsDate2time(birthday)
+	now := KTime.Time()
+	if !chk {
+		return false, ""
+	} else if tim >= now {
+		return false, ""
 	}
 
-	return true, tim
+	// 18位身份证需要验证最后一位校验位
+	if leng == 18 {
+		str = strings.ToUpper(str)
+		if str[17] != creditChecksum(str) {
+			return false, ""
+		}
+	}
+
+	return true, str
 }
 
 // IsUrl 检查字符串是否URL.
@@ -246,6 +254,46 @@ func (ka *LkkArray) IsArrayOrSlice(data interface{}, chkType uint8) int {
 // IsMap 检查变量是否字典
 func (ka *LkkArray) IsMap(data interface{}) bool {
 	return isMap(data)
+}
+
+// IsDate2time 检查字符串是否日期格式,并转换为时间戳.注意,时间戳可能为负数(小于1970年时).
+// 匹配如:
+//	0000
+//	0000-00
+//	0000/00
+//	0000-00-00
+//	0000/00/00
+//	0000-00-00 00
+//	0000/00/00 00
+//	0000-00-00 00:00
+//	0000/00/00 00:00
+//	0000-00-00 00:00:00
+//	0000/00/00 00:00:00
+// 等日期格式.
+func (kt *LkkTime) IsDate2time(str string) (bool, int64) {
+	if str == "" {
+		return false, 0
+	} else if strings.ContainsRune(str, '/') {
+		str = strings.Replace(str, "/", "-", -1)
+	}
+
+	chk := regexp.MustCompile(PATTERN_DATETIME).MatchString(str)
+	if !chk {
+		return false, 0
+	}
+
+	leng := len(str)
+	if leng < 19 {
+		reference := "1970-01-01 00:00:00"
+		str = str + reference[leng:19]
+	}
+
+	tim, err := KTime.Strtotime(str)
+	if err != nil {
+		return false, 0
+	}
+
+	return true, tim
 }
 
 // IsNan 是否为“非数值”
