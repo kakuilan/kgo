@@ -41,6 +41,34 @@ func BenchmarkIsLetters(b *testing.B) {
 	}
 }
 
+func TestHasLetter(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{"12345", false},
+		{"http://none.localhost/", true},
+		{"hello,world", true},
+		{"PI:314159", true},
+		{"你好，世界", false},
+	}
+	for _, test := range tests {
+		actual := KStr.HasLetter(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected HasLetter(%q) to be %v, got %v", test.param, test.expected, actual)
+			return
+		}
+	}
+}
+
+func BenchmarkHasLetter(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.HasLetter("hello,world")
+	}
+}
+
 func TestIsUtf8(t *testing.T) {
 	str := "你好，世界！"
 	chk1 := KStr.IsUtf8(str)

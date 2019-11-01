@@ -34,6 +34,9 @@ type (
 	// LkkRandString 枚举类型,随机字符串类型
 	LkkRandString uint8
 
+	// LkkCaseSwitch 枚举类型,大小写开关
+	LkkCaseSwitch uint8
+
 	// FileFilter 文件过滤函数
 	FileFilter func(string) bool
 
@@ -89,6 +92,13 @@ const (
 	RAND_STRING_SPECIAL LkkRandString = 3
 	// RAND_STRING_CHINESE 随机字符串类型,仅中文
 	RAND_STRING_CHINESE LkkRandString = 4
+
+	// CASE_NONE 忽略大小写
+	CASE_NONE LkkCaseSwitch = 0
+	// CASE_LOWER 检查小写
+	CASE_LOWER LkkCaseSwitch = 1
+	// CASE_UPPER 检查大写
+	CASE_UPPER LkkCaseSwitch = 2
 
 	//检查连接超时的时间
 	CHECK_CONNECT_TIMEOUT = time.Second * 5
