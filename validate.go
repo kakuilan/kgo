@@ -16,7 +16,7 @@ import (
 	"unicode/utf8"
 )
 
-// IsLetters 字符串是否纯字母组成
+// IsLetters 字符串是否全(英文)字母组成
 func (ks *LkkString) IsLetters(str string) bool {
 	if str == "" {
 		return false
@@ -27,6 +27,16 @@ func (ks *LkkString) IsLetters(str string) bool {
 		}
 	}
 	return true
+}
+
+// HasLetter 字符串是否含有(英文)字母
+func (ks *LkkString) HasLetter(str string) bool {
+	for _, r := range str {
+		if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') {
+			return true
+		}
+	}
+	return false
 }
 
 // IsUtf8 字符串是否UTF-8编码
