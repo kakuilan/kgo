@@ -290,6 +290,11 @@ func (ks *LkkString) HasWhitespace(str string) bool {
 	return str != "" && regexp.MustCompile(PATTERN_WHITESPACE_HAS).MatchString(str)
 }
 
+// IsBase64 是否base64字符串.
+func (ks *LkkString) IsBase64(str string) bool {
+	return str != "" && regexp.MustCompile(PATTERN_BASE64).MatchString(str)
+}
+
 // IsUrl 检查字符串是否URL.
 func (ku *LkkUrl) IsUrl(str string) bool {
 	if str == "" || len(str) <= 3 || utf8.RuneCountInString(str) >= 2083 || strings.HasPrefix(str, ".") {
