@@ -166,12 +166,15 @@ const (
 	// 正则模式-带空白字符
 	PATTERN_WHITESPACE_HAS = ".*[[:space:]]"
 
-	// 正则模式-base64串
+	// 正则模式-base64字符串
 	PATTERN_BASE64 = "^(?:[A-Za-z0-9+\\/]{4})*(?:[A-Za-z0-9+\\/]{2}==|[A-Za-z0-9+\\/]{3}=|[A-Za-z0-9+\\/]{4})$"
+
+	// 正则模式-base64编码图片
+	PATTERN_BASE64_IMAGE = `^data:\s*(image|img)\/(\w+);base64`
 )
 
 var (
-	//Kuptime 当前服务启动时间
+	// Kuptime 当前服务启动时间
 	Kuptime = time.Now()
 
 	// KFile utilities

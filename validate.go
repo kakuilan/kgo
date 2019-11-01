@@ -295,6 +295,16 @@ func (ks *LkkString) IsBase64(str string) bool {
 	return str != "" && regexp.MustCompile(PATTERN_BASE64).MatchString(str)
 }
 
+// IsBase64Image 是否base64编码的图片.
+func (ks *LkkString) IsBase64Image(str string) bool {
+	if str == "" || !strings.ContainsRune(str, ',') {
+		return false
+	}
+
+	dataURI := strings.Split(str, ",")
+	return regexp.MustCompile(PATTERN_BASE64_IMAGE).MatchString(dataURI[0]) && regexp.MustCompile(PATTERN_BASE64).MatchString(dataURI[1])
+}
+
 // IsUrl 检查字符串是否URL.
 func (ku *LkkUrl) IsUrl(str string) bool {
 	if str == "" || len(str) <= 3 || utf8.RuneCountInString(str) >= 2083 || strings.HasPrefix(str, ".") {
