@@ -963,3 +963,33 @@ func BenchmarkIsWhitespaces(b *testing.B) {
 		KStr.IsWhitespaces("\f\n\t\v\r\f")
 	}
 }
+
+func TestHasWhitespace(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"abacaba", false},
+		{"", false},
+		{"    ", true},
+		{"  \r\n  ", true},
+		{"\014\012\011\013\015", true},
+		{"\014\012\011\013 abc  \015", true},
+		{"\f\n\t\v\r\f", true},
+		{"x\n\t\t\t\t", true},
+		{"\f\n\t  \n\n\n   \v\r\f", true},
+	}
+	for _, test := range tests {
+		actual := KStr.HasWhitespace(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected HasWhitespace(%q) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkHasWhitespace(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.HasWhitespace("x\n\t\t\t\t")
+	}
+}
