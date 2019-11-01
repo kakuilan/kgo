@@ -138,6 +138,9 @@ const (
 
 	// 正则模式-大写英文
 	PATTERN_ALPHA_UPPER = `^[A-Z]+$`
+
+	// 正则模式-字母和数字
+	PATTERN_ALPHA_NUMERIC = `^[a-zA-Z0-9]+$`
 )
 
 var (

@@ -850,3 +850,30 @@ func BenchmarkIsCreditNo(b *testing.B) {
 		_, _ = KStr.IsCreditNo("51343620180101646X")
 	}
 }
+
+func TestIsAlphaNumeric(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{"12345", true},
+		{"helloworld", true},
+		{"PI314159", true},
+		{"你好，世界", false},
+	}
+	for _, test := range tests {
+		actual := KStr.IsAlphaNumeric(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected IsAlphaNumeric(%q) to be %v, got %v", test.param, test.expected, actual)
+			return
+		}
+	}
+}
+
+func BenchmarkIsAlphaNumeric(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsAlphaNumeric("PI314159")
+	}
+}
