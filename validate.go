@@ -241,6 +241,11 @@ func (ks *LkkString) IsCreditNo(str string) (bool, string) {
 	return true, str
 }
 
+// IsAlphaNumeric 是否字母或数字.
+func (ks *LkkString) IsAlphaNumeric(str string) bool {
+	return str != "" && regexp.MustCompile(PATTERN_ALPHA_NUMERIC).MatchString(str)
+}
+
 // IsUrl 检查字符串是否URL.
 func (ku *LkkUrl) IsUrl(str string) bool {
 	if str == "" || len(str) <= 3 || utf8.RuneCountInString(str) >= 2083 || strings.HasPrefix(str, ".") {
