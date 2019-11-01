@@ -104,7 +104,7 @@ func TestIsEnglish(t *testing.T) {
 	res7 := KStr.IsEnglish("HELLOWORLD", CASE_UPPER)
 	res8 := KStr.IsEnglish("hehe", 9)
 
-	if res1 || res2 || !res3 || res4 || res5 || !res6 || !res7 || res8 {
+	if res1 || res2 || !res3 || res4 || res5 || !res6 || !res7 || !res8 {
 		t.Error("IsEnglish fail")
 		return
 	}
@@ -875,5 +875,61 @@ func BenchmarkIsAlphaNumeric(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KStr.IsAlphaNumeric("PI314159")
+	}
+}
+
+func TestIsHexcolor(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{"#ff", false},
+		{"fff0", false},
+		{"#ff12FG", false},
+		{"CCccCC", true},
+		{"fff", true},
+		{"#f00", true},
+	}
+	for _, test := range tests {
+		actual, color := KStr.IsHexcolor(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected IsHexcolor(%q) to be %v, got %v %s", test.param, test.expected, actual, color)
+		}
+	}
+}
+
+func BenchmarkIsHexcolor(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.IsHexcolor("#ff12FG")
+	}
+}
+
+func TestIsRGBcolor(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{"rgb(0,31,255)", true},
+		{"rgb(1,349,275)", false},
+		{"rgb(01,31,255)", false},
+		{"rgb(0.6,31,255)", false},
+		{"rgba(0,31,255)", false},
+		{"rgb(0,  31, 255)", true},
+	}
+	for _, test := range tests {
+		actual := KStr.IsRGBcolor(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected IsRGBcolor(%q) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkIsRGBcolor(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsRGBcolor("rgb(01,31,255)")
 	}
 }

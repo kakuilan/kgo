@@ -246,6 +246,20 @@ func (ks *LkkString) IsAlphaNumeric(str string) bool {
 	return str != "" && regexp.MustCompile(PATTERN_ALPHA_NUMERIC).MatchString(str)
 }
 
+// IsHexcolor 检查是否十六进制颜色,并返回带"#"的修正值.
+func (ks *LkkString) IsHexcolor(str string) (bool, string) {
+	chk := str != "" && regexp.MustCompile(PATTERN_HEXCOLOR).MatchString(str)
+	if chk && !strings.ContainsRune(str, '#') {
+		str = "#" + strings.ToUpper(str)
+	}
+	return chk, str
+}
+
+// IsRGBcolor 检查字符串是否RGB颜色格式.
+func (ks *LkkString) IsRGBcolor(str string) bool {
+	return str != "" && regexp.MustCompile(PATTERN_RGBCOLOR).MatchString(str)
+}
+
 // IsUrl 检查字符串是否URL.
 func (ku *LkkUrl) IsUrl(str string) bool {
 	if str == "" || len(str) <= 3 || utf8.RuneCountInString(str) >= 2083 || strings.HasPrefix(str, ".") {
