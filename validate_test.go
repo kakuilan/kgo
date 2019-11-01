@@ -94,6 +94,42 @@ func BenchmarkIsUtf8(b *testing.B) {
 	}
 }
 
+func TestIsEnglish(t *testing.T) {
+	res1 := KStr.IsEnglish("", CASE_NONE)
+	res2 := KStr.IsEnglish("1234", CASE_NONE)
+	res3 := KStr.IsEnglish("hellWorld", CASE_NONE)
+	res4 := KStr.IsEnglish("hellWorld", CASE_LOWER)
+	res5 := KStr.IsEnglish("hellWorld", CASE_UPPER)
+	res6 := KStr.IsEnglish("hellworld", CASE_LOWER)
+	res7 := KStr.IsEnglish("HELLOWORLD", CASE_UPPER)
+
+	if res1 || res2 || !res3 || res4 || res5 || !res6 || !res7 {
+		t.Error("IsEnglish fail")
+		return
+	}
+}
+
+func BenchmarkIsEnglishCASE_NONE(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsEnglish("hellWorld", CASE_LOWER)
+	}
+}
+
+func BenchmarkIsEnglishCASE_LOWER(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsEnglish("hellWorld", CASE_LOWER)
+	}
+}
+
+func BenchmarkIsEnglishCASE_UPPER(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsEnglish("hellWorld", CASE_UPPER)
+	}
+}
+
 func TestIsNumeric(t *testing.T) {
 	res1 := KConv.IsNumeric(123)
 	res2 := KConv.IsNumeric("123.456")
