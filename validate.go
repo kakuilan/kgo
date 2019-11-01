@@ -260,6 +260,11 @@ func (ks *LkkString) IsRGBcolor(str string) bool {
 	return str != "" && regexp.MustCompile(PATTERN_RGBCOLOR).MatchString(str)
 }
 
+// IsWhitespaces 是否全部空白字符.
+func (ks *LkkString) IsWhitespaces(str string) bool {
+	return str != "" && regexp.MustCompile(PATTERN_WHITESPACE_ALL).MatchString(str)
+}
+
 // IsUrl 检查字符串是否URL.
 func (ku *LkkUrl) IsUrl(str string) bool {
 	if str == "" || len(str) <= 3 || utf8.RuneCountInString(str) >= 2083 || strings.HasPrefix(str, ".") {
