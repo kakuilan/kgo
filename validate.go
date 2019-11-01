@@ -54,6 +54,16 @@ func (ks *LkkString) IsMultibyte(str string) bool {
 	return str != "" && regexp.MustCompile(PATTERN_MULTIBYTE).MatchString(str)
 }
 
+// HasFullWidth 是否含有全角字符.
+func (ks *LkkString) HasFullWidth(str string) bool {
+	return str != "" && regexp.MustCompile(PATTERN_FULLWIDTH).MatchString(str)
+}
+
+// HasHalfWidth 是否含有半角字符.
+func (ks *LkkString) HasHalfWidth(str string) bool {
+	return str != "" && regexp.MustCompile(PATTERN_HALFWIDTH).MatchString(str)
+}
+
 // IsEnglish 字符串是否纯英文.letterCase是否检查大小写,枚举值(CASE_NONE,CASE_LOWER,CASE_UPPER).
 func (ks *LkkString) IsEnglish(str string, letterCase LkkCaseSwitch) bool {
 	switch letterCase {
