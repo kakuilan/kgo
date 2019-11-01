@@ -58,6 +58,11 @@ func (ks *LkkString) IsEnglish(str string, letterCase LkkCaseSwitch) bool {
 	}
 }
 
+// HasEnglish 是否含有英文字符,HasLetter的别名.
+func (ks *LkkString) HasEnglish(str string) bool {
+	return ks.HasLetter(str)
+}
+
 // HasChinese 字符串是否含有中文
 func (ks *LkkString) HasChinese(str string) bool {
 	for _, r := range str {

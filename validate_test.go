@@ -130,6 +130,27 @@ func BenchmarkIsEnglishCASE_UPPER(b *testing.B) {
 	}
 }
 
+func TestHasEnglish(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{"12345", false},
+		{"http://none.localhost/", true},
+		{"hello,world", true},
+		{"PI:314159", true},
+		{"你好，世界", false},
+	}
+	for _, test := range tests {
+		actual := KStr.HasEnglish(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected HasEnglish(%q) to be %v, got %v", test.param, test.expected, actual)
+			return
+		}
+	}
+}
+
 func TestIsNumeric(t *testing.T) {
 	res1 := KConv.IsNumeric(123)
 	res2 := KConv.IsNumeric("123.456")
