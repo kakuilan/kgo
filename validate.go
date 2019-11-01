@@ -44,6 +44,20 @@ func (ks *LkkString) IsUtf8(str string) bool {
 	return utf8.ValidString(str)
 }
 
+// IsEnglish 字符串是否纯英文.letterCase是否检查大小写,枚举值(CASE_NONE,CASE_LOWER,CASE_UPPER).
+func (ks *LkkString) IsEnglish(str string, letterCase LkkCaseSwitch) bool {
+	switch letterCase {
+	case CASE_NONE:
+		return ks.IsLetters(str)
+	case CASE_LOWER:
+		return str != "" && regexp.MustCompile(PATTERN_ALPHA_LOWER).MatchString(str)
+	case CASE_UPPER:
+		return str != "" && regexp.MustCompile(PATTERN_ALPHA_UPPER).MatchString(str)
+	default:
+		return false
+	}
+}
+
 // HasChinese 字符串是否含有中文
 func (ks *LkkString) HasChinese(str string) bool {
 	for _, r := range str {
