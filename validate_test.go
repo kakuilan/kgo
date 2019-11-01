@@ -683,10 +683,9 @@ func TestIsDate2time(t *testing.T) {
 		{"2990-00-00 03:14:59", false},
 	}
 	for _, test := range tests {
-		actual, tim := KStr.IsDate2time(test.param)
-		println("IsDate2time", test.param, actual, tim)
+		actual, tim := KTime.IsDate2time(test.param)
 		if actual != test.expected {
-			t.Errorf("Expected IsDate2time(%q) to be %v, got %v", test.param, test.expected, actual)
+			t.Errorf("Expected IsDate2time(%q) to be %v, got %v %d", test.param, test.expected, actual, tim)
 			return
 		}
 	}
@@ -695,7 +694,7 @@ func TestIsDate2time(t *testing.T) {
 func BenchmarkIsDate2time(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = KStr.IsDate2time("1990-01-02 03:14:59")
+		_, _ = KTime.IsDate2time("1990-01-02 03:14:59")
 	}
 }
 
@@ -723,5 +722,43 @@ func BenchmarkIsUrlExists(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KUrl.IsUrlExists("https://github.com/")
+	}
+}
+
+func TestIsCreditNo(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{"hello", false},
+		{"123123123", false},
+		{"510723198006202551", true},
+		{"34052419800101001x", true},
+		{"511028199507215915", true},
+		{"53010219200508011X", true},
+		{"130503670401001", true},
+		{"370986890623212", true},
+		{"370725881105149", true},
+		{"370725881105996", true},
+		{"35051419930513051X", false},
+		{"44141419900430157X", false},
+		{"110106209901012141", false},
+		{"513436200011013606", true},
+		{"51343620180101646X", true},
+	}
+	for _, test := range tests {
+		chk, idNo := KStr.IsCreditNo(test.param)
+		if chk != test.expected {
+			t.Errorf("Expected IsCreditNo(%q) to be %v, got %v %s", test.param, test.expected, chk, idNo)
+			return
+		}
+	}
+}
+
+func BenchmarkIsCreditNo(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.IsCreditNo("51343620180101646X")
 	}
 }

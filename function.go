@@ -220,3 +220,21 @@ func reflectPtr(r reflect.Value) reflect.Value {
 	}
 	return r
 }
+
+// creditChecksum 计算身份证校验码,其中id为身份证号码.
+func creditChecksum(id string) byte {
+	//∑(ai×Wi)(mod 11)
+	// 加权因子
+	factor := []int{7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2}
+	// 校验位对应值
+	code := []byte{'1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'}
+
+	leng := len(id)
+	sum := 0
+	for i, char := range id[:leng-1] {
+		num, _ := strconv.Atoi(string(char))
+		sum += num * factor[i]
+	}
+
+	return code[sum%11]
+}
