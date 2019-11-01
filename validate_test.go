@@ -933,3 +933,33 @@ func BenchmarkIsRGBcolor(b *testing.B) {
 		KStr.IsRGBcolor("rgb(01,31,255)")
 	}
 }
+
+func TestIsWhitespaces(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"abacaba", false},
+		{"", false},
+		{"    ", true},
+		{"  \r\n  ", true},
+		{"\014\012\011\013\015", true},
+		{"\014\012\011\013 abc  \015", false},
+		{"\f\n\t\v\r\f", true},
+		{"x\n\t\t\t\t", false},
+		{"\f\n\t  \n\n\n   \v\r\f", true},
+	}
+	for _, test := range tests {
+		actual := KStr.IsWhitespaces(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected IsWhitespaces(%q) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkIsWhitespaces(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsWhitespaces("\f\n\t\v\r\f")
+	}
+}
