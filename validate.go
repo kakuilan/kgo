@@ -265,6 +265,11 @@ func (ks *LkkString) IsWhitespaces(str string) bool {
 	return str != "" && regexp.MustCompile(PATTERN_WHITESPACE_ALL).MatchString(str)
 }
 
+// HasWhitespace 是否带有空白字符.
+func (ks *LkkString) HasWhitespace(str string) bool {
+	return str != "" && regexp.MustCompile(PATTERN_WHITESPACE_HAS).MatchString(str)
+}
+
 // IsUrl 检查字符串是否URL.
 func (ku *LkkUrl) IsUrl(str string) bool {
 	if str == "" || len(str) <= 3 || utf8.RuneCountInString(str) >= 2083 || strings.HasPrefix(str, ".") {
