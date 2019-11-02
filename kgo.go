@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"net"
+	"regexp"
 	"time"
 )
 
@@ -167,7 +168,7 @@ const (
 	PATTERN_WHITESPACE_HAS = ".*[[:space:]]"
 
 	// 正则模式-连续空白符
-	PATTERN_DUPLICATE_WHITE = `[[:space:]]{2,}|[\s\p{Zs}]{2,}`
+	PATTERN_WHITESPACE_DUPLICATE = `[[:space:]]{2,}|[\s\p{Zs}]{2,}`
 
 	// 正则模式-base64字符串
 	PATTERN_BASE64 = "^(?:[A-Za-z0-9+\\/]{4})*(?:[A-Za-z0-9+\\/]{2}==|[A-Za-z0-9+\\/]{3}=|[A-Za-z0-9+\\/]{4})$"
@@ -221,4 +222,31 @@ var (
 
 	// html抽取文本要排除的标签
 	TextHtmlExcludeTags = []string{"head", "title", "img", "form", "textarea", "input", "select", "button", "iframe", "script", "style", "option"}
+
+	// 已编译的正则
+	RegFormatDir           = regexp.MustCompile(`(/){2,}|(\\){1,}`)
+	RegAllChinese          = regexp.MustCompile(PATTERN_ALL_CHINESE)
+	RegMultiByte           = regexp.MustCompile(PATTERN_MULTIBYTE)
+	RegAscii               = regexp.MustCompile(PATTERN_ASCII)
+	RegFullWidth           = regexp.MustCompile(PATTERN_FULLWIDTH)
+	RegHalfWidth           = regexp.MustCompile(PATTERN_HALFWIDTH)
+	RegFloat               = regexp.MustCompile(PATTERN_FLOAT)
+	RegEmail               = regexp.MustCompile(PATTERN_EMAIL)
+	RegMobile              = regexp.MustCompile(PATTERN_MOBILE)
+	RegTelephone           = regexp.MustCompile(PATTERN_TELEPHONE)
+	RegPhone               = regexp.MustCompile(PATTERN_PHONE)
+	RegDatetime            = regexp.MustCompile(PATTERN_DATETIME)
+	RegCreditno            = regexp.MustCompile(PATTERN_CREDIT_NO)
+	RegAlphaLower          = regexp.MustCompile(PATTERN_ALPHA_LOWER)
+	RegAlphaUpper          = regexp.MustCompile(PATTERN_ALPHA_UPPER)
+	RegAlphaNumeric        = regexp.MustCompile(PATTERN_ALPHA_NUMERIC)
+	RegHexcolor            = regexp.MustCompile(PATTERN_HEXCOLOR)
+	RegRgbcolor            = regexp.MustCompile(PATTERN_RGBCOLOR)
+	RegWhitespace          = regexp.MustCompile(`\s`)
+	RegWhitespaceAll       = regexp.MustCompile(PATTERN_WHITESPACE_ALL)
+	RegWhitespaceHas       = regexp.MustCompile(PATTERN_WHITESPACE_HAS)
+	RegWhitespaceDuplicate = regexp.MustCompile(PATTERN_WHITESPACE_DUPLICATE)
+	RegBase64              = regexp.MustCompile(PATTERN_BASE64)
+	RegBase64Image         = regexp.MustCompile(PATTERN_BASE64_IMAGE)
+	RegHtmlTag             = regexp.MustCompile(PATTERN_HTML_TAGS)
 )

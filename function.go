@@ -10,7 +10,6 @@ import (
 	"fmt"
 	"hash"
 	"reflect"
-	"regexp"
 	"strconv"
 	"unsafe"
 )
@@ -147,7 +146,8 @@ func isFloat(val interface{}) bool {
 		if str == "" {
 			return false
 		}
-		if ok, _ := regexp.MatchString(PATTERN_FLOAT, str); ok {
+
+		if ok := RegFloat.MatchString(str); ok {
 			return true
 		}
 	}
