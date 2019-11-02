@@ -163,6 +163,15 @@ func (ks *LkkString) IsPort(val interface{}) bool {
 	return false
 }
 
+// IsDNSName 是否DNS名称
+func (ks *LkkString) IsDNSName(str string) bool {
+	if str == "" || len(strings.Replace(str, ".", "", -1)) > 255 {
+		// constraints already violated
+		return false
+	}
+	return !ks.IsIP(str) && RegDNSname.MatchString(str)
+}
+
 // IsEmail 检查字符串是否邮箱.参数validateTrue,是否验证邮箱的真实性.
 func (ks *LkkString) IsEmail(email string, validateTrue bool) (bool, error) {
 	//验证邮箱格式

@@ -178,6 +178,9 @@ const (
 
 	// 正则模式-html标签
 	PATTERN_HTML_TAGS = `<(.|\n)*?>`
+
+	// 正则模式-DNS名称
+	PATTERN_DNSNAME = `^([a-zA-Z0-9_]{1}[a-zA-Z0-9_-]{0,62}){1}(\.[a-zA-Z0-9_]{1}[a-zA-Z0-9_-]{0,62})*[\._]?$`
 )
 
 var (
@@ -249,4 +252,5 @@ var (
 	RegBase64              = regexp.MustCompile(PATTERN_BASE64)
 	RegBase64Image         = regexp.MustCompile(PATTERN_BASE64_IMAGE)
 	RegHtmlTag             = regexp.MustCompile(PATTERN_HTML_TAGS)
+	RegDNSname             = regexp.MustCompile(PATTERN_DNSNAME)
 )
