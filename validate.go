@@ -129,6 +129,11 @@ func (ks *LkkString) IsJSON(str string) bool {
 	return json.Unmarshal([]byte(str), &js) == nil
 }
 
+// IsIP 检查字符串是否IP地址.
+func (ks *LkkString) IsIP(str string) bool {
+	return net.ParseIP(str) != nil
+}
+
 // IsIPv4 检查字符串是否IPv4地址
 func (ks *LkkString) IsIPv4(str string) bool {
 	ipAddr := net.ParseIP(str)

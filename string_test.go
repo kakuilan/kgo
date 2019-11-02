@@ -1298,7 +1298,6 @@ var htmlDoc = `
 func TestHtml2Text(t *testing.T) {
 	res1 := KStr.Html2Text("")
 	res2 := KStr.Html2Text(htmlDoc)
-	println("res2:", res2)
 
 	if res1 != "" || res2 == "" {
 		t.Error("Html2Text fail")

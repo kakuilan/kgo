@@ -1182,3 +1182,32 @@ func BenchmarkIsBase64Image(b *testing.B) {
 		KStr.IsBase64Image("data:image/png;base64,TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2NpbmcgZWxpdC4=")
 	}
 }
+
+func TestIsIP(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{"127.0.0.1", true},
+		{"0.0.0.0", true},
+		{"255.255.255.255", true},
+		{"1.2.3.4", true},
+		{"::1", true},
+		{"2001:db8:0000:1:1:1:1:1", true},
+		{"300.0.0.0", false},
+	}
+	for _, test := range tests {
+		actual := KStr.IsIP(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected IsIP(%q) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkIsIP(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsIP("127.0.0.1")
+	}
+}
