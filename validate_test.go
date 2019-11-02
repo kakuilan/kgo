@@ -1211,3 +1211,33 @@ func BenchmarkIsIP(b *testing.B) {
 		KStr.IsIP("127.0.0.1")
 	}
 }
+
+func TestIsPort(t *testing.T) {
+	var tests = []struct {
+		param    interface{}
+		expected bool
+	}{
+		{"hello", false},
+		{"1", true},
+		{0, false},
+		{100, true},
+		{"65535", true},
+		{"0", false},
+		{"65536", false},
+		{"65538", false},
+	}
+
+	for _, test := range tests {
+		actual := KStr.IsPort(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected IsPort(%q) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkIsPort(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsPort("65538")
+	}
+}
