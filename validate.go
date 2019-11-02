@@ -187,6 +187,11 @@ func (ks *LkkString) IsMAC(str string) bool {
 	return err == nil
 }
 
+// IsHost 字符串是否主机名(IP或DNS名称).
+func (ks *LkkString) IsHost(str string) bool {
+	return ks.IsIP(str) || ks.IsDNSName(str)
+}
+
 // IsEmail 检查字符串是否邮箱.参数validateTrue,是否验证邮箱的真实性.
 func (ks *LkkString) IsEmail(email string, validateTrue bool) (bool, error) {
 	//验证邮箱格式
