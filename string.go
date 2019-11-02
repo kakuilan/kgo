@@ -88,10 +88,10 @@ func (ks *LkkString) RemoveSpace(str string, all bool) string {
 		//先将2个以上的连续空白符转为空格
 		str = regexp.MustCompile(PATTERN_DUPLICATE_WHITE).ReplaceAllString(str, " ")
 		//再将[\t\n\f\r]等转为空格
-		return regexp.MustCompile(`\s`).ReplaceAllString(str, " ")
+		str = regexp.MustCompile(`\s`).ReplaceAllString(str, " ")
 	}
 
-	return ""
+	return strings.TrimSpace(str)
 }
 
 // StripTags 过滤html和php标签
@@ -105,7 +105,6 @@ func (ks *LkkString) StripTags(str string) string {
 }
 
 // Html2Text 将html转换为纯文本.
-// 参考库 https://godoc.org/golang.org/x/net/html
 func (ks *LkkString) Html2Text(str string) string {
 	if str == "" {
 		return ""
