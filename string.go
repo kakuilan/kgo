@@ -14,7 +14,6 @@ import (
 	"html"
 	"io/ioutil"
 	"math/rand"
-	"regexp"
 	"strconv"
 	"strings"
 	"time"

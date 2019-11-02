@@ -9,7 +9,6 @@ import (
 	"net/smtp"
 	"net/url"
 	"reflect"
-	"regexp"
 	"strings"
 	"time"
 	"unicode"
