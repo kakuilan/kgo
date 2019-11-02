@@ -1357,3 +1357,35 @@ func BenchmarkIsMAC(b *testing.B) {
 		KStr.IsMAC("08:00:27:88:0f:fd")
 	}
 }
+
+func TestIsHost(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{"hello world", false},
+		{"localhost", true},
+		{"localhost.localdomain", true},
+		{"2001:db8:0000:1:1:1:1:1", true},
+		{"::1", true},
+		{"play.golang.org", true},
+		{"localhost.localdomain.intern:65535", false},
+		{"-[::1]", false},
+		{"-localhost", false},
+		{".localhost", false},
+	}
+	for _, test := range tests {
+		actual := KStr.IsHost(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected IsHost(%q) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkIsHost(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsHost("localhost.localdomain")
+	}
+}
