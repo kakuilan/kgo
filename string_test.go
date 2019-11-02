@@ -1189,3 +1189,24 @@ func BenchmarkUpperCaseFirstWords(b *testing.B) {
 		KStr.UpperCaseFirstWords(str)
 	}
 }
+
+func TestRemoveSpace(t *testing.T) {
+	str := "hello World. Hello  \t \n world!   Text   \f\n\t\v\r\fMore \014\012\011\013\015here      \t\n\t Hello,\tWorld\n!\n\t"
+	res1 := KStr.RemoveSpace(str, true)
+	res2 := KStr.RemoveSpace(str, false)
+
+	if strings.Contains(res1, " ") {
+		t.Error("RemoveSpace fail")
+		return
+	} else if !strings.Contains(res2, " ") {
+		t.Error("RemoveSpace fail")
+	}
+}
+
+func BenchmarkRemoveSpace(b *testing.B) {
+	b.ResetTimer()
+	str := "hello World. Hello  \t \n world!   Text   \f\n\t\v\r\fMore \014\012\011\013\015here      \t\n\t Hello,\tWorld\n!\n\t"
+	for i := 0; i < b.N; i++ {
+		KStr.RemoveSpace(str, true)
+	}
+}
