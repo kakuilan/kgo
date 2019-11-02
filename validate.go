@@ -151,6 +151,18 @@ func (ks *LkkString) IsIPv6(str string) bool {
 	return ipAddr != nil && strings.ContainsRune(str, ':')
 }
 
+// IsPort 字符串或数字是否端口号.
+func (ks *LkkString) IsPort(val interface{}) bool {
+	if KConv.IsInt(val) {
+		port := KConv.ToInt(val)
+		if port > 0 && port < 65536 {
+			return true
+		}
+	}
+
+	return false
+}
+
 // IsEmail 检查字符串是否邮箱.参数validateTrue,是否验证邮箱的真实性.
 func (ks *LkkString) IsEmail(email string, validateTrue bool) (bool, error) {
 	//验证邮箱格式
