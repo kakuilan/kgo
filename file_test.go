@@ -880,3 +880,30 @@ func BenchmarkUnTarGz(b *testing.B) {
 		_, _ = KFile.UnTarGz(src, dst)
 	}
 }
+
+func TestSafeFileName(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected string
+	}{
+		{"", "."},
+		{"abc", "abc"},
+		{"123456789     '_-?ASDF@£$%£%^é.html", "123456789-asdf.html"},
+		{"ReadMe.md", "readme.md"},
+		{"file:///c:/test.go", "test.go"},
+		{"../../../Hello World!.txt", "hello-world.txt"},
+	}
+	for _, test := range tests {
+		actual := KFile.SafeFileName(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected SafeFileName(%q) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkSafeFileName(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.SafeFileName("../../../Hello World!.txt")
+	}
+}
