@@ -1288,3 +1288,37 @@ func BenchmarkIsDNSName(b *testing.B) {
 		KStr.IsDNSName("localhost.local")
 	}
 }
+
+func TestIsDialString(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"localhost.local:1", true},
+		{"localhost.localdomain:9090", true},
+		{"localhost.localdomain.intern:65535", true},
+		{"127.0.0.1:30000", true},
+		{"[::1]:80", true},
+		{"[1200::AB00:1234::2552:7777:1313]:22", false},
+		{"-localhost:1", false},
+		{"localhost.-localdomain:9090", false},
+		{"localhost.localdomain.-int:65535", false},
+		{"localhost.loc:100000", false},
+		{"漢字汉字:2", false},
+		{"www.jubfvq1v3p38i51622y0dvmdk1mymowjyeu26gbtw9andgynj1gg8z3msb1kl5z6906k846pj3sulm4kiyk82ln5teqj9nsht59opr0cs5ssltx78lfyvml19lfq1wp4usbl0o36cmiykch1vywbttcus1p9yu0669h8fj4ll7a6bmop505908s1m83q2ec2qr9nbvql2589adma3xsq2o38os2z3dmfh2tth4is4ixyfasasasefqwe4t2ub2fz1rme.de:20000", false},
+	}
+
+	for _, test := range tests {
+		actual := KStr.IsDialString(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected IsDialString(%q) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkIsDialString(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsDialString("127.0.0.1:30000")
+	}
+}
