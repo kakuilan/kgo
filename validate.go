@@ -172,6 +172,15 @@ func (ks *LkkString) IsDNSName(str string) bool {
 	return !ks.IsIP(str) && RegDNSname.MatchString(str)
 }
 
+// IsDialString 是否网络拨号字符串(形如127.0.0.1:80),用于net.Dial()检查.
+func (ks *LkkString) IsDialString(str string) bool {
+	if h, p, err := net.SplitHostPort(str); err == nil && h != "" && p != "" && (ks.IsDNSName(h) || ks.IsIP(h)) && ks.IsPort(p) {
+		return true
+	}
+
+	return false
+}
+
 // IsEmail 检查字符串是否邮箱.参数validateTrue,是否验证邮箱的真实性.
 func (ks *LkkString) IsEmail(email string, validateTrue bool) (bool, error) {
 	//验证邮箱格式
