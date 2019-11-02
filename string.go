@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"github.com/json-iterator/go"
+	xhtml "golang.org/x/net/html"
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/encoding/traditionalchinese"
 	"golang.org/x/text/transform"
@@ -78,13 +79,59 @@ func (ks *LkkString) Br2nl(str string) string {
 	return string(buf)
 }
 
+// RemoveSpace 移除字符串中的空白字符.
+// all为true时移除全部空白,为false时只替换连续的空白字符为一个空格.
+func (ks *LkkString) RemoveSpace(str string, all bool) string {
+	if all && str != "" {
+		return strings.Join(strings.Fields(str), "")
+	} else if str != "" {
+		//先将2个以上的连续空白符转为空格
+		str = regexp.MustCompile(PATTERN_DUPLICATE_WHITE).ReplaceAllString(str, " ")
+		//再将[\t\n\f\r]等转为空格
+		return regexp.MustCompile(`\s`).ReplaceAllString(str, " ")
+	}
+
+	return ""
+}
+
 // StripTags 过滤html和php标签
-func (ks *LkkString) StripTags(html string) string {
-	if html == "" {
+func (ks *LkkString) StripTags(str string) string {
+	if str == "" {
 		return ""
 	}
-	re := regexp.MustCompile(`<(.|\n)*?>`)
-	return re.ReplaceAllString(html, "")
+
+	re := regexp.MustCompile(PATTERN_HTML_TAGS)
+	return re.ReplaceAllString(str, "")
+}
+
+// Html2Text 将html转换为纯文本.
+// 参考库 https://godoc.org/golang.org/x/net/html
+func (ks *LkkString) Html2Text(str string) string {
+	if str == "" {
+		return ""
+	}
+
+	domDoc := xhtml.NewTokenizer(strings.NewReader(str))
+	previousStartToken := domDoc.Token()
+	var text string
+loopDom:
+	for {
+		nx := domDoc.Next()
+		switch {
+		case nx == xhtml.ErrorToken:
+			break loopDom // End of the document
+		case nx == xhtml.StartTagToken:
+			previousStartToken = domDoc.Token()
+		case nx == xhtml.TextToken:
+			if chk, _ := ks.Dstrpos(previousStartToken.Data, TextHtmlExcludeTags, false); chk {
+				continue
+			}
+
+			text += " " + strings.TrimSpace(xhtml.UnescapeString(string(domDoc.Text())))
+		}
+	}
+
+	return ks.RemoveSpace(text, false)
 }
 
 // Md5 获取字符串md5值,length指定结果长度32/16

@@ -252,15 +252,14 @@ https://github.com/sohaha/zlsgo/blob/master/zvalidator/validator.go
 https://github.com/nothollyhigh/kiss/blob/master/util/regexp.go
 https://github.com/bytedance/go-tagexpr
 
-身份证号码
-https://www.5-wow.com/article/detail/76
-https://github.com/luopotaotao/IdValidator/blob/master/src/idvalidator/idvalidator.go
-https://www.cnblogs.com/sn-dnv-aps/p/3735567.html
-https://github.com/sndnvaps/CheckID_card
-https://www.jianshu.com/p/267f726f1c46
-https://www.bbsmax.com/A/6pdDLE3qdw/
-https://leokongwq.github.io/2016/10/13/IDCardNo-algo.html
-https://github.com/afanti-com/utils-go/blob/master/idCardNo/idCardNo.go
+html to text
+https://github.com/k3a/html2text
+https://github.com/grokify/html-strip-tags-go
+https://stackoverflow.com/questions/44441665/how-to-extract-only-text-from-html-in-golang
+https://stackoverflow.com/questions/55036156/how-to-replace-all-html-tag-with-empty-string-in-golang
+https://www.golangprograms.com/how-to-extract-text-from-between-html-tag-using-regular-expressions-in-golang.html
+https://codereview.stackexchange.com/questions/161461/golang-function-to-clean-a-string-of-scripts
+
 
 
 
