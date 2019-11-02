@@ -181,6 +181,12 @@ func (ks *LkkString) IsDialString(str string) bool {
 	return false
 }
 
+// IsMAC 是否MAC物理网卡地址.
+func (ks *LkkString) IsMAC(str string) bool {
+	_, err := net.ParseMAC(str)
+	return err == nil
+}
+
 // IsEmail 检查字符串是否邮箱.参数validateTrue,是否验证邮箱的真实性.
 func (ks *LkkString) IsEmail(email string, validateTrue bool) (bool, error) {
 	//验证邮箱格式

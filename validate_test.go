@@ -1322,3 +1322,38 @@ func BenchmarkIsDialString(b *testing.B) {
 		KStr.IsDialString("127.0.0.1:30000")
 	}
 }
+
+func TestIsMAC(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{"123", false},
+		{"abacaba", false},
+		{"01:23:45:67:89:ab", true},
+		{"01:23:45:67:89:ab:cd:ef", true},
+		{"01-23-45-67-89-ab", true},
+		{"01-23-45-67-89-ab-cd-ef", true},
+		{"0123.4567.89ab", true},
+		{"0123.4567.89ab.cdef", true},
+		{"3D:F2:C9:A6:B3:4F", true},
+		{"08:00:27:88:0f:fd", true},
+		{"00:e0:66:07:5c:97:00:00", true},
+		{"08:00:27:00:d8:94:00:00", true},
+		{"3D-F2-C9-A6-B3:4F", false},
+	}
+	for _, test := range tests {
+		actual := KStr.IsMAC(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected IsMAC(%q) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkIsMAC(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsMAC("08:00:27:88:0f:fd")
+	}
+}
