@@ -543,8 +543,7 @@ func (kf *LkkFile) FormatDir(path string) string {
 		return ""
 	}
 
-	re := regexp.MustCompile(`(/){2,}|(\\){1,}`)
-	str := re.ReplaceAllString(path, "/")
+	str := RegFormatDir.ReplaceAllString(path, "/")
 	return strings.TrimRight(str, "/") + "/"
 }
 

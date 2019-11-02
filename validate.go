@@ -46,22 +46,22 @@ func (ks *LkkString) IsUtf8(str string) bool {
 
 // IsASCII 是否IsASCII字符串.
 func (ks *LkkString) IsASCII(str string) bool {
-	return str != "" && regexp.MustCompile(PATTERN_ASCII).MatchString(str)
+	return str != "" && RegAscii.MatchString(str)
 }
 
 // IsMultibyte 字符串是否含有多字节字符.
 func (ks *LkkString) IsMultibyte(str string) bool {
-	return str != "" && regexp.MustCompile(PATTERN_MULTIBYTE).MatchString(str)
+	return str != "" && RegMultiByte.MatchString(str)
 }
 
 // HasFullWidth 是否含有全角字符.
 func (ks *LkkString) HasFullWidth(str string) bool {
-	return str != "" && regexp.MustCompile(PATTERN_FULLWIDTH).MatchString(str)
+	return str != "" && RegFullWidth.MatchString(str)
 }
 
 // HasHalfWidth 是否含有半角字符.
 func (ks *LkkString) HasHalfWidth(str string) bool {
-	return str != "" && regexp.MustCompile(PATTERN_HALFWIDTH).MatchString(str)
+	return str != "" && RegHalfWidth.MatchString(str)
 }
 
 // IsEnglish 字符串是否纯英文.letterCase是否检查大小写,枚举值(CASE_NONE,CASE_LOWER,CASE_UPPER).
@@ -70,9 +70,9 @@ func (ks *LkkString) IsEnglish(str string, letterCase LkkCaseSwitch) bool {
 	case CASE_NONE:
 		return ks.IsLetters(str)
 	case CASE_LOWER:
-		return str != "" && regexp.MustCompile(PATTERN_ALPHA_LOWER).MatchString(str)
+		return str != "" && RegAlphaLower.MatchString(str)
 	case CASE_UPPER:
-		return str != "" && regexp.MustCompile(PATTERN_ALPHA_UPPER).MatchString(str)
+		return str != "" && RegAlphaUpper.MatchString(str)
 	default:
 		return ks.IsLetters(str)
 	}
@@ -96,7 +96,7 @@ func (ks *LkkString) HasChinese(str string) bool {
 
 // IsChinese 字符串是否全部中文
 func (ks *LkkString) IsChinese(str string) bool {
-	return str != "" && regexp.MustCompile(PATTERN_ALL_CHINESE).MatchString(str)
+	return str != "" && RegAllChinese.MatchString(str)
 }
 
 // HasSpecialChar 字符串是否含有特殊字符
@@ -150,7 +150,7 @@ func (ks *LkkString) IsIPv6(str string) bool {
 // IsEmail 检查字符串是否邮箱.参数validateTrue,是否验证邮箱的真实性.
 func (ks *LkkString) IsEmail(email string, validateTrue bool) (bool, error) {
 	//验证邮箱格式
-	chkFormat := regexp.MustCompile(PATTERN_EMAIL).MatchString(email)
+	chkFormat := RegEmail.MatchString(email)
 	if !chkFormat {
 		return false, fmt.Errorf("invalid email format")
 	}
@@ -200,22 +200,22 @@ func (ks *LkkString) IsEmail(email string, validateTrue bool) (bool, error) {
 
 // IsMobile 检查字符串是否手机号
 func (ks *LkkString) IsMobile(str string) bool {
-	return str != "" && regexp.MustCompile(PATTERN_MOBILE).MatchString(str)
+	return str != "" && RegMobile.MatchString(str)
 }
 
 // IsTel 是否固定电话或400/800电话.
 func (ks *LkkString) IsTel(str string) bool {
-	return str != "" && regexp.MustCompile(PATTERN_TELEPHONE).MatchString(str)
+	return str != "" && RegTelephone.MatchString(str)
 }
 
 // IsPhone 是否电话号码(手机或固话).
 func (ks *LkkString) IsPhone(str string) bool {
-	return str != "" && regexp.MustCompile(PATTERN_PHONE).MatchString(str)
+	return str != "" && RegPhone.MatchString(str)
 }
 
 // IsCreditNo 检查是否(15或18位)身份证号码,并返回经校验的号码.
 func (ks *LkkString) IsCreditNo(str string) (bool, string) {
-	chk := str != "" && regexp.MustCompile(PATTERN_CREDIT_NO).MatchString(str)
+	chk := str != "" && RegCreditno.MatchString(str)
 	if !chk {
 		return false, ""
 	}
@@ -263,12 +263,12 @@ func (ks *LkkString) IsCreditNo(str string) (bool, string) {
 
 // IsAlphaNumeric 是否字母或数字.
 func (ks *LkkString) IsAlphaNumeric(str string) bool {
-	return str != "" && regexp.MustCompile(PATTERN_ALPHA_NUMERIC).MatchString(str)
+	return str != "" && RegAlphaNumeric.MatchString(str)
 }
 
 // IsHexcolor 检查是否十六进制颜色,并返回带"#"的修正值.
 func (ks *LkkString) IsHexcolor(str string) (bool, string) {
-	chk := str != "" && regexp.MustCompile(PATTERN_HEXCOLOR).MatchString(str)
+	chk := str != "" && RegHexcolor.MatchString(str)
 	if chk && !strings.ContainsRune(str, '#') {
 		str = "#" + strings.ToUpper(str)
 	}
@@ -277,22 +277,22 @@ func (ks *LkkString) IsHexcolor(str string) (bool, string) {
 
 // IsRGBcolor 检查字符串是否RGB颜色格式.
 func (ks *LkkString) IsRGBcolor(str string) bool {
-	return str != "" && regexp.MustCompile(PATTERN_RGBCOLOR).MatchString(str)
+	return str != "" && RegRgbcolor.MatchString(str)
 }
 
 // IsWhitespaces 是否全部空白字符.
 func (ks *LkkString) IsWhitespaces(str string) bool {
-	return str != "" && regexp.MustCompile(PATTERN_WHITESPACE_ALL).MatchString(str)
+	return str != "" && RegWhitespaceAll.MatchString(str)
 }
 
 // HasWhitespace 是否带有空白字符.
 func (ks *LkkString) HasWhitespace(str string) bool {
-	return str != "" && regexp.MustCompile(PATTERN_WHITESPACE_HAS).MatchString(str)
+	return str != "" && RegWhitespaceHas.MatchString(str)
 }
 
 // IsBase64 是否base64字符串.
 func (ks *LkkString) IsBase64(str string) bool {
-	return str != "" && regexp.MustCompile(PATTERN_BASE64).MatchString(str)
+	return str != "" && RegBase64.MatchString(str)
 }
 
 // IsBase64Image 是否base64编码的图片.
@@ -302,7 +302,7 @@ func (ks *LkkString) IsBase64Image(str string) bool {
 	}
 
 	dataURI := strings.Split(str, ",")
-	return regexp.MustCompile(PATTERN_BASE64_IMAGE).MatchString(dataURI[0]) && regexp.MustCompile(PATTERN_BASE64).MatchString(dataURI[1])
+	return RegBase64Image.MatchString(dataURI[0]) && RegBase64.MatchString(dataURI[1])
 }
 
 // IsUrl 检查字符串是否URL.
@@ -370,7 +370,7 @@ func (kt *LkkTime) IsDate2time(str string) (bool, int64) {
 		str = strings.Replace(str, "/", "-", -1)
 	}
 
-	chk := regexp.MustCompile(PATTERN_DATETIME).MatchString(str)
+	chk := RegDatetime.MatchString(str)
 	if !chk {
 		return false, 0
 	}
