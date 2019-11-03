@@ -218,3 +218,21 @@ func BenchmarkHttpBuildQuery(b *testing.B) {
 		KStr.HttpBuildQuery(params)
 	}
 }
+
+func TestFormatUrl(t *testing.T) {
+	res1 := KStr.FormatUrl("")
+	res2 := KStr.FormatUrl("abc.com")
+	res3 := KStr.FormatUrl("abc.com/hello?a=1")
+	res4 := KStr.FormatUrl(`http://login.localhost:3000\/ab//cd/ef///hi\\12/33\`)
+
+	if res1 != "" || res2 == "" || res3 == "" || strings.ContainsRune(res4, '\\') {
+		t.Error("FormatUrl fail")
+	}
+}
+
+func BenchmarkFormatUrl(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.FormatUrl(`http://login.localhost:3000\/ab//cd/ef///hi\\12/33\`)
+	}
+}
