@@ -236,3 +236,35 @@ func BenchmarkFormatUrl(b *testing.B) {
 		KStr.FormatUrl(`http://login.localhost:3000\/ab//cd/ef///hi\\12/33\`)
 	}
 }
+
+func TestGetDomain(t *testing.T) {
+	var tests = []struct {
+		param    string
+		isMain   bool
+		expected string
+	}{
+		{"", false, ""},
+		{"hello world", false, ""},
+		{"http://login.localhost:3000", false, "login.localhost"},
+		{"https://play.golang.com:3000/p/3R1TPyk8qck", false, "play.golang.com"},
+		{"https://www.siongui.github.io/pali-chanting/zh/archives.html", true, "github.io"},
+		{"http://foobar.中文网/", false, "foobar.中文网"},
+		{"foobar.com/abc/efg/h=1", false, "foobar.com"},
+		{"127.0.0.1", false, "127.0.0.1"},
+	}
+	for _, test := range tests {
+		actual := KStr.GetDomain(test.param, test.isMain)
+		if actual != test.expected {
+			t.Errorf("Expected GetDomain(%q) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+
+	KStr.GetDomain("123456")
+}
+
+func BenchmarkGetDomain(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.GetDomain("https://github.com/abc")
+	}
+}
