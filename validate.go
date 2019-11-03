@@ -192,8 +192,8 @@ func (ks *LkkString) IsDialString(str string) bool {
 	return false
 }
 
-// IsMAC 是否MAC物理网卡地址.
-func (ks *LkkString) IsMAC(str string) bool {
+// IsMACAddr 是否MAC物理网卡地址.
+func (ks *LkkString) IsMACAddr(str string) bool {
 	_, err := net.ParseMAC(str)
 	return err == nil
 }

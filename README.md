@@ -164,6 +164,12 @@ https://github.com/buger/jsonparser
 检查端口绑定
 https://golangnote.com/topic/241.html
 https://www.jianshu.com/p/b4ce0794fa32
+https://gist.github.com/montanaflynn/b59c058ce2adc18f31d6
+https://stackoverflow.com/questions/40296483/continuously-check-if-tcp-port-is-in-use
+https://coolaj86.com/articles/how-to-test-if-a-port-is-available-in-go/
+https://github.com/phayes/freeport/blob/master/freeport.go
+https://dev.to/williamhgough/how-to-test-tcpudp-connections-in-go---part-1-3bga
+
 
 pid
 https://github.com/bitnami/gonit/blob/master/utils/process.go
@@ -245,14 +251,6 @@ https://github.com/mr-tron/base58
 https://github.com/itchyny/base58-go
 https://github.com/shuangdeyu/helper_go/blob/master/pwdhelper/base58.go
 https://blog.csdn.net/jason_cuijiahui/article/details/79280362
-
-validate
-https://github.com/asaskevich/govalidator   -x
-https://github.com/shuangdeyu/helper_go/blob/master/verhelper/verify.go -x
-https://github.com/sohaha/zlsgo/blob/master/zvalidator/validator.go -x
-https://github.com/nothollyhigh/kiss/blob/master/util/regexp.go
-https://github.com/bytedance/go-tagexpr
-
 
 mutex
 https://github.com/nothollyhigh/kiss/blob/master/sync/mutex.go
