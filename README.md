@@ -247,21 +247,11 @@ https://github.com/shuangdeyu/helper_go/blob/master/pwdhelper/base58.go
 https://blog.csdn.net/jason_cuijiahui/article/details/79280362
 
 validate
-https://github.com/asaskevich/govalidator
+https://github.com/asaskevich/govalidator   -x
 https://github.com/shuangdeyu/helper_go/blob/master/verhelper/verify.go
 https://github.com/sohaha/zlsgo/blob/master/zvalidator/validator.go
 https://github.com/nothollyhigh/kiss/blob/master/util/regexp.go
 https://github.com/bytedance/go-tagexpr
-
-html to text
-https://github.com/k3a/html2text
-https://github.com/grokify/html-strip-tags-go
-https://stackoverflow.com/questions/44441665/how-to-extract-only-text-from-html-in-golang
-https://stackoverflow.com/questions/55036156/how-to-replace-all-html-tag-with-empty-string-in-golang
-https://www.golangprograms.com/how-to-extract-text-from-between-html-tag-using-regular-expressions-in-golang.html
-https://codereview.stackexchange.com/questions/161461/golang-function-to-clean-a-string-of-scripts
-
-
 
 
 mutex

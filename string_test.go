@@ -1310,3 +1310,36 @@ func BenchmarkHtml2Text(b *testing.B) {
 		KStr.Html2Text(htmlDoc)
 	}
 }
+
+func TestHideCard(t *testing.T) {
+	res0 := KStr.HideCard("")
+	res1 := KStr.HideCard("12345")
+	res2 := KStr.HideCard("123456789")
+	res3 := KStr.HideCard("123456789012345")
+	if res0 == "" || res1 == "" || res2 == "" || res3 == "" {
+		t.Error("HideCard fail")
+	}
+}
+
+func BenchmarkHideCard(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.HideCard("123456789012345")
+	}
+}
+
+func TestHideMobile(t *testing.T) {
+	res0 := KStr.HideMobile("")
+	res1 := KStr.HideMobile("12345")
+	res2 := KStr.HideMobile("13712345678")
+	if res0 == "" || res1 == "" || res2 == "" {
+		t.Error("HideCard fail")
+	}
+}
+
+func BenchmarkHideMobile(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.HideMobile("13712345678")
+	}
+}
