@@ -40,6 +40,7 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 
 ### 参考项目
 - https://www.php2golang.com/
+- https://github.com/alessiosavi/GoGPUtils
 - https://github.com/b3log/gulu -x
 - https://github.com/syyongx/php2go -x
 - https://github.com/openset/php2go -x
@@ -91,6 +92,19 @@ go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
 - https://golang.hotexamples.com/examples/unicode/-/IsControl/golang-iscontrol-function-examples.html
 - https://github.com/idoall/TokenExchangeCommon/blob/master/commonutils/utils.go
 - https://github.com/afanti-com/utils-go
+- https://github.com/solo-io/go-utils
+- https://github.com/txthinking/x
+- https://github.com/TruthHun/gotil
+- https://github.com/xiaonanln/go-xnsyncutil
+- https://github.com/0xrawsec/golang-utils
+- https://github.com/Laisky/go-utils
+- https://github.com/xgfone/go-tools
+- https://github.com/printfcoder/goutils
+- https://github.com/space307/go-utils
+- https://github.com/liuyongshuai/goUtils
+- https://github.com/Jordanzuo/goutil
+- https://github.com/gxxgle/go-utils
+
 
 
 
