@@ -1423,11 +1423,49 @@ UmRd11MrWCvj59lWzt1/eIMN+ekjH8aXeLOOl54CL+kWp48C+V9BchyKCShZB7uc
 imFvjHTtuxziXZQRO7HlcsBOa0WwvDJnRnskdyoD31s4F4jpKEYBJNWTo63v6lUv
 bQIDAQAB
 -----END PUBLIC KEY-----`, 4096, false},
+		{`-----BEGIN PRIVATE KEY-----
+MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAKn4X6phG2ZsKjof
+ytRsM8zC7VTZmQSi9hr7ZqHxsIe+UeGToXLSqfJ8ikWWMg15N8PTbzIG11GTexyd
+QH/u+zPAS//qrf0HbCXjICt741A8qMipMHIG409PYLQWjfnrjusLt51dY84llj9C
+7BzXlHvWqowBGU5jCEaQTBAHPRutAgMBAAECgYAYNdeylihn+2o8Y0Dp5wut0+oo
+VuJT5b52c27YDGwfub1CC1xI1bb9Yj3z0YQJpUWLMDe7gXv0E7TKi5+fWXQQXJWt
+ejTBtbf0hE14x6OqTzazess99UAxKIdsk7trzVRlPkE4NpJ5jAGTzPqHPlkuaFb3
+IK3dyQGLas5QriFnAQJBANagrgmfxygmwH+i7QacffZ6yTu+rhyAcdeUSu6ekPUu
+ITv8mOA/bT2m9sIGinW3gjf8KMfz9JH11TasZVsL8e0CQQDKu/bc9oTI0f2jRupY
+vmrc31rmOdPq4C4Z6Uj00Ui/FicdywUnGF0bvA+jlCUTLEqBYerl3EEHeLiyZsbT
+E5jBAkBVhIZz/T78h5xR/xgUd0xVZo1CCfMUFjXGISdONs4pcyz42ugLChq74wgV
+PUf0KZ9wMUAKk/DSK7K96ykjgvntAkBwmqBOMLqmFETN2Mi3S+RtE74YXAxBzAyv
+Jaz5FflS8Yn+eVI+WcD1c6o4EEPbd2FWpb1juMeBz+K+bGmIubzBAkB61Sd8LvfF
+fDA7MDOGRtIcWq+7bPPw3y44RYIKA35ocMAlzHFhXw7RtSLCl6xgzIpkIfW4ilCP
+oCbhuSHBcPnj
+-----END PRIVATE KEY-----`, 1024, false},
+		{`JXU4RkQ5JXU5MUNDJXU2NjJGJXU4OTgxJXU1MkEwJXU1QkM2JXU3Njg0JXU1MTg1JXU1QkI5JXVGRjAx`, 2048, false},
+		// dsa public key
+		{`-----BEGIN PUBLIC KEY-----
+MIIDRzCCAjkGByqGSM44BAEwggIsAoIBAQCYBeAV/nYFehIyAJqGBSl6Kqthllr5
+25iJYG7R9V+/wG5oaVtFJSow/vexBaQ0D5fLQZHJhOPPd+QkEQeMWXVh1mLv0a/V
+tbVzA/X5nPrh6qf3SK1fO3cM19Z2YFqCE9sXtrDfroi/DR9Ze1uDT/HVDJ23iZZ7
+x7f8cegQN23jOv1APz2d4OEqGe1s85RcS0RPoRrBe1e5itaM1EU0eCCaUjozYt4H
+dLZ/VhYZlTG5k814EqrAX+4aWFXUKW1X374a6cvfXirGzZfYr90pL/8VAHATbR2O
+P6R0VrdZ0W1hfwPkPb9zBZMaV3+A1HewCjsuheXIKLxnIG+SbceMyYizAiEAkr9Q
+R4mvyGhvC79HoQxjRJZRYYqf1O92Yn1dixROC+sCggEAL0rHy4qOIW3g4l/FFh4y
+uzzXXePBooCc2jpdYlGXa9g9B5ueX2GQ5+f/QB0VoXvGeYaXefo2YTW5B45IHn7W
+9ceX9yme3n9tl8H1dK3sjyqQKxAhyynM1wJaBaALhYT0NzuCXEoBq3kn7On3rU8d
+/LM+1UoDwJ0iPqooI9xDW5UX8xd+iYV2FzMtc+SWu4YWmH57EKjcOgC9MqPzCpIn
+1Cgo7nSexzSCYIXGDVOqJ0hjeHlL54CMOON2EkUg0e3J/mcneTT8YbP8zPMuBrEX
+vwPWNk8wJr2rtxpjhny/sj8BCJY5hhKQFHL1kive7i16AQJv3gJn42eGFJgBsdYa
+lgOCAQYAAoIBAQCFyXq2x1BWFxj8qQrbGl5bojxO4r8+gnIoCIbzaxJbiK+eo+JT
+BiJNQlludq8f1+0SZ9Paiv1qLaH5p1qxw7mz4ZU8HO4+9grDIb1tuWld/RyhH9PJ
+NIoXIVT1J6lK8DqpjnIIoIjqHh5kSJNnXw6XQrA5nlcdZfokVl9oXjH0tGl3McdZ
+TQ3WVV0EekGzoIrPw7BkGgb71UBedEt9AqkLSnW6KzQ1A1ILokX8Yq9oWLASea3F
+9UxJXpPlCRz3FYgvuR+Q07thgm/z3VQ/+Uq0PFsGFB7Cern0vOKZ+E4673jYK9nq
+xVZ+SCC8Wd6nIK4FyZbYaa3Jz7GkqHdMelsl
+-----END PUBLIC KEY-----`, 2048, false},
 	}
 	for i, test := range tests {
 		actual := KStr.IsRsaPublicKey(test.rsastr, test.keylen)
 		if actual != test.expected {
-			t.Errorf("Expected TestIsRsaPublicKey(%d, %d) to be %v, got %v", i, test.keylen, test.expected, actual)
+			t.Errorf("Expected TestIsRsaPublicKey(%d, %d) to be %v, got %v %s", i, test.keylen, test.expected, actual, test.rsastr)
 		}
 	}
 }

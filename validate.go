@@ -359,15 +359,15 @@ func (ks *LkkString) IsBase64Image(str string) bool {
 // IsRsaPublicKey 检查字符串是否RSA的公钥,keylen为密钥长度.
 func (ks *LkkString) IsRsaPublicKey(str string, keylen int) bool {
 	bb := bytes.NewBufferString(str)
-	pemBytes, err := ioutil.ReadAll(bb)
-	if err != nil {
-		return false
-	}
+	pemBytes, _ := ioutil.ReadAll(bb)
+
+	// 获取公钥
 	block, _ := pem.Decode(pemBytes)
 	if block != nil && block.Type != "PUBLIC KEY" {
 		return false
 	}
 	var der []byte
+	var err error
 
 	if block != nil {
 		der = block.Bytes
