@@ -1352,7 +1352,7 @@ func BenchmarkIsDialString(b *testing.B) {
 	}
 }
 
-func TestIsMAC(t *testing.T) {
+func TestIsMACAddr(t *testing.T) {
 	var tests = []struct {
 		param    string
 		expected bool
@@ -1373,17 +1373,17 @@ func TestIsMAC(t *testing.T) {
 		{"3D-F2-C9-A6-B3:4F", false},
 	}
 	for _, test := range tests {
-		actual := KStr.IsMAC(test.param)
+		actual := KStr.IsMACAddr(test.param)
 		if actual != test.expected {
-			t.Errorf("Expected IsMAC(%q) to be %v, got %v", test.param, test.expected, actual)
+			t.Errorf("Expected IsMACAddr(%q) to be %v, got %v", test.param, test.expected, actual)
 		}
 	}
 }
 
-func BenchmarkIsMAC(b *testing.B) {
+func BenchmarkIsMACAddr(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KStr.IsMAC("08:00:27:88:0f:fd")
+		KStr.IsMACAddr("08:00:27:88:0f:fd")
 	}
 }
 

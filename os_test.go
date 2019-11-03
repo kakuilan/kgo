@@ -702,3 +702,37 @@ func BenchmarkGetSystemInfo(b *testing.B) {
 		KOS.GetSystemInfo()
 	}
 }
+
+func TestIsPortOpen(t *testing.T) {
+	var tests = []struct {
+		host     string
+		port     interface{}
+		protocol string
+		expected bool
+	}{
+		{"", 23, "", false},
+		{"localhost", 0, "", false},
+		{"127.0.0.1", 23, "", false},
+		{"golang.org", 80, "udp", true},
+		{"golang.org", 80, "tcp", true},
+		{"www.google.com", "443", "tcp", true},
+	}
+	for _, test := range tests {
+		actual := KOS.IsPortOpen(test.host, test.port, test.protocol)
+		if actual != test.expected {
+			t.Errorf("Expected IsChineseName(%q, %v, %q) to be %v, got %v", test.host, test.port, test.protocol, test.expected, actual)
+		}
+	}
+
+	KOS.IsPortOpen("127.0.0.1", 80, "tcp")
+	KOS.IsPortOpen("::", 80, "tcp")
+	KOS.IsPortOpen("::", 80, "")
+	KOS.IsPortOpen("::", 80)
+}
+
+func BenchmarkIsPortOpen(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.IsPortOpen("127.0.0.1", 80, "tcp")
+	}
+}
