@@ -271,8 +271,8 @@ func (ko *LkkOS) MemoryUsage(virtual bool) (used, free, total uint64) {
 // idle为空闲时间,
 // total为累计时间.
 func (ko *LkkOS) CpuUsage() (user, idle, total uint64) {
-	contents, err := ioutil.ReadFile("/proc/stat")
-	if err == nil {
+	contents, _ := ioutil.ReadFile("/proc/stat")
+	if len(contents) > 0 {
 		lines := strings.Split(string(contents), "\n")
 		for _, line := range lines {
 			fields := strings.Fields(line)
@@ -290,7 +290,7 @@ func (ko *LkkOS) CpuUsage() (user, idle, total uint64) {
 						idle = val
 					}
 				}
-				return
+				break
 			}
 		}
 	}
