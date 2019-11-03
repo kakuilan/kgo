@@ -1065,3 +1065,25 @@ func (ks *LkkString) HideMobile(mobile string) string {
 
 	return res
 }
+
+// HideTrueName 隐藏真实名称(如姓名、账号、公司等).
+func (ks *LkkString) HideTrueName(name string) string {
+	res := "**"
+	if name != "" {
+		runs := []rune(name)
+		leng := len(runs)
+		if leng <= 3 {
+			res = string(runs[0:1]) + res
+		} else if leng < 5 {
+			res = string(runs[0:2]) + res
+		} else if leng < 10 {
+			res = string(runs[0:2]) + "***" + string(runs[leng-2:leng])
+		} else if leng < 16 {
+			res = string(runs[0:3]) + "****" + string(runs[leng-3:leng])
+		} else {
+			res = string(runs[0:4]) + "*****" + string(runs[leng-4:leng])
+		}
+	}
+
+	return res
+}
