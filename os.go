@@ -113,14 +113,15 @@ func (ko *LkkOS) LocalIP() (string, error) {
 
 // OutboundIP 获取本机的出口IP
 func (ko *LkkOS) OutboundIP() (string, error) {
+	res := ""
 	conn, err := net.Dial("udp", "8.8.8.8:80")
-	if err != nil {
-		return "", nil
+	if conn != nil {
+		addr := conn.LocalAddr().(*net.UDPAddr)
+		res = addr.IP.String()
+		_ = conn.Close()
 	}
-	defer conn.Close()
 
-	addr := conn.LocalAddr().(*net.UDPAddr)
-	return addr.IP.String(), nil
+	return res, err
 }
 
 // IsPublicIP 是否公网IP
