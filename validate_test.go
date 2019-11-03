@@ -249,6 +249,35 @@ func BenchmarkIsChinese(b *testing.B) {
 	}
 }
 
+func TestIsChineseName(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{"hello world", false},
+		{"赵武", true},
+		{"赵武a", false},
+		{"南宫先生", true},
+		{"吉乃•阿衣·依扎嫫", true},
+		{"古丽莎•卡迪尔", true},
+		{"迪丽热巴.迪力木拉提", true},
+	}
+	for _, test := range tests {
+		actual := KStr.IsChineseName(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected IsChineseName(%q) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkIsChineseName(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsChineseName("南宫先生")
+	}
+}
+
 func TestIsJSON(t *testing.T) {
 	chk1 := KStr.IsJSON("hello你好")
 	chk2 := KStr.IsJSON(`{"id":"1"}`)

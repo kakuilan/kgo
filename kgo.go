@@ -105,7 +105,10 @@ const (
 	CHECK_CONNECT_TIMEOUT = time.Second * 5
 
 	// 正则模式-全中文
-	PATTERN_ALL_CHINESE = "^[\u4e00-\u9fa5]+$"
+	PATTERN_CHINESE_ALL = "^[\u4e00-\u9fa5]+$"
+
+	// 正则模式-中文名称
+	PATTERN_CHINESE_NAME = "^[\u4e00-\u9fa5][.•·\u4e00-\u9fa5]{0,30}[\u4e00-\u9fa5]$"
 
 	// 正则模式-多字节字符
 	PATTERN_MULTIBYTE = "[^\x00-\x7F]"
@@ -228,7 +231,8 @@ var (
 
 	// 已编译的正则
 	RegFormatDir           = regexp.MustCompile(`(/){2,}|(\\){1,}`)
-	RegAllChinese          = regexp.MustCompile(PATTERN_ALL_CHINESE)
+	RegChineseAll          = regexp.MustCompile(PATTERN_CHINESE_ALL)
+	RegChineseName         = regexp.MustCompile(PATTERN_CHINESE_NAME)
 	RegMultiByte           = regexp.MustCompile(PATTERN_MULTIBYTE)
 	RegAscii               = regexp.MustCompile(PATTERN_ASCII)
 	RegFullWidth           = regexp.MustCompile(PATTERN_FULLWIDTH)

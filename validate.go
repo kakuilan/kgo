@@ -101,7 +101,12 @@ func (ks *LkkString) HasChinese(str string) bool {
 
 // IsChinese 字符串是否全部中文
 func (ks *LkkString) IsChinese(str string) bool {
-	return str != "" && RegAllChinese.MatchString(str)
+	return str != "" && RegChineseAll.MatchString(str)
+}
+
+// IsChineseName 字符串是否中文名称
+func (ks *LkkString) IsChineseName(str string) bool {
+	return str != "" && RegChineseName.MatchString(str)
 }
 
 // HasSpecialChar 字符串是否含有特殊字符
