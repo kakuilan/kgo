@@ -1343,3 +1343,31 @@ func BenchmarkHideMobile(b *testing.B) {
 		KStr.HideMobile("13712345678")
 	}
 }
+
+func TestHideTrueName(t *testing.T) {
+	var tests = []struct {
+		param string
+	}{
+		{""},
+		{"李四"},
+		{"张三丰"},
+		{"公孙先生"},
+		{"helloWorld"},
+		{"北京搜狗科技发展有限公司"},
+		{"工商发展银行深圳南山科苑梅龙路支行"},
+	}
+	for _, test := range tests {
+		actual := KStr.HideTrueName(test.param)
+		if actual == "" {
+			t.Errorf("Expected HideTrueName(%q) , got %v", test.param, actual)
+		}
+	}
+
+}
+
+func BenchmarkHideTrueName(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.HideTrueName("公孙先生")
+	}
+}
