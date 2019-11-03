@@ -7,7 +7,7 @@ import (
 )
 
 // ParseStr 将查询字符串转换为字典
-func (ku *LkkUrl) ParseStr(encodedString string, result map[string]interface{}) error {
+func (ks *LkkString) ParseStr(encodedString string, result map[string]interface{}) error {
 	// build nested map.
 	var build func(map[string]interface{}, []string, interface{}) error
 
@@ -152,7 +152,7 @@ func (ku *LkkUrl) ParseStr(encodedString string, result map[string]interface{}) 
 
 // ParseUrl 解析 URL,返回其组成部分,component为需要返回的组成.
 // -1: all; 1: scheme; 2: host; 4: port; 8: user; 16: pass; 32: path; 64: query; 128: fragment
-func (ku *LkkUrl) ParseUrl(str string, component int) (map[string]string, error) {
+func (ks *LkkString) ParseUrl(str string, component int) (map[string]string, error) {
 	u, err := url.Parse(str)
 	if err != nil {
 		return nil, err
@@ -189,26 +189,26 @@ func (ku *LkkUrl) ParseUrl(str string, component int) (map[string]string, error)
 }
 
 // UrlEncode 编码 URL 字符串
-func (ku *LkkUrl) UrlEncode(str string) string {
+func (ks *LkkString) UrlEncode(str string) string {
 	return url.QueryEscape(str)
 }
 
 // UrlDecode 解码已编码的 URL 字符串
-func (ku *LkkUrl) UrlDecode(str string) (string, error) {
+func (ks *LkkString) UrlDecode(str string) (string, error) {
 	return url.QueryUnescape(str)
 }
 
 // RawurlEncode 按照 RFC 3986 对 URL 进行编码
-func (ku *LkkUrl) RawurlEncode(str string) string {
+func (ks *LkkString) RawurlEncode(str string) string {
 	return strings.Replace(url.QueryEscape(str), "+", "%20", -1)
 }
 
 // RawurlDecode 对已编码的 URL 字符串进行解码
-func (ku *LkkUrl) RawurlDecode(str string) (string, error) {
+func (ks *LkkString) RawurlDecode(str string) (string, error) {
 	return url.QueryUnescape(strings.Replace(str, "%20", "+", -1))
 }
 
 // HttpBuildQuery 根据参数生成 URL-encode 之后的请求字符串
-func (ku *LkkUrl) HttpBuildQuery(queryData url.Values) string {
+func (ks *LkkString) HttpBuildQuery(queryData url.Values) string {
 	return queryData.Encode()
 }

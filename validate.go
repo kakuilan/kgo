@@ -396,7 +396,7 @@ func (ks *LkkString) IsRsaPublicKey(str string, keylen int) bool {
 }
 
 // IsUrl 检查字符串是否URL.
-func (ku *LkkUrl) IsUrl(str string) bool {
+func (ks *LkkString) IsUrl(str string) bool {
 	if str == "" || len(str) <= 3 || utf8.RuneCountInString(str) >= 2083 || strings.HasPrefix(str, ".") {
 		return false
 	}
@@ -413,8 +413,8 @@ func (ku *LkkUrl) IsUrl(str string) bool {
 }
 
 // IsUrlExists 检查URL是否存在.
-func (ku *LkkUrl) IsUrlExists(str string) bool {
-	if !ku.IsUrl(str) {
+func (ks *LkkString) IsUrlExists(str string) bool {
+	if !ks.IsUrl(str) {
 		return false
 	}
 

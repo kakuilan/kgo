@@ -678,7 +678,7 @@ func TestIsUrl(t *testing.T) {
 		{"./rel/test/dir", false},
 	}
 	for _, test := range tests {
-		actual := KUrl.IsUrl(test.param)
+		actual := KStr.IsUrl(test.param)
 		if actual != test.expected {
 			t.Errorf("Expected IsUrl(%q) to be %v, got %v", test.param, test.expected, actual)
 		}
@@ -688,7 +688,7 @@ func TestIsUrl(t *testing.T) {
 func BenchmarkIsUrl(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KUrl.IsUrl("http//google.com")
+		KStr.IsUrl("http//google.com")
 	}
 }
 
@@ -825,7 +825,7 @@ func TestIsUrlExists(t *testing.T) {
 		{"https://github.com/dsfasdfasd/adsfasdfasdf", false},
 	}
 	for _, test := range tests {
-		actual := KUrl.IsUrlExists(test.param)
+		actual := KStr.IsUrlExists(test.param)
 		if actual != test.expected {
 			t.Errorf("Expected IsUrlExists(%q) to be %v, got %v", test.param, test.expected, actual)
 			return
@@ -836,7 +836,7 @@ func TestIsUrlExists(t *testing.T) {
 func BenchmarkIsUrlExists(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KUrl.IsUrlExists("https://github.com/")
+		KStr.IsUrlExists("https://github.com/")
 	}
 }
 
