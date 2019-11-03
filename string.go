@@ -184,7 +184,8 @@ func (ks *LkkString) Random(length uint8, rtype LkkRandString) string {
 	return string(b)
 }
 
-// Strpos 查找字符串首次出现的位置.haystack在该字符串中进行查找,needle要查找的字符串,offset起始位置.
+// Strpos 查找字符串首次出现的位置,找不到时返回-1.
+// haystack在该字符串中进行查找,needle要查找的字符串,offset起始位置.
 func (ks *LkkString) Strpos(haystack, needle string, offset int) int {
 	length := len(haystack)
 	if length == 0 || offset > length || -offset > length {
@@ -201,7 +202,8 @@ func (ks *LkkString) Strpos(haystack, needle string, offset int) int {
 	return pos + offset
 }
 
-// Stripos  查找字符串首次出现的位置（不区分大小写）.haystack在该字符串中进行查找,needle要查找的字符串,offset起始位置.
+// Stripos  查找字符串首次出现的位置（不区分大小写）,找不到时返回-1.
+// haystack在该字符串中进行查找,needle要查找的字符串,offset起始位置.
 func (ks *LkkString) Stripos(haystack, needle string, offset int) int {
 	length := len(haystack)
 	if length == 0 || offset > length || -offset > length {
