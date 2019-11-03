@@ -86,7 +86,8 @@ func isMap(data interface{}) bool {
 }
 
 // getEndian 获取系统字节序类型,小端返回binary.LittleEndian,大端返回binary.BigEndian
-func getEndian() (nativeEndian binary.ByteOrder) {
+func getEndian() binary.ByteOrder {
+	var nativeEndian binary.ByteOrder = binary.LittleEndian
 	buf := [2]byte{}
 	*(*uint16)(unsafe.Pointer(&buf[0])) = uint16(0xABCD)
 
@@ -95,11 +96,9 @@ func getEndian() (nativeEndian binary.ByteOrder) {
 		nativeEndian = binary.LittleEndian
 	case [2]byte{0xAB, 0xCD}:
 		nativeEndian = binary.BigEndian
-	default:
-		nativeEndian = binary.LittleEndian
 	}
 
-	return
+	return nativeEndian
 }
 
 // isLittleEndian 系统字节序类型是否小端存储
