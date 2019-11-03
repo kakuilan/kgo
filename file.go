@@ -422,9 +422,7 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 		} else {
 			destFileInfo, err := os.Stat(destFilePath)
 			if err == nil {
-				if cover != FILE_COVER_ALLOW {
-					continue
-				} else if os.SameFile(obj, destFileInfo) {
+				if cover != FILE_COVER_ALLOW || os.SameFile(obj, destFileInfo) {
 					continue
 				}
 			}
