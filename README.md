@@ -248,8 +248,8 @@ https://blog.csdn.net/jason_cuijiahui/article/details/79280362
 
 validate
 https://github.com/asaskevich/govalidator   -x
-https://github.com/shuangdeyu/helper_go/blob/master/verhelper/verify.go
-https://github.com/sohaha/zlsgo/blob/master/zvalidator/validator.go
+https://github.com/shuangdeyu/helper_go/blob/master/verhelper/verify.go -x
+https://github.com/sohaha/zlsgo/blob/master/zvalidator/validator.go -x
 https://github.com/nothollyhigh/kiss/blob/master/util/regexp.go
 https://github.com/bytedance/go-tagexpr
 
