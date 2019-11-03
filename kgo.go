@@ -21,8 +21,6 @@ type (
 	LkkConvert byte
 	// LkkOS is the receiver of OS utilities
 	LkkOS byte
-	// LkkUrl is the receiver of url utilities
-	LkkUrl byte
 	// LkkEncrypt is the receiver of encrypt utilities
 	LkkEncrypt byte
 	// LkkDebug is the receiver of debug utilities
@@ -210,9 +208,6 @@ var (
 
 	// KOS utilities
 	KOS LkkOS
-
-	// KUrl utilities
-	KUrl LkkUrl
 
 	// KEncr utilities
 	KEncr LkkEncrypt
