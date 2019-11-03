@@ -320,8 +320,8 @@ func TestAbsPath(t *testing.T) {
 
 	//手工引发 filepath.Abs 错误
 	//创建目录
-	testpath := "./testdata/test/hehe/abspath"
-	err := os.MkdirAll(testpath, 0777)
+	testpath := "./testdata/testhehetcl/abspath/123"
+	err := os.MkdirAll(testpath, 0755)
 	if err == nil {
 		filename = "../../test.jpg"
 		//进入目录
