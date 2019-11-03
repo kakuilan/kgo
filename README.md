@@ -152,6 +152,7 @@ https://www.itread01.com/content/1547577396.html
 https://stackoverflow.com/questions/18817336/golang-encrypting-a-string-with-aes-and-base64
 https://github.com/bocajim/helpers/blob/master/crypt.go
 https://github.com/nothollyhigh/kiss/tree/master/crypto
+https://my.oschina.net/qyyoung/blog/1486324
 
 
 json库
