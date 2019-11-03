@@ -316,6 +316,27 @@ func TestAbsPath(t *testing.T) {
 		return
 	}
 	KFile.AbsPath("")
+	KFile.AbsPath("file:///c:/test.go")
+
+	//手工引发 filepath.Abs 错误
+	//创建目录
+	testpath := "./testdata/test/hehe/abspath"
+	err := os.MkdirAll(testpath, 0777)
+	if err == nil {
+		filename = "../../test.jpg"
+		//进入目录
+		_ = os.Chdir(testpath)
+		pwdir, _ := os.Getwd()
+
+		//删除目录
+		_ = os.Remove(pwdir)
+
+		//再获取路径
+		res := KFile.AbsPath(filename)
+		if res != "/test.jpg" {
+			t.Error("KFile.AbsPath fail")
+		}
+	}
 }
 
 func BenchmarkAbsPath(b *testing.B) {
