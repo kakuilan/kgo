@@ -82,17 +82,15 @@ func (ko *LkkOS) Chdir(dir string) error {
 
 // HomeDir 获取当前用户的主目录(仅支持Unix-like system)
 func (ko *LkkOS) HomeDir() (string, error) {
+	// Unix-like system, so just assume Unix
+	home := os.Getenv("HOME")
+
 	usr, err := user.Current()
 	if nil == err {
-		return usr.HomeDir, nil
+		home = usr.HomeDir
 	}
 
-	// Unix-like system, so just assume Unix
-	if home := os.Getenv("HOME"); home != "" {
-		return home, nil
-	}
-
-	return "", err
+	return home, err
 }
 
 // LocalIP 获取本机第一个NIC's IP
