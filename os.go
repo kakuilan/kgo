@@ -95,18 +95,20 @@ func (ko *LkkOS) HomeDir() (string, error) {
 
 // LocalIP 获取本机第一个NIC's IP
 func (ko *LkkOS) LocalIP() (string, error) {
-	addrs, _ := net.InterfaceAddrs()
+	res := ""
+	addrs, err := net.InterfaceAddrs()
 	if len(addrs) > 0 {
 		for _, addr := range addrs {
 			if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
 				if nil != ipnet.IP.To4() {
-					return ipnet.IP.String(), nil
+					res = ipnet.IP.String()
+					break
 				}
 			}
 		}
 	}
 
-	return "", errors.New("can't get local IP")
+	return res, err
 }
 
 // OutboundIP 获取本机的出口IP
