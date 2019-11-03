@@ -1,8 +1,14 @@
 package kgo
 
 import (
+	"bytes"
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/base64"
 	"encoding/json"
+	"encoding/pem"
 	"fmt"
+	"io/ioutil"
 	"math"
 	"net"
 	"net/http"
@@ -348,6 +354,40 @@ func (ks *LkkString) IsBase64Image(str string) bool {
 
 	dataURI := strings.Split(str, ",")
 	return RegBase64Image.MatchString(dataURI[0]) && RegBase64.MatchString(dataURI[1])
+}
+
+// IsRsaPublicKey 检查字符串是否RSA的公钥,keylen为密钥长度.
+func (ks *LkkString) IsRsaPublicKey(str string, keylen int) bool {
+	bb := bytes.NewBufferString(str)
+	pemBytes, err := ioutil.ReadAll(bb)
+	if err != nil {
+		return false
+	}
+	block, _ := pem.Decode(pemBytes)
+	if block != nil && block.Type != "PUBLIC KEY" {
+		return false
+	}
+	var der []byte
+
+	if block != nil {
+		der = block.Bytes
+	} else {
+		der, err = base64.StdEncoding.DecodeString(str)
+		if err != nil {
+			return false
+		}
+	}
+
+	key, err := x509.ParsePKIXPublicKey(der)
+	if err != nil {
+		return false
+	}
+	pubkey, ok := key.(*rsa.PublicKey)
+	if !ok {
+		return false
+	}
+	bitlen := len(pubkey.N.Bytes()) * 8
+	return bitlen == int(keylen)
 }
 
 // IsUrl 检查字符串是否URL.
