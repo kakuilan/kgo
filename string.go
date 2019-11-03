@@ -1041,3 +1041,27 @@ func (ks *LkkString) UpperCaseFirstWords(str string) string {
 
 	return string(retval)
 }
+
+// HideCard 隐藏证件号码.
+func (ks *LkkString) HideCard(card string) string {
+	res := "******"
+	leng := len(card)
+	if leng > 4 && leng <= 10 {
+		res = card[0:4] + "******"
+	} else if leng > 10 {
+		res = card[0:4] + "******" + card[(leng-4):leng]
+	}
+
+	return res
+}
+
+// HideMobile 隐藏手机号.
+func (ks *LkkString) HideMobile(mobile string) string {
+	res := "***"
+	leng := len(mobile)
+	if leng > 7 {
+		res = mobile[0:3] + "****" + mobile[leng-3:leng]
+	}
+
+	return res
+}
