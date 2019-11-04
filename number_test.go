@@ -347,3 +347,165 @@ func BenchmarkSign(b *testing.B) {
 		KNum.NumSign(-2)
 	}
 }
+
+func TestIsNegative(t *testing.T) {
+	var tests = []struct {
+		param    float64
+		expected bool
+	}{
+		{0, false},
+		{-1, true},
+		{10, false},
+		{3.14, false},
+		{-96, true},
+		{-10e-12, true},
+	}
+	for _, test := range tests {
+		actual := KNum.IsNegative(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected IsNegative(%v) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkIsNegative(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.IsNegative(9)
+	}
+}
+
+func TestIsPositive(t *testing.T) {
+	var tests = []struct {
+		param    float64
+		expected bool
+	}{
+		{0, false},
+		{-1, false},
+		{10, true},
+		{3.14, true},
+		{-96, false},
+		{-10e-12, false},
+	}
+	for _, test := range tests {
+		actual := KNum.IsPositive(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected IsPositive(%v) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkIsPositive(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.IsPositive(-2)
+	}
+}
+
+func TestIsNonNegative(t *testing.T) {
+	var tests = []struct {
+		param    float64
+		expected bool
+	}{
+		{0, true},
+		{-1, false},
+		{10, true},
+		{3.14, true},
+		{-96, false},
+		{-10e-12, false},
+	}
+	for _, test := range tests {
+		actual := KNum.IsNonNegative(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected IsNonNegative(%v) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkIsNonNegative(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.IsNonNegative(8)
+	}
+}
+
+func TestIsNonPositive(t *testing.T) {
+	var tests = []struct {
+		param    float64
+		expected bool
+	}{
+		{0, true},
+		{-1, true},
+		{10, false},
+		{3.14, false},
+		{-96, true},
+		{-10e-12, true},
+	}
+	for _, test := range tests {
+		actual := KNum.IsNonPositive(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected IsNonPositive(%v) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkIsNonPositive(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.IsNonPositive(34)
+	}
+}
+
+func TestIsWhole(t *testing.T) {
+	var tests = []struct {
+		param    float64
+		expected bool
+	}{
+		{0, true},
+		{-1, true},
+		{10, true},
+		{3.14, false},
+		{-96, true},
+		{-10e-12, false},
+	}
+	for _, test := range tests {
+		actual := KNum.IsWhole(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected IsWhole(%v) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkIsWhole(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.IsWhole(1.2)
+	}
+}
+
+func TestIsNatural(t *testing.T) {
+	var tests = []struct {
+		param    float64
+		expected bool
+	}{
+		{0, false},
+		{-1, false},
+		{10, true},
+		{3.14, false},
+		{96, true},
+		{-10e-12, false},
+	}
+	for _, test := range tests {
+		actual := KNum.IsNatural(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected IsNatural(%v) to be %v, got %v", test.param, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkIsNatural(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.IsNatural(-3)
+	}
+}
