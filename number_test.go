@@ -697,6 +697,7 @@ func TestInRange(t *testing.T) {
 		t.Error("InRange fail")
 	}
 	KNum.InRange("1", 0, 3)
+	KNum.InRange("hello", []byte{}, 3)
 }
 
 func BenchmarkInRange(b *testing.B) {
