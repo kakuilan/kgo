@@ -211,3 +211,14 @@ func (kn *LkkNumber) IsWhole(value float64) bool {
 func (kn *LkkNumber) IsNatural(value float64) bool {
 	return kn.IsWhole(value) && kn.IsPositive(value)
 }
+
+// InRangeInt 数值是否在2个整数范围内,将自动转换为整数再比较.
+func (kn *LkkNumber) InRangeInt(value, left, right interface{}) bool {
+	value64 := KConv.ToInt(value)
+	left64 := KConv.ToInt(left)
+	right64 := KConv.ToInt(right)
+	if left64 > right64 {
+		left64, right64 = right64, left64
+	}
+	return value64 >= left64 && value64 <= right64
+}
