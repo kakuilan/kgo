@@ -170,3 +170,14 @@ func (kn *LkkNumber) IsOdd(val int) bool {
 func (kn *LkkNumber) IsEven(val int) bool {
 	return val%2 == 0
 }
+
+// NumSign 返回数值的符号.值>0为1,<0为-1,其他为0.
+func (kn *LkkNumber) NumSign(value float64) float64 {
+	if value > 0 {
+		return 1
+	} else if value < 0 {
+		return -1
+	} else {
+		return 0
+	}
+}
