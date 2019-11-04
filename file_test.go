@@ -353,17 +353,17 @@ func BenchmarkAbsPath(b *testing.B) {
 	}
 }
 
-func TestRealpath(t *testing.T) {
+func TestRealPath(t *testing.T) {
 	pwd, _ := KOS.Getcwd()
 	path1 := "testdata/diglett.png"
 	path2 := "./testdata/diglett.png"
 	path3 := pwd + `/` + path1
 
-	res1 := KFile.Realpath("./hello/nothing")
-	res2 := KFile.Realpath(path3)
-	res3 := KFile.Realpath(path2)
+	res1 := KFile.RealPath("./hello/nothing")
+	res2 := KFile.RealPath(path3)
+	res3 := KFile.RealPath(path2)
 	if res1 != "" || res2 != res3 {
-		t.Error("Realpath fail")
+		t.Error("RealPath fail")
 		return
 	}
 
@@ -384,10 +384,10 @@ func TestRealpath(t *testing.T) {
 		_ = os.Remove(pwdir)
 
 		//再获取路径
-		res := KFile.Realpath(filename)
+		res := KFile.RealPath(filename)
 		println("res---------", res)
 		if res != "" {
-			t.Error("KFile.Realpath fail")
+			t.Error("KFile.RealPath fail")
 		}
 
 		//回到旧目录
@@ -395,11 +395,11 @@ func TestRealpath(t *testing.T) {
 	}
 }
 
-func BenchmarkRealpath(b *testing.B) {
+func BenchmarkRealPath(b *testing.B) {
 	b.ResetTimer()
 	path := "testdata/diglett.png"
 	for i := 0; i < b.N; i++ {
-		KFile.Realpath(path)
+		KFile.RealPath(path)
 	}
 }
 
