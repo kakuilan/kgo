@@ -366,6 +366,33 @@ func TestRealpath(t *testing.T) {
 		t.Error("Realpath fail")
 		return
 	}
+
+	//手工引发 os.Getwd 错误
+	//创建目录
+	testpath := "./testdata/testhehetcl/abspath/456"
+	err := os.MkdirAll(testpath, 0755)
+	if err == nil {
+		//当前目录
+		testDir, _ := os.Getwd()
+		filename := "../../test.jpg"
+
+		//进入目录
+		_ = os.Chdir(testpath)
+		pwdir, _ := os.Getwd()
+
+		//删除目录
+		_ = os.Remove(pwdir)
+
+		//再获取路径
+		res := KFile.Realpath(filename)
+		println("res---------", res)
+		if res != "" {
+			t.Error("KFile.Realpath fail")
+		}
+
+		//回到旧目录
+		_ = os.Chdir(testDir)
+	}
 }
 
 func BenchmarkRealpath(b *testing.B) {
