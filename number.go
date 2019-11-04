@@ -181,3 +181,33 @@ func (kn *LkkNumber) NumSign(value float64) float64 {
 		return 0
 	}
 }
+
+// IsNegative 数值是否为负数.
+func (kn *LkkNumber) IsNegative(value float64) bool {
+	return value < 0
+}
+
+// IsPositive 数值是否为正数.
+func (kn *LkkNumber) IsPositive(value float64) bool {
+	return value > 0
+}
+
+// IsNonNegative 数值是否为非负数.
+func (kn *LkkNumber) IsNonNegative(value float64) bool {
+	return value >= 0
+}
+
+// IsNonPositive 数值是否为非正数.
+func (kn *LkkNumber) IsNonPositive(value float64) bool {
+	return value <= 0
+}
+
+// IsWhole 数值是否为整数.
+func (kn *LkkNumber) IsWhole(value float64) bool {
+	return math.Remainder(value, 1) == 0
+}
+
+// IsNatural 数值是否为自然数.
+func (kn *LkkNumber) IsNatural(value float64) bool {
+	return kn.IsWhole(value) && kn.IsPositive(value)
+}
