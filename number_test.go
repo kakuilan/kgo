@@ -740,3 +740,65 @@ func BenchmarkInRangeInt(b *testing.B) {
 		KNum.InRangeInt(6, -1, 9)
 	}
 }
+
+func TestInRangeFloat32(t *testing.T) {
+	var tests = []struct {
+		param    float32
+		left     float32
+		right    float32
+		expected bool
+	}{
+		{0, 0, 0, true},
+		{1, 0, 0, false},
+		{-1, 0, 0, false},
+		{0, -1, 1, true},
+		{0, 0, 1, true},
+		{0, -1, 0, true},
+		{0, 0, -1, true},
+		{0, 10, 5, false},
+	}
+	for _, test := range tests {
+		actual := KNum.InRangeFloat32(test.param, test.left, test.right)
+		if actual != test.expected {
+			t.Errorf("Expected InRangeFloat32(%v, %v, %v) to be %v, got %v", test.param, test.left, test.right, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkInRangeFloat32(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.InRangeFloat32(3.14, 0.1, 65.27)
+	}
+}
+
+func TestInRangeFloat64(t *testing.T) {
+	var tests = []struct {
+		param    float64
+		left     float64
+		right    float64
+		expected bool
+	}{
+		{0, 0, 0, true},
+		{1, 0, 0, false},
+		{-1, 0, 0, false},
+		{0, -1, 1, true},
+		{0, 0, 1, true},
+		{0, -1, 0, true},
+		{0, 0, -1, true},
+		{0, 10, 5, false},
+	}
+	for _, test := range tests {
+		actual := KNum.InRangeFloat64(test.param, test.left, test.right)
+		if actual != test.expected {
+			t.Errorf("Expected InRangeFloat64(%v, %v, %v) to be %v, got %v", test.param, test.left, test.right, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkInRangeFloat64(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.InRangeFloat64(3.14, 0.1, 65.27)
+	}
+}
