@@ -214,14 +214,11 @@ func (kn *LkkNumber) IsNatural(value float64) bool {
 }
 
 // InRangeInt 数值是否在2个整数范围内,将自动转换为整数再比较.
-func (kn *LkkNumber) InRangeInt(value, left, right interface{}) bool {
-	value64 := KConv.ToInt(value)
-	left64 := KConv.ToInt(left)
-	right64 := KConv.ToInt(right)
-	if left64 > right64 {
-		left64, right64 = right64, left64
+func (kn *LkkNumber) InRangeInt(value, left, right int) bool {
+	if left > right {
+		left, right = right, left
 	}
-	return value64 >= left64 && value64 <= right64
+	return value >= left && value <= right
 }
 
 // InRangeFloat32 数值是否在2个32位浮点数范围内.
@@ -252,6 +249,8 @@ func (kn *LkkNumber) InRange(value interface{}, left interface{}, right interfac
 		return kn.InRangeFloat32(value.(float32), left.(float32), right.(float32))
 	} else if reflectValue == reflect.Float64 && reflectLeft == reflect.Float64 && reflectRight == reflect.Float64 {
 		return kn.InRangeFloat64(value.(float64), left.(float64), right.(float64))
+	} else if KConv.IsInt(value) && KConv.IsInt(left) && KConv.IsInt(right) {
+		return kn.InRangeInt(KConv.ToInt(value), KConv.ToInt(left), KConv.ToInt(right))
 	} else if KConv.IsNumeric(value) && KConv.IsNumeric(left) && KConv.IsNumeric(right) {
 		return kn.InRangeFloat64(KConv.ToFloat(value), KConv.ToFloat(left), KConv.ToFloat(right))
 	}
