@@ -323,6 +323,9 @@ func TestAbsPath(t *testing.T) {
 	testpath := "./testdata/testhehetcl/abspath/123"
 	err := os.MkdirAll(testpath, 0755)
 	if err == nil {
+		//当前目录
+		testDir, _ := os.Getwd()
+
 		filename = "../../test.jpg"
 		//进入目录
 		_ = os.Chdir(testpath)
@@ -336,6 +339,9 @@ func TestAbsPath(t *testing.T) {
 		if res != "/test.jpg" {
 			t.Error("KFile.AbsPath fail")
 		}
+
+		//回到旧目录
+		_ = os.Chdir(testDir)
 	}
 }
 
