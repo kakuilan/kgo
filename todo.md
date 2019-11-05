@@ -127,6 +127,7 @@ https://stackoverflow.com/questions/18817336/golang-encrypting-a-string-with-aes
 https://github.com/bocajim/helpers/blob/master/crypt.go
 https://github.com/nothollyhigh/kiss/tree/master/crypto
 https://my.oschina.net/qyyoung/blog/1486324
+https://github.com/iiinsomnia/yiigo/blob/master/crypto.go
 
 
 json库
