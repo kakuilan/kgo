@@ -735,17 +735,22 @@ func BenchmarkSimilarText(b *testing.B) {
 }
 
 func TestExplode(t *testing.T) {
-	res := KStr.Explode(",", "hello,world,welcome,golang")
+	res := KStr.Explode("hello,world;welcome golang", []string{",", " ", ";"}...)
+	fmt.Printf("Explode: %v\n", res)
 	if len(res) != 4 {
 		t.Error("Explode fail")
 		return
 	}
+	KStr.Explode("")
+	KStr.Explode("hello,world,welcome,golang")
+	KStr.Explode("hello,world,welcome,golang", "")
+	KStr.Explode("hello,world,welcome,golang", ",")
 }
 
 func BenchmarkExplode(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KStr.Explode(",", "hello,world,welcome,golang")
+		KStr.Explode("hello,world;welcome golang", []string{",", " ", ";"}...)
 	}
 }
 

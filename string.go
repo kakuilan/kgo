@@ -523,9 +523,29 @@ func (ks *LkkString) SimilarText(first, second string, percent *float64) int {
 	return sim
 }
 
-// Explode 使用一个字符串分割另一个字符串
-func (ks *LkkString) Explode(delimiter, str string) []string {
-	return strings.Split(str, delimiter)
+// Explode 字符串分割.delimiters为分隔符,可选,支持多个.
+func (ks *LkkString) Explode(str string, delimiters ...string) (res []string) {
+	if str == "" {
+		return
+	}
+
+	dLen := len(delimiters)
+	if dLen == 0 {
+		res = append(res, str)
+	} else if dLen > 1 {
+		var sl []string
+		for _, v := range delimiters {
+			if v != "" {
+				sl = append(sl, v, KDelimiter)
+			}
+		}
+		str = strings.NewReplacer(sl...).Replace(str)
+		res = strings.Split(str, KDelimiter)
+	} else {
+		res = strings.Split(str, delimiters[0])
+	}
+
+	return
 }
 
 // Uniqid 获取一个带前缀、基于当前时间微秒数的唯一ID
