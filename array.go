@@ -431,8 +431,8 @@ func (ka *LkkArray) ArrayReverse(arr interface{}) []interface{} {
 	}
 }
 
-// Implode 用glue将数组(仅限数组和切片)的值连接为一个字符串
-func (ka *LkkArray) Implode(glue string, arr interface{}) string {
+// Implode 用str将数组(仅限数组和切片)的值连接为一个字符串
+func (ka *LkkArray) Implode(str string, arr interface{}) string {
 	val := reflect.ValueOf(arr)
 	switch val.Kind() {
 	case reflect.Array, reflect.Slice:
@@ -445,7 +445,7 @@ func (ka *LkkArray) Implode(glue string, arr interface{}) string {
 		for i := 0; i < length; i++ {
 			buf.WriteString(fmt.Sprintf("%s", val.Index(i)))
 			if j--; j > 0 {
-				buf.WriteString(glue)
+				buf.WriteString(str)
 			}
 		}
 		return buf.String()
