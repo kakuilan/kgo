@@ -736,7 +736,6 @@ func BenchmarkSimilarText(b *testing.B) {
 
 func TestExplode(t *testing.T) {
 	res := KStr.Explode("hello,world;welcome golang", []string{",", " ", ";"}...)
-	fmt.Printf("Explode: %v\n", res)
 	if len(res) != 4 {
 		t.Error("Explode fail")
 		return
