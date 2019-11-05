@@ -166,3 +166,33 @@ func BenchmarkServiceUptime(b *testing.B) {
 		KTime.ServiceUptime()
 	}
 }
+
+func TestGetMonthDays(t *testing.T) {
+	var tests = []struct {
+		month    int
+		year     int
+		expected int
+	}{
+		{1, 2009, 31},
+		{0, 2009, 0},
+		{2, 2009, 28},
+		{2, 2016, 29},
+		{2, 1900, 28},
+		{2, 1600, 29},
+	}
+	for _, test := range tests {
+		actual := KTime.GetMonthDays(test.month, test.year)
+		if actual != test.expected {
+			t.Errorf("Expected GetMonthDays(%d, %d) to be %v, got %v", test.month, test.year, test.expected, actual)
+		}
+	}
+
+	KTime.GetMonthDays(3, 1970)
+}
+
+func BenchmarkGetMonthDays(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.GetMonthDays(3, 1970)
+	}
+}
