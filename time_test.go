@@ -187,6 +187,7 @@ func TestGetMonthDays(t *testing.T) {
 		}
 	}
 
+	KTime.GetMonthDays(2)
 	KTime.GetMonthDays(3, 1970)
 }
 
