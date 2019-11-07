@@ -11,6 +11,16 @@ golang 函数库/工具集,仅测试支持64位linux
 [![Starts](https://img.shields.io/github/stars/kakuilan/kgo.svg)](https://github.com/kakuilan/kgo)
 [![Downloads](https://img.shields.io/github/downloads/kakuilan/kgo/total.svg)](https://github.com/kakuilan/kgo/releases)
 
+### 函数接收器说明
+- *KFile* 为文件操作
+- *KStr* 为字符串操作
+- *KNum* 为数值操作
+- *KArr* 为数组(切片/字典)操作
+- *KTime* 为时间操作
+- *KConv* 为类型转换操作
+- *KOS* 为系统和网络操作
+- *KEncr* 为加密操作
+- *KDbug* 为调试操作
 
 ### 测试
 ```shell
