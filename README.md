@@ -80,6 +80,6 @@ go tool cover -html=coverage.out #将统计信息转换为html
 #性能分析
 time go test -bench=. -benchmem -memprofile memprofile.out -cpuprofile profile.out
 go tool pprof profile.out
-go tool pprof -http=192.168.56.10:8081 /usr/bin/dot profile.out
+go tool pprof -http=192.168.1.2:8081 /usr/bin/dot profile.out
 ```
 

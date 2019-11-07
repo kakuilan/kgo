@@ -32,7 +32,6 @@ type (
 	LkkFileTree int8
 	// LkkRandString 枚举类型,随机字符串类型
 	LkkRandString uint8
-
 	// LkkCaseSwitch 枚举类型,大小写开关
 	LkkCaseSwitch uint8
 
