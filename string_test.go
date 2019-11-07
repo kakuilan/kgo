@@ -1376,3 +1376,23 @@ func BenchmarkHideTrueName(b *testing.B) {
 		KStr.HideTrueName("公孙先生")
 	}
 }
+
+func TestCountBase64Byte(t *testing.T) {
+	img := "./testdata/diglett.png"
+	str, _ := KFile.Img2Base64(img)
+	res1 := KStr.CountBase64Byte(str)
+	res2 := KStr.CountBase64Byte("hello")
+
+	if res1 == 0 || res2 != 0 {
+		t.Error("CountBase64Byte fail")
+	}
+}
+
+func BenchmarkCountBase64Byte(b *testing.B) {
+	b.ResetTimer()
+	img := "./testdata/diglett.png"
+	str, _ := KFile.Img2Base64(img)
+	for i := 0; i < b.N; i++ {
+		KStr.CountBase64Byte(str)
+	}
+}
