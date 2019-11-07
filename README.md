@@ -11,16 +11,51 @@ golang 函数库/工具集,仅测试支持64位linux
 [![Starts](https://img.shields.io/github/stars/kakuilan/kgo.svg)](https://github.com/kakuilan/kgo)
 [![Downloads](https://img.shields.io/github/downloads/kakuilan/kgo/total.svg)](https://github.com/kakuilan/kgo/releases)
 
-### 函数接收器说明
-- *KFile* 为文件操作
-- *KStr* 为字符串操作
-- *KNum* 为数值操作
-- *KArr* 为数组(切片/字典)操作
-- *KTime* 为时间操作
-- *KConv* 为类型转换操作
-- *KOS* 为系统和网络操作
-- *KEncr* 为加密操作
-- *KDbug* 为调试操作
+### 函数接收器
+- *KFile* 为文件操作,如
+```go
+chk := KFile.IsExist(filename)
+```
+- *KStr* 为字符串操作,如
+```go
+res := KStr.Trim(" hello world ")
+```
+- *KNum* 为数值操作,如
+```go
+res := KNum.NumberFormat(123.4567890, 3, ".", "")
+```
+- *KArr* 为数组(切片/字典)操作,如
+```go
+mp := map[string]string{
+    "a": "aa",
+    "b": "bb",
+}
+chk := KArr.InArray("bb", mp)	
+```
+- *KTime* 为时间操作,如
+```go
+res, err := KTime.Strtotime("2019-07-11 10:11:23")
+```
+- *KConv* 为类型转换操作,如
+```go
+res := KConv.ToStr(false)
+```
+- *KOS* 为系统和网络操作,如
+```go
+res, err := KOS.LocalIP()
+```
+- *KEncr* 为加密操作,如
+```go
+res, err := KEncr.PasswordHash([]byte("123456"))
+```
+- *KDbug* 为调试操作,如
+```go
+KDbug.DumpStacks()
+```
+
+具体函数请查看[godoc](https://godoc.org/github.com/kakuilan/kgo),更多示例请参考*_test.go文件.
+
+
 
 ### 测试
 ```shell
