@@ -591,3 +591,33 @@ func (ka *LkkArray) ArrayUnique(arr interface{}) []interface{} {
 
 	return res
 }
+
+// ArraySearchItem 从数组中搜索对应元素(单个).arr为要查找的数组,condition为条件字典.
+func (ka *LkkArray) ArraySearchItem(arr interface{}, condition map[string]interface{}) (res interface{}) {
+	// 条件为空
+	if len(condition) == 0 {
+		return
+	}
+
+	val := reflect.ValueOf(arr)
+	switch val.Kind() {
+	case reflect.Array, reflect.Slice:
+		for i := 0; i < val.Len(); i++ {
+			res = compareConditionMap(condition, val.Index(i).Interface())
+			if res != nil {
+				return
+			}
+		}
+	case reflect.Map:
+		for _, k := range val.MapKeys() {
+			res = compareConditionMap(condition, val.MapIndex(k).Interface())
+			if res != nil {
+				return
+			}
+		}
+	default:
+		panic("[ArraySearchItem]arr type must be array, slice or map")
+	}
+
+	return
+}

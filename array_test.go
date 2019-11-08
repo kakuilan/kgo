@@ -783,3 +783,78 @@ func BenchmarkArrayUnique(b *testing.B) {
 		KArr.ArrayUnique(arr)
 	}
 }
+
+func TestArraySearchItem(t *testing.T) {
+	type titem map[string]interface{}
+
+	var list []interface{}
+	arrs := make(map[string]interface{})
+	cond := make(map[string]interface{})
+
+	res1 := KArr.ArraySearchItem(list, cond)
+	res2 := KArr.ArraySearchItem(arrs, cond)
+	if res1 != nil || res2 != nil {
+		t.Error("ArraySearchItem fail")
+	}
+
+	item1 := titem{"age": 20, "name": "test1", "naction": "us", "tel": "13712345678"}
+	item2 := titem{"age": 21, "name": "test2", "naction": "cn", "tel": "13712345679"}
+	item3 := titem{"age": 22, "name": "test3", "naction": "en", "tel": "13712345670"}
+	item4 := titem{"age": 23, "name": "test4", "naction": "fr", "tel": "13712345671"}
+
+	list = append(list, item1, item2, item3, item4, nil, "hello")
+	arrs["a"] = item1
+	arrs["b"] = item2
+	arrs["c"] = item3
+	arrs["c"] = item4
+	arrs["d"] = nil
+	arrs["d"] = "world"
+
+	cond1 := map[string]interface{}{"age": 23}
+	cond2 := map[string]interface{}{"age": 21, "naction": "cn"}
+	cond3 := map[string]interface{}{"age": 22, "naction": "cn", "tel": "13712345671"}
+
+	res3 := KArr.ArraySearchItem(list, cond1)
+	res4 := KArr.ArraySearchItem(arrs, cond1)
+	if res3 == nil || res4 == nil {
+		t.Error("ArraySearchItem fail")
+	}
+
+	res5 := KArr.ArraySearchItem(list, cond2)
+	res6 := KArr.ArraySearchItem(arrs, cond2)
+	if res5 == nil || res6 == nil {
+		t.Error("ArraySearchItem fail")
+	}
+
+	res7 := KArr.ArraySearchItem(list, cond3)
+	res8 := KArr.ArraySearchItem(arrs, cond3)
+	if res7 != nil || res8 != nil {
+		t.Error("ArraySearchItem fail")
+	}
+}
+
+func TestArraySearchItemPanic(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	KArr.ArraySearchItem("hello", map[string]interface{}{"a": 1})
+}
+
+func BenchmarkArraySearchItem(b *testing.B) {
+	b.ResetTimer()
+	type titem map[string]interface{}
+	var list []interface{}
+
+	item1 := titem{"age": 20, "name": "test1", "naction": "us", "tel": "13712345678"}
+	item2 := titem{"age": 21, "name": "test2", "naction": "cn", "tel": "13712345679"}
+	item3 := titem{"age": 22, "name": "test3", "naction": "en", "tel": "13712345670"}
+	item4 := titem{"age": 23, "name": "test4", "naction": "fr", "tel": "13712345671"}
+	list = append(list, item1, item2, item3, item4, nil, "hello")
+	cond := map[string]interface{}{"age": 21, "naction": "cn"}
+	for i := 0; i < b.N; i++ {
+		KArr.ArraySearchItem(list, cond)
+	}
+}
