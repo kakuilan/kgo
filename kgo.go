@@ -236,7 +236,7 @@ var (
 	TextHtmlExcludeTags = []string{"head", "title", "img", "form", "textarea", "input", "select", "button", "iframe", "script", "style", "option"}
 
 	// 已编译的正则
-	RegFormatDir             = regexp.MustCompile(`(/){2,}|(\\){1,}`)
+	RegFormatDir             = regexp.MustCompile(`[\/]{2,}`) //连续的"//"或"\\"或"\/"或"/\"
 	RegChineseAll            = regexp.MustCompile(PATTERN_CHINESE_ALL)
 	RegChineseName           = regexp.MustCompile(PATTERN_CHINESE_NAME)
 	RegMultiByte             = regexp.MustCompile(PATTERN_MULTIBYTE)
@@ -263,5 +263,5 @@ var (
 	RegBase64Image           = regexp.MustCompile(PATTERN_BASE64_IMAGE)
 	RegHtmlTag               = regexp.MustCompile(PATTERN_HTML_TAGS)
 	RegDNSname               = regexp.MustCompile(PATTERN_DNSNAME)
-	RegUrlBackslashDuplicate = regexp.MustCompile(`([^:])[\\/]{2,}`) //url中连续的"//"或"\\"或"\/"
+	RegUrlBackslashDuplicate = regexp.MustCompile(`([^:])[\/]{2,}`) //url中连续的"//"或"\\"或"\/"或"/\"
 )

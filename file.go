@@ -541,6 +541,9 @@ func (kf *LkkFile) FormatDir(path string) string {
 		return ""
 	}
 
+	// 将"\"替换为"/"
+	path = strings.ReplaceAll(path, "\\", "/")
+
 	str := RegFormatDir.ReplaceAllString(path, "/")
 	return strings.TrimRight(str, "/") + "/"
 }
