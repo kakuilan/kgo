@@ -621,3 +621,34 @@ func (ka *LkkArray) ArraySearchItem(arr interface{}, condition map[string]interf
 
 	return
 }
+
+// ArraySearchMutilItem 从数组中搜索对应元素(多个).arr为要查找的数组,condition为条件字典.
+func (ka *LkkArray) ArraySearchMutilItem(arr interface{}, condition map[string]interface{}) (res []interface{}) {
+	// 条件为空
+	if len(condition) == 0 {
+		return
+	}
+
+	val := reflect.ValueOf(arr)
+	var item interface{}
+	switch val.Kind() {
+	case reflect.Array, reflect.Slice:
+		for i := 0; i < val.Len(); i++ {
+			item = compareConditionMap(condition, val.Index(i).Interface())
+			if item != nil {
+				res = append(res, item)
+			}
+		}
+	case reflect.Map:
+		for _, k := range val.MapKeys() {
+			item = compareConditionMap(condition, val.MapIndex(k).Interface())
+			if item != nil {
+				res = append(res, item)
+			}
+		}
+	default:
+		panic("[ArraySearchMutilItem]arr type must be array, slice or map")
+	}
+
+	return
+}

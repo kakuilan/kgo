@@ -784,7 +784,7 @@ func BenchmarkArrayUnique(b *testing.B) {
 	}
 }
 
-func TestArraySearchItem(t *testing.T) {
+func TestArraySearchItemNMutil(t *testing.T) {
 	type titem map[string]interface{}
 
 	var list []interface{}
@@ -797,18 +797,26 @@ func TestArraySearchItem(t *testing.T) {
 		t.Error("ArraySearchItem fail")
 	}
 
+	mul1 := KArr.ArraySearchMutilItem(list, cond)
+	mul2 := KArr.ArraySearchMutilItem(arrs, cond)
+	if mul1 != nil || mul2 != nil {
+		t.Error("ArraySearchMutilItem fail")
+	}
+
 	item1 := titem{"age": 20, "name": "test1", "naction": "us", "tel": "13712345678"}
 	item2 := titem{"age": 21, "name": "test2", "naction": "cn", "tel": "13712345679"}
 	item3 := titem{"age": 22, "name": "test3", "naction": "en", "tel": "13712345670"}
 	item4 := titem{"age": 23, "name": "test4", "naction": "fr", "tel": "13712345671"}
+	item5 := titem{"age": 21, "name": "test5", "naction": "cn", "tel": "13712345672"}
 
-	list = append(list, item1, item2, item3, item4, nil, "hello")
+	list = append(list, item1, item2, item3, item4, item5, nil, "hello")
 	arrs["a"] = item1
 	arrs["b"] = item2
 	arrs["c"] = item3
 	arrs["c"] = item4
 	arrs["d"] = nil
 	arrs["d"] = "world"
+	arrs["e"] = item5
 
 	cond1 := map[string]interface{}{"age": 23}
 	cond2 := map[string]interface{}{"age": 21, "naction": "cn"}
@@ -820,16 +828,34 @@ func TestArraySearchItem(t *testing.T) {
 		t.Error("ArraySearchItem fail")
 	}
 
+	mul3 := KArr.ArraySearchMutilItem(list, cond1)
+	mul4 := KArr.ArraySearchMutilItem(arrs, cond1)
+	if mul3 == nil || mul4 == nil {
+		t.Error("ArraySearchMutilItem fail")
+	}
+
 	res5 := KArr.ArraySearchItem(list, cond2)
 	res6 := KArr.ArraySearchItem(arrs, cond2)
 	if res5 == nil || res6 == nil {
 		t.Error("ArraySearchItem fail")
 	}
 
+	mul5 := KArr.ArraySearchMutilItem(list, cond2)
+	mul6 := KArr.ArraySearchMutilItem(arrs, cond2)
+	if mul5 == nil || mul6 == nil {
+		t.Error("ArraySearchMutilItem fail")
+	}
+
 	res7 := KArr.ArraySearchItem(list, cond3)
 	res8 := KArr.ArraySearchItem(arrs, cond3)
 	if res7 != nil || res8 != nil {
 		t.Error("ArraySearchItem fail")
+	}
+
+	mul7 := KArr.ArraySearchMutilItem(list, cond3)
+	mul8 := KArr.ArraySearchMutilItem(arrs, cond3)
+	if mul7 != nil || mul8 != nil {
+		t.Error("ArraySearchMutilItem fail")
 	}
 }
 
@@ -841,6 +867,16 @@ func TestArraySearchItemPanic(t *testing.T) {
 	}()
 
 	KArr.ArraySearchItem("hello", map[string]interface{}{"a": 1})
+}
+
+func TestArraySearchMutilItemPanic(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	KArr.ArraySearchMutilItem("hello", map[string]interface{}{"a": 1})
 }
 
 func BenchmarkArraySearchItem(b *testing.B) {
@@ -856,5 +892,22 @@ func BenchmarkArraySearchItem(b *testing.B) {
 	cond := map[string]interface{}{"age": 21, "naction": "cn"}
 	for i := 0; i < b.N; i++ {
 		KArr.ArraySearchItem(list, cond)
+	}
+}
+
+func BenchmarkArraySearchMutilItem(b *testing.B) {
+	b.ResetTimer()
+	type titem map[string]interface{}
+	var list []interface{}
+
+	item1 := titem{"age": 20, "name": "test1", "naction": "us", "tel": "13712345678"}
+	item2 := titem{"age": 21, "name": "test2", "naction": "cn", "tel": "13712345679"}
+	item3 := titem{"age": 22, "name": "test3", "naction": "en", "tel": "13712345670"}
+	item4 := titem{"age": 23, "name": "test4", "naction": "fr", "tel": "13712345671"}
+	item5 := titem{"age": 21, "name": "test5", "naction": "cn", "tel": "13712345672"}
+	list = append(list, item1, item2, item3, item4, nil, "hello", item5)
+	cond := map[string]interface{}{"age": 21, "naction": "cn"}
+	for i := 0; i < b.N; i++ {
+		KArr.ArraySearchMutilItem(list, cond)
 	}
 }
