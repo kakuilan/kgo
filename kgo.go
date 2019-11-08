@@ -34,6 +34,8 @@ type (
 	LkkRandString uint8
 	// LkkCaseSwitch 枚举类型,大小写开关
 	LkkCaseSwitch uint8
+	// LkkPadType 枚举类型,字符串填充类型
+	LkkPadType uint8
 
 	// FileFilter 文件过滤函数
 	FileFilter func(string) bool
@@ -97,6 +99,13 @@ const (
 	CASE_LOWER LkkCaseSwitch = 1
 	// CASE_UPPER 检查大写
 	CASE_UPPER LkkCaseSwitch = 2
+
+	// PAD_LEFT 左侧填充
+	PAD_LEFT LkkPadType = 0
+	// PAD_RIGHT 右侧填充
+	PAD_RIGHT LkkPadType = 1
+	// PAD_BOTH 两侧填充
+	PAD_BOTH LkkPadType = 2
 
 	//检查连接超时的时间
 	CHECK_CONNECT_TIMEOUT = time.Second * 5

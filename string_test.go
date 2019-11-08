@@ -1396,3 +1396,57 @@ func BenchmarkCountBase64Byte(b *testing.B) {
 		KStr.CountBase64Byte(str)
 	}
 }
+
+func TestStrpadding(t *testing.T) {
+	str1 := "hello,world"
+	str2 := "你好,世界"
+
+	chk1 := KStr.Strpad(str1, "-", 1, PAD_BOTH)
+	chk2 := KStr.Strpad(str2, "", 10, PAD_BOTH)
+	if chk1 != str1 || chk2 != str2 {
+		t.Error("Strpad fail")
+	}
+
+	res1 := KStr.StrpadLeft(str1, "-", 30)
+	res2 := KStr.StrpadLeft(str2, "。", 30)
+	if KStr.MbStrlen(res1) != 30 || KStr.MbStrlen(res2) != 30 {
+		t.Error("StrpadLeft fail")
+	}
+
+	res3 := KStr.StrpadRight(str1, "-", 30)
+	res4 := KStr.StrpadRight(str2, "。", 30)
+	if KStr.MbStrlen(res3) != 30 || KStr.MbStrlen(res4) != 30 {
+		t.Error("StrpadLeft fail")
+	}
+
+	res5 := KStr.StrpadBoth(str1, "-", 30)
+	res6 := KStr.StrpadBoth(str2, "。", 30)
+	if KStr.MbStrlen(res5) != 30 || KStr.MbStrlen(res6) != 30 {
+		t.Error("StrpadLeft fail")
+	}
+
+}
+
+func BenchmarkStrpadLeft(b *testing.B) {
+	b.ResetTimer()
+	str := "hello,世界"
+	for i := 0; i < b.N; i++ {
+		KStr.StrpadLeft(str, "-。", 30)
+	}
+}
+
+func BenchmarkStrpadRight(b *testing.B) {
+	b.ResetTimer()
+	str := "hello,世界"
+	for i := 0; i < b.N; i++ {
+		KStr.StrpadRight(str, "-。", 30)
+	}
+}
+
+func BenchmarkStrpadBoth(b *testing.B) {
+	b.ResetTimer()
+	str := "hello,世界"
+	for i := 0; i < b.N; i++ {
+		KStr.StrpadBoth(str, "-。", 30)
+	}
+}
