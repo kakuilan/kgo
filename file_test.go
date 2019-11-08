@@ -680,8 +680,9 @@ func BenchmarkFileTree(b *testing.B) {
 }
 
 func TestFormatDir(t *testing.T) {
-	dir := `/usr\bin\\golang//fmt`
+	dir := `/usr\bin\\golang//fmt/\test\/hehe`
 	res := KFile.FormatDir(dir)
+	println(res)
 	if strings.Contains(res, `\`) {
 		t.Error("FormatDir fail")
 		return
