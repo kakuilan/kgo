@@ -828,3 +828,27 @@ func (kf *LkkFile) SafeFileName(str string) string {
 	}
 	return name
 }
+
+// ChmodBatch 批量改变路径权限模式(包括子目录和所属文件).filemode为文件权限模式,dirmode为目录权限模式.
+func (kf *LkkFile) ChmodBatch(path string, filemode, dirmode os.FileMode) (res bool) {
+	var err error
+	err = filepath.Walk(path, func(path string, f os.FileInfo, err error) error {
+		if f == nil {
+			return err
+		}
+
+		if f.IsDir() {
+			err = os.Chmod(path, dirmode)
+		} else {
+			err = os.Chmod(path, filemode)
+		}
+
+		return err
+	})
+
+	if err == nil {
+		res = true
+	}
+
+	return
+}

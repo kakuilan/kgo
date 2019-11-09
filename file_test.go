@@ -962,3 +962,38 @@ func BenchmarkSafeFileName(b *testing.B) {
 		KFile.SafeFileName("../../../Hello World!.txt")
 	}
 }
+
+func TestChmodBatch(t *testing.T) {
+	dir := "/tmp/kgotest/test"
+	err := os.MkdirAll(dir, 0766)
+	if err == nil {
+		file1 := "/tmp/kgotest/test/chmod/1.log"
+		file2 := "/tmp/kgotest/test/chmod/2.log"
+		file3 := "/tmp/kgotest/test/chmod/hehe/3.log"
+		file4 := "/tmp/kgotest/test/chmod/hehe/4.log"
+
+		KFile.Touch(file1, 0)
+		KFile.Touch(file2, 0)
+		KFile.Touch(file3, 0)
+		KFile.Touch(file4, 0)
+
+		res := KFile.ChmodBatch(dir, 0777, 0755)
+		if !res {
+			t.Error("ChmodBatch fail")
+		}
+	}
+
+	res1 := KFile.ChmodBatch("/hello/world/123456", 0766, 0755)
+	res2 := KFile.ChmodBatch("/root", 0766, 0755)
+	if res1 || res2 {
+		t.Error("ChmodBatch fail")
+	}
+}
+
+func BenchmarkChmodBatch(b *testing.B) {
+	b.ResetTimer()
+	dir := "/tmp/kgotest/test"
+	for i := 0; i < b.N; i++ {
+		KFile.ChmodBatch(dir, 0777, 0755)
+	}
+}
