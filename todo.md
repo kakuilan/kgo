@@ -65,6 +65,7 @@
 - https://github.com/Jordanzuo/goutil
 - https://github.com/gxxgle/go-utils
 - https://github.com/q191201771/naza
+- https://github.com/kirinlabs/utils
 
 
 
