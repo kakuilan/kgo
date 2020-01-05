@@ -36,6 +36,17 @@ func (kd *LkkDebug) GetFuncLine() int {
 	return line
 }
 
+// GetFuncFile 获取调用方法的文件路径
+func (kd *LkkDebug) GetFuncFile() string {
+	_, file, _, _ := runtime.Caller(1)
+	return file
+}
+
+// GetFuncDir 获取调用方法的文件目录
+func (kd *LkkDebug) GetFuncDir() string {
+	return filepath.Dir(kd.GetFuncFile())
+}
+
 // DumpStacks 打印堆栈信息
 func (kd *LkkDebug) DumpStacks() {
 	buf := make([]byte, 16384)

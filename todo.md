@@ -67,7 +67,8 @@
 - https://github.com/q191201771/naza
 - https://github.com/kirinlabs/utils
 - https://github.com/xinliangnote/go-util
-
+- https://github.com/facebookarchive/pidfile/blob/master/pidfile.go
+- https://github.com/struCoder/pidusage/blob/master/pidusage.go
 
 
 
@@ -106,6 +107,7 @@ https://github.com/jimmykuu/webhelpers/blob/master/text.go
 - 简单http请求
 - rsa加解密
 - Kstr增加Img2Base64
+- pid文件检查
 
 
 encrypt
@@ -261,6 +263,16 @@ https://stackoverflow.com/questions/40182289/golang-equivalent-of-pythons-struct
 https://stackoverflow.com/questions/8039552/byte-endian-convert-by-using-encoding-binary-in-go
 https://studygolang.com/articles/2791
 https://www.reddit.com/r/golang/comments/7pwlh6/binary_string_to_readable_string/
+
+
+go get current package name
+https://stackoverflow.com/questions/25262754/how-to-get-name-of-current-package-in-go
+
+go get current file path
+https://coderwall.com/p/_fmbug/go-get-path-to-current-file
+https://github.com/unknwon/gcblog/blob/master/content/04-go-caller.md
+https://colobu.com/2018/11/03/get-function-name-in-go/
+
 
 
 
