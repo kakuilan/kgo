@@ -39,6 +39,32 @@ func BenchmarkGetFuncLine(b *testing.B) {
 	}
 }
 
+func TestGetFuncFileDir(t *testing.T) {
+	res1 := KDbug.GetFuncFile()
+	res2 := KDbug.GetFuncDir()
+	if res1 == "" {
+		t.Error("GetFuncFile fail")
+		return
+	} else if res2 == "" {
+		t.Error("GetFuncDir fail")
+		return
+	}
+}
+
+func BenchmarkGetFuncFile(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KDbug.GetFuncFile()
+	}
+}
+
+func BenchmarkGetFuncDir(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KDbug.GetFuncDir()
+	}
+}
+
 func TestDumpStacks(t *testing.T) {
 	KDbug.DumpStacks()
 }
