@@ -4,7 +4,6 @@ import (
 	"archive/tar"
 	"compress/gzip"
 	"crypto/md5"
-	"encoding/base64"
 	"encoding/hex"
 	"fmt"
 	"io"
@@ -443,7 +442,7 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 	return total, err
 }
 
-// Img2Base64 读取图片文件,并转换为base64字符串
+// Img2Base64 读取图片文件,并转换为base64字符串.
 func (kf *LkkFile) Img2Base64(path string) (string, error) {
 	if !kf.IsImg(path) {
 		return "", fmt.Errorf("%s is not a image", path)
@@ -455,7 +454,7 @@ func (kf *LkkFile) Img2Base64(path string) (string, error) {
 	}
 
 	ext := kf.GetExt(path)
-	return fmt.Sprintf("data:image/%s;base64,%s", ext, base64.StdEncoding.EncodeToString(imgBuffer)), nil
+	return KStr.Img2Base64(imgBuffer, ext), nil
 }
 
 // DelDir 删除目录;delRoot为true时连该目录一起删除;为false时只清空该目录

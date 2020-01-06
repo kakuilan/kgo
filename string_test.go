@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"fmt"
+	"io/ioutil"
 	"strings"
 	"testing"
 )
@@ -1448,5 +1449,26 @@ func BenchmarkStrpadBoth(b *testing.B) {
 	str := "hello,世界"
 	for i := 0; i < b.N; i++ {
 		KStr.StrpadBoth(str, "-。", 30)
+	}
+}
+
+func TestStrImg2Base64(t *testing.T) {
+	cont, _ := ioutil.ReadFile("testdata/diglett.png")
+	img1 := KStr.Img2Base64(cont)
+	img2 := KStr.Img2Base64(cont, "png")
+
+	chk1 := KStr.IsBase64Image(img1)
+	chk2 := KStr.IsBase64Image(img2)
+	if !chk1 || !chk2 {
+		t.Error("IsBase64Image fail")
+		return
+	}
+}
+
+func BenchmarkStrImg2Base64(b *testing.B) {
+	b.ResetTimer()
+	cont, _ := ioutil.ReadFile("testdata/diglett.png")
+	for i := 0; i < b.N; i++ {
+		KStr.Img2Base64(cont)
 	}
 }
