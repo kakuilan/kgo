@@ -257,3 +257,36 @@ func (kn *LkkNumber) InRange(value interface{}, left interface{}, right interfac
 
 	return false
 }
+
+func (kn *LkkNumber) Sum() {
+	//TODO
+}
+
+func (kn *LkkNumber) SumInt() {
+	//TODO
+}
+
+func (kn *LkkNumber) SumFloat64() {
+	//TODO
+}
+
+//func sum(input ...int) int {
+//	sum := 0
+//
+//	for _, i := range input {
+//		sum += i
+//	}
+//
+//	fmt.Println("sum was ", sum)
+//	return sum
+//}
+
+//s := []interface{}{1, 2, 3, "invalid"}
+//sum := 0
+//for _, v := range s {
+//if i, ok := v.(int); ok {
+//sum += i
+//} else {
+//fmt.Println("Not int:", v)
+//}
+//}
