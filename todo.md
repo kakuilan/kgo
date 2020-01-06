@@ -106,7 +106,6 @@ https://github.com/jimmykuu/webhelpers/blob/master/text.go
 - 时间轮定时器
 - 简单http请求
 - rsa加解密
-- Kstr增加Img2Base64
 - pid文件检查
 
 
