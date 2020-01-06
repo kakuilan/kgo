@@ -65,6 +65,24 @@ func BenchmarkGetFuncDir(b *testing.B) {
 	}
 }
 
+func TestGetFuncPackage(t *testing.T) {
+	res1 := KDbug.GetFuncPackage()
+	res2 := KDbug.GetFuncPackage(KDbug.GetFuncFile())
+	res3 := KDbug.GetFuncPackage("test")
+
+	if res1 != "kgo" || res1 != res2 || res3 != "" {
+		t.Error("GetFuncPackage fail")
+		return
+	}
+}
+
+func BenchmarkGetFuncPackage(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KDbug.GetFuncPackage()
+	}
+}
+
 func TestDumpStacks(t *testing.T) {
 	KDbug.DumpStacks()
 }
