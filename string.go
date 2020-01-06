@@ -1199,7 +1199,7 @@ func (ks *LkkString) StrpadBoth(str string, fill string, max int) string {
 
 // Img2Base64 将字符串转换为base64图片.ext为图片扩展名,默认jpg.
 func (ks *LkkString) Img2Base64(content []byte, ext ...string) string {
-	var imgType = "jpg"
+	var imgType string = "jpg"
 	if len(ext) > 0 {
 		imgType = strings.ToLower(ext[0])
 	}
