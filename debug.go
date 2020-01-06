@@ -2,6 +2,8 @@ package kgo
 
 import (
 	"fmt"
+	"go/parser"
+	"go/token"
 	"path/filepath"
 	"reflect"
 	"runtime"
@@ -45,6 +47,26 @@ func (kd *LkkDebug) GetFuncFile() string {
 // GetFuncDir 获取调用方法的文件目录
 func (kd *LkkDebug) GetFuncDir() string {
 	return filepath.Dir(kd.GetFuncFile())
+}
+
+// GetFuncPackage 获取调用方法或源文件的包名.funcFile为源文件路径.
+func (kd *LkkDebug) GetFuncPackage(funcFile ...string) string {
+	var sourceFile string
+	if len(funcFile) == 0 {
+		sourceFile = kd.GetFuncFile()
+	} else {
+		sourceFile = funcFile[0]
+	}
+
+	fset := token.NewFileSet()
+	astFile, err := parser.ParseFile(fset, sourceFile, nil, parser.PackageClauseOnly)
+	if err != nil {
+		return ""
+	} else if astFile.Name == nil {
+		return ""
+	}
+
+	return astFile.Name.Name
 }
 
 // DumpStacks 打印堆栈信息
