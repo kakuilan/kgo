@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/hex"
 	"fmt"
 	"github.com/json-iterator/go"
@@ -1194,4 +1195,14 @@ func (ks *LkkString) StrpadRight(str string, fill string, max int) string {
 // StrpadBoth 字符串两侧填充,请参考Strpad.
 func (ks *LkkString) StrpadBoth(str string, fill string, max int) string {
 	return ks.Strpad(str, fill, max, PAD_BOTH)
+}
+
+// Img2Base64 将字符串转换为base64图片.ext为图片扩展名,默认jpg.
+func (ks *LkkString) Img2Base64(content []byte, ext ...string) string {
+	var imgType = "jpg"
+	if len(ext) > 0 {
+		imgType = strings.ToLower(ext[0])
+	}
+
+	return fmt.Sprintf("data:image/%s;base64,%s", imgType, base64.StdEncoding.EncodeToString(content))
 }
