@@ -11,6 +11,7 @@ import (
 	"hash"
 	"reflect"
 	"strconv"
+	"strings"
 	"unsafe"
 )
 
@@ -202,11 +203,11 @@ func arrayValues(arr interface{}, filterNil bool) []interface{} {
 
 // getTrimMask 去除mask字符
 func getTrimMask(characterMask []string) string {
-	mask := ""
+	var mask string
 	if len(characterMask) == 0 {
-		mask = " \\t\\n\\r\\0\\x0B　"
+		mask = " \t\n\r\v\f　"
 	} else {
-		mask = characterMask[0]
+		mask = strings.Join(characterMask, "")
 	}
 	return mask
 }

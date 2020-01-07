@@ -498,6 +498,13 @@ func TestTrim(t *testing.T) {
 		t.Error("Trim fail")
 		return
 	}
+
+	res = KStr.Trim("\v\t 0.0.0\f\n ")
+	if res != "0.0.0" {
+		t.Error("Trim fail")
+		return
+	}
+
 	KStr.Trim(str, "\n")
 }
 
