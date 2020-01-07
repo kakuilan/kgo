@@ -454,6 +454,16 @@ func (ka *LkkArray) Implode(str string, arr interface{}) string {
 	}
 }
 
+func (ka *LkkArray) JoinStrings(strs []string, delimiter string) string {
+	//TODO
+	return ""
+}
+
+func (ka *LkkArray) JoinInts(ints []int, delimiter string) string {
+	//TODO
+	return ""
+}
+
 // ArrayDiff 计算数组/切片/字典的差集,返回在 arr1 中但是不在 arr2 里,且非空元素(nil,'')的值.
 func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}) []interface{} {
 	valA := reflect.ValueOf(arr1)
