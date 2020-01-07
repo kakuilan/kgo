@@ -258,35 +258,31 @@ func (kn *LkkNumber) InRange(value interface{}, left interface{}, right interfac
 	return false
 }
 
-func (kn *LkkNumber) Sum() {
-	//TODO
+// Sum 任意类型求和.注意:其中true和"true"等价于1.0 .
+func (kn *LkkNumber) Sum(intput ...interface{}) float64 {
+	var sum float64
+	for _, item := range intput {
+		v := KConv.ToFloat(item)
+		sum += v
+	}
+
+	return sum
 }
 
-func (kn *LkkNumber) SumInt() {
-	//TODO
+// SumInt 整数求和.
+func (kn *LkkNumber) SumInt(intput ...int) int {
+	var sum int
+	for _, v := range intput {
+		sum += v
+	}
+	return sum
 }
 
-func (kn *LkkNumber) SumFloat64() {
-	//TODO
+// SumFloat64 浮点数求和.
+func (kn *LkkNumber) SumFloat64(intput ...float64) float64 {
+	var sum float64
+	for _, v := range intput {
+		sum += v
+	}
+	return sum
 }
-
-//func sum(input ...int) int {
-//	sum := 0
-//
-//	for _, i := range input {
-//		sum += i
-//	}
-//
-//	fmt.Println("sum was ", sum)
-//	return sum
-//}
-
-//s := []interface{}{1, 2, 3, "invalid"}
-//sum := 0
-//for _, v := range s {
-//if i, ok := v.(int); ok {
-//sum += i
-//} else {
-//fmt.Println("Not int:", v)
-//}
-//}
