@@ -111,6 +111,7 @@ https://github.com/jimmykuu/webhelpers/blob/master/text.go
 - pid文件检查
 - max/min ->int/float64
 - rand ->int/float64
+- JoinStrings/JoinInts
 
 
 
@@ -175,6 +176,8 @@ https://github.com/dghubble/sling
 https://github.com/h2non/gentleman
 https://github.com/guonaihong/gout
 https://github.com/levigross/grequests
+https://github.com/alessiosavi/Requests
+
 
 
 queue
