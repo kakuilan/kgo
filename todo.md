@@ -1,6 +1,7 @@
 ### 参考项目
 - https://www.php2golang.com/
 - https://github.com/alessiosavi/GoGPUtils
+- https://github.com/alessiosavi/GoUtils
 - https://github.com/b3log/gulu -x
 - https://github.com/syyongx/php2go -x
 - https://github.com/openset/php2go -x
@@ -73,6 +74,7 @@
 
 
 
+
 ### 其他库
 - https://github.com/lalamove/konfig
 - https://github.com/jinzhu/configor
@@ -107,7 +109,8 @@ https://github.com/jimmykuu/webhelpers/blob/master/text.go
 - 简单http请求
 - rsa加解密
 - pid文件检查
-- trim 0.0.0 => .0.
+- max/min ->int/float64
+- rand ->int/float64
 
 
 
