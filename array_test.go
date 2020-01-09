@@ -911,3 +911,8 @@ func BenchmarkArraySearchMutilItem(b *testing.B) {
 		KArr.ArraySearchMutilItem(list, cond)
 	}
 }
+
+func TestGetPidByPort(t *testing.T) {
+	res := KOS.GetPidByPort(22)
+	println("pid:", res)
+}
