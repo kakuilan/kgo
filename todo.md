@@ -112,8 +112,13 @@ https://github.com/jimmykuu/webhelpers/blob/master/text.go
 - max/min ->int/float64
 - rand ->int/float64
 - JoinStrings/JoinInts
+- 根据端口查找pid
 
 
+根据端口查找pid
+https://mlog.club/article/1772495
+https://groups.google.com/forum/#!topic/golang-china/boCI84hL_rM
+https://blog.csdn.net/zheshijieyouwo/article/details/78307091
 
 encrypt
 https://github.com/henrylee2cn/goutil/blob/master/encrypt.go
