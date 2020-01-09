@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/binary"
 	"errors"
@@ -616,4 +617,37 @@ func (ko *LkkOS) IsPortOpen(host string, port interface{}, protocols ...string) 
 	}
 
 	return false
+}
+
+func (ko *LkkOS) GetPidByPort(port int) (pid int) {
+	var err error
+	fi, err := os.Open("/proc/net/tcp")
+	if err != nil {
+		return
+	}
+	defer fi.Close()
+
+	br := bufio.NewReader(fi)
+	portStr := strconv.Itoa(port)
+	for {
+		a, _, err := br.ReadLine()
+		println("a:", string(a))
+		if err == io.EOF {
+			break
+		}
+		Info := strings.Fields(string(a))
+		println("Info 0000:", Info)
+		println("Info 1111:", Info[1])
+		// Info不同位置代表不同,想从哪查就获取啥
+		remPort := strings.Split(Info[1], ":")
+		if len(remPort) == 2 {
+			fmt.Printf("%04X\n", remPort[1])
+			if remPort[1] == portStr {
+				pid, _ = strconv.Atoi(Info[9])
+				return
+			}
+		}
+	}
+
+	return
 }
