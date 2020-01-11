@@ -70,6 +70,23 @@
 - https://github.com/xinliangnote/go-util
 - https://github.com/facebookarchive/pidfile/blob/master/pidfile.go
 - https://github.com/struCoder/pidusage/blob/master/pidusage.go
+- https://github.com/docker/go-units
+- https://github.com/alecthomas/units
+- https://github.com/prashantv/gostub
+- https://github.com/tgulacsi/go
+- https://github.com/UlricQin/goutils
+- https://github.com/chanxuehong/util
+- https://github.com/Akagi201/utilgo
+- https://github.com/fastly/go-utils
+- https://github.com/Teamwork/utils
+- https://github.com/OneOfOne/go-utils
+- https://github.com/bitrise-io/go-utils
+- https://github.com/ik5/gostrutils
+- https://github.com/hacdias/fileutils
+- https://github.com/gookit/goutil
+- https://github.com/henrylee2cn/utils
+- https://github.com/billmi/go-utils
+
 
 
 
