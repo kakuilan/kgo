@@ -93,7 +93,7 @@ func (kn *LkkNumber) RandInt64(min, max int64) int64 {
 	//范围是否在边界内
 	mMax := int64(math.MaxInt32)
 	mMin := int64(math.MinInt32)
-	inrang := (INT64_MIN <= min && max <= 0) || (0 <= min && max <= INT64_MAX) || (mMin <= min && max <= mMax)
+	inrang := (mMin <= min && max <= mMax) || (INT64_MIN <= min && max <= 0) || (0 <= min && max <= INT64_MAX)
 
 	if !inrang {
 		panic("[RandInt64]: min and max exceed capacity,the result should be overflows int64.")
@@ -103,8 +103,29 @@ func (kn *LkkNumber) RandInt64(min, max int64) int64 {
 	return r.Int63n(max-min) + min
 }
 
+// RandFloat64 生产一个随机float64整数.
 func (kn *LkkNumber) RandFloat64(min, max float64) float64 {
-	return 0
+	if min > max {
+		panic("[RandFloat64]: min cannot be greater than max")
+	}
+
+	if min == max {
+		return min
+	}
+
+	//范围是否在边界内
+	mMax := float64(math.MaxFloat32)
+	mMin := -mMax
+	inrang := (mMin <= min && max <= mMax) || (-math.MaxFloat64 <= min && max <= 0) || (0 <= min && max <= math.MaxFloat64)
+	if !inrang {
+		panic("[RandFloat64]: min and max exceed capacity,the result should be overflows float64.")
+	}
+
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	num := r.Float64()
+
+	res := min + num*(max-min)
+	return res
 }
 
 // Rand RandInt的别名.
