@@ -66,20 +66,50 @@ func (kn *LkkNumber) Abs(number float64) float64 {
 	return math.Abs(number)
 }
 
-// Rand 产生一个随机整数,范围: [0, 2147483647]
-func (kn *LkkNumber) Rand(min, max int) int {
+// RandInt 产生一个随机int整数.
+func (kn *LkkNumber) RandInt(min, max int) int {
 	if min > max {
-		panic("[Rand]: min cannot be greater than max")
+		panic("[RandInt]: min cannot be greater than max")
 	}
-	// PHP: getrandmax()
-	if int31 := 1<<31 - 1; max > int31 {
-		panic("[Rand]: max can not be greater than " + strconv.Itoa(int31))
-	}
+
 	if min == max {
 		return min
 	}
+
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	return r.Intn(max+1-min) + min
+	return r.Intn(max-min) + min
+}
+
+// RandInt64 生产一个随机int64整数.
+func (kn *LkkNumber) RandInt64(min, max int64) int64 {
+	if min > max {
+		panic("[RandInt64]: min cannot be greater than max")
+	}
+
+	if min == max {
+		return min
+	}
+
+	//范围是否在边界内
+	mMax := int64(math.MaxInt32)
+	mMin := int64(math.MinInt32)
+	inrang := (INT64_MIN <= min && max <= 0) || (0 <= min && max <= INT64_MAX) || (mMin <= min && max <= mMax)
+
+	if !inrang {
+		panic("[RandInt64]: min and max exceed capacity,the result should be overflows int64.")
+	}
+
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	return r.Int63n(max-min) + min
+}
+
+func (kn *LkkNumber) RandFloat64(min, max float64) float64 {
+	return 0
+}
+
+// Rand RandInt的别名.
+func (kn *LkkNumber) Rand(min, max int) int {
+	return kn.RandInt(min, max)
 }
 
 // Round 对浮点数进行四舍五入
