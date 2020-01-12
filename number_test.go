@@ -72,6 +72,7 @@ func TestRand(t *testing.T) {
 		return
 	}
 	KNum.Rand(5, 5)
+	KNum.Rand(-2147483648, 2147483647)
 }
 
 func TestRandPanicMin(t *testing.T) {
@@ -84,21 +85,55 @@ func TestRandPanicMin(t *testing.T) {
 	KNum.Rand(5, 1)
 }
 
-func TestRandPanicMax(t *testing.T) {
+func BenchmarkRand(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.Rand(-2147483648, 2147483647)
+	}
+}
+
+func TestRandInt64(t *testing.T) {
+	var min int64 = -9999
+	var max int64 = 6666
+
+	res := KNum.RandInt64(min, max)
+
+	if res < min || res > max {
+		t.Error("Rand fail")
+		return
+	}
+
+	res2 := KNum.RandInt64(int64(5), int64(5))
+	res3 := KNum.RandInt64(int64(-2147483648), int64(2147483647))
+	println("res2", res2, res3)
+}
+
+func TestRandInt64PanicMin(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("recover...:", r)
 		}
 	}()
 
-	KNum.Rand(1, 2147483648)
+	KNum.RandInt64(int64(5), int64(1))
 }
 
-func BenchmarkRand(b *testing.B) {
+func TestRandInt64PanicOverflow(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	KNum.RandInt64(int64(-9223372036854775808), int64(9223372036854775807))
+}
+
+func BenchmarkRandInt64(b *testing.B) {
 	b.ResetTimer()
-	num := -123.456
+	min := int64(-2147483648)
+	max := int64(-2147483647)
 	for i := 0; i < b.N; i++ {
-		KNum.Abs(num)
+		KNum.RandInt64(min, max)
 	}
 }
 
