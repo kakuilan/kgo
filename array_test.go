@@ -668,7 +668,27 @@ func TestImplode(t *testing.T) {
 	arr = nil
 	res = KArr.Implode(",", arr)
 	if res != "" {
-		t.Error("Implode fail")
+		t.Error("Implode slice fail")
+		return
+	}
+
+	//字典
+	var mp1 = make(map[string]string)
+	res = KArr.Implode(",", mp1)
+	if res != "" {
+		t.Error("Implode map fail")
+		return
+	}
+
+	mp2 := map[string]string{
+		"a": "aa",
+		"b": "bb",
+		"c": "cc",
+		"d": "dd",
+	}
+	res = KArr.Implode(",", mp2)
+	if res == "" {
+		t.Error("Implode map fail")
 		return
 	}
 }

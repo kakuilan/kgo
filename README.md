@@ -60,9 +60,6 @@ KDbug.DumpStacks()
 
 ### 测试
 ```shell
-#清理包
-go mod tidy
-
 #单元测试
 go test
 
