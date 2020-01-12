@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"fmt"
+	"math"
 	"strings"
 	"testing"
 )
@@ -102,10 +103,6 @@ func TestRandInt64(t *testing.T) {
 		t.Error("Rand fail")
 		return
 	}
-
-	res2 := KNum.RandInt64(int64(5), int64(5))
-	res3 := KNum.RandInt64(int64(-2147483648), int64(2147483647))
-	println("res2", res2, res3)
 }
 
 func TestRandInt64PanicMin(t *testing.T) {
@@ -134,6 +131,46 @@ func BenchmarkRandInt64(b *testing.B) {
 	max := int64(-2147483647)
 	for i := 0; i < b.N; i++ {
 		KNum.RandInt64(min, max)
+	}
+}
+
+func TestRandFloat64(t *testing.T) {
+	var min float64 = -9999.0
+	var max float64 = 6666.0
+
+	res := KNum.RandFloat64(min, max)
+	if res < min || res > max {
+		t.Error("Rand fail")
+		return
+	}
+}
+
+func TestRandFloat64PanicMin(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	KNum.RandFloat64(float64(5), float64(1))
+}
+
+func TestRandFloat64PanicOverflow(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	KNum.RandFloat64(-math.MaxFloat64, math.MaxFloat64)
+}
+
+func BenchmarkRandFloat64(b *testing.B) {
+	b.ResetTimer()
+	var min float64 = -9999.0
+	var max float64 = 6666.0
+	for i := 0; i < b.N; i++ {
+		KNum.RandFloat64(min, max)
 	}
 }
 
