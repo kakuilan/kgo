@@ -6,6 +6,7 @@ import (
 	"math"
 	"math/rand"
 	"reflect"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -474,9 +475,23 @@ func (ka *LkkArray) JoinStrings(strs []string, delimiter string) (res string) {
 	return
 }
 
-func (ka *LkkArray) JoinInts(ints []int, delimiter string) string {
-	//TODO
-	return ""
+// JoinInts 使用分隔符delimiter连接整数数组.
+func (ka *LkkArray) JoinInts(ints []int, delimiter string) (res string) {
+	length := len(ints)
+	if length == 0 {
+		return
+	}
+
+	var sb strings.Builder
+	for _, num := range ints {
+		sb.WriteString(strconv.Itoa(num))
+		if length--; length > 0 {
+			sb.WriteString(delimiter)
+		}
+	}
+	res = sb.String()
+
+	return
 }
 
 // ArrayDiff 计算数组/切片/字典的差集,返回在 arr1 中但是不在 arr2 里,且非空元素(nil,'')的值.
