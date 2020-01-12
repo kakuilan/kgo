@@ -127,7 +127,6 @@ https://github.com/jimmykuu/webhelpers/blob/master/text.go
 - rsa加解密
 - pid文件检查
 - max/min ->int/float64
-- rand ->int/float64
 - JoinStrings/JoinInts
 - 根据端口查找pid
 

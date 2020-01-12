@@ -691,6 +691,27 @@ func BenchmarkImplode(b *testing.B) {
 	}
 }
 
+func TestJoinStrings(t *testing.T) {
+	var arr = []string{}
+
+	res := KArr.JoinStrings(arr, ",")
+	if res != "" {
+		t.Error("JoinStrings fail")
+		return
+	}
+
+	arr = append(arr, "a", "b", "c", "d", "e")
+	KArr.JoinStrings(arr, ",")
+}
+
+func BenchmarkJoinStrings(b *testing.B) {
+	b.ResetTimer()
+	var arr = []string{"a", "b", "c", "d", "e"}
+	for i := 0; i < b.N; i++ {
+		KArr.JoinStrings(arr, ",")
+	}
+}
+
 func TestArrayDiff(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
