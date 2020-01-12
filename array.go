@@ -6,6 +6,7 @@ import (
 	"math"
 	"math/rand"
 	"reflect"
+	"strings"
 	"time"
 )
 
@@ -431,7 +432,7 @@ func (ka *LkkArray) ArrayReverse(arr interface{}) []interface{} {
 	}
 }
 
-// Implode 用str将数组(仅限数组和切片)的值连接为一个字符串
+// Implode 用str将数组(仅限数组和切片)的值连接为一个字符串.
 func (ka *LkkArray) Implode(str string, arr interface{}) string {
 	val := reflect.ValueOf(arr)
 	switch val.Kind() {
@@ -454,9 +455,23 @@ func (ka *LkkArray) Implode(str string, arr interface{}) string {
 	}
 }
 
-func (ka *LkkArray) JoinStrings(strs []string, delimiter string) string {
-	//TODO
-	return ""
+// JoinStrings 使用分隔符delimiter连接字符串数组.效率比Implode高.
+func (ka *LkkArray) JoinStrings(strs []string, delimiter string) (res string) {
+	length := len(strs)
+	if length == 0 {
+		return
+	}
+
+	var sb strings.Builder
+	for _, str := range strs {
+		sb.WriteString(str)
+		if length--; length > 0 {
+			sb.WriteString(delimiter)
+		}
+	}
+	res = sb.String()
+
+	return
 }
 
 func (ka *LkkArray) JoinInts(ints []int, delimiter string) string {
