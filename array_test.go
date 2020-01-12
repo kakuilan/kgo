@@ -712,6 +712,27 @@ func BenchmarkJoinStrings(b *testing.B) {
 	}
 }
 
+func TestJoinJoinInts(t *testing.T) {
+	var arr = []int{}
+
+	res := KArr.JoinInts(arr, ",")
+	if res != "" {
+		t.Error("JoinStrings fail")
+		return
+	}
+
+	arr = append(arr, 1, 2, 3, 4, 5, 6)
+	KArr.JoinInts(arr, ",")
+}
+
+func BenchmarkJoinInts(b *testing.B) {
+	b.ResetTimer()
+	var arr = []int{1, 2, 3, 4, 5, 6}
+	for i := 0; i < b.N; i++ {
+		KArr.JoinInts(arr, ",")
+	}
+}
+
 func TestArrayDiff(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
