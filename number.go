@@ -158,6 +158,8 @@ func (kn *LkkNumber) MaxInt(nums ...int) (res int) {
 	if len(nums) < 1 {
 		panic("[MaxInt]: the nums length is less than 1")
 	}
+
+	res = nums[0]
 	for _, v := range nums {
 		if v > res {
 			res = v
@@ -172,6 +174,8 @@ func (kn *LkkNumber) MaxFloat64(nums ...float64) (res float64) {
 	if len(nums) < 1 {
 		panic("[MaxFloat64]: the nums length is less than 1")
 	}
+
+	res = nums[0]
 	for _, v := range nums {
 		res = math.Max(res, v)
 	}
@@ -179,7 +183,7 @@ func (kn *LkkNumber) MaxFloat64(nums ...float64) (res float64) {
 	return
 }
 
-// Max 取出任意类型中数值类型的最大值.
+// Max 取出任意类型中数值类型的最大值,无数值类型则为0.
 func (kn *LkkNumber) Max(nums ...interface{}) (res float64) {
 	if len(nums) < 1 {
 		panic("[Max]: the nums length is less than 1")
@@ -187,6 +191,7 @@ func (kn *LkkNumber) Max(nums ...interface{}) (res float64) {
 
 	var err error
 	var val float64
+	res, _ = numeric2Float(nums[0])
 	for _, v := range nums {
 		val, err = numeric2Float(v)
 		if err == nil {
@@ -197,16 +202,51 @@ func (kn *LkkNumber) Max(nums ...interface{}) (res float64) {
 	return
 }
 
-// Min 取出最小值
-func (kn *LkkNumber) Min(nums ...float64) float64 {
-	if len(nums) < 2 {
-		panic("[Min]: the nums length is less than 2")
+// MinInt 整数序列求最小值.
+func (kn *LkkNumber) MinInt(nums ...int) (res int) {
+	if len(nums) < 1 {
+		panic("[MinInt]: the nums length is less than 1")
 	}
-	min := nums[0]
-	for i := 1; i < len(nums); i++ {
-		min = math.Min(min, nums[i])
+	res = nums[0]
+	for _, v := range nums {
+		if v < res {
+			res = v
+		}
 	}
-	return min
+
+	return
+}
+
+// MinFloat64 64位浮点数序列求最小值.
+func (kn *LkkNumber) MinFloat64(nums ...float64) (res float64) {
+	if len(nums) < 1 {
+		panic("[MinFloat64]: the nums length is less than 1")
+	}
+	res = nums[0]
+	for _, v := range nums {
+		res = math.Min(res, v)
+	}
+
+	return
+}
+
+// Min 取出任意类型中数值类型的最小值,无数值类型则为0.
+func (kn *LkkNumber) Min(nums ...interface{}) (res float64) {
+	if len(nums) < 1 {
+		panic("[Min]: the nums length is less than 1")
+	}
+
+	var err error
+	var val float64
+	res, _ = numeric2Float(nums[0])
+	for _, v := range nums {
+		val, err = numeric2Float(v)
+		if err == nil {
+			res = math.Min(res, val)
+		}
+	}
+
+	return
 }
 
 // Exp 计算 e 的指数

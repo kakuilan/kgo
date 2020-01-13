@@ -254,6 +254,12 @@ func TestMaxInt(t *testing.T) {
 		t.Error("MaxInt fail")
 		return
 	}
+
+	res = KNum.MaxInt(-1)
+	if res != -1 {
+		t.Error("MaxInt fail")
+		return
+	}
 }
 
 func TestMaxIntPanic(t *testing.T) {
@@ -277,7 +283,13 @@ func TestMaxFloat64(t *testing.T) {
 	nums := []float64{-4, 0, 3, 9}
 	res := KNum.MaxFloat64(nums...)
 	if int(res) != 9 {
-		t.Error("Max fail")
+		t.Error("MaxFloat64 fail")
+		return
+	}
+
+	res = KNum.MaxFloat64(-1)
+	if int(res) != -1 {
+		t.Error("MaxFloat64 fail")
 		return
 	}
 }
@@ -326,10 +338,75 @@ func BenchmarkMax(b *testing.B) {
 	}
 }
 
-func TestMin(t *testing.T) {
+func TestMinInt(t *testing.T) {
+	nums := []int{-4, 0, 3, 9}
+	res := KNum.MinInt(nums...)
+	if res != -4 {
+		t.Error("MinInt fail")
+		return
+	}
+
+	res = KNum.MinInt(-1)
+	if res != -1 {
+		t.Error("MinInt fail")
+		return
+	}
+}
+
+func TestMinIntPanic(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+	KNum.MinInt()
+}
+
+func BenchmarkMinInt(b *testing.B) {
+	b.ResetTimer()
+	nums := []int{-4, 0, 3, 9}
+	for i := 0; i < b.N; i++ {
+		KNum.MinInt(nums...)
+	}
+}
+
+func TestMaxMinFloat64(t *testing.T) {
 	nums := []float64{-4, 0, 3, 9}
-	res := KNum.Min(nums...)
+	res := KNum.MinFloat64(nums...)
 	if int(res) != -4 {
+		t.Error("MinFloat64 fail")
+		return
+	}
+
+	res = KNum.MinFloat64(-1)
+	if int(res) != -1 {
+		t.Error("MinFloat64 fail")
+		return
+	}
+}
+
+func TestMinFloat64Panic(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+	KNum.MinFloat64()
+}
+
+func BenchmarkMinFloat64(b *testing.B) {
+	b.ResetTimer()
+	nums := []float64{-4, 0, 3, 9}
+	for i := 0; i < b.N; i++ {
+		KNum.MinFloat64(nums...)
+	}
+}
+
+func TestMin(t *testing.T) {
+	nums := []interface{}{-1, 0, "18", true, nil, "hello", int8(1), int16(2), int32(3), int64(4), uint(5),
+		uint8(6), uint16(7), uint32(8), uint64(9), float32(10.0), float64(11.1)}
+	res := KNum.Min(nums...)
+	if int(res) != -1 {
 		t.Error("Min fail")
 		return
 	}
@@ -341,12 +418,12 @@ func TestMinPanic(t *testing.T) {
 			fmt.Println("recover...:", r)
 		}
 	}()
-	KNum.Min(3)
+	KNum.Min()
 }
 
 func BenchmarkMin(b *testing.B) {
 	b.ResetTimer()
-	nums := []float64{-4, 0, 3, 9}
+	nums := []interface{}{-4, 0, 3, 9, "18", true, nil}
 	for i := 0; i < b.N; i++ {
 		KNum.Min(nums...)
 	}
