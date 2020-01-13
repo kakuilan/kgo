@@ -909,27 +909,6 @@ func BenchmarkInRange(b *testing.B) {
 	}
 }
 
-func TestSumAny(t *testing.T) {
-	sum := KNum.Sum(1, 0, 1.2, -3, false, nil, "4")
-	if KNum.NumberFormat(sum, 2, ".", "") != "3.20" {
-		t.Error("Sum fail")
-		return
-	}
-
-	sum = KNum.Sum(true, false, "false", "true")
-	if KNum.NumberFormat(sum, 2, ".", "") != "2.00" {
-		t.Error("Sum fail")
-		return
-	}
-}
-
-func BenchmarkSumAny(b *testing.B) {
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		KNum.Sum(1, 0, 1.2, -3, false, nil, "4")
-	}
-}
-
 func TestSumInt(t *testing.T) {
 	sum := KNum.SumInt(0, 1, -2, 3, 5)
 	if sum != 7 {
@@ -957,5 +936,26 @@ func BenchmarkSumFloat64(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KNum.SumInt(0, 1, -2, 3, 5)
+	}
+}
+
+func TestSumAny(t *testing.T) {
+	sum := KNum.Sum(1, 0, 1.2, -3, false, nil, "4")
+	if KNum.NumberFormat(sum, 2, ".", "") != "3.20" {
+		t.Error("Sum fail")
+		return
+	}
+
+	sum = KNum.Sum(true, false, "false", "true")
+	if KNum.NumberFormat(sum, 2, ".", "") != "0.00" {
+		t.Error("Sum fail")
+		return
+	}
+}
+
+func BenchmarkSumAny(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.Sum(1, 0, 1.2, -3, false, nil, "4")
 	}
 }
