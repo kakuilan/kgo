@@ -959,3 +959,63 @@ func BenchmarkSumAny(b *testing.B) {
 		KNum.Sum(1, 0, 1.2, -3, false, nil, "4")
 	}
 }
+
+func TestAverageInt(t *testing.T) {
+	var res1, res2, res3 float64
+
+	res1 = KNum.AverageInt()
+	res2 = KNum.AverageInt(1)
+	res3 = KNum.AverageInt(1, 2, 3, 4, 5, 6)
+
+	if res1 != 0 || int(res2) != 1 || KNum.NumberFormat(res3, 2, ".", "") != "3.50" {
+		t.Error("AverageInt fail")
+		return
+	}
+}
+
+func BenchmarkAverageInt(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.AverageInt(1, 2, 3, 4, 5, 6)
+	}
+}
+
+func TestAverageFloat64(t *testing.T) {
+	var res1, res2, res3 float64
+
+	res1 = KNum.AverageFloat64()
+	res2 = KNum.AverageFloat64(1)
+	res3 = KNum.AverageFloat64(1, 2, 3, 4, 5, 6)
+
+	if res1 != 0 || int(res2) != 1 || KNum.NumberFormat(res3, 2, ".", "") != "3.50" {
+		t.Error("AverageFloat64 fail")
+		return
+	}
+}
+
+func BenchmarkAverageFloat64(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.AverageFloat64(1, 2, 3, 4, 5, 6)
+	}
+}
+
+func TestAverage(t *testing.T) {
+	var res1, res2, res3 float64
+
+	res1 = KNum.Average()
+	res2 = KNum.Average(1)
+	res3 = KNum.Average(1, 2.0, "3", 4.0, 5, "6")
+
+	if res1 != 0 || int(res2) != 1 || KNum.NumberFormat(res3, 2, ".", "") != "3.50" {
+		t.Error("Average fail")
+		return
+	}
+}
+
+func BenchmarkAverage(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.Average(1, 2.0, "3", 4.0, 5, "6")
+	}
+}

@@ -382,18 +382,18 @@ func (kn *LkkNumber) InRange(value interface{}, left interface{}, right interfac
 }
 
 // SumInt 整数求和.
-func (kn *LkkNumber) SumInt(intput ...int) int {
+func (kn *LkkNumber) SumInt(nums ...int) int {
 	var sum int
-	for _, v := range intput {
+	for _, v := range nums {
 		sum += v
 	}
 	return sum
 }
 
 // SumFloat64 浮点数求和.
-func (kn *LkkNumber) SumFloat64(intput ...float64) float64 {
+func (kn *LkkNumber) SumFloat64(nums ...float64) float64 {
 	var sum float64
-	for _, v := range intput {
+	for _, v := range nums {
 		sum += v
 	}
 	return sum
@@ -408,6 +408,61 @@ func (kn *LkkNumber) Sum(nums ...interface{}) (res float64) {
 		if err == nil {
 			res += val
 		}
+	}
+
+	return
+}
+
+// AverageInt 对整数序列求平均值.
+func (kn *LkkNumber) AverageInt(nums ...int) (res float64) {
+	length := len(nums)
+	if length == 0 {
+		return
+	} else if length == 1 {
+		res = float64(nums[0])
+	} else {
+		total := kn.SumInt(nums...)
+		res = float64(total) / float64(length)
+	}
+
+	return
+}
+
+// AverageFloat64 对浮点数序列求平均值.
+func (kn *LkkNumber) AverageFloat64(nums ...float64) (res float64) {
+	length := len(nums)
+	if length == 0 {
+		return
+	} else if length == 1 {
+		res = nums[0]
+	} else {
+		total := kn.SumFloat64(nums...)
+		res = total / float64(length)
+	}
+
+	return
+}
+
+// Average 对任意类型序列中的数值类型求平均值.
+func (kn *LkkNumber) Average(nums ...interface{}) (res float64) {
+	length := len(nums)
+	if length == 0 {
+		return
+	} else if length == 1 {
+		res, _ = numeric2Float(nums[0])
+	} else {
+		var count int
+		var err error
+		var val, total float64
+		for _, v := range nums {
+			val, err = numeric2Float(v)
+			if err == nil {
+				count++
+				total += val
+			}
+		}
+
+		res = total / float64(count)
 	}
 
 	return
