@@ -300,7 +300,8 @@ func BenchmarkMaxFloat64(b *testing.B) {
 }
 
 func TestMax(t *testing.T) {
-	nums := []interface{}{-4, 0, 3, 9, "18", true, nil}
+	nums := []interface{}{-1, 0, "18", true, nil, int8(1), int16(2), int32(3), int64(4), uint(5),
+		uint8(6), uint16(7), uint32(8), uint64(9), float32(10.0), float64(11.1)}
 	res := KNum.Max(nums...)
 	if int(res) != 18 {
 		t.Error("Max fail")
