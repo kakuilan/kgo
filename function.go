@@ -174,8 +174,8 @@ func isNumeric(val interface{}) bool {
 	return false
 }
 
-// numeric2Float 将数值转换为float64.ignoreInvalid为是否忽略非数值.
-func numeric2Float(val interface{}, ignoreInvalid bool) (res float64, err error) {
+// numeric2Float 将数值转换为float64.
+func numeric2Float(val interface{}) (res float64, err error) {
 	switch val.(type) {
 	case int:
 		res = float64(val.(int))
@@ -204,9 +204,6 @@ func numeric2Float(val interface{}, ignoreInvalid bool) (res float64, err error)
 	case string:
 		str := val.(string)
 		res, err = strconv.ParseFloat(str, 64)
-		if !ignoreInvalid && err != nil {
-			panic(fmt.Sprintf("[numeric2Float]: %s not a numeric", str))
-		}
 	}
 	return
 }

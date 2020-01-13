@@ -154,43 +154,47 @@ func (kn *LkkNumber) Pi() float64 {
 }
 
 // MaxInt 整数序列求最大值.
-func (kn *LkkNumber) MaxInt(nums ...int) int {
+func (kn *LkkNumber) MaxInt(nums ...int) (res int) {
 	if len(nums) < 1 {
 		panic("[MaxInt]: the nums length is less than 1")
 	}
-	max := nums[0]
 	for _, v := range nums {
-		if v > max {
-			max = v
+		if v > res {
+			res = v
 		}
 	}
 
-	return max
+	return
 }
 
 // MaxFloat64 64位浮点数序列求最大值.
-func (kn *LkkNumber) MaxFloat64(nums ...float64) float64 {
+func (kn *LkkNumber) MaxFloat64(nums ...float64) (res float64) {
 	if len(nums) < 1 {
 		panic("[MaxFloat64]: the nums length is less than 1")
 	}
-	max := nums[0]
 	for _, v := range nums {
-		max = math.Max(max, v)
+		res = math.Max(res, v)
 	}
 
-	return max
+	return
 }
 
-// Max 取出最大值
-func (kn *LkkNumber) Max(nums ...float64) float64 {
-	if len(nums) < 2 {
-		panic("[Max]: the nums length is less than 2")
+// Max 取出任意类型中数值类型的最大值.
+func (kn *LkkNumber) Max(nums ...interface{}) (res float64) {
+	if len(nums) < 1 {
+		panic("[Max]: the nums length is less than 1")
 	}
-	max := nums[0]
-	for i := 1; i < len(nums); i++ {
-		max = math.Max(max, nums[i])
+
+	var err error
+	var val float64
+	for _, v := range nums {
+		val, err = numeric2Float(v)
+		if err == nil {
+			res = math.Max(res, val)
+		}
 	}
-	return max
+
+	return
 }
 
 // Min 取出最小值

@@ -300,9 +300,9 @@ func BenchmarkMaxFloat64(b *testing.B) {
 }
 
 func TestMax(t *testing.T) {
-	nums := []float64{-4, 0, 3, 9}
+	nums := []interface{}{-4, 0, 3, 9, "18", true, nil}
 	res := KNum.Max(nums...)
-	if int(res) != 9 {
+	if int(res) != 18 {
 		t.Error("Max fail")
 		return
 	}
@@ -314,12 +314,12 @@ func TestMaxPanic(t *testing.T) {
 			fmt.Println("recover...:", r)
 		}
 	}()
-	KNum.Max(3)
+	KNum.Max()
 }
 
 func BenchmarkMax(b *testing.B) {
 	b.ResetTimer()
-	nums := []float64{-4, 0, 3, 9}
+	nums := []interface{}{-4, 0, 3, 9, "18", true, nil}
 	for i := 0; i < b.N; i++ {
 		KNum.Max(nums...)
 	}
