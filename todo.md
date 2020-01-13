@@ -128,6 +128,8 @@ https://github.com/jimmykuu/webhelpers/blob/master/text.go
 - pid文件检查
 - max/min ->int/float64
 - 根据端口查找pid
+- sum 接口类型要修改
+
 
 
 根据端口查找pid
