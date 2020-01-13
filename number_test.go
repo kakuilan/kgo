@@ -247,6 +247,58 @@ func BenchmarkPi(b *testing.B) {
 	}
 }
 
+func TestMaxInt(t *testing.T) {
+	nums := []int{-4, 0, 3, 9}
+	res := KNum.MaxInt(nums...)
+	if res != 9 {
+		t.Error("MaxInt fail")
+		return
+	}
+}
+
+func TestMaxIntPanic(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+	KNum.MaxInt()
+}
+
+func BenchmarkMaxInt(b *testing.B) {
+	b.ResetTimer()
+	nums := []int{-4, 0, 3, 9}
+	for i := 0; i < b.N; i++ {
+		KNum.MaxInt(nums...)
+	}
+}
+
+func TestMaxFloat64(t *testing.T) {
+	nums := []float64{-4, 0, 3, 9}
+	res := KNum.MaxFloat64(nums...)
+	if int(res) != 9 {
+		t.Error("Max fail")
+		return
+	}
+}
+
+func TestMaxFloat64Panic(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+	KNum.MaxFloat64()
+}
+
+func BenchmarkMaxFloat64(b *testing.B) {
+	b.ResetTimer()
+	nums := []float64{-4, 0, 3, 9}
+	for i := 0; i < b.N; i++ {
+		KNum.MaxFloat64(nums...)
+	}
+}
+
 func TestMax(t *testing.T) {
 	nums := []float64{-4, 0, 3, 9}
 	res := KNum.Max(nums...)

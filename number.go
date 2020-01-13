@@ -153,6 +153,34 @@ func (kn *LkkNumber) Pi() float64 {
 	return math.Pi
 }
 
+// MaxInt 整数序列求最大值.
+func (kn *LkkNumber) MaxInt(nums ...int) int {
+	if len(nums) < 1 {
+		panic("[MaxInt]: the nums length is less than 1")
+	}
+	max := nums[0]
+	for _, v := range nums {
+		if v > max {
+			max = v
+		}
+	}
+
+	return max
+}
+
+// MaxFloat64 64位浮点数序列求最大值.
+func (kn *LkkNumber) MaxFloat64(nums ...float64) float64 {
+	if len(nums) < 1 {
+		panic("[MaxFloat64]: the nums length is less than 1")
+	}
+	max := nums[0]
+	for _, v := range nums {
+		max = math.Max(max, v)
+	}
+
+	return max
+}
+
 // Max 取出最大值
 func (kn *LkkNumber) Max(nums ...float64) float64 {
 	if len(nums) < 2 {
