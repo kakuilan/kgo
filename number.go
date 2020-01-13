@@ -381,17 +381,6 @@ func (kn *LkkNumber) InRange(value interface{}, left interface{}, right interfac
 	return false
 }
 
-// Sum 任意类型求和.注意:其中true和"true"等价于1.0 .
-func (kn *LkkNumber) Sum(intput ...interface{}) float64 {
-	var sum float64
-	for _, item := range intput {
-		v := KConv.ToFloat(item)
-		sum += v
-	}
-
-	return sum
-}
-
 // SumInt 整数求和.
 func (kn *LkkNumber) SumInt(intput ...int) int {
 	var sum int
@@ -408,4 +397,18 @@ func (kn *LkkNumber) SumFloat64(intput ...float64) float64 {
 		sum += v
 	}
 	return sum
+}
+
+// Sum 对任意类型序列中的数值类型求和.
+func (kn *LkkNumber) Sum(nums ...interface{}) (res float64) {
+	var err error
+	var val float64
+	for _, v := range nums {
+		val, err = numeric2Float(v)
+		if err == nil {
+			res += val
+		}
+	}
+
+	return
 }
