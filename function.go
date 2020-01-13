@@ -33,7 +33,7 @@ func md5Str(str []byte, length uint8) []byte {
 	return res
 }
 
-// shaXStr 计算字符串的 shaX 散列值,x为1/256/512
+// shaXStr 计算字符串的 shaX 散列值,x为1/256/512.
 func shaXStr(str []byte, x uint16) []byte {
 	var h hash.Hash
 	switch x {
@@ -58,11 +58,10 @@ func shaXStr(str []byte, x uint16) []byte {
 	return res
 }
 
-// isArrayOrSlice 检查变量是否数组或切片;chkType检查类型,枚举值有(1仅数组,2仅切片,3数组或切片);结果为-1表示非,>=0表示是
+// isArrayOrSlice 检查变量是否数组或切片;chkType检查类型,枚举值有(1仅数组,2仅切片,3数组或切片);结果为-1表示非,>=0表示是.
 func isArrayOrSlice(data interface{}, chkType uint8) int {
 	if chkType != 1 && chkType != 2 && chkType != 3 {
-		msg := fmt.Sprintf("[isArrayOrSlice]chkType value muset in (1, 2, 3), but it`s %d", chkType)
-		panic(msg)
+		panic(fmt.Sprintf("[isArrayOrSlice]chkType value muset in (1, 2, 3), but it`s %d", chkType))
 	}
 
 	var res = -1
@@ -86,7 +85,7 @@ func isMap(data interface{}) bool {
 	return reflect.ValueOf(data).Kind() == reflect.Map
 }
 
-// getEndian 获取系统字节序类型,小端返回binary.LittleEndian,大端返回binary.BigEndian
+// getEndian 获取系统字节序类型,小端返回binary.LittleEndian,大端返回binary.BigEndian .
 func getEndian() binary.ByteOrder {
 	var nativeEndian binary.ByteOrder = binary.LittleEndian
 	buf := [2]byte{}
@@ -102,7 +101,7 @@ func getEndian() binary.ByteOrder {
 	return nativeEndian
 }
 
-// isLittleEndian 系统字节序类型是否小端存储
+// isLittleEndian 系统字节序类型是否小端存储.
 func isLittleEndian() bool {
 	var i int32 = 0x01020304
 
@@ -155,7 +154,7 @@ func isFloat(val interface{}) bool {
 	return false
 }
 
-// isNumeric 变量是否数值(不包含复数和科学计数法)
+// isNumeric 变量是否数值(不包含复数和科学计数法).
 func isNumeric(val interface{}) bool {
 	switch val.(type) {
 	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
@@ -246,7 +245,7 @@ func getTrimMask(characterMask []string) string {
 	return mask
 }
 
-// reflectPtr 获取反射的指向
+// reflectPtr 获取反射的指向.
 func reflectPtr(r reflect.Value) reflect.Value {
 	// 如果是指针，则获取其所指向的元素
 	if r.Kind() == reflect.Ptr {
