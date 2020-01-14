@@ -182,7 +182,7 @@ func (kf *LkkFile) IsImg(path string) bool {
 	}
 }
 
-// Mkdir 新建目录
+// Mkdir 新建目录,允许多级目录.
 func (kf *LkkFile) Mkdir(filename string, mode os.FileMode) error {
 	return os.MkdirAll(filename, mode)
 }
@@ -641,13 +641,13 @@ func (kf *LkkFile) Dirname(path string) string {
 	return filepath.Dir(path)
 }
 
-// Filemtime 取得文件修改时间
-func (kf *LkkFile) Filemtime(filename string) (int64, error) {
-	fileinfo, err := os.Stat(filename)
-	if err != nil {
-		return 0, err
+// GetModTime 获取文件的修改时间戳,秒.
+func (kf *LkkFile) GetModTime(fpath string) (res int64) {
+	fileinfo, err := os.Stat(fpath)
+	if err == nil {
+		res = fileinfo.ModTime().Unix()
 	}
-	return fileinfo.ModTime().Unix(), nil
+	return
 }
 
 // Glob 寻找与模式匹配的文件路径
