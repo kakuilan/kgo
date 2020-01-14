@@ -843,21 +843,22 @@ func BenchmarkDirname(b *testing.B) {
 	}
 }
 
-func TestFilemtime(t *testing.T) {
+func TestGetModTime(t *testing.T) {
 	path := "./testdata/diglett.png"
-	res, err := KFile.Filemtime(path)
-	if err != nil || res == 0 {
-		t.Error("Filemtime fail")
+	res := KFile.GetModTime(path)
+	if res == 0 {
+		t.Error("GetModTime fail")
 		return
 	}
-	_, _ = KFile.Filemtime("./hello")
+
+	KFile.GetModTime("./hello")
 }
 
-func BenchmarkFilemtime(b *testing.B) {
+func BenchmarkGetModTime(b *testing.B) {
 	b.ResetTimer()
 	path := "./testdata/diglett.png"
 	for i := 0; i < b.N; i++ {
-		_, _ = KFile.Filemtime(path)
+		KFile.GetModTime(path)
 	}
 }
 
