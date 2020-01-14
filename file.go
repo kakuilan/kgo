@@ -33,6 +33,16 @@ func (kf *LkkFile) GetContents(path string) ([]byte, error) {
 	return data, err
 }
 
+// ReadInArray 把整个文件读入一个数组中,每行作为一个元素.
+func (kf *LkkFile) ReadInArray(path string) ([]string, error) {
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	return strings.Split(string(data), "\n"), nil
+}
+
 // PutContents 将一个字符串写入文件
 func (kf *LkkFile) PutContents(fpath string, data []byte) error {
 	if dir := path.Dir(fpath); dir != "" {
