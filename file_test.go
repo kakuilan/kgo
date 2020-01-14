@@ -997,3 +997,20 @@ func BenchmarkChmodBatch(b *testing.B) {
 		KFile.ChmodBatch(dir, 0777, 0755)
 	}
 }
+
+func TestReadInArray(t *testing.T) {
+	filepath := "./testdata/dante.txt"
+	arr, err := KFile.ReadInArray(filepath)
+	if err != nil || len(arr) != 19568 {
+		t.Error("ReadInArray fail")
+		return
+	}
+}
+
+func BenchmarkReadInArray(b *testing.B) {
+	b.ResetTimer()
+	filepath := "./testdata/dante.txt"
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.ReadInArray(filepath)
+	}
+}
