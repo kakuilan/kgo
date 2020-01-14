@@ -18,24 +18,24 @@ import (
 	"syscall"
 )
 
-// GetExt 获取文件扩展名,不包括点"."
-func (kf *LkkFile) GetExt(path string) string {
-	suffix := filepath.Ext(path)
+// GetExt 获取文件的小写扩展名,不包括点"." .
+func (kf *LkkFile) GetExt(fpath string) string {
+	suffix := filepath.Ext(fpath)
 	if suffix != "" {
 		return strings.ToLower(suffix[1:])
 	}
 	return suffix
 }
 
-// GetContents 获取文件内容作为字符串
-func (kf *LkkFile) GetContents(path string) ([]byte, error) {
-	data, err := ioutil.ReadFile(path)
+// GetContents 读取文件内容作为字符串.
+func (kf *LkkFile) GetContents(fpath string) ([]byte, error) {
+	data, err := ioutil.ReadFile(fpath)
 	return data, err
 }
 
 // ReadInArray 把整个文件读入一个数组中,每行作为一个元素.
-func (kf *LkkFile) ReadInArray(path string) ([]string, error) {
-	data, err := ioutil.ReadFile(path)
+func (kf *LkkFile) ReadInArray(fpath string) ([]string, error) {
+	data, err := ioutil.ReadFile(fpath)
 	if err != nil {
 		return nil, err
 	}
@@ -54,13 +54,13 @@ func (kf *LkkFile) PutContents(fpath string, data []byte) error {
 }
 
 // GetMime 获取文件mime类型;fast为true时根据后缀快速获取;为false时读取文件头获取
-func (kf *LkkFile) GetMime(path string, fast bool) string {
+func (kf *LkkFile) GetMime(fpath string, fast bool) string {
 	var res string
 	if fast {
-		suffix := filepath.Ext(path)
+		suffix := filepath.Ext(fpath)
 		res = mime.TypeByExtension(suffix)
 	} else {
-		srcFile, err := os.Open(path)
+		srcFile, err := os.Open(fpath)
 		if err != nil {
 			return res
 		}
@@ -78,8 +78,8 @@ func (kf *LkkFile) GetMime(path string, fast bool) string {
 }
 
 // FileSize 获取文件大小(bytes字节),注意:文件不存在或无法访问返回-1
-func (kf *LkkFile) FileSize(path string) int64 {
-	f, err := os.Stat(path)
+func (kf *LkkFile) FileSize(fpath string) int64 {
+	f, err := os.Stat(fpath)
 	if nil != err {
 		return -1
 	}
@@ -87,10 +87,10 @@ func (kf *LkkFile) FileSize(path string) int64 {
 }
 
 // DirSize 获取目录大小(bytes字节)
-func (kf *LkkFile) DirSize(path string) int64 {
+func (kf *LkkFile) DirSize(fpath string) int64 {
 	var size int64
 	//filepath.Walk压测很慢
-	_ = filepath.Walk(path, func(_ string, info os.FileInfo, err error) error {
+	_ = filepath.Walk(fpath, func(_ string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
@@ -103,14 +103,14 @@ func (kf *LkkFile) DirSize(path string) int64 {
 }
 
 // IsExist 路径(文件/目录)是否存在
-func (kf *LkkFile) IsExist(path string) bool {
-	_, err := os.Stat(path)
+func (kf *LkkFile) IsExist(fpath string) bool {
+	_, err := os.Stat(fpath)
 	return err == nil || os.IsExist(err)
 }
 
 // IsWritable 路径是否可写
-func (kf *LkkFile) IsWritable(path string) bool {
-	err := syscall.Access(path, syscall.O_RDWR)
+func (kf *LkkFile) IsWritable(fpath string) bool {
+	err := syscall.Access(fpath, syscall.O_RDWR)
 	if err != nil {
 		return false
 	}
@@ -118,8 +118,8 @@ func (kf *LkkFile) IsWritable(path string) bool {
 }
 
 // IsReadable 路径是否可读
-func (kf *LkkFile) IsReadable(path string) bool {
-	err := syscall.Access(path, syscall.O_RDONLY)
+func (kf *LkkFile) IsReadable(fpath string) bool {
+	err := syscall.Access(fpath, syscall.O_RDONLY)
 	if err != nil {
 		return false
 	}
@@ -127,14 +127,14 @@ func (kf *LkkFile) IsReadable(path string) bool {
 }
 
 // IsExecutable 是否可执行文件
-func (kf *LkkFile) IsExecutable(file string) bool {
-	info, err := os.Stat(file)
+func (kf *LkkFile) IsExecutable(fpath string) bool {
+	info, err := os.Stat(fpath)
 	return err == nil && info.Mode().IsRegular() && (info.Mode()&0111) != 0
 }
 
-// IsFile 是否常规文件(且存在)
-func (kf *LkkFile) IsFile(path string) bool {
-	stat, err := os.Stat(path)
+// IsFile 是否常规文件(且存在).
+func (kf *LkkFile) IsFile(fpath string) bool {
+	stat, err := os.Stat(fpath)
 	if err != nil {
 		return false
 	}
@@ -142,9 +142,9 @@ func (kf *LkkFile) IsFile(path string) bool {
 	return stat.Mode().IsRegular()
 }
 
-// IsLink 是否链接文件(且存在)
-func (kf *LkkFile) IsLink(path string) bool {
-	f, err := os.Lstat(path)
+// IsLink 是否链接文件(且存在).
+func (kf *LkkFile) IsLink(fpath string) bool {
+	f, err := os.Lstat(fpath)
 	if err != nil {
 		return false
 	}
@@ -152,18 +152,18 @@ func (kf *LkkFile) IsLink(path string) bool {
 	return f.Mode()&os.ModeSymlink == os.ModeSymlink
 }
 
-// IsDir 是否目录(且存在)
-func (kf *LkkFile) IsDir(path string) bool {
-	f, err := os.Lstat(path)
+// IsDir 是否目录(且存在).
+func (kf *LkkFile) IsDir(fpath string) bool {
+	f, err := os.Lstat(fpath)
 	if os.IsNotExist(err) || nil != err {
 		return false
 	}
 	return f.IsDir()
 }
 
-// IsBinary 是否二进制文件(且存在)
-func (kf *LkkFile) IsBinary(path string) bool {
-	cont, err := kf.GetContents(path)
+// IsBinary 是否二进制文件(且存在).
+func (kf *LkkFile) IsBinary(fpath string) bool {
+	cont, err := kf.GetContents(fpath)
 	if err != nil {
 		return false
 	}
@@ -172,8 +172,8 @@ func (kf *LkkFile) IsBinary(path string) bool {
 }
 
 // IsImg 是否图片文件
-func (kf *LkkFile) IsImg(path string) bool {
-	ext := kf.GetExt(path)
+func (kf *LkkFile) IsImg(fpath string) bool {
+	ext := kf.GetExt(fpath)
 	switch ext {
 	case "jpg", "jpeg", "bmp", "gif", "png", "svg", "ico":
 		return true
@@ -183,16 +183,16 @@ func (kf *LkkFile) IsImg(path string) bool {
 }
 
 // Mkdir 新建目录,允许多级目录.
-func (kf *LkkFile) Mkdir(filename string, mode os.FileMode) error {
-	return os.MkdirAll(filename, mode)
+func (kf *LkkFile) Mkdir(fpath string, mode os.FileMode) error {
+	return os.MkdirAll(fpath, mode)
 }
 
 // AbsPath 获取绝对路径,path可允许不存在.
-func (kf *LkkFile) AbsPath(path string) string {
+func (kf *LkkFile) AbsPath(fpath string) string {
 	fullPath := ""
-	res, err := filepath.Abs(path) // filepath.Abs最终使用到os.Getwd()检查
+	res, err := filepath.Abs(fpath) // filepath.Abs最终使用到os.Getwd()检查
 	if err != nil {
-		fullPath = filepath.Clean(filepath.Join(`/`, path))
+		fullPath = filepath.Clean(filepath.Join(`/`, fpath))
 	} else {
 		fullPath = res
 	}
@@ -201,14 +201,14 @@ func (kf *LkkFile) AbsPath(path string) string {
 }
 
 // RealPath 返回规范化的真实绝对路径名,path必须存在.若路径不存在则返回空字符串.
-func (kf *LkkFile) RealPath(path string) string {
-	fullPath := path
-	if !filepath.IsAbs(path) {
+func (kf *LkkFile) RealPath(fpath string) string {
+	fullPath := fpath
+	if !filepath.IsAbs(fpath) {
 		wd, err := os.Getwd()
 		if err != nil {
 			return ""
 		}
-		fullPath = filepath.Clean(wd + `/` + path)
+		fullPath = filepath.Clean(wd + `/` + fpath)
 	}
 
 	_, err := os.Stat(fullPath)
@@ -220,16 +220,16 @@ func (kf *LkkFile) RealPath(path string) string {
 }
 
 // Touch 快速创建指定大小的文件,size为字节
-func (kf *LkkFile) Touch(path string, size int64) bool {
+func (kf *LkkFile) Touch(fpath string, size int64) bool {
 	//创建目录
-	destDir := filepath.Dir(path)
+	destDir := filepath.Dir(fpath)
 	if destDir != "" && !kf.IsDir(destDir) {
 		if err := os.MkdirAll(destDir, 0766); err != nil {
 			return false
 		}
 	}
 
-	fd, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0666)
+	fd, err := os.OpenFile(fpath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0666)
 	if err != nil {
 		return false
 	}
@@ -243,14 +243,14 @@ func (kf *LkkFile) Touch(path string, size int64) bool {
 	return true
 }
 
-// Rename 重命名一个文件或目录
+// Rename 重命名一个文件或目录.
 func (kf *LkkFile) Rename(oldname, newname string) error {
 	return os.Rename(oldname, newname)
 }
 
 // Unlink 删除文件
-func (kf *LkkFile) Unlink(filename string) error {
-	return os.Remove(filename)
+func (kf *LkkFile) Unlink(fpath string) error {
+	return os.Remove(fpath)
 }
 
 // CopyFile 拷贝源文件到目标文件,cover为枚举(FILE_COVER_ALLOW、FILE_COVER_IGNORE、FILE_COVER_DENY)
@@ -453,21 +453,21 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 }
 
 // Img2Base64 读取图片文件,并转换为base64字符串.
-func (kf *LkkFile) Img2Base64(path string) (string, error) {
-	if !kf.IsImg(path) {
-		return "", fmt.Errorf("%s is not a image", path)
+func (kf *LkkFile) Img2Base64(fpath string) (string, error) {
+	if !kf.IsImg(fpath) {
+		return "", fmt.Errorf("%s is not a image", fpath)
 	}
 
-	imgBuffer, err := ioutil.ReadFile(path)
+	imgBuffer, err := ioutil.ReadFile(fpath)
 	if err != nil {
 		return "", err
 	}
 
-	ext := kf.GetExt(path)
+	ext := kf.GetExt(fpath)
 	return KStr.Img2Base64(imgBuffer, ext), nil
 }
 
-// DelDir 删除目录;delRoot为true时连该目录一起删除;为false时只清空该目录
+// DelDir 删除目录;delRoot为true时连该目录一起删除;为false时只清空该目录.
 func (kf *LkkFile) DelDir(dir string, delRoot bool) error {
 	realPath := kf.AbsPath(dir)
 	if !kf.IsDir(realPath) {
@@ -495,19 +495,19 @@ func (kf *LkkFile) DelDir(dir string, delRoot bool) error {
 // FileTree 获取目录的文件树列表;
 // ftype为枚举(FILE_TREE_ALL、FILE_TREE_DIR、FILE_TREE_FILE);
 // recursive为是否递归;
-// filters为一个或多个文件过滤器函数,FileFilter类型
-func (kf *LkkFile) FileTree(path string, ftype LkkFileTree, recursive bool, filters ...FileFilter) []string {
+// filters为一个或多个文件过滤器函数,FileFilter类型.
+func (kf *LkkFile) FileTree(fpath string, ftype LkkFileTree, recursive bool, filters ...FileFilter) []string {
 	var trees []string
 
-	if kf.IsFile(path) || kf.IsLink(path) {
+	if kf.IsFile(fpath) || kf.IsLink(fpath) {
 		if ftype != FILE_TREE_DIR {
-			trees = append(trees, path)
+			trees = append(trees, fpath)
 		}
 		return trees
 	}
 
-	path = strings.TrimRight(path, "/")
-	files, err := filepath.Glob(filepath.Join(path, "*"))
+	fpath = strings.TrimRight(fpath, "/")
+	files, err := filepath.Glob(filepath.Join(fpath, "*"))
 	if err != nil || len(files) == 0 {
 		return trees
 	}
@@ -545,22 +545,22 @@ func (kf *LkkFile) FileTree(path string, ftype LkkFileTree, recursive bool, filt
 }
 
 // FormatDir 格式化路径,将"\","//"替换为"/",且以"/"结尾
-func (kf *LkkFile) FormatDir(path string) string {
-	if path == "" {
+func (kf *LkkFile) FormatDir(fpath string) string {
+	if fpath == "" {
 		return ""
 	}
 
 	// 将"\"替换为"/"
-	path = strings.ReplaceAll(path, "\\", "/")
+	fpath = strings.ReplaceAll(fpath, "\\", "/")
 
-	str := RegFormatDir.ReplaceAllString(path, "/")
+	str := RegFormatDir.ReplaceAllString(fpath, "/")
 	return strings.TrimRight(str, "/") + "/"
 }
 
 // Md5 获取文件md5值,length指定结果长度32/16
-func (kf *LkkFile) Md5(path string, length uint8) (string, error) {
+func (kf *LkkFile) Md5(fpath string, length uint8) (string, error) {
 	var res string
-	f, err := os.Open(path)
+	f, err := os.Open(fpath)
 	if err != nil {
 		return res, err
 	}
@@ -584,8 +584,8 @@ func (kf *LkkFile) Md5(path string, length uint8) (string, error) {
 }
 
 // ShaX 计算文件的 shaX 散列值,x为1/256/512
-func (kf *LkkFile) ShaX(path string, x uint16) (string, error) {
-	data, err := ioutil.ReadFile(path)
+func (kf *LkkFile) ShaX(fpath string, x uint16) (string, error) {
+	data, err := ioutil.ReadFile(fpath)
 	if err != nil {
 		return "", err
 	}
@@ -594,23 +594,23 @@ func (kf *LkkFile) ShaX(path string, x uint16) (string, error) {
 }
 
 // Pathinfo 获取文件路径的信息,options的值为-1: all; 1: dirname; 2: basename; 4: extension; 8: filename
-func (kf *LkkFile) Pathinfo(path string, options int) map[string]string {
+func (kf *LkkFile) Pathinfo(fpath string, options int) map[string]string {
 	if options == -1 {
 		options = 1 | 2 | 4 | 8
 	}
 	info := make(map[string]string)
 	if (options & 1) == 1 {
-		info["dirname"] = filepath.Dir(path)
+		info["dirname"] = filepath.Dir(fpath)
 	}
 	if (options & 2) == 2 {
-		info["basename"] = filepath.Base(path)
+		info["basename"] = filepath.Base(fpath)
 	}
 	if ((options & 4) == 4) || ((options & 8) == 8) {
 		basename := ""
 		if (options & 2) == 2 {
 			basename, _ = info["basename"]
 		} else {
-			basename = filepath.Base(path)
+			basename = filepath.Base(fpath)
 		}
 		p := strings.LastIndex(basename, ".")
 		filename, extension := "", ""
@@ -632,13 +632,13 @@ func (kf *LkkFile) Pathinfo(path string, options int) map[string]string {
 }
 
 // Basename 返回路径中的文件名部分
-func (kf *LkkFile) Basename(path string) string {
-	return filepath.Base(path)
+func (kf *LkkFile) Basename(fpath string) string {
+	return filepath.Base(fpath)
 }
 
 // Dirname 返回路径中的目录部分,注意空路径或无目录的返回"."
-func (kf *LkkFile) Dirname(path string) string {
-	return filepath.Dir(path)
+func (kf *LkkFile) Dirname(fpath string) string {
+	return filepath.Dir(fpath)
 }
 
 // GetModTime 获取文件的修改时间戳,秒.
@@ -839,17 +839,17 @@ func (kf *LkkFile) SafeFileName(str string) string {
 }
 
 // ChmodBatch 批量改变路径权限模式(包括子目录和所属文件).filemode为文件权限模式,dirmode为目录权限模式.
-func (kf *LkkFile) ChmodBatch(path string, filemode, dirmode os.FileMode) (res bool) {
+func (kf *LkkFile) ChmodBatch(fpath string, filemode, dirmode os.FileMode) (res bool) {
 	var err error
-	err = filepath.Walk(path, func(path string, f os.FileInfo, err error) error {
+	err = filepath.Walk(fpath, func(fpath string, f os.FileInfo, err error) error {
 		if f == nil {
 			return err
 		}
 
 		if f.IsDir() {
-			err = os.Chmod(path, dirmode)
+			err = os.Chmod(fpath, dirmode)
 		} else {
-			err = os.Chmod(path, filemode)
+			err = os.Chmod(fpath, filemode)
 		}
 
 		return err
