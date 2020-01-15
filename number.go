@@ -66,6 +66,22 @@ func (kn *LkkNumber) Abs(number float64) float64 {
 	return math.Abs(number)
 }
 
+// FloatEqual 比较两个浮点数是否相等.decimals为小数精确位数.
+func (kn *LkkNumber) FloatEqual(f1 float64, f2 float64, decimals ...int) bool {
+	var threshold float64
+	var decimal int
+	if len(decimals) == 0 {
+		decimal = 10
+	} else {
+		decimal = decimals[0]
+	}
+
+	//比较精度
+	threshold = math.Pow10(-decimal)
+
+	return math.Abs(f1-f2) <= threshold
+}
+
 // RandInt 产生一个随机int整数.
 func (kn *LkkNumber) RandInt(min, max int) int {
 	if min > max {
@@ -107,10 +123,6 @@ func (kn *LkkNumber) RandInt64(min, max int64) int64 {
 func (kn *LkkNumber) RandFloat64(min, max float64) float64 {
 	if min > max {
 		panic("[RandFloat64]: min cannot be greater than max")
-	}
-
-	if min == max {
-		return min
 	}
 
 	//范围是否在边界内
