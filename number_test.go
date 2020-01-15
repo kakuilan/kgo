@@ -100,7 +100,13 @@ func TestRandInt64(t *testing.T) {
 	res := KNum.RandInt64(min, max)
 
 	if res < min || res > max {
-		t.Error("Rand fail")
+		t.Error("RandInt64 fail")
+		return
+	}
+
+	res = KNum.RandInt64(5, 5)
+	if res != 5 {
+		t.Error("RandInt64 fail")
 		return
 	}
 }
@@ -339,7 +345,7 @@ func BenchmarkMax(b *testing.B) {
 }
 
 func TestMinInt(t *testing.T) {
-	nums := []int{-4, 0, 3, 9}
+	nums := []int{0, 3, -4, 5, 9}
 	res := KNum.MinInt(nums...)
 	if res != -4 {
 		t.Error("MinInt fail")
@@ -1017,5 +1023,29 @@ func BenchmarkAverage(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KNum.Average(1, 2.0, "3", 4.0, 5, "6")
+	}
+}
+
+func TestFloatEqual(t *testing.T) {
+	var f1, f2 float64
+
+	f1 = 1.2345678
+	f2 = 1.2345679
+
+	chk1 := KNum.FloatEqual(f1, f2)
+	chk2 := KNum.FloatEqual(f1, f2, 6)
+
+	if chk1 || !chk2 {
+		t.Error("FloatEqual fail")
+		return
+	}
+}
+
+func BenchmarkFloatEqual(b *testing.B) {
+	b.ResetTimer()
+	f1 := 1.2345678
+	f2 := 1.2345679
+	for i := 0; i < b.N; i++ {
+		KNum.FloatEqual(f1, f2)
 	}
 }
