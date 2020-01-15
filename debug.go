@@ -60,9 +60,7 @@ func (kd *LkkDebug) GetFuncPackage(funcFile ...string) string {
 
 	fset := token.NewFileSet()
 	astFile, err := parser.ParseFile(fset, sourceFile, nil, parser.PackageClauseOnly)
-	if err != nil {
-		return ""
-	} else if astFile.Name == nil {
+	if err != nil || astFile.Name == nil {
 		return ""
 	}
 
