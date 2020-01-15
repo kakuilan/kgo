@@ -1006,6 +1006,8 @@ func TestReadInArray(t *testing.T) {
 		t.Error("ReadInArray fail")
 		return
 	}
+
+	_, _ = KFile.ReadInArray("./hello")
 }
 
 func BenchmarkReadInArray(b *testing.B) {
