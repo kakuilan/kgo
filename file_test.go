@@ -1031,6 +1031,14 @@ func TestCountLines(t *testing.T) {
 		t.Error("CountLines fail")
 		return
 	}
+
+	filepath = "./testdata/gopher10th-small.jpg"
+	go func() {
+		_ = KFile.Unlink(filepath)
+	}()
+	go func() {
+		res, err = KFile.CountLines(filepath, 1)
+	}()
 }
 
 func BenchmarkCountLines(b *testing.B) {
