@@ -1017,3 +1017,26 @@ func BenchmarkReadInArray(b *testing.B) {
 		_, _ = KFile.ReadInArray(filepath)
 	}
 }
+
+func TestCountLines(t *testing.T) {
+	filepath := "./testdata/dante.txt"
+	res, err := KFile.CountLines(filepath, 0)
+	if err != nil || res == 0 {
+		t.Error("CountLines fail")
+		return
+	}
+
+	res, err = KFile.CountLines("./hello", 8)
+	if err == nil || res != -1 {
+		t.Error("CountLines fail")
+		return
+	}
+}
+
+func BenchmarkCountLines(b *testing.B) {
+	b.ResetTimer()
+	filepath := "./testdata/dante.txt"
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.CountLines(filepath, 0)
+	}
+}
