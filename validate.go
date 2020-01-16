@@ -71,7 +71,14 @@ func (ks *LkkString) IsUtf8(str string) bool {
 
 // IsASCII 是否IsASCII字符串.
 func (ks *LkkString) IsASCII(str string) bool {
-	return str != "" && RegAscii.MatchString(str)
+	//return str != "" && RegAscii.MatchString(str)
+	n := len(str)
+	for i := 0; i < n; i++ {
+		if str[i] > 127 {
+			return false
+		}
+	}
+	return true
 }
 
 // IsMultibyte 字符串是否含有多字节字符.

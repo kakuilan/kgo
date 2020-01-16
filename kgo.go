@@ -240,7 +240,6 @@ var (
 	RegChineseAll            = regexp.MustCompile(PATTERN_CHINESE_ALL)
 	RegChineseName           = regexp.MustCompile(PATTERN_CHINESE_NAME)
 	RegMultiByte             = regexp.MustCompile(PATTERN_MULTIBYTE)
-	RegAscii                 = regexp.MustCompile(PATTERN_ASCII)
 	RegFullWidth             = regexp.MustCompile(PATTERN_FULLWIDTH)
 	RegHalfWidth             = regexp.MustCompile(PATTERN_HALFWIDTH)
 	RegFloat                 = regexp.MustCompile(PATTERN_FLOAT)
@@ -264,4 +263,6 @@ var (
 	RegHtmlTag               = regexp.MustCompile(PATTERN_HTML_TAGS)
 	RegDNSname               = regexp.MustCompile(PATTERN_DNSNAME)
 	RegUrlBackslashDuplicate = regexp.MustCompile(`([^:])[\/]{2,}`) //url中连续的"//"或"\\"或"\/"或"/\"
+//	RegAscii                 = regexp.MustCompile(PATTERN_ASCII)
+
 )
