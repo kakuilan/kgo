@@ -34,6 +34,26 @@ func (ks *LkkString) IsLetters(str string) bool {
 	return true
 }
 
+// IsUpper 字符串是否全部大写.
+func (ks *LkkString) IsUpper(str string) bool {
+	for _, r := range str {
+		if !unicode.IsUpper(r) && unicode.IsLetter(r) {
+			return false
+		}
+	}
+	return true
+}
+
+// IsLower 字符串是否全部小写.
+func (ks *LkkString) IsLower(str string) bool {
+	for _, r := range str {
+		if !unicode.IsLower(r) && unicode.IsLetter(r) {
+			return false
+		}
+	}
+	return true
+}
+
 // HasLetter 字符串是否含有(英文)字母
 func (ks *LkkString) HasLetter(str string) bool {
 	for _, r := range str {

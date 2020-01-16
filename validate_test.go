@@ -1509,3 +1509,49 @@ B7ucimFvjHTtuxziXZQRO7HlcsBOa0WwvDJnRnskdyoD31s4F4jpKEYBJNWTo63v6lUvbQIDAQAB`
 		KStr.IsRsaPublicKey(str, 2048)
 	}
 }
+
+func TestIsUpper(t *testing.T) {
+	str1 := "HELLO"
+	str2 := "world"
+	str3 := "中文"
+
+	res1 := KStr.IsUpper(str1)
+	res2 := KStr.IsUpper(str2)
+	res3 := KStr.IsUpper(str3)
+
+	if !res1 || res2 || res3 {
+		t.Error("IsUpper fail")
+		return
+	}
+}
+
+func BenchmarkIsUpper(b *testing.B) {
+	b.ResetTimer()
+	str := "HELLO WORLD"
+	for i := 0; i < b.N; i++ {
+		KStr.IsUpper(str)
+	}
+}
+
+func TestIsLower(t *testing.T) {
+	str1 := "HELLO"
+	str2 := "world"
+	str3 := "中文"
+
+	res1 := KStr.IsLower(str1)
+	res2 := KStr.IsLower(str2)
+	res3 := KStr.IsLower(str3)
+
+	if res1 || !res2 || res3 {
+		t.Error("IsLower fail")
+		return
+	}
+}
+
+func BenchmarkIsLower(b *testing.B) {
+	b.ResetTimer()
+	str := "hello World"
+	for i := 0; i < b.N; i++ {
+		KStr.IsLower(str)
+	}
+}
