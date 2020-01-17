@@ -31,6 +31,22 @@ func (ks *LkkString) IsLetters(str string) bool {
 	return str != ""
 }
 
+// IsBlank 是否空(空白)字符.
+func (ks *LkkString) IsBlank(str string) bool {
+	// Check length
+	if len(str) > 0 {
+		// Iterate string
+		for i := range str {
+			// Check about char different from whitespace
+			// 227为全角空格
+			if str[i] > 32 && str[i] != 227 {
+				return false
+			}
+		}
+	}
+	return true
+}
+
 // IsUpper 字符串是否全部大写.
 func (ks *LkkString) IsUpper(str string) bool {
 	for _, r := range str {

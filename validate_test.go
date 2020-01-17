@@ -1555,3 +1555,25 @@ func BenchmarkIsLower(b *testing.B) {
 		KStr.IsLower(str)
 	}
 }
+
+func TestIsBlank(t *testing.T) {
+	str1 := " 0"
+	str2 := " \t\n\r\v\f　"
+	str3 := "a1~"
+
+	res1 := KStr.IsBlank(str1)
+	res2 := KStr.IsBlank(str2)
+	res3 := KStr.IsBlank(str3)
+	if res1 || !res2 || res3 {
+		t.Error("IsBlank fail")
+		return
+	}
+}
+
+func BenchmarkIsBlank(b *testing.B) {
+	b.ResetTimer()
+	str := "hello World"
+	for i := 0; i < b.N; i++ {
+		KStr.IsBlank(str)
+	}
+}
