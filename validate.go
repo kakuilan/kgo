@@ -23,15 +23,12 @@ import (
 
 // IsLetters 字符串是否全(英文)字母组成
 func (ks *LkkString) IsLetters(str string) bool {
-	if str == "" {
-		return false
-	}
 	for _, r := range str {
 		if (r < 'a' || r > 'z') && (r < 'A' || r > 'Z') {
 			return false
 		}
 	}
-	return true
+	return str != ""
 }
 
 // IsUpper 字符串是否全部大写.
@@ -41,7 +38,7 @@ func (ks *LkkString) IsUpper(str string) bool {
 			return false
 		}
 	}
-	return true
+	return str != ""
 }
 
 // IsLower 字符串是否全部小写.
@@ -51,7 +48,7 @@ func (ks *LkkString) IsLower(str string) bool {
 			return false
 		}
 	}
-	return true
+	return str != ""
 }
 
 // HasLetter 字符串是否含有(英文)字母
@@ -66,7 +63,7 @@ func (ks *LkkString) HasLetter(str string) bool {
 
 // IsUtf8 字符串是否UTF-8编码
 func (ks *LkkString) IsUtf8(str string) bool {
-	return utf8.ValidString(str)
+	return str != "" && utf8.ValidString(str)
 }
 
 // IsASCII 是否IsASCII字符串.
@@ -78,7 +75,8 @@ func (ks *LkkString) IsASCII(str string) bool {
 			return false
 		}
 	}
-	return true
+
+	return str != ""
 }
 
 // IsMultibyte 字符串是否含有多字节字符.
@@ -169,7 +167,7 @@ func (ks *LkkString) IsJSON(str string) bool {
 
 // IsIP 检查字符串是否IP地址.
 func (ks *LkkString) IsIP(str string) bool {
-	return net.ParseIP(str) != nil
+	return str != "" && net.ParseIP(str) != nil
 }
 
 // IsIPv4 检查字符串是否IPv4地址
