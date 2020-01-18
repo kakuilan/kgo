@@ -366,12 +366,14 @@ func TestIsEmail(t *testing.T) {
 	}
 
 	//有效的账号
-	res5, _ := KStr.IsEmail("copyright@github.com", true)
+	res5, err := KStr.IsEmail("copyright@github.com", true)
 	host, _ := KOS.Hostname()
 	//travis-ci不允许出站SMTP通信
 	if !res5 && strings.Contains(host, "travis") == false {
 		t.Error("IsEmail fail")
 		return
+	} else if err != nil {
+		println("IsEmail fail:", err.Error())
 	}
 }
 
