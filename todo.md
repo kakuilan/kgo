@@ -53,9 +53,9 @@
 - https://github.com/idoall/TokenExchangeCommon/blob/master/commonutils/utils.go
 - https://github.com/afanti-com/utils-go -x
 - https://github.com/solo-io/go-utils -x
-- https://github.com/txthinking/x
-- https://github.com/TruthHun/gotil
-- https://github.com/xiaonanln/go-xnsyncutil
+- https://github.com/txthinking/x -x
+- https://github.com/TruthHun/gotil -x
+- https://github.com/xiaonanln/go-xnsyncutil -x
 - https://github.com/0xrawsec/golang-utils
 - https://github.com/Laisky/go-utils
 - https://github.com/xgfone/go-tools

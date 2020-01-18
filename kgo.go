@@ -190,6 +190,18 @@ const (
 
 	// 正则模式-DNS名称
 	PATTERN_DNSNAME = `^([a-zA-Z0-9_]{1}[a-zA-Z0-9_-]{0,62}){1}(\.[a-zA-Z0-9_]{1}[a-zA-Z0-9_-]{0,62})*[\._]?$`
+
+	// 正则模式-MD5
+	PATTERN_MD5 = `^(?i)([0-9a-h]{32})$`
+
+	// 正则模式-SHA1
+	PATTERN_SHA1 = `^(?i)([0-9a-h]{40})$`
+
+	// 正则模式-SHA256
+	PATTERN_SHA256 = `^(?i)([0-9a-h]{64})$`
+
+	// 正则模式-SHA512
+	PATTERN_SHA512 = `^(?i)([0-9a-h]{128})$`
 )
 
 var (
@@ -263,6 +275,11 @@ var (
 	RegHtmlTag               = regexp.MustCompile(PATTERN_HTML_TAGS)
 	RegDNSname               = regexp.MustCompile(PATTERN_DNSNAME)
 	RegUrlBackslashDuplicate = regexp.MustCompile(`([^:])[\/]{2,}`) //url中连续的"//"或"\\"或"\/"或"/\"
+	RegMd5                   = regexp.MustCompile(PATTERN_MD5)
+	RegSha1                  = regexp.MustCompile(PATTERN_SHA1)
+	RegSha256                = regexp.MustCompile(PATTERN_SHA256)
+	RegSha512                = regexp.MustCompile(PATTERN_SHA512)
+
 //	RegAscii                 = regexp.MustCompile(PATTERN_ASCII)
 
 )

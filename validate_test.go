@@ -1577,3 +1577,87 @@ func BenchmarkIsBlank(b *testing.B) {
 		KStr.IsBlank(str)
 	}
 }
+
+func TestIsMd5(t *testing.T) {
+	str := "hello world"
+	md5 := KStr.Md5(str, 32)
+
+	res1 := KStr.IsMd5(md5)
+	res2 := KStr.IsMd5("")
+	res3 := KStr.IsMd5(str)
+	if !res1 || res2 || res3 {
+		t.Error("IsMd5 fail")
+		return
+	}
+}
+
+func BenchmarkIsMd5(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!"
+	for i := 0; i < b.N; i++ {
+		KStr.IsMd5(str)
+	}
+}
+
+func TestIsSha1(t *testing.T) {
+	str := "hello world"
+	has := KStr.ShaX(str, 1)
+
+	res1 := KStr.IsSha1(has)
+	res2 := KStr.IsSha1("")
+	res3 := KStr.IsSha1(str)
+	if !res1 || res2 || res3 {
+		t.Error("IsSha1 fail")
+		return
+	}
+}
+
+func BenchmarkIsSha1(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!"
+	for i := 0; i < b.N; i++ {
+		KStr.IsSha1(str)
+	}
+}
+
+func TestIsSha256(t *testing.T) {
+	str := "hello world"
+	has := KStr.ShaX(str, 256)
+
+	res1 := KStr.IsSha256(has)
+	res2 := KStr.IsSha256("")
+	res3 := KStr.IsSha256(str)
+	if !res1 || res2 || res3 {
+		t.Error("IsSha256 fail")
+		return
+	}
+}
+
+func BenchmarkIsSha256(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!"
+	for i := 0; i < b.N; i++ {
+		KStr.IsSha256(str)
+	}
+}
+
+func TestIsSha512(t *testing.T) {
+	str := "hello world"
+	has := KStr.ShaX(str, 512)
+
+	res1 := KStr.IsSha512(has)
+	res2 := KStr.IsSha512("")
+	res3 := KStr.IsSha512(str)
+	if !res1 || res2 || res3 {
+		t.Error("IsSha512 fail")
+		return
+	}
+}
+
+func BenchmarkIsSha512(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!"
+	for i := 0; i < b.N; i++ {
+		KStr.IsSha512(str)
+	}
+}
