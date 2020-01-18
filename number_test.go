@@ -1049,3 +1049,29 @@ func BenchmarkFloatEqual(b *testing.B) {
 		KNum.FloatEqual(f1, f2)
 	}
 }
+
+func TestGeoDistance(t *testing.T) {
+	var lat1, lng1, lat2, lng2, res1, res2 float64
+
+	lat1, lng1 = 30.0, 45.0
+	lat2, lng2 = 40.0, 90.0
+	res1 = KNum.GeoDistance(lng1, lat1, lng2, lat2)
+
+	lat1, lng1 = 390.0, 405.0
+	lat2, lng2 = -320.0, 90.0
+	res2 = KNum.GeoDistance(lng1, lat1, lng2, lat2)
+
+	if res1 <= 0 || res2 <= 0 || !KNum.FloatEqual(res1, res2) {
+		t.Error("GeoDistance fail")
+		return
+	}
+}
+
+func BenchmarkGeoDistance(b *testing.B) {
+	b.ResetTimer()
+	lat1, lng1 := 30.0, 45.0
+	lat2, lng2 := 40.0, 90.0
+	for i := 0; i < b.N; i++ {
+		KNum.GeoDistance(lng1, lat1, lng2, lat2)
+	}
+}
