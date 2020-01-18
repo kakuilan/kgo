@@ -737,6 +737,14 @@ func BenchmarkIsPortOpen(b *testing.B) {
 	}
 }
 
+func TestForceGC(t *testing.T) {
+	KOS.ForceGC()
+}
+
+func TestTriggerGC(t *testing.T) {
+	KOS.TriggerGC()
+}
+
 func BenchmarkForceGC(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
