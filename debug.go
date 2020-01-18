@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-// GetFunctionName 获取调用方法的名称;f为目标方法;onlyFun为true时仅返回方法,不包括包名
+// GetFunctionName 获取调用方法的名称;f为目标方法;onlyFun为true时仅返回方法,不包括包名.
 func (kd *LkkDebug) GetFuncName(f interface{}, onlyFun ...bool) string {
 	var funcObj *runtime.Func
 	if f == nil {

@@ -56,8 +56,8 @@
 - https://github.com/txthinking/x -x
 - https://github.com/TruthHun/gotil -x
 - https://github.com/xiaonanln/go-xnsyncutil -x
-- https://github.com/0xrawsec/golang-utils
-- https://github.com/Laisky/go-utils
+- https://github.com/0xrawsec/golang-utils -x
+- https://github.com/Laisky/go-utils -x
 - https://github.com/xgfone/go-tools
 - https://github.com/printfcoder/goutils
 - https://github.com/space307/go-utils
@@ -85,6 +85,7 @@
 - https://github.com/gookit/goutil
 - https://github.com/henrylee2cn/utils
 - https://github.com/billmi/go-utils
+- https://github.com/zcalusic/sysinfo
 
 
 
