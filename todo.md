@@ -1,7 +1,6 @@
 ### 参考项目
 - https://www.php2golang.com/
-- https://github.com/alessiosavi/GoGPUtils
-- https://github.com/alessiosavi/GoUtils
+- https://github.com/alessiosavi/GoGPUtils -x
 - https://github.com/b3log/gulu -x
 - https://github.com/syyongx/php2go -x
 - https://github.com/openset/php2go -x
@@ -29,7 +28,7 @@
 - https://github.com/leifengyao/go2php  -x
 - https://github.com/leizongmin/go-utils   -x
 - https://github.com/lets-go-go/helper  -x
-- https://github.com/mylxsw/go-toolkit  -未完成
+- https://github.com/mylxsw/go-toolkit  -x
 - https://github.com/nletech/go-func    -x
 - https://github.com/orivil/helper  -x
 - https://github.com/relunctance/goutils -x
@@ -52,8 +51,8 @@
 - https://github.com/torden/go-strutil  -x
 - https://golang.hotexamples.com/examples/unicode/-/IsControl/golang-iscontrol-function-examples.html
 - https://github.com/idoall/TokenExchangeCommon/blob/master/commonutils/utils.go
-- https://github.com/afanti-com/utils-go
-- https://github.com/solo-io/go-utils
+- https://github.com/afanti-com/utils-go -x
+- https://github.com/solo-io/go-utils -x
 - https://github.com/txthinking/x
 - https://github.com/TruthHun/gotil
 - https://github.com/xiaonanln/go-xnsyncutil
