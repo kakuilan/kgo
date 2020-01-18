@@ -470,6 +470,26 @@ func (ks *LkkString) IsUrlExists(str string) bool {
 	return true
 }
 
+// IsMd5 是否md5值.
+func (ks *LkkString) IsMd5(str string) bool {
+	return str != "" && RegMd5.MatchString(str)
+}
+
+// IsSha1 是否Sha1值.
+func (ks *LkkString) IsSha1(str string) bool {
+	return str != "" && RegSha1.MatchString(str)
+}
+
+// IsSha256 是否Sha256值.
+func (ks *LkkString) IsSha256(str string) bool {
+	return str != "" && RegSha256.MatchString(str)
+}
+
+// IsSha512 是否Sha512值.
+func (ks *LkkString) IsSha512(str string) bool {
+	return str != "" && RegSha512.MatchString(str)
+}
+
 // IsArrayOrSlice 检查变量是否数组或切片;chkType检查类型,枚举值有(1仅数组,2仅切片,3数组或切片);结果为-1表示非,>=0表示是
 func (ka *LkkArray) IsArrayOrSlice(data interface{}, chkType uint8) int {
 	return isArrayOrSlice(data, chkType)

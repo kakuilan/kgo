@@ -133,12 +133,12 @@ loopDom:
 	return ks.RemoveSpace(text, false)
 }
 
-// Md5 获取字符串md5值,length指定结果长度32/16
+// Md5 获取字符串md5值,length指定结果长度32/16 .
 func (ks *LkkString) Md5(str string, length uint8) string {
 	return string(md5Str([]byte(str), length))
 }
 
-// ShaX 计算字符串的 shaX 散列值,x为1/256/512
+// ShaX 计算字符串的 shaX 散列值,x为1/256/512 .
 func (ks *LkkString) ShaX(str string, x uint16) string {
 	return string(shaXStr([]byte(str), x))
 }
