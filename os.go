@@ -14,6 +14,7 @@ import (
 	"os/user"
 	"path/filepath"
 	"runtime"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"syscall"
@@ -621,4 +622,17 @@ func (ko *LkkOS) IsPortOpen(host string, port interface{}, protocols ...string) 
 func (ko *LkkOS) GetPidByPort(port int) (pid int) {
 	// TODO
 	return
+}
+
+// ForceGC 强制手动GC垃圾回收(阻塞).
+func (ko *LkkOS) ForceGC() {
+	runtime.GC()
+	debug.FreeOSMemory()
+}
+
+// TriggerGC 触发GC(非阻塞).
+func (ko *LkkOS) TriggerGC() {
+	go func() {
+		ko.ForceGC()
+	}()
 }

@@ -736,3 +736,17 @@ func BenchmarkIsPortOpen(b *testing.B) {
 		KOS.IsPortOpen("127.0.0.1", 80, "tcp")
 	}
 }
+
+func BenchmarkForceGC(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.ForceGC()
+	}
+}
+
+func BenchmarkTriggerGC(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.TriggerGC()
+	}
+}
