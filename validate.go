@@ -12,11 +12,9 @@ import (
 	"math"
 	"net"
 	"net/http"
-	"net/smtp"
 	"net/url"
 	"reflect"
 	"strings"
-	"time"
 	"unicode"
 	"unicode/utf8"
 )
@@ -244,51 +242,30 @@ func (ks *LkkString) IsHost(str string) bool {
 	return ks.IsIP(str) || ks.IsDNSName(str)
 }
 
-// IsEmail 检查字符串是否邮箱.参数validateTrue,是否验证邮箱的真实性.
-func (ks *LkkString) IsEmail(email string, validateTrue bool) (bool, error) {
+// IsEmail 检查字符串是否邮箱.参数validateTrue,是否验证邮箱主机的真实性.
+func (ks *LkkString) IsEmail(email string, validateHost bool) (bool, error) {
+	//长度检查
+	length := len(email)
+	at := strings.LastIndexByte(email, '@')
+	if (length < 6 || length > 254) || (at <= 0 || at > length-3) {
+		return false, fmt.Errorf("invalid email length")
+	}
+
 	//验证邮箱格式
 	chkFormat := RegEmail.MatchString(email)
 	if !chkFormat {
 		return false, fmt.Errorf("invalid email format")
 	}
 
-	//验证真实性
-	if validateTrue {
-		i := strings.LastIndexByte(email, '@')
-		host := email[i+1:]
-
-		// MX records
-		mx, err := net.LookupMX(host)
-		if err != nil {
-			return false, err
-		}
-
-		server := fmt.Sprintf("%s:%d", mx[0].Host, 25)
-		conn, err := net.DialTimeout("tcp", server, CHECK_CONNECT_TIMEOUT)
-		if err != nil {
-			return false, err
-		}
-
-		t := time.AfterFunc(CHECK_CONNECT_TIMEOUT, func() { conn.Close() })
-		defer t.Stop()
-
-		client, err := smtp.NewClient(conn, host)
-		if err != nil {
-			return false, err
-		}
-		defer client.Close()
-
-		err = client.Hello("checkmail.me")
-		if err != nil {
-			return false, err
-		}
-		err = client.Mail("kakuilan@gmail.com")
-		if err != nil {
-			return false, err
-		}
-		err = client.Rcpt(email)
-		if err != nil {
-			return false, err
+	//验证主机
+	if validateHost {
+		host := email[at+1:]
+		if _, err := net.LookupMX(host); err != nil {
+			//因无法确定mx主机的smtp端口,所以去掉Hello/Mail/Rcpt检查邮箱是否存在
+			//仅检查主机是否有效
+			if _, err := net.LookupIP(host); err != nil {
+				return false, err
+			}
 		}
 	}
 
