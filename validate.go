@@ -263,6 +263,7 @@ func (ks *LkkString) IsEmail(email string, validateHost bool) (bool, error) {
 		if _, err := net.LookupMX(host); err != nil {
 			//因无法确定mx主机的smtp端口,所以去掉Hello/Mail/Rcpt检查邮箱是否存在
 			//仅检查主机是否有效
+			//TODO 仅对国内几家大的邮件厂家进行检查
 			if _, err := net.LookupIP(host); err != nil {
 				return false, err
 			}
