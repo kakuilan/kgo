@@ -411,7 +411,7 @@ func (ko *LkkOS) System(command string) (retInt int, outStr, errStr []byte) {
 	}
 
 	var stdout, stderr bytes.Buffer
-	var err, err1, err2, err3 error
+	var err error
 
 	cmd := exec.Command(parts[0], parts[1:]...)
 	stdoutIn, _ := cmd.StdoutPipe()
@@ -423,40 +423,27 @@ func (ko *LkkOS) System(command string) (retInt int, outStr, errStr []byte) {
 	if err != nil {
 		retInt = 1 //失败
 		stderr.WriteString(err.Error())
-		errStr = stderr.Bytes()
-		fmt.Printf("%s\n", errStr)
+		fmt.Printf("%s\n", stderr.Bytes())
 		return
 	}
 
 	go func() {
-		_, err1 = io.Copy(outWr, stdoutIn)
+		_, _ = io.Copy(outWr, stdoutIn)
 	}()
 	go func() {
-		_, err2 = io.Copy(errWr, stderrIn)
+		_, _ = io.Copy(errWr, stderrIn)
 	}()
 
-	err3 = cmd.Wait()
-	if err1 != nil || err2 != nil || err3 != nil {
-		if err1 != nil {
-			stderr.WriteString(err1.Error())
-			errStr = stderr.Bytes()
-			fmt.Println(err1)
-		}
-		if err2 != nil {
-			stderr.WriteString(err2.Error())
-			errStr = stderr.Bytes()
-			fmt.Println(err2)
-		}
-		if err3 != nil {
-			stderr.WriteString(err3.Error())
-			errStr = stderr.Bytes()
-			fmt.Println(err3)
-		}
+	err = cmd.Wait()
+	if err != nil {
+		stderr.WriteString(err.Error())
+		fmt.Println(stderr.Bytes())
 		retInt = 1 //失败
 	} else {
 		retInt = 0 //成功
-		outStr, errStr = stdout.Bytes(), stderr.Bytes()
 	}
+	outStr, errStr = stdout.Bytes(), stderr.Bytes()
+
 	return
 }
 
