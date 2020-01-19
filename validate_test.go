@@ -3,7 +3,6 @@ package kgo
 import (
 	"fmt"
 	"math"
-	"strings"
 	"testing"
 )
 
@@ -337,43 +336,41 @@ func BenchmarkIsIPv6(b *testing.B) {
 }
 
 func TestIsEmail(t *testing.T) {
-	//无效的邮箱格式
-	res1, _ := KStr.IsEmail("ç$€§/az@gmail.com", false)
-	if res1 {
+	var res bool
+	//长度验证
+	res, _ = KStr.IsEmail("a@b.c", false)
+	if res {
+		t.Error("IsEmail fail")
+		return
+	}
+	res, _ = KStr.IsEmail("hello-world@c", false)
+	if res {
 		t.Error("IsEmail fail")
 		return
 	}
 
-	//有效的邮箱格式
-	res2, _ := KStr.IsEmail("abc@abc123.com", false)
-	if !res2 {
+	//无效的格式
+	res, _ = KStr.IsEmail("ç$€§/az@gmail.com", false)
+	if res {
 		t.Error("IsEmail fail")
 		return
 	}
 
 	//无效的域名
-	res3, _ := KStr.IsEmail("email@x-unkown-domain.com", true)
-	if res3 {
-		t.Error("IsEmail fail")
-		return
-	}
-
-	//无效的账号
-	res4, _ := KStr.IsEmail("unknown-user-123456789@gmail.com", true)
-	if res4 {
+	res, _ = KStr.IsEmail("email@x-unkown-domain.com", true)
+	if res {
 		t.Error("IsEmail fail")
 		return
 	}
 
 	//有效的账号
-	res5, err := KStr.IsEmail("copyright@github.com", true)
-	host, _ := KOS.Hostname()
-	//travis-ci不允许出站SMTP通信
-	if !res5 && strings.Contains(host, "travis") == false {
+	res, err := KStr.IsEmail("copyright@github.com", true)
+	if !res {
 		t.Error("IsEmail fail")
 		return
 	} else if err != nil {
-		println("IsEmail fail:", err.Error())
+		t.Error("IsEmail fail:", err.Error())
+		return
 	}
 }
 
