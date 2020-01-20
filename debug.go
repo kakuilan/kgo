@@ -73,3 +73,12 @@ func (kd *LkkDebug) DumpStacks() {
 	buf = buf[:runtime.Stack(buf, true)]
 	fmt.Printf("=== BEGIN goroutine stack dump ===\n%s\n=== END goroutine stack dump ===", buf)
 }
+
+// 检查是否具有某方法.
+func (kd *LkkDebug) HasMethod(t interface{}, method string) bool {
+	_, ok := reflect.TypeOf(t).MethodByName(method)
+	if ok {
+		return true
+	}
+	return false
+}
