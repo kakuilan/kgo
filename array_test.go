@@ -997,3 +997,23 @@ func BenchmarkHasMethod(b *testing.B) {
 		KDbug.HasMethod(test, "IsLinux")
 	}
 }
+
+func TestGetMethod(t *testing.T) {
+	var test = &KOS
+
+	fun1 := KDbug.GetMethod(test, "GoMemory")
+	fun2 := KDbug.GetMethod(test, "Hello")
+
+	if fun1 == nil || fun2 != nil {
+		t.Error("GetMethod fail")
+		return
+	}
+}
+
+func BenchmarkGetMethod(b *testing.B) {
+	b.ResetTimer()
+	var test = &KOS
+	for i := 0; i < b.N; i++ {
+		KDbug.GetMethod(test, "GoMemory")
+	}
+}
