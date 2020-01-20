@@ -296,3 +296,12 @@ func compareConditionMap(condition map[string]interface{}, arr interface{}) (res
 
 	return
 }
+
+// getMethod 获取对象的方法.
+func getMethod(t interface{}, method string) reflect.Value {
+	m, b := reflect.TypeOf(t).MethodByName(method)
+	if !b {
+		return reflect.ValueOf(nil)
+	}
+	return m.Func
+}

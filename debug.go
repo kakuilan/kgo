@@ -74,11 +74,22 @@ func (kd *LkkDebug) DumpStacks() {
 	fmt.Printf("=== BEGIN goroutine stack dump ===\n%s\n=== END goroutine stack dump ===", buf)
 }
 
-// 检查是否具有某方法.
+// HasMethod 检查对象是否具有某方法.
 func (kd *LkkDebug) HasMethod(t interface{}, method string) bool {
 	_, ok := reflect.TypeOf(t).MethodByName(method)
 	if ok {
 		return true
 	}
 	return false
+}
+
+// GetMethod 获取对象中的方法.
+// 注意:返回的该方法中的第一个参数是接收者.
+// 所以,调用该方法时,必须将接收者作为第一个参数传递.
+func (kd *LkkDebug) GetMethod(t interface{}, method string) interface{} {
+	m := getMethod(t, method)
+	if !m.IsValid() || m.IsNil() {
+		return nil
+	}
+	return m.Interface()
 }
