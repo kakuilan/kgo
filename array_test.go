@@ -978,3 +978,22 @@ func TestGetPidByPort(t *testing.T) {
 	res := KOS.GetPidByPort(22)
 	println("pid:", res)
 }
+
+func TestHasMethod(t *testing.T) {
+	var test = &KOS
+
+	chk1 := KDbug.HasMethod(test, "IsLinux")
+	chk2 := KDbug.HasMethod(test, "Hello")
+	if !chk1 || chk2 {
+		t.Error("HasMethod fail")
+		return
+	}
+}
+
+func BenchmarkHasMethod(b *testing.B) {
+	b.ResetTimer()
+	var test = &KOS
+	for i := 0; i < b.N; i++ {
+		KDbug.HasMethod(test, "IsLinux")
+	}
+}
