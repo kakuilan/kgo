@@ -93,3 +93,17 @@ func (kd *LkkDebug) GetMethod(t interface{}, method string) interface{} {
 	}
 	return m.Interface()
 }
+
+// CallMethod 调用对象的方法.
+// 若执行成功,则结果是该方法的返回结果;
+// 否则返回(nil, error)
+func (kd *LkkDebug) CallMethod(t interface{}, method string, args ...interface{}) ([]interface{}, error) {
+	m := kd.GetMethod(t, method)
+	if m == nil {
+		return nil, fmt.Errorf("Don't have method: %s", method)
+	}
+	_args := make([]interface{}, len(args)+1)
+	_args[0] = t
+	copy(_args[1:], args)
+	return CallFunc(m, _args...)
+}
