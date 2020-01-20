@@ -1017,3 +1017,32 @@ func BenchmarkGetMethod(b *testing.B) {
 		KDbug.GetMethod(test, "GoMemory")
 	}
 }
+
+func TestCallMethod(t *testing.T) {
+	var test = &KOS
+
+	//无参数调用
+	res1, err1 := KDbug.CallMethod(test, "GoMemory")
+	if res1 == nil || err1 != nil {
+		t.Error("CallMethod fail")
+		return
+	}
+
+	//调用不存在的方法
+	res2, err2 := KDbug.CallMethod(test, "Hello")
+	if res2 != nil || err2 == nil {
+		t.Error("CallMethod fail")
+		return
+	}
+
+	//有参数调用
+	//TODO https://segmentfault.com/a/1190000016230264
+}
+
+func BenchmarkCallMethod(b *testing.B) {
+	b.ResetTimer()
+	var test = &KOS
+	for i := 0; i < b.N; i++ {
+		KDbug.GetMethod(test, "GoMemory")
+	}
+}
