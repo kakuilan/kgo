@@ -167,3 +167,41 @@ func BenchmarkCallMethod(b *testing.B) {
 		KDbug.GetMethod(test, "GoMemory")
 	}
 }
+
+func TestValidFunc(t *testing.T) {
+	var err error
+	var conv = &KConv
+	method := KDbug.GetMethod(conv, "BaseConvert")
+
+	//不存在的方法
+	_, _, err = ValidFunc("test", "echo")
+	if err == nil {
+		t.Error("ValidFunc fail")
+		return
+	}
+
+	//参数数量不足
+	_, _, err = ValidFunc(method, "12345")
+	if err == nil {
+		t.Error("ValidFunc fail")
+		return
+	}
+
+	//参数类型错误
+	_, _, err = ValidFunc(method, 0, "12345", "10", 16)
+	if err == nil {
+		t.Error("ValidFunc fail")
+		return
+	}
+}
+
+func TestCallFunc(t *testing.T) {
+	var err error
+	var conv = &KConv
+	method := KDbug.GetMethod(conv, "BaseConvert")
+
+	_, err = CallFunc(method, 0, "12345", "10", 16)
+	if err != nil {
+		println(err.Error())
+	}
+}
