@@ -93,3 +93,77 @@ func BenchmarkDumpStacks(b *testing.B) {
 		KDbug.DumpStacks()
 	}
 }
+
+func TestHasMethod(t *testing.T) {
+	var test = &KOS
+
+	chk1 := KDbug.HasMethod(test, "IsLinux")
+	chk2 := KDbug.HasMethod(test, "Hello")
+	if !chk1 || chk2 {
+		t.Error("HasMethod fail")
+		return
+	}
+}
+
+func BenchmarkHasMethod(b *testing.B) {
+	b.ResetTimer()
+	var test = &KOS
+	for i := 0; i < b.N; i++ {
+		KDbug.HasMethod(test, "IsLinux")
+	}
+}
+
+func TestGetMethod(t *testing.T) {
+	var test = &KOS
+
+	fun1 := KDbug.GetMethod(test, "GoMemory")
+	fun2 := KDbug.GetMethod(test, "Hello")
+
+	if fun1 == nil || fun2 != nil {
+		t.Error("GetMethod fail")
+		return
+	}
+}
+
+func BenchmarkGetMethod(b *testing.B) {
+	b.ResetTimer()
+	var test = &KOS
+	for i := 0; i < b.N; i++ {
+		KDbug.GetMethod(test, "GoMemory")
+	}
+}
+
+func TestCallMethod(t *testing.T) {
+	var test = &KOS
+
+	//无参数调用
+	res1, err1 := KDbug.CallMethod(test, "GoMemory")
+	if res1 == nil || err1 != nil {
+		t.Error("CallMethod fail")
+		return
+	}
+
+	//调用不存在的方法
+	res2, err2 := KDbug.CallMethod(test, "Hello")
+	if res2 != nil || err2 == nil {
+		t.Error("CallMethod fail")
+		return
+	}
+
+	//有参数调用
+	var conv = &KConv
+	res3, err3 := KDbug.CallMethod(conv, "BaseConvert", "123456", 10, 16)
+	//结果 [1e240 <nil>]
+	if len(res3) != 2 || res3[0] != "1e240" || res3[1] != nil || err3 != nil {
+		t.Error("CallMethod fail")
+		return
+	}
+}
+
+func BenchmarkCallMethod(b *testing.B) {
+	b.ResetTimer()
+	var test = &KOS
+	for i := 0; i < b.N; i++ {
+		KDbug.GetMethod(test, "GoMemory")
+	}
+}

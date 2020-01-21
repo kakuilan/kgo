@@ -100,7 +100,7 @@ func (kd *LkkDebug) GetMethod(t interface{}, method string) interface{} {
 func (kd *LkkDebug) CallMethod(t interface{}, method string, args ...interface{}) ([]interface{}, error) {
 	m := kd.GetMethod(t, method)
 	if m == nil {
-		return nil, fmt.Errorf("Don't have method: %s", method)
+		return nil, fmt.Errorf("don't have method: %s", method)
 	}
 	_args := make([]interface{}, len(args)+1)
 	_args[0] = t
