@@ -553,7 +553,7 @@ func (kc *LkkConvert) IsFloat(val interface{}) bool {
 	return isFloat(val)
 }
 
-// IsEmpty 检查一个变量是否为空
+// IsEmpty 检查变量是否为空.
 func (kc *LkkConvert) IsEmpty(val interface{}) bool {
 	if val == nil {
 		return true
@@ -577,6 +577,22 @@ func (kc *LkkConvert) IsEmpty(val interface{}) bool {
 	}
 
 	return reflect.DeepEqual(val, reflect.Zero(v.Type()).Interface())
+}
+
+// IsNil 检查变量是否空值.
+func (kc *LkkConvert) IsNil(val interface{}) bool {
+	if val == nil {
+		return true
+	}
+
+	rv := reflect.ValueOf(val)
+	switch rv.Kind() {
+	case reflect.Chan, reflect.Func, reflect.Map, reflect.Ptr, reflect.Slice, reflect.Interface:
+		if rv.IsNil() {
+			return true
+		}
+	}
+	return false
 }
 
 // IsBool 是否布尔值

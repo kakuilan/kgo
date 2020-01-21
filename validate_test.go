@@ -494,6 +494,26 @@ func BenchmarkIsEmpty(b *testing.B) {
 	}
 }
 
+func TestIsNil(t *testing.T) {
+	var s []int
+	chk1 := KConv.IsNil(nil)
+	chk2 := KConv.IsNil(s)
+	chk3 := KConv.IsNil("")
+
+	if !chk1 || !chk2 || chk3 {
+		t.Error("IsSha512 fail")
+		return
+	}
+}
+
+func BenchmarkIsNil(b *testing.B) {
+	b.ResetTimer()
+	var s []int
+	for i := 0; i < b.N; i++ {
+		KConv.IsNil(s)
+	}
+}
+
 func TestIsBool(t *testing.T) {
 	res1 := KConv.IsBool(1)
 	res2 := KConv.IsBool("hello")
