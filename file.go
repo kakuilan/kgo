@@ -2,11 +2,13 @@ package kgo
 
 import (
 	"archive/tar"
+	"archive/zip"
 	"bufio"
 	"bytes"
 	"compress/gzip"
 	"crypto/md5"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -892,4 +894,58 @@ func (kf *LkkFile) CountLines(fpath string, buffLength int) (int, error) {
 			return count, err
 		}
 	}
+}
+
+// Zip 将文件目录进行zip打包.fpaths为文件或目录的路径.
+func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
+	fzip, err := os.Create(dst)
+	if err != nil {
+		println("3333333333333333")
+		return false, err
+	}
+	defer fzip.Close()
+
+	if len(fpaths) == 0 {
+		println("11111111111111")
+		return false, errors.New("No input files.")
+	}
+
+	var allfiles, files []string
+	var fpath string
+	for _, fpath = range fpaths {
+		files = kf.FileTree(fpath, FILE_TREE_FILE, true)
+		if len(files) != 0 {
+			allfiles = append(allfiles, files...)
+		}
+	}
+
+	if len(allfiles) == 0 {
+		println("22222222222")
+		return false, errors.New("No exist files.")
+	}
+
+	zipw := zip.NewWriter(fzip)
+	defer zipw.Close()
+
+	for _, fpath = range allfiles {
+		fileToZip, err := os.Open(fpath)
+		if err != nil {
+			println("44444444444444")
+			return false, fmt.Errorf("Failed to open %s: %s", fpath, err)
+		}
+		defer fileToZip.Close()
+
+		wr, err := zipw.Create(fpath)
+		if err != nil {
+			println("555555555555555")
+			return false, fmt.Errorf("Failed to create entry for %s in zip file: %s", fpath, err)
+		}
+
+		if _, err := io.Copy(wr, fileToZip); err != nil {
+			println("6666666666666666")
+			return false, fmt.Errorf("Failed to write %s to zip: %s", fpath, err)
+		}
+	}
+
+	return true, nil
 }

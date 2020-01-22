@@ -978,3 +978,57 @@ func TestGetPidByPort(t *testing.T) {
 	res := KOS.GetPidByPort(22)
 	println("pid:", res)
 }
+
+func TestZip(t *testing.T) {
+	zfile := "./testdata/test.zip"
+	var res bool
+	var err error
+
+	_, err = KFile.Zip(zfile)
+	if err == nil {
+		t.Error("Zip fail")
+		return
+	}
+
+	_, err = KFile.Zip(zfile, "hello-world")
+	if err == nil {
+		t.Error("Zip fail")
+		return
+	}
+
+	_, err = KFile.Zip("", "./README.md", "/root")
+	if err == nil {
+		t.Error("Zip fail")
+		return
+	}
+
+	res, err = KFile.Zip(zfile, "./README.md", "./vendor")
+	if !res || err != nil {
+		t.Error("Zip fail")
+		return
+	}
+}
+
+func TestZipError(t *testing.T) {
+	zdir := "/tmp/zip/tmp"
+	zfile := zdir + "/test.zip"
+	_ = KFile.Mkdir(zdir, 0777)
+
+	go func(zfile string) {
+		_, _ = KFile.Zip(zfile, "./README.md")
+	}(zfile)
+
+	go func(zdir string) {
+		zdir = "/tmp/zip/tmp"
+		KOS.Chmod(zdir, 0111)
+	}(zdir)
+
+	go func(zfile string) {
+		_, _ = KFile.Zip(zfile, "./README.md")
+	}(zfile)
+
+}
+
+func BenchmarkZip(b *testing.B) {
+
+}

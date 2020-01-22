@@ -909,10 +909,12 @@ func TestTarGzUnTarGzError(t *testing.T) {
 	go func(tarDir string) {
 		_, _ = KFile.TarGz("/tmp/targz/tmp", tarDir+"/test.tar.gz")
 	}(tarDir)
+
 	go func(tarDir string) {
 		tarDir = "/tmp/targz/tmp"
 		KOS.Chmod(tarDir, 0111)
 	}(tarDir)
+
 	go func(tarDir string) {
 		_, _ = KFile.TarGz("/tmp/targz/tmp", tarDir+"/test.tar.gz")
 	}(tarDir)

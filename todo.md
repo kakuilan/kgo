@@ -58,10 +58,10 @@
 - https://github.com/xiaonanln/go-xnsyncutil -x
 - https://github.com/0xrawsec/golang-utils -x
 - https://github.com/Laisky/go-utils -x
-- https://github.com/xgfone/go-tools
-- https://github.com/printfcoder/goutils
-- https://github.com/space307/go-utils
-- https://github.com/liuyongshuai/goUtils
+- https://github.com/xgfone/go-tools -x
+- https://github.com/printfcoder/goutils -x
+- https://github.com/space307/go-utils -x
+- https://github.com/liuyongshuai/goUtils -x
 - https://github.com/Jordanzuo/goutil
 - https://github.com/gxxgle/go-utils
 - https://github.com/q191201771/naza
