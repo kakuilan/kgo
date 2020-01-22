@@ -484,7 +484,7 @@ func (ko *LkkOS) PrivateCIDR() []*net.IPNet {
 	return res
 }
 
-// IsPrivateIp 是否私有IP地址
+// IsPrivateIp 是否私有IP地址(ipv4/ipv6).
 func (ko *LkkOS) IsPrivateIp(address string) (bool, error) {
 	ip := net.ParseIP(address)
 	if ip == nil {
