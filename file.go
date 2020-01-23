@@ -365,7 +365,7 @@ func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
 			break
 		}
 
-		if _, err := destFile.Write(buf[:n]); err != nil {
+		if _, err := destFile.Write(buf[:n]); err != nil || !kf.IsExist(dest) {
 			return int64(nBytes), err
 		}
 

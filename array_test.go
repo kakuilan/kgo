@@ -1017,7 +1017,7 @@ func TestZipError(t *testing.T) {
 	time.AfterFunc(100*time.Millisecond, func() {
 		res, err := KFile.Zip("test.zip", "./testdata")
 		println("Zip res:", res)
-		if err == nil {
+		if err != nil {
 			t.Error("Zip fail")
 			return
 		} else {
