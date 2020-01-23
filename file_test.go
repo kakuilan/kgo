@@ -385,7 +385,6 @@ func TestRealPath(t *testing.T) {
 
 		//再获取路径
 		res := KFile.RealPath(filename)
-		println("res---------", res)
 		if res != "" {
 			t.Error("KFile.RealPath fail")
 		}

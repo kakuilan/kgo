@@ -3,6 +3,7 @@ package kgo
 import (
 	"fmt"
 	"testing"
+	"time"
 )
 
 func TestInArray(t *testing.T) {
@@ -1010,22 +1011,31 @@ func TestZip(t *testing.T) {
 }
 
 func TestZipError(t *testing.T) {
-	zdir := "/tmp/zip/tmp"
-	zfile := zdir + "/test.zip"
-	_ = KFile.Mkdir(zdir, 0777)
+	zdir := "./testdata"
+	copyFile := zdir + "/out"
 
-	go func(zfile string) {
-		_, _ = KFile.Zip(zfile, "./README.md")
-	}(zfile)
+	time.AfterFunc(100*time.Millisecond, func() {
+		res, err := KFile.Zip("test.zip", "./testdata")
+		println("Zip res:", res)
+		if err == nil {
+			t.Error("Zip fail")
+			return
+		} else {
+			println(err.Error())
+		}
+	})
 
-	go func(zdir string) {
-		zdir = "/tmp/zip/tmp"
-		KOS.Chmod(zdir, 0111)
-	}(zdir)
+	time.AfterFunc(500*time.Millisecond, func() {
+		err := KFile.Unlink(copyFile)
+		if err != nil {
+			println("unlink:", err.Error())
+		}
+	})
 
-	go func(zfile string) {
-		_, _ = KFile.Zip(zfile, "./README.md")
-	}(zfile)
+	num, err := KFile.CopyFile("/dev/zero", copyFile, FILE_COVER_ALLOW)
+	if err != nil {
+		println("copyFile:", num, err.Error())
+	}
 
 }
 
