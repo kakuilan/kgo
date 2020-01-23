@@ -315,7 +315,7 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 				break
 			}
 
-			if _, err := destFile.Write(buf[:n]); err != nil {
+			if _, err := destFile.Write(buf[:n]); err != nil || !kf.IsExist(dest) {
 				return int64(total), err
 			}
 
@@ -338,6 +338,7 @@ func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
 	if err != nil {
 		return 0, err
 	}
+	defer sourceFile.Close()
 
 	//创建目录
 	destDir := filepath.Dir(dest)
@@ -351,6 +352,7 @@ func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
 	if err != nil {
 		return 0, err
 	}
+	defer destFile.Close()
 
 	var bufferSize int = 32768
 	var nBytes int
@@ -900,13 +902,11 @@ func (kf *LkkFile) CountLines(fpath string, buffLength int) (int, error) {
 func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
 	fzip, err := os.Create(dst)
 	if err != nil {
-		println("3333333333333333")
 		return false, err
 	}
 	defer fzip.Close()
 
 	if len(fpaths) == 0 {
-		println("11111111111111")
 		return false, errors.New("No input files.")
 	}
 
@@ -920,7 +920,6 @@ func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
 	}
 
 	if len(allfiles) == 0 {
-		println("22222222222")
 		return false, errors.New("No exist files.")
 	}
 
@@ -930,19 +929,19 @@ func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
 	for _, fpath = range allfiles {
 		fileToZip, err := os.Open(fpath)
 		if err != nil {
-			println("44444444444444")
+			println("11111111", err.Error())
 			return false, fmt.Errorf("Failed to open %s: %s", fpath, err)
 		}
 		defer fileToZip.Close()
 
 		wr, err := zipw.Create(fpath)
 		if err != nil {
-			println("555555555555555")
+			println("2222222222", err.Error())
 			return false, fmt.Errorf("Failed to create entry for %s in zip file: %s", fpath, err)
 		}
 
 		if _, err := io.Copy(wr, fileToZip); err != nil {
-			println("6666666666666666")
+			println("3333333333", err.Error())
 			return false, fmt.Errorf("Failed to write %s to zip: %s", fpath, err)
 		}
 	}
