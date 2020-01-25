@@ -1020,13 +1020,7 @@ func TestZip(t *testing.T) {
 	}
 
 	_ = KFile.Unlink("./testdata/svg-lnk")
-	dir, _ := KOS.Getcwd()
-	svgFile = dir + "/testdata/jetbrains.svg"
-	cmd = exec.Command("/bin/bash", "-c", fmt.Sprintf("ln -sf %s ./testdata/svg-lnk1", svgFile))
-	_ = cmd.Run()
-	cmd = exec.Command("/bin/bash", "-c", fmt.Sprintf("ln -sf %s ./testdata/svg-lnk2", svgFile))
-	_ = cmd.Run()
-	_, err = KFile.Zip(zfile, "./testdata")
+	_, err = KFile.Zip(zfile, "./testdata", "./testdata")
 	if err == nil {
 		t.Error("Zip fail")
 		return

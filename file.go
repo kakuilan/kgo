@@ -911,6 +911,7 @@ func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
 	}
 
 	var allfiles, files []string
+
 	var fpath string
 	for _, fpath = range fpaths {
 		files = kf.FileTree(fpath, FILE_TREE_FILE, true)
@@ -918,6 +919,8 @@ func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
 			allfiles = append(allfiles, files...)
 		}
 	}
+	println("allfiles:")
+	fmt.Printf("%v:\n", allfiles)
 
 	if len(allfiles) == 0 {
 		return false, errors.New("No exist files.")
