@@ -929,7 +929,6 @@ func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
 	for _, fpath = range allfiles {
 		fileToZip, err := os.Open(fpath)
 		if err != nil {
-			println("11111111", err.Error())
 			return false, fmt.Errorf("Failed to open %s: %s", fpath, err)
 		}
 		defer fileToZip.Close()
