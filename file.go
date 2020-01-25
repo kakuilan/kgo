@@ -940,7 +940,7 @@ func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
 		}
 
 		if _, err := io.Copy(wr, fileToZip); err != nil {
-			println("3333333333", err.Error())
+			println("3333333333", fpath, err.Error())
 			return false, fmt.Errorf("Failed to write %s to zip: %s", fpath, err)
 		}
 	}
