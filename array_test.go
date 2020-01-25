@@ -2,8 +2,8 @@ package kgo
 
 import (
 	"fmt"
+	"os/exec"
 	"testing"
-	"time"
 )
 
 func TestInArray(t *testing.T) {
@@ -1008,34 +1008,44 @@ func TestZip(t *testing.T) {
 		t.Error("Zip fail")
 		return
 	}
+
+	svgFile := "./testdata/jetbrains.svg"
+	cmd := exec.Command("/bin/bash", "-c", "ln -sf ./testdata/jetbrains.svg ./testdata/svg-lnk")
+	_ = cmd.Run()
+	_ = KFile.Unlink(svgFile)
+	_, err = KFile.Zip(zfile, "./testdata")
+	if err == nil {
+		t.Error("Zip fail")
+		return
+	}
 }
 
 func TestZipError(t *testing.T) {
-	zdir := "./testdata"
-	copyFile := zdir + "/out"
-
-	time.AfterFunc(100*time.Millisecond, func() {
-		res, err := KFile.Zip("test.zip", "./testdata")
-		println("Zip res:", res)
-		if err != nil {
-			t.Error("Zip fail")
-			return
-		} else {
-			println(err.Error())
-		}
-	})
-
-	time.AfterFunc(500*time.Millisecond, func() {
-		err := KFile.Unlink(copyFile)
-		if err != nil {
-			println("unlink:", err.Error())
-		}
-	})
-
-	num, err := KFile.CopyFile("/dev/zero", copyFile, FILE_COVER_ALLOW)
-	if err != nil {
-		println("copyFile:", num, err.Error())
-	}
+	//zdir := "./testdata"
+	//copyFile := zdir + "/out"
+	//
+	//go func() {
+	//	res, err := KFile.Zip("test.zip", "./testdata")
+	//	println("Zip res:", res)
+	//	if err == nil {
+	//		t.Error("Zip fail")
+	//		return
+	//	} else {
+	//		println(err.Error())
+	//	}
+	//}()
+	//
+	//time.AfterFunc(100*time.Millisecond, func() {
+	//	err := KFile.Unlink(copyFile)
+	//	if err != nil {
+	//		println("unlink:", err.Error())
+	//	}
+	//})
+	//
+	//num, err := KFile.FastCopy("/dev/zero", copyFile)
+	//if err != nil {
+	//	println("copyFile:", num, err.Error())
+	//}
 
 }
 
