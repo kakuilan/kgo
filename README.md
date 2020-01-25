@@ -81,3 +81,8 @@ go tool pprof profile.out
 go tool pprof -http=192.168.1.2:8081 /usr/bin/dot profile.out
 ```
 
+
+### 鸣谢
+感谢[JetBrains](https://www.jetbrains.com/?from=kakuilan/kgo)的赞助.  
+![JetBrains](testdata/jetbrains.svg)
+
