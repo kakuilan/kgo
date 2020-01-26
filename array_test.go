@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os/exec"
 	"testing"
+	"time"
 )
 
 func TestInArray(t *testing.T) {
@@ -1021,11 +1022,9 @@ func TestZip(t *testing.T) {
 
 	_ = KFile.Unlink("./testdata/svg-lnk")
 	_, err = KFile.Zip(zfile, "./testdata", "./testdata")
-	if err == nil {
+	if err != nil {
 		t.Error("Zip fail")
 		return
-	} else {
-		println(err.Error())
 	}
 
 }
@@ -1033,30 +1032,32 @@ func TestZip(t *testing.T) {
 func TestZipError(t *testing.T) {
 	//zdir := "./testdata"
 	//copyFile := zdir + "/out"
-	//
-	//go func() {
-	//	res, err := KFile.Zip("test.zip", "./testdata")
-	//	println("Zip res:", res)
-	//	if err == nil {
-	//		t.Error("Zip fail")
-	//		return
-	//	} else {
-	//		println(err.Error())
-	//	}
-	//}()
-	//
-	//time.AfterFunc(100*time.Millisecond, func() {
-	//	err := KFile.Unlink(copyFile)
-	//	if err != nil {
-	//		println("unlink:", err.Error())
-	//	}
-	//})
-	//
+	dest := "test.zip"
+
+	time.AfterFunc(200*time.Millisecond, func() {
+		println("888888888888")
+		res, err := KFile.Zip(dest, "/dev/zero", "./testdata", "./vendor")
+		println("Zip res:", res)
+		if err == nil {
+			t.Error("Zip fail----------------")
+			return
+		} else {
+			println(err.Error())
+		}
+	})
+
+	time.AfterFunc(500*time.Millisecond, func() {
+		println("99999999999999")
+		err := KFile.Unlink(dest)
+		if err != nil {
+			println("unlink:", err.Error())
+		}
+	})
+
 	//num, err := KFile.FastCopy("/dev/zero", copyFile)
 	//if err != nil {
 	//	println("copyFile:", num, err.Error())
 	//}
-
 }
 
 func BenchmarkZip(b *testing.B) {
