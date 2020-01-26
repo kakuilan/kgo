@@ -927,6 +927,7 @@ func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
 	zipw := zip.NewWriter(fzip)
 	defer zipw.Close()
 
+	fmt.Printf("allfiles:%v\n", allfiles)
 	keys := make(map[string]bool)
 	for _, fpath = range allfiles {
 		if _, ok := keys[fpath]; ok || kf.AbsPath(fpath) == dst {
@@ -935,7 +936,7 @@ func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
 
 		fileToZip, err := os.Open(fpath)
 		if err != nil {
-			return false, fmt.Errorf("Failed to open %s: %s", fpath, err)
+			return false, fmt.Errorf("11111111111Failed to open %s: %s", fpath, err)
 		}
 		defer fileToZip.Close()
 
