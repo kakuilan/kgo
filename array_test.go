@@ -1003,7 +1003,7 @@ func TestZip(t *testing.T) {
 		return
 	}
 
-	res, err = KFile.Zip(zfile, "./README.md", "./vendor")
+	res, err = KFile.Zip(zfile, "./README.md", "./testdata")
 	if !res || err != nil {
 		t.Error("Zip fail")
 		return

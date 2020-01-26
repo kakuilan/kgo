@@ -900,6 +900,7 @@ func (kf *LkkFile) CountLines(fpath string, buffLength int) (int, error) {
 
 // Zip 将文件目录进行zip打包.fpaths为文件或目录的路径.
 func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
+	dst = kf.AbsPath(dst)
 	fzip, err := os.Create(dst)
 	if err != nil {
 		return false, err
@@ -911,7 +912,6 @@ func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
 	}
 
 	var allfiles, files []string
-
 	var fpath string
 	for _, fpath = range fpaths {
 		files = kf.FileTree(fpath, FILE_TREE_FILE, true)
@@ -919,8 +919,6 @@ func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
 			allfiles = append(allfiles, files...)
 		}
 	}
-	println("allfiles:")
-	fmt.Printf("%v:\n", allfiles)
 
 	if len(allfiles) == 0 {
 		return false, errors.New("No exist files.")
@@ -929,19 +927,20 @@ func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
 	zipw := zip.NewWriter(fzip)
 	defer zipw.Close()
 
+	keys := make(map[string]bool)
 	for _, fpath = range allfiles {
+		if _, ok := keys[fpath]; ok || kf.AbsPath(fpath) == dst {
+			continue
+		}
+
 		fileToZip, err := os.Open(fpath)
 		if err != nil {
 			return false, fmt.Errorf("Failed to open %s: %s", fpath, err)
 		}
 		defer fileToZip.Close()
 
-		wr, err := zipw.Create(fpath)
-		if err != nil {
-			println("2222222222", err.Error())
-			return false, fmt.Errorf("Failed to create entry for %s in zip file: %s", fpath, err)
-		}
-
+		wr, _ := zipw.Create(fpath)
+		keys[fpath] = true
 		if _, err := io.Copy(wr, fileToZip); err != nil {
 			println("3333333333", fpath, err.Error())
 			return false, fmt.Errorf("Failed to write %s to zip: %s", fpath, err)
