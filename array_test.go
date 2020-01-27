@@ -2,7 +2,6 @@ package kgo
 
 import (
 	"fmt"
-	"os/exec"
 	"testing"
 )
 
@@ -978,60 +977,4 @@ func BenchmarkArraySearchMutilItem(b *testing.B) {
 func TestGetPidByPort(t *testing.T) {
 	res := KOS.GetPidByPort(22)
 	println("pid:", res)
-}
-
-func TestZip(t *testing.T) {
-	zfile := "./zip/test.zip"
-	var res bool
-	var err error
-
-	_, err = KFile.Zip(zfile)
-	if err == nil {
-		t.Error("Zip fail")
-		return
-	}
-
-	_, err = KFile.Zip(zfile, "hello-world")
-	if err == nil {
-		t.Error("Zip fail")
-		return
-	}
-
-	_, err = KFile.Zip("", "./README.md", "/root")
-	if err == nil {
-		t.Error("Zip fail")
-		return
-	}
-
-	res, err = KFile.Zip(zfile, "./README.md", "./testdata")
-	if !res || err != nil {
-		t.Error("Zip fail")
-		return
-	}
-
-	svgFile := "./testdata/jetbrains.svg-bak"
-	_, _ = KFile.FastCopy("./testdata/jetbrains.svg", svgFile)
-	cmd := exec.Command("/bin/bash", "-c", "ln -sf ./testdata/jetbrains.svg-bak ./testdata/svg-lnk")
-	_ = cmd.Run()
-	_, err = KFile.Zip(zfile, "./testdata")
-	if err == nil {
-		t.Error("Zip fail")
-		return
-	}
-
-	_ = KFile.Unlink("./testdata/svg-lnk")
-	_, err = KFile.Zip(zfile, "./testdata", "./testdata")
-	if err != nil {
-		t.Error("Zip fail")
-		return
-	}
-}
-
-func BenchmarkZip(b *testing.B) {
-	b.ResetTimer()
-	src := "./README.md"
-	for i := 0; i < b.N; i++ {
-		dst := fmt.Sprintf("./zip/test_%d.zip", i)
-		_, _ = KFile.Zip(dst, src)
-	}
 }
