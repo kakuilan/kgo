@@ -1052,7 +1052,7 @@ func BenchmarkCountLines(b *testing.B) {
 	}
 }
 
-func TestZipUnzip(t *testing.T) {
+func TestZipIszipUnzip(t *testing.T) {
 	zfile := "./zip/test.zip"
 	var res bool
 	var err error
@@ -1098,6 +1098,15 @@ func TestZipUnzip(t *testing.T) {
 		return
 	}
 
+	//判断
+	chk1 := KFile.IsZip("abc.txt")
+	chk2 := KFile.IsZip("abc.zip")
+	chk3 := KFile.IsZip(zfile)
+	if chk1 || chk2 || !chk3 {
+		t.Error("IsZip fail")
+		return
+	}
+
 	//解压
 	dstdir := "./zip/unzip/"
 	_, err = KFile.UnZip("hello", dstdir)
@@ -1113,7 +1122,7 @@ func TestZipUnzip(t *testing.T) {
 	}
 
 	_, err = KFile.UnZip(zfile, dstdir)
-	if err == nil {
+	if err != nil {
 		t.Error("UnZip fail")
 		return
 	}
