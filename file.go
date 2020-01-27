@@ -223,7 +223,7 @@ func (kf *LkkFile) RealPath(fpath string) string {
 	return fullPath
 }
 
-// Touch 快速创建指定大小的文件,size为字节
+// Touch 快速创建指定大小的文件,size为字节.
 func (kf *LkkFile) Touch(fpath string, size int64) bool {
 	//创建目录
 	destDir := filepath.Dir(fpath)
@@ -901,6 +901,11 @@ func (kf *LkkFile) CountLines(fpath string, buffLength int) (int, error) {
 // Zip 将文件目录进行zip打包.fpaths为文件或目录的路径.
 func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
 	dst = kf.AbsPath(dst)
+	dstDir := kf.Dirname(dst)
+	if !kf.IsExist(dstDir) {
+		_ = kf.Mkdir(dstDir, os.ModePerm)
+	}
+
 	fzip, err := os.Create(dst)
 	if err != nil {
 		return false, err
@@ -914,9 +919,14 @@ func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
 	var allfiles, files []string
 	var fpath string
 	for _, fpath = range fpaths {
-		files = kf.FileTree(fpath, FILE_TREE_FILE, true)
-		if len(files) != 0 {
-			allfiles = append(allfiles, files...)
+		fpath = KStr.Trim(fpath)
+		if kf.IsDir(fpath) {
+			files = kf.FileTree(fpath, FILE_TREE_FILE, true)
+			if len(files) != 0 {
+				allfiles = append(allfiles, files...)
+			}
+		} else if fpath != "" {
+			allfiles = append(allfiles, fpath)
 		}
 	}
 
@@ -927,7 +937,6 @@ func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
 	zipw := zip.NewWriter(fzip)
 	defer zipw.Close()
 
-	fmt.Printf("allfiles:%v\n", allfiles)
 	keys := make(map[string]bool)
 	for _, fpath = range allfiles {
 		if _, ok := keys[fpath]; ok || kf.AbsPath(fpath) == dst {
@@ -936,14 +945,13 @@ func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
 
 		fileToZip, err := os.Open(fpath)
 		if err != nil {
-			return false, fmt.Errorf("11111111111Failed to open %s: %s", fpath, err)
+			return false, fmt.Errorf("Failed to open %s: %s", fpath, err)
 		}
 		defer fileToZip.Close()
 
 		wr, _ := zipw.Create(fpath)
 		keys[fpath] = true
 		if _, err := io.Copy(wr, fileToZip); err != nil {
-			println("3333333333", fpath, err.Error())
 			return false, fmt.Errorf("Failed to write %s to zip: %s", fpath, err)
 		}
 	}

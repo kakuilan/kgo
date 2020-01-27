@@ -1034,11 +1034,13 @@ func TestCountLines(t *testing.T) {
 	}
 
 	filepath = "./testdata/gopher10th-small.jpg"
+	backup := "./testdata/gopher10th-small.jpg-bak"
+	_, _ = KFile.FastCopy(filepath, backup)
 	go func() {
-		_ = KFile.Unlink(filepath)
+		_ = KFile.Unlink(backup)
 	}()
 	go func() {
-		res, err = KFile.CountLines(filepath, 1)
+		res, err = KFile.CountLines(backup, 1)
 	}()
 }
 

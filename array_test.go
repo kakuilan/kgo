@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os/exec"
 	"testing"
-	"time"
 )
 
 func TestInArray(t *testing.T) {
@@ -982,7 +981,7 @@ func TestGetPidByPort(t *testing.T) {
 }
 
 func TestZip(t *testing.T) {
-	zfile := "./testdata/test.zip"
+	zfile := "./zip/test.zip"
 	var res bool
 	var err error
 
@@ -1026,40 +1025,13 @@ func TestZip(t *testing.T) {
 		t.Error("Zip fail")
 		return
 	}
-
-}
-
-func TestZipError(t *testing.T) {
-	//zdir := "./testdata"
-	//copyFile := zdir + "/out"
-	dest := "test.zip"
-
-	time.AfterFunc(200*time.Millisecond, func() {
-		println("888888888888")
-		res, err := KFile.Zip(dest, "/dev/zero", "./testdata", "./vendor")
-		println("Zip res:", res)
-		if err == nil {
-			t.Error("Zip fail----------------")
-			return
-		} else {
-			println(err.Error())
-		}
-	})
-
-	time.AfterFunc(500*time.Millisecond, func() {
-		println("99999999999999")
-		err := KFile.Unlink(dest)
-		if err != nil {
-			println("unlink:", err.Error())
-		}
-	})
-
-	//num, err := KFile.FastCopy("/dev/zero", copyFile)
-	//if err != nil {
-	//	println("copyFile:", num, err.Error())
-	//}
 }
 
 func BenchmarkZip(b *testing.B) {
-
+	b.ResetTimer()
+	src := "./README.md"
+	for i := 0; i < b.N; i++ {
+		dst := fmt.Sprintf("./zip/test_%d.zip", i)
+		_, _ = KFile.Zip(dst, src)
+	}
 }
