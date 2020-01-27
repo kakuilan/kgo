@@ -676,8 +676,8 @@ func (ka *LkkArray) ArraySearchItem(arr interface{}, condition map[string]interf
 	return
 }
 
-// ArraySearchMutilItem 从数组中搜索对应元素(多个).arr为要查找的数组,condition为条件字典.
-func (ka *LkkArray) ArraySearchMutilItem(arr interface{}, condition map[string]interface{}) (res []interface{}) {
+// ArraySearchMutil 从数组中搜索对应元素(多个).arr为要查找的数组,condition为条件字典.
+func (ka *LkkArray) ArraySearchMutil(arr interface{}, condition map[string]interface{}) (res []interface{}) {
 	// 条件为空
 	if len(condition) == 0 {
 		return
@@ -701,7 +701,7 @@ func (ka *LkkArray) ArraySearchMutilItem(arr interface{}, condition map[string]i
 			}
 		}
 	default:
-		panic("[ArraySearchMutilItem]arr type must be array, slice or map")
+		panic("[ArraySearchMutil]arr type must be array, slice or map")
 	}
 
 	return
