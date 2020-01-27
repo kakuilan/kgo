@@ -1051,3 +1051,89 @@ func BenchmarkCountLines(b *testing.B) {
 		_, _ = KFile.CountLines(filepath, 0)
 	}
 }
+
+func TestZipUnzip(t *testing.T) {
+	zfile := "./zip/test.zip"
+	var res bool
+	var err error
+
+	_, err = KFile.Zip(zfile)
+	if err == nil {
+		t.Error("Zip fail")
+		return
+	}
+
+	_, err = KFile.Zip(zfile, "hello-world")
+	if err == nil {
+		t.Error("Zip fail")
+		return
+	}
+
+	_, err = KFile.Zip("", "./README.md", "/root")
+	if err == nil {
+		t.Error("Zip fail")
+		return
+	}
+
+	res, err = KFile.Zip(zfile, "./README.md", "./testdata")
+	if !res || err != nil {
+		t.Error("Zip fail")
+		return
+	}
+
+	svgFile := "./testdata/jetbrains.svg-bak"
+	_, _ = KFile.FastCopy("./testdata/jetbrains.svg", svgFile)
+	cmd := exec.Command("/bin/bash", "-c", "ln -sf ./testdata/jetbrains.svg-bak ./testdata/svg-lnk")
+	_ = cmd.Run()
+	_, err = KFile.Zip(zfile, "./testdata")
+	if err == nil {
+		t.Error("Zip fail")
+		return
+	}
+
+	_ = KFile.Unlink("./testdata/svg-lnk")
+	_, err = KFile.Zip(zfile, "./testdata", "./testdata", "./vendor")
+	if err != nil {
+		t.Error("Zip fail")
+		return
+	}
+
+	//解压
+	dstdir := "./zip/unzip/"
+	_, err = KFile.UnZip("hello", dstdir)
+	if err == nil {
+		t.Error("UnZip fail")
+		return
+	}
+
+	_, err = KFile.UnZip(zfile, "/root/hello")
+	if err == nil {
+		t.Error("UnZip fail")
+		return
+	}
+
+	_, err = KFile.UnZip(zfile, dstdir)
+	if err == nil {
+		t.Error("UnZip fail")
+		return
+	}
+}
+
+func BenchmarkZip(b *testing.B) {
+	b.ResetTimer()
+	src := "./README.md"
+	for i := 0; i < b.N; i++ {
+		dst := fmt.Sprintf("./zip/test_%d.zip", i)
+		_, _ = KFile.Zip(dst, src)
+	}
+}
+
+func BenchmarkUnzip(b *testing.B) {
+	b.ResetTimer()
+	var src, dst string
+	for i := 0; i < b.N; i++ {
+		src = fmt.Sprintf("./zip/test_%d.zip", i)
+		dst = fmt.Sprintf("./zip/unzip/test_%d", i)
+		_, _ = KFile.UnZip(src, dst)
+	}
+}
