@@ -730,21 +730,21 @@ func BenchmarkIsUrl(b *testing.B) {
 	}
 }
 
-func TestIsMobile(t *testing.T) {
-	res1 := KStr.IsMobile("12345678901")
-	res2 := KStr.IsMobile("13712345678")
-	res3 := KStr.IsMobile("")
-	res4 := KStr.IsMobile("hello")
+func TestIsMobilecn(t *testing.T) {
+	res1 := KStr.IsMobilecn("12345678901")
+	res2 := KStr.IsMobilecn("13712345678")
+	res3 := KStr.IsMobilecn("")
+	res4 := KStr.IsMobilecn("hello")
 
 	if res1 || !res2 || res3 || res4 {
-		t.Error("IsMobile fail")
+		t.Error("IsMobilecn fail")
 	}
 }
 
-func BenchmarkIsMobile(b *testing.B) {
+func BenchmarkIsMobilecn(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KStr.IsMobile("13712345678")
+		KStr.IsMobilecn("13712345678")
 	}
 }
 
