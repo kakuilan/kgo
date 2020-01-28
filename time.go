@@ -61,9 +61,9 @@ func (kt *LkkTime) MicroTime() int64 {
 	return time.Now().UnixNano() / int64(time.Microsecond)
 }
 
-// Strtotime 字符串转时间戳.
-// 例如KTime.Strtotime("2019-07-11 10:11:23") == 1562839883.
-func (kt *LkkTime) Strtotime(str string) (int64, error) {
+// Str2Time 字符串转时间戳.
+// 例如KTime.Str2Time("2019-07-11 10:11:23") == 1562839883.
+func (kt *LkkTime) Str2Time(str string) (int64, error) {
 	layout := "2006-01-02 15:04:05"
 	t, err := time.Parse(layout, str)
 	if err != nil {
