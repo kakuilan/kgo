@@ -169,7 +169,7 @@ func BenchmarkArrayValues(b *testing.B) {
 	}
 }
 
-func TestSliceMerge(t *testing.T) {
+func TestMergeSlice(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("recover...:", r)
@@ -182,22 +182,22 @@ func TestSliceMerge(t *testing.T) {
 	sli[2] = "ccc"
 	sli[3] = "ddd"
 
-	res1 := KArr.SliceMerge(false, arr, sli)
+	res1 := KArr.MergeSlice(false, arr, sli)
 	if len(res1) != 15 {
-		t.Error("SliceMerge fail")
+		t.Error("MergeSlice fail")
 		return
 	}
 
-	res2 := KArr.SliceMerge(true, arr, sli)
+	res2 := KArr.MergeSlice(true, arr, sli)
 	if len(res2) != 13 {
-		t.Error("SliceMerge fail")
+		t.Error("MergeSlice fail")
 		return
 	}
-	KArr.SliceMerge(true)
-	KArr.SliceMerge(false, "hellow")
+	KArr.MergeSlice(true)
+	KArr.MergeSlice(false, "hellow")
 }
 
-func BenchmarkSliceMerge(b *testing.B) {
+func BenchmarkMergeSlice(b *testing.B) {
 	b.ResetTimer()
 	var arr = [10]int{1, 2, 3, 4, 5, 6}
 	var sli []string = make([]string, 5)
@@ -205,11 +205,11 @@ func BenchmarkSliceMerge(b *testing.B) {
 	sli[2] = "ccc"
 	sli[3] = "ddd"
 	for i := 0; i < b.N; i++ {
-		KArr.SliceMerge(false, arr, sli)
+		KArr.MergeSlice(false, arr, sli)
 	}
 }
 
-func TestMapMerge(t *testing.T) {
+func TestMergeMap(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("recover...:", r)
@@ -226,18 +226,18 @@ func TestMapMerge(t *testing.T) {
 		"j": 3,
 	}
 
-	res := KArr.MapMerge(true, mp1, mp2)
+	res := KArr.MergeMap(true, mp1, mp2)
 	_, err := KStr.JsonEncode(res)
 	if err != nil {
-		t.Error("MapMerge fail")
+		t.Error("MergeMap fail")
 		return
 	}
-	KArr.MapMerge(false)
-	KArr.MapMerge(false, mp1, mp2)
-	KArr.MapMerge(false, mp1, mp2, "hello")
+	KArr.MergeMap(false)
+	KArr.MergeMap(false, mp1, mp2)
+	KArr.MergeMap(false, mp1, mp2, "hello")
 }
 
-func BenchmarkMapMerge(b *testing.B) {
+func BenchmarkMergeMap(b *testing.B) {
 	b.ResetTimer()
 	mp1 := map[string]string{
 		"a": "aa",
@@ -249,7 +249,7 @@ func BenchmarkMapMerge(b *testing.B) {
 		"j": 3,
 	}
 	for i := 0; i < b.N; i++ {
-		KArr.MapMerge(true, mp1, mp2)
+		KArr.MergeMap(true, mp1, mp2)
 	}
 }
 

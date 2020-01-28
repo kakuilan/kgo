@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-// InArray 元素是否在数组(切片/字典)内
+// InArray 元素是否在数组(切片/字典)内.
 func (ka *LkkArray) InArray(needle interface{}, haystack interface{}) bool {
 	val := reflect.ValueOf(haystack)
 	switch val.Kind() {
@@ -34,7 +34,7 @@ func (ka *LkkArray) InArray(needle interface{}, haystack interface{}) bool {
 	return false
 }
 
-// ArrayFill 用给定的值value填充数组,num为插入元素的数量
+// ArrayFill 用给定的值value填充数组,num为插入元素的数量.
 func (ka *LkkArray) ArrayFill(value interface{}, num int) []interface{} {
 	if num <= 0 {
 		return nil
@@ -48,7 +48,7 @@ func (ka *LkkArray) ArrayFill(value interface{}, num int) []interface{} {
 	return res
 }
 
-// ArrayFlip 交换数组中的键和值
+// ArrayFlip 交换数组中的键和值.
 func (ka *LkkArray) ArrayFlip(arr interface{}) map[interface{}]interface{} {
 	res := make(map[interface{}]interface{})
 	val := reflect.ValueOf(arr)
@@ -72,7 +72,7 @@ func (ka *LkkArray) ArrayFlip(arr interface{}) map[interface{}]interface{} {
 	return res
 }
 
-// ArrayKeys 返回数组中所有的键名
+// ArrayKeys 返回数组中所有的键名.
 func (ka *LkkArray) ArrayKeys(arr interface{}) []interface{} {
 	val := reflect.ValueOf(arr)
 	res := make([]interface{}, val.Len())
@@ -92,13 +92,15 @@ func (ka *LkkArray) ArrayKeys(arr interface{}) []interface{} {
 	return res
 }
 
-// ArrayValues 返回数组/切片/字典中所有的值;filterNil是否过滤空元素(nil,''),true时排除空元素,false时保留空元素.
+// ArrayValues 返回数组(切片/字典)中所有的值.
+// filterNil是否过滤空元素(nil,''),true时排除空元素,false时保留空元素.
 func (ka *LkkArray) ArrayValues(arr interface{}, filterNil bool) []interface{} {
 	return arrayValues(arr, filterNil)
 }
 
-// SliceMerge 合并一个或多个数组/切片;filterNil是否过滤空元素(nil,''),true时排除空元素,false时保留空元素;ss是元素为数组/切片的切片
-func (ka *LkkArray) SliceMerge(filterNil bool, ss ...interface{}) []interface{} {
+// MergeSlice 合并一个或多个数组/切片.
+// filterNil是否过滤空元素(nil,''),true时排除空元素,false时保留空元素;ss是元素为数组/切片的数组.
+func (ka *LkkArray) MergeSlice(filterNil bool, ss ...interface{}) []interface{} {
 	var res []interface{}
 	switch len(ss) {
 	case 0:
@@ -108,7 +110,7 @@ func (ka *LkkArray) SliceMerge(filterNil bool, ss ...interface{}) []interface{} 
 		for i, v := range ss {
 			chkLen := isArrayOrSlice(v, 3)
 			if chkLen == -1 {
-				msg := fmt.Sprintf("[SliceMerge]ss type must be array or slice, but [%d]th item not is.", i)
+				msg := fmt.Sprintf("[MergeSlice]ss type must be array or slice, but [%d]th item not is.", i)
 				panic(msg)
 			} else {
 				n += chkLen
@@ -132,8 +134,9 @@ func (ka *LkkArray) SliceMerge(filterNil bool, ss ...interface{}) []interface{} 
 	return res
 }
 
-// MapMerge 合并字典,相同的键名后面的值将覆盖前一个值;key2Str是否将键转换为字符串;ss是元素为数组/切片的切片
-func (ka *LkkArray) MapMerge(key2Str bool, ss ...interface{}) map[interface{}]interface{} {
+// MergeMap 合并字典.
+// 相同的键名时,后面的值将覆盖前一个值;key2Str是否将键转换为字符串;ss是元素为字典的数组.
+func (ka *LkkArray) MergeMap(key2Str bool, ss ...interface{}) map[interface{}]interface{} {
 	res := make(map[interface{}]interface{})
 	switch len(ss) {
 	case 0:
@@ -151,7 +154,7 @@ func (ka *LkkArray) MapMerge(key2Str bool, ss ...interface{}) map[interface{}]in
 					}
 				}
 			default:
-				msg := fmt.Sprintf("[MapMerge]ss type must be map, but [%d]th item not is.", i)
+				msg := fmt.Sprintf("[MergeMap]ss type must be map, but [%d]th item not is.", i)
 				panic(msg)
 			}
 		}
@@ -159,7 +162,7 @@ func (ka *LkkArray) MapMerge(key2Str bool, ss ...interface{}) map[interface{}]in
 	return res
 }
 
-// ArrayChunk 将一个数组分割成多个,size为每个子数组的长度
+// ArrayChunk 将一个数组分割成多个,size为每个子数组的长度.
 func (ka *LkkArray) ArrayChunk(arr interface{}, size int) [][]interface{} {
 	if size < 1 {
 		panic("[ArrayChunk]size: cannot be less than 1")
@@ -201,8 +204,9 @@ func (ka *LkkArray) ArrayChunk(arr interface{}, size int) [][]interface{} {
 	}
 }
 
-// ArrayPad 以指定长度将一个值item填充进数组
-// 如果 size 为正，则填补到数组的右侧，如果为负则从左侧开始填补。如果 size 的绝对值小于或等于 arr 数组的长度则没有任何填补
+// ArrayPad 以指定长度将一个值item填充进数组.
+// 若 size 为正，则填补到数组的右侧，如果为负则从左侧开始填补;
+// 若 size 的绝对值小于或等于 arr 数组的长度则没有任何填补.
 func (ka *LkkArray) ArrayPad(arr interface{}, size int, item interface{}) []interface{} {
 	val := reflect.ValueOf(arr)
 	switch val.Kind() {
@@ -240,7 +244,7 @@ func (ka *LkkArray) ArrayPad(arr interface{}, size int, item interface{}) []inte
 	}
 }
 
-// ArraySlice 返回根据 offset 和 size 参数所指定的 arr 数组中的一段序列
+// ArraySlice 返回根据 offset 和 size 参数所指定的 arr 数组中的一段切片.
 func (ka *LkkArray) ArraySlice(arr interface{}, offset, size int) []interface{} {
 	if size < 1 {
 		panic("[ArraySlice]size: cannot be less than 1")
@@ -272,7 +276,7 @@ func (ka *LkkArray) ArraySlice(arr interface{}, offset, size int) []interface{} 
 	}
 }
 
-// ArrayRand 从数组中随机取出num个单元
+// ArrayRand 从数组中随机取出num个单元.
 func (ka *LkkArray) ArrayRand(arr interface{}, num int) []interface{} {
 	if num < 1 {
 		panic("[ArrayRand]num: cannot be less than 1")
@@ -303,7 +307,8 @@ func (ka *LkkArray) ArrayRand(arr interface{}, num int) []interface{} {
 	}
 }
 
-// ArrayColumn 返回数组中指定的一列,arr的元素必须是字典;该方法效率低,因为嵌套了两层反射和遍历
+// ArrayColumn 返回数组中指定的一列.
+// arr的元素必须是字典;该方法效率低,因为嵌套了两层反射和遍历.
 func (ka *LkkArray) ArrayColumn(arr interface{}, columnKey string) []interface{} {
 	val := reflect.ValueOf(arr)
 	var res []interface{}
@@ -348,13 +353,13 @@ func (ka *LkkArray) ArrayColumn(arr interface{}, columnKey string) []interface{}
 	return res
 }
 
-// ArrayPush 将一个或多个单元压入数组的末尾（入栈）
+// ArrayPush 将一个或多个单元压入数组的末尾(入栈).
 func (ka *LkkArray) ArrayPush(s *[]interface{}, elements ...interface{}) int {
 	*s = append(*s, elements...)
 	return len(*s)
 }
 
-// ArrayPop 弹出数组最后一个单元（出栈）
+// ArrayPop 弹出数组最后一个单元(出栈).
 func (ka *LkkArray) ArrayPop(s *[]interface{}) interface{} {
 	if len(*s) == 0 {
 		return nil
@@ -365,13 +370,13 @@ func (ka *LkkArray) ArrayPop(s *[]interface{}) interface{} {
 	return e
 }
 
-// ArrayUnshift 在数组开头插入一个或多个单元
+// ArrayUnshift 在数组开头插入一个或多个单元.
 func (ka *LkkArray) ArrayUnshift(s *[]interface{}, elements ...interface{}) int {
 	*s = append(elements, *s...)
 	return len(*s)
 }
 
-// ArrayShift 将数组开头的单元移出数组
+// ArrayShift 将数组开头的单元移出数组.
 func (ka *LkkArray) ArrayShift(s *[]interface{}) interface{} {
 	if len(*s) == 0 {
 		return nil
@@ -381,7 +386,7 @@ func (ka *LkkArray) ArrayShift(s *[]interface{}) interface{} {
 	return f
 }
 
-// ArrayKeyExists 检查数组里是否有指定的键名或索引
+// ArrayKeyExists 检查数组里是否有指定的键名或索引.
 func (ka *LkkArray) ArrayKeyExists(key interface{}, arr interface{}) bool {
 	if key == nil {
 		return false
@@ -412,7 +417,7 @@ func (ka *LkkArray) ArrayKeyExists(key interface{}, arr interface{}) bool {
 	return false
 }
 
-// ArrayReverse 返回单元顺序相反的数组(仅限数组和切片)
+// ArrayReverse 返回单元顺序相反的数组(仅限数组和切片).
 func (ka *LkkArray) ArrayReverse(arr interface{}) []interface{} {
 	val := reflect.ValueOf(arr)
 	switch val.Kind() {
@@ -433,7 +438,7 @@ func (ka *LkkArray) ArrayReverse(arr interface{}) []interface{} {
 	}
 }
 
-// Implode 用delimiter将数组(数组,切片,字典)的值连接为一个字符串.
+// Implode 用delimiter将数组(数组/切片/字典)的值连接为一个字符串.
 func (ka *LkkArray) Implode(delimiter string, arr interface{}) string {
 	val := reflect.ValueOf(arr)
 	switch val.Kind() {
@@ -508,7 +513,7 @@ func (ka *LkkArray) JoinInts(ints []int, delimiter string) (res string) {
 	return
 }
 
-// ArrayDiff 计算数组/切片/字典的差集,返回在 arr1 中但是不在 arr2 里,且非空元素(nil,'')的值.
+// ArrayDiff 计算数组(数组/切片/字典)的差集,返回在 arr1 中但是不在 arr2 里,且非空元素(nil,'')的值.
 func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}) []interface{} {
 	valA := reflect.ValueOf(arr1)
 	valB := reflect.ValueOf(arr2)
@@ -646,7 +651,8 @@ func (ka *LkkArray) ArrayUnique(arr interface{}) []interface{} {
 	return res
 }
 
-// ArraySearchItem 从数组中搜索对应元素(单个).arr为要查找的数组,condition为条件字典.
+// ArraySearchItem 从数组中搜索对应元素(单个).
+// arr为要查找的数组,condition为条件字典.
 func (ka *LkkArray) ArraySearchItem(arr interface{}, condition map[string]interface{}) (res interface{}) {
 	// 条件为空
 	if len(condition) == 0 {
@@ -676,7 +682,8 @@ func (ka *LkkArray) ArraySearchItem(arr interface{}, condition map[string]interf
 	return
 }
 
-// ArraySearchMutil 从数组中搜索对应元素(多个).arr为要查找的数组,condition为条件字典.
+// ArraySearchMutil 从数组中搜索对应元素(多个).
+// arr为要查找的数组,condition为条件字典.
 func (ka *LkkArray) ArraySearchMutil(arr interface{}, condition map[string]interface{}) (res []interface{}) {
 	// 条件为空
 	if len(condition) == 0 {
