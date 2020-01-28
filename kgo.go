@@ -135,7 +135,7 @@ const (
 	PATTERN_EMAIL = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
 
 	// 正则模式-大陆手机号
-	PATTERN_MOBILE = `^1[3-9]\d{9}$`
+	PATTERN_MOBILECN = `^1[3-9]\d{9}$`
 
 	// 正则模式-固定电话
 	PATTERN_TEL_FIX = `^(010|02\d{1}|0[3-9]\d{2})-\d{7,9}(-\d+)?$`
@@ -147,7 +147,7 @@ const (
 	PATTERN_TELEPHONE = `(` + PATTERN_TEL_FIX + `)|(` + PATTERN_TEL_4800 + `)`
 
 	// 正则模式-电话(手机或固话)
-	PATTERN_PHONE = `(` + PATTERN_MOBILE + `)|(` + PATTERN_TEL_FIX + `)`
+	PATTERN_PHONE = `(` + PATTERN_MOBILECN + `)|(` + PATTERN_TEL_FIX + `)`
 
 	// 正则模式-日期时间
 	PATTERN_DATETIME = `^[0-9]{4}(|\-[0-9]{2}(|\-[0-9]{2}(|\s+[0-9]{2}(|:[0-9]{2}(|:[0-9]{2})))))$`
@@ -256,7 +256,7 @@ var (
 	RegHalfWidth             = regexp.MustCompile(PATTERN_HALFWIDTH)
 	RegFloat                 = regexp.MustCompile(PATTERN_FLOAT)
 	RegEmail                 = regexp.MustCompile(PATTERN_EMAIL)
-	RegMobile                = regexp.MustCompile(PATTERN_MOBILE)
+	RegMobilecn              = regexp.MustCompile(PATTERN_MOBILECN)
 	RegTelephone             = regexp.MustCompile(PATTERN_TELEPHONE)
 	RegPhone                 = regexp.MustCompile(PATTERN_PHONE)
 	RegDatetime              = regexp.MustCompile(PATTERN_DATETIME)

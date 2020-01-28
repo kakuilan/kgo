@@ -282,9 +282,9 @@ func (ks *LkkString) IsEmail(email string, validateHost bool) (bool, error) {
 	return true, nil
 }
 
-// IsMobile 检查字符串是否手机号
-func (ks *LkkString) IsMobile(str string) bool {
-	return str != "" && RegMobile.MatchString(str)
+// IsMobilecn 检查字符串是否中国大陆手机号.
+func (ks *LkkString) IsMobilecn(str string) bool {
+	return str != "" && RegMobilecn.MatchString(str)
 }
 
 // IsTel 是否固定电话或400/800电话.
