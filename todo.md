@@ -375,3 +375,45 @@ func FilterEmoji(content string) string {
     }
     return new_content
 }
+
+// 检查是否存在特殊符号
+// 1. emoji字符
+// 2. ascii控制字符
+// 3. \ " '
+// val:待检查的字符串
+// 返回值:
+// bool:true:有特殊字符 false:无特殊字符
+func IfHaveSpecialChar(val string) bool {
+	if len(val) <= 0 {
+		return false
+	}
+
+	// 表情符号过滤
+	// Wide UCS-4 build
+	emojiReg, _ := regexp.Compile("[^\U00000000-\U0000FFFF]+")
+	if emojiReg.Match([]byte(val)) {
+		return true
+	}
+
+	// 排除控制字符和特殊字符
+	for _, charItem := range val {
+		// 排除控制字符
+		if (charItem > 0 && charItem < 0x20) || charItem == 0x7F {
+			return true
+		}
+
+		// 排除部分特殊字符：  \ " '
+		switch charItem {
+		case '\\':
+			fallthrough
+		case '"':
+			fallthrough
+		case '\'':
+			return true
+		}
+	}
+
+	return false
+}
+
+	
