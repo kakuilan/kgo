@@ -15,7 +15,7 @@ import (
 	"unsafe"
 )
 
-// md5Str 计算字符串的 MD5 散列值
+// md5Str 计算字符串的 MD5 散列值.
 func md5Str(str []byte, length uint8) []byte {
 	var res []byte
 	h := md5.New()
@@ -58,7 +58,8 @@ func shaXStr(str []byte, x uint16) []byte {
 	return res
 }
 
-// isArrayOrSlice 检查变量是否数组或切片;chkType检查类型,枚举值有(1仅数组,2仅切片,3数组或切片);结果为-1表示非,>=0表示是.
+// isArrayOrSlice 检查变量是否数组或切片.
+// chkType为检查类型,枚举值有(1仅数组,2仅切片,3数组或切片);结果为-1表示非,>=0表示是.
 func isArrayOrSlice(data interface{}, chkType uint8) int {
 	if chkType != 1 && chkType != 2 && chkType != 3 {
 		panic(fmt.Sprintf("[isArrayOrSlice]chkType value muset in (1, 2, 3), but it`s %d", chkType))
@@ -80,7 +81,7 @@ func isArrayOrSlice(data interface{}, chkType uint8) int {
 	return res
 }
 
-// isMap 检查变量是否字典
+// isMap 检查变量是否字典.
 func isMap(data interface{}) bool {
 	return reflect.ValueOf(data).Kind() == reflect.Map
 }
@@ -118,7 +119,7 @@ func isLittleEndian() bool {
 	return (b == 0x04)
 }
 
-// isInt 变量是否整型数值
+// isInt 变量是否整型数值.
 func isInt(val interface{}) bool {
 	switch val.(type) {
 	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
@@ -135,7 +136,7 @@ func isInt(val interface{}) bool {
 	return false
 }
 
-// isFloat 变量是否浮点数值
+// isFloat 变量是否浮点数值.
 func isFloat(val interface{}) bool {
 	switch val.(type) {
 	case float32, float64:
@@ -207,7 +208,8 @@ func numeric2Float(val interface{}) (res float64, err error) {
 	return
 }
 
-// arrayValues 返回数组/切片/字典中所有的值;filterNil是否过滤空元素(nil,''),true时排除空元素,false时保留空元素.
+// arrayValues 返回数组/切片/字典中所有的值.
+// filterNil是否过滤空元素(nil,''),true时排除空元素,false时保留空元素.
 func arrayValues(arr interface{}, filterNil bool) []interface{} {
 	var res []interface{}
 	var item interface{}
@@ -234,7 +236,7 @@ func arrayValues(arr interface{}, filterNil bool) []interface{} {
 	return res
 }
 
-// getTrimMask 去除mask字符
+// getTrimMask 去除mask字符.
 func getTrimMask(characterMask []string) string {
 	var mask string
 	if len(characterMask) == 0 {
@@ -247,7 +249,7 @@ func getTrimMask(characterMask []string) string {
 
 // reflectPtr 获取反射的指向.
 func reflectPtr(r reflect.Value) reflect.Value {
-	// 如果是指针，则获取其所指向的元素
+	// 如果是指针,则获取其所指向的元素
 	if r.Kind() == reflect.Ptr {
 		r = r.Elem()
 	}
