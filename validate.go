@@ -45,6 +45,15 @@ func (ks *LkkString) IsBlank(str string) bool {
 	return true
 }
 
+// IsEmpty 字符串是否为空(包括空格).
+func (ks *LkkString) IsEmpty(str string) bool {
+	if len(str) == 0 || len(ks.Trim(str)) == 0 {
+		return true
+	}
+
+	return false
+}
+
 // IsUpper 字符串是否全部大写.
 func (ks *LkkString) IsUpper(str string) bool {
 	for _, r := range str {
