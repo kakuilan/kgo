@@ -458,7 +458,7 @@ func BenchmarkIsNan(b *testing.B) {
 	}
 }
 
-func TestIsEmpty(t *testing.T) {
+func TestConvertIsEmpty(t *testing.T) {
 	var sli []int
 	mp := make(map[string]int)
 	var i uint = 0
@@ -482,15 +482,34 @@ func TestIsEmpty(t *testing.T) {
 	res10 := KConv.IsEmpty(val2)
 
 	if !res1 || !res2 || !res3 || !res4 || !res5 || !res6 || !res7 || !res8 || res9 || !res10 {
-		t.Error("IsEmpty fail")
+		t.Error("Convert IsEmpty fail")
 		return
 	}
 }
 
-func BenchmarkIsEmpty(b *testing.B) {
+func BenchmarkConvertIsEmpty(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.IsEmpty("")
+	}
+}
+
+func TestStrIsEmpty(t *testing.T) {
+	chk1 := KStr.IsEmpty("")
+	chk2 := KStr.IsEmpty("  ")
+	chk3 := KStr.IsEmpty("hello")
+
+	if !chk1 || !chk2 || chk3 {
+		t.Error("String IsEmpty fail")
+		return
+	}
+}
+
+func BenchmarkStrIsEmpty(b *testing.B) {
+	b.ResetTimer()
+	str := "hello World"
+	for i := 0; i < b.N; i++ {
+		KStr.IsEmpty(str)
 	}
 }
 
