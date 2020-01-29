@@ -62,7 +62,7 @@
 - https://github.com/printfcoder/goutils -x
 - https://github.com/space307/go-utils -x
 - https://github.com/liuyongshuai/goUtils -x
-- https://github.com/Jordanzuo/goutil
+- https://github.com/Jordanzuo/goutil -x
 - https://github.com/gxxgle/go-utils
 - https://github.com/q191201771/naza
 - https://github.com/kirinlabs/utils

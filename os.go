@@ -62,15 +62,21 @@ func (ko *LkkOS) IsMac() bool {
 	return "darwin" == runtime.GOOS
 }
 
-// Pwd 获取当前程序运行所在的路径,注意和Getwd有所不同
+// Pwd 获取当前程序运行所在的路径,注意和Getwd有所不同.
 func (ko *LkkOS) Pwd() string {
-	dir, _ := exec.LookPath(os.Args[0])
-	pwd, _ := filepath.Abs(dir)
+	var dir, ex string
+	var err error
+	ex, err = os.Executable()
+	if err == nil {
+		exReal, _ := filepath.EvalSymlinks(ex)
+		exReal, _ = filepath.Abs(exReal)
+		dir = filepath.Dir(exReal)
+	}
 
-	return filepath.Dir(pwd)
+	return dir
 }
 
-// Getcwd 取得当前工作目录
+// Getcwd 取得当前工作目录(程序可能在任务中进行多次目录切换).
 func (ko *LkkOS) Getcwd() (string, error) {
 	dir, err := os.Getwd()
 	return dir, err
