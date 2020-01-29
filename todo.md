@@ -63,8 +63,8 @@
 - https://github.com/space307/go-utils -x
 - https://github.com/liuyongshuai/goUtils -x
 - https://github.com/Jordanzuo/goutil -x
-- https://github.com/gxxgle/go-utils
-- https://github.com/q191201771/naza
+- https://github.com/gxxgle/go-utils -x
+- https://github.com/q191201771/naza -x
 - https://github.com/kirinlabs/utils
 - https://github.com/xinliangnote/go-util
 - https://github.com/facebookarchive/pidfile/blob/master/pidfile.go
@@ -128,6 +128,8 @@ https://github.com/jimmykuu/webhelpers/blob/master/text.go
 - pid文件检查
 - 根据端口查找pid
 - 修正各函数的参数名称,尽量统一;弃用类似php不合理的函数名
+- ToBool
+- ToStr
 
 
 
