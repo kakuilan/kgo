@@ -98,16 +98,16 @@ func BenchmarkBool2Int(b *testing.B) {
 	}
 }
 
-func TestStrictStr2Int(t *testing.T) {
+func TestStr2IntStrict(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("recover...:", r)
 		}
 	}()
 
-	res := KConv.StrictStr2Int("abc123", 8, true)
+	res := KConv.Str2IntStrict("abc123", 8, true)
 	if fmt.Sprint(reflect.TypeOf(res)) != "int8" {
-		t.Error("StrictStr2Int fail")
+		t.Error("Str2IntStrict fail")
 		return
 	}
 }
