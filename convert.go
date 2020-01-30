@@ -282,8 +282,8 @@ func (kc *LkkConvert) Ip2Long(ipAddress string) uint32 {
 	return binary.BigEndian.Uint32(ip.To4())
 }
 
-// Long2ip 将长整型转化为字符串形式带点的互联网标准格式地址(IPV4).
-func (kc *LkkConvert) Long2ip(properAddress uint32) string {
+// Long2Ip 将长整型转化为字符串形式带点的互联网标准格式地址(IPV4).
+func (kc *LkkConvert) Long2Ip(properAddress uint32) string {
 	ipByte := make([]byte, 4)
 	binary.BigEndian.PutUint32(ipByte, properAddress)
 	ip := net.IP(ipByte)
