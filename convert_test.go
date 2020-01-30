@@ -283,16 +283,16 @@ func BenchmarkStr2Uint64(b *testing.B) {
 	}
 }
 
-func TestStrictStr2Float(t *testing.T) {
+func TestStr2FloatStrict(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("recover...:", r)
 		}
 	}()
 
-	res := KConv.StrictStr2Float("abc123", 32, true)
+	res := KConv.Str2FloatStrict("abc123", 32, true)
 	if fmt.Sprint(reflect.TypeOf(res)) != "float32" {
-		t.Error("StrictStr2Float fail")
+		t.Error("Str2FloatStrict fail")
 		return
 	}
 }

@@ -128,8 +128,9 @@ func (kc *LkkConvert) Str2Uint64(val string) uint64 {
 	return uint64(kc.StrictStr2Uint(val, 64, false))
 }
 
-// StrictStr2Float 严格将字符串转换为浮点型,bitSize为类型位数,strict为是否严格检查
-func (kc *LkkConvert) StrictStr2Float(val string, bitSize int, strict bool) float64 {
+// Str2FloatStrict 严格将字符串转换为浮点型.
+// bitSize为类型位数,strict为是否严格检查
+func (kc *LkkConvert) Str2FloatStrict(val string, bitSize int, strict bool) float64 {
 	res, err := strconv.ParseFloat(val, bitSize)
 	if err != nil {
 		if strict {
@@ -141,12 +142,12 @@ func (kc *LkkConvert) StrictStr2Float(val string, bitSize int, strict bool) floa
 
 // Str2Float32 将字符串转换为float32
 func (kc *LkkConvert) Str2Float32(val string) float32 {
-	return float32(kc.StrictStr2Float(val, 32, false))
+	return float32(kc.Str2FloatStrict(val, 32, false))
 }
 
 // Str2Float64 将字符串转换为float64
 func (kc *LkkConvert) Str2Float64(val string) float64 {
-	return float64(kc.StrictStr2Float(val, 64, false))
+	return float64(kc.Str2FloatStrict(val, 64, false))
 }
 
 // Str2Bool 将字符串转换为布尔值
