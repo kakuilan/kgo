@@ -811,3 +811,48 @@ func BenchmarkGetPointerAddrInt(b *testing.B) {
 		KConv.GetPointerAddrInt(v)
 	}
 }
+
+func TestToBool(t *testing.T) {
+	//并行测试
+	t.Parallel()
+
+	var fn CallBack
+
+	var tests = []struct {
+		param    interface{}
+		expected bool
+	}{
+		{int(-1), false},
+		{int8(0), false},
+		{int16(1), true},
+		{int32(2), true},
+		{int64(3), true},
+		{uint(0), false},
+		{uint8(0), false},
+		{uint16(0), false},
+		{uint32(0), false},
+		{uint64(0), false},
+		{float32(0), false},
+		{float64(0), false},
+		{[]byte{}, false},
+		{"1", true},
+		{"TRUE", true},
+		{false, false},
+		{fn, false},
+	}
+
+	for _, test := range tests {
+		actual := KConv.ToBool(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected ToBool(%q) to be %v, got %v", test.param, test.expected, actual)
+			return
+		}
+	}
+}
+
+func BenchmarkToBool(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.ToBool(1)
+	}
+}

@@ -978,6 +978,4 @@ func TestGetPidByPort(t *testing.T) {
 	res := KOS.GetPidByPort(22)
 	println("pid:", res)
 
-	var b []byte
-	println(KConv.Gettype(b))
 }

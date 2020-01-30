@@ -151,8 +151,8 @@ func (kc *LkkConvert) Str2Float64(val string) float64 {
 }
 
 // Str2Bool 将字符串转换为布尔值.
-// 1, t, T, TRUE, true, True.
-// 0, f, F, FALSE, false, False.
+// 1, t, T, TRUE, true, True 等字符串为真.
+// 0, f, F, FALSE, false, False 等字符串为假.
 func (kc *LkkConvert) Str2Bool(val string) (res bool) {
 	if val != "" {
 		res, _ = strconv.ParseBool(val)
