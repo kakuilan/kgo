@@ -551,7 +551,7 @@ func BenchmarkIsBool(b *testing.B) {
 }
 
 func TestIsHex(t *testing.T) {
-	num1 := KConv.Dec2hex(1234)
+	num1 := KConv.Dec2Hex(1234)
 	num2 := "0x" + num1
 	res1 := KConv.IsHex(num1)
 	res2 := KConv.IsHex(num2)
