@@ -129,7 +129,7 @@ func (kc *LkkConvert) Str2Uint64(val string) uint64 {
 }
 
 // Str2FloatStrict 严格将字符串转换为浮点型.
-// bitSize为类型位数,strict为是否严格检查
+// bitSize为类型位数,strict为是否严格检查.
 func (kc *LkkConvert) Str2FloatStrict(val string, bitSize int, strict bool) float64 {
 	res, err := strconv.ParseFloat(val, bitSize)
 	if err != nil {
@@ -150,12 +150,15 @@ func (kc *LkkConvert) Str2Float64(val string) float64 {
 	return float64(kc.Str2FloatStrict(val, 64, false))
 }
 
-// Str2Bool 将字符串转换为布尔值
-func (kc *LkkConvert) Str2Bool(val string) bool {
-	if val == "true" || val == "True" || val == "TRUE" {
-		return true
+// Str2Bool 将字符串转换为布尔值.
+// 1, t, T, TRUE, true, True.
+// 0, f, F, FALSE, false, False.
+func (kc *LkkConvert) Str2Bool(val string) (res bool) {
+	if val != "" {
+		res, _ = strconv.ParseBool(val)
 	}
-	return false
+
+	return
 }
 
 // Int2Bool 将整数转换为布尔值
@@ -304,6 +307,44 @@ func (kc *LkkConvert) ToStr(val interface{}) (res string) {
 		res = fmt.Sprintf("%v", val)
 	}
 	return
+}
+
+// ToBool 强制将变量转换为布尔值.
+func (kc *LkkConvert) ToBool(val interface{}) bool {
+	switch val.(type) {
+	case int:
+		return (val.(int) > 0)
+	case int8:
+		return (val.(int8) > 0)
+	case int16:
+		return (val.(int16) > 0)
+	case int32:
+		return (val.(int32) > 0)
+	case int64:
+		return (val.(int64) > 0)
+	case uint:
+		return (val.(uint) > 0)
+	case uint8:
+		return (val.(uint8) > 0)
+	case uint16:
+		return (val.(uint16) > 0)
+	case uint32:
+		return (val.(uint32) > 0)
+	case uint64:
+		return (val.(uint64) > 0)
+	case float32:
+		return (val.(float32) > 0)
+	case float64:
+		return (val.(float64) > 0)
+	case []uint8:
+		return kc.Str2Bool(string(val.([]uint8)))
+	case string:
+		return kc.Str2Bool(val.(string))
+	case bool:
+		return val.(bool)
+	default:
+		return false
+	}
 }
 
 // ToInt 强制将变量转换为整型;其中true或"true"为1
