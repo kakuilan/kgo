@@ -201,8 +201,8 @@ func (kc *LkkConvert) ByteSlice2Str(val []byte) string {
 	return *(*string)(unsafe.Pointer(&val))
 }
 
-// Dec2bin 将十进制转换为二进制
-func (kc *LkkConvert) Dec2bin(number int64) string {
+// Dec2Bin 将十进制转换为二进制
+func (kc *LkkConvert) Dec2Bin(number int64) string {
 	return strconv.FormatInt(number, 2)
 }
 
@@ -264,7 +264,7 @@ func (kc *LkkConvert) Oct2dec(str string) (int64, error) {
 	return strconv.ParseInt(str[start:], 8, 0)
 }
 
-// BaseConvert 进制转换,在任意进制之间转换数字
+// BaseConvert 进制转换,在任意进制之间转换数字.
 func (kc *LkkConvert) BaseConvert(number string, frombase, tobase int) (string, error) {
 	i, err := strconv.ParseInt(number, frombase, 0)
 	if err != nil {
@@ -282,7 +282,7 @@ func (kc *LkkConvert) Ip2long(ipAddress string) uint32 {
 	return binary.BigEndian.Uint32(ip.To4())
 }
 
-// Long2ip 将长整型转化为字符串形式带点的互联网标准格式地址（IPV4）
+// Long2ip 将长整型转化为字符串形式带点的互联网标准格式地址(IPV4).
 func (kc *LkkConvert) Long2ip(properAddress uint32) string {
 	ipByte := make([]byte, 4)
 	binary.BigEndian.PutUint32(ipByte, properAddress)
@@ -290,7 +290,7 @@ func (kc *LkkConvert) Long2ip(properAddress uint32) string {
 	return ip.String()
 }
 
-// Gettype 获取变量类型
+// Gettype 获取变量类型.
 func (kc *LkkConvert) Gettype(v interface{}) string {
 	return fmt.Sprintf("%T", v)
 }
