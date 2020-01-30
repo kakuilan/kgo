@@ -233,8 +233,8 @@ func (kc *LkkConvert) Bin2Hex(str string) (string, error) {
 	return strconv.FormatInt(i, 16), nil
 }
 
-// Dec2hex 将十进制转换为十六进制
-func (kc *LkkConvert) Dec2hex(number int64) string {
+// Dec2Hex 将十进制转换为十六进制
+func (kc *LkkConvert) Dec2Hex(number int64) string {
 	return strconv.FormatInt(number, 16)
 }
 

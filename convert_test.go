@@ -504,18 +504,18 @@ func BenchmarkBin2Hex(b *testing.B) {
 	}
 }
 
-func TestDec2hex(t *testing.T) {
-	res := KConv.Dec2hex(1234567890)
+func TestDec2Hex(t *testing.T) {
+	res := KConv.Dec2Hex(1234567890)
 	if res != "499602d2" {
-		t.Error("Dec2hex fail")
+		t.Error("Dec2Hex fail")
 		return
 	}
 }
 
-func BenchmarkDec2hex(b *testing.B) {
+func BenchmarkDec2Hex(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KConv.Dec2hex(1234567890)
+		KConv.Dec2Hex(1234567890)
 	}
 }
 
