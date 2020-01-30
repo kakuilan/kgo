@@ -611,7 +611,7 @@ func (kc *LkkConvert) IsBool(v interface{}) bool {
 
 // IsHex 是否十六进制字符串
 func (kc *LkkConvert) IsHex(str string) bool {
-	_, err := kc.Hex2dec(str)
+	_, err := kc.Hex2Dec(str)
 	return err == nil
 }
 
