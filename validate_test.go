@@ -676,6 +676,7 @@ func BenchmarkHasSpecialChar(b *testing.B) {
 }
 
 func TestIsUrl(t *testing.T) {
+	//并行测试
 	t.Parallel()
 
 	var tests = []struct {
