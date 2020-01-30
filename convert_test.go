@@ -588,19 +588,19 @@ func BenchmarkBaseConvert(b *testing.B) {
 	}
 }
 
-func TestIp2long(t *testing.T) {
-	res := KConv.Ip2long("127.0.0.1")
+func TestIp2Long(t *testing.T) {
+	res := KConv.Ip2Long("127.0.0.1")
 	if res == 0 {
-		t.Error("Ip2long fail")
+		t.Error("Ip2Long fail")
 		return
 	}
-	KConv.Ip2long("1")
+	KConv.Ip2Long("1")
 }
 
-func BenchmarkIp2long(b *testing.B) {
+func BenchmarkIp2Long(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KConv.Ip2long("127.0.0.1")
+		KConv.Ip2Long("127.0.0.1")
 	}
 }
 
