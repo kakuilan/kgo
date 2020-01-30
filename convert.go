@@ -249,8 +249,8 @@ func (kc *LkkConvert) Hex2Dec(str string) (int64, error) {
 	return strconv.ParseInt(str[start:], 16, 0)
 }
 
-// Dec2oct 将十进制转换为八进制
-func (kc *LkkConvert) Dec2oct(number int64) string {
+// Dec2Oct 将十进制转换为八进制
+func (kc *LkkConvert) Dec2Oct(number int64) string {
 	return strconv.FormatInt(number, 8)
 }
 

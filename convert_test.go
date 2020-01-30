@@ -538,18 +538,18 @@ func BenchmarkHex2Dec(b *testing.B) {
 	}
 }
 
-func TestDec2oct(t *testing.T) {
-	res := KConv.Dec2oct(123456789)
+func TestDec2Oct(t *testing.T) {
+	res := KConv.Dec2Oct(123456789)
 	if res != "726746425" {
-		t.Error("Dec2oct fail")
+		t.Error("Dec2Oct fail")
 		return
 	}
 }
 
-func BenchmarkDec2oct(b *testing.B) {
+func BenchmarkDec2Oct(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KConv.Dec2oct(123456789)
+		KConv.Dec2Oct(123456789)
 	}
 }
 
