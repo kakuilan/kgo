@@ -488,19 +488,19 @@ func BenchmarkHex2Bin(b *testing.B) {
 	}
 }
 
-func TestBin2hex(t *testing.T) {
-	_, err := KConv.Bin2hex("1001000111010101111111111")
+func TestBin2Hex(t *testing.T) {
+	_, err := KConv.Bin2Hex("1001000111010101111111111")
 	if err != nil {
-		t.Error("Bin2hex fail")
+		t.Error("Bin2Hex fail")
 		return
 	}
-	_, _ = KConv.Bin2hex("hello")
+	_, _ = KConv.Bin2Hex("hello")
 }
 
-func BenchmarkBin2hex(b *testing.B) {
+func BenchmarkBin2Hex(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = KConv.Bin2hex("1001000111010101111111111")
+		_, _ = KConv.Bin2Hex("1001000111010101111111111")
 	}
 }
 

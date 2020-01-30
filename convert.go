@@ -224,8 +224,8 @@ func (kc *LkkConvert) Hex2Bin(data string) (string, error) {
 	return strconv.FormatInt(i, 2), nil
 }
 
-// Bin2hex 将二进制字符串转换为十六进制字符串
-func (kc *LkkConvert) Bin2hex(str string) (string, error) {
+// Bin2Hex 将二进制字符串转换为十六进制字符串
+func (kc *LkkConvert) Bin2Hex(str string) (string, error) {
 	i, err := strconv.ParseInt(str, 2, 0)
 	if err != nil {
 		return "", err
