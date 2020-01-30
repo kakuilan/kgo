@@ -349,55 +349,6 @@ func BenchmarkStr2Bool(b *testing.B) {
 	}
 }
 
-func TestInt2Bool(t *testing.T) {
-	var (
-		it1 int   = -1
-		it2 int8  = 0
-		it3 int16 = 1
-		it4 int32 = 2
-		it5 int64 = 3
-
-		ui1 uint   = 0
-		ui2 uint8  = 1
-		ui3 uint16 = 2
-		ui4 uint32 = 3
-		ui5 uint64 = 4
-
-		it6 string = "1"
-	)
-
-	res1 := KConv.Int2Bool(it1)
-	res2 := KConv.Int2Bool(it2)
-	res3 := KConv.Int2Bool(it3)
-	res4 := KConv.Int2Bool(it4)
-	res5 := KConv.Int2Bool(it5)
-
-	res6 := KConv.Int2Bool(ui1)
-	res7 := KConv.Int2Bool(ui2)
-	res8 := KConv.Int2Bool(ui3)
-	res9 := KConv.Int2Bool(ui4)
-	res10 := KConv.Int2Bool(ui5)
-	res11 := KConv.Int2Bool(it6)
-
-	if res1 || res2 || res6 || res11 {
-		t.Error("Int2Bool fail")
-		return
-	}
-
-	if !(res3 && res4 && res5 && res7 && res8 && res9 && res10) {
-		t.Error("Int2Bool fail")
-		return
-	}
-
-}
-
-func BenchmarkInt2Bool(b *testing.B) {
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		KConv.Int2Bool(1)
-	}
-}
-
 func TestStr2ByteSlice(t *testing.T) {
 	str := `hello world!`
 	res := KConv.Str2ByteSlice(str)
@@ -836,6 +787,7 @@ func TestToBool(t *testing.T) {
 		{float64(0), false},
 		{[]byte{}, false},
 		{"1", true},
+		{"2.1", false},
 		{"TRUE", true},
 		{false, false},
 		{fn, false},
