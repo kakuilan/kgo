@@ -196,8 +196,8 @@ func (kc *LkkConvert) Str2ByteSlice(val string) []byte {
 	return *(*[]byte)(unsafe.Pointer(pSliceHeader))
 }
 
-// BytesSlice2Str 将字节切片转换为字符串,零拷贝
-func (kc *LkkConvert) BytesSlice2Str(val []byte) string {
+// ByteSlice2Str 将字节切片转换为字符串,零拷贝
+func (kc *LkkConvert) ByteSlice2Str(val []byte) string {
 	return *(*string)(unsafe.Pointer(&val))
 }
 
