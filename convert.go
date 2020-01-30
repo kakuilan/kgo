@@ -54,8 +54,9 @@ func (kc *LkkConvert) Bool2Int(val bool) int {
 	return 0
 }
 
-// StrictStr2Int 严格将字符串转换为有符号整型,bitSize为类型位数,strict为是否严格检查
-func (kc *LkkConvert) StrictStr2Int(val string, bitSize int, strict bool) int64 {
+// Str2IntStrict 严格将字符串转换为有符号整型.
+// bitSize为类型位数,strict为是否严格检查.
+func (kc *LkkConvert) Str2IntStrict(val string, bitSize int, strict bool) int64 {
 	res, err := strconv.ParseInt(val, 0, bitSize)
 	if err != nil {
 		if strict {
@@ -73,22 +74,22 @@ func (kc *LkkConvert) Str2Int(val string) int {
 
 // Str2Int8 将字符串转换为int8
 func (kc *LkkConvert) Str2Int8(val string) int8 {
-	return int8(kc.StrictStr2Int(val, 8, false))
+	return int8(kc.Str2IntStrict(val, 8, false))
 }
 
 // Str2Int16 将字符串转换为int16
 func (kc *LkkConvert) Str2Int16(val string) int16 {
-	return int16(kc.StrictStr2Int(val, 16, false))
+	return int16(kc.Str2IntStrict(val, 16, false))
 }
 
 // Str2Int32 将字符串转换为int32
 func (kc *LkkConvert) Str2Int32(val string) int32 {
-	return int32(kc.StrictStr2Int(val, 32, false))
+	return int32(kc.Str2IntStrict(val, 32, false))
 }
 
 // Str2Int64 将字符串转换为int64
 func (kc *LkkConvert) Str2Int64(val string) int64 {
-	return kc.StrictStr2Int(val, 64, false)
+	return kc.Str2IntStrict(val, 64, false)
 }
 
 // StrictStr2Uint 严格将字符串转换为无符号整型,bitSize为类型位数,strict为是否严格检查
