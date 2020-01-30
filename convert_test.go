@@ -519,22 +519,22 @@ func BenchmarkDec2Hex(b *testing.B) {
 	}
 }
 
-func TestHex2dec(t *testing.T) {
-	res1, err := KConv.Hex2dec("123abf")
-	res2, _ := KConv.Hex2dec("0x123abf")
+func TestHex2Dec(t *testing.T) {
+	res1, err := KConv.Hex2Dec("123abf")
+	res2, _ := KConv.Hex2Dec("0x123abf")
 	if err != nil {
-		t.Error("Hex2dec fail")
+		t.Error("Hex2Dec fail")
 		return
 	} else if res1 != res2 {
-		t.Error("Hex2dec fail")
+		t.Error("Hex2Dec fail")
 		return
 	}
 }
 
-func BenchmarkHex2dec(b *testing.B) {
+func BenchmarkHex2Dec(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = KConv.Hex2dec("123abf")
+		_, _ = KConv.Hex2Dec("123abf")
 	}
 }
 

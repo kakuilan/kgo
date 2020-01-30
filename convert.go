@@ -238,8 +238,8 @@ func (kc *LkkConvert) Dec2Hex(number int64) string {
 	return strconv.FormatInt(number, 16)
 }
 
-// Hex2dec 将十六进制转换为十进制
-func (kc *LkkConvert) Hex2dec(str string) (int64, error) {
+// Hex2Dec 将十六进制转换为十进制
+func (kc *LkkConvert) Hex2Dec(str string) (int64, error) {
 	start := 0
 	if len(str) > 2 && str[0:2] == "0x" {
 		start = 2
@@ -368,6 +368,6 @@ func (kc *LkkConvert) Hex2Byte(str string) []byte {
 
 // GetPointerAddrInt 获取变量指针地址整型值.variable为变量.
 func (kc *LkkConvert) GetPointerAddrInt(variable interface{}) int64 {
-	res, _ := kc.Hex2dec(fmt.Sprintf("%p", &variable))
+	res, _ := kc.Hex2Dec(fmt.Sprintf("%p", &variable))
 	return res
 }
