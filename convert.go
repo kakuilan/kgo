@@ -66,10 +66,15 @@ func (kc *LkkConvert) Str2IntStrict(val string, bitSize int, strict bool) int64 
 	return res
 }
 
-// Str2Int 将字符串转换为int
-func (kc *LkkConvert) Str2Int(val string) int {
-	res, _ := strconv.Atoi(val)
-	return res
+// Str2Int 将字符串转换为int.其中"true", "TRUE", "True"为1.
+func (kc *LkkConvert) Str2Int(val string) (res int) {
+	if val == "true" || val == "TRUE" || val == "True" {
+		res = 1
+		return
+	}
+
+	res, _ = strconv.Atoi(val)
+	return
 }
 
 // Str2Int8 将字符串转换为int8
@@ -171,7 +176,7 @@ func (kc *LkkConvert) Str2ByteSlice(val string) []byte {
 	return *(*[]byte)(unsafe.Pointer(pSliceHeader))
 }
 
-// ByteSlice2Str 将字节切片转换为字符串,零拷贝
+// ByteSlice2Str 将字节切片转换为字符串,零拷贝.
 func (kc *LkkConvert) ByteSlice2Str(val []byte) string {
 	return *(*string)(unsafe.Pointer(&val))
 }
@@ -319,13 +324,41 @@ func (kc *LkkConvert) ToBool(val interface{}) bool {
 	}
 }
 
-// ToInt 强制将变量转换为整型;其中true或"true"为1
+// ToInt 强制将变量转换为整型;其中true或"true"为1.
 func (kc *LkkConvert) ToInt(val interface{}) int {
-	str := strings.ToLower(fmt.Sprintf("%v", val))
-	if str == "true" {
-		return 1
-	} else {
-		return kc.Str2Int(str)
+	switch val.(type) {
+	case int:
+		return val.(int)
+	case int8:
+		return int(val.(int8))
+	case int16:
+		return int(val.(int16))
+	case int32:
+		return int(val.(int32))
+	case int64:
+		return int(val.(int64))
+	case uint:
+		return int(val.(uint))
+	case uint8:
+		return int(val.(uint8))
+	case uint16:
+		return int(val.(uint16))
+	case uint32:
+		return int(val.(uint32))
+	case uint64:
+		return int(val.(uint64))
+	case float32:
+		return int(val.(float32))
+	case float64:
+		return int(val.(float64))
+	case []uint8:
+		return kc.Str2Int(string(val.([]uint8)))
+	case string:
+		return kc.Str2Int(val.(string))
+	case bool:
+		return kc.Bool2Int(val.(bool))
+	default:
+		return 0
 	}
 }
 

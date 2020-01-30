@@ -118,6 +118,25 @@ func TestStr2Int(t *testing.T) {
 		t.Error("Str2Int fail")
 		return
 	}
+
+	var tests = []struct {
+		param    string
+		expected int
+	}{
+		{"", 0},
+		{"123", 123},
+		{"123.45", 0},
+		{"True", 1},
+		{"false", 0},
+	}
+
+	for _, test := range tests {
+		actual := KConv.Str2Int(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected ToBool(%q) to be %v, got %v", test.param, test.expected, actual)
+			return
+		}
+	}
 }
 
 func BenchmarkStr2Int(b *testing.B) {
@@ -606,13 +625,38 @@ func BenchmarkToStr(b *testing.B) {
 }
 
 func TestToInt(t *testing.T) {
-	res1 := KConv.ToInt("")
-	res2 := KConv.ToInt(true)
-	res3 := KConv.ToInt(UINT64_MAX)
-	res4 := KConv.ToInt("123")
-	if res1 != 0 || res2 != 1 || res3 != INT_MAX || res4 != 123 {
-		t.Error("ToInt fail")
-		return
+	var fn CallBack
+	var tests = []struct {
+		param    interface{}
+		expected int
+	}{
+		{int(-1), -1},
+		{int8(0), 0},
+		{int16(1), 1},
+		{int32(2), 2},
+		{int64(3), 3},
+		{uint(0), 0},
+		{uint8(0), 0},
+		{uint16(0), 0},
+		{uint32(0), 0},
+		{uint64(0), 0},
+		{float32(0), 0},
+		{float64(0), 0},
+		{[]byte{}, 0},
+		{"1", 1},
+		{"2.1", 0},
+		{"TRUE", 1},
+		{true, 1},
+		{false, 0},
+		{fn, 0},
+	}
+
+	for _, test := range tests {
+		actual := KConv.ToInt(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected ToBool(%q) to be %v, got %v", test.param, test.expected, actual)
+			return
+		}
 	}
 }
 
