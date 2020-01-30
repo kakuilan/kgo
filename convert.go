@@ -273,8 +273,8 @@ func (kc *LkkConvert) BaseConvert(number string, frombase, tobase int) (string, 
 	return strconv.FormatInt(i, tobase), nil
 }
 
-// Ip2long 将 IPV4 的字符串互联网协议转换成长整型数字
-func (kc *LkkConvert) Ip2long(ipAddress string) uint32 {
+// Ip2Long 将 IPV4 的字符串互联网协议转换成长整型数字
+func (kc *LkkConvert) Ip2Long(ipAddress string) uint32 {
 	ip := net.ParseIP(ipAddress)
 	if ip == nil {
 		return 0
