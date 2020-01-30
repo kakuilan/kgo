@@ -668,13 +668,38 @@ func BenchmarkToInt(b *testing.B) {
 }
 
 func TestToFloat(t *testing.T) {
-	res1 := KConv.ToFloat("")
-	res2 := KConv.ToFloat(true)
-	res3 := KConv.ToFloat(UINT64_MAX)
-	res4 := KConv.ToFloat("123")
-	if res1 != 0 || res2 != 1 || res3 < 1 || res4 != 123.0 {
-		t.Error("ToFloat fail")
-		return
+	var fn CallBack
+	var tests = []struct {
+		param    interface{}
+		expected float64
+	}{
+		{int(-1), -1.0},
+		{int8(0), 0.0},
+		{int16(1), 1.0},
+		{int32(2), 2.0},
+		{int64(3), 3.0},
+		{uint(0), 0.0},
+		{uint8(0), 0.0},
+		{uint16(0), 0.0},
+		{uint32(0), 0.0},
+		{uint64(0), 0.0},
+		{float32(0), 0.0},
+		{float64(0), 0.0},
+		{[]byte{}, 0.0},
+		{"1", 1.0},
+		{"2.1", 2.1},
+		{"TRUE", 1.0},
+		{true, 1.0},
+		{false, 0},
+		{fn, 0},
+	}
+
+	for _, test := range tests {
+		actual := KConv.ToFloat(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected ToBool(%q) to be %v, got %v", test.param, test.expected, actual)
+			return
+		}
 	}
 }
 

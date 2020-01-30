@@ -8,7 +8,6 @@ import (
 	"net"
 	"reflect"
 	"strconv"
-	"strings"
 	"unsafe"
 )
 
@@ -150,9 +149,15 @@ func (kc *LkkConvert) Str2Float32(val string) float32 {
 	return float32(kc.Str2FloatStrict(val, 32, false))
 }
 
-// Str2Float64 将字符串转换为float64
-func (kc *LkkConvert) Str2Float64(val string) float64 {
-	return float64(kc.Str2FloatStrict(val, 64, false))
+// Str2Float64 将字符串转换为float64.其中"true", "TRUE", "True"为1.0 .
+func (kc *LkkConvert) Str2Float64(val string) (res float64) {
+	if val == "true" || val == "TRUE" || val == "True" {
+		res = 1.0
+	} else {
+		res = float64(kc.Str2FloatStrict(val, 64, false))
+	}
+
+	return
 }
 
 // Str2Bool 将字符串转换为布尔值.
@@ -362,14 +367,44 @@ func (kc *LkkConvert) ToInt(val interface{}) int {
 	}
 }
 
-// ToFloat 强制将变量转换为浮点型;其中true或"true"为1.0
-func (kc *LkkConvert) ToFloat(val interface{}) float64 {
-	str := strings.ToLower(fmt.Sprintf("%v", val))
-	if str == "true" {
-		return 1.0
-	} else {
-		return kc.Str2Float64(str)
+// ToFloat 强制将变量转换为浮点型;其中true或"true"为1.0 .
+func (kc *LkkConvert) ToFloat(val interface{}) (res float64) {
+	switch val.(type) {
+	case int:
+		res = float64(val.(int))
+	case int8:
+		res = float64(val.(int8))
+	case int16:
+		res = float64(val.(int16))
+	case int32:
+		res = float64(val.(int32))
+	case int64:
+		res = float64(val.(int64))
+	case uint:
+		res = float64(val.(uint))
+	case uint8:
+		res = float64(val.(uint8))
+	case uint16:
+		res = float64(val.(uint16))
+	case uint32:
+		res = float64(val.(uint32))
+	case uint64:
+		res = float64(val.(uint64))
+	case float32:
+		res = float64(val.(float32))
+	case float64:
+		res = val.(float64)
+	case []uint8:
+		res = kc.Str2Float64(string(val.([]uint8)))
+	case string:
+		res = kc.Str2Float64(val.(string))
+	case bool:
+		if val.(bool) {
+			res = 1.0
+		}
 	}
+
+	return
 }
 
 // Float64ToByte 64位浮点数转字节切片
