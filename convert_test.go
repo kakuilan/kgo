@@ -440,19 +440,19 @@ func BenchmarkByteSlice2Str(b *testing.B) {
 	}
 }
 
-func TestDec2bin(t *testing.T) {
+func TestDec2Bin(t *testing.T) {
 	var num int64 = 8
-	res := KConv.Dec2bin(num)
+	res := KConv.Dec2Bin(num)
 	if res != "1000" {
-		t.Error("Dec2bin fail")
+		t.Error("Dec2Bin fail")
 		return
 	}
 }
 
-func BenchmarkDec2bin(b *testing.B) {
+func BenchmarkDec2Bin(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KConv.Dec2bin(10)
+		KConv.Dec2Bin(10)
 	}
 }
 
