@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"github.com/json-iterator/go"
 	xhtml "golang.org/x/net/html"
@@ -1251,4 +1252,24 @@ func (ks *LkkString) Img2Base64(content []byte, ext ...string) string {
 	}
 
 	return fmt.Sprintf("data:image/%s;base64,%s", imgType, base64.StdEncoding.EncodeToString(content))
+}
+
+// Jsonp2Json 将jsonp转为json串.
+// Example: forbar({a:"1",b:2}) to {"a":"1","b":2}
+func (ks *LkkString) Jsonp2Json(str string) (string, error) {
+	start := strings.Index(str, "(")
+	end := strings.LastIndex(str, ")")
+
+	if start == -1 || end == -1 {
+		return "", errors.New("invalid jsonp.")
+	}
+
+	start += 1
+	if start >= end {
+		return "", errors.New("invalid jsonp.")
+	}
+
+	res := str[start:end]
+
+	return res, nil
 }

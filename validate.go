@@ -160,11 +160,12 @@ func (ks *LkkString) HasSpecialChar(str string) (res bool) {
 	return
 }
 
-// IsJSON 字符串是否合法的json格式
+// IsJSON 字符串是否合法的json格式.
 func (ks *LkkString) IsJSON(str string) bool {
-	if str == "" {
+	length := len(str)
+	if length == 0 {
 		return false
-	} else if str[0] != '{' || str[len(str)-1] != '}' {
+	} else if (str[0] != '{' || str[length-1] != '}') && (str[0] != '[' || str[length-1] != ']') {
 		return false
 	}
 

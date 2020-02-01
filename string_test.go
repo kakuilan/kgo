@@ -1503,3 +1503,41 @@ func BenchmarkStrImg2Base64(b *testing.B) {
 		KStr.Img2Base64(cont)
 	}
 }
+
+func TestJsonp2Json(t *testing.T) {
+	str := `JsonpCallbackFn_abc123etc({"meta":{"Status":200,"Content-Type":"application/json","Content-Length":"19","etc":"etc"},"data":{"name":"yummy"}})`
+	res, _ := KStr.Jsonp2Json(str)
+	if !KStr.IsJSON(res) {
+		t.Error("Jsonp2Json fail")
+		return
+	}
+
+	str = `myFunc([{"Name":"Bob","Age":32,"Company":"IBM","Engineer":true},{"Name":"John","Age":20,"Company":"Oracle","Engineer":false},{"Name":"Henry","Age":45,"Company":"Microsoft","Engineer":false}]);`
+	res, _ = KStr.Jsonp2Json(str)
+	if !KStr.IsJSON(res) {
+		t.Error("Jsonp2Json fail")
+		return
+	}
+
+	str = "hello world"
+	_, err := KStr.Jsonp2Json(str)
+	if err == nil {
+		t.Error("Jsonp2Json fail")
+		return
+	}
+
+	str = "call)hello world(done"
+	_, err = KStr.Jsonp2Json(str)
+	if err == nil {
+		t.Error("Jsonp2Json fail")
+		return
+	}
+}
+
+func BenchmarkJsonp2Json(b *testing.B) {
+	b.ResetTimer()
+	str := `JsonpCallbackFn_abc123etc({"meta":{"Status":200,"Content-Type":"application/json","Content-Length":"19","etc":"etc"},"data":{"name":"yummy"}})`
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.Jsonp2Json(str)
+	}
+}

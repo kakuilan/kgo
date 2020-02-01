@@ -65,7 +65,7 @@
 - https://github.com/Jordanzuo/goutil -x
 - https://github.com/gxxgle/go-utils -x
 - https://github.com/q191201771/naza -x
-- https://github.com/kirinlabs/utils
+- https://github.com/kirinlabs/utils -x
 - https://github.com/xinliangnote/go-util
 - https://github.com/facebookarchive/pidfile/blob/master/pidfile.go
 - https://github.com/struCoder/pidusage/blob/master/pidusage.go
