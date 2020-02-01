@@ -240,8 +240,8 @@ func (kc *LkkConvert) Dec2Oct(number int64) string {
 	return strconv.FormatInt(number, 8)
 }
 
-// Oct2dec 将八进制转换为十进制
-func (kc *LkkConvert) Oct2dec(str string) (int64, error) {
+// Oct2Dec 将八进制转换为十进制
+func (kc *LkkConvert) Oct2Dec(str string) (int64, error) {
 	start := 0
 	if len(str) > 1 && str[0:1] == "0" {
 		start = 1

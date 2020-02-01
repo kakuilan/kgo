@@ -524,22 +524,22 @@ func BenchmarkDec2Oct(b *testing.B) {
 	}
 }
 
-func TestOct2dec(t *testing.T) {
-	res1, err := KConv.Oct2dec("726746425")
-	res2, _ := KConv.Oct2dec("0726746425")
+func TestOct2Dec(t *testing.T) {
+	res1, err := KConv.Oct2Dec("726746425")
+	res2, _ := KConv.Oct2Dec("0726746425")
 	if err != nil {
-		t.Error("Oct2dec fail")
+		t.Error("Oct2Dec fail")
 		return
 	} else if res1 != res2 {
-		t.Error("Oct2dec fail")
+		t.Error("Oct2Dec fail")
 		return
 	}
 }
 
-func BenchmarkOct2dec(b *testing.B) {
+func BenchmarkOct2Dec(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = KConv.Oct2dec("726746425")
+		_, _ = KConv.Oct2Dec("726746425")
 	}
 }
 
