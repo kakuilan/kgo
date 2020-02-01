@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"fmt"
+	"math"
 	"reflect"
 	"testing"
 )
@@ -607,13 +608,45 @@ func BenchmarkGettype(b *testing.B) {
 }
 
 func TestToStr(t *testing.T) {
-	res1 := KConv.ToStr(1)
-	res2 := KConv.ToStr(false)
-	res3 := KConv.ToStr(UINT64_MAX)
-	res4 := KConv.ToStr([]byte("hello"))
-	if res1 != "1" || res2 != "false" || res3 != "18446744073709551615" || res4 != "hello" {
-		t.Error("ToStr fail")
-		return
+	var fn CallBack
+	mp := map[string]string{
+		"a": "aa",
+		"b": "bb",
+	}
+	fnPtr := &fn
+
+	var tests = []struct {
+		param    interface{}
+		expected string
+	}{
+		{int(-1), "-1"},
+		{int8(0), "0"},
+		{int16(1), "1"},
+		{int32(2), "2"},
+		{int64(INT64_MAX), "9223372036854775807"},
+		{uint(0), "0"},
+		{uint8(0), "0"},
+		{uint16(0), "0"},
+		{uint32(0), "0"},
+		{uint64(UINT64_MAX), "18446744073709551615"},
+		{float32(math.Pi), "3.1415927"},
+		{float64(math.Pi), "3.141592653589793"},
+		{[]byte{}, ""},
+		{"1", "1"},
+		{true, "true"},
+		{false, "false"},
+		{fn, "<nil>"},
+		{nil, ""},
+		{fnPtr, ""},
+		{mp, `{"a":"aa","b":"bb"}`},
+	}
+
+	for _, test := range tests {
+		actual := KConv.ToStr(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected ToStr(%q) to be %v, got %v", test.param, test.expected, actual)
+			return
+		}
 	}
 }
 
@@ -654,7 +687,7 @@ func TestToInt(t *testing.T) {
 	for _, test := range tests {
 		actual := KConv.ToInt(test.param)
 		if actual != test.expected {
-			t.Errorf("Expected ToBool(%q) to be %v, got %v", test.param, test.expected, actual)
+			t.Errorf("Expected ToInt(%q) to be %v, got %v", test.param, test.expected, actual)
 			return
 		}
 	}
@@ -697,7 +730,7 @@ func TestToFloat(t *testing.T) {
 	for _, test := range tests {
 		actual := KConv.ToFloat(test.param)
 		if actual != test.expected {
-			t.Errorf("Expected ToBool(%q) to be %v, got %v", test.param, test.expected, actual)
+			t.Errorf("Expected ToFloat(%q) to be %v, got %v", test.param, test.expected, actual)
 			return
 		}
 	}

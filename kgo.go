@@ -107,6 +107,9 @@ const (
 	// PAD_BOTH 两侧填充
 	PAD_BOTH LkkPadType = 2
 
+	//默认浮点数精确小数位数
+	FLOAT_DECIMAL = 10
+
 	//检查连接超时的时间
 	CHECK_CONNECT_TIMEOUT = time.Second * 5
 

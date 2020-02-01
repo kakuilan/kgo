@@ -3,6 +3,7 @@ package kgo
 import (
 	"encoding/binary"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"math"
 	"net"
@@ -23,14 +24,14 @@ func (kc *LkkConvert) Int2Str(val interface{}) string {
 	}
 }
 
-// Float2Str 将浮点数转换为字符串,length为小数位数
-func (kc *LkkConvert) Float2Str(val interface{}, length int) string {
+// Float2Str 将浮点数转换为字符串,decimal为小数位数.
+func (kc *LkkConvert) Float2Str(val interface{}, decimal int) string {
 	switch val.(type) {
 	// Floats
 	case float32:
-		return strconv.FormatFloat(float64(val.(float32)), 'f', length, 32)
+		return strconv.FormatFloat(float64(val.(float32)), 'f', decimal, 32)
 	case float64:
-		return strconv.FormatFloat(val.(float64), 'f', length, 64)
+		return strconv.FormatFloat(val.(float64), 'f', decimal, 64)
 	// Type is not floats, return empty string
 	default:
 		return ""
@@ -280,15 +281,40 @@ func (kc *LkkConvert) Gettype(v interface{}) string {
 	return fmt.Sprintf("%T", v)
 }
 
-// ToStr 强制将变量转换为字符串
-func (kc *LkkConvert) ToStr(val interface{}) (res string) {
-	switch val.(type) {
-	case []byte:
-		res = fmt.Sprintf("%s", (string(val.([]byte))))
-	default:
-		res = fmt.Sprintf("%v", val)
+// ToStr 强制将变量转换为字符串.
+func (kc *LkkConvert) ToStr(val interface{}) string {
+	//先处理其他类型
+	v := reflect.ValueOf(val)
+	switch v.Kind() {
+	case reflect.Invalid:
+		return ""
+	case reflect.Bool:
+		return strconv.FormatBool(v.Bool())
+	case reflect.String:
+		return v.String()
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return strconv.FormatInt(v.Int(), 10)
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		return strconv.FormatUint(v.Uint(), 10)
+	case reflect.Float32:
+		return strconv.FormatFloat(v.Float(), 'f', -1, 32)
+	case reflect.Float64:
+		return strconv.FormatFloat(v.Float(), 'f', -1, 64)
+	case reflect.Ptr, reflect.Struct, reflect.Map: //指针、结构体和字典
+		b, err := json.Marshal(v.Interface())
+		if err != nil {
+			return ""
+		}
+		return string(b)
 	}
-	return
+
+	//再处理字节切片
+	switch val.(type) {
+	case []uint8:
+		return string(val.([]uint8))
+	}
+
+	return fmt.Sprintf("%v", val)
 }
 
 // ToBool 强制将变量转换为布尔值.

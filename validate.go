@@ -29,22 +29,6 @@ func (ks *LkkString) IsLetters(str string) bool {
 	return str != ""
 }
 
-// IsBlank 是否空(空白)字符.
-func (ks *LkkString) IsBlank(str string) bool {
-	// Check length
-	if len(str) > 0 {
-		// Iterate string
-		for i := range str {
-			// Check about char different from whitespace
-			// 227为全角空格
-			if str[i] > 32 && str[i] != 227 {
-				return false
-			}
-		}
-	}
-	return true
-}
-
 // IsEmpty 字符串是否为空(包括空格).
 func (ks *LkkString) IsEmpty(str string) bool {
 	if len(str) == 0 || len(ks.Trim(str)) == 0 {
@@ -364,7 +348,23 @@ func (ks *LkkString) IsRGBcolor(str string) bool {
 	return str != "" && RegRgbcolor.MatchString(str)
 }
 
-// IsWhitespaces 是否全部空白字符.
+// IsBlank 是否空(空白)字符.
+func (ks *LkkString) IsBlank(str string) bool {
+	// Check length
+	if len(str) > 0 {
+		// Iterate string
+		for i := range str {
+			// Check about char different from whitespace
+			// 227为全角空格
+			if str[i] > 32 && str[i] != 227 {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+// IsWhitespaces 是否全部空白字符,不包括空字符串.
 func (ks *LkkString) IsWhitespaces(str string) bool {
 	return str != "" && RegWhitespaceAll.MatchString(str)
 }
