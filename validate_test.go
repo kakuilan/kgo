@@ -1700,3 +1700,39 @@ func BenchmarkIsSha512(b *testing.B) {
 		KStr.IsSha512(str)
 	}
 }
+
+func TestStartsWith(t *testing.T) {
+	str := "hello你好世界world"
+	chk1 := KStr.StartsWith(str, "hello你好")
+	chk2 := KStr.StartsWith(str, "gogo")
+	if !chk1 || chk2 {
+		t.Error("StartsWith fail")
+		return
+	}
+}
+
+func BenchmarkStartsWith(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!welcome to golang,go go go!你好世界"
+	for i := 0; i < b.N; i++ {
+		KStr.StartsWith(str, "hello你好")
+	}
+}
+
+func TestEndsWith(t *testing.T) {
+	str := "hello你好世界world"
+	chk1 := KStr.EndsWith(str, "世界world")
+	chk2 := KStr.EndsWith(str, "gogo")
+	if !chk1 || chk2 {
+		t.Error("EndsWith fail")
+		return
+	}
+}
+
+func BenchmarkEndsWith(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!welcome to golang,go go go!你好世界"
+	for i := 0; i < b.N; i++ {
+		KStr.EndsWith(str, "hello你好")
+	}
+}
