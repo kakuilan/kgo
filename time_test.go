@@ -216,7 +216,7 @@ func TestYearMonthDay(t *testing.T) {
 	tim, _ := KTime.Str2Timestruct("2019-07-11 10:11:23")
 	y = KTime.Year(tim)
 	m = KTime.Month(tim)
-	d = KTime.Month(tim)
+	d = KTime.Day(tim)
 	if y != 2019 || m != 7 || d != 11 {
 		t.Error("Year/Month/Day fail")
 		return
