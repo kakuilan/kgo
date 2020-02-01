@@ -97,8 +97,8 @@ func (kc *LkkConvert) Str2Int64(val string) int64 {
 	return kc.Str2IntStrict(val, 64, false)
 }
 
-// StrictStr2Uint 严格将字符串转换为无符号整型,bitSize为类型位数,strict为是否严格检查
-func (kc *LkkConvert) StrictStr2Uint(val string, bitSize int, strict bool) uint64 {
+// Str2UintStrict 严格将字符串转换为无符号整型,bitSize为类型位数,strict为是否严格检查
+func (kc *LkkConvert) Str2UintStrict(val string, bitSize int, strict bool) uint64 {
 	res, err := strconv.ParseUint(val, 0, bitSize)
 	if err != nil {
 		if strict {
@@ -110,27 +110,27 @@ func (kc *LkkConvert) StrictStr2Uint(val string, bitSize int, strict bool) uint6
 
 // Str2Uint 将字符串转换为uint
 func (kc *LkkConvert) Str2Uint(val string) uint {
-	return uint(kc.StrictStr2Uint(val, 0, false))
+	return uint(kc.Str2UintStrict(val, 0, false))
 }
 
 // Str2Uint8 将字符串转换为uint8
 func (kc *LkkConvert) Str2Uint8(val string) uint8 {
-	return uint8(kc.StrictStr2Uint(val, 8, false))
+	return uint8(kc.Str2UintStrict(val, 8, false))
 }
 
 // Str2Uint16 将字符串转换为uint16
 func (kc *LkkConvert) Str2Uint16(val string) uint16 {
-	return uint16(kc.StrictStr2Uint(val, 16, false))
+	return uint16(kc.Str2UintStrict(val, 16, false))
 }
 
 // Str2Uint32 将字符串转换为uint32
 func (kc *LkkConvert) Str2Uint32(val string) uint32 {
-	return uint32(kc.StrictStr2Uint(val, 32, false))
+	return uint32(kc.Str2UintStrict(val, 32, false))
 }
 
 // Str2Uint64 将字符串转换为uint64
 func (kc *LkkConvert) Str2Uint64(val string) uint64 {
-	return uint64(kc.StrictStr2Uint(val, 64, false))
+	return uint64(kc.Str2UintStrict(val, 64, false))
 }
 
 // Str2FloatStrict 严格将字符串转换为浮点型.

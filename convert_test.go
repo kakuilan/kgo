@@ -211,15 +211,15 @@ func BenchmarkStr2Int64(b *testing.B) {
 	}
 }
 
-func TestStrictStr2Uint(t *testing.T) {
+func TestStr2UintStrict(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("recover...:", r)
 		}
 	}()
-	res := KConv.StrictStr2Uint("abc123", 8, true)
+	res := KConv.Str2UintStrict("abc123", 8, true)
 	if fmt.Sprint(reflect.TypeOf(res)) != "uint8" {
-		t.Error("StrictStr2Uint fail")
+		t.Error("Str2UintStrict fail")
 		return
 	}
 }
