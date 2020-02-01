@@ -71,7 +71,7 @@ func (kn *LkkNumber) FloatEqual(f1 float64, f2 float64, decimals ...int) bool {
 	var threshold float64
 	var decimal int
 	if len(decimals) == 0 {
-		decimal = 10
+		decimal = FLOAT_DECIMAL
 	} else {
 		decimal = decimals[0]
 	}
