@@ -1567,3 +1567,20 @@ func BenchmarkCountWords(b *testing.B) {
 		KStr.CountWords(str)
 	}
 }
+
+func TestStrReverse(t *testing.T) {
+	str := "hello,world"
+	res := KStr.Reverse(str)
+	if res != "dlrow,olleh" {
+		t.Error("String Reverse fail")
+		return
+	}
+}
+
+func BenchmarkStrReverse(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world,你好，世界.hello world!"
+	for i := 0; i < b.N; i++ {
+		KStr.Reverse(str)
+	}
+}
