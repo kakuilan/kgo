@@ -369,16 +369,16 @@ func BenchmarkStr2Bool(b *testing.B) {
 	}
 }
 
-func TestStr2ByteSlice(t *testing.T) {
+func TestStr2Bytes(t *testing.T) {
 	str := `hello world!`
-	res := KConv.Str2ByteSlice(str)
+	res := KConv.Str2Bytes(str)
 	if fmt.Sprint(reflect.TypeOf(res)) != "[]uint8" {
-		t.Error("Str2ByteSlice fail")
+		t.Error("Str2Bytes fail")
 		return
 	}
 }
 
-func BenchmarkStr2ByteSlice(b *testing.B) {
+func BenchmarkStr2Bytes(b *testing.B) {
 	b.ResetTimer()
 	str := `hello world!
 // Convert different types to byte slice using types and functions in unsafe and reflect package. 
@@ -386,7 +386,7 @@ func BenchmarkStr2ByteSlice(b *testing.B) {
 // Use it when you need to temporary convert a long string to a byte slice and won't keep it for long time.
 `
 	for i := 0; i < b.N; i++ {
-		KConv.Str2ByteSlice(str)
+		KConv.Str2Bytes(str)
 	}
 }
 
