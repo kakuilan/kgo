@@ -479,14 +479,15 @@ func (ks *LkkString) IsSha512(str string) bool {
 
 // StartsWith 字符串str是否以substr开头.
 func (ks *LkkString) StartsWith(str, substr string) bool {
-	if substr != "" && ks.Substr(str, 0, len([]rune(substr))) == substr {
+	if str != "" && substr != "" && ks.MbSubstr(str, 0, len([]rune(substr))) == substr {
 		return true
 	}
 	return false
 }
 
+// EndsWith 字符串str是否以substr结尾.
 func (ks *LkkString) EndsWith(str, substr string) bool {
-	if ks.Substr(str, -len([]rune(substr)), len(str)) == substr {
+	if str != "" && substr != "" && ks.MbSubstr(str, -len([]rune(substr))) == substr {
 		return true
 	}
 	return false
