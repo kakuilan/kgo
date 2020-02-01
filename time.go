@@ -66,9 +66,11 @@ func (kt *LkkTime) MicroTime() int64 {
 // str 为要转换的字符串.
 // format 为该字符串的格式,默认为"2006-01-02 15:04:05" .
 func (kt *LkkTime) Str2Timestruct(str string, format ...string) (time.Time, error) {
-	f := "2006-01-02 15:04:05"
+	var f string
 	if len(format) > 0 {
 		f = strings.Trim(format[0], " ")
+	} else {
+		f = "2006-01-02 15:04:05"
 	}
 
 	if len(str) != len(f) {
@@ -193,27 +195,66 @@ func (kt *LkkTime) GetMonthDays(month int, years ...int) int {
 
 // Year 获取年份.
 func (kt *LkkTime) Year(t ...time.Time) int {
-	tm := time.Now()
+	var tm time.Time
 	if len(t) > 0 {
 		tm = t[0]
+	} else {
+		tm = time.Now()
 	}
 	return tm.Year()
 }
 
 // Month 获取月份.
 func (kt *LkkTime) Month(t ...time.Time) int {
-	tm := time.Now()
+	var tm time.Time
 	if len(t) > 0 {
 		tm = t[0]
+	} else {
+		tm = time.Now()
 	}
 	return int(tm.Month())
 }
 
 // Day 获取日份.
 func (kt *LkkTime) Day(t ...time.Time) int {
-	tm := time.Now()
+	var tm time.Time
 	if len(t) > 0 {
 		tm = t[0]
+	} else {
+		tm = time.Now()
 	}
 	return tm.Day()
+}
+
+// Hour 获取小时.
+func (kt *LkkTime) Hour(t ...time.Time) int {
+	var tm time.Time
+	if len(t) > 0 {
+		tm = t[0]
+	} else {
+		tm = time.Now()
+	}
+	return tm.Hour()
+}
+
+// Minute 获取分钟.
+func (kt *LkkTime) Minute(t ...time.Time) int {
+	var tm time.Time
+	if len(t) > 0 {
+		tm = t[0]
+	} else {
+		tm = time.Now()
+	}
+	return tm.Minute()
+}
+
+// Second 获取秒数.
+func (kt *LkkTime) Second(t ...time.Time) int {
+	var tm time.Time
+	if len(t) > 0 {
+		tm = t[0]
+	} else {
+		tm = time.Now()
+	}
+	return tm.Second()
 }

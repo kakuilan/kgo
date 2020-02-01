@@ -234,3 +234,34 @@ func BenchmarkDay(b *testing.B) {
 		KTime.Day()
 	}
 }
+
+func TestHourMinuteSecond(t *testing.T) {
+	h := KTime.Hour()
+	m := KTime.Minute()
+	s := KTime.Second()
+	if h <= 0 || m <= 0 || s <= 0 {
+		t.Error("Hour/Minute/Second fail")
+		return
+	}
+}
+
+func BenchmarkHour(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.Hour()
+	}
+}
+
+func BenchmarkMinute(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.Minute()
+	}
+}
+
+func BenchmarkSecond(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.Second()
+	}
+}
