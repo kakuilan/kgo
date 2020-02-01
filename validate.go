@@ -477,6 +477,21 @@ func (ks *LkkString) IsSha512(str string) bool {
 	return str != "" && RegSha512.MatchString(str)
 }
 
+// StartsWith 字符串str是否以substr开头.
+func (ks *LkkString) StartsWith(str, substr string) bool {
+	if substr != "" && ks.Substr(str, 0, len(substr)) == substr {
+		return true
+	}
+	return false
+}
+
+func (ks *LkkString) EndsWith(str, substr string) bool {
+	if ks.Substr(str, -len([]rune(substr)), len(str)) == substr {
+		return true
+	}
+	return false
+}
+
 // IsArrayOrSlice 检查变量是否数组或切片;chkType检查类型,枚举值有(1仅数组,2仅切片,3数组或切片);结果为-1表示非,>=0表示是
 func (ka *LkkArray) IsArrayOrSlice(data interface{}, chkType uint8) int {
 	return isArrayOrSlice(data, chkType)
