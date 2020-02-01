@@ -353,8 +353,8 @@ func TestSubstr(t *testing.T) {
 		{"abcdef01", 0, 4, "abcd"},
 		{"abcdef02", -2, 4, "02"},
 		{"abcdef03", 0, -2, "abcdef"},
-		{"abcdef03", -9, 8, ""},
-		{"abcdef03", 5, 10, "f03"},
+		{"abcdef04", -9, 8, ""},
+		{"abcdef05", 5, 10, "f05"},
 	}
 
 	for _, test := range tests {
@@ -375,17 +375,29 @@ func BenchmarkSubstr(b *testing.B) {
 }
 
 func TestMbSubstr(t *testing.T) {
-	str := "hello world,你好世界welcome to golang!"
-	res1 := KStr.MbSubstr(str, 6, 10)
-	res2 := KStr.MbSubstr(str, 0, -5)
-	res3 := KStr.MbSubstr(str, 6, -1)
-	res4 := KStr.MbSubstr(str, 6, 0)
+	KStr.MbSubstr("", 0)
+	KStr.MbSubstr("abcdef", 0)
 
-	if KStr.MbStrlen(res1) != 10 || res2 != str || !strings.Contains(str, res3) || res4 != "" {
-		t.Error("MbSubstr fail")
-		return
+	var tests = []struct {
+		param    string
+		start    int
+		length   int
+		expected string
+	}{
+		{"ab你好世界cdef01", 0, 4, "ab你好"},
+		{"ab你好世界cdef02", -2, 4, "02"},
+		{"ab你好世界cdef03", 0, -2, "ab你好世界cdef"},
+		{"ab你好世界cdef04", -20, 8, ""},
+		{"ab你好世界cdef05", 5, 50, "界cdef05"},
 	}
-	KStr.MbSubstr(str, 10, 50)
+
+	for _, test := range tests {
+		actual := KStr.MbSubstr(test.param, test.start, test.length)
+		if actual != test.expected {
+			t.Errorf("Expected Substr(%q) to be %v, got %v", test.param, test.expected, actual)
+			return
+		}
+	}
 }
 
 func BenchmarkMbSubstr(b *testing.B) {
