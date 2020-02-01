@@ -212,6 +212,15 @@ func TestYearMonthDay(t *testing.T) {
 		t.Error("Year/Month/Day fail")
 		return
 	}
+
+	tim, _ := KTime.Str2Timestruct("2019-07-11 10:11:23")
+	y = KTime.Year(tim)
+	m = KTime.Month(tim)
+	d = KTime.Month(tim)
+	if y != 2019 || m != 7 || d != 11 {
+		t.Error("Year/Month/Day fail")
+		return
+	}
 }
 
 func BenchmarkYear(b *testing.B) {
@@ -240,6 +249,15 @@ func TestHourMinuteSecond(t *testing.T) {
 	m := KTime.Minute()
 	s := KTime.Second()
 	if h <= 0 || m <= 0 || s <= 0 {
+		t.Error("Hour/Minute/Second fail")
+		return
+	}
+
+	tim, _ := KTime.Str2Timestruct("2019-07-11 10:11:23")
+	h = KTime.Hour(tim)
+	m = KTime.Minute(tim)
+	s = KTime.Second(tim)
+	if h != 10 || m != 11 || s != 23 {
 		t.Error("Hour/Minute/Second fail")
 		return
 	}

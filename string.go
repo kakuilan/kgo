@@ -332,9 +332,6 @@ func (ks *LkkString) MbSubstr(str string, start int, length ...int) string {
 
 	runes := []rune(str)
 	total := len(runes)
-	if total == 0 {
-		return ""
-	}
 
 	var sublen, end int
 	max := total //最大的结束位置
