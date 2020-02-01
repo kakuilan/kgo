@@ -341,17 +341,29 @@ func BenchmarkLcfirst(b *testing.B) {
 }
 
 func TestSubstr(t *testing.T) {
-	str := "hello world,welcome to golang!"
-	res1 := KStr.Substr(str, 5, 10)
-	res2 := KStr.Substr(str, 0, -5)
-	res3 := KStr.Substr(str, 5, -1)
-	res4 := KStr.Substr(str, 5, 0)
+	KStr.Substr("", 0)
+	KStr.Substr("abcdef", 0)
 
-	if len(res1) != 10 || res2 != str || !strings.Contains(str, res3) || res4 != "" {
-		t.Error("Substr fail")
-		return
+	var tests = []struct {
+		param    string
+		start    int
+		length   int
+		expected string
+	}{
+		{"abcdef01", 0, 4, "abcd"},
+		{"abcdef02", -2, 4, "02"},
+		{"abcdef03", 0, -2, "abcdef"},
+		{"abcdef03", -9, 8, ""},
+		{"abcdef03", 5, 10, "f03"},
 	}
-	KStr.Substr(str, 10, 50)
+
+	for _, test := range tests {
+		actual := KStr.Substr(test.param, test.start, test.length)
+		if actual != test.expected {
+			t.Errorf("Expected Substr(%q) to be %v, got %v", test.param, test.expected, actual)
+			return
+		}
+	}
 }
 
 func BenchmarkSubstr(b *testing.B) {
