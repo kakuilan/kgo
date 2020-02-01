@@ -109,4 +109,17 @@ func IfHaveSpecialChar(val string) bool {
 	return false
 }
 
+// strip tags in html string
+func StripTags(src string) string {
+	//去除style,script,html tag
+	re := regexp.MustCompile(`(?s)<(?:style|script)[^<>]*>.*?</(?:style|script)>|</?[a-z][a-z0-9]*[^<>]*>|<!--.*?-->`)
+	src = re.ReplaceAllString(src, "")
+
+	//trim all spaces(2+) into \n
+	re = regexp.MustCompile(`\s{2,}`)
+	src = re.ReplaceAllString(src, "\n")
+
+	return strings.TrimSpace(src)
+}
+
 

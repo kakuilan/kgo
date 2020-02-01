@@ -1541,3 +1541,29 @@ func BenchmarkJsonp2Json(b *testing.B) {
 		_, _ = KStr.Jsonp2Json(str)
 	}
 }
+
+func TestCountWords(t *testing.T) {
+	content, _ := KFile.GetContents("./testdata/dante.txt")
+	word_all, mp := KStr.CountWords(KConv.Bytes2Str(content))
+	word_num := len(mp)
+
+	if word_all == 0 || word_num == 0 || word_num > word_all {
+		t.Error("CountWords fail")
+		return
+	}
+
+	word_all, mp = KStr.CountWords("hello world,你好，世界.hello world!")
+	word_num = len(mp)
+	if word_all != 6 || word_num != 4 {
+		t.Error("CountWords fail")
+		return
+	}
+}
+
+func BenchmarkCountWords(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world,你好，世界.hello world!"
+	for i := 0; i < b.N; i++ {
+		KStr.CountWords(str)
+	}
+}
