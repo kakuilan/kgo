@@ -427,19 +427,19 @@ func BenchmarkDec2Bin(b *testing.B) {
 	}
 }
 
-func TestBin2dec(t *testing.T) {
-	res, err := KConv.Bin2dec("1000")
+func TestBin2Dec(t *testing.T) {
+	res, err := KConv.Bin2Dec("1000")
 	if err != nil || res != 8 {
-		t.Error("Bin2dec fail")
+		t.Error("Bin2Dec fail")
 		return
 	}
-	_, _ = KConv.Bin2dec("hello")
+	_, _ = KConv.Bin2Dec("hello")
 }
 
-func BenchmarkBin2dec(b *testing.B) {
+func BenchmarkBin2Dec(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = KConv.Bin2dec("1000")
+		_, _ = KConv.Bin2Dec("1000")
 	}
 }
 

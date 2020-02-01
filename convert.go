@@ -192,8 +192,8 @@ func (kc *LkkConvert) Dec2Bin(number int64) string {
 	return strconv.FormatInt(number, 2)
 }
 
-// Bin2dec 将二进制转换为十进制
-func (kc *LkkConvert) Bin2dec(str string) (int64, error) {
+// Bin2Dec 将二进制转换为十进制
+func (kc *LkkConvert) Bin2Dec(str string) (int64, error) {
 	i, err := strconv.ParseInt(str, 2, 0)
 	if err != nil {
 		return 0, err
