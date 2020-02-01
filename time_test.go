@@ -51,24 +51,30 @@ func BenchmarkMicroTime(b *testing.B) {
 	}
 }
 
-func TestStr2Time(t *testing.T) {
-	ti, err := KTime.Str2Time("2019-07-11 10:11:23")
+func TestStr2Timestamp(t *testing.T) {
+	ti, err := KTime.Str2Timestamp("2019-07-11 10:11:23")
 	if err != nil || ti <= 0 {
-		t.Error("Str2Time fail")
+		t.Error("Str2Timestamp fail")
 		return
 	}
 
-	_, err2 := KTime.Str2Time("02/01/2016 15:04:05")
-	if err2 == nil {
-		t.Error("Str2Time fail")
+	_, err = KTime.Str2Timestamp("02/01/2016 15:04:05")
+	if err == nil {
+		t.Error("Str2Timestamp fail")
+		return
+	}
+
+	_, err = KTime.Str2Timestamp("2020-02-01 13:39:36", "2019-07- 11 10: 11:23")
+	if err == nil {
+		t.Error("Str2Timestamp fail")
 		return
 	}
 }
 
-func BenchmarkStr2Time(b *testing.B) {
+func BenchmarkStr2Timestamp(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = KTime.Str2Time("2019-07-11 10:11:23")
+		_, _ = KTime.Str2Timestamp("2019-07-11 10:11:23")
 	}
 }
 

@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"errors"
 	"strings"
 	"time"
 )
@@ -61,18 +62,37 @@ func (kt *LkkTime) MicroTime() int64 {
 	return time.Now().UnixNano() / int64(time.Microsecond)
 }
 
-// Str2Time 字符串转时间戳.
-// 例如KTime.Str2Time("2019-07-11 10:11:23") == 1562839883.
-func (kt *LkkTime) Str2Time(str string) (int64, error) {
-	layout := "2006-01-02 15:04:05"
-	t, err := time.Parse(layout, str)
+// Str2Time 将字符串转换为时间结构.
+// str 为要转换的字符串.
+// format 为该字符串的格式,默认为"2006-01-02 15:04:05" .
+func (kt *LkkTime) Str2Timestruct(str string, format ...string) (time.Time, error) {
+	f := "2006-01-02 15:04:05"
+	if len(format) > 0 {
+		f = strings.Trim(format[0], " ")
+	}
+
+	if len(str) != len(f) {
+		return time.Now(), errors.New("Str2Timestruct: parameter format error")
+	}
+
+	return time.Parse(f, str)
+}
+
+// Str2Timestamp 将字符串转换为时间戳,秒.
+// str 为要转换的字符串.
+// format 为该字符串的格式,默认为"2006-01-02 15:04:05" .
+func (kt *LkkTime) Str2Timestamp(str string, format ...string) (int64, error) {
+	tim, err := kt.Str2Timestruct(str, format...)
 	if err != nil {
 		return 0, err
 	}
-	return t.Unix(), nil
+
+	return tim.Unix(), nil
 }
 
-// Date 格式化时间;ts为int/int64类型时间戳或time.Time类型
+// Date 格式化时间.
+// format 格式,如"Y-m-d H:i:s".
+// ts为int/int64类型时间戳或time.Time类型.
 func (kt *LkkTime) Date(format string, ts ...interface{}) string {
 	replacer := strings.NewReplacer(datePatterns...)
 	format = replacer.Replace(format)
