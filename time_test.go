@@ -197,3 +197,34 @@ func BenchmarkGetMonthDays(b *testing.B) {
 		KTime.GetMonthDays(3, 1970)
 	}
 }
+
+func TestYearMonthDay(t *testing.T) {
+	y := KTime.Year()
+	m := KTime.Month()
+	d := KTime.Day()
+	if y <= 0 || m <= 0 || d <= 0 {
+		t.Error("Year/Month/Day fail")
+		return
+	}
+}
+
+func BenchmarkYear(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.Year()
+	}
+}
+
+func BenchmarkMonth(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.Month()
+	}
+}
+
+func BenchmarkDay(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.Day()
+	}
+}
