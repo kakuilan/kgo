@@ -437,7 +437,7 @@ func TestStrrev(t *testing.T) {
 
 func BenchmarkStrrev(b *testing.B) {
 	b.ResetTimer()
-	str := "hello world!"
+	str := "hello world,你好，世界.hello world!"
 	for i := 0; i < b.N; i++ {
 		KStr.Strrev(str)
 	}

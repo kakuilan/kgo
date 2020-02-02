@@ -262,7 +262,7 @@ func (ks *LkkString) Strripos(haystack, needle string, offset int) int {
 	return pos
 }
 
-// Ucfirst 将字符串的首字母转换为大写
+// Ucfirst 将字符串的第一个字符转换为大写.
 func (ks *LkkString) Ucfirst(str string) string {
 	for _, v := range str {
 		u := string(unicode.ToUpper(v))
@@ -271,7 +271,7 @@ func (ks *LkkString) Ucfirst(str string) string {
 	return ""
 }
 
-// Lcfirst 使一个字符串的第一个字符小写
+// Lcfirst 将字符串的第一个字符转换为小写.
 func (ks *LkkString) Lcfirst(str string) string {
 	for _, v := range str {
 		u := string(unicode.ToLower(v))
@@ -378,6 +378,17 @@ func (ks *LkkString) Strrev(str string) string {
 		runes[i], runes[j] = runes[j], runes[i]
 	}
 	return string(runes)
+}
+
+// Reverse 字符串翻转.
+func (ks *LkkString) Reverse(str string) string {
+	n := len(str)
+	runes := make([]rune, n)
+	for _, r := range str {
+		n--
+		runes[n] = r
+	}
+	return string(runes[n:])
 }
 
 // ChunkSplit 将字符串分割成小块.body为要分割的字符,chunklen为分割的尺寸,end为行尾序列符号
@@ -1339,15 +1350,4 @@ func (ks *LkkString) CountWords(str string) (int, map[string]int) {
 	}
 
 	return total, mp
-}
-
-// Reverse 字符串翻转.
-func (ks *LkkString) Reverse(str string) string {
-	n := len(str)
-	runes := make([]rune, n)
-	for _, r := range str {
-		n--
-		runes[n] = r
-	}
-	return string(runes[n:])
 }
