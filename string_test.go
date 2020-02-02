@@ -860,25 +860,6 @@ func BenchmarkVersionCompare(b *testing.B) {
 	}
 }
 
-func TestToCamelCaseUnderscoreName(t *testing.T) {
-	str := "hello world learn_golang"
-	res := KStr.ToCamelCase(str)
-	res1 := KStr.ToCamelCase("device_id ")
-	res2 := KStr.ToCamelCase("create_time ")
-	res3 := KStr.ToCamelCase("location ")
-
-	if strings.Contains(res, "_") || strings.Contains(res1, "_") || strings.Contains(res2, "_") || strings.Contains(res3, " ") {
-		t.Error("ToCamelCase fail")
-		return
-	}
-
-	str = KStr.UnderscoreName(res)
-	if !strings.Contains(str, "_") {
-		t.Error("UnderscoreName fail")
-		return
-	}
-}
-
 func TestToCamelCase(t *testing.T) {
 	var tests = []struct {
 		param    string
@@ -888,7 +869,7 @@ func TestToCamelCase(t *testing.T) {
 		{"some_words", "SomeWords"},
 		{"http_server", "HttpServer"},
 		{"no_https", "NoHttps"},
-		{"_complex__case_", "ComplexCase"},
+		{"_complex__case_", "_Complex_Case_"},
 		{"some words", "SomeWords"},
 	}
 
@@ -909,11 +890,71 @@ func BenchmarkToCamelCase(b *testing.B) {
 	}
 }
 
-func BenchmarkUnderscoreName(b *testing.B) {
+func TestToSnakeCase(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected string
+	}{
+		{"", ""},
+		{"FirstName", "first_name"},
+		{"HTTPServer", "http_server"},
+		{"NoHTTPS", "no_https"},
+		{"GO_PATH", "go_path"},
+		{"GO PATH", "go_path"},
+		{"GO-PATH", "go_path"},
+		{"HTTP2XX", "http_2xx"},
+		{"http2xx", "http_2xx"},
+		{"HTTP20xOK", "http_20x_ok"},
+	}
+
+	for _, test := range tests {
+		actual := KStr.ToSnakeCase(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected ToSnakeCase(%q) to be %v, got %v", test.param, test.expected, actual)
+			return
+		}
+	}
+}
+
+func BenchmarkToSnakeCase(b *testing.B) {
 	b.ResetTimer()
-	str := "HelloWorldLearnGolang"
+	str := "hello world learn_golang go-go"
 	for i := 0; i < b.N; i++ {
-		KStr.UnderscoreName(str)
+		KStr.ToSnakeCase(str)
+	}
+}
+
+func TestToKebabCase(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected string
+	}{
+		{"", ""},
+		{"FirstName", "first-name"},
+		{"HTTPServer", "http-server"},
+		{"NoHTTPS", "no-https"},
+		{"GO_PATH", "go-path"},
+		{"GO PATH", "go-path"},
+		{"GO-PATH", "go-path"},
+		{"HTTP2XX", "http-2xx"},
+		{"http2xx", "http-2xx"},
+		{"HTTP20xOK", "http-20x-ok"},
+	}
+
+	for _, test := range tests {
+		actual := KStr.ToKebabCase(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected ToSnakeCase(%q) to be %v, got %v", test.param, test.expected, actual)
+			return
+		}
+	}
+}
+
+func BenchmarkToKebabCase(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world learn_golang go-go"
+	for i := 0; i < b.N; i++ {
+		KStr.ToKebabCase(str)
 	}
 }
 

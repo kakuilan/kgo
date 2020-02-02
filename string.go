@@ -810,30 +810,69 @@ func (ks *LkkString) VersionCompare(version1, version2, operator string) bool {
 
 // ToCamelCase 转为驼峰写法.
 // 去掉包括下划线"_"和横杠"-".
-func (ks *LkkString) ToCamelCase(str string) (res string) {
-	replacer := strings.NewReplacer("–", " ", "_", " ")
-	str = replacer.Replace(str)
-	str = strings.Title(str)
-	res = strings.Replace(str, " ", "", -1)
+func (ks *LkkString) ToCamelCase(str string) string {
+	if len(str) == 0 {
+		return ""
+	}
 
-	return
-}
+	buf := &bytes.Buffer{}
+	var r0, r1 rune
+	var size int
 
-// UnderscoreName 驼峰写法转为下划线写法
-func (ks *LkkString) UnderscoreName(name string) string {
-	buf := bytes.NewBufferString("")
-	for i, r := range name {
-		if unicode.IsUpper(r) {
-			if i != 0 {
-				buf.WriteRune('_')
-			}
-			buf.WriteRune(unicode.ToLower(r))
+	// leading connector will appear in output.
+	for len(str) > 0 {
+		r0, size = utf8.DecodeRuneInString(str)
+		str = str[size:]
+
+		if !isCaseConnector(r0) {
+			r0 = unicode.ToUpper(r0)
+			break
+		}
+
+		buf.WriteRune(r0)
+	}
+
+	if len(str) == 0 {
+		// A special case for a string contains only 1 rune.
+		if size != 0 {
+			buf.WriteRune(r0)
+		}
+
+		return buf.String()
+	}
+
+	for len(str) > 0 {
+		r1 = r0
+		r0, size = utf8.DecodeRuneInString(str)
+		str = str[size:]
+
+		if isCaseConnector(r0) && isCaseConnector(r1) {
+			buf.WriteRune(r1)
+			continue
+		}
+
+		if isCaseConnector(r1) {
+			r0 = unicode.ToUpper(r0)
 		} else {
-			buf.WriteRune(r)
+			r0 = unicode.ToLower(r0)
+			buf.WriteRune(r1)
 		}
 	}
 
+	buf.WriteRune(r0)
 	return buf.String()
+}
+
+// ToSnakeCase 转为蛇形写法.
+// 使用下划线"_"连接.
+func (ks *LkkString) ToSnakeCase(str string) string {
+	return camelCaseToLowerCase(str, '_')
+}
+
+// ToSnakeCase 转为串形写法.
+// 使用横杠"-"连接.
+func (ks *LkkString) ToKebabCase(str string) string {
+	return camelCaseToLowerCase(str, '-')
 }
 
 // RemoveBefore 移除before之前的字符串;include为是否移除包括before本身
