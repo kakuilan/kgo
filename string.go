@@ -415,17 +415,6 @@ func (ks *LkkString) MbStrlen(str string) int {
 	return utf8.RuneCountInString(str)
 }
 
-// StrShuffle 随机打乱一个字符串
-func (ks *LkkString) StrShuffle00(str string) string {
-	runes := []rune(str)
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	s := make([]rune, len(runes))
-	for i, v := range r.Perm(len(runes)) {
-		s[i] = runes[v]
-	}
-	return string(s)
-}
-
 // Shuffle 随机打乱字符串.
 func (ks *LkkString) Shuffle(str string) string {
 	if str == "" {
