@@ -7,12 +7,12 @@ import (
 )
 
 func TestStringIsBinary(t *testing.T) {
-	cont, _ := KFile.GetContents("./file.go")
+	cont, _ := KFile.ReadFile("./file.go")
 	if KConv.IsBinary(string(cont)) {
 		t.Error("str isn`t binary")
 		return
 	}
-	_, _ = KFile.GetContents("")
+	_, _ = KFile.ReadFile("")
 }
 
 func BenchmarkStringIsBinary(b *testing.B) {

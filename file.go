@@ -41,8 +41,8 @@ func (kf *LkkFile) ReadInArray(fpath string) ([]string, error) {
 	return strings.Split(string(data), "\n"), nil
 }
 
-// GetContents 读取文件内容.
-func (kf *LkkFile) GetContents(fpath string) ([]byte, error) {
+// ReadFile 读取文件内容.
+func (kf *LkkFile) ReadFile(fpath string) ([]byte, error) {
 	data, err := ioutil.ReadFile(fpath)
 	return data, err
 }
@@ -167,7 +167,7 @@ func (kf *LkkFile) IsDir(fpath string) bool {
 
 // IsBinary 是否二进制文件(且存在).
 func (kf *LkkFile) IsBinary(fpath string) bool {
-	cont, err := kf.GetContents(fpath)
+	cont, err := kf.ReadFile(fpath)
 	if err != nil {
 		return false
 	}

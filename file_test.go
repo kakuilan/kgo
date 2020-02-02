@@ -26,20 +26,20 @@ func BenchmarkGetExt(b *testing.B) {
 	}
 }
 
-func TestGetContents(t *testing.T) {
+func TestReadFile(t *testing.T) {
 	filename := "./file.go"
-	cont, _ := KFile.GetContents(filename)
+	cont, _ := KFile.ReadFile(filename)
 	if string(cont) == "" {
 		t.Error("file get contents error")
 		return
 	}
 }
 
-func BenchmarkGetContents(b *testing.B) {
+func BenchmarkReadFile(b *testing.B) {
 	b.ResetTimer()
 	filename := "./README.md"
 	for i := 0; i < b.N; i++ {
-		_, _ = KFile.GetContents(filename)
+		_, _ = KFile.ReadFile(filename)
 	}
 }
 
