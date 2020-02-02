@@ -86,7 +86,7 @@
 - https://github.com/henrylee2cn/utils
 - https://github.com/billmi/go-utils
 - https://github.com/zcalusic/sysinfo
-- https://github.com/unknwon/com
+- https://github.com/unknwon/com -x
 - https://github.com/huandu/xstrings
 - https://github.com/astaxie/beego/tree/develop/utils
 
