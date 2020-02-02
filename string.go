@@ -371,16 +371,7 @@ func (ks *LkkString) SubstrCount(str, substr string) int {
 	return strings.Count(str, substr)
 }
 
-// Strrev 反转字符串
-func (ks *LkkString) Strrev(str string) string {
-	runes := []rune(str)
-	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
-		runes[i], runes[j] = runes[j], runes[i]
-	}
-	return string(runes)
-}
-
-// Reverse 字符串翻转.
+// Reverse 反转字符串.
 func (ks *LkkString) Reverse(str string) string {
 	n := len(str)
 	runes := make([]rune, n)
@@ -841,15 +832,6 @@ func (ks *LkkString) ToCamelCase(str string) string {
 		}
 
 		buf.WriteRune(r0)
-	}
-
-	if len(str) == 0 {
-		// A special case for a string contains only 1 rune.
-		if size != 0 {
-			buf.WriteRune(r0)
-		}
-
-		return buf.String()
 	}
 
 	for len(str) > 0 {
