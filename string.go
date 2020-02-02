@@ -416,7 +416,7 @@ func (ks *LkkString) MbStrlen(str string) int {
 }
 
 // StrShuffle 随机打乱一个字符串
-func (ks *LkkString) StrShuffle(str string) string {
+func (ks *LkkString) StrShuffle00(str string) string {
 	runes := []rune(str)
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	s := make([]rune, len(runes))
@@ -424,6 +424,26 @@ func (ks *LkkString) StrShuffle(str string) string {
 		s[i] = runes[v]
 	}
 	return string(s)
+}
+
+// Shuffle 随机打乱字符串.
+func (ks *LkkString) Shuffle(str string) string {
+	if str == "" {
+		return str
+	}
+
+	runes := []rune(str)
+	index := 0
+
+	for i := len(runes) - 1; i > 0; i-- {
+		index = rand.Intn(i + 1)
+
+		if i != index {
+			runes[i], runes[index] = runes[index], runes[i]
+		}
+	}
+
+	return string(runes)
 }
 
 // Trim 去除字符串首尾处的空白字符（或者其他字符）

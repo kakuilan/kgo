@@ -497,20 +497,39 @@ func BenchmarkMbStrlen(b *testing.B) {
 	}
 }
 
-func TestMbStrShuffle(t *testing.T) {
+func TestMbStrShuffle00(t *testing.T) {
 	str := "hello world!你好 世界！"
-	res := KStr.StrShuffle(str)
+	res := KStr.StrShuffle00(str)
 	if res == str {
 		t.Error("StrShuffle fail")
 		return
 	}
 }
 
+func BenchmarkStrShuffle00(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!你好 世界！"
+	for i := 0; i < b.N; i++ {
+		KStr.StrShuffle00(str)
+	}
+}
+
+func TestMbStrShuffle(t *testing.T) {
+	str := "hello world!你好 世界！"
+	res := KStr.Shuffle(str)
+	if res == str {
+		t.Error("StrShuffle fail")
+		return
+	}
+
+	KStr.Shuffle("")
+}
+
 func BenchmarkStrShuffle(b *testing.B) {
 	b.ResetTimer()
 	str := "hello world!你好 世界！"
 	for i := 0; i < b.N; i++ {
-		KStr.StrShuffle(str)
+		KStr.Shuffle(str)
 	}
 }
 

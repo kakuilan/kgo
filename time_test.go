@@ -208,7 +208,7 @@ func TestYearMonthDay(t *testing.T) {
 	y := KTime.Year()
 	m := KTime.Month()
 	d := KTime.Day()
-	if y <= 0 || m <= 0 || d <= 0 {
+	if y <= 0 || m <= 0 || d < 0 {
 		t.Error("Year/Month/Day fail")
 		return
 	}
@@ -248,7 +248,7 @@ func TestHourMinuteSecond(t *testing.T) {
 	h := KTime.Hour()
 	m := KTime.Minute()
 	s := KTime.Second()
-	if h <= 0 || m <= 0 || s <= 0 {
+	if h < 0 || m < 0 || s < 0 {
 		t.Error("Hour/Minute/Second fail")
 		return
 	}
