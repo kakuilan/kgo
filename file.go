@@ -31,12 +31,6 @@ func (kf *LkkFile) GetExt(fpath string) string {
 	return suffix
 }
 
-// GetContents 读取文件内容作为字符串.
-func (kf *LkkFile) GetContents(fpath string) ([]byte, error) {
-	data, err := ioutil.ReadFile(fpath)
-	return data, err
-}
-
 // ReadInArray 把整个文件读入一个数组中,每行作为一个元素.
 func (kf *LkkFile) ReadInArray(fpath string) ([]string, error) {
 	data, err := ioutil.ReadFile(fpath)
@@ -47,14 +41,20 @@ func (kf *LkkFile) ReadInArray(fpath string) ([]string, error) {
 	return strings.Split(string(data), "\n"), nil
 }
 
-// PutContents 将一个字符串写入文件
+// GetContents 读取文件内容.
+func (kf *LkkFile) GetContents(fpath string) ([]byte, error) {
+	data, err := ioutil.ReadFile(fpath)
+	return data, err
+}
+
+// PutContents 将内容写入文件.
 func (kf *LkkFile) PutContents(fpath string, data []byte) error {
 	if dir := path.Dir(fpath); dir != "" {
-		if err := os.MkdirAll(dir, 0755); err != nil {
+		if err := os.MkdirAll(dir, os.ModePerm); err != nil {
 			return err
 		}
 	}
-	return ioutil.WriteFile(fpath, data, 0644)
+	return ioutil.WriteFile(fpath, data, 0655)
 }
 
 // GetMime 获取文件mime类型;fast为true时根据后缀快速获取;为false时读取文件头获取
