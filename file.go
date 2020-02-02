@@ -47,8 +47,8 @@ func (kf *LkkFile) ReadFile(fpath string) ([]byte, error) {
 	return data, err
 }
 
-// PutContents 将内容写入文件.
-func (kf *LkkFile) PutContents(fpath string, data []byte) error {
+// WriteFile 将内容写入文件.
+func (kf *LkkFile) WriteFile(fpath string, data []byte) error {
 	if dir := path.Dir(fpath); dir != "" {
 		if err := os.MkdirAll(dir, os.ModePerm); err != nil {
 			return err
