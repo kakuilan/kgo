@@ -43,22 +43,22 @@ func BenchmarkReadFile(b *testing.B) {
 	}
 }
 
-func TestPutContents(t *testing.T) {
+func TestWriteFile(t *testing.T) {
 	str := []byte("Hello World!")
-	err := KFile.PutContents("./testdata/putfile", str)
+	err := KFile.WriteFile("./testdata/putfile", str)
 	if err != nil {
 		t.Error("file get contents error")
 		return
 	}
-	_ = KFile.PutContents("/root/hello/world", str)
+	_ = KFile.WriteFile("/root/hello/world", str)
 }
 
-func BenchmarkPutContents(b *testing.B) {
+func BenchmarkWriteFile(b *testing.B) {
 	b.ResetTimer()
 	str := []byte("Hello World!")
 	for i := 0; i < b.N; i++ {
 		filename := fmt.Sprintf("./testdata/file/putfile_%d", i)
-		_ = KFile.PutContents(filename, str)
+		_ = KFile.WriteFile(filename, str)
 	}
 }
 
