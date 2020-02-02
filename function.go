@@ -370,7 +370,7 @@ func camelCaseToLowerCase(str string, connector rune) string {
 
 		switch {
 		case r0 == utf8.RuneError:
-			buf.WriteRune(r0)
+			continue
 
 		case unicode.IsUpper(r0):
 			if prev != connector && !unicode.IsNumber(prev) {
@@ -402,7 +402,6 @@ func camelCaseToLowerCase(str string, connector rune) string {
 
 				if r0 == utf8.RuneError {
 					buf.WriteRune(unicode.ToLower(r1))
-					buf.WriteRune(r0)
 					break
 				}
 

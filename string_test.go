@@ -931,6 +931,9 @@ func TestToKebabCase(t *testing.T) {
 		expected string
 	}{
 		{"", ""},
+		{"�helloWorld", "hello-world"},
+		{"A", "a"},
+		{"HellOW�orld", "hell-oworld"},
 		{"FirstName", "first-name"},
 		{"HTTPServer", "http-server"},
 		{"NoHTTPS", "no-https"},
