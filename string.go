@@ -808,12 +808,15 @@ func (ks *LkkString) VersionCompare(version1, version2, operator string) bool {
 	}
 }
 
-// CamelName 下划线(包括横杠"-")写法转为驼峰写法.
-func (ks *LkkString) CamelName(name string) string {
+// ToCamelCase 转为驼峰写法.
+// 去掉包括下划线"_"和横杠"-".
+func (ks *LkkString) ToCamelCase(str string) (res string) {
 	replacer := strings.NewReplacer("–", " ", "_", " ")
-	name = replacer.Replace(name)
-	name = strings.Title(name)
-	return strings.Replace(name, " ", "", -1)
+	str = replacer.Replace(str)
+	str = strings.Title(str)
+	res = strings.Replace(str, " ", "", -1)
+
+	return
 }
 
 // UnderscoreName 驼峰写法转为下划线写法
