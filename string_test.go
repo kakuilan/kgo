@@ -860,15 +860,15 @@ func BenchmarkVersionCompare(b *testing.B) {
 	}
 }
 
-func TestCamelNameUnderscoreName(t *testing.T) {
+func TestToCamelCaseUnderscoreName(t *testing.T) {
 	str := "hello world learn_golang"
-	res := KStr.CamelName(str)
-	res1 := KStr.CamelName("device_id ")
-	res2 := KStr.CamelName("create_time ")
-	res3 := KStr.CamelName("location ")
+	res := KStr.ToCamelCase(str)
+	res1 := KStr.ToCamelCase("device_id ")
+	res2 := KStr.ToCamelCase("create_time ")
+	res3 := KStr.ToCamelCase("location ")
 
 	if strings.Contains(res, "_") || strings.Contains(res1, "_") || strings.Contains(res2, "_") || strings.Contains(res3, " ") {
-		t.Error("CamelName fail")
+		t.Error("ToCamelCase fail")
 		return
 	}
 
@@ -879,11 +879,33 @@ func TestCamelNameUnderscoreName(t *testing.T) {
 	}
 }
 
-func BenchmarkCamelName(b *testing.B) {
+func TestToCamelCase(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected string
+	}{
+		{"", ""},
+		{"some_words", "SomeWords"},
+		{"http_server", "HttpServer"},
+		{"no_https", "NoHttps"},
+		{"_complex__case_", "ComplexCase"},
+		{"some words", "SomeWords"},
+	}
+
+	for _, test := range tests {
+		actual := KStr.ToCamelCase(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected ToCamelCase(%q) to be %v, got %v", test.param, test.expected, actual)
+			return
+		}
+	}
+}
+
+func BenchmarkToCamelCase(b *testing.B) {
 	b.ResetTimer()
 	str := "hello world learn_golang"
 	for i := 0; i < b.N; i++ {
-		KStr.CamelName(str)
+		KStr.ToCamelCase(str)
 	}
 }
 
