@@ -1610,7 +1610,7 @@ func BenchmarkJsonp2Json(b *testing.B) {
 }
 
 func TestCountWords(t *testing.T) {
-	content, _ := KFile.GetContents("./testdata/dante.txt")
+	content, _ := KFile.ReadFile("./testdata/dante.txt")
 	word_all, mp := KStr.CountWords(KConv.Bytes2Str(content))
 	word_num := len(mp)
 
