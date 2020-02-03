@@ -66,17 +66,17 @@
 - https://github.com/gxxgle/go-utils -x
 - https://github.com/q191201771/naza -x
 - https://github.com/kirinlabs/utils -x
-- https://github.com/xinliangnote/go-util
+- https://github.com/xinliangnote/go-util -x
 - https://github.com/facebookarchive/pidfile/blob/master/pidfile.go
 - https://github.com/struCoder/pidusage/blob/master/pidusage.go
-- https://github.com/docker/go-units
-- https://github.com/alecthomas/units
-- https://github.com/prashantv/gostub
-- https://github.com/tgulacsi/go
-- https://github.com/UlricQin/goutils
-- https://github.com/chanxuehong/util
-- https://github.com/Akagi201/utilgo
-- https://github.com/fastly/go-utils
+- https://github.com/docker/go-units -x
+- https://github.com/alecthomas/units -x
+- https://github.com/prashantv/gostub -x
+- https://github.com/tgulacsi/go -x
+- https://github.com/UlricQin/goutils -x
+- https://github.com/chanxuehong/util -x
+- https://github.com/Akagi201/utilgo -x
+- https://github.com/fastly/go-utils -x
 - https://github.com/Teamwork/utils
 - https://github.com/OneOfOne/go-utils
 - https://github.com/bitrise-io/go-utils
@@ -87,11 +87,13 @@
 - https://github.com/billmi/go-utils
 - https://github.com/zcalusic/sysinfo
 - https://github.com/unknwon/com -x
-- https://github.com/huandu/xstrings
-- https://github.com/astaxie/beego/tree/develop/utils
+- https://github.com/huandu/xstrings -x
+- https://github.com/astaxie/beego/tree/develop/utils -x
 
 
 
+https://github.com/fastly/go-utils-master/executable/executable_linux.go
+https://github.com/fastly/go-utils-master/lifecycle/lifecycle.go
 
 
 
@@ -146,7 +148,7 @@ https://guanjunjian.github.io/2017/11/09/study-8-proc-net-tcp-analysis/
 https://blog.csdn.net/justlinux2010/article/details/21028797
 
 
-encrypt
+encrypt Encrypt/Decrypt
 https://github.com/henrylee2cn/goutil/blob/master/encrypt.go
 https://www.ctolib.com/topics-4140.html
 https://www.cnblogs.com/lavin/p/5373188.html
@@ -170,6 +172,7 @@ https://github.com/bocajim/helpers/blob/master/crypt.go
 https://github.com/nothollyhigh/kiss/tree/master/crypto
 https://my.oschina.net/qyyoung/blog/1486324
 https://github.com/iiinsomnia/yiigo/blob/master/crypto.go
+https://github.com/Teamwork/utils/aesutil/aesutil.go
 
 
 json库
