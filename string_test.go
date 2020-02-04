@@ -934,6 +934,7 @@ func TestToKebabCase(t *testing.T) {
 		{"�helloWorld", "hello-world"},
 		{"A", "a"},
 		{"HellOW�orld", "hell-oworld"},
+		{"-FirstName", "-first-name"},
 		{"FirstName", "first-name"},
 		{"HTTPServer", "http-server"},
 		{"NoHTTPS", "no-https"},
