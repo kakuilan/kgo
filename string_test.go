@@ -1263,16 +1263,16 @@ func BenchmarkDstrpos(b *testing.B) {
 	}
 }
 
-func TestLowerUpperCaseFirstWords(t *testing.T) {
+func TestLowerUcwords(t *testing.T) {
 	str := "Hello world. I`m use Golang, python, and so on."
 	res1 := KStr.LowerCaseFirstWords(str)
-	res2 := KStr.UpperCaseFirstWords(str)
+	res2 := KStr.Ucwords(str)
 
 	if res1 == "" {
 		t.Error("LowerCaseFirstWords fail")
 		return
 	} else if res2 == "" {
-		t.Error("UpperCaseFirstWords fail")
+		t.Error("Ucwords fail")
 		return
 	}
 }
@@ -1285,11 +1285,11 @@ func BenchmarkLowerCaseFirstWords(b *testing.B) {
 	}
 }
 
-func BenchmarkUpperCaseFirstWords(b *testing.B) {
+func BenchmarkUcwords(b *testing.B) {
 	b.ResetTimer()
 	str := "Hello world. I`m use Golang, python, and so on."
 	for i := 0; i < b.N; i++ {
-		KStr.UpperCaseFirstWords(str)
+		KStr.Ucwords(str)
 	}
 }
 
