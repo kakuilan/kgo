@@ -17,7 +17,6 @@
 - https://github.com/emirozer/go-helpers    -x
 - https://github.com/evilsocket/islazy  -x
 - https://github.com/fatih-yavuz/go-helpers -x
-- https://github.com/fingerQin/gophp    -x
 - https://github.com/hhxsv5/go-helpers  -x
 - https://github.com/idoall/TokenExchangeCommon/tree/master/commonutils -x
 - https://github.com/jiazhoulvke/goutil -x
@@ -40,7 +39,7 @@
 - https://github.com/jinzhu/now -x
 - https://github.com/thinkeridea/go-extend -x
 - https://github.com/lalamove/nui   -x
-- https://github.com/go-eyas/toolkit    -x
+- https://github.com/go-eyas/toolkit    -x yy
 - https://github.com/hwholiday/learning_tools   -x
 - https://github.com/nothollyhigh/kiss  -x
 - https://github.com/huandu/xstrings    -x
@@ -89,7 +88,7 @@
 - https://github.com/unknwon/com -x
 - https://github.com/huandu/xstrings -x
 - https://github.com/astaxie/beego/tree/develop/utils -x
-
+- https://github.com/pubgo/g
 
 
 https://github.com/fastly/go-utils-master/executable/executable_linux.go
