@@ -287,7 +287,47 @@ func (ks *LkkString) Ucwords(str string) string {
 
 // Lcwords 将字符串中每个词的首字母转换为小写.
 func (ks *LkkString) Lcwords(str string) string {
-	return ""
+	buf := &bytes.Buffer{}
+	lastIsSpace := true
+	for _, r := range str {
+		if unicode.IsLetter(r) {
+			if lastIsSpace {
+				r = unicode.ToLower(r)
+			}
+
+			lastIsSpace = false
+		} else {
+			lastIsSpace = false
+			if unicode.IsSpace(r) || unicode.IsPunct(r) || unicode.IsSymbol(r) || unicode.IsMark(r) {
+				lastIsSpace = true
+			}
+		}
+
+		buf.WriteRune(r)
+	}
+
+	return buf.String()
+}
+
+// LowerCaseFirstWords 将每个单词的首字母小写.
+func (ks *LkkString) LowerCaseFirstWords(str string) string {
+	upper := 1
+	bufbyteStr := []byte(str)
+	retval := make([]byte, len(bufbyteStr))
+	for k, v := range bufbyteStr {
+		if upper == 1 && v >= 65 && v <= 90 {
+			v = v + 32
+		}
+
+		upper = 0
+
+		if v >= 9 && v <= 13 || v == 32 {
+			upper = 1
+		}
+		retval[k] = v
+	}
+
+	return string(retval)
 }
 
 // Substr 截取字符串str的子串.
@@ -1121,27 +1161,6 @@ func (ks *LkkString) Dstrpos(str string, arr []string, chkCase bool) (bool, stri
 	}
 
 	return false, ""
-}
-
-// LowerCaseFirstWords 将每个单词的首字母小写.
-func (ks *LkkString) LowerCaseFirstWords(str string) string {
-	upper := 1
-	bufbyteStr := []byte(str)
-	retval := make([]byte, len(bufbyteStr))
-	for k, v := range bufbyteStr {
-		if upper == 1 && v >= 65 && v <= 90 {
-			v = v + 32
-		}
-
-		upper = 0
-
-		if v >= 9 && v <= 13 || v == 32 {
-			upper = 1
-		}
-		retval[k] = v
-	}
-
-	return string(retval)
 }
 
 // HideCard 隐藏证件号码.
