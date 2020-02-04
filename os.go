@@ -612,6 +612,7 @@ func (ko *LkkOS) IsPortOpen(host string, port interface{}, protocols ...string) 
 	return false
 }
 
+//GetPidByPort 根据端口号获取进程PID.TODO,待实现.
 func (ko *LkkOS) GetPidByPort(port int) (pid int) {
 	// TODO
 	return

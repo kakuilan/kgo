@@ -974,8 +974,60 @@ func BenchmarkArraySearchMutil(b *testing.B) {
 	}
 }
 
-func TestGetPidByPort(t *testing.T) {
-	res := KOS.GetPidByPort(22)
-	println("pid:", res)
+func TestUniqueInts(t *testing.T) {
+	arr := []int{-3, 9, -5, 0, 5, -3, 0, 7}
+	res := KArr.UniqueInts(arr)
+	if len(arr) == len(res) {
+		t.Error("UniqueInts fail")
+		return
+	}
+}
 
+func BenchmarkUniqueInts(b *testing.B) {
+	b.ResetTimer()
+	arr := []int{-3, 9, -5, 0, 5, -3, 0, 7}
+	for i := 0; i < b.N; i++ {
+		KArr.UniqueInts(arr)
+	}
+}
+
+func TestUnique64Ints(t *testing.T) {
+	arr := []int64{-3, 9, -5, 0, 5, -3, 0, 7}
+	res := KArr.Unique64Ints(arr)
+	if len(arr) == len(res) {
+		t.Error("Unique64Ints fail")
+		return
+	}
+}
+
+func BenchmarkUnique64Ints(b *testing.B) {
+	b.ResetTimer()
+	arr := []int64{-3, 9, -5, 0, 5, -3, 0, 7}
+	for i := 0; i < b.N; i++ {
+		KArr.Unique64Ints(arr)
+	}
+}
+
+func TestUniqueStrings(t *testing.T) {
+	arr1 := []string{}
+	res1 := KArr.UniqueStrings(arr1)
+	if len(res1) != 0 {
+		t.Error("UniqueStrings fail")
+		return
+	}
+
+	arr2 := []string{"", "hello", "world", "hello", "你好", "world", "1234"}
+	res2 := KArr.UniqueStrings(arr2)
+	if len(arr2) == len(res2) {
+		t.Error("UniqueStrings fail")
+		return
+	}
+}
+
+func BenchmarkUniqueStrings(b *testing.B) {
+	b.ResetTimer()
+	arr := []string{"", "hello", "world", "hello", "你好", "world", "1234"}
+	for i := 0; i < b.N; i++ {
+		KArr.UniqueStrings(arr)
+	}
 }
