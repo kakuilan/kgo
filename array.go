@@ -6,6 +6,7 @@ import (
 	"math"
 	"math/rand"
 	"reflect"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -509,6 +510,44 @@ func (ka *LkkArray) JoinInts(ints []int, delimiter string) (res string) {
 		}
 	}
 	res = sb.String()
+
+	return
+}
+
+// UniqueInts 移除整数数组中的重复值.
+func (ka *LkkArray) UniqueInts(ints []int) (res []int) {
+	seen := make(map[int]bool)
+	for _, num := range ints {
+		if _, ok := seen[num]; !ok {
+			seen[num] = true
+			res = append(res, num)
+		}
+	}
+	return
+}
+
+// Unique64Ints 移除64位整数数组中的重复值.
+func (ka *LkkArray) Unique64Ints(ints []int64) (res []int64) {
+	seen := make(map[int64]bool)
+	for _, num := range ints {
+		if _, ok := seen[num]; !ok {
+			seen[num] = true
+			res = append(res, num)
+		}
+	}
+	return
+}
+
+// UniqueStrings 移除字符串数组中的重复值.
+func (ka *LkkArray) UniqueStrings(strs []string) (res []string) {
+	sort.Strings(strs)
+	var last string
+	for _, str := range strs {
+		if str != last {
+			res = append(res, str)
+		}
+		last = str
+	}
 
 	return
 }
