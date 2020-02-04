@@ -1263,31 +1263,32 @@ func BenchmarkDstrpos(b *testing.B) {
 	}
 }
 
-func TestLowerUcwords(t *testing.T) {
-	str := "Hello world. I`m use Golang, python, and so on."
-	res1 := KStr.LowerCaseFirstWords(str)
+func TestUcwordsLcwords(t *testing.T) {
+	str := "Hello world. 你好，世界。I`m use Golang, python, and so on."
+	res1 := KStr.Lcwords(str)
 	res2 := KStr.Ucwords(str)
 
-	if res1 == "" {
-		t.Error("LowerCaseFirstWords fail")
+	if res1 != "hello world. 你好，世界。i`m use golang, python, and so on." {
+		t.Error("Lcwords fail")
 		return
-	} else if res2 == "" {
+	}
+	if res2 != "Hello World. 你好，世界。I`M Use Golang, Python, And So On." {
 		t.Error("Ucwords fail")
 		return
 	}
 }
 
-func BenchmarkLowerCaseFirstWords(b *testing.B) {
+func BenchmarkLcwords(b *testing.B) {
 	b.ResetTimer()
-	str := "Hello world. I`m use Golang, python, and so on."
+	str := "Hello world. 你好，世界。I`m use Golang, python, and so on."
 	for i := 0; i < b.N; i++ {
-		KStr.LowerCaseFirstWords(str)
+		KStr.Lcwords(str)
 	}
 }
 
 func BenchmarkUcwords(b *testing.B) {
 	b.ResetTimer()
-	str := "Hello world. I`m use Golang, python, and so on."
+	str := "Hello world. 你好，世界。I`m use Golang, python, and so on."
 	for i := 0; i < b.N; i++ {
 		KStr.Ucwords(str)
 	}

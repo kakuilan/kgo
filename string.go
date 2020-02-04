@@ -309,27 +309,6 @@ func (ks *LkkString) Lcwords(str string) string {
 	return buf.String()
 }
 
-// LowerCaseFirstWords 将每个单词的首字母小写.
-func (ks *LkkString) LowerCaseFirstWords(str string) string {
-	upper := 1
-	bufbyteStr := []byte(str)
-	retval := make([]byte, len(bufbyteStr))
-	for k, v := range bufbyteStr {
-		if upper == 1 && v >= 65 && v <= 90 {
-			v = v + 32
-		}
-
-		upper = 0
-
-		if v >= 9 && v <= 13 || v == 32 {
-			upper = 1
-		}
-		retval[k] = v
-	}
-
-	return string(retval)
-}
-
 // Substr 截取字符串str的子串.
 // start 为起始位置.若值是负数,返回的结果将从 str 结尾处向前数第 abs(start) 个字符开始.
 // length 为截取的长度.若值时负数, str 末尾处的 abs(length) 个字符将会被省略.
