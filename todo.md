@@ -269,7 +269,6 @@ https://github.com/itchyny/base58-go
 https://blog.csdn.net/idwtwt/article/details/80740474
 https://studygolang.com/articles/16870
 https://github.com/mr-tron/base58
-https://github.com/itchyny/base58-go
 https://github.com/shuangdeyu/helper_go/blob/master/pwdhelper/base58.go
 https://blog.csdn.net/jason_cuijiahui/article/details/79280362
 
