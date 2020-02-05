@@ -516,12 +516,13 @@ func (ka *LkkArray) JoinInts(ints []int, delimiter string) (res string) {
 
 // UniqueInts 移除整数数组中的重复值.
 func (ka *LkkArray) UniqueInts(ints []int) (res []int) {
-	seen := make(map[int]bool)
-	for _, num := range ints {
-		if _, ok := seen[num]; !ok {
-			seen[num] = true
+	sort.Ints(ints)
+	var last int
+	for i, num := range ints {
+		if i == 0 || num != last {
 			res = append(res, num)
 		}
+		last = num
 	}
 	return
 }
