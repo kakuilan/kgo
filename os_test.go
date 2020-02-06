@@ -758,9 +758,3 @@ func BenchmarkTriggerGC(b *testing.B) {
 		KOS.TriggerGC()
 	}
 }
-
-func TestGetPidByPort(t *testing.T) {
-	res := KOS.GetPidByPort(22)
-	println("pid:", res)
-
-}
