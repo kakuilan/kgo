@@ -615,6 +615,36 @@ func (ko *LkkOS) IsPortOpen(host string, port interface{}, protocols ...string) 
 //GetPidByPort 根据端口号获取进程PID.TODO,待实现.
 func (ko *LkkOS) GetPidByPort(port int) (pid int) {
 	// TODO
+	files := []string{
+		"/proc/net/tcp",
+		//"/proc/net/udp",
+		//"/proc/net/tcp6",
+		//"/proc/net/udp6",
+	}
+
+	for _, fpath := range files {
+		lines, _ := KFile.ReadInArray(fpath)
+		for i, line := range lines[1:] {
+			println(line)
+			println("----------------:", i)
+			fields := strings.Fields(line)
+
+			if len(fields) < 9 {
+				continue
+			}
+
+			//本地ip和端口
+			ipport := strings.Split(fields[1], ":")
+			port, _ := KConv.Hex2Dec(ipport[1])
+			fmt.Printf("%v %v %v \n", ipport, port, fields[9])
+
+			pid, _ := GetPid(fields[9])
+			println("pid:", pid)
+
+			println("----------------")
+		}
+	}
+
 	return
 }
 
