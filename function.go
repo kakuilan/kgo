@@ -460,15 +460,10 @@ func isCaseConnector(r rune) bool {
 }
 
 // getPidByInode 根据套接字的inode获取PID.须root权限.
-func getPidByInode(inode string, procDirs []string) (int, error) {
-	var pid int
-	var err error
+func getPidByInode(inode string, procDirs []string) (pid int) {
 
 	if len(procDirs) == 0 {
-		procDirs, err = filepath.Glob("/proc/[0-9]*/fd/[0-9]*")
-		if err != nil {
-			return pid, err
-		}
+		procDirs, _ = filepath.Glob("/proc/[0-9]*/fd/[0-9]*")
 	}
 
 	re := regexp.MustCompile(inode)
@@ -481,7 +476,7 @@ func getPidByInode(inode string, procDirs []string) (int, error) {
 		}
 	}
 
-	return pid, nil
+	return pid
 }
 
 // getProcessExeByPid 根据PID获取进程的执行路径.

@@ -743,6 +743,7 @@ func TestGetPidByPortGetProcessExeByPid(t *testing.T) {
 	message := "Hi there!\n"
 
 	time.AfterFunc(time.Millisecond*200, func() {
+		getPidByInode("1234", nil)
 		KOS.GetPidByPort(22)
 		KOS.GetPidByPort(25)
 		KOS.GetPidByPort(1999)
@@ -792,7 +793,6 @@ func TestGetPidByPortGetProcessExeByPid(t *testing.T) {
 		}
 		return // Done
 	}
-
 }
 
 func BenchmarkGetPidByPort(b *testing.B) {
