@@ -141,7 +141,6 @@ https://github.com/jimmykuu/webhelpers/blob/master/text.go
 根据端口查找pid
 /proc/net/tcp
 https://mlog.club/article/1772495
-https://groups.google.com/forum/#!topic/golang-china/boCI84hL_rM
 https://blog.csdn.net/zheshijieyouwo/article/details/78307091 -ok
 https://guanjunjian.github.io/2017/11/09/study-8-proc-net-tcp-analysis/ -ok
 https://blog.csdn.net/justlinux2010/article/details/21028797 -ok

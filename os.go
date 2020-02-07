@@ -612,36 +612,42 @@ func (ko *LkkOS) IsPortOpen(host string, port interface{}, protocols ...string) 
 	return false
 }
 
-//GetPidByPort 根据端口号获取进程PID.TODO,待实现.
+//GetPidByPort 根据端口号获取监听的进程PID.
 func (ko *LkkOS) GetPidByPort(port int) (pid int) {
-	// TODO
 	files := []string{
 		"/proc/net/tcp",
-		//"/proc/net/udp",
-		//"/proc/net/tcp6",
-		//"/proc/net/udp6",
+		"/proc/net/udp",
+		"/proc/net/tcp6",
+		"/proc/net/udp6",
 	}
 
+	procDirs, _ := filepath.Glob("/proc/[0-9]*/fd/[0-9]*")
 	for _, fpath := range files {
 		lines, _ := KFile.ReadInArray(fpath)
-		for i, line := range lines[1:] {
-			println(line)
-			println("----------------:", i)
+		for _, line := range lines[1:] {
 			fields := strings.Fields(line)
+			if len(fields) < 10 {
+				continue
+			}
 
-			if len(fields) < 9 {
+			//非 LISTEN 监听状态
+			if fields[3] != "0A" {
 				continue
 			}
 
 			//本地ip和端口
 			ipport := strings.Split(fields[1], ":")
-			port, _ := KConv.Hex2Dec(ipport[1])
-			fmt.Printf("%v %v %v \n", ipport, port, fields[9])
+			locPort, _ := KConv.Hex2Dec(ipport[1])
 
-			pid, _ := GetPid(fields[9])
-			println("pid:", pid)
+			// 非该端口
+			if int(locPort) != port {
+				continue
+			}
 
-			println("----------------")
+			pid, _ = getPidByInode(fields[9], procDirs)
+			if pid > 0 {
+				return
+			}
 		}
 	}
 

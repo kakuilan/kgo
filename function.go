@@ -8,10 +8,8 @@ import (
 	"crypto/sha512"
 	"encoding/binary"
 	"encoding/hex"
-	"errors"
 	"fmt"
 	"hash"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -461,54 +459,34 @@ func isCaseConnector(r rune) bool {
 	return r == '-' || r == '_' || unicode.IsSpace(r)
 }
 
-// getPidByInode 根据套接字的inode获取PID.
-func getPidByInode(inode string) (string, error) {
-	var pid string
-	dirs, err := filepath.Glob("/proc/[0-9]*/fd/[0-9]*")
-	fmt.Printf("glob: %v\n", dirs)
-	if err != nil {
-		return pid, err
+// getPidByInode 根据套接字的inode获取PID.须root权限.
+func getPidByInode(inode string, procDirs []string) (int, error) {
+	var pid int
+	var err error
+
+	if len(procDirs) == 0 {
+		procDirs, err = filepath.Glob("/proc/[0-9]*/fd/[0-9]*")
+		if err != nil {
+			return pid, err
+		}
 	}
 
 	re := regexp.MustCompile(inode)
-	for _, item := range dirs {
+	for _, item := range procDirs {
 		path, _ := os.Readlink(item)
 		out := re.FindString(path)
-		println("path:", item, path, out)
 		if len(out) != 0 {
-			pid = strings.Split(item, "/")[2]
+			pid, _ = strconv.Atoi(strings.Split(item, "/")[2])
+			break
 		}
 	}
 
 	return pid, nil
 }
 
-func GetPid(SocketId string) (pid string, err error) {
-	SocketInfo := fmt.Sprintf("socket:[%s]", SocketId)
-	procDirList, err := ioutil.ReadDir("/proc")
-	if err != nil {
-		println("err----:", err.Error())
-		return
-	}
-
-	for _, procDir := range procDirList {
-		_, err := strconv.Atoi(procDir.Name())
-		if err != nil {
-			continue
-		}
-		fdDir := fmt.Sprintf("/proc/%s/fd", procDir.Name())
-		fdSonDirList, err := ioutil.ReadDir(fdDir)
-		for _, socketFile := range fdSonDirList {
-
-			socket := fmt.Sprintf("/proc/%s/fd/%s", procDir.Name(), socketFile.Name())
-			data, err := os.Readlink(socket)
-			if err != nil {
-				continue
-			}
-			if SocketInfo == data {
-				return procDir.Name(), nil
-			}
-		}
-	}
-	return "", errors.New("get pid fail")
+// getProcessExeByPid 根据PID获取进程的执行路径.
+func getProcessExeByPid(pid int) string {
+	exe := fmt.Sprintf("/proc/%d/exe", pid)
+	path, _ := os.Readlink(exe)
+	return path
 }
