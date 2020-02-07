@@ -1031,16 +1031,3 @@ func BenchmarkUniqueStrings(b *testing.B) {
 		KArr.UniqueStrings(arr)
 	}
 }
-
-func TestGetPidByPort(t *testing.T) {
-	KOS.GetPidByPort(22)
-	KOS.GetPidByPort(25)
-	KOS.GetPidByPort(1999)
-}
-
-func BenchmarkGetPidByPort(b *testing.B) {
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		KOS.GetPidByPort(22)
-	}
-}

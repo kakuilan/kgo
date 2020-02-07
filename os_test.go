@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"fmt"
+	"io/ioutil"
 	"net"
 	"net/http"
 	"os/user"
@@ -734,6 +735,76 @@ func BenchmarkIsPortOpen(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KOS.IsPortOpen("127.0.0.1", 80, "tcp")
+	}
+}
+
+func TestGetPidByPortGetProcessExeByPid(t *testing.T) {
+	message := "Hi there!\n"
+
+	time.AfterFunc(time.Millisecond*200, func() {
+		KOS.GetPidByPort(22)
+		KOS.GetPidByPort(25)
+		KOS.GetPidByPort(1999)
+		res := KOS.GetPidByPort(2020)
+		exepath := KOS.GetProcessExeByPid(res)
+		if res == 0 {
+			t.Error("GetPidByPort fail")
+			return
+		}
+		if exepath == "" {
+			t.Error("getProcessExeByPid fail")
+			return
+		}
+	})
+
+	time.AfterFunc(time.Millisecond*500, func() {
+		conn, err := net.Dial("tcp", ":2020")
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer conn.Close()
+
+		if _, err := fmt.Fprintf(conn, message); err != nil {
+			t.Fatal(err)
+		}
+	})
+
+	l, err := net.Listen("tcp", ":2020")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer l.Close()
+	for {
+		conn, err := l.Accept()
+		if err != nil {
+			return
+		}
+		defer conn.Close()
+
+		buf, err := ioutil.ReadAll(conn)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if msg := string(buf[:]); msg != message {
+			t.Fatalf("Unexpected message:\nGot:\t\t%s\nExpected:\t%s\n", msg, message)
+		}
+		return // Done
+	}
+
+}
+
+func BenchmarkGetPidByPort(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetPidByPort(2020)
+	}
+}
+
+func BenchmarkGetProcessExeByPid(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetProcessExeByPid(2020)
 	}
 }
 

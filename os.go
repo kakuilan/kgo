@@ -654,6 +654,11 @@ func (ko *LkkOS) GetPidByPort(port int) (pid int) {
 	return
 }
 
+// GetProcessExeByPid 根据PID获取进程的执行路径.
+func (ko *LkkOS) GetProcessExeByPid(pid int) string {
+	return getProcessExeByPid(pid)
+}
+
 // ForceGC 强制手动GC垃圾回收(阻塞).
 func (ko *LkkOS) ForceGC() {
 	runtime.GC()
