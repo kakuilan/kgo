@@ -8,6 +8,7 @@ import (
 	"os/user"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestIsWindows(t *testing.T) {
