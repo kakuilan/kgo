@@ -1033,7 +1033,14 @@ func BenchmarkUniqueStrings(b *testing.B) {
 }
 
 func TestGetPidByPort(t *testing.T) {
-	res := KOS.GetPidByPort(22)
-	println("pid:", res)
+	KOS.GetPidByPort(22)
+	KOS.GetPidByPort(25)
+	KOS.GetPidByPort(1999)
+}
 
+func BenchmarkGetPidByPort(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetPidByPort(22)
+	}
 }
