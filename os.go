@@ -644,7 +644,7 @@ func (ko *LkkOS) GetPidByPort(port int) (pid int) {
 				continue
 			}
 
-			pid, _ = getPidByInode(fields[9], procDirs)
+			pid = getPidByInode(fields[9], procDirs)
 			if pid > 0 {
 				return
 			}
