@@ -138,37 +138,6 @@ https://github.com/jimmykuu/webhelpers/blob/master/text.go
 
 
 
-根据端口查找pid
-/proc/net/tcp
-https://mlog.club/article/1772495
-https://blog.csdn.net/zheshijieyouwo/article/details/78307091 -ok
-https://guanjunjian.github.io/2017/11/09/study-8-proc-net-tcp-analysis/ -ok
-https://blog.csdn.net/justlinux2010/article/details/21028797 -ok
-https://unix.stackexchange.com/questions/226276/read-proc-to-know-if-a-process-has-opened-a-port
-https://stackoverflow.com/questions/24298150/using-proc-pid-how-can-i-identify-a-network-port-numbers-application/24318187
-https://stackoverflow.com/questions/50849122/how-to-find-which-process-bind-a-socket-but-not-listen
-https://github.com/weaveworks/procspy
-https://github.com/microsoft/WSL/issues/2084
-https://www.2daygeek.com/how-to-find-out-which-port-number-a-process-is-using-in-linux/
-http://doumadou.github.io/golang-shi-xian-ssnetstat.html -ok
-https://github.com/drael/GOnetstat
-https://github.com/gotoolkits/libnetgo
-https://github.com/alicebob/procspy
-https://mlog.club/article/555881
-https://ixyzero.com/blog/archives/3410.html
-
-cat /proc/net/tcp
-cat /proc/net/tcp6
-cat /proc/net/udp
-netstat -nap
-netstat -nlp|grep 9000
-sudo netstat -nlp | grep :80
-lsof -i :25
-sudo lsof -n -i :80 | grep LISTEN
-
-
-
-
 encrypt Encrypt/Decrypt
 https://github.com/henrylee2cn/goutil/blob/master/encrypt.go
 https://www.ctolib.com/topics-4140.html
