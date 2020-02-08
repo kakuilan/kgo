@@ -131,11 +131,9 @@ https://github.com/jimmykuu/webhelpers/blob/master/text.go
 - 简单http请求
 - rsa加解密
 - pid文件检查
-- 根据端口查找pid
 - 修正各函数的参数名称,尽量统一;弃用类似php不合理的函数名
-- 修改驼峰写法
-- LowerCaseFirstWords/ucwords
-
+- 改进EasyEncrypt/EasyDecrypt里面的循环
+- 文件拷贝
 
 
 encrypt Encrypt/Decrypt

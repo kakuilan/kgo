@@ -12,7 +12,7 @@ import (
 	"unsafe"
 )
 
-// Int2Str 将整数转换为字符串
+// Int2Str 将整数转换为字符串.
 func (kc *LkkConvert) Int2Str(val interface{}) string {
 	switch val.(type) {
 	// Integers
@@ -38,7 +38,7 @@ func (kc *LkkConvert) Float2Str(val interface{}, decimal int) string {
 	}
 }
 
-// Bool2Str 将布尔值转换为字符串
+// Bool2Str 将布尔值转换为字符串.
 func (kc *LkkConvert) Bool2Str(val bool) string {
 	if val {
 		return "true"
@@ -77,22 +77,22 @@ func (kc *LkkConvert) Str2Int(val string) (res int) {
 	return
 }
 
-// Str2Int8 将字符串转换为int8
+// Str2Int8 将字符串转换为int8.
 func (kc *LkkConvert) Str2Int8(val string) int8 {
 	return int8(kc.Str2IntStrict(val, 8, false))
 }
 
-// Str2Int16 将字符串转换为int16
+// Str2Int16 将字符串转换为int16.
 func (kc *LkkConvert) Str2Int16(val string) int16 {
 	return int16(kc.Str2IntStrict(val, 16, false))
 }
 
-// Str2Int32 将字符串转换为int32
+// Str2Int32 将字符串转换为int32.
 func (kc *LkkConvert) Str2Int32(val string) int32 {
 	return int32(kc.Str2IntStrict(val, 32, false))
 }
 
-// Str2Int64 将字符串转换为int64
+// Str2Int64 将字符串转换为int64.
 func (kc *LkkConvert) Str2Int64(val string) int64 {
 	return kc.Str2IntStrict(val, 64, false)
 }
@@ -108,27 +108,27 @@ func (kc *LkkConvert) Str2UintStrict(val string, bitSize int, strict bool) uint6
 	return res
 }
 
-// Str2Uint 将字符串转换为uint
+// Str2Uint 将字符串转换为uint.
 func (kc *LkkConvert) Str2Uint(val string) uint {
 	return uint(kc.Str2UintStrict(val, 0, false))
 }
 
-// Str2Uint8 将字符串转换为uint8
+// Str2Uint8 将字符串转换为uint8.
 func (kc *LkkConvert) Str2Uint8(val string) uint8 {
 	return uint8(kc.Str2UintStrict(val, 8, false))
 }
 
-// Str2Uint16 将字符串转换为uint16
+// Str2Uint16 将字符串转换为uint16.
 func (kc *LkkConvert) Str2Uint16(val string) uint16 {
 	return uint16(kc.Str2UintStrict(val, 16, false))
 }
 
-// Str2Uint32 将字符串转换为uint32
+// Str2Uint32 将字符串转换为uint32.
 func (kc *LkkConvert) Str2Uint32(val string) uint32 {
 	return uint32(kc.Str2UintStrict(val, 32, false))
 }
 
-// Str2Uint64 将字符串转换为uint64
+// Str2Uint64 将字符串转换为uint64.
 func (kc *LkkConvert) Str2Uint64(val string) uint64 {
 	return uint64(kc.Str2UintStrict(val, 64, false))
 }
@@ -145,7 +145,7 @@ func (kc *LkkConvert) Str2FloatStrict(val string, bitSize int, strict bool) floa
 	return res
 }
 
-// Str2Float32 将字符串转换为float32
+// Str2Float32 将字符串转换为float32.
 func (kc *LkkConvert) Str2Float32(val string) float32 {
 	return float32(kc.Str2FloatStrict(val, 32, false))
 }
@@ -192,12 +192,12 @@ func (kc *LkkConvert) Bytes2Str(val []byte) string {
 	return *(*string)(unsafe.Pointer(&val))
 }
 
-// Dec2Bin 将十进制转换为二进制
+// Dec2Bin 将十进制转换为二进制.
 func (kc *LkkConvert) Dec2Bin(number int64) string {
 	return strconv.FormatInt(number, 2)
 }
 
-// Bin2Dec 将二进制转换为十进制
+// Bin2Dec 将二进制转换为十进制.
 func (kc *LkkConvert) Bin2Dec(str string) (int64, error) {
 	i, err := strconv.ParseInt(str, 2, 0)
 	if err != nil {
@@ -206,7 +206,7 @@ func (kc *LkkConvert) Bin2Dec(str string) (int64, error) {
 	return i, nil
 }
 
-// Hex2Bin 将十六进制字符串转换为二进制字符串
+// Hex2Bin 将十六进制字符串转换为二进制字符串.
 func (kc *LkkConvert) Hex2Bin(data string) (string, error) {
 	i, err := strconv.ParseInt(data, 16, 0)
 	if err != nil {
@@ -215,7 +215,7 @@ func (kc *LkkConvert) Hex2Bin(data string) (string, error) {
 	return strconv.FormatInt(i, 2), nil
 }
 
-// Bin2Hex 将二进制字符串转换为十六进制字符串
+// Bin2Hex 将二进制字符串转换为十六进制字符串.
 func (kc *LkkConvert) Bin2Hex(str string) (string, error) {
 	i, err := strconv.ParseInt(str, 2, 0)
 	if err != nil {
@@ -224,12 +224,12 @@ func (kc *LkkConvert) Bin2Hex(str string) (string, error) {
 	return strconv.FormatInt(i, 16), nil
 }
 
-// Dec2Hex 将十进制转换为十六进制
+// Dec2Hex 将十进制转换为十六进制.
 func (kc *LkkConvert) Dec2Hex(number int64) string {
 	return strconv.FormatInt(number, 16)
 }
 
-// Hex2Dec 将十六进制转换为十进制
+// Hex2Dec 将十六进制转换为十进制.
 func (kc *LkkConvert) Hex2Dec(str string) (int64, error) {
 	start := 0
 	if len(str) > 2 && str[0:2] == "0x" {
@@ -240,12 +240,12 @@ func (kc *LkkConvert) Hex2Dec(str string) (int64, error) {
 	return strconv.ParseInt(str[start:], 16, 0)
 }
 
-// Dec2Oct 将十进制转换为八进制
+// Dec2Oct 将十进制转换为八进制.
 func (kc *LkkConvert) Dec2Oct(number int64) string {
 	return strconv.FormatInt(number, 8)
 }
 
-// Oct2Dec 将八进制转换为十进制
+// Oct2Dec 将八进制转换为十进制.
 func (kc *LkkConvert) Oct2Dec(str string) (int64, error) {
 	start := 0
 	if len(str) > 1 && str[0:1] == "0" {
@@ -264,7 +264,7 @@ func (kc *LkkConvert) BaseConvert(number string, frombase, tobase int) (string, 
 	return strconv.FormatInt(i, tobase), nil
 }
 
-// Ip2Long 将 IPV4 的字符串互联网协议转换成长整型数字
+// Ip2Long 将 IPV4 的字符串互联网协议转换成长整型数字.
 func (kc *LkkConvert) Ip2Long(ipAddress string) uint32 {
 	ip := net.ParseIP(ipAddress)
 	if ip == nil {
@@ -438,7 +438,7 @@ func (kc *LkkConvert) ToFloat(val interface{}) (res float64) {
 	return
 }
 
-// Float64ToByte 64位浮点数转字节切片
+// Float64ToByte 64位浮点数转字节切片.
 func (kc *LkkConvert) Float64ToByte(val float64) []byte {
 	bits := math.Float64bits(val)
 	res := make([]byte, 8)
@@ -447,14 +447,14 @@ func (kc *LkkConvert) Float64ToByte(val float64) []byte {
 	return res
 }
 
-// ByteToFloat64 字节切片转64位浮点数
+// ByteToFloat64 字节切片转64位浮点数.
 func (kc *LkkConvert) ByteToFloat64(bytes []byte) float64 {
 	bits := binary.LittleEndian.Uint64(bytes)
 
 	return math.Float64frombits(bits)
 }
 
-// Int64ToByte 64位整型转字节切片
+// Int64ToByte 64位整型转字节切片.
 func (kc *LkkConvert) Int64ToByte(val int64) []byte {
 	res := make([]byte, 8)
 	binary.BigEndian.PutUint64(res, uint64(val))
@@ -462,17 +462,17 @@ func (kc *LkkConvert) Int64ToByte(val int64) []byte {
 	return res
 }
 
-// ByteToInt64 字节切片转64位整型
+// ByteToInt64 字节切片转64位整型.
 func (kc *LkkConvert) ByteToInt64(val []byte) int64 {
 	return int64(binary.BigEndian.Uint64(val))
 }
 
-// Byte2Hex 字节切片转16进制字符串
+// Byte2Hex 字节切片转16进制字符串.
 func (kc *LkkConvert) Byte2Hex(val []byte) string {
 	return hex.EncodeToString(val)
 }
 
-// Hex2Byte 16进制字符串转字节切片
+// Hex2Byte 16进制字符串转字节切片.
 func (kc *LkkConvert) Hex2Byte(str string) []byte {
 	h, _ := hex.DecodeString(str)
 	return h

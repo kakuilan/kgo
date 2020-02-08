@@ -31,20 +31,20 @@ func (kd *LkkDebug) GetFuncName(f interface{}, onlyFun ...bool) string {
 	return name
 }
 
-// GetFuncLine 获取调用方法的行号
+// GetFuncLine 获取调用方法的行号.
 func (kd *LkkDebug) GetFuncLine() int {
 	// Skip this function, and fetch the PC and file for its parent
 	_, _, line, _ := runtime.Caller(1)
 	return line
 }
 
-// GetFuncFile 获取调用方法的文件路径
+// GetFuncFile 获取调用方法的文件路径.
 func (kd *LkkDebug) GetFuncFile() string {
 	_, file, _, _ := runtime.Caller(1)
 	return file
 }
 
-// GetFuncDir 获取调用方法的文件目录
+// GetFuncDir 获取调用方法的文件目录.
 func (kd *LkkDebug) GetFuncDir() string {
 	return filepath.Dir(kd.GetFuncFile())
 }
@@ -67,7 +67,7 @@ func (kd *LkkDebug) GetFuncPackage(funcFile ...string) string {
 	return astFile.Name.Name
 }
 
-// DumpStacks 打印堆栈信息
+// DumpStacks 打印堆栈信息.
 func (kd *LkkDebug) DumpStacks() {
 	buf := make([]byte, 16384)
 	buf = buf[:runtime.Stack(buf, true)]

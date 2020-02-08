@@ -15,12 +15,12 @@ import (
 	"time"
 )
 
-// Base64Encode 使用 MIME base64 对数据进行编码
+// Base64Encode 使用 MIME base64 对数据进行编码.
 func (ke *LkkEncrypt) Base64Encode(str []byte) string {
 	return base64.StdEncoding.EncodeToString(str)
 }
 
-// Base64Decode 对使用 MIME base64 编码的数据进行解码
+// Base64Decode 对使用 MIME base64 编码的数据进行解码.
 func (ke *LkkEncrypt) Base64Decode(str string) ([]byte, error) {
 	switch len(str) % 4 {
 	case 2:
@@ -36,7 +36,7 @@ func (ke *LkkEncrypt) Base64Decode(str string) ([]byte, error) {
 	return data, nil
 }
 
-// Base64UrlSafeEncode url安全的Base64Encode,没有'/'和'+'及结尾的'='
+// Base64UrlSafeEncode url安全的Base64Encode,没有'/'和'+'及结尾的'=' .
 func (ke *LkkEncrypt) Base64UrlEncode(source []byte) string {
 	// Base64 Url Safe is the same as Base64 but does not contain '/' and '+' (replaced by '_' and '-') and trailing '=' are removed.
 	bytearr := base64.StdEncoding.EncodeToString(source)
@@ -46,14 +46,14 @@ func (ke *LkkEncrypt) Base64UrlEncode(source []byte) string {
 	return safeurl
 }
 
-// Base64UrlDecode url安全的Base64Decode
+// Base64UrlDecode url安全的Base64Decode.
 func (ke *LkkEncrypt) Base64UrlDecode(data string) ([]byte, error) {
 	var missing = (4 - len(data)%4) % 4
 	data += strings.Repeat("=", missing)
 	return base64.URLEncoding.DecodeString(data)
 }
 
-// AuthCode 授权码编码或解码;encode为true时编码,为false解码;expiry为有效期,秒;返回结果为加密/解密的字符串和有效期时间戳
+// AuthCode 授权码编码或解码;encode为true时编码,为false解码;expiry为有效期,秒;返回结果为加密/解密的字符串和有效期时间戳.
 func (ke *LkkEncrypt) AuthCode(str, key string, encode bool, expiry int64) (string, int64) {
 	if str == "" {
 		return "", 0
@@ -159,7 +159,7 @@ func (ke *LkkEncrypt) AuthCode(str, key string, encode bool, expiry int64) (stri
 	}
 }
 
-// PasswordHash 创建密码的散列值;costs为算法的cost,范围4~31,默认10,注意值越大越耗时
+// PasswordHash 创建密码的散列值;costs为算法的cost,范围4~31,默认10,注意值越大越耗时.
 func (ke *LkkEncrypt) PasswordHash(password []byte, costs ...int) ([]byte, error) {
 	var cost int
 	if len(costs) == 0 {
@@ -177,13 +177,13 @@ func (ke *LkkEncrypt) PasswordHash(password []byte, costs ...int) ([]byte, error
 	return bytes, err
 }
 
-// PasswordVerify 验证密码是否和散列值匹配
+// PasswordVerify 验证密码是否和散列值匹配.
 func (ke *LkkEncrypt) PasswordVerify(password, hash []byte) bool {
 	err := bcrypt.CompareHashAndPassword(hash, password)
 	return err == nil
 }
 
-// EasyEncrypt 简单加密
+// EasyEncrypt 简单加密.
 func (ke *LkkEncrypt) EasyEncrypt(data, key string) string {
 	datLen := len(data)
 	if datLen == 0 {
@@ -211,7 +211,7 @@ func (ke *LkkEncrypt) EasyEncrypt(data, key string) string {
 	return res
 }
 
-// EasyDecrypt 简单解密
+// EasyDecrypt 简单解密.
 func (ke *LkkEncrypt) EasyDecrypt(val, key string) string {
 	if len(val) <= 4 {
 		return ""

@@ -19,7 +19,7 @@ import (
 	"unicode/utf8"
 )
 
-// IsLetters 字符串是否全(英文)字母组成
+// IsLetters 字符串是否全(英文)字母组成.
 func (ks *LkkString) IsLetters(str string) bool {
 	for _, r := range str {
 		if (r < 'a' || r > 'z') && (r < 'A' || r > 'Z') {
@@ -58,7 +58,7 @@ func (ks *LkkString) IsLower(str string) bool {
 	return str != ""
 }
 
-// HasLetter 字符串是否含有(英文)字母
+// HasLetter 字符串是否含有(英文)字母.
 func (ks *LkkString) HasLetter(str string) bool {
 	for _, r := range str {
 		if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') {
@@ -68,7 +68,7 @@ func (ks *LkkString) HasLetter(str string) bool {
 	return false
 }
 
-// IsUtf8 字符串是否UTF-8编码
+// IsUtf8 字符串是否UTF-8编码.
 func (ks *LkkString) IsUtf8(str string) bool {
 	return str != "" && utf8.ValidString(str)
 }
@@ -120,7 +120,7 @@ func (ks *LkkString) HasEnglish(str string) bool {
 	return ks.HasLetter(str)
 }
 
-// HasChinese 字符串是否含有中文
+// HasChinese 字符串是否含有中文.
 func (ks *LkkString) HasChinese(str string) bool {
 	for _, r := range str {
 		if unicode.Is(unicode.Scripts["Han"], r) {
@@ -131,17 +131,17 @@ func (ks *LkkString) HasChinese(str string) bool {
 	return false
 }
 
-// IsChinese 字符串是否全部中文
+// IsChinese 字符串是否全部中文.
 func (ks *LkkString) IsChinese(str string) bool {
 	return str != "" && RegChineseAll.MatchString(str)
 }
 
-// IsChineseName 字符串是否中文名称
+// IsChineseName 字符串是否中文名称.
 func (ks *LkkString) IsChineseName(str string) bool {
 	return str != "" && RegChineseName.MatchString(str)
 }
 
-// HasSpecialChar 字符串是否含有特殊字符
+// HasSpecialChar 字符串是否含有特殊字符.
 func (ks *LkkString) HasSpecialChar(str string) (res bool) {
 	if str == "" {
 		return
@@ -178,7 +178,7 @@ func (ks *LkkString) IsIP(str string) bool {
 	return str != "" && net.ParseIP(str) != nil
 }
 
-// IsIPv4 检查字符串是否IPv4地址
+// IsIPv4 检查字符串是否IPv4地址.
 func (ks *LkkString) IsIPv4(str string) bool {
 	ipAddr := net.ParseIP(str)
 	// 不是合法的IP地址
@@ -189,7 +189,7 @@ func (ks *LkkString) IsIPv4(str string) bool {
 	return ipAddr.To4() != nil && strings.ContainsRune(str, '.')
 }
 
-// IsIPv6 检查字符串是否IPv6地址
+// IsIPv6 检查字符串是否IPv6地址.
 func (ks *LkkString) IsIPv6(str string) bool {
 	ipAddr := net.ParseIP(str)
 	return ipAddr != nil && strings.ContainsRune(str, ':')
@@ -207,7 +207,7 @@ func (ks *LkkString) IsPort(val interface{}) bool {
 	return false
 }
 
-// IsDNSName 是否DNS名称
+// IsDNSName 是否DNS名称.
 func (ks *LkkString) IsDNSName(str string) bool {
 	if str == "" || len(strings.Replace(str, ".", "", -1)) > 255 {
 		// constraints already violated
@@ -218,7 +218,8 @@ func (ks *LkkString) IsDNSName(str string) bool {
 
 // IsDialString 是否网络拨号字符串(形如127.0.0.1:80),用于net.Dial()检查.
 func (ks *LkkString) IsDialString(str string) bool {
-	if h, p, err := net.SplitHostPort(str); err == nil && h != "" && p != "" && (ks.IsDNSName(h) || ks.IsIP(h)) && ks.IsPort(p) {
+	h, p, err := net.SplitHostPort(str)
+	if err == nil && h != "" && p != "" && (ks.IsDNSName(h) || ks.IsIP(h)) && ks.IsPort(p) {
 		return true
 	}
 
@@ -494,14 +495,15 @@ func (ks *LkkString) EndsWith(str, substr string) bool {
 	return false
 }
 
-// IsArrayOrSlice 检查变量是否数组或切片;chkType检查类型,枚举值有(1仅数组,2仅切片,3数组或切片);结果为-1表示非,>=0表示是
-func (ka *LkkArray) IsArrayOrSlice(data interface{}, chkType uint8) int {
-	return isArrayOrSlice(data, chkType)
+// IsArrayOrSlice 检查变量是否数组或切片.
+// chkType检查类型,枚举值有(1仅数组,2仅切片,3数组或切片);结果为-1表示非,>=0表示是
+func (ka *LkkArray) IsArrayOrSlice(val interface{}, chkType uint8) int {
+	return isArrayOrSlice(val, chkType)
 }
 
-// IsMap 检查变量是否字典
-func (ka *LkkArray) IsMap(data interface{}) bool {
-	return isMap(data)
+// IsMap 检查变量是否字典.
+func (ka *LkkArray) IsMap(val interface{}) bool {
+	return isMap(val)
 }
 
 // IsDate2time 检查字符串是否日期格式,并转换为时间戳.注意,时间戳可能为负数(小于1970年时).
@@ -544,17 +546,17 @@ func (kt *LkkTime) IsDate2time(str string) (bool, int64) {
 	return true, tim
 }
 
-// IsNan 是否为“非数值”
+// IsNan 是否为“非数值”.
 func (kn *LkkNumber) IsNan(val float64) bool {
 	return math.IsNaN(val)
 }
 
-// IsString 变量是否字符串
-func (kc *LkkConvert) IsString(v interface{}) bool {
-	return kc.Gettype(v) == "string"
+// IsString 变量是否字符串.
+func (kc *LkkConvert) IsString(val interface{}) bool {
+	return kc.Gettype(val) == "string"
 }
 
-// IsBinary 字符串是否二进制
+// IsBinary 字符串是否二进制.
 func (kc *LkkConvert) IsBinary(s string) bool {
 	for _, b := range s {
 		if 0 == b {
@@ -564,17 +566,17 @@ func (kc *LkkConvert) IsBinary(s string) bool {
 	return false
 }
 
-// IsNumeric 变量是否数值(不包含复数和科学计数法)
+// IsNumeric 变量是否数值(不包含复数和科学计数法).
 func (kc *LkkConvert) IsNumeric(val interface{}) bool {
 	return isNumeric(val)
 }
 
-// IsInt 变量是否整型数值
+// IsInt 变量是否整型数值.
 func (kc *LkkConvert) IsInt(val interface{}) bool {
 	return isInt(val)
 }
 
-// IsFloat 变量是否浮点数值
+// IsFloat 变量是否浮点数值.
 func (kc *LkkConvert) IsFloat(val interface{}) bool {
 	return isFloat(val)
 }
@@ -621,30 +623,30 @@ func (kc *LkkConvert) IsNil(val interface{}) bool {
 	return false
 }
 
-// IsBool 是否布尔值
-func (kc *LkkConvert) IsBool(v interface{}) bool {
-	return v == true || v == false
+// IsBool 是否布尔值.
+func (kc *LkkConvert) IsBool(val interface{}) bool {
+	return val == true || val == false
 }
 
-// IsHex 是否十六进制字符串
+// IsHex 是否十六进制字符串.
 func (kc *LkkConvert) IsHex(str string) bool {
 	_, err := kc.Hex2Dec(str)
 	return err == nil
 }
 
-// IsByte 变量是否字节切片
-func (kc *LkkConvert) IsByte(v interface{}) bool {
-	return kc.Gettype(v) == "[]uint8"
+// IsByte 变量是否字节切片.
+func (kc *LkkConvert) IsByte(val interface{}) bool {
+	return kc.Gettype(val) == "[]uint8"
 }
 
-// IsStruct 变量是否结构体
-func (kc *LkkConvert) IsStruct(v interface{}) bool {
-	r := reflectPtr(reflect.ValueOf(v))
+// IsStruct 变量是否结构体.
+func (kc *LkkConvert) IsStruct(val interface{}) bool {
+	r := reflectPtr(reflect.ValueOf(val))
 	return r.Kind() == reflect.Struct
 }
 
-// IsInterface 变量是否接口
-func (kc *LkkConvert) IsInterface(v interface{}) bool {
-	r := reflectPtr(reflect.ValueOf(v))
+// IsInterface 变量是否接口.
+func (kc *LkkConvert) IsInterface(val interface{}) bool {
+	r := reflectPtr(reflect.ValueOf(val))
 	return r.Kind() == reflect.Invalid
 }
