@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
 - KArr.Unique64Ints
 - KArr.UniqueInts
 - KArr.UniqueStrings
-- KCont.ToBool
+- KConv.ToBool
 - KConv.IsNil
 - KDbug.CallMethod
 - KDbug.GetFuncDir
