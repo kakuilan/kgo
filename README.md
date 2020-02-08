@@ -3,7 +3,7 @@ k`s golang helper/library/utils
 golang 函数库/工具集,仅测试支持64位linux
 
 ### 文档
-[![GoDoc](https://godoc.org/github.com/kakuilan/kgo?status.svg)](https://pkg.go.dev/github.com/kakuilan/kgo?tab=doc)
+[![GoDoc](https://godoc.org/github.com/kakuilan/kgo?status.svg)](https://godoc.org/github.com/kakuilan/kgo)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kakuilan/kgo)](https://goreportcard.com/report/github.com/kakuilan/kgo)
 [![Build Status](https://travis-ci.org/kakuilan/kgo.svg?branch=master)](https://travis-ci.org/kakuilan/kgo)
 [![codecov](https://codecov.io/gh/kakuilan/kgo/branch/master/graph/badge.svg)](https://codecov.io/gh/kakuilan/kgo)
