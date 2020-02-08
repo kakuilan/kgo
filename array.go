@@ -354,13 +354,13 @@ func (ka *LkkArray) ArrayColumn(arr interface{}, columnKey string) []interface{}
 	return res
 }
 
-// ArrayPush 将一个或多个单元压入数组的末尾(入栈).
+// ArrayPush 将一个或多个元素压入数组的末尾(入栈),返回处理之后数组的元素个数.
 func (ka *LkkArray) ArrayPush(s *[]interface{}, elements ...interface{}) int {
 	*s = append(*s, elements...)
 	return len(*s)
 }
 
-// ArrayPop 弹出数组最后一个单元(出栈).
+// ArrayPop 弹出数组最后一个元素(出栈),并返回该元素.
 func (ka *LkkArray) ArrayPop(s *[]interface{}) interface{} {
 	if len(*s) == 0 {
 		return nil
@@ -371,20 +371,20 @@ func (ka *LkkArray) ArrayPop(s *[]interface{}) interface{} {
 	return e
 }
 
-// ArrayUnshift 在数组开头插入一个或多个单元.
+// ArrayUnshift 在数组开头插入一个或多个元素,返回处理之后数组的元素个数.
 func (ka *LkkArray) ArrayUnshift(s *[]interface{}, elements ...interface{}) int {
 	*s = append(elements, *s...)
 	return len(*s)
 }
 
-// ArrayShift 将数组开头的单元移出数组.
+// ArrayShift 将数组开头的元素移出数组,并返回该元素.
 func (ka *LkkArray) ArrayShift(s *[]interface{}) interface{} {
 	if len(*s) == 0 {
 		return nil
 	}
-	f := (*s)[0]
+	e := (*s)[0]
 	*s = (*s)[1:]
-	return f
+	return e
 }
 
 // ArrayKeyExists 检查数组里是否有指定的键名或索引.
