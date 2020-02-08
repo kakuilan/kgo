@@ -177,7 +177,7 @@ func TestEasyEncryptDecrypt(t *testing.T) {
 	}
 
 	dec := KEncr.EasyDecrypt(enc, key)
-	if dec == "" {
+	if dec != str {
 		t.Error("EasyDecrypt fail")
 		return
 	}

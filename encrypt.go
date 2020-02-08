@@ -184,9 +184,10 @@ func (ke *LkkEncrypt) PasswordVerify(password, hash []byte) bool {
 }
 
 // EasyEncrypt 简单加密.
+// data为要加密的原字符串,key为密钥.
 func (ke *LkkEncrypt) EasyEncrypt(data, key string) string {
-	datLen := len(data)
-	if datLen == 0 {
+	dataLen := len(data)
+	if dataLen == 0 {
 		return ""
 	}
 
@@ -194,24 +195,24 @@ func (ke *LkkEncrypt) EasyEncrypt(data, key string) string {
 	keyLen := len(keyByte)
 
 	var i, x, c int
-	var str, chat []byte
-	for i = 0; i < datLen; i++ {
+	var str []byte
+	for i = 0; i < dataLen; i++ {
 		if x == keyLen {
 			x = 0
 		}
-		chat = append(chat, keyByte[x])
+
+		c = (int(data[i]) + int(keyByte[x])) % 256
+		str = append(str, byte(c))
+
 		x++
 	}
 
-	for i = 0; i < datLen; i++ {
-		c = (int(data[i]) + int(chat[i])) % 256
-		str = append(str, byte(c))
-	}
 	res := string(keyByte[:4]) + ke.Base64UrlEncode(str)
 	return res
 }
 
 // EasyDecrypt 简单解密.
+// val为待解密的字符串,key为密钥.
 func (ke *LkkEncrypt) EasyDecrypt(val, key string) string {
 	if len(val) <= 4 {
 		return ""
@@ -227,26 +228,25 @@ func (ke *LkkEncrypt) EasyDecrypt(val, key string) string {
 		return ""
 	}
 
-	datLen := len(data)
+	dataLen := len(data)
 	keyLen := len(keyByte)
 
 	var i, x, c int
-	var str, chat []byte
-	for i = 0; i < datLen; i++ {
+	var str []byte
+	for i = 0; i < dataLen; i++ {
 		if x == keyLen {
 			x = 0
 		}
-		chat = append(chat, keyByte[x])
-		x++
-	}
+		//chat = append(chat, keyByte[x])
 
-	for i = 0; i < datLen; i++ {
-		if data[i] < chat[i] {
-			c = int(data[i]) + 256 - int(chat[i])
+		if data[i] < keyByte[x] {
+			c = int(data[i]) + 256 - int(keyByte[x])
 		} else {
-			c = int(data[i]) - int(chat[i])
+			c = int(data[i]) - int(keyByte[x])
 		}
 		str = append(str, byte(c))
+
+		x++
 	}
 
 	return string(str)
