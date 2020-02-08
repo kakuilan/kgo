@@ -101,8 +101,7 @@ All notable changes to this project will be documented in this file.
 - rename KStr.StrShuffle to Shuffle
 - rename KStr.Strrev to Reverse
 - rename KStr.UpperCaseFirstWords to Ucwords
-- rename KTime.Strtotime to Str2Time
-- rename Ktime.Str2Time to Str2Timestamp
+- rename KTime.Strtotime to Str2Timestamp
 
 #### Removed
 - remove KConv.Int2Bool
