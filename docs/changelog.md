@@ -105,5 +105,5 @@ All notable changes to this project will be documented in this file.
 - rename Ktime.Str2Time to Str2Timestamp
 
 #### Removed
-- remove KConb.Int2Bool
+- remove KConv.Int2Bool
 
