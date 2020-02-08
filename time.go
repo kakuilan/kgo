@@ -47,23 +47,23 @@ var datePatterns = []string{
 	"r", time.RFC1123Z,
 }
 
-// Time 获取当前Unix时间戳(秒)
+// Time 获取当前Unix时间戳(秒).
 func (kt *LkkTime) Time() int64 {
 	return time.Now().Unix()
 }
 
-// MilliTime 获取当前Unix时间戳(毫秒)
+// MilliTime 获取当前Unix时间戳(毫秒).
 func (kt *LkkTime) MilliTime() int64 {
 	return time.Now().UnixNano() / int64(time.Millisecond)
 }
 
-// MicroTime 获取当前Unix时间戳(微秒)
+// MicroTime 获取当前Unix时间戳(微秒).
 func (kt *LkkTime) MicroTime() int64 {
 	return time.Now().UnixNano() / int64(time.Microsecond)
 }
 
 // Str2Time 将字符串转换为时间结构.
-// str 为要转换的字符串.
+// str 为要转换的字符串;
 // format 为该字符串的格式,默认为"2006-01-02 15:04:05" .
 func (kt *LkkTime) Str2Timestruct(str string, format ...string) (time.Time, error) {
 	var f string
@@ -81,7 +81,7 @@ func (kt *LkkTime) Str2Timestruct(str string, format ...string) (time.Time, erro
 }
 
 // Str2Timestamp 将字符串转换为时间戳,秒.
-// str 为要转换的字符串.
+// str 为要转换的字符串;
 // format 为该字符串的格式,默认为"2006-01-02 15:04:05" .
 func (kt *LkkTime) Str2Timestamp(str string, format ...string) (int64, error) {
 	tim, err := kt.Str2Timestruct(str, format...)
@@ -118,7 +118,7 @@ func (kt *LkkTime) Date(format string, ts ...interface{}) string {
 	return t.Format(format)
 }
 
-// CheckDate 检查是否正常的日期
+// CheckDate 检查是否正常的日期.
 func (kt *LkkTime) CheckDate(month, day, year int) bool {
 	if month < 1 || month > 12 || day < 1 || day > 31 || year < 1 || year > 32767 {
 		return false
@@ -142,12 +142,12 @@ func (kt *LkkTime) CheckDate(month, day, year int) bool {
 	return true
 }
 
-// Sleep 延缓执行,秒
+// Sleep 延缓执行,秒.
 func (kt *LkkTime) Sleep(t int64) {
 	time.Sleep(time.Duration(t) * time.Second)
 }
 
-// Usleep 以指定的微秒数延迟执行
+// Usleep 以指定的微秒数延迟执行.
 func (kt *LkkTime) Usleep(t int64) {
 	time.Sleep(time.Duration(t) * time.Microsecond)
 }

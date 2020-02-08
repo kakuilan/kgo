@@ -96,7 +96,7 @@ func (ks *LkkString) RemoveSpace(str string, all bool) string {
 	return strings.TrimSpace(str)
 }
 
-// StripTags 过滤html和php标签
+// StripTags 过滤html和php标签.
 func (ks *LkkString) StripTags(str string) string {
 	if str == "" {
 		return ""
@@ -144,12 +144,13 @@ func (ks *LkkString) ShaX(str string, x uint16) string {
 	return string(shaXStr([]byte(str), x))
 }
 
-// Random 生成随机字符串;length为长度,rtype为枚举:
-// RAND_STRING_ALPHA 字母
-// RAND_STRING_NUMERIC 数值
-// RAND_STRING_ALPHANUM 字母+数值
-// RAND_STRING_SPECIAL 字母+数值+特殊字符
-// RAND_STRING_CHINESE 仅中文
+// Random 生成随机字符串.
+// length为长度,rtype为枚举:
+// RAND_STRING_ALPHA 字母;
+// RAND_STRING_NUMERIC 数值;
+// RAND_STRING_ALPHANUM 字母+数值;
+// RAND_STRING_SPECIAL 字母+数值+特殊字符;
+// RAND_STRING_CHINESE 仅中文.
 func (ks *LkkString) Random(length uint8, rtype LkkRandString) string {
 	if length == 0 {
 		return ""
@@ -224,7 +225,7 @@ func (ks *LkkString) Stripos(haystack, needle string, offset int) int {
 	return pos + offset
 }
 
-// Strrpos 查找指定字符串在目标字符串中最后一次出现的位置
+// Strrpos 查找指定字符串在目标字符串中最后一次出现的位置.
 func (ks *LkkString) Strrpos(haystack, needle string, offset int) int {
 	pos, length := 0, len(haystack)
 	if length == 0 || offset > length || -offset > length {
@@ -243,7 +244,7 @@ func (ks *LkkString) Strrpos(haystack, needle string, offset int) int {
 	return pos
 }
 
-// Strripos 查找指定字符串在目标字符串中最后一次出现的位置（不区分大小写）
+// Strripos 查找指定字符串在目标字符串中最后一次出现的位置（不区分大小写）.
 func (ks *LkkString) Strripos(haystack, needle string, offset int) int {
 	pos, length := 0, len(haystack)
 	if length == 0 || offset > length || -offset > length {
@@ -395,7 +396,7 @@ func (ks *LkkString) MbSubstr(str string, start int, length ...int) string {
 	return string(runes[start:end])
 }
 
-// SubstrCount 计算字符串出现的次数
+// SubstrCount 计算字符串出现的次数.
 func (ks *LkkString) SubstrCount(str, substr string) int {
 	return strings.Count(str, substr)
 }
@@ -411,15 +412,15 @@ func (ks *LkkString) Reverse(str string) string {
 	return string(runes[n:])
 }
 
-// ChunkSplit 将字符串分割成小块.body为要分割的字符,chunklen为分割的尺寸,end为行尾序列符号
-func (ks *LkkString) ChunkSplit(body string, chunklen uint, end string) string {
+// ChunkSplit 将字符串分割成小块.str为要分割的字符,chunklen为分割的尺寸,end为行尾序列符号.
+func (ks *LkkString) ChunkSplit(str string, chunklen uint, end string) string {
 	if end == "" {
 		end = "\r\n"
 	}
-	runes, erunes := []rune(body), []rune(end)
+	runes, erunes := []rune(str), []rune(end)
 	length := uint(len(runes))
 	if length <= 1 || length < chunklen {
-		return body + end
+		return str + end
 	}
 	ns := make([]rune, 0, len(runes)+len(erunes))
 	var i uint
@@ -434,12 +435,12 @@ func (ks *LkkString) ChunkSplit(body string, chunklen uint, end string) string {
 	return string(ns)
 }
 
-// Strlen 获取字符串长度
+// Strlen 获取字符串长度.
 func (ks *LkkString) Strlen(str string) int {
 	return len(str)
 }
 
-// MbStrlen 获取字符串的长度,多字节的字符被计为 1
+// MbStrlen 获取宽字符串的长度,多字节的字符被计为 1.
 func (ks *LkkString) MbStrlen(str string) int {
 	return utf8.RuneCountInString(str)
 }
@@ -464,50 +465,50 @@ func (ks *LkkString) Shuffle(str string) string {
 	return string(runes)
 }
 
-// Trim 去除字符串首尾处的空白字符（或者其他字符）
+// Trim 去除字符串首尾处的空白字符（或者其他字符）.
 func (ks *LkkString) Trim(str string, characterMask ...string) string {
 	mask := getTrimMask(characterMask)
 	return strings.Trim(str, mask)
 }
 
-// Ltrim 删除字符串开头的空白字符（或其他字符）
+// Ltrim 删除字符串开头的空白字符（或其他字符）.
 func (ks *LkkString) Ltrim(str string, characterMask ...string) string {
 	mask := getTrimMask(characterMask)
 	return strings.TrimLeft(str, mask)
 }
 
-// Rtrim 删除字符串末端的空白字符（或者其他字符）
+// Rtrim 删除字符串末端的空白字符（或者其他字符）.
 func (ks *LkkString) Rtrim(str string, characterMask ...string) string {
 	mask := getTrimMask(characterMask)
 	return strings.TrimRight(str, mask)
 }
 
-// Chr 返回相对应于 ascii 所指定的单个字符
+// Chr 返回相对应于 ascii 所指定的单个字符.
 func (ks *LkkString) Chr(ascii int) string {
 	return string(ascii)
 }
 
-// Ord 将首字符转换为rune
+// Ord 将首字符转换为rune.
 func (ks *LkkString) Ord(char string) rune {
 	r, _ := utf8.DecodeRune([]byte(char))
 	return r
 }
 
-// JsonEncode 对变量进行 JSON 编码
-// 依赖库github.com/json-iterator/go
+// JsonEncode 对变量进行 JSON 编码.
+// 依赖库github.com/json-iterator/go.
 func (ks *LkkString) JsonEncode(val interface{}) ([]byte, error) {
 	var json = jsoniter.ConfigCompatibleWithStandardLibrary
 	return json.Marshal(val)
 }
 
-// JsonDecode 对 JSON 格式的字符串进行解码,注意val使用指针
-// 依赖库github.com/json-iterator/go
+// JsonDecode 对 JSON 格式的字符串进行解码,注意val使用指针.
+// 依赖库github.com/json-iterator/go.
 func (ks *LkkString) JsonDecode(data []byte, val interface{}) error {
 	var json = jsoniter.ConfigCompatibleWithStandardLibrary
 	return json.Unmarshal(data, val)
 }
 
-// Addslashes 使用反斜线引用字符串
+// Addslashes 使用反斜线引用字符串.
 func (ks *LkkString) Addslashes(str string) string {
 	var buf bytes.Buffer
 	for _, char := range str {
@@ -520,7 +521,7 @@ func (ks *LkkString) Addslashes(str string) string {
 	return buf.String()
 }
 
-// Stripslashes 反引用一个引用字符串
+// Stripslashes 反引用一个引用字符串.
 func (ks *LkkString) Stripslashes(str string) string {
 	var buf bytes.Buffer
 	l, skip := len(str), false
@@ -538,7 +539,7 @@ func (ks *LkkString) Stripslashes(str string) string {
 	return buf.String()
 }
 
-// Quotemeta 转义元字符集,包括 . \ + * ? [ ^ ] ( $ )
+// Quotemeta 转义元字符集,包括 . \ + * ? [ ^ ] ( $ ).
 func (ks *LkkString) Quotemeta(str string) string {
 	var buf bytes.Buffer
 	for _, char := range str {
@@ -551,22 +552,22 @@ func (ks *LkkString) Quotemeta(str string) string {
 	return buf.String()
 }
 
-// Htmlentities 将字符转换为 HTML 转义字符
+// Htmlentities 将字符转换为 HTML 转义字符.
 func (ks *LkkString) Htmlentities(str string) string {
 	return html.EscapeString(str)
 }
 
-// HtmlentityDecode 将HTML实体转换为它们对应的字符
+// HtmlentityDecode 将HTML实体转换为它们对应的字符.
 func (ks *LkkString) HtmlentityDecode(str string) string {
 	return html.UnescapeString(str)
 }
 
-// Crc32 计算一个字符串的 crc32 多项式
+// Crc32 计算一个字符串的 crc32 多项式.
 func (ks *LkkString) Crc32(str string) uint32 {
 	return crc32.ChecksumIEEE([]byte(str))
 }
 
-// SimilarText 计算两个字符串的相似度,返回在两个字符串中匹配字符的数目;percent为相似程度百分数
+// SimilarText 计算两个字符串的相似度,返回在两个字符串中匹配字符的数目;percent为相似程度百分数.
 func (ks *LkkString) SimilarText(first, second string, percent *float64) int {
 	var similarText func(string, string, int, int) int
 	similarText = func(str1, str2 string, len1, len2 int) int {
@@ -636,20 +637,20 @@ func (ks *LkkString) Explode(str string, delimiters ...string) (res []string) {
 	return
 }
 
-// Uniqid 获取一个带前缀、基于当前时间微秒数的唯一ID
+// Uniqid 获取一个带前缀、基于当前时间微秒数的唯一ID.
 func (ks *LkkString) Uniqid(prefix string) string {
 	now := time.Now()
 	return fmt.Sprintf("%s%08x%05x", prefix, now.Unix(), now.UnixNano()%0x100000)
 }
 
-// VersionCompare 对比两个版本号字符串
+// VersionCompare 对比两个版本号字符串.
 // operator允许的操作符有: <, lt, <=, le, >, gt, >=, ge, ==, =, eq, !=, <>, ne .
 // 特定的版本字符串，将会用以下顺序处理：
 // 未找到的任意字符串 < dev < alpha = a < beta = b < RC = rc < # < pl = p
 // 用法:
-// VersionCompare("1.2.3-alpha", "1.2.3RC7", '>=')
-// VersionCompare("1.2.3-beta", "1.2.3pl", 'lt')
-// VersionCompare("1.1_dev", "1.2any", 'eq')
+// VersionCompare("1.2.3-alpha", "1.2.3RC7", '>=') ;
+// VersionCompare("1.2.3-beta", "1.2.3pl", 'lt') ;
+// VersionCompare("1.1_dev", "1.2any", 'eq') .
 func (ks *LkkString) VersionCompare(version1, version2, operator string) bool {
 	var vcompare func(string, string) int
 	var canonicalize func(string) string
@@ -906,7 +907,7 @@ func (ks *LkkString) ToKebabCase(str string) string {
 	return camelCaseToLowerCase(str, '-')
 }
 
-// RemoveBefore 移除before之前的字符串;include为是否移除包括before本身
+// RemoveBefore 移除before之前的字符串.include为是否移除包括before本身.
 func (ks *LkkString) RemoveBefore(str, before string, include bool) string {
 	i := strings.Index(str, before)
 	if i > 0 {
@@ -919,7 +920,7 @@ func (ks *LkkString) RemoveBefore(str, before string, include bool) string {
 	return str
 }
 
-// RemoveAfter 移除after之后的字符串;include为是否移除包括after本身
+// RemoveAfter 移除after之后的字符串.include为是否移除包括after本身.
 func (ks *LkkString) RemoveAfter(str, after string, include bool) string {
 	i := strings.Index(str, after)
 	if i > 0 {
@@ -932,17 +933,17 @@ func (ks *LkkString) RemoveAfter(str, after string, include bool) string {
 	return str
 }
 
-// DBC2SBC 半角转全角
+// DBC2SBC 半角转全角.
 func (ks *LkkString) DBC2SBC(s string) string {
 	return width.Widen.String(s)
 }
 
-// SBC2DBC 全角转半角
+// SBC2DBC 全角转半角.
 func (ks *LkkString) SBC2DBC(s string) string {
 	return width.Narrow.String(s)
 }
 
-// Levenshtein 计算两个字符串之间的编辑距离
+// Levenshtein 计算两个字符串之间的编辑距离.
 func (ks *LkkString) Levenshtein(a, b *string) int {
 	la := len(*a)
 	lb := len(*b)
@@ -982,7 +983,8 @@ func (ks *LkkString) Levenshtein(a, b *string) int {
 	return d[la]
 }
 
-// ClosestWord 获取相似度最高的字符串.word为原字符串,searchs为待查找的字符串数组.
+// ClosestWord 获取与原字符串相似度最高的字符串,以及它们的编辑距离.
+// word为原字符串,searchs为待查找的字符串数组.
 func (ks *LkkString) ClosestWord(word string, searchs []string) (string, int) {
 	distance := 10000
 	res := ""
@@ -1003,35 +1005,35 @@ func (ks *LkkString) ClosestWord(word string, searchs []string) (string, int) {
 	return res, distance
 }
 
-// Utf8ToGbk UTF-8转GBK编码
+// Utf8ToGbk UTF-8转GBK编码.
 func (ks *LkkString) Utf8ToGbk(s []byte) ([]byte, error) {
 	reader := transform.NewReader(bytes.NewReader(s), simplifiedchinese.GBK.NewEncoder())
 	d, e := ioutil.ReadAll(reader)
 	return d, e
 }
 
-// GbkToUtf8 GBK转UTF-8编码
+// GbkToUtf8 GBK转UTF-8编码.
 func (ks *LkkString) GbkToUtf8(s []byte) ([]byte, error) {
 	reader := transform.NewReader(bytes.NewReader(s), simplifiedchinese.GBK.NewDecoder())
 	d, e := ioutil.ReadAll(reader)
 	return d, e
 }
 
-// Utf8ToBig5 UTF-8转BIG5编码
+// Utf8ToBig5 UTF-8转BIG5编码.
 func (ks *LkkString) Utf8ToBig5(s []byte) ([]byte, error) {
 	reader := transform.NewReader(bytes.NewReader(s), traditionalchinese.Big5.NewEncoder())
 	d, e := ioutil.ReadAll(reader)
 	return d, e
 }
 
-// Big5ToUtf8 BIG5转UTF-8编码
+// Big5ToUtf8 BIG5转UTF-8编码.
 func (ks *LkkString) Big5ToUtf8(s []byte) ([]byte, error) {
 	reader := transform.NewReader(bytes.NewReader(s), traditionalchinese.Big5.NewDecoder())
 	d, e := ioutil.ReadAll(reader)
 	return d, e
 }
 
-// FirstLetter 获取字符串首字母
+// FirstLetter 获取字符串首字母.
 func (ks *LkkString) FirstLetter(str string) string {
 	if str != "" {
 		// 获取字符串第一个字符
@@ -1127,7 +1129,8 @@ func (ks *LkkString) FirstLetter(str string) string {
 	return ""
 }
 
-// Dstrpos 检查字符串str是否包含数组arr的元素之一.chkCase为是否检查大小写.返回检查结果和匹配的字符串.
+// Dstrpos 检查字符串str是否包含数组arr的元素之一,返回检查结果和匹配的字符串.
+// chkCase为是否检查大小写.
 func (ks *LkkString) Dstrpos(str string, arr []string, chkCase bool) (bool, string) {
 	if len(str) == 0 || len(arr) == 0 {
 		return false, ""
@@ -1199,7 +1202,8 @@ func (ks *LkkString) CountBase64Byte(str string) (res int) {
 	return
 }
 
-// Strpad 使用fill填充str字符串到指定长度max.ptype为填充类型,枚举值(PAD_LEFT,PAD_RIGHT,PAD_BOTH).
+// Strpad 使用fill填充str字符串到指定长度max.
+// ptype为填充类型,枚举值(PAD_LEFT,PAD_RIGHT,PAD_BOTH).
 func (ks *LkkString) Strpad(str string, fill string, max int, ptype LkkPadType) string {
 	runeStr := []rune(str)
 	runeStrLen := len(runeStr)

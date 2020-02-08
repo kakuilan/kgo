@@ -57,7 +57,7 @@ func (kf *LkkFile) WriteFile(fpath string, data []byte) error {
 	return ioutil.WriteFile(fpath, data, 0655)
 }
 
-// GetMime 获取文件mime类型;fast为true时根据后缀快速获取;为false时读取文件头获取
+// GetMime 获取文件mime类型;fast为true时根据后缀快速获取;为false时读取文件头获取.
 func (kf *LkkFile) GetMime(fpath string, fast bool) string {
 	var res string
 	if fast {
@@ -81,7 +81,7 @@ func (kf *LkkFile) GetMime(fpath string, fast bool) string {
 	return res
 }
 
-// FileSize 获取文件大小(bytes字节),注意:文件不存在或无法访问返回-1
+// FileSize 获取文件大小(bytes字节),注意:文件不存在或无法访问返回-1 .
 func (kf *LkkFile) FileSize(fpath string) int64 {
 	f, err := os.Stat(fpath)
 	if nil != err {
@@ -90,7 +90,7 @@ func (kf *LkkFile) FileSize(fpath string) int64 {
 	return f.Size()
 }
 
-// DirSize 获取目录大小(bytes字节)
+// DirSize 获取目录大小(bytes字节).
 func (kf *LkkFile) DirSize(fpath string) int64 {
 	var size int64
 	//filepath.Walk压测很慢
@@ -106,13 +106,13 @@ func (kf *LkkFile) DirSize(fpath string) int64 {
 	return size
 }
 
-// IsExist 路径(文件/目录)是否存在
+// IsExist 路径(文件/目录)是否存在.
 func (kf *LkkFile) IsExist(fpath string) bool {
 	_, err := os.Stat(fpath)
 	return err == nil || os.IsExist(err)
 }
 
-// IsWritable 路径是否可写
+// IsWritable 路径是否可写.
 func (kf *LkkFile) IsWritable(fpath string) bool {
 	err := syscall.Access(fpath, syscall.O_RDWR)
 	if err != nil {
@@ -121,7 +121,7 @@ func (kf *LkkFile) IsWritable(fpath string) bool {
 	return true
 }
 
-// IsReadable 路径是否可读
+// IsReadable 路径是否可读.
 func (kf *LkkFile) IsReadable(fpath string) bool {
 	err := syscall.Access(fpath, syscall.O_RDONLY)
 	if err != nil {
@@ -130,7 +130,7 @@ func (kf *LkkFile) IsReadable(fpath string) bool {
 	return true
 }
 
-// IsExecutable 是否可执行文件
+// IsExecutable 是否可执行文件.
 func (kf *LkkFile) IsExecutable(fpath string) bool {
 	info, err := os.Stat(fpath)
 	return err == nil && info.Mode().IsRegular() && (info.Mode()&0111) != 0
@@ -175,11 +175,11 @@ func (kf *LkkFile) IsBinary(fpath string) bool {
 	return KConv.IsBinary(string(cont))
 }
 
-// IsImg 是否图片文件
+// IsImg 是否图片文件(仅检查后缀).
 func (kf *LkkFile) IsImg(fpath string) bool {
 	ext := kf.GetExt(fpath)
 	switch ext {
-	case "jpg", "jpeg", "bmp", "gif", "png", "svg", "ico":
+	case "jpg", "jpeg", "bmp", "gif", "png", "svg", "ico", "webp":
 		return true
 	default:
 		return false
@@ -247,17 +247,17 @@ func (kf *LkkFile) Touch(fpath string, size int64) bool {
 	return true
 }
 
-// Rename 重命名一个文件或目录.
+// Rename 重命名文件或目录.
 func (kf *LkkFile) Rename(oldname, newname string) error {
 	return os.Rename(oldname, newname)
 }
 
-// Unlink 删除文件
+// Unlink 删除文件.
 func (kf *LkkFile) Unlink(fpath string) error {
 	return os.Remove(fpath)
 }
 
-// CopyFile 拷贝源文件到目标文件,cover为枚举(FILE_COVER_ALLOW、FILE_COVER_IGNORE、FILE_COVER_DENY)
+// CopyFile 拷贝源文件到目标文件,cover为枚举(FILE_COVER_ALLOW、FILE_COVER_IGNORE、FILE_COVER_DENY).
 func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int64, error) {
 	if source == dest {
 		return 0, nil
@@ -332,7 +332,7 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 	return nBytes, err
 }
 
-// FastCopy 快速拷贝源文件到目标文件,不做安全检查
+// FastCopy 快速拷贝源文件到目标文件,不做安全检查.
 func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
 	sourceFile, err := os.Open(source)
 	if err != nil {
@@ -375,7 +375,7 @@ func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
 	return int64(nBytes), err
 }
 
-// CopyLink 拷贝链接
+// CopyLink 拷贝链接.
 func (kf *LkkFile) CopyLink(source string, dest string) error {
 	if source == dest {
 		return nil
@@ -402,7 +402,7 @@ func (kf *LkkFile) CopyLink(source string, dest string) error {
 	return os.Symlink(source, dest)
 }
 
-// CopyDir 拷贝源目录到目标目录,cover为枚举(FILE_COVER_ALLOW、FILE_COVER_IGNORE、FILE_COVER_DENY)
+// CopyDir 拷贝源目录到目标目录,cover为枚举(FILE_COVER_ALLOW、FILE_COVER_IGNORE、FILE_COVER_DENY).
 func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int64, error) {
 	var total, nBytes int64
 	var err error
@@ -498,7 +498,7 @@ func (kf *LkkFile) DelDir(dir string, delRoot bool) error {
 	return err
 }
 
-// FileTree 获取目录的文件树列表;
+// FileTree 获取目录的文件树列表.
 // ftype为枚举(FILE_TREE_ALL、FILE_TREE_DIR、FILE_TREE_FILE);
 // recursive为是否递归;
 // filters为一个或多个文件过滤器函数,FileFilter类型.
@@ -550,7 +550,7 @@ func (kf *LkkFile) FileTree(fpath string, ftype LkkFileTree, recursive bool, fil
 	return trees
 }
 
-// FormatDir 格式化路径,将"\","//"替换为"/",且以"/"结尾
+// FormatDir 格式化路径,将"\","//"替换为"/",且以"/"结尾.
 func (kf *LkkFile) FormatDir(fpath string) string {
 	if fpath == "" {
 		return ""
@@ -563,7 +563,7 @@ func (kf *LkkFile) FormatDir(fpath string) string {
 	return strings.TrimRight(str, "/") + "/"
 }
 
-// Md5 获取文件md5值,length指定结果长度32/16
+// Md5 获取文件md5值,length指定结果长度32/16.
 func (kf *LkkFile) Md5(fpath string, length uint8) (string, error) {
 	var res string
 	f, err := os.Open(fpath)
@@ -589,7 +589,7 @@ func (kf *LkkFile) Md5(fpath string, length uint8) (string, error) {
 	return res, nil
 }
 
-// ShaX 计算文件的 shaX 散列值,x为1/256/512
+// ShaX 计算文件的 shaX 散列值,x为1/256/512.
 func (kf *LkkFile) ShaX(fpath string, x uint16) (string, error) {
 	data, err := ioutil.ReadFile(fpath)
 	if err != nil {
@@ -599,7 +599,7 @@ func (kf *LkkFile) ShaX(fpath string, x uint16) (string, error) {
 	return string(shaXStr(data, x)), nil
 }
 
-// Pathinfo 获取文件路径的信息,options的值为-1: all; 1: dirname; 2: basename; 4: extension; 8: filename
+// Pathinfo 获取文件路径的信息,options的值为-1: all; 1: dirname; 2: basename; 4: extension; 8: filename.
 func (kf *LkkFile) Pathinfo(fpath string, options int) map[string]string {
 	if options == -1 {
 		options = 1 | 2 | 4 | 8
@@ -637,12 +637,12 @@ func (kf *LkkFile) Pathinfo(fpath string, options int) map[string]string {
 	return info
 }
 
-// Basename 返回路径中的文件名部分
+// Basename 返回路径中的文件名部分.
 func (kf *LkkFile) Basename(fpath string) string {
 	return filepath.Base(fpath)
 }
 
-// Dirname 返回路径中的目录部分,注意空路径或无目录的返回"."
+// Dirname 返回路径中的目录部分,注意空路径或无目录的返回"." .
 func (kf *LkkFile) Dirname(fpath string) string {
 	return filepath.Dir(fpath)
 }
@@ -656,12 +656,12 @@ func (kf *LkkFile) GetModTime(fpath string) (res int64) {
 	return
 }
 
-// Glob 寻找与模式匹配的文件路径
+// Glob 寻找与模式匹配的文件路径.
 func (kf *LkkFile) Glob(pattern string) ([]string, error) {
 	return filepath.Glob(pattern)
 }
 
-// TarGz 打包压缩tar.gz;src为源文件或目录,dstTar为打包的路径名,ignorePatterns为要忽略的文件正则
+// TarGz 打包压缩tar.gz;src为源文件或目录,dstTar为打包的路径名,ignorePatterns为要忽略的文件正则.
 func (kf *LkkFile) TarGz(src string, dstTar string, ignorePatterns ...string) (bool, error) {
 	//过滤器,检查要忽略的文件
 	var filter = func(file string) bool {
@@ -769,7 +769,7 @@ func (kf *LkkFile) TarGz(src string, dstTar string, ignorePatterns ...string) (b
 	return true, nil
 }
 
-// UnTarGz 将tar.gz文件解压缩;srcTar为压缩包,dstDir为解压目录
+// UnTarGz 将tar.gz文件解压缩;srcTar为压缩包,dstDir为解压目录.
 func (kf *LkkFile) UnTarGz(srcTar, dstDir string) (bool, error) {
 	fr, err := os.Open(srcTar)
 	if err != nil {

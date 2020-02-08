@@ -9,14 +9,15 @@ import (
 	"time"
 )
 
-// NumberFormat 以千位分隔符方式格式化一个数字;decimals为要保留的小数位数,decPoint为小数点显示的字符,thousandsSep为千位分隔符显示的字符
-func (kn *LkkNumber) NumberFormat(number float64, decimals uint8, decPoint, thousandsSep string) string {
+// NumberFormat 以千位分隔符方式格式化一个数字.
+// decimal为要保留的小数位数,point为小数点显示的字符,thousand为千位分隔符显示的字符.
+func (kn *LkkNumber) NumberFormat(number float64, decimal uint8, point, thousand string) string {
 	neg := false
 	if number < 0 {
 		number = -number
 		neg = true
 	}
-	dec := int(decimals)
+	dec := int(decimal)
 	// Will round off
 	str := fmt.Sprintf("%."+strconv.Itoa(dec)+"F", number)
 	prefix, suffix := "", ""
@@ -26,7 +27,7 @@ func (kn *LkkNumber) NumberFormat(number float64, decimals uint8, decPoint, thou
 	} else {
 		prefix = str
 	}
-	sep := []byte(thousandsSep)
+	sep := []byte(thousand)
 	n, l1, l2 := 0, len(prefix), len(sep)
 	// thousands sep num
 	c := (l1 - 1) / 3
@@ -43,7 +44,7 @@ func (kn *LkkNumber) NumberFormat(number float64, decimals uint8, decPoint, thou
 	}
 	s := string(tmp)
 	if dec > 0 {
-		s += decPoint + suffix
+		s += point + suffix
 	}
 	if neg {
 		s = "-" + s
@@ -52,7 +53,7 @@ func (kn *LkkNumber) NumberFormat(number float64, decimals uint8, decPoint, thou
 	return s
 }
 
-// Range 根据范围创建数组，包含指定的元素
+// Range 根据范围创建数组,包含指定的元素.
 func (kn *LkkNumber) Range(min, max int) []int {
 	a := make([]int, max-min+1)
 	for i := range a {
@@ -61,23 +62,23 @@ func (kn *LkkNumber) Range(min, max int) []int {
 	return a
 }
 
-// Abs 取绝对值
+// Abs 取绝对值.
 func (kn *LkkNumber) Abs(number float64) float64 {
 	return math.Abs(number)
 }
 
-// FloatEqual 比较两个浮点数是否相等.decimals为小数精确位数.
-func (kn *LkkNumber) FloatEqual(f1 float64, f2 float64, decimals ...int) bool {
+// FloatEqual 比较两个浮点数是否相等.decimal为小数精确位数.
+func (kn *LkkNumber) FloatEqual(f1 float64, f2 float64, decimal ...int) bool {
 	var threshold float64
-	var decimal int
-	if len(decimals) == 0 {
-		decimal = FLOAT_DECIMAL
+	var dec int
+	if len(decimal) == 0 {
+		dec = FLOAT_DECIMAL
 	} else {
-		decimal = decimals[0]
+		dec = decimal[0]
 	}
 
 	//比较精度
-	threshold = math.Pow10(-decimal)
+	threshold = math.Pow10(-dec)
 
 	return math.Abs(f1-f2) <= threshold
 }
@@ -145,22 +146,22 @@ func (kn *LkkNumber) Rand(min, max int) int {
 	return kn.RandInt(min, max)
 }
 
-// Round 对浮点数进行四舍五入
+// Round 对浮点数进行四舍五入.
 func (kn *LkkNumber) Round(value float64) float64 {
 	return math.Floor(value + 0.5)
 }
 
-// Floor 向下取整
+// Floor 向下取整.
 func (kn *LkkNumber) Floor(value float64) float64 {
 	return math.Floor(value)
 }
 
-// Ceil 向上取整
+// Ceil 向上取整.
 func (kn *LkkNumber) Ceil(value float64) float64 {
 	return math.Ceil(value)
 }
 
-// Pi 得到圆周率值
+// Pi 得到圆周率值.
 func (kn *LkkNumber) Pi() float64 {
 	return math.Pi
 }
@@ -261,23 +262,24 @@ func (kn *LkkNumber) Min(nums ...interface{}) (res float64) {
 	return
 }
 
-// Exp 计算 e 的指数
+// Exp 计算 e 的指数.
 func (kn *LkkNumber) Exp(x float64) float64 {
 	return math.Exp(x)
 }
 
-// Expm1 返回 exp(number) - 1，甚至当 number 的值接近零也能计算出准确结果
+// Expm1 返回 exp(number) - 1，甚至当 number 的值接近零也能计算出准确结果.
 func (kn *LkkNumber) Expm1(x float64) float64 {
 	return math.Exp(x) - 1
 }
 
-// Pow 指数表达式
+// Pow 指数表达式.
 func (kn *LkkNumber) Pow(x, y float64) float64 {
 	return math.Pow(x, y)
 }
 
-// ByteFormat 格式化文件比特大小.size为文件大小,decimals为要保留的小数位数.
-func (kn *LkkNumber) ByteFormat(size float64, decimals uint8) string {
+// ByteFormat 格式化文件比特大小.
+// size为文件大小,decimal为要保留的小数位数.
+func (kn *LkkNumber) ByteFormat(size float64, decimal uint8) string {
 	var arr = []string{"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB", "UnKnown"}
 	var pos int = 0
 	var j float64 = float64(size)
@@ -294,7 +296,7 @@ func (kn *LkkNumber) ByteFormat(size float64, decimals uint8) string {
 		pos = len(arr) - 1
 	}
 
-	return fmt.Sprintf("%."+strconv.Itoa(int(decimals))+"f%s", j, arr[pos])
+	return fmt.Sprintf("%."+strconv.Itoa(int(decimal))+"f%s", j, arr[pos])
 }
 
 // IsOdd 变量是否奇数.
@@ -348,7 +350,7 @@ func (kn *LkkNumber) IsNatural(value float64) bool {
 	return kn.IsWhole(value) && kn.IsPositive(value)
 }
 
-// InRangeInt 数值是否在2个整数范围内,将自动转换为整数再比较.
+// InRangeInt 数值是否在2个整数范围内.
 func (kn *LkkNumber) InRangeInt(value, left, right int) bool {
 	if left > right {
 		left, right = right, left
@@ -411,7 +413,7 @@ func (kn *LkkNumber) SumFloat64(nums ...float64) float64 {
 	return sum
 }
 
-// Sum 对任意类型序列中的数值类型求和.
+// Sum 对任意类型序列中的数值类型求和,忽略非数值的.
 func (kn *LkkNumber) Sum(nums ...interface{}) (res float64) {
 	var err error
 	var val float64
@@ -455,7 +457,7 @@ func (kn *LkkNumber) AverageFloat64(nums ...float64) (res float64) {
 	return
 }
 
-// Average 对任意类型序列中的数值类型求平均值.
+// Average 对任意类型序列中的数值类型求平均值,忽略非数值的.
 func (kn *LkkNumber) Average(nums ...interface{}) (res float64) {
 	length := len(nums)
 	if length == 0 {
@@ -480,7 +482,8 @@ func (kn *LkkNumber) Average(nums ...interface{}) (res float64) {
 	return
 }
 
-// GeoDistance 获取地理距离/米.参数分别为两点的经度和纬度.lat:-90~90,lng:-180~180.
+// GeoDistance 获取地理距离/米.
+// 参数分别为两点的经度和纬度.lat:-90~90,lng:-180~180.
 func (kn *LkkNumber) GeoDistance(lng1, lat1, lng2, lat2 float64) float64 {
 	//地球半径
 	radius := 6371000.0

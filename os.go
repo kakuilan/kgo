@@ -47,17 +47,17 @@ type SystemInfo struct {
 	PauseNs      uint64  `json:"pause_ns"`       //上次GC暂停时间,纳秒
 }
 
-// IsWindows 当前操作系统是否Windows
+// IsWindows 当前操作系统是否Windows.
 func (ko *LkkOS) IsWindows() bool {
 	return "windows" == runtime.GOOS
 }
 
-// IsLinux 当前操作系统是否Linux
+// IsLinux 当前操作系统是否Linux.
 func (ko *LkkOS) IsLinux() bool {
 	return "linux" == runtime.GOOS
 }
 
-// IsMac 当前操作系统是否Mac OS/X
+// IsMac 当前操作系统是否Mac OS/X.
 func (ko *LkkOS) IsMac() bool {
 	return "darwin" == runtime.GOOS
 }
@@ -82,12 +82,12 @@ func (ko *LkkOS) Getcwd() (string, error) {
 	return dir, err
 }
 
-// Chdir 改变/进入新的工作目录
+// Chdir 改变/进入新的工作目录.
 func (ko *LkkOS) Chdir(dir string) error {
 	return os.Chdir(dir)
 }
 
-// HomeDir 获取当前用户的主目录(仅支持Unix-like system)
+// HomeDir 获取当前用户的主目录(仅支持Unix-like system).
 func (ko *LkkOS) HomeDir() (string, error) {
 	// Unix-like system, so just assume Unix
 	home := os.Getenv("HOME")
@@ -100,7 +100,7 @@ func (ko *LkkOS) HomeDir() (string, error) {
 	return home, err
 }
 
-// LocalIP 获取本机第一个NIC's IP
+// LocalIP 获取本机第一个NIC's IP.
 func (ko *LkkOS) LocalIP() (string, error) {
 	res := ""
 	addrs, err := net.InterfaceAddrs()
@@ -118,7 +118,7 @@ func (ko *LkkOS) LocalIP() (string, error) {
 	return res, err
 }
 
-// OutboundIP 获取本机的出口IP
+// OutboundIP 获取本机的出口IP.
 func (ko *LkkOS) OutboundIP() (string, error) {
 	res := ""
 	conn, err := net.Dial("udp", "8.8.8.8:80")
@@ -131,7 +131,7 @@ func (ko *LkkOS) OutboundIP() (string, error) {
 	return res, err
 }
 
-// IsPublicIP 是否公网IP
+// IsPublicIP 是否公网IP.
 func (ko *LkkOS) IsPublicIP(ip net.IP) bool {
 	if ip.IsLoopback() || ip.IsLinkLocalMulticast() || ip.IsLinkLocalUnicast() {
 		return false
@@ -151,7 +151,7 @@ func (ko *LkkOS) IsPublicIP(ip net.IP) bool {
 	return false
 }
 
-// GetIPs 获取本机的IP列表
+// GetIPs 获取本机的IP列表.
 func (ko *LkkOS) GetIPs() (ips []string) {
 	interfaceAddrs, _ := net.InterfaceAddrs()
 	if len(interfaceAddrs) > 0 {
@@ -168,7 +168,7 @@ func (ko *LkkOS) GetIPs() (ips []string) {
 	return
 }
 
-// GetMacAddrs 获取本机的Mac网卡地址列表
+// GetMacAddrs 获取本机的Mac网卡地址列表.
 func (ko *LkkOS) GetMacAddrs() (macAddrs []string) {
 	netInterfaces, _ := net.Interfaces()
 	if len(netInterfaces) > 0 {
@@ -184,12 +184,12 @@ func (ko *LkkOS) GetMacAddrs() (macAddrs []string) {
 	return
 }
 
-// Hostname 获取主机名
+// Hostname 获取主机名.
 func (ko *LkkOS) Hostname() (string, error) {
 	return os.Hostname()
 }
 
-// GetIpByHostname 返回主机名对应的 IPv4地址
+// GetIpByHostname 返回主机名对应的 IPv4地址.
 func (ko *LkkOS) GetIpByHostname(hostname string) (string, error) {
 	ips, err := net.LookupIP(hostname)
 	if ips != nil {
@@ -203,7 +203,7 @@ func (ko *LkkOS) GetIpByHostname(hostname string) (string, error) {
 	return "", err
 }
 
-// GetIpsByHost 获取互联网域名/主机名对应的 IPv4 地址列表
+// GetIpsByHost 获取互联网域名/主机名对应的 IPv4 地址列表.
 func (ko *LkkOS) GetIpsByDomain(domain string) ([]string, error) {
 	ips, err := net.LookupIP(domain)
 	if ips != nil {
@@ -218,7 +218,7 @@ func (ko *LkkOS) GetIpsByDomain(domain string) ([]string, error) {
 	return nil, err
 }
 
-// GetHostByIp 获取指定的IP地址对应的主机名
+// GetHostByIp 获取指定的IP地址对应的主机名.
 func (ko *LkkOS) GetHostByIp(ipAddress string) (string, error) {
 	names, err := net.LookupAddr(ipAddress)
 	if names != nil {
@@ -234,7 +234,8 @@ func (ko *LkkOS) GoMemory() uint64 {
 	return stat.Alloc
 }
 
-// MemoryUsage 获取内存使用率(仅支持linux),单位字节.参数virtual,是否取虚拟内存.
+// MemoryUsage 获取内存使用率(仅支持linux),单位字节.
+// 参数 virtual,是否取虚拟内存.
 // used为已用,
 // free为空闲,
 // total为总数.
@@ -322,27 +323,28 @@ func (ko *LkkOS) DiskUsage(path string) (used, free, total uint64) {
 	return
 }
 
-// Setenv 设置一个环境变量的值
+// Setenv 设置一个环境变量的值.
 func (ko *LkkOS) Setenv(varname, data string) error {
 	return os.Setenv(varname, data)
 }
 
-// Getenv 获取一个环境变量的值
+// Getenv 获取一个环境变量的值.
 func (ko *LkkOS) Getenv(varname string) string {
 	return os.Getenv(varname)
 }
 
-// GetEndian 获取系统字节序类型,小端返回binary.LittleEndian,大端返回binary.BigEndian
+// GetEndian 获取系统字节序类型,小端返回binary.LittleEndian,大端返回binary.BigEndian .
 func (ko *LkkOS) GetEndian() binary.ByteOrder {
 	return getEndian()
 }
 
-// IsLittleEndian 系统字节序类型是否小端存储
+// IsLittleEndian 系统字节序类型是否小端存储.
 func (ko *LkkOS) IsLittleEndian() bool {
 	return isLittleEndian()
 }
 
-// Exec 执行一个外部命令;retInt为1时失败,为0时成功;outStr为执行命令的输出;errStr为错误输出
+// Exec 执行一个外部命令.
+// retInt为1时失败,为0时成功;outStr为执行命令的输出;errStr为错误输出.
 // 命令如
 // "ls -a"
 // "/bin/bash -c \"ls -a\""
@@ -389,7 +391,7 @@ func (ko *LkkOS) Exec(command string) (retInt int, outStr, errStr []byte) {
 	return
 }
 
-// System 与Exec相同,但会同时打印标准输出和标准错误
+// System 与Exec相同,但会同时打印标准输出和标准错误.
 func (ko *LkkOS) System(command string) (retInt int, outStr, errStr []byte) {
 	// split command
 	q := rune(0)
@@ -453,22 +455,22 @@ func (ko *LkkOS) System(command string) (retInt int, outStr, errStr []byte) {
 	return
 }
 
-// Chmod 改变文件模式
+// Chmod 改变文件模式.
 func (ko *LkkOS) Chmod(filename string, mode os.FileMode) bool {
 	return os.Chmod(filename, mode) == nil
 }
 
-// Chown 改变文件的所有者
+// Chown 改变文件的所有者.
 func (ko *LkkOS) Chown(filename string, uid, gid int) bool {
 	return os.Chown(filename, uid, gid) == nil
 }
 
-// GetTempDir 返回用于临时文件的目录
+// GetTempDir 返回用于临时文件的目录.
 func (ko *LkkOS) GetTempDir() string {
 	return os.TempDir()
 }
 
-// PrivateCIDR 获取私有网段的CIDR(无类别域间路由)
+// PrivateCIDR 获取私有网段的CIDR(无类别域间路由).
 func (ko *LkkOS) PrivateCIDR() []*net.IPNet {
 	maxCidrBlocks := []string{
 		"127.0.0.1/8",    // localhost
@@ -509,7 +511,7 @@ func (ko *LkkOS) IsPrivateIp(address string) (bool, error) {
 	return false, nil
 }
 
-// ClientIp 获取客户端真实IP,req为http请求
+// ClientIp 获取客户端真实IP,req为http请求.
 func (ko *LkkOS) ClientIp(req *http.Request) string {
 	// 获取头部信息,有可能是代理
 	xRealIP := req.Header.Get("X-Real-Ip")
