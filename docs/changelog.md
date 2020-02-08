@@ -70,7 +70,7 @@ All notable changes to this project will be documented in this file.
 - KNum.Max, 接受任意类型的参数.
 - KNum.Min, 接受任意类型的参数.
 - KNum.Sum, 只对数值类型求和.
-- KSO.Pwd, 弃用os.Args[0],改用os.Executable.
+- KOS.Pwd, 弃用os.Args[0],改用os.Executable.
 - KStr.IsASCII, 弃用正则判断.
 - KStr.IsEmail, 去掉邮箱是否真实存在的检查.
 - KStr.MbSubstr, 允许参数start/length为负数.
