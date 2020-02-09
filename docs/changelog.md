@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [v0.0.2]- 2020-02-08
+## [v0.0.2]- 2020-02-09
 #### Added
 - KArr.JoinInts
 - KArr.JoinStrings
@@ -80,6 +80,8 @@ All notable changes to this project will be documented in this file.
 - rename KArr.SliceMerge to MergeSlice
 - rename KConv.Bin2dec to Bin2Dec
 - rename KConv.Bin2hex to Bin2Hex
+- rename KConv.ByteToFloat64 to Byte2Float64
+- rename KConv.ByteToInt64 to Byte2Int64
 - rename KConv.BytesSlice2Str to Bytes2Str
 - rename KConv.Dec2bin to Dec2Bin
 - rename KConv.Dec2hex to Dec2Hex
