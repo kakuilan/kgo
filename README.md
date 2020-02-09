@@ -35,7 +35,7 @@ chk := KArr.InArray("bb", mp)
 ```
 - *KTime* 为时间操作,如
 ```go
-res, err := KTime.Str2Time("2019-07-11 10:11:23")
+res, err := KTime.Str2Timestamp("2019-07-11 10:11:23")
 ```
 - *KConv* 为类型转换操作,如
 ```go
