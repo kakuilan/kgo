@@ -462,8 +462,8 @@ func (kc *LkkConvert) Int64ToByte(val int64) []byte {
 	return res
 }
 
-// ByteToInt64 字节切片转64位整型.
-func (kc *LkkConvert) ByteToInt64(val []byte) int64 {
+// Byte2Int64 字节切片转64位整型.
+func (kc *LkkConvert) Byte2Int64(val []byte) int64 {
 	return int64(binary.BigEndian.Uint64(val))
 }
 

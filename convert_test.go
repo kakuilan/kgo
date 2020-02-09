@@ -794,20 +794,20 @@ func BenchmarkInt64ToByte(b *testing.B) {
 	}
 }
 
-func TestByteToInt64(t *testing.T) {
+func TestByte2Int64(t *testing.T) {
 	bs := []byte{0, 0, 0, 0, 0, 0, 48, 57}
-	res := KConv.ByteToInt64(bs)
+	res := KConv.Byte2Int64(bs)
 	if res != 12345 {
 		t.Error("Byte2Float64 fail")
 		return
 	}
 }
 
-func BenchmarkByteToInt64(b *testing.B) {
+func BenchmarkByte2Int64(b *testing.B) {
 	b.ResetTimer()
 	bs := []byte{0, 0, 0, 0, 0, 0, 48, 57}
 	for i := 0; i < b.N; i++ {
-		KConv.ByteToInt64(bs)
+		KConv.Byte2Int64(bs)
 	}
 }
 
