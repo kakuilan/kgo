@@ -1006,7 +1006,7 @@ func (kf *LkkFile) UnZip(srcZip, dstDir string) (bool, error) {
 	return true, nil
 }
 
-// IsZip 是否zip文件夹.
+// IsZip 是否zip文件.
 func (kf *LkkFile) IsZip(fpath string) bool {
 	ext := kf.GetExt(fpath)
 	if ext != "zip" {
