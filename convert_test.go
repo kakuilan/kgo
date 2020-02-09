@@ -760,20 +760,20 @@ func BenchmarkFloat64ToByte(b *testing.B) {
 	}
 }
 
-func TestByteToFloat64(t *testing.T) {
+func TestByte2Float64(t *testing.T) {
 	bs := []byte{205, 204, 204, 204, 204, 28, 200, 64}
-	res := KConv.ByteToFloat64(bs)
+	res := KConv.Byte2Float64(bs)
 	if res != 12345.6 {
-		t.Error("ByteToFloat64 fail")
+		t.Error("Byte2Float64 fail")
 		return
 	}
 }
 
-func BenchmarkByteToFloat64(b *testing.B) {
+func BenchmarkByte2Float64(b *testing.B) {
 	b.ResetTimer()
 	bs := []byte{205, 204, 204, 204, 204, 28, 200, 64}
 	for i := 0; i < b.N; i++ {
-		KConv.ByteToFloat64(bs)
+		KConv.Byte2Float64(bs)
 	}
 }
 
@@ -798,7 +798,7 @@ func TestByteToInt64(t *testing.T) {
 	bs := []byte{0, 0, 0, 0, 0, 0, 48, 57}
 	res := KConv.ByteToInt64(bs)
 	if res != 12345 {
-		t.Error("ByteToFloat64 fail")
+		t.Error("Byte2Float64 fail")
 		return
 	}
 }
