@@ -447,8 +447,8 @@ func (kc *LkkConvert) Float64ToByte(val float64) []byte {
 	return res
 }
 
-// ByteToFloat64 字节切片转64位浮点数.
-func (kc *LkkConvert) ByteToFloat64(bytes []byte) float64 {
+// Byte2Float64 字节切片转64位浮点数.
+func (kc *LkkConvert) Byte2Float64(bytes []byte) float64 {
 	bits := binary.LittleEndian.Uint64(bytes)
 
 	return math.Float64frombits(bits)
