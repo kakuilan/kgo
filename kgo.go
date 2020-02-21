@@ -110,6 +110,9 @@ const (
 	//默认浮点数精确小数位数
 	FLOAT_DECIMAL = 10
 
+	//AuthCode 动态密钥长度,须<32
+	DYNAMIC_KEY_LEN = 8
+
 	//检查连接超时的时间
 	CHECK_CONNECT_TIMEOUT = time.Second * 5
 
