@@ -55,15 +55,16 @@ func (ke *LkkEncrypt) Base64UrlDecode(data string) ([]byte, error) {
 
 // AuthCode 授权码编码或解码;encode为true时编码,为false解码;expiry为有效期,秒;返回结果为加密/解密的字符串和有效期时间戳.
 func (ke *LkkEncrypt) AuthCode(str, key string, encode bool, expiry int64) (string, int64) {
+	// DYNAMIC_KEY_LEN 动态密钥长度，相同的明文会生成不同密文就是依靠动态密钥
+	// 加入随机密钥，可以令密文无任何规律，即便是原文和密钥完全相同，加密结果也会每次不同，增大破解难度。
+	// 取值越大，密文变动规律越大，密文变化 = 16 的 DYNAMIC_KEY_LEN 次方
+	// 当此值为 0 时，则不产生随机密钥
+
 	if str == "" {
 		return "", 0
+	} else if !encode && len(str) < DYNAMIC_KEY_LEN {
+		return "", 0
 	}
-
-	// 动态密钥长度，相同的明文会生成不同密文就是依靠动态密钥
-	// 加入随机密钥，可以令密文无任何规律，即便是原文和密钥完全相同，加密结果也会每次不同，增大破解难度。
-	// 取值越大，密文变动规律越大，密文变化 = 16 的 ckeyLength 次方
-	// 当此值为 0 时，则不产生随机密钥
-	ckeyLength := 4
 
 	// 密钥
 	keyByte := md5Str([]byte(key), 32)
@@ -77,9 +78,9 @@ func (ke *LkkEncrypt) AuthCode(str, key string, encode bool, expiry int64) (stri
 	// 密钥c用于变化生成的密文
 	var keyc []byte
 	if encode == false {
-		keyc = []byte(str[:ckeyLength])
+		keyc = []byte(str[:DYNAMIC_KEY_LEN])
 	} else {
-		cLen := 32 - ckeyLength
+		cLen := 32 - DYNAMIC_KEY_LEN
 		now, _ := time.Now().MarshalBinary()
 		timeBytes := md5Str(now, 32)
 		keyc = timeBytes[cLen:]
@@ -90,9 +91,9 @@ func (ke *LkkEncrypt) AuthCode(str, key string, encode bool, expiry int64) (stri
 	cryptkey := append(keya, keyd...)
 	keyLength := len(cryptkey)
 	// 明文，前10位用来保存时间戳，解密时验证数据有效性，10到26位用来保存keyb(密钥b)，解密时会通过这个密钥验证数据完整性
-	// 如果是解码的话，会从第ckeyLength位开始，因为密文前ckeyLength位保存 动态密钥，以保证解密正确
+	// 如果是解码的话，会从第 DYNAMIC_KEY_LEN 位开始，因为密文前 DYNAMIC_KEY_LEN 位保存 动态密钥，以保证解密正确
 	if encode == false {
-		strByte, err := ke.Base64UrlDecode(str[ckeyLength:])
+		strByte, err := ke.Base64UrlDecode(str[DYNAMIC_KEY_LEN:])
 		if err != nil {
 			return "", 0
 		}
@@ -111,7 +112,6 @@ func (ke *LkkEncrypt) AuthCode(str, key string, encode bool, expiry int64) (stri
 	j := 0
 	a := 0
 	i := 0
-	tmp := 0
 	for i = 0; i < 256; i++ {
 		rndkey[i] = int(cryptkey[i%keyLength])
 		box[i] = i
@@ -119,20 +119,15 @@ func (ke *LkkEncrypt) AuthCode(str, key string, encode bool, expiry int64) (stri
 	// 用固定的算法，打乱密钥簿，增加随机性，好像很复杂，实际上并不会增加密文的强度
 	for i = 0; i < 256; i++ {
 		j = (j + box[i] + rndkey[i]) % 256
-		tmp = box[i]
-		box[i] = box[j]
-		box[j] = tmp
+		box[i], box[j] = box[j], box[i]
 	}
 	// 核心加解密部分
 	a = 0
 	j = 0
-	tmp = 0
 	for i = 0; i < stringLength; i++ {
 		a = ((a + 1) % 256)
 		j = ((j + box[a]) % 256)
-		tmp = box[a]
-		box[a] = box[j]
-		box[j] = tmp
+		box[a], box[j] = box[j], box[a]
 		// 从密钥簿得出密钥进行异或，再转成字符
 		resdata = append(resdata, byte(int(str[i])^box[(box[a]+box[j])%256]))
 	}
