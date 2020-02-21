@@ -202,24 +202,24 @@ func (ke *LkkEncrypt) EasyEncrypt(data, key string) string {
 		x++
 	}
 
-	res := string(keyByte[:4]) + ke.Base64UrlEncode(str)
+	res := string(keyByte[:DYNAMIC_KEY_LEN]) + ke.Base64UrlEncode(str)
 	return res
 }
 
 // EasyDecrypt 简单解密.
 // val为待解密的字符串,key为密钥.
 func (ke *LkkEncrypt) EasyDecrypt(val, key string) string {
-	if len(val) <= 4 {
+	if len(val) <= DYNAMIC_KEY_LEN {
 		return ""
 	}
 
-	data, err := ke.Base64UrlDecode(val[4:])
+	data, err := ke.Base64UrlDecode(val[DYNAMIC_KEY_LEN:])
 	if err != nil {
 		return ""
 	}
 
 	keyByte := md5Str([]byte(key), 32)
-	if val[:4] != string(keyByte[:4]) {
+	if val[:DYNAMIC_KEY_LEN] != string(keyByte[:DYNAMIC_KEY_LEN]) {
 		return ""
 	}
 
@@ -232,7 +232,6 @@ func (ke *LkkEncrypt) EasyDecrypt(val, key string) string {
 		if x == keyLen {
 			x = 0
 		}
-		//chat = append(chat, keyByte[x])
 
 		if data[i] < keyByte[x] {
 			c = int(data[i]) + 256 - int(keyByte[x])
