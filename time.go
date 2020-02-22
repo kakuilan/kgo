@@ -119,7 +119,7 @@ func (kt *LkkTime) Date(format string, ts ...interface{}) string {
 }
 
 // CheckDate 检查是否正常的日期.
-func (kt *LkkTime) CheckDate(month, day, year int) bool {
+func (kt *LkkTime) CheckDate(year, month, day int) bool {
 	if month < 1 || month > 12 || day < 1 || day > 31 || year < 1 || year > 32767 {
 		return false
 	}
