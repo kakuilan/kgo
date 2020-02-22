@@ -103,21 +103,21 @@ func BenchmarkDate(b *testing.B) {
 }
 
 func TestCheckDate(t *testing.T) {
-	chk1 := KTime.CheckDate(7, 31, 2019)
-	chk2 := KTime.CheckDate(2, 31, 2019)
+	chk1 := KTime.CheckDate(2019, 7, 31)
+	chk2 := KTime.CheckDate(2019, 2, 31)
 	if !chk1 || chk2 {
 		t.Error("CheckDate fail")
 		return
 	}
-	KTime.CheckDate(0, 31, 2019)
-	KTime.CheckDate(4, 31, 2019)
-	KTime.CheckDate(2, 30, 2008)
+	KTime.CheckDate(2019, 0, 31)
+	KTime.CheckDate(2019, 4, 31)
+	KTime.CheckDate(2008, 2, 30)
 }
 
 func BenchmarkCheckDate(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KTime.CheckDate(7, 31, 2019)
+		KTime.CheckDate(2019, 7, 31)
 	}
 }
 
