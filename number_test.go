@@ -481,11 +481,11 @@ func BenchmarkPow(b *testing.B) {
 }
 
 func TestByteFormat(t *testing.T) {
-	res1 := KNum.ByteFormat(0, 0)
-	res2 := KNum.ByteFormat(1024000, 2)
-	res3 := KNum.ByteFormat(1024000000, 3)
-	res4 := KNum.ByteFormat(1024000000000, 4)
-	res5 := KNum.ByteFormat(1024000000000000000000000000000000000, 4)
+	res1 := KNum.ByteFormat(0, 0, "")
+	res2 := KNum.ByteFormat(1024000, 2, " ")
+	res3 := KNum.ByteFormat(1024000000, 3, " ")
+	res4 := KNum.ByteFormat(1024000000000, 4, " ")
+	res5 := KNum.ByteFormat(1024000000000000000000000000000000000, 4, " ")
 
 	if res1 == "" || res2 == "" || res3 == "" || res4 == "" || !strings.HasSuffix(res5, "UnKnown") {
 		t.Error("ByteFormat fail")
@@ -496,7 +496,7 @@ func TestByteFormat(t *testing.T) {
 func BenchmarkByteFormat(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KNum.ByteFormat(1024000000000, 4)
+		KNum.ByteFormat(1024000000000, 4, "")
 	}
 }
 
