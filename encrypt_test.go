@@ -182,6 +182,12 @@ func TestEasyEncryptDecrypt(t *testing.T) {
 		return
 	}
 
+	dec = KEncr.EasyDecrypt("你好，世界！", key)
+	if dec != "" {
+		t.Error("EasyDecrypt fail")
+		return
+	}
+
 	KEncr.EasyEncrypt("", key)
 	KEncr.EasyEncrypt("", "")
 	KEncr.EasyDecrypt(enc, "1qwer")
