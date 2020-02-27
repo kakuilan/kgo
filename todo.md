@@ -89,6 +89,7 @@
 - https://github.com/huandu/xstrings -x
 - https://github.com/astaxie/beego/tree/develop/utils -x
 - https://github.com/pubgo/g
+- https://github.com/layidao/utilx
 
 
 https://github.com/fastly/go-utils-master/executable/executable_linux.go
