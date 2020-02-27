@@ -1,6 +1,6 @@
 # kgo
 k`s golang helper/library/utils  
-golang 函数库/工具集,仅测试支持64位linux
+golang 常用函数库/工具集,仅测试支持64位linux
 
 ### 文档
 [![GoDoc](https://godoc.org/github.com/kakuilan/kgo?status.svg)](https://godoc.org/github.com/kakuilan/kgo)
