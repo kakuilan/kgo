@@ -1,6 +1,23 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.0.3]- 2020-03-03
+#### Added
+- 增加常量`DYNAMIC_KEY_LEN`动态密钥长度
+
+#### Fixed
+- KEncr.AuthCode 修复bounds out of range错误
+
+#### Changed
+- KEncr.AuthCode 动态密钥长度改为8
+- KEncr.EasyEncrypt 动态密钥长度改为8
+- KEncr.EasyDecrypt 动态密钥长度改为8
+- KTime.CheckDate(month, day, year int) to CheckDate(year, month, day int)
+- KNum.ByteFormat 增加'delimiter'参数,为数字和单位间的分隔符
+
+#### Removed
+- none
+
 ## [v0.0.2]- 2020-02-09
 #### Added
 - KArr.JoinInts

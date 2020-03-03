@@ -46,7 +46,7 @@ type (
 
 const (
 	// Version 版本号
-	Version = "0.0.2"
+	Version = "0.0.3"
 
 	//UINT_MAX 无符号整型uint最大值
 	UINT_MAX = ^uint(0)
