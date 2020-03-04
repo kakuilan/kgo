@@ -301,6 +301,8 @@ https://coderwall.com/p/_fmbug/go-get-path-to-current-file
 https://github.com/unknwon/gcblog/blob/master/content/04-go-caller.md
 https://colobu.com/2018/11/03/get-function-name-in-go/
 
+系统信息
+https://github.com/akhenakh/statgo
 
 
 
