@@ -1702,12 +1702,26 @@ func BenchmarkIsSha512(b *testing.B) {
 }
 
 func TestStartsWith(t *testing.T) {
-	str := "hello你好世界world"
-	chk1 := KStr.StartsWith(str, "hello你好")
-	chk2 := KStr.StartsWith(str, "gogo")
-	if !chk1 || chk2 {
-		t.Error("StartsWith fail")
-		return
+	var tests = []struct {
+		str        string
+		sub        string
+		ignoreCase bool
+		expected   bool
+	}{
+		{"", "", false, false},
+		{"hello world", "", false, false},
+		{"Hello 你好, World 世界！", "hello", false, false},
+		{"Hello 你好, World 世界！", "Hello", false, true},
+		{"Hello 你好, World 世界！", "hello", true, true},
+		{"Hello 你好, World 世界！", "Hello 你好", false, true},
+		{"Hello 你好, World 世界！", "hello 你好", true, true},
+		{"Hello 你好, World 世界！", "world 世", true, false},
+	}
+	for _, test := range tests {
+		actual := KStr.StartsWith(test.str, test.sub, test.ignoreCase)
+		if actual != test.expected {
+			t.Errorf("Expected KStr.StartsWith(%q, %q, %t) , got %v", test.str, test.sub, test.ignoreCase, actual)
+		}
 	}
 }
 
@@ -1715,17 +1729,29 @@ func BenchmarkStartsWith(b *testing.B) {
 	b.ResetTimer()
 	str := "hello world!welcome to golang,go go go!你好世界"
 	for i := 0; i < b.N; i++ {
-		KStr.StartsWith(str, "hello你好")
+		KStr.StartsWith(str, "hello你好", false)
 	}
 }
 
 func TestEndsWith(t *testing.T) {
-	str := "hello你好世界world"
-	chk1 := KStr.EndsWith(str, "世界world")
-	chk2 := KStr.EndsWith(str, "gogo")
-	if !chk1 || chk2 {
-		t.Error("EndsWith fail")
-		return
+	var tests = []struct {
+		str        string
+		sub        string
+		ignoreCase bool
+		expected   bool
+	}{
+		{"", "", false, false},
+		{"hello world", "", false, false},
+		{"Hello 你好, World 世界！", "World", false, false},
+		{"Hello 你好, World 世界！", "World", true, false},
+		{"Hello 你好, World 世界！", "World 世界！", false, true},
+		{"Hello 你好, World 世界！", "world 世界！", true, true},
+	}
+	for _, test := range tests {
+		actual := KStr.EndsWith(test.str, test.sub, test.ignoreCase)
+		if actual != test.expected {
+			t.Errorf("Expected KStr.EndsWith(%q, %q, %t) , got %v", test.str, test.sub, test.ignoreCase, actual)
+		}
 	}
 }
 
@@ -1733,6 +1759,6 @@ func BenchmarkEndsWith(b *testing.B) {
 	b.ResetTimer()
 	str := "hello world!welcome to golang,go go go!你好世界"
 	for i := 0; i < b.N; i++ {
-		KStr.EndsWith(str, "hello你好")
+		KStr.EndsWith(str, "hello你好", false)
 	}
 }
