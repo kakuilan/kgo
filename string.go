@@ -188,8 +188,39 @@ func (ks *LkkString) Random(length uint8, rtype LkkRandString) string {
 	return string(b)
 }
 
+// Index 查找子串sub在字符串str中第一次出现的位置,不存在则返回-1;
+// ignoreCase为是否忽略大小写.
+func (ks *LkkString) Index(str, sub string, ignoreCase bool) int {
+	if str == "" || sub == "" {
+		return -1
+	}
+
+	if ignoreCase {
+		str = strings.ToLower(str)
+		sub = strings.ToLower(sub)
+	}
+
+	return strings.Index(str, sub)
+}
+
+// LastIndex 查找子串sub在字符串str中最后一次出现的位置,不存在则返回-1;
+// ignoreCase为是否忽略大小写.
+func (ks *LkkString) LastIndex(str, sub string, ignoreCase bool) int {
+	if str == "" || sub == "" {
+		return -1
+	}
+
+	if ignoreCase {
+		str = strings.ToLower(str)
+		sub = strings.ToLower(sub)
+	}
+
+	return strings.LastIndex(str, sub)
+}
+
 // Strpos 查找字符串首次出现的位置,找不到时返回-1.
-// haystack在该字符串中进行查找,needle要查找的字符串,offset起始位置.
+// haystack在该字符串中进行查找,needle要查找的字符串;
+// offset起始位置,为负数时时,搜索会从字符串结尾指定字符数开始.
 func (ks *LkkString) Strpos(haystack, needle string, offset int) int {
 	length := len(haystack)
 	if length == 0 || offset > length || -offset > length {
@@ -207,7 +238,8 @@ func (ks *LkkString) Strpos(haystack, needle string, offset int) int {
 }
 
 // Stripos  查找字符串首次出现的位置（不区分大小写）,找不到时返回-1.
-// haystack在该字符串中进行查找,needle要查找的字符串,offset起始位置.
+// haystack在该字符串中进行查找,needle要查找的字符串;
+// offset起始位置,为负数时时,搜索会从字符串结尾指定字符数开始.
 func (ks *LkkString) Stripos(haystack, needle string, offset int) int {
 	length := len(haystack)
 	if length == 0 || offset > length || -offset > length {
@@ -217,8 +249,7 @@ func (ks *LkkString) Stripos(haystack, needle string, offset int) int {
 	if offset < 0 {
 		offset += length
 	}
-	haystack = haystack[offset:]
-	pos := strings.Index(strings.ToLower(haystack), strings.ToLower(needle))
+	pos := ks.Index(haystack[offset:], needle, true)
 	if pos == -1 {
 		return -1
 	}
@@ -256,7 +287,7 @@ func (ks *LkkString) Strripos(haystack, needle string, offset int) int {
 	} else {
 		haystack = haystack[offset:]
 	}
-	pos = strings.LastIndex(strings.ToLower(haystack), strings.ToLower(needle))
+	pos = ks.LastIndex(haystack, needle, true)
 	if offset > 0 && pos != -1 {
 		pos += offset
 	}

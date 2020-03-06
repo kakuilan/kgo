@@ -222,6 +222,65 @@ func BenchmarkRandomChinese(b *testing.B) {
 	}
 }
 
+func TestStringIndex(t *testing.T) {
+	var tests = []struct {
+		str        string
+		sub        string
+		ignoreCase bool
+		expected   int
+	}{
+		{"", "", false, -1},
+		{"Hello 你好, World 世界！", "hello", false, -1},
+		{"Hello 你好, World 世界！", "Hello", false, 0},
+		{"Hello 你好, World 世界！", "hello", true, 0},
+		{"Hello 你好, World 世界！", "world 世", true, 14},
+	}
+	for _, test := range tests {
+		actual := KStr.Index(test.str, test.sub, test.ignoreCase)
+		if actual != test.expected {
+			t.Errorf("Expected KStr.Index(%q, %q, %t) , got %v", test.str, test.sub, test.ignoreCase, actual)
+		}
+	}
+}
+
+func BenchmarkStringIndex(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!"
+	for i := 0; i < b.N; i++ {
+		KStr.Index(str, "World", true)
+	}
+}
+
+func TestStringLastIndex(t *testing.T) {
+	var tests = []struct {
+		str        string
+		sub        string
+		ignoreCase bool
+		expected   int
+	}{
+		{"", "", false, -1},
+		{"Hello 你好, World 世界！", "world", false, -1},
+		{"Hello 你好, World 世界！", "World", false, 14},
+		{"Hello 你好, World 世界！", "world", true, 14},
+		{"Hello 你好, World 世界！", "world 世", true, 14},
+	}
+	for _, test := range tests {
+		actual := KStr.LastIndex(test.str, test.sub, test.ignoreCase)
+		println("actual:", actual)
+		if actual != test.expected {
+			t.Errorf("Expected KStr.LastIndex(%q, %q, %t) , got %v", test.str, test.sub, test.ignoreCase, actual)
+		}
+	}
+}
+
+func BenchmarkStringLastIndex(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!"
+	for i := 0; i < b.N; i++ {
+		KStr.LastIndex(str, "World", true)
+	}
+}
+
 func TestStrpos(t *testing.T) {
 	str := "hello world!"
 	res1 := KStr.Strpos(str, "world", 0)
