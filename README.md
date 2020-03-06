@@ -83,7 +83,7 @@ go tool pprof -http=192.168.1.2:8081 /usr/bin/dot profile.out
 
 
 ### 更新日志
-详见[[CHANGELOG]](/docs/changelog.md)
+详见[[Changelog]](/docs/changelog.md)
 
 
 ### 鸣谢
