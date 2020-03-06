@@ -1023,13 +1023,27 @@ func BenchmarkToKebabCase(b *testing.B) {
 }
 
 func TestRemoveBefore(t *testing.T) {
-	str := "hello world learn golang"
-	res1 := KStr.RemoveBefore(str, "world", false)
-	res2 := KStr.RemoveBefore(str, "world", true)
-	res3 := KStr.RemoveBefore(str, "World", false)
-	if !strings.Contains(res1, "world") || strings.Contains(res2, "world") || res3 != str {
-		t.Error("RemoveBefore fail")
-		return
+	var tests = []struct {
+		str        string
+		sub        string
+		include    bool
+		ignoreCase bool
+		expected   string
+	}{
+		{"", "", false, false, ""},
+		{"hello world", "", false, false, "hello world"},
+		{"Hello 你好, World 世界！", "world", false, false, "Hello 你好, World 世界！"},
+		{"Hello 你好, World 世界！", "World", false, false, "World 世界！"},
+		{"Hello 你好, World 世界！", "World", true, false, " 世界！"},
+		{"Hello 你好, World 世界！", "world", false, true, "World 世界！"},
+		{"Hello 你好, World 世界！", "world 世", false, true, "World 世界！"},
+		{"Hello 你好, World 世界！", "world 世", true, true, "界！"},
+	}
+	for _, test := range tests {
+		actual := KStr.RemoveBefore(test.str, test.sub, test.include, test.ignoreCase)
+		if actual != test.expected {
+			t.Errorf("Expected KStr.RemoveBefore(%q, %q, %t, %t) , got %v", test.str, test.sub, test.include, test.ignoreCase, actual)
+		}
 	}
 }
 
@@ -1037,18 +1051,32 @@ func BenchmarkRemoveBefore(b *testing.B) {
 	b.ResetTimer()
 	str := "hello world learn golang"
 	for i := 0; i < b.N; i++ {
-		KStr.RemoveBefore(str, "world", true)
+		KStr.RemoveBefore(str, "world", true, true)
 	}
 }
 
 func TestRemoveAfter(t *testing.T) {
-	str := "hello world learn golang"
-	res1 := KStr.RemoveAfter(str, "learn", false)
-	res2 := KStr.RemoveAfter(str, "learn", true)
-	res3 := KStr.RemoveAfter(str, "Learn", false)
-	if !strings.Contains(res1, "learn") || strings.Contains(res2, "learn") || res3 != str {
-		t.Error("RemoveAfter fail")
-		return
+	var tests = []struct {
+		str        string
+		sub        string
+		include    bool
+		ignoreCase bool
+		expected   string
+	}{
+		{"", "", false, false, ""},
+		{"hello world", "", false, false, "hello world"},
+		{"Hello 你好, World 世界！", "world", false, false, "Hello 你好, World 世界！"},
+		{"Hello 你好, World 世界！", "World", false, false, "Hello 你好, World"},
+		{"Hello 你好, World 世界！", "World", true, false, "Hello 你好, "},
+		{"Hello 你好, World 世界！", "world", false, true, "Hello 你好, World"},
+		{"Hello 你好, World 世界！", "world 世", false, true, "Hello 你好, World 世"},
+		{"Hello 你好, World 世界！", "world 世", true, true, "Hello 你好, "},
+	}
+	for _, test := range tests {
+		actual := KStr.RemoveAfter(test.str, test.sub, test.include, test.ignoreCase)
+		if actual != test.expected {
+			t.Errorf("Expected KStr.RemoveAfter(%q, %q, %t, %t) , got %v", test.str, test.sub, test.include, test.ignoreCase, actual)
+		}
 	}
 }
 
@@ -1056,7 +1084,7 @@ func BenchmarkRemoveAfter(b *testing.B) {
 	b.ResetTimer()
 	str := "hello world learn golang"
 	for i := 0; i < b.N; i++ {
-		KStr.RemoveAfter(str, "learn", true)
+		KStr.RemoveAfter(str, "learn", true, true)
 	}
 }
 

@@ -938,9 +938,11 @@ func (ks *LkkString) ToKebabCase(str string) string {
 	return camelCaseToLowerCase(str, '-')
 }
 
-// RemoveBefore 移除before之前的字符串.include为是否移除包括before本身.
-func (ks *LkkString) RemoveBefore(str, before string, include bool) string {
-	i := strings.Index(str, before)
+// RemoveBefore 移除before之前的字符串;
+// include为是否移除包括before本身;
+// ignoreCase为是否忽略大小写.
+func (ks *LkkString) RemoveBefore(str, before string, include, ignoreCase bool) string {
+	i := ks.Index(str, before, ignoreCase)
 	if i > 0 {
 		if include {
 			str = str[i+len(before):]
@@ -951,9 +953,11 @@ func (ks *LkkString) RemoveBefore(str, before string, include bool) string {
 	return str
 }
 
-// RemoveAfter 移除after之后的字符串.include为是否移除包括after本身.
-func (ks *LkkString) RemoveAfter(str, after string, include bool) string {
-	i := strings.Index(str, after)
+// RemoveAfter 移除after之后的字符串;
+// include为是否移除包括after本身;
+// ignoreCase为是否忽略大小写.
+func (ks *LkkString) RemoveAfter(str, after string, include, ignoreCase bool) string {
+	i := ks.Index(str, after, ignoreCase)
 	if i > 0 {
 		if include {
 			str = str[0:i]
