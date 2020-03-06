@@ -479,19 +479,23 @@ func (ks *LkkString) IsSha512(str string) bool {
 	return str != "" && RegSha512.MatchString(str)
 }
 
-// StartsWith 字符串str是否以substr开头.
-func (ks *LkkString) StartsWith(str, substr string) bool {
-	if str != "" && substr != "" && ks.MbSubstr(str, 0, len([]rune(substr))) == substr {
-		return true
+// StartsWith 字符串str是否以sub开头.
+func (ks *LkkString) StartsWith(str, sub string, ignoreCase bool) bool {
+	if str != "" && sub != "" {
+		i := ks.Index(str, sub, ignoreCase)
+		return i == 0
 	}
+
 	return false
 }
 
-// EndsWith 字符串str是否以substr结尾.
-func (ks *LkkString) EndsWith(str, substr string) bool {
-	if str != "" && substr != "" && ks.MbSubstr(str, -len([]rune(substr))) == substr {
-		return true
+// EndsWith 字符串str是否以sub结尾.
+func (ks *LkkString) EndsWith(str, sub string, ignoreCase bool) bool {
+	if str != "" && sub != "" {
+		i := ks.LastIndex(str, sub, ignoreCase)
+		return i != -1 && (len(str)-len(sub)) == i
 	}
+
 	return false
 }
 
