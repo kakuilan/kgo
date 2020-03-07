@@ -48,7 +48,7 @@
 - https://github.com/techoner/gophp -x
 - https://github.com/m3ng9i/go-utils -x
 - https://github.com/torden/go-strutil  -x
-- https://golang.hotexamples.com/examples/unicode/-/IsControl/golang-iscontrol-function-examples.html
+- https://golang.hotexamples.com/examples/unicode/-/IsControl/golang-iscontrol-function-examples.html -x
 - https://github.com/idoall/TokenExchangeCommon/blob/master/commonutils/utils.go
 - https://github.com/afanti-com/utils-go -x
 - https://github.com/solo-io/go-utils -x

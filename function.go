@@ -461,7 +461,6 @@ func isCaseConnector(r rune) bool {
 
 // getPidByInode 根据套接字的inode获取PID.须root权限.
 func getPidByInode(inode string, procDirs []string) (pid int) {
-
 	if len(procDirs) == 0 {
 		procDirs, _ = filepath.Glob("/proc/[0-9]*/fd/[0-9]*")
 	}
