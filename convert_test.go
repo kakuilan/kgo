@@ -5,6 +5,7 @@ import (
 	"math"
 	"reflect"
 	"testing"
+	"unicode/utf8"
 )
 
 func TestInt2Str(t *testing.T) {
@@ -908,5 +909,31 @@ func BenchmarkToBool(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.ToBool(1)
+	}
+}
+
+func TestRunes2Bytes(t *testing.T) {
+	var rs1 []rune
+	var rs2 = []rune{'H', 'e', 'l', 'l', 'o', ' ', '世', '界'}
+
+	res1 := KConv.Runes2Bytes(rs1)
+	res2 := KConv.Runes2Bytes(rs2)
+
+	if len(res1) != 0 {
+		t.Error("Runes2Bytes fail")
+		return
+	} else if len(res2) != 12 || string(res2) != "Hello 世界" {
+		t.Error("Runes2Bytes fail")
+		return
+	}
+
+	utf8.DecodeRune(res2)
+}
+
+func BenchmarkRunes2Bytes(b *testing.B) {
+	b.ResetTimer()
+	var rs = []rune{'H', 'e', 'l', 'l', 'o', ' ', '世', '界'}
+	for i := 0; i < b.N; i++ {
+		KConv.Runes2Bytes(rs)
 	}
 }

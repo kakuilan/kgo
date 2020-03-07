@@ -9,6 +9,7 @@ import (
 	"net"
 	"reflect"
 	"strconv"
+	"unicode/utf8"
 	"unsafe"
 )
 
@@ -482,4 +483,21 @@ func (kc *LkkConvert) Hex2Byte(str string) []byte {
 func (kc *LkkConvert) GetPointerAddrInt(variable interface{}) int64 {
 	res, _ := kc.Hex2Dec(fmt.Sprintf("%p", &variable))
 	return res
+}
+
+// Runes2Bytes 将[]rune转为[]byte.
+func (kc *LkkConvert) Runes2Bytes(rs []rune) []byte {
+	size := 0
+	for _, r := range rs {
+		size += utf8.RuneLen(r)
+	}
+
+	bs := make([]byte, size)
+
+	count := 0
+	for _, r := range rs {
+		count += utf8.EncodeRune(bs[count:], r)
+	}
+
+	return bs
 }

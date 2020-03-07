@@ -108,6 +108,22 @@ func BenchmarkStringMd5(b *testing.B) {
 	}
 }
 
+func BenchmarkStringMd5Str16(b *testing.B) {
+	b.ResetTimer()
+	str := []byte("hello world!")
+	for i := 0; i < b.N; i++ {
+		md5Str(str, 16)
+	}
+}
+
+func BenchmarkStringMd5Str32(b *testing.B) {
+	b.ResetTimer()
+	str := []byte("hello world!")
+	for i := 0; i < b.N; i++ {
+		md5Str(str, 32)
+	}
+}
+
 func TestStringShaX(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
