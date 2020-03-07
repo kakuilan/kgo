@@ -162,7 +162,6 @@ func (ks *LkkString) Random(length uint8, rtype LkkRandString) string {
 	specials := "~!@#$%^&*()_+{}:|<>?`-=;,."
 
 	rand.Seed(time.Now().UTC().UnixNano())
-	time.Sleep(time.Nanosecond)
 
 	switch rtype {
 	case RAND_STRING_ALPHA:
