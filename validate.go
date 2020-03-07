@@ -31,7 +31,7 @@ func (ks *LkkString) IsLetters(str string) bool {
 
 // IsEmpty 字符串是否为空(包括空格).
 func (ks *LkkString) IsEmpty(str string) bool {
-	if len(str) == 0 || len(ks.Trim(str)) == 0 {
+	if str == "" || len(ks.Trim(str)) == 0 {
 		return true
 	}
 
@@ -139,6 +139,11 @@ func (ks *LkkString) IsChinese(str string) bool {
 // IsChineseName 字符串是否中文名称.
 func (ks *LkkString) IsChineseName(str string) bool {
 	return str != "" && RegChineseName.MatchString(str)
+}
+
+// IsWord 是否词语(不以下划线开头的中文、英文、数字、下划线).
+func (ks *LkkString) IsWord(str string) bool {
+	return str != "" && RegWord.MatchString(str)
 }
 
 // HasSpecialChar 字符串是否含有特殊字符.

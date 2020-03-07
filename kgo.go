@@ -134,6 +134,9 @@ const (
 	// 正则模式-半角字符
 	PATTERN_HALFWIDTH = "[\u0020-\u007E\uFF61-\uFF9F\uFFA0-\uFFDC\uFFE8-\uFFEE0-9a-zA-Z]"
 
+	// 正则模式-词语,不以下划线开头的中文、英文、数字、下划线
+	PATTERN_WORD = "^[a-zA-Z0-9\u4e00-\u9fa5][a-zA-Z0-9_\u4e00-\u9fa5]+$"
+
 	// 正则模式-浮点数
 	PATTERN_FLOAT = `^(-?\d+)(\.\d+)?`
 
@@ -257,6 +260,7 @@ var (
 	RegFormatDir             = regexp.MustCompile(`[\/]{2,}`) //连续的"//"或"\\"或"\/"或"/\"
 	RegChineseAll            = regexp.MustCompile(PATTERN_CHINESE_ALL)
 	RegChineseName           = regexp.MustCompile(PATTERN_CHINESE_NAME)
+	RegWord                  = regexp.MustCompile(PATTERN_WORD)
 	RegMultiByte             = regexp.MustCompile(PATTERN_MULTIBYTE)
 	RegFullWidth             = regexp.MustCompile(PATTERN_FULLWIDTH)
 	RegHalfWidth             = regexp.MustCompile(PATTERN_HALFWIDTH)
