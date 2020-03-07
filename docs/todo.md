@@ -49,7 +49,7 @@
 - https://github.com/m3ng9i/go-utils -x
 - https://github.com/torden/go-strutil  -x
 - https://golang.hotexamples.com/examples/unicode/-/IsControl/golang-iscontrol-function-examples.html -x
-- https://github.com/idoall/TokenExchangeCommon/blob/master/commonutils/utils.go
+- https://github.com/idoall/TokenExchangeCommon/blob/master/commonutils/utils.go -x
 - https://github.com/afanti-com/utils-go -x
 - https://github.com/solo-io/go-utils -x
 - https://github.com/txthinking/x -x
@@ -66,8 +66,6 @@
 - https://github.com/q191201771/naza -x
 - https://github.com/kirinlabs/utils -x
 - https://github.com/xinliangnote/go-util -x
-- https://github.com/facebookarchive/pidfile/blob/master/pidfile.go
-- https://github.com/struCoder/pidusage/blob/master/pidusage.go
 - https://github.com/docker/go-units -x
 - https://github.com/alecthomas/units -x
 - https://github.com/prashantv/gostub -x
@@ -183,6 +181,8 @@ https://dev.to/williamhgough/how-to-test-tcpudp-connections-in-go---part-1-3bga
 pid
 https://github.com/bitnami/gonit/blob/master/utils/process.go
 https://github.com/henrylee2cn/goutil/blob/master/pid_file.go
+https://github.com/facebookarchive/pidfile/blob/master/pidfile.go
+https://github.com/struCoder/pidusage/blob/master/pidusage.go
 
 ping
 https://github.com/bocajim/helpers/blob/master/ping.go

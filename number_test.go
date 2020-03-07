@@ -181,13 +181,20 @@ func BenchmarkRandFloat64(b *testing.B) {
 }
 
 func TestRound(t *testing.T) {
-	num1 := 0.3
-	num2 := 0.6
-	res1 := KNum.Round(num1)
-	res2 := KNum.Round(num2)
-	if int(res1) != 0 || int(res2) != 1 {
-		t.Error("Round fail")
-		return
+	var tests = []struct {
+		num      float64
+		expected int
+	}{
+		{0.3, 0},
+		{0.6, 1},
+		{-2.4, -2},
+		{-3.6, -4},
+	}
+	for _, test := range tests {
+		actual := KNum.Round(test.num)
+		if int(actual) != test.expected {
+			t.Errorf("Expected KNum.Round(%f) , got %v", test.num, actual)
+		}
 	}
 }
 
@@ -196,6 +203,34 @@ func BenchmarkRound(b *testing.B) {
 	num := -123.456
 	for i := 0; i < b.N; i++ {
 		KNum.Round(num)
+	}
+}
+
+func TestRoundPlus(t *testing.T) {
+	var tests = []struct {
+		num      float64
+		pre      int8
+		expected float64
+	}{
+		{0.334, 2, 0.33},
+		{0.6467, 2, 0.65},
+		{7.258, 2, 7.26},
+		{-2.42439, 3, -2.424},
+		{-3.611504, 3, -3.612},
+	}
+	for _, test := range tests {
+		actual := KNum.RoundPlus(test.num, test.pre)
+		if !KNum.FloatEqual(actual, test.expected, 2) {
+			t.Errorf("Expected KNum.RoundPlus(%f, %d) , got %v, not %v", test.num, test.pre, actual, test.expected)
+		}
+	}
+}
+
+func BenchmarkRoundPlus(b *testing.B) {
+	b.ResetTimer()
+	num := -123.456
+	for i := 0; i < b.N; i++ {
+		KNum.RoundPlus(num, 2)
 	}
 }
 
