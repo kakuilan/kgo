@@ -1762,3 +1762,36 @@ func BenchmarkEndsWith(b *testing.B) {
 		KStr.EndsWith(str, "hello你好", false)
 	}
 }
+
+func TestIsWord(t *testing.T) {
+	var tests = []struct {
+		str      string
+		expected bool
+	}{
+		{"", false},
+		{"_Football", false},
+		{"-Football", false},
+		{" 3.124", false},
+		{"hello world.你好，世界！", false},
+		{"世界", true},
+		{"hello", true},
+		{"作品T", true},
+		{"8point", true},
+		{"hello_Kitty2", true},
+		{"hello-Kitty2", false},
+	}
+	for _, test := range tests {
+		actual := KStr.IsWord(test.str)
+		if actual != test.expected {
+			t.Errorf("Expected KStr.IsWord(%q) , got %v", test.str, actual)
+		}
+	}
+}
+
+func BenchmarkIsWord(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world,你好，世界.hello world!"
+	for i := 0; i < b.N; i++ {
+		KStr.IsWord(str)
+	}
+}
