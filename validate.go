@@ -318,7 +318,7 @@ func (ks *LkkString) IsCreditNo(str string) (bool, string) {
 	// 检查生日
 	birthday := str[6:10] + "-" + str[10:12] + "-" + str[12:14]
 	chk, tim := KTime.IsDate2time(birthday)
-	now := KTime.Time()
+	now := KTime.UnixTime()
 	if !chk {
 		return false, ""
 	} else if tim >= now {

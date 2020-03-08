@@ -48,7 +48,7 @@ var datePatterns = []string{
 }
 
 // Time 获取当前Unix时间戳(秒).
-func (kt *LkkTime) Time() int64 {
+func (kt *LkkTime) UnixTime() int64 {
 	return time.Now().Unix()
 }
 

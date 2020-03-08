@@ -7,7 +7,7 @@ import (
 )
 
 func TestTime(t *testing.T) {
-	ti := fmt.Sprintf("%d", KTime.Time())
+	ti := fmt.Sprintf("%d", KTime.UnixTime())
 	if len(ti) != 10 {
 		t.Error("Time fail")
 		return
@@ -17,7 +17,7 @@ func TestTime(t *testing.T) {
 func BenchmarkTime(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KTime.Time()
+		KTime.UnixTime()
 	}
 }
 
@@ -122,9 +122,9 @@ func BenchmarkCheckDate(b *testing.B) {
 }
 
 func TestSleep(t *testing.T) {
-	ti1 := KTime.Time()
+	ti1 := KTime.UnixTime()
 	KTime.Sleep(1)
-	ti2 := KTime.Time()
+	ti2 := KTime.UnixTime()
 	diff := ti2 - ti1
 	if diff != 1 {
 		t.Error("Sleep fail")
