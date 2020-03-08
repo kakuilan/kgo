@@ -50,6 +50,96 @@ func BenchmarkInArray(b *testing.B) {
 	}
 }
 
+func TestInIntSlice(t *testing.T) {
+	tests := []struct {
+		list     []int
+		find     int
+		expected bool
+	}{
+		{[]int{42}, 42, true},
+		{[]int{42}, 4, false},
+		{[]int{42, 666, 324523}, 666, true},
+		{[]int{42, 796, 141259}, 0, false},
+		{[]int{}, 0, false},
+	}
+
+	for _, test := range tests {
+		actual := KArr.InIntSlice(test.find, test.list)
+		if actual != test.expected {
+			t.Errorf("Expected InIntSlice(%d, %v) to be %v, got %v", test.find, test.list, test.expected, actual)
+			return
+		}
+	}
+}
+
+func BenchmarkInIntSlice(b *testing.B) {
+	b.ResetTimer()
+	arr := []int{-3, 9, -5, 0, 5, -3, 0, 7}
+	for i := 0; i < b.N; i++ {
+		KArr.InIntSlice(7, arr)
+	}
+}
+
+func TestInInt64Slice(t *testing.T) {
+	tests := []struct {
+		list     []int64
+		find     int64
+		expected bool
+	}{
+		{[]int64{42}, 42, true},
+		{[]int64{42}, 4, false},
+		{[]int64{42, 666, 324523}, 666, true},
+		{[]int64{42, 796, 141259}, 0, false},
+		{[]int64{}, 0, false},
+	}
+
+	for _, test := range tests {
+		actual := KArr.InInt64Slice(test.find, test.list)
+		if actual != test.expected {
+			t.Errorf("Expected InInt64Slice(%d, %v) to be %v, got %v", test.find, test.list, test.expected, actual)
+			return
+		}
+	}
+}
+
+func BenchmarkInInt64Slice(b *testing.B) {
+	b.ResetTimer()
+	arr := []int64{-3, 9, -5, 0, 5, -3, 0, 7}
+	for i := 0; i < b.N; i++ {
+		KArr.InInt64Slice(7, arr)
+	}
+}
+
+func TestInStringSlice(t *testing.T) {
+	tests := []struct {
+		list     []string
+		find     string
+		expected bool
+	}{
+		{[]string{}, "", false},
+		{[]string{""}, "", true},
+		{[]string{"aa"}, "bb", false},
+		{[]string{"aa", "bb", "cc", "hello"}, "ee", false},
+		{[]string{"aa", "bb", "cc", "hello"}, "hello", true},
+	}
+
+	for _, test := range tests {
+		actual := KArr.InStringSlice(test.find, test.list)
+		if actual != test.expected {
+			t.Errorf("Expected InStringSlice(%s, %v) to be %v, got %v", test.find, test.list, test.expected, actual)
+			return
+		}
+	}
+}
+
+func BenchmarkInStringSlice(b *testing.B) {
+	b.ResetTimer()
+	arr := []string{"aa", "bb", "cc", "hello"}
+	for i := 0; i < b.N; i++ {
+		KArr.InStringSlice("hello", arr)
+	}
+}
+
 func TestArrayFill(t *testing.T) {
 	num := 4
 	res := KArr.ArrayFill("abc", num)
