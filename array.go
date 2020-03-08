@@ -35,6 +35,36 @@ func (ka *LkkArray) InArray(needle interface{}, haystack interface{}) bool {
 	return false
 }
 
+// InIntSlice 是否在整型数组/切片内.
+func (ka *LkkArray) InIntSlice(i int, list []int) bool {
+	for _, item := range list {
+		if item == i {
+			return true
+		}
+	}
+	return false
+}
+
+// InInt64Slice 是否在64位整型数组/切片内.
+func (ka *LkkArray) InInt64Slice(i int64, list []int64) bool {
+	for _, item := range list {
+		if item == i {
+			return true
+		}
+	}
+	return false
+}
+
+// InStringSlice 是否在字符串数组/切片内.
+func (ka *LkkArray) InStringSlice(str string, list []string) bool {
+	for _, item := range list {
+		if item == str {
+			return true
+		}
+	}
+	return false
+}
+
 // ArrayFill 用给定的值value填充数组,num为插入元素的数量.
 func (ka *LkkArray) ArrayFill(value interface{}, num int) []interface{} {
 	if num <= 0 {
