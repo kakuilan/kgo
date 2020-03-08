@@ -287,3 +287,20 @@ func (kt *LkkTime) StartOfYear(date time.Time) time.Time {
 func (kt *LkkTime) EndOfYear(date time.Time) time.Time {
 	return time.Date(date.Year()+1, 0, 0, 0, 0, 0, 0, date.Location())
 }
+
+// StartOfWeek 获取日期中当周的开始时间;
+// weekStartDay 周几作为周的第一天.
+func (kt *LkkTime) StartOfWeek(date time.Time, weekStartDay ...int) time.Time {
+	return time.Now()
+}
+
+// EndOfWeek 获取日期中当周的结束时间;
+// weekStartDay 周几作为周的第一天.
+func (kt *LkkTime) EndOfWeek(date time.Time, weekStartDay ...int) time.Time {
+	return time.Now()
+}
+
+// DaysBetween 获取两个日期的间隔天数.
+func (kt *LkkTime) DaysBetween(fromDate, toDate time.Time) int {
+	return int(toDate.Sub(fromDate) / (24 * time.Hour))
+}
