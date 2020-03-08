@@ -257,3 +257,33 @@ func (kt *LkkTime) Second(t ...time.Time) int {
 	}
 	return tm.Second()
 }
+
+// StartOfDay 获取日期中当天的开始时间.
+func (kt *LkkTime) StartOfDay(date time.Time) time.Time {
+	return time.Date(date.Year(), date.Month(), date.Day(), 0, 0, 0, 0, date.Location())
+}
+
+// EndOfDay 获取日期中当天的结束时间.
+func (kt *LkkTime) EndOfDay(date time.Time) time.Time {
+	return time.Date(date.Year(), date.Month(), date.Day(), 23, 59, 59, int(time.Second-time.Nanosecond), date.Location())
+}
+
+// StartOfMonth 获取日期中当月的开始时间.
+func (kt *LkkTime) StartOfMonth(date time.Time) time.Time {
+	return time.Date(date.Year(), date.Month(), 1, 0, 0, 0, 0, date.Location())
+}
+
+// EndOfMonth 获取日期中当月的结束时间.
+func (kt *LkkTime) EndOfMonth(date time.Time) time.Time {
+	return time.Date(date.Year(), date.Month()+1, 0, 0, 0, 0, 0, date.Location())
+}
+
+// StartOfYear 获取日期中当年的开始时间.
+func (kt *LkkTime) StartOfYear(date time.Time) time.Time {
+	return time.Date(date.Year(), 1, 1, 0, 0, 0, 0, date.Location())
+}
+
+// EndOfYear 获取日期中当年的结束时间.
+func (kt *LkkTime) EndOfYear(date time.Time) time.Time {
+	return time.Date(date.Year()+1, 0, 0, 0, 0, 0, 0, date.Location())
+}
