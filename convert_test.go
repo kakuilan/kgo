@@ -9,7 +9,7 @@ import (
 )
 
 func TestInt2Str(t *testing.T) {
-	tim := KConv.Int2Str(KTime.Time())
+	tim := KConv.Int2Str(KTime.UnixTime())
 	if fmt.Sprint(reflect.TypeOf(tim)) != "string" {
 		t.Error("Int2Str fail")
 		return
@@ -25,7 +25,7 @@ func TestInt2Str(t *testing.T) {
 
 func BenchmarkInt2Str(b *testing.B) {
 	b.ResetTimer()
-	tim := KTime.Time()
+	tim := KTime.UnixTime()
 	for i := 0; i < b.N; i++ {
 		KConv.Int2Str(tim)
 	}
