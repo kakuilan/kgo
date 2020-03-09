@@ -275,7 +275,7 @@ func (kt *LkkTime) StartOfMonth(date time.Time) time.Time {
 
 // EndOfMonth 获取日期中当月的结束时间.
 func (kt *LkkTime) EndOfMonth(date time.Time) time.Time {
-	return time.Date(date.Year(), date.Month()+1, 0, 0, 0, 0, 0, date.Location())
+	return kt.StartOfMonth(date).AddDate(0, 1, 0).Add(-time.Nanosecond)
 }
 
 // StartOfYear 获取日期中当年的开始时间.
@@ -285,19 +285,36 @@ func (kt *LkkTime) StartOfYear(date time.Time) time.Time {
 
 // EndOfYear 获取日期中当年的结束时间.
 func (kt *LkkTime) EndOfYear(date time.Time) time.Time {
-	return time.Date(date.Year()+1, 0, 0, 0, 0, 0, 0, date.Location())
+	return kt.StartOfYear(date).AddDate(1, 0, 0).Add(-time.Nanosecond)
 }
 
 // StartOfWeek 获取日期中当周的开始时间;
-// weekStartDay 周几作为周的第一天.
-func (kt *LkkTime) StartOfWeek(date time.Time, weekStartDay ...int) time.Time {
-	return time.Now()
+// weekStartDay 周几作为周的第一天,本库默认周一.
+func (kt *LkkTime) StartOfWeek(date time.Time, weekStartDay ...time.Weekday) time.Time {
+	weekstart := time.Monday
+	if len(weekStartDay) > 0 {
+		weekstart = weekStartDay[0]
+	}
+
+	// 当前是周几
+	weekday := int(date.Weekday())
+	if weekstart != time.Sunday {
+		weekStartDayInt := int(weekstart)
+
+		if weekday < weekStartDayInt {
+			weekday = weekday + 7 - weekStartDayInt
+		} else {
+			weekday = weekday - weekStartDayInt
+		}
+	}
+
+	return time.Date(date.Year(), date.Month(), date.Day()-weekday, 0, 0, 0, 0, date.Location())
 }
 
 // EndOfWeek 获取日期中当周的结束时间;
-// weekStartDay 周几作为周的第一天.
-func (kt *LkkTime) EndOfWeek(date time.Time, weekStartDay ...int) time.Time {
-	return time.Now()
+// weekStartDay 周几作为周的第一天,本库默认周一.
+func (kt *LkkTime) EndOfWeek(date time.Time, weekStartDay ...time.Weekday) time.Time {
+	return kt.StartOfWeek(date, weekStartDay...).AddDate(0, 0, 7).Add(-time.Nanosecond)
 }
 
 // DaysBetween 获取两个日期的间隔天数.

@@ -6,15 +6,17 @@ import (
 	"time"
 )
 
-func TestTime(t *testing.T) {
+var myDate, _ = KTime.Str2Timestruct("2020-03-10 23:04:35")
+
+func TestUnixTime(t *testing.T) {
 	ti := fmt.Sprintf("%d", KTime.UnixTime())
 	if len(ti) != 10 {
-		t.Error("Time fail")
+		t.Error("UnixTime fail")
 		return
 	}
 }
 
-func BenchmarkTime(b *testing.B) {
+func BenchmarkUnixTime(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KTime.UnixTime()
@@ -281,5 +283,150 @@ func BenchmarkSecond(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KTime.Second()
+	}
+}
+
+func TestStartOfDay(t *testing.T) {
+	res := KTime.StartOfDay(myDate)
+	str := KTime.Date("Y-m-d H:i:s", res)
+	if str != "2020-03-10 00:00:00" {
+		t.Error("StartOfDay fail")
+		return
+	}
+}
+
+func BenchmarkStartOfDay(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.StartOfDay(myDate)
+	}
+}
+
+func TestEndOfDay(t *testing.T) {
+	res := KTime.EndOfDay(myDate)
+	str := KTime.Date("Y-m-d H:i:s", res)
+	if str != "2020-03-10 23:59:59" {
+		t.Error("EndOfDay fail")
+		return
+	}
+}
+
+func BenchmarkEndOfDay(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.EndOfDay(myDate)
+	}
+}
+
+func TestStartOfMonth(t *testing.T) {
+	res := KTime.StartOfMonth(myDate)
+	str := KTime.Date("Y-m-d H:i:s", res)
+	if str != "2020-03-01 00:00:00" {
+		t.Error("StartOfMonth fail")
+		return
+	}
+}
+
+func BenchmarkStartOfMonth(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.StartOfMonth(myDate)
+	}
+}
+
+func TestEndOfMonth(t *testing.T) {
+	res := KTime.EndOfMonth(myDate)
+	str := KTime.Date("Y-m-d H:i:s", res)
+	if str != "2020-03-31 23:59:59" {
+		t.Error("EndOfMonth fail")
+		return
+	}
+}
+
+func BenchmarkEndOfMonth(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.EndOfMonth(myDate)
+	}
+}
+
+func TestStartOfYear(t *testing.T) {
+	res := KTime.StartOfYear(myDate)
+	str := KTime.Date("Y-m-d H:i:s", res)
+	if str != "2020-01-01 00:00:00" {
+		t.Error("StartOfYear fail")
+		return
+	}
+}
+
+func BenchmarkStartOfYear(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.StartOfYear(myDate)
+	}
+}
+
+func TestEndOfYear(t *testing.T) {
+	res := KTime.EndOfYear(myDate)
+	str := KTime.Date("Y-m-d H:i:s", res)
+	if str != "2020-12-31 23:59:59" {
+		t.Error("EndOfYear fail")
+		return
+	}
+}
+
+func BenchmarkEndOfYear(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.EndOfYear(myDate)
+	}
+}
+
+func TestStartOfWeek(t *testing.T) {
+	res := KTime.StartOfWeek(myDate)
+	str := KTime.Date("Y-m-d H:i:s", res)
+	if str != "2020-03-09 00:00:00" {
+		t.Error("StartOfWeek fail")
+		return
+	}
+}
+
+func BenchmarkStartOfWeek(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.StartOfWeek(myDate)
+	}
+}
+
+func TestEndOfWeek(t *testing.T) {
+	res := KTime.EndOfWeek(myDate)
+	str := KTime.Date("Y-m-d H:i:s", res)
+	if str != "2020-03-15 23:59:59" {
+		t.Error("EndOfWeek fail")
+		return
+	}
+}
+
+func BenchmarkEndOfWeek(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.EndOfWeek(myDate)
+	}
+}
+
+func TestDaysBetween(t *testing.T) {
+	toDate, _ := KTime.Str2Timestruct("2020-06-25 23:59:59")
+	days := KTime.DaysBetween(myDate, toDate)
+	if days != 107 {
+		t.Error("DaysBetween fail")
+		return
+	}
+}
+
+func BenchmarkDaysBetween(b *testing.B) {
+	b.ResetTimer()
+	toDate, _ := KTime.Str2Timestruct("2020-06-25 23:59:59")
+	for i := 0; i < b.N; i++ {
+		KTime.DaysBetween(myDate, toDate)
 	}
 }
