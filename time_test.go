@@ -389,6 +389,14 @@ func TestStartOfWeek(t *testing.T) {
 		t.Error("StartOfWeek fail")
 		return
 	}
+
+	d, _ := KTime.Str2Timestruct("2020-03-08 23:04:35")
+	res = KTime.StartOfWeek(d, time.Tuesday)
+	str = KTime.Date("Y-m-d H:i:s", res)
+	if str != "2020-03-03 00:00:00" {
+		t.Error("StartOfWeek fail")
+		return
+	}
 }
 
 func BenchmarkStartOfWeek(b *testing.B) {
@@ -403,6 +411,14 @@ func TestEndOfWeek(t *testing.T) {
 	str := KTime.Date("Y-m-d H:i:s", res)
 	if str != "2020-03-15 23:59:59" {
 		t.Error("EndOfWeek fail")
+		return
+	}
+
+	d, _ := KTime.Str2Timestruct("2020-03-08 23:04:35")
+	res = KTime.EndOfWeek(d, time.Tuesday)
+	str = KTime.Date("Y-m-d H:i:s", res)
+	if str != "2020-03-09 23:59:59" {
+		t.Error("StartOfWeek fail")
 		return
 	}
 }

@@ -133,6 +133,7 @@ https://github.com/jimmykuu/webhelpers/blob/master/text.go
 - pid文件检查
 - 修正各函数的参数名称,尽量统一;弃用类似php不合理的函数名
 - 文件拷贝
+- 增加sync.go
 
 
 encrypt Encrypt/Decrypt
