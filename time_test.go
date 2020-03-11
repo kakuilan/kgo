@@ -186,6 +186,7 @@ func TestGetMonthDays(t *testing.T) {
 		{2, 2009, 28},
 		{2, 2016, 29},
 		{2, 1900, 28},
+		{4, 2020, 30},
 		{2, 1600, 29},
 	}
 	for _, test := range tests {
