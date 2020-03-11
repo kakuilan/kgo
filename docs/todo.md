@@ -74,8 +74,8 @@
 - https://github.com/chanxuehong/util -x
 - https://github.com/Akagi201/utilgo -x
 - https://github.com/fastly/go-utils -x
-- https://github.com/Teamwork/utils
-- https://github.com/OneOfOne/go-utils
+- https://github.com/Teamwork/utils -x
+- https://github.com/OneOfOne/go-utils -x
 - https://github.com/bitrise-io/go-utils
 - https://github.com/ik5/gostrutils
 - https://github.com/hacdias/fileutils
