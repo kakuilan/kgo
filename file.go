@@ -48,13 +48,20 @@ func (kf *LkkFile) ReadFile(fpath string) ([]byte, error) {
 }
 
 // WriteFile 将内容写入文件.
-func (kf *LkkFile) WriteFile(fpath string, data []byte) error {
+// fpath为文件路径,data为内容,perm为权限.
+func (kf *LkkFile) WriteFile(fpath string, data []byte, perm ...os.FileMode) error {
 	if dir := path.Dir(fpath); dir != "" {
 		if err := os.MkdirAll(dir, os.ModePerm); err != nil {
 			return err
 		}
 	}
-	return ioutil.WriteFile(fpath, data, 0655)
+
+	var p os.FileMode = 0655
+	if len(perm) > 0 {
+		p = perm[0]
+	}
+
+	return ioutil.WriteFile(fpath, data, p)
 }
 
 // GetMime 获取文件mime类型;fast为true时根据后缀快速获取;为false时读取文件头获取.

@@ -51,6 +51,7 @@ func TestWriteFile(t *testing.T) {
 		return
 	}
 	_ = KFile.WriteFile("/root/hello/world", str)
+	_ = KFile.WriteFile("/root/how/are", str, 0777)
 }
 
 func BenchmarkWriteFile(b *testing.B) {
