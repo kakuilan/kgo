@@ -1170,3 +1170,34 @@ func BenchmarkGetFileMode(b *testing.B) {
 		_, _ = KFile.GetFileMode(filepath)
 	}
 }
+
+func TestAppendFile(t *testing.T) {
+	cont := []byte("hello world.")
+	err := KFile.AppendFile("", cont)
+	if err == nil {
+		t.Error("AppendFile fail")
+		return
+	}
+
+	pth := "./testdata/append.txt"
+	err = KFile.AppendFile(pth, cont)
+	if err != nil {
+		t.Error("AppendFile fail")
+		return
+	}
+
+	err = KFile.AppendFile(pth, []byte("how are you?"))
+	if err != nil {
+		t.Error("AppendFile fail")
+		return
+	}
+}
+
+func BenchmarkAppendFile(b *testing.B) {
+	b.ResetTimer()
+	pth := "./testdata/append.txt"
+	cont := []byte("hello world.\r\n")
+	for i := 0; i < b.N; i++ {
+		_ = KFile.AppendFile(pth, cont)
+	}
+}
