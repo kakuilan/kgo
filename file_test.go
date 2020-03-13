@@ -50,8 +50,9 @@ func TestWriteFile(t *testing.T) {
 		t.Error("file get contents error")
 		return
 	}
+	_ = KFile.WriteFile("./testdata/putfile", str, 0777)
 	_ = KFile.WriteFile("/root/hello/world", str)
-	_ = KFile.WriteFile("/root/how/are", str, 0777)
+	_ = KFile.WriteFile("/root/how/are", str)
 }
 
 func BenchmarkWriteFile(b *testing.B) {
@@ -682,7 +683,6 @@ func BenchmarkFileTree(b *testing.B) {
 func TestFormatDir(t *testing.T) {
 	dir := `/usr\bin\\golang//fmt/\test\/hehe`
 	res := KFile.FormatDir(dir)
-	println(res)
 	if strings.Contains(res, `\`) {
 		t.Error("FormatDir fail")
 		return
@@ -884,7 +884,6 @@ func TestTarGzUnTarGz(t *testing.T) {
 	patterns := []string{".*_test.go", ".*.yml", "*_test"}
 	_, err := KFile.TarGz("./", "./targz/test.tar.gz", patterns...)
 	if err != nil {
-		println(err.Error())
 		t.Error("TarGz fail")
 		return
 	}
@@ -892,7 +891,6 @@ func TestTarGzUnTarGz(t *testing.T) {
 	//解压
 	_, err = KFile.UnTarGz("./targz/test.tar.gz", "/tmp/targz/tmp")
 	if err != nil {
-		println(err.Error())
 		t.Error("UnTarGz fail")
 		return
 	}
@@ -1156,7 +1154,6 @@ func TestGetFileMode(t *testing.T) {
 	}
 
 	perm, err = KFile.GetFileMode("/root/hello/world")
-	println(perm)
 	if err == nil || perm != 0 {
 		t.Error("GetFileMode fail")
 		return
@@ -1191,6 +1188,9 @@ func TestAppendFile(t *testing.T) {
 		t.Error("AppendFile fail")
 		return
 	}
+
+	_ = KFile.AppendFile("/root/hello/world", []byte("how are you?"))
+	_ = KFile.AppendFile(pth, []byte(""))
 }
 
 func BenchmarkAppendFile(b *testing.B) {
