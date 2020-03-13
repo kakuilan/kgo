@@ -1121,3 +1121,86 @@ func BenchmarkUniqueStrings(b *testing.B) {
 		KArr.UniqueStrings(arr)
 	}
 }
+
+func TestIsEqualArray(t *testing.T) {
+	s1 := []string{"a", "b"}
+	s2 := []string{"b", "a"}
+	chk1 := KArr.IsEqualArray(s1, s2)
+	if !chk1 {
+		t.Error("IsEqualArray fail")
+		return
+	}
+
+	s3 := [2]int{3, 8}
+	s4 := []int{8, 3}
+	chk2 := KArr.IsEqualArray(s3, s4)
+	if !chk2 {
+		t.Error("IsEqualArray fail")
+		return
+	}
+
+	s5 := []string{"3", "8"}
+	chk3 := KArr.IsEqualArray(s3, s5)
+	if chk3 {
+		t.Error("IsEqualArray fail")
+		return
+	}
+
+	type TestType struct {
+		StrKey   string
+		IntSlice []int
+	}
+	s6 := []TestType{
+		{StrKey: "key1", IntSlice: []int{1, 2}},
+		{StrKey: "key2", IntSlice: []int{3, 4, 5}},
+	}
+	s7 := []TestType{
+		{StrKey: "key2", IntSlice: []int{3, 4, 5}},
+		{StrKey: "key1", IntSlice: []int{1, 2}},
+	}
+	s8 := []TestType{
+		{StrKey: "key2", IntSlice: []int{3, 4, 5}},
+		{StrKey: "key3", IntSlice: []int{6, 7}},
+	}
+	chk4 := KArr.IsEqualArray(s6, s7)
+	if !chk4 {
+		t.Error("IsEqualArray fail")
+		return
+	}
+	chk5 := KArr.IsEqualArray(s7, s8)
+	if chk5 {
+		t.Error("IsEqualArray fail")
+		return
+	}
+}
+
+func TestIsEqualArrayPanicExpected(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	s := []string{"a", "b"}
+	KArr.IsEqualArray("hello", s)
+}
+
+func TestIsEqualArrayPanicActual(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	s := []string{"a", "b"}
+	KArr.IsEqualArray(s, "hello")
+}
+
+func BenchmarkIsEqualArray(b *testing.B) {
+	b.ResetTimer()
+	s1 := []string{"a", "b"}
+	s2 := []string{"b", "a"}
+	for i := 0; i < b.N; i++ {
+		KArr.IsEqualArray(s1, s2)
+	}
+}
