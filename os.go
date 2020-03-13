@@ -328,9 +328,14 @@ func (ko *LkkOS) Setenv(varname, data string) error {
 	return os.Setenv(varname, data)
 }
 
-// Getenv 获取一个环境变量的值.
-func (ko *LkkOS) Getenv(varname string) string {
-	return os.Getenv(varname)
+// Getenv 获取一个环境变量的值.def为默认值.
+func (ko *LkkOS) Getenv(varname string, def ...string) string {
+	val := os.Getenv(varname)
+	if val == "" && len(def) > 0 {
+		val = def[0]
+	}
+
+	return val
 }
 
 // GetEndian 获取系统字节序类型,小端返回binary.LittleEndian,大端返回binary.BigEndian .

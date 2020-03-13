@@ -371,6 +371,13 @@ func BenchmarkDiskUsage(b *testing.B) {
 	}
 }
 
+func BenchmarkSetenv(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = KOS.Setenv("HELLO", "world")
+	}
+}
+
 func TestSetenvGetenv(t *testing.T) {
 	name1 := "HELLO"
 	name2 := "HOME"
@@ -387,12 +394,11 @@ func TestSetenvGetenv(t *testing.T) {
 		t.Error("Getenv fail")
 		return
 	}
-}
 
-func BenchmarkSetenv(b *testing.B) {
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		_ = KOS.Setenv("HELLO", "world")
+	val3 := KOS.Getenv("admusr", "zhang3")
+	if val3 != "zhang3" {
+		t.Error("Getenv fail")
+		return
 	}
 }
 
