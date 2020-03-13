@@ -64,6 +64,37 @@ func (kf *LkkFile) WriteFile(fpath string, data []byte, perm ...os.FileMode) err
 	return ioutil.WriteFile(fpath, data, p)
 }
 
+// AppendFile 插入文件内容.
+func (kf *LkkFile) AppendFile(fpath string, data []byte) error {
+	if fpath == "" {
+		return errors.New("No path provided")
+	}
+
+	var file *os.File
+	filePerm, err := kf.GetFileMode(fpath)
+	if err != nil {
+		// create the file
+		file, err = os.Create(fpath)
+	} else {
+		// open for append
+		file, err = os.OpenFile(fpath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, filePerm)
+	}
+	if err != nil {
+		// failed to create or open-for-append the file
+		return err
+	}
+
+	defer func() {
+		_ = file.Close()
+	}()
+
+	if _, err := file.Write(data); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // GetFileMode 获取路径的权限模式.
 func (kf *LkkFile) GetFileMode(fpath string) (os.FileMode, error) {
 	finfo, err := os.Lstat(fpath)
@@ -253,7 +284,9 @@ func (kf *LkkFile) Touch(fpath string, size int64) bool {
 	if err != nil {
 		return false
 	}
-	defer fd.Close()
+	defer func() {
+		_ = fd.Close()
+	}()
 
 	if size > 1 {
 		_, _ = fd.Seek(size-1, 0)
@@ -297,7 +330,9 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 	}
 
 	sourceFile, _ := os.Open(source)
-	defer sourceFile.Close()
+	defer func() {
+		_ = sourceFile.Close()
+	}()
 
 	//创建目录
 	destDir := filepath.Dir(dest)
@@ -311,7 +346,9 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 	if err != nil {
 		return 0, err
 	}
-	defer destFile.Close()
+	defer func() {
+		_ = destFile.Close()
+	}()
 
 	var nBytes int64
 	sourceSize := sourceStat.Size()
@@ -354,7 +391,9 @@ func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
 	if err != nil {
 		return 0, err
 	}
-	defer sourceFile.Close()
+	defer func() {
+		_ = sourceFile.Close()
+	}()
 
 	//创建目录
 	destDir := filepath.Dir(dest)
@@ -368,7 +407,9 @@ func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
 	if err != nil {
 		return 0, err
 	}
-	defer destFile.Close()
+	defer func() {
+		_ = destFile.Close()
+	}()
 
 	var bufferSize int = 32768
 	var nBytes int
@@ -436,7 +477,9 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 	}
 
 	directory, _ := os.Open(source)
-	defer directory.Close()
+	defer func() {
+		_ = directory.Close()
+	}()
 
 	objects, err := directory.Readdir(-1)
 	if err != nil {
@@ -586,7 +629,9 @@ func (kf *LkkFile) Md5(fpath string, length uint8) (string, error) {
 	if err != nil {
 		return res, err
 	}
-	defer f.Close()
+	defer func() {
+		_ = f.Close()
+	}()
 
 	hash := md5.New()
 	if _, err := io.Copy(hash, f); err != nil {
@@ -714,15 +759,20 @@ func (kf *LkkFile) TarGz(src string, dstTar string, ignorePatterns ...string) (b
 	if err != nil {
 		return false, err
 	}
-	defer fw.Close()
-
+	defer func() {
+		_ = fw.Close()
+	}()
 	// gzip write
 	gw := gzip.NewWriter(fw)
-	defer gw.Close()
+	defer func() {
+		_ = gw.Close()
+	}()
 
 	// tar write
 	tw := tar.NewWriter(gw)
-	defer tw.Close()
+	defer func() {
+		_ = tw.Close()
+	}()
 
 	parentDir := filepath.Dir(src)
 	for _, file := range files {
@@ -760,7 +810,9 @@ func (kf *LkkFile) TarGz(src string, dstTar string, ignorePatterns ...string) (b
 			if err != nil {
 				return false, fmt.Errorf("OpenErr: %s file:%s\n", err.Error(), file)
 			}
-			defer fr.Close()
+			defer func() {
+				_ = fr.Close()
+			}()
 
 			hdr.Name = newName
 			hdr.Size = fi.Size()
@@ -791,7 +843,9 @@ func (kf *LkkFile) UnTarGz(srcTar, dstDir string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	defer fr.Close()
+	defer func() {
+		_ = fr.Close()
+	}()
 
 	dstDir = strings.TrimRight(kf.AbsPath(dstDir), "/\\")
 	if !kf.IsExist(dstDir) {
@@ -890,7 +944,9 @@ func (kf *LkkFile) CountLines(fpath string, buffLength int) (int, error) {
 	if err != nil {
 		return -1, err
 	}
-	defer file.Close()
+	defer func() {
+		_ = file.Close()
+	}()
 
 	count := 0
 	lineSep := []byte{'\n'}
@@ -926,7 +982,9 @@ func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	defer fzip.Close()
+	defer func() {
+		_ = fzip.Close()
+	}()
 
 	if len(fpaths) == 0 {
 		return false, errors.New("No input files.")
@@ -951,7 +1009,9 @@ func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
 	}
 
 	zipw := zip.NewWriter(fzip)
-	defer zipw.Close()
+	defer func() {
+		_ = zipw.Close()
+	}()
 
 	keys := make(map[string]bool)
 	for _, fpath = range allfiles {
@@ -963,7 +1023,9 @@ func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
 		if err != nil {
 			return false, fmt.Errorf("Failed to open %s: %s", fpath, err)
 		}
-		defer fileToZip.Close()
+		defer func() {
+			_ = fileToZip.Close()
+		}()
 
 		wr, _ := zipw.Create(fpath)
 		keys[fpath] = true
@@ -981,7 +1043,9 @@ func (kf *LkkFile) UnZip(srcZip, dstDir string) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	defer reader.Close()
+	defer func() {
+		_ = reader.Close()
+	}()
 
 	dstDir = strings.TrimRight(kf.AbsPath(dstDir), "/\\")
 	if !kf.IsExist(dstDir) {
@@ -1006,11 +1070,11 @@ func (kf *LkkFile) UnZip(srcZip, dstDir string) (bool, error) {
 		if !f.FileInfo().IsDir() {
 			if fcreate, err := os.Create(newPath); err == nil {
 				if rc, err := f.Open(); err == nil {
-					io.Copy(fcreate, rc)
-					rc.Close() //不要用defer来关闭，如果文件太多的话，会报too many open files 的错误
-					fcreate.Close()
+					_, _ = io.Copy(fcreate, rc)
+					_ = rc.Close() //不要用defer来关闭，如果文件太多的话，会报too many open files 的错误
+					_ = fcreate.Close()
 				} else {
-					fcreate.Close()
+					_ = fcreate.Close()
 					return false, err
 				}
 			} else {
@@ -1033,7 +1097,9 @@ func (kf *LkkFile) IsZip(fpath string) bool {
 	if err != nil {
 		return false
 	}
-	defer f.Close()
+	defer func() {
+		_ = f.Close()
+	}()
 
 	buf := make([]byte, 4)
 	if n, err := f.Read(buf); err != nil || n < 4 {
