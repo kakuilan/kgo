@@ -64,6 +64,15 @@ func (kf *LkkFile) WriteFile(fpath string, data []byte, perm ...os.FileMode) err
 	return ioutil.WriteFile(fpath, data, p)
 }
 
+// GetFileMode 获取路径的权限模式.
+func (kf *LkkFile) GetFileMode(fpath string) (os.FileMode, error) {
+	finfo, err := os.Lstat(fpath)
+	if err != nil {
+		return 0, err
+	}
+	return finfo.Mode(), nil
+}
+
 // GetMime 获取文件mime类型;fast为true时根据后缀快速获取;为false时读取文件头获取.
 func (kf *LkkFile) GetMime(fpath string, fast bool) string {
 	var res string

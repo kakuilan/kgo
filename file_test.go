@@ -1146,3 +1146,27 @@ func BenchmarkUnzip(b *testing.B) {
 		_, _ = KFile.UnZip(src, dst)
 	}
 }
+
+func TestGetFileMode(t *testing.T) {
+	filepath := "./testdata/dante.txt"
+	perm, err := KFile.GetFileMode(filepath)
+	if err != nil || perm <= 0 {
+		t.Error("GetFileMode fail")
+		return
+	}
+
+	perm, err = KFile.GetFileMode("/root/hello/world")
+	println(perm)
+	if err == nil || perm != 0 {
+		t.Error("GetFileMode fail")
+		return
+	}
+}
+
+func BenchmarkGetFileMode(b *testing.B) {
+	b.ResetTimer()
+	filepath := "./testdata/dante.txt"
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.GetFileMode(filepath)
+	}
+}
