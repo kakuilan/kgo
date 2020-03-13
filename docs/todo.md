@@ -76,9 +76,9 @@
 - https://github.com/fastly/go-utils -x
 - https://github.com/Teamwork/utils -x
 - https://github.com/OneOfOne/go-utils -x
-- https://github.com/bitrise-io/go-utils
-- https://github.com/ik5/gostrutils
-- https://github.com/hacdias/fileutils
+- https://github.com/bitrise-io/go-utils -x
+- https://github.com/ik5/gostrutils -x
+- https://github.com/hacdias/fileutils -x
 - https://github.com/gookit/goutil
 - https://github.com/henrylee2cn/utils
 - https://github.com/billmi/go-utils
