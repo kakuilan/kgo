@@ -33,6 +33,7 @@ func TestReadFile(t *testing.T) {
 		t.Error("file get contents error")
 		return
 	}
+	_, _ = KFile.ReadFile("")
 }
 
 func BenchmarkReadFile(b *testing.B) {

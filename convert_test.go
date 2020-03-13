@@ -937,3 +937,258 @@ func BenchmarkRunes2Bytes(b *testing.B) {
 		KConv.Runes2Bytes(rs)
 	}
 }
+
+func TestStringIsBinary(t *testing.T) {
+	cont, _ := KFile.ReadFile("./file.go")
+	if KConv.IsBinary(string(cont)) {
+		t.Error("str isn`t binary")
+		return
+	}
+}
+
+func BenchmarkStringIsBinary(b *testing.B) {
+	b.ResetTimer()
+	str := "hello"
+	for i := 0; i < b.N; i++ {
+		KConv.IsBinary(str)
+	}
+}
+
+func TestIsNumeric(t *testing.T) {
+	res1 := KConv.IsNumeric(123)
+	res2 := KConv.IsNumeric("123.456")
+	res3 := KConv.IsNumeric("-0.56")
+	res4 := KConv.IsNumeric(45.678)
+	if !res1 || !res2 || !res3 || !res4 {
+		t.Error("IsNumeric fail")
+		return
+	}
+
+	var sli []int
+	KConv.IsNumeric("")
+	KConv.IsNumeric(sli)
+}
+
+func BenchmarkIsNumeric(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsNumeric("123.456")
+	}
+}
+
+func TestIsInt(t *testing.T) {
+	res1 := KConv.IsInt(123)
+	res2 := KConv.IsInt("123")
+	res3 := KConv.IsInt("-45")
+	if !res1 || !res2 || !res3 {
+		t.Error("IsInt fail")
+		return
+	}
+	var sli []int
+	KConv.IsInt("")
+	KConv.IsInt(sli)
+}
+
+func BenchmarkIsInt(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsInt("123")
+	}
+}
+
+func TestIsFloat(t *testing.T) {
+	res1 := KConv.IsFloat(123.0)
+	res2 := KConv.IsFloat("123.4")
+	res3 := KConv.IsFloat("-45.6")
+	if !res1 || !res2 || !res3 {
+		t.Error("IsFloat IsFloat")
+		return
+	}
+
+	var sli []int
+	KConv.IsFloat("")
+	KConv.IsFloat(sli)
+}
+
+func BenchmarkIsFloat(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsFloat("123.45")
+	}
+}
+
+func TestConvertIsEmpty(t *testing.T) {
+	var sli []int
+	mp := make(map[string]int)
+	var i uint = 0
+	var val1 interface{} = &sli
+
+	type myStru struct {
+		conv LkkFileCover
+		name string
+	}
+	var val2 myStru
+
+	res1 := KConv.IsEmpty(nil)
+	res2 := KConv.IsEmpty("")
+	res3 := KConv.IsEmpty(sli)
+	res4 := KConv.IsEmpty(mp)
+	res5 := KConv.IsEmpty(false)
+	res6 := KConv.IsEmpty(0)
+	res7 := KConv.IsEmpty(i)
+	res8 := KConv.IsEmpty(0.0)
+	res9 := KConv.IsEmpty(val1)
+	res10 := KConv.IsEmpty(val2)
+
+	if !res1 || !res2 || !res3 || !res4 || !res5 || !res6 || !res7 || !res8 || res9 || !res10 {
+		t.Error("Convert IsEmpty fail")
+		return
+	}
+}
+
+func BenchmarkConvertIsEmpty(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsEmpty("")
+	}
+}
+
+func TestIsNil(t *testing.T) {
+	var s []int
+	chk1 := KConv.IsNil(nil)
+	chk2 := KConv.IsNil(s)
+	chk3 := KConv.IsNil("")
+
+	if !chk1 || !chk2 || chk3 {
+		t.Error("IsSha512 fail")
+		return
+	}
+}
+
+func BenchmarkIsNil(b *testing.B) {
+	b.ResetTimer()
+	var s []int
+	for i := 0; i < b.N; i++ {
+		KConv.IsNil(s)
+	}
+}
+
+func TestIsBool(t *testing.T) {
+	res1 := KConv.IsBool(1)
+	res2 := KConv.IsBool("hello")
+	res3 := KConv.IsBool(false)
+	if res1 || res2 || !res3 {
+		t.Error("IsBool fail")
+		return
+	}
+}
+
+func BenchmarkIsBool(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsBool("hello")
+	}
+}
+
+func TestIsHex(t *testing.T) {
+	num1 := KConv.Dec2Hex(1234)
+	num2 := "0x" + num1
+	res1 := KConv.IsHex(num1)
+	res2 := KConv.IsHex(num2)
+	res3 := KConv.IsHex("hello")
+	res4 := KConv.IsHex("")
+	if !res1 || !res2 || res3 || res4 {
+		t.Error("IsHex fail")
+		return
+	}
+}
+
+func BenchmarkIsHex(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsHex("4d2")
+	}
+}
+
+func TestIsString(t *testing.T) {
+	chk1 := KConv.IsString(123)
+	chk2 := KConv.IsString("hello")
+	if chk1 || !chk2 {
+		t.Error("IsString fail")
+		return
+	}
+}
+
+func BenchmarkIsString(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsString("hello")
+	}
+}
+
+func TestIsByte(t *testing.T) {
+	chk1 := KConv.IsByte("hello")
+	chk2 := KConv.IsByte([]byte("hello"))
+	if chk1 || !chk2 {
+		t.Error("IsByte fail")
+		return
+	}
+}
+
+func BenchmarkIsByte(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsByte([]byte("hello"))
+	}
+}
+
+func TestIsStruct(t *testing.T) {
+	type sutTest struct {
+		test string
+	}
+	sut := sutTest{test: "T"}
+
+	chk1 := KConv.IsStruct("hello")
+	chk2 := KConv.IsStruct(sut)
+	chk3 := KConv.IsStruct(&sut)
+
+	if chk1 || !chk2 || !chk3 {
+		t.Error("IsStruct fail")
+		return
+	}
+}
+
+func BenchmarkIsStruct(b *testing.B) {
+	b.ResetTimer()
+	type sutTest struct {
+		test string
+	}
+	sut := sutTest{test: "T"}
+	for i := 0; i < b.N; i++ {
+		KConv.IsStruct(&sut)
+	}
+}
+
+func TestIsInterface(t *testing.T) {
+	type inTest interface {
+	}
+	var in inTest
+
+	chk1 := KConv.IsInterface("hello")
+	chk2 := KConv.IsInterface(in)
+
+	if chk1 || !chk2 {
+		t.Error("IsInterface fail")
+		return
+	}
+}
+
+func BenchmarkIsInterface(b *testing.B) {
+	b.ResetTimer()
+	type inTest interface {
+	}
+	var in inTest
+	for i := 0; i < b.N; i++ {
+		KConv.IsInterface(in)
+	}
+}

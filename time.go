@@ -321,3 +321,43 @@ func (kt *LkkTime) EndOfWeek(date time.Time, weekStartDay ...time.Weekday) time.
 func (kt *LkkTime) DaysBetween(fromDate, toDate time.Time) int {
 	return int(toDate.Sub(fromDate) / (24 * time.Hour))
 }
+
+// IsDate2time 检查字符串是否日期格式,并转换为时间戳.注意,时间戳可能为负数(小于1970年时).
+// 匹配如:
+//	0000
+//	0000-00
+//	0000/00
+//	0000-00-00
+//	0000/00/00
+//	0000-00-00 00
+//	0000/00/00 00
+//	0000-00-00 00:00
+//	0000/00/00 00:00
+//	0000-00-00 00:00:00
+//	0000/00/00 00:00:00
+// 等日期格式.
+func (kt *LkkTime) IsDate2time(str string) (bool, int64) {
+	if str == "" {
+		return false, 0
+	} else if strings.ContainsRune(str, '/') {
+		str = strings.Replace(str, "/", "-", -1)
+	}
+
+	chk := RegDatetime.MatchString(str)
+	if !chk {
+		return false, 0
+	}
+
+	leng := len(str)
+	if leng < 19 {
+		reference := "1970-01-01 00:00:00"
+		str = str + reference[leng:19]
+	}
+
+	tim, err := KTime.Str2Timestamp(str)
+	if err != nil {
+		return false, 0
+	}
+
+	return true, tim
+}
