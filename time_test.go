@@ -447,3 +447,40 @@ func BenchmarkDaysBetween(b *testing.B) {
 		KTime.DaysBetween(myDate, toDate)
 	}
 }
+
+func TestIsDate2time(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{"hello", false},
+		{"0000", true},
+		{"1970", true},
+		{"1990-01", true},
+		{"1990/01", true},
+		{"1990-01-02", true},
+		{"1990/01/02", true},
+		{"1990-01-02 03", true},
+		{"1990/01/02 03", true},
+		{"1990-01-02 03:14", true},
+		{"1990/01/02 03:14", true},
+		{"1990-01-02 03:14:59", true},
+		{"1990/01/02 03:14:59", true},
+		{"2990-00-00 03:14:59", false},
+	}
+	for _, test := range tests {
+		actual, tim := KTime.IsDate2time(test.param)
+		if actual != test.expected {
+			t.Errorf("Expected IsDate2time(%q) to be %v, got %v %d", test.param, test.expected, actual, tim)
+			return
+		}
+	}
+}
+
+func BenchmarkIsDate2time(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KTime.IsDate2time("1990-01-02 03:14:59")
+	}
+}

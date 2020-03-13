@@ -501,3 +501,103 @@ func (kc *LkkConvert) Runes2Bytes(rs []rune) []byte {
 
 	return bs
 }
+
+// IsString 变量是否字符串.
+func (kc *LkkConvert) IsString(val interface{}) bool {
+	return kc.Gettype(val) == "string"
+}
+
+// IsBinary 字符串是否二进制.
+func (kc *LkkConvert) IsBinary(s string) bool {
+	for _, b := range s {
+		if 0 == b {
+			return true
+		}
+	}
+	return false
+}
+
+// IsNumeric 变量是否数值(不包含复数和科学计数法).
+func (kc *LkkConvert) IsNumeric(val interface{}) bool {
+	return isNumeric(val)
+}
+
+// IsInt 变量是否整型数值.
+func (kc *LkkConvert) IsInt(val interface{}) bool {
+	return isInt(val)
+}
+
+// IsFloat 变量是否浮点数值.
+func (kc *LkkConvert) IsFloat(val interface{}) bool {
+	return isFloat(val)
+}
+
+// IsEmpty 检查变量是否为空.
+func (kc *LkkConvert) IsEmpty(val interface{}) bool {
+	if val == nil {
+		return true
+	}
+	v := reflect.ValueOf(val)
+	switch v.Kind() {
+	case reflect.String, reflect.Array:
+		return v.Len() == 0
+	case reflect.Map, reflect.Slice:
+		return v.Len() == 0 || v.IsNil()
+	case reflect.Bool:
+		return !v.Bool()
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return v.Int() == 0
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		return v.Uint() == 0
+	case reflect.Float32, reflect.Float64:
+		return v.Float() == 0
+	case reflect.Interface, reflect.Ptr:
+		return v.IsNil()
+	}
+
+	return reflect.DeepEqual(val, reflect.Zero(v.Type()).Interface())
+}
+
+// IsNil 检查变量是否空值.
+func (kc *LkkConvert) IsNil(val interface{}) bool {
+	if val == nil {
+		return true
+	}
+
+	rv := reflect.ValueOf(val)
+	switch rv.Kind() {
+	case reflect.Chan, reflect.Func, reflect.Map, reflect.Ptr, reflect.Slice, reflect.Interface:
+		if rv.IsNil() {
+			return true
+		}
+	}
+	return false
+}
+
+// IsBool 是否布尔值.
+func (kc *LkkConvert) IsBool(val interface{}) bool {
+	return val == true || val == false
+}
+
+// IsHex 是否十六进制字符串.
+func (kc *LkkConvert) IsHex(str string) bool {
+	_, err := kc.Hex2Dec(str)
+	return err == nil
+}
+
+// IsByte 变量是否字节切片.
+func (kc *LkkConvert) IsByte(val interface{}) bool {
+	return kc.Gettype(val) == "[]uint8"
+}
+
+// IsStruct 变量是否结构体.
+func (kc *LkkConvert) IsStruct(val interface{}) bool {
+	r := reflectPtr(reflect.ValueOf(val))
+	return r.Kind() == reflect.Struct
+}
+
+// IsInterface 变量是否接口.
+func (kc *LkkConvert) IsInterface(val interface{}) bool {
+	r := reflectPtr(reflect.ValueOf(val))
+	return r.Kind() == reflect.Invalid
+}

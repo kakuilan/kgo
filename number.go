@@ -505,3 +505,8 @@ func (kn *LkkNumber) GeoDistance(lng1, lat1, lng2, lat2 float64) float64 {
 	dist := math.Acos(math.Sin(lat1)*math.Sin(lat2) + math.Cos(lat1)*math.Cos(lat2)*math.Cos(theta))
 	return dist * radius
 }
+
+// IsNan 是否为“非数值”.
+func (kn *LkkNumber) IsNan(val float64) bool {
+	return math.IsNaN(val)
+}
