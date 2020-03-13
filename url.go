@@ -252,3 +252,33 @@ func (ks *LkkString) GetDomain(str string, isMains ...bool) string {
 
 	return domain
 }
+
+// ClearUrlPrefix 清除URL的前缀;
+// str为URL字符串,prefix为前缀,默认"/".
+func (ks *LkkString) ClearUrlPrefix(str string, prefix ...string) string {
+	var p string = "/"
+	if len(prefix) > 0 {
+		p = prefix[0]
+	}
+
+	for p != "" && strings.HasPrefix(str, p) {
+		str = str[len(p):len(str)]
+	}
+
+	return str
+}
+
+// ClearUrlSuffix 清除URL的后缀;
+// str为URL字符串,suffix为后缀,默认"/".
+func (ks *LkkString) ClearUrlSuffix(str string, suffix ...string) string {
+	var s string = "/"
+	if len(suffix) > 0 {
+		s = suffix[0]
+	}
+
+	for s != "" && strings.HasSuffix(str, s) {
+		str = str[0 : len(str)-len(s)]
+	}
+
+	return str
+}

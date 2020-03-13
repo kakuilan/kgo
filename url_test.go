@@ -268,3 +268,57 @@ func BenchmarkGetDomain(b *testing.B) {
 		KStr.GetDomain("https://github.com/abc")
 	}
 }
+
+func TestClearUrlPrefix(t *testing.T) {
+	var tests = []struct {
+		url      string
+		prefix   string
+		expected string
+	}{
+		{"", "", ""},
+		{"https://github.com/abc", "https://", "github.com/abc"},
+		{"////google.com/test?name=hello", "/", "google.com/test?name=hello"},
+	}
+	for _, test := range tests {
+		actual := KStr.ClearUrlPrefix(test.url, test.prefix)
+		if actual != test.expected {
+			t.Errorf("Expected ClearUrlPrefix(%q, %q) to be %v, got %v", test.url, test.prefix, test.expected, actual)
+		}
+	}
+
+	KStr.ClearUrlPrefix("")
+}
+
+func BenchmarkClearUrlPrefix(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.ClearUrlPrefix("//github.com/abc")
+	}
+}
+
+func TestClearUrlSuffix(t *testing.T) {
+	var tests = []struct {
+		url      string
+		prefix   string
+		expected string
+	}{
+		{"", "", ""},
+		{"https://github.com/abc/abc", "/abc", "https://github.com"},
+		{"google.com/test?name=hello////", "/", "google.com/test?name=hello"},
+	}
+	for _, test := range tests {
+		actual := KStr.ClearUrlSuffix(test.url, test.prefix)
+		if actual != test.expected {
+			t.Errorf("Expected ClearUrlSuffix(%q, %q) to be %v, got %v", test.url, test.prefix, test.expected, actual)
+		}
+	}
+
+	KStr.ClearUrlPrefix("")
+}
+
+func BenchmarkClearUrlSuffix(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.ClearUrlSuffix("github.com/abc///")
+	}
+}
