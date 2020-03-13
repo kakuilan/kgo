@@ -681,6 +681,7 @@ func (ks *LkkString) Uniqid(prefix string) string {
 }
 
 // VersionCompare 对比两个版本号字符串.
+// 在第一个版本低于第二个时,version_compare() 返回 -1;如果两者相等,返回 0;第二个版本更低时则返回 1.
 // operator允许的操作符有: <, lt, <=, le, >, gt, >=, ge, ==, =, eq, !=, <>, ne .
 // 特定的版本字符串，将会用以下顺序处理：
 // 未找到的任意字符串 < dev < alpha = a < beta = b < RC = rc < # < pl = p
