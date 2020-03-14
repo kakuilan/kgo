@@ -1861,24 +1861,5 @@ func (ks *LkkString) EndsWith(str, sub string, ignoreCase bool) bool {
 
 // RemoveEmoji 移除字符串中的表情符(使用正则,效率较低).
 func (ks *LkkString) RemoveEmoji(str string) string {
-	runes := []rune(str)
-	swap := make([]rune, len(runes))
-	var hasTree bool
-	for _, r := range runes {
-		leng := len(string(r))
-		if leng >= 4 {
-			continue
-		} else if leng == 3 {
-			hasTree = true
-		}
-
-		swap = append(swap, r)
-	}
-
-	res := string(swap)
-	if hasTree {
-		res = RegEmoji.ReplaceAllString(res, "")
-	}
-
-	return res
+	return RegEmoji.ReplaceAllString(str, "")
 }

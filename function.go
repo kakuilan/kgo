@@ -246,7 +246,7 @@ func arrayValues(arr interface{}, filterNil bool) []interface{} {
 func getTrimMask(characterMask []string) string {
 	var mask string
 	if len(characterMask) == 0 {
-		mask = " \t\n\r\v\f　"
+		mask = " \t\n\r\v\f\x00　"
 	} else {
 		mask = strings.Join(characterMask, "")
 	}
