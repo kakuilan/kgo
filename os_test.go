@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
+	"os"
 	"os/user"
 	"strings"
 	"testing"
@@ -768,7 +769,9 @@ func TestGetPidByPortGetProcessExeByPid(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		defer conn.Close()
+		defer func() {
+			_ = conn.Close()
+		}()
 
 		if _, err := fmt.Fprintf(conn, message); err != nil {
 			t.Fatal(err)
@@ -779,13 +782,18 @@ func TestGetPidByPortGetProcessExeByPid(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer l.Close()
+	defer func() {
+		_ = l.Close()
+	}()
+
 	for {
 		conn, err := l.Accept()
 		if err != nil {
 			return
 		}
-		defer conn.Close()
+		defer func() {
+			_ = conn.Close()
+		}()
 
 		buf, err := ioutil.ReadAll(conn)
 		if err != nil {
@@ -832,5 +840,33 @@ func BenchmarkTriggerGC(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KOS.TriggerGC()
+	}
+}
+
+func TestIsProcessExists(t *testing.T) {
+	pid := os.Getpid()
+	tests := []struct {
+		p        int
+		expected bool
+	}{
+		{0, false},
+		{-123, false},
+		{pid, true},
+	}
+
+	for _, test := range tests {
+		actual := KOS.IsProcessExists(test.p)
+		if actual != test.expected {
+			t.Errorf("Expected IsProcessExists(%d) to be %v, got %v", test.p, test.expected, actual)
+			return
+		}
+	}
+}
+
+func BenchmarkIsProcessExists(b *testing.B) {
+	b.ResetTimer()
+	pid := os.Getpid()
+	for i := 0; i < b.N; i++ {
+		KOS.IsProcessExists(pid)
 	}
 }

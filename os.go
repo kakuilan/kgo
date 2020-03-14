@@ -666,6 +666,18 @@ func (ko *LkkOS) GetProcessExeByPid(pid int) string {
 	return getProcessExeByPid(pid)
 }
 
+// IsProcessExists 进程是否存在.
+func (ko *LkkOS) IsProcessExists(pid int) (res bool) {
+	process, err := os.FindProcess(pid)
+	if err == nil {
+		if err = process.Signal(os.Signal(syscall.Signal(0))); err == nil {
+			res = true
+		}
+	}
+
+	return
+}
+
 // ForceGC 强制手动GC垃圾回收(阻塞).
 func (ko *LkkOS) ForceGC() {
 	runtime.GC()
