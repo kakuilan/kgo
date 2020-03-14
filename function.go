@@ -478,8 +478,8 @@ func getPidByInode(inode string, procDirs []string) (pid int) {
 	return pid
 }
 
-// getProcessExeByPid 根据PID获取进程的执行路径.
-func getProcessExeByPid(pid int) string {
+// getProcessPathByPid 根据PID获取进程的执行路径.
+func getProcessPathByPid(pid int) string {
 	exe := fmt.Sprintf("/proc/%d/exe", pid)
 	path, _ := os.Readlink(exe)
 	return path
