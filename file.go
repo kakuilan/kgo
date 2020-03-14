@@ -183,14 +183,42 @@ func (kf *LkkFile) IsExecutable(fpath string) bool {
 	return err == nil && info.Mode().IsRegular() && (info.Mode()&0111) != 0
 }
 
-// IsFile 是否常规文件(且存在).
-func (kf *LkkFile) IsFile(fpath string) bool {
-	stat, err := os.Stat(fpath)
-	if err != nil {
-		return false
+// IsFile 是否(某类型)文件,且存在.
+// ftype为枚举(FILE_TYPE_ANY、FILE_TYPE_LINK、FILE_TYPE_REGULAR、FILE_TYPE_COMMON),默认FILE_TYPE_ANY;
+func (kf *LkkFile) IsFile(fpath string, ftype ...LkkFileType) (res bool) {
+	var t LkkFileType = FILE_TYPE_ANY
+	if len(ftype) > 0 {
+		t = ftype[0]
 	}
-	//常规文件,不包括链接
-	return stat.Mode().IsRegular()
+
+	var f os.FileInfo
+	var e error
+	var musLink, musRegular bool
+
+	if t == FILE_TYPE_LINK {
+		musLink = true
+	} else if t == FILE_TYPE_REGULAR {
+		musRegular = true
+	} else if t == FILE_TYPE_COMMON {
+		musLink = true
+		musRegular = true
+	}
+
+	if (!musLink && !musRegular) || musRegular {
+		f, e := os.Stat(fpath)
+		if musRegular {
+			res = (e == nil) && f.Mode().IsRegular()
+		} else {
+			res = (e == nil) && !f.IsDir()
+		}
+	}
+
+	if !res && musLink {
+		f, e = os.Lstat(fpath)
+		res = (e == nil) && (f.Mode()&os.ModeSymlink == os.ModeSymlink)
+	}
+
+	return
 }
 
 // IsLink 是否链接文件(且存在).
@@ -564,7 +592,7 @@ func (kf *LkkFile) DelDir(dir string, delRoot bool) error {
 func (kf *LkkFile) FileTree(fpath string, ftype LkkFileTree, recursive bool, filters ...FileFilter) []string {
 	var trees []string
 
-	if kf.IsFile(fpath) || kf.IsLink(fpath) {
+	if kf.IsFile(fpath, FILE_TYPE_ANY) {
 		if ftype != FILE_TREE_DIR {
 			trees = append(trees, fpath)
 		}

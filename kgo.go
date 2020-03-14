@@ -28,8 +28,10 @@ type (
 
 	// LkkFileCover 枚举类型,文件是否覆盖
 	LkkFileCover int8
+	// LkkFileType 枚举类型,文件类型
+	LkkFileType uint8
 	// LkkFileTree 枚举类型,文件树查找类型
-	LkkFileTree int8
+	LkkFileTree uint8
 	// LkkRandString 枚举类型,随机字符串类型
 	LkkRandString uint8
 	// LkkCaseSwitch 枚举类型,大小写开关
@@ -74,6 +76,15 @@ const (
 	FILE_COVER_IGNORE LkkFileCover = 0
 	// FILE_COVER_DENY 文件覆盖,禁止
 	FILE_COVER_DENY LkkFileCover = -1
+
+	// FILE_TYPE_ANY 文件类型-任意
+	FILE_TYPE_ANY LkkFileType = 0
+	// FILE_TYPE_LINK 文件类型-链接文件
+	FILE_TYPE_LINK LkkFileType = 1
+	// FILE_TYPE_REGULAR 文件类型-常规文件(不包括链接)
+	FILE_TYPE_REGULAR LkkFileType = 2
+	// FILE_TYPE_COMMON 文件类型-普通文件(包括常规和链接)
+	FILE_TYPE_COMMON LkkFileType = 3
 
 	// FILE_TREE_ALL 文件树,查找所有(包括目录和文件)
 	FILE_TREE_ALL LkkFileTree = 3

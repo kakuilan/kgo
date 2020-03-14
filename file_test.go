@@ -197,23 +197,6 @@ func BenchmarkIsExecutable(b *testing.B) {
 	}
 }
 
-func TestIsFile(t *testing.T) {
-	filename := "./file.go"
-	if !KFile.IsFile(filename) {
-		t.Error("isn`t a file")
-		return
-	}
-	KFile.IsFile("./hello")
-}
-
-func BenchmarkIsFile(b *testing.B) {
-	b.ResetTimer()
-	filename := "./README.md"
-	for i := 0; i < b.N; i++ {
-		KFile.IsFile(filename)
-	}
-}
-
 func TestIsLink(t *testing.T) {
 	cmd := exec.Command("/bin/bash", "-c", "ln -sf ./testdata/diglett.png ./testdata/diglett-lnk")
 	_ = cmd.Run()
@@ -230,6 +213,41 @@ func BenchmarkIsLink(b *testing.B) {
 	filename := "./testdata/diglett-lnk"
 	for i := 0; i < b.N; i++ {
 		KFile.IsLink(filename)
+	}
+}
+
+func TestIsFile(t *testing.T) {
+	tests := []struct {
+		f        string
+		t        LkkFileType
+		expected bool
+	}{
+		{"", FILE_TYPE_ANY, false},
+		{"./hello.go", FILE_TYPE_ANY, false},
+		{"./file.go", FILE_TYPE_ANY, true},
+		{"./file.go", FILE_TYPE_LINK, false},
+		{"./file.go", FILE_TYPE_REGULAR, true},
+		{"./file.go", FILE_TYPE_COMMON, true},
+		{"./testdata/diglett-lnk", FILE_TYPE_LINK, true},
+		{"./", FILE_TYPE_ANY, false},
+	}
+
+	for _, test := range tests {
+		actual := KFile.IsFile(test.f, test.t)
+		if actual != test.expected {
+			t.Errorf("Expected InIntSlice(%q, %q) to be %v, got %v", test.f, test.t, test.expected, actual)
+			return
+		}
+	}
+
+	KFile.IsFile("./hello")
+}
+
+func BenchmarkIsFile(b *testing.B) {
+	b.ResetTimer()
+	filename := "./README.md"
+	for i := 0; i < b.N; i++ {
+		KFile.IsFile(filename)
 	}
 }
 
