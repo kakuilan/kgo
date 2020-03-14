@@ -255,7 +255,7 @@ func TestGetDomain(t *testing.T) {
 	for _, test := range tests {
 		actual := KStr.GetDomain(test.param, test.isMain)
 		if actual != test.expected {
-			t.Errorf("Expected GetDomain(%q) to be %v, got %v", test.param, test.expected, actual)
+			t.Errorf("Expected GetDomain(%q, %v) to be %v, got %v", test.param, test.isMain, test.expected, actual)
 		}
 	}
 

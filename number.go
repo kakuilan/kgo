@@ -489,6 +489,18 @@ func (kn *LkkNumber) Average(nums ...interface{}) (res float64) {
 	return
 }
 
+// Percent 返回百分比(val/total).
+func (kn *LkkNumber) Percent(val, total interface{}) float64 {
+	t := KConv.ToFloat(total)
+	if t == 0 {
+		return float64(0)
+	}
+
+	v := KConv.ToFloat(val)
+
+	return (v / t) * 100
+}
+
 // GeoDistance 获取地理距离/米.
 // 参数分别为两点的经度和纬度.lat:-90~90,lng:-180~180.
 func (kn *LkkNumber) GeoDistance(lng1, lat1, lng2, lat2 float64) float64 {

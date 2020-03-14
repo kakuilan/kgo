@@ -79,7 +79,7 @@ func (ka *LkkArray) ArrayFill(value interface{}, num int) []interface{} {
 	return res
 }
 
-// ArrayFlip 交换数组中的键和值.
+// ArrayFlip 交换数组(切片/字典)中的键和值.
 func (ka *LkkArray) ArrayFlip(arr interface{}) map[interface{}]interface{} {
 	res := make(map[interface{}]interface{})
 	val := reflect.ValueOf(arr)
@@ -103,7 +103,7 @@ func (ka *LkkArray) ArrayFlip(arr interface{}) map[interface{}]interface{} {
 	return res
 }
 
-// ArrayKeys 返回数组中所有的键名.
+// ArrayKeys 返回数组(切片/字典)中所有的键名.
 func (ka *LkkArray) ArrayKeys(arr interface{}) []interface{} {
 	val := reflect.ValueOf(arr)
 	res := make([]interface{}, val.Len())
@@ -193,7 +193,7 @@ func (ka *LkkArray) MergeMap(key2Str bool, ss ...interface{}) map[interface{}]in
 	return res
 }
 
-// ArrayChunk 将一个数组分割成多个,size为每个子数组的长度.
+// ArrayChunk 将一个数组/切片分割成多个,size为每个子数组的长度.
 func (ka *LkkArray) ArrayChunk(arr interface{}, size int) [][]interface{} {
 	if size < 1 {
 		panic("[ArrayChunk]size: cannot be less than 1")
@@ -235,7 +235,7 @@ func (ka *LkkArray) ArrayChunk(arr interface{}, size int) [][]interface{} {
 	}
 }
 
-// ArrayPad 以指定长度将一个值item填充进数组.
+// ArrayPad 以指定长度将一个值item填充进数组/切片.
 // 若 size 为正，则填补到数组的右侧，如果为负则从左侧开始填补;
 // 若 size 的绝对值小于或等于 arr 数组的长度则没有任何填补.
 func (ka *LkkArray) ArrayPad(arr interface{}, size int, item interface{}) []interface{} {
@@ -275,7 +275,7 @@ func (ka *LkkArray) ArrayPad(arr interface{}, size int, item interface{}) []inte
 	}
 }
 
-// ArraySlice 返回根据 offset 和 size 参数所指定的 arr 数组中的一段切片.
+// ArraySlice 返回根据 offset 和 size 参数所指定的 arr 数组/切片中的一段切片.
 func (ka *LkkArray) ArraySlice(arr interface{}, offset, size int) []interface{} {
 	if size < 1 {
 		panic("[ArraySlice]size: cannot be less than 1")
@@ -307,7 +307,7 @@ func (ka *LkkArray) ArraySlice(arr interface{}, offset, size int) []interface{} 
 	}
 }
 
-// ArrayRand 从数组中随机取出num个单元.
+// ArrayRand 从数组/切片中随机取出num个单元.
 func (ka *LkkArray) ArrayRand(arr interface{}, num int) []interface{} {
 	if num < 1 {
 		panic("[ArrayRand]num: cannot be less than 1")
@@ -338,7 +338,7 @@ func (ka *LkkArray) ArrayRand(arr interface{}, num int) []interface{} {
 	}
 }
 
-// ArrayColumn 返回数组中指定的一列.
+// ArrayColumn 返回数组(切片/字典)中指定的一列.
 // arr的元素必须是字典;该方法效率低,因为嵌套了两层反射和遍历.
 func (ka *LkkArray) ArrayColumn(arr interface{}, columnKey string) []interface{} {
 	val := reflect.ValueOf(arr)

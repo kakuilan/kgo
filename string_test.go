@@ -282,7 +282,6 @@ func TestStringLastIndex(t *testing.T) {
 	}
 	for _, test := range tests {
 		actual := KStr.LastIndex(test.str, test.sub, test.ignoreCase)
-		println("actual:", actual)
 		if actual != test.expected {
 			t.Errorf("Expected KStr.LastIndex(%q, %q, %t) , got %v", test.str, test.sub, test.ignoreCase, actual)
 		}
@@ -435,7 +434,7 @@ func TestSubstr(t *testing.T) {
 	for _, test := range tests {
 		actual := KStr.Substr(test.param, test.start, test.length)
 		if actual != test.expected {
-			t.Errorf("Expected Substr(%q) to be %v, got %v", test.param, test.expected, actual)
+			t.Errorf("Expected Substr(%q, %d, %d) to be %v, got %v", test.param, test.start, test.length, test.expected, actual)
 			return
 		}
 	}
@@ -469,7 +468,7 @@ func TestMbSubstr(t *testing.T) {
 	for _, test := range tests {
 		actual := KStr.MbSubstr(test.param, test.start, test.length)
 		if actual != test.expected {
-			t.Errorf("Expected Substr(%q) to be %v, got %v", test.param, test.expected, actual)
+			t.Errorf("Expected MbSubstr(%q, %d, %d) to be %v, got %v", test.param, test.start, test.length, test.expected, actual)
 			return
 		}
 	}
@@ -1024,7 +1023,7 @@ func TestToKebabCase(t *testing.T) {
 	for _, test := range tests {
 		actual := KStr.ToKebabCase(test.param)
 		if actual != test.expected {
-			t.Errorf("Expected ToSnakeCase(%q) to be %v, got %v", test.param, test.expected, actual)
+			t.Errorf("Expected ToKebabCase(%q) to be %v, got %v", test.param, test.expected, actual)
 			return
 		}
 	}
@@ -2709,7 +2708,7 @@ func TestIsDNSName(t *testing.T) {
 	for _, test := range tests {
 		actual := KStr.IsDNSName(test.param)
 		if actual != test.expected {
-			t.Errorf("Expected IsDNS(%q) to be %v, got %v", test.param, test.expected, actual)
+			t.Errorf("Expected IsDNSName(%q) to be %v, got %v", test.param, test.expected, actual)
 		}
 	}
 }
@@ -2894,10 +2893,10 @@ TQ3WVV0EekGzoIrPw7BkGgb71UBedEt9AqkLSnW6KzQ1A1ILokX8Yq9oWLASea3F
 xVZ+SCC8Wd6nIK4FyZbYaa3Jz7GkqHdMelsl
 -----END PUBLIC KEY-----`, 2048, false},
 	}
-	for i, test := range tests {
+	for _, test := range tests {
 		actual := KStr.IsRsaPublicKey(test.rsastr, test.keylen)
 		if actual != test.expected {
-			t.Errorf("Expected TestIsRsaPublicKey(%d, %d) to be %v, got %v %s", i, test.keylen, test.expected, actual, test.rsastr)
+			t.Errorf("Expected IsRsaPublicKey(%s, %d) to be %v, got %v %s", test.rsastr, test.keylen, test.expected, actual, test.rsastr)
 		}
 	}
 }

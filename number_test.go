@@ -1127,3 +1127,33 @@ func BenchmarkIsNan(b *testing.B) {
 		KNum.IsNan(123.456)
 	}
 }
+
+func TestPercent(t *testing.T) {
+	tests := []struct {
+		val      interface{}
+		total    interface{}
+		expected float64
+	}{
+		{0, "", 0},
+		{0, 0, 0},
+		{"1", "20", 5},
+		{2.5, 10, 25},
+		{3.46, 12.24, 28.2679},
+	}
+
+	for _, test := range tests {
+		actual := KNum.Percent(test.val, test.total)
+		if !KNum.FloatEqual(actual, test.expected, 4) {
+			t.Errorf("Expected Percent(%v, %v) to be %v, got %v", test.val, test.total, test.expected, actual)
+			return
+		}
+	}
+
+}
+
+func BenchmarkPercent(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.IsNan(123.456)
+	}
+}
