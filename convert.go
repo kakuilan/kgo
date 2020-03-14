@@ -257,6 +257,7 @@ func (kc *LkkConvert) Oct2Dec(str string) (int64, error) {
 }
 
 // BaseConvert 进制转换,在任意进制之间转换数字.
+// number为输入数值,frombase为原进制,tobase为结果进制.
 func (kc *LkkConvert) BaseConvert(number string, frombase, tobase int) (string, error) {
 	i, err := strconv.ParseInt(number, frombase, 0)
 	if err != nil {

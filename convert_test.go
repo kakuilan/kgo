@@ -135,7 +135,7 @@ func TestStr2Int(t *testing.T) {
 	for _, test := range tests {
 		actual := KConv.Str2Int(test.param)
 		if actual != test.expected {
-			t.Errorf("Expected ToBool(%q) to be %v, got %v", test.param, test.expected, actual)
+			t.Errorf("Expected Str2Int(%q) to be %v, got %v", test.param, test.expected, actual)
 			return
 		}
 	}

@@ -235,7 +235,7 @@ func TestIsFile(t *testing.T) {
 	for _, test := range tests {
 		actual := KFile.IsFile(test.f, test.t)
 		if actual != test.expected {
-			t.Errorf("Expected InIntSlice(%q, %q) to be %v, got %v", test.f, test.t, test.expected, actual)
+			t.Errorf("Expected IsFile(%q, %q) to be %v, got %v", test.f, test.t, test.expected, actual)
 			return
 		}
 	}

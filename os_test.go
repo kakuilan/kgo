@@ -89,14 +89,12 @@ func BenchmarkGetcwd(b *testing.B) {
 func TestChdir(t *testing.T) {
 	err := KOS.Chdir("./testdata")
 	if err != nil {
-		println(err.Error())
 		t.Error("Chdir fail")
 		return
 	}
 
 	err = KOS.Chdir("../")
 	if err != nil {
-		println(err.Error())
 		t.Error("Chdir fail")
 		return
 	}
@@ -728,7 +726,7 @@ func TestIsPortOpen(t *testing.T) {
 	for _, test := range tests {
 		actual := KOS.IsPortOpen(test.host, test.port, test.protocol)
 		if actual != test.expected {
-			t.Errorf("Expected IsChineseName(%q, %v, %q) to be %v, got %v", test.host, test.port, test.protocol, test.expected, actual)
+			t.Errorf("Expected IsPortOpen(%q, %v, %q) to be %v, got %v", test.host, test.port, test.protocol, test.expected, actual)
 		}
 	}
 
