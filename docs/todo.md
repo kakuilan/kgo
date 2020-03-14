@@ -79,8 +79,8 @@
 - https://github.com/bitrise-io/go-utils -x
 - https://github.com/ik5/gostrutils -x
 - https://github.com/hacdias/fileutils -x
-- https://github.com/gookit/goutil
-- https://github.com/henrylee2cn/utils
+- https://github.com/gookit/goutil -x
+- https://github.com/henrylee2cn/utils -x
 - https://github.com/billmi/go-utils
 - https://github.com/zcalusic/sysinfo
 - https://github.com/unknwon/com -x
