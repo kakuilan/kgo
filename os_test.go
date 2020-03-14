@@ -744,7 +744,7 @@ func BenchmarkIsPortOpen(b *testing.B) {
 	}
 }
 
-func TestGetPidByPortGetProcessExeByPid(t *testing.T) {
+func TestGetPidByPortGetProcessExecPath(t *testing.T) {
 	message := "Hi there!\n"
 
 	time.AfterFunc(time.Millisecond*200, func() {
@@ -753,7 +753,7 @@ func TestGetPidByPortGetProcessExeByPid(t *testing.T) {
 		KOS.GetPidByPort(25)
 		KOS.GetPidByPort(1999)
 		res := KOS.GetPidByPort(2020)
-		exepath := KOS.GetProcessExeByPid(res)
+		exepath := KOS.GetProcessExecPath(res)
 		if res == 0 {
 			t.Error("GetPidByPort fail")
 			return
@@ -814,10 +814,10 @@ func BenchmarkGetPidByPort(b *testing.B) {
 	}
 }
 
-func BenchmarkGetProcessExeByPid(b *testing.B) {
+func BenchmarkGetProcessExecPath(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KOS.GetProcessExeByPid(2020)
+		KOS.GetProcessExecPath(2020)
 	}
 }
 
