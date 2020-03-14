@@ -661,9 +661,9 @@ func (ko *LkkOS) GetPidByPort(port int) (pid int) {
 	return
 }
 
-// GetProcessExeByPid 根据PID获取进程的执行路径.
-func (ko *LkkOS) GetProcessExeByPid(pid int) string {
-	return getProcessExeByPid(pid)
+// GetProcessExecPath 根据PID获取进程的执行路径.
+func (ko *LkkOS) GetProcessExecPath(pid int) string {
+	return getProcessPathByPid(pid)
 }
 
 // IsProcessExists 进程是否存在.
