@@ -3191,7 +3191,9 @@ func TestRemoveEmoji(t *testing.T) {
 ⬆↗➡↘⬇↙⬅↖↕↔↩↪⤴⤵🔃🔄🔙🔚🔛🔜🔝`
 
 	res := KStr.RemoveEmoji(str)
-	if KStr.Trim(res) != `Lorem ipsum dolor sit amet, consectetur adipiscing  elit. سلام تست شد hell中文` {
+	str1 := KStr.Trim(res)
+	str2 := `Lorem ipsum dolor sit amet, consectetur adipiscing  elit. سلام تست شد hell中文`
+	if str1 != str2 {
 		t.Error("RemoveEmoji fail")
 		return
 	}
