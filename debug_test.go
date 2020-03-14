@@ -200,8 +200,31 @@ func TestCallFunc(t *testing.T) {
 	var conv = &KConv
 	method := KDbug.GetMethod(conv, "BaseConvert")
 
-	_, err = CallFunc(method, 0, "12345", "10", 16)
-	if err != nil {
-		println(err.Error())
+	// 错误的调用
+	_, err = CallFunc(method, "12346", "10", 16)
+	if err == nil {
+		t.Error("CallFunc fail")
+		return
 	}
+
+	// 正确的调用
+	res1, err1 := CallFunc(method, conv, "12345", 10, 16)
+	if err1 != nil {
+		t.Error("CallFunc fail")
+		return
+	} else if res1[0] != "3039" {
+		t.Error("CallFunc fail")
+		return
+	}
+
+	// 正确的调用
+	res2, err2 := CallFunc(KConv.BaseConvert, "12345", 10, 16)
+	if err2 != nil {
+		t.Error("CallFunc fail")
+		return
+	} else if res2[0] != "3039" {
+		t.Error("CallFunc fail")
+		return
+	}
+
 }
