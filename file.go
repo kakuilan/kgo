@@ -41,6 +41,24 @@ func (kf *LkkFile) ReadInArray(fpath string) ([]string, error) {
 	return strings.Split(string(data), "\n"), nil
 }
 
+// FirstLine 读取文件首行.
+func (kf *LkkFile) FirstLine(fpath string) string {
+	var res string
+	file, err := os.Open(fpath)
+	if err == nil {
+		scanner := bufio.NewScanner(file)
+		for scanner.Scan() {
+			res = scanner.Text()
+			break
+		}
+	}
+	defer func() {
+		_ = file.Close()
+	}()
+
+	return res
+}
+
 // ReadFile 读取文件内容.
 func (kf *LkkFile) ReadFile(fpath string) ([]byte, error) {
 	data, err := ioutil.ReadFile(fpath)

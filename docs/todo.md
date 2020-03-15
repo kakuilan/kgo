@@ -81,7 +81,7 @@
 - https://github.com/hacdias/fileutils -x
 - https://github.com/gookit/goutil -x
 - https://github.com/henrylee2cn/utils -x
-- https://github.com/billmi/go-utils
+- https://github.com/billmi/go-utils -x
 - https://github.com/zcalusic/sysinfo
 - https://github.com/unknwon/com -x
 - https://github.com/huandu/xstrings -x

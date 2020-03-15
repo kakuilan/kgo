@@ -1264,3 +1264,37 @@ func BenchmarkIsMap(b *testing.B) {
 		KArr.IsMap("hello")
 	}
 }
+
+func TestFirstLine(t *testing.T) {
+	var tests = []struct {
+		file     string
+		expected string
+	}{
+		{"", ""},
+		{"./testdata/firstline.log", ""},
+		{"./testdata/dante.txt", "LA DIVINA COMMEDIA"},
+		{"docs/changelog.md", "# Changelog"},
+	}
+	for _, test := range tests {
+		actual := KFile.FirstLine(test.file)
+		if actual != test.expected {
+			t.Errorf("Expected FirstLine(%q) to be %v, got %v", test.file, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkFirstLine(b *testing.B) {
+	b.ResetTimer()
+	fpath := "./testdata/dante.txt"
+	for i := 0; i < b.N; i++ {
+		KFile.FirstLine(fpath)
+	}
+}
+
+func BenchmarkReadInArray(b *testing.B) {
+	b.ResetTimer()
+	filepath := "./testdata/dante.txt"
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.ReadInArray(filepath)
+	}
+}
