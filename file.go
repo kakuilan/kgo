@@ -42,7 +42,7 @@ func (kf *LkkFile) ReadInArray(fpath string) ([]string, error) {
 }
 
 // FirstLine 读取文件首行.
-func (kf *LkkFile) FirstLine(fpath string) string {
+func (kf *LkkFile) ReadFirstLine(fpath string) string {
 	var res string
 	file, err := os.Open(fpath)
 	if err == nil {
@@ -51,6 +51,36 @@ func (kf *LkkFile) FirstLine(fpath string) string {
 			res = scanner.Text()
 			break
 		}
+	}
+	defer func() {
+		_ = file.Close()
+	}()
+
+	return res
+}
+
+func (kf *LkkFile) ReadLastLine(fpath string) string {
+	var res string
+	file, err := os.Open(fpath)
+	if err == nil {
+		var lastLineSize int
+		reader := bufio.NewReader(file)
+
+		for {
+			bs, err := reader.ReadBytes('\n')
+			lastLineSize = len(bs)
+			if err == io.EOF {
+				break
+			}
+		}
+
+		fileInfo, _ := os.Stat(fpath)
+
+		// make a buffer size according to the lastLineSize
+		buffer := make([]byte, lastLineSize)
+		offset := fileInfo.Size() - int64(lastLineSize)
+		numRead, _ := file.ReadAt(buffer, offset)
+		res = string(buffer[:numRead])
 	}
 	defer func() {
 		_ = file.Close()

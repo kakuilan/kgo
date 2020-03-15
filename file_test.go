@@ -1221,7 +1221,7 @@ func BenchmarkAppendFile(b *testing.B) {
 	}
 }
 
-func TestFirstLine(t *testing.T) {
+func TestReadFirstLine(t *testing.T) {
 	var tests = []struct {
 		file     string
 		expected string
@@ -1232,17 +1232,17 @@ func TestFirstLine(t *testing.T) {
 		{"docs/changelog.md", "# Changelog"},
 	}
 	for _, test := range tests {
-		actual := KFile.FirstLine(test.file)
+		actual := KFile.ReadFirstLine(test.file)
 		if actual != test.expected {
 			t.Errorf("Expected FirstLine(%q) to be %v, got %v", test.file, test.expected, actual)
 		}
 	}
 }
 
-func BenchmarkFirstLine(b *testing.B) {
+func BenchmarkReadFirstLine(b *testing.B) {
 	b.ResetTimer()
 	fpath := "./testdata/dante.txt"
 	for i := 0; i < b.N; i++ {
-		KFile.FirstLine(fpath)
+		KFile.ReadFirstLine(fpath)
 	}
 }
