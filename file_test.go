@@ -1029,14 +1029,6 @@ func TestReadInArray(t *testing.T) {
 	_, _ = KFile.ReadInArray("./hello")
 }
 
-func BenchmarkReadInArray(b *testing.B) {
-	b.ResetTimer()
-	filepath := "./testdata/dante.txt"
-	for i := 0; i < b.N; i++ {
-		_, _ = KFile.ReadInArray(filepath)
-	}
-}
-
 func TestCountLines(t *testing.T) {
 	filepath := "./testdata/dante.txt"
 	res, err := KFile.CountLines(filepath, 0)
