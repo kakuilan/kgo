@@ -1029,6 +1029,14 @@ func TestReadInArray(t *testing.T) {
 	_, _ = KFile.ReadInArray("./hello")
 }
 
+func BenchmarkReadInArray(b *testing.B) {
+	b.ResetTimer()
+	filepath := "./testdata/dante.txt"
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.ReadInArray(filepath)
+	}
+}
+
 func TestCountLines(t *testing.T) {
 	filepath := "./testdata/dante.txt"
 	res, err := KFile.CountLines(filepath, 0)
@@ -1210,5 +1218,31 @@ func BenchmarkAppendFile(b *testing.B) {
 	cont := []byte("hello world.\r\n")
 	for i := 0; i < b.N; i++ {
 		_ = KFile.AppendFile(pth, cont)
+	}
+}
+
+func TestFirstLine(t *testing.T) {
+	var tests = []struct {
+		file     string
+		expected string
+	}{
+		{"", ""},
+		{"./testdata/firstline.log", ""},
+		{"./testdata/dante.txt", "LA DIVINA COMMEDIA"},
+		{"docs/changelog.md", "# Changelog"},
+	}
+	for _, test := range tests {
+		actual := KFile.FirstLine(test.file)
+		if actual != test.expected {
+			t.Errorf("Expected FirstLine(%q) to be %v, got %v", test.file, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkFirstLine(b *testing.B) {
+	b.ResetTimer()
+	fpath := "./testdata/dante.txt"
+	for i := 0; i < b.N; i++ {
+		KFile.FirstLine(fpath)
 	}
 }
