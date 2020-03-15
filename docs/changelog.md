@@ -141,3 +141,6 @@ All notable changes to this project will be documented in this file.
 
 #### Removed
 - remove `KConv.Int2Bool`
+
+
+*--end of file--*
