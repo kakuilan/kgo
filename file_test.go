@@ -1246,3 +1246,37 @@ func BenchmarkReadFirstLine(b *testing.B) {
 		KFile.ReadFirstLine(fpath)
 	}
 }
+
+func TestReadLastLine(t *testing.T) {
+	tfile1 := "./testdata/lastline1.log"
+	tfile2 := "./testdata/lastline2.log"
+	str := "hello World"
+	KFile.Touch(tfile1, 0)
+	_ = KFile.WriteFile(tfile2, []byte(str))
+
+	var tests = []struct {
+		file     string
+		expected string
+	}{
+		{"", ""},
+		{"./testdata/firstline.log", ""},
+		{tfile1, ""},
+		{tfile2, str},
+		{"./testdata/dante.txt", ""},
+		{"docs/changelog.md", "*--end of file--*"},
+	}
+	for _, test := range tests {
+		actual := KFile.ReadLastLine(test.file)
+		if KStr.Trim(actual) != test.expected {
+			t.Errorf("Expected FirstLine(%q) to be [%s], got [%s]", test.file, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkReadLastLine(b *testing.B) {
+	b.ResetTimer()
+	fpath := "./testdata/dante.txt"
+	for i := 0; i < b.N; i++ {
+		KFile.ReadLastLine(fpath)
+	}
+}

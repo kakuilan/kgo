@@ -41,7 +41,7 @@ func (kf *LkkFile) ReadInArray(fpath string) ([]string, error) {
 	return strings.Split(string(data), "\n"), nil
 }
 
-// FirstLine 读取文件首行.
+// ReadFirstLine 读取文件首行.
 func (kf *LkkFile) ReadFirstLine(fpath string) string {
 	var res string
 	file, err := os.Open(fpath)
@@ -59,6 +59,7 @@ func (kf *LkkFile) ReadFirstLine(fpath string) string {
 	return res
 }
 
+// ReadLastLine 读取文件末行.
 func (kf *LkkFile) ReadLastLine(fpath string) string {
 	var res string
 	file, err := os.Open(fpath)
