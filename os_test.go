@@ -870,3 +870,50 @@ func BenchmarkIsProcessExists(b *testing.B) {
 		KOS.IsProcessExists(pid)
 	}
 }
+
+func TestGetBiosBoardCpuInfo(t *testing.T) {
+	res1 := KOS.GetBiosInfo()
+	res2 := KOS.GetBoardInfo()
+	res3 := KOS.GetCpuInfo()
+
+	fmt.Printf("%+v\n", res1)
+	fmt.Printf("%+v\n", res2)
+	fmt.Printf("%+v\n", res3)
+
+	if res1.Vendor == "" {
+		t.Error("GetBiosInfo fail")
+		return
+	}
+
+	if res2.Vendor == "" {
+		t.Error("GetBoardInfo fail")
+		return
+	}
+
+	if res3.Vendor == "" {
+		t.Error("GetCpuInfo fail")
+		return
+	}
+
+}
+
+func BenchmarkGetBiosInfo(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetBiosInfo()
+	}
+}
+
+func BenchmarkGetBoardInfo(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetBoardInfo()
+	}
+}
+
+func BenchmarkGetCpuInfo(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetCpuInfo()
+	}
+}
