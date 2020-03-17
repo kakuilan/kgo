@@ -88,14 +88,8 @@
 - https://github.com/huandu/xstrings -x
 - https://github.com/astaxie/beego/tree/develop/utils -x
 - https://github.com/pubgo/g -x
-- https://github.com/layidao/utilx
-- https://github.com/siddontang/go
-
-
-https://github.com/fastly/go-utils-master/executable/executable_linux.go
-https://github.com/fastly/go-utils-master/lifecycle/lifecycle.go
-
-
+- https://github.com/layidao/utilx -x
+- https://github.com/siddontang/go -x
 
 
 ### 其他库
@@ -107,25 +101,6 @@ https://github.com/fastly/go-utils-master/lifecycle/lifecycle.go
 - https://github.com/shirou/gopsutil
 - https://github.com/sunmi-OS/gocore
 
-
-### 包
-file
-string
-time
-os
-array
-number
-url
-convert
-validate
-encrypt
-net
-debug
-
-
-### 临时
-https://github.com/jimmykuu/webhelpers/blob/master/gravatar.go
-https://github.com/jimmykuu/webhelpers/blob/master/text.go
 
 ### TODO 
 - 时间轮定时器
@@ -167,24 +142,6 @@ rsa
 http://doc.aiwaly.com/docs/golang/golang-1b9e5j9tn5g08
 aes
 http://doc.aiwaly.com/docs/golang/golang-1b9e47tisaoe4
-
-
-
-json库
-https://github.com/json-iterator/go
-https://github.com/tidwall/gjson
-https://github.com/mailru/easyjson
-https://github.com/buger/jsonparser
-
-检查端口绑定
-https://golangnote.com/topic/241.html
-https://www.jianshu.com/p/b4ce0794fa32
-https://gist.github.com/montanaflynn/b59c058ce2adc18f31d6
-https://stackoverflow.com/questions/40296483/continuously-check-if-tcp-port-is-in-use
-https://coolaj86.com/articles/how-to-test-if-a-port-is-available-in-go/
-https://github.com/phayes/freeport/blob/master/freeport.go
-https://dev.to/williamhgough/how-to-test-tcpudp-connections-in-go---part-1-3bga
-
 
 pid
 https://github.com/bitnami/gonit/blob/master/utils/process.go
