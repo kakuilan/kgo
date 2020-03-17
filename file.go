@@ -137,11 +137,9 @@ func (kf *LkkFile) AppendFile(fpath string, data []byte) error {
 		_ = file.Close()
 	}()
 
-	if _, err := file.Write(data); err != nil {
-		return err
-	}
+	_, err = file.Write(data)
 
-	return nil
+	return err
 }
 
 // GetFileMode 获取路径的权限模式.
