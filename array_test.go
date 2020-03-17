@@ -1270,7 +1270,9 @@ func TestGetBiosBoardCpuInfo(t *testing.T) {
 	res2 := KOS.GetBoardInfo()
 	res3 := KOS.GetCpuInfo()
 
-	//fmt.Printf("%+v\n", res1)
+	fmt.Printf("%+v\n", res1)
+	fmt.Printf("%+v\n", res1)
+	fmt.Printf("%+v\n", res1)
 
 	if res1.Version == "" {
 		t.Error("GetBiosInfo fail")
