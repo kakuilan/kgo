@@ -94,15 +94,13 @@ func isMap(data interface{}) bool {
 
 // getEndian 获取系统字节序类型,小端返回binary.LittleEndian,大端返回binary.BigEndian .
 func getEndian() binary.ByteOrder {
-	var nativeEndian binary.ByteOrder = binary.LittleEndian
+	var nativeEndian binary.ByteOrder = binary.BigEndian
 	buf := [2]byte{}
 	*(*uint16)(unsafe.Pointer(&buf[0])) = uint16(0xABCD)
 
 	switch buf {
 	case [2]byte{0xCD, 0xAB}:
 		nativeEndian = binary.LittleEndian
-	case [2]byte{0xAB, 0xCD}:
-		nativeEndian = binary.BigEndian
 	}
 
 	return nativeEndian
