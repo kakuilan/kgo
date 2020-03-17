@@ -1177,9 +1177,7 @@ func (kf *LkkFile) IsZip(fpath string) bool {
 	}()
 
 	buf := make([]byte, 4)
-	if n, err := f.Read(buf); err != nil || n < 4 {
-		return false
-	}
+	n, err := f.Read(buf)
 
-	return bytes.Equal(buf, []byte("PK\x03\x04"))
+	return err == nil && n >= 4 && bytes.Equal(buf, []byte("PK\x03\x04"))
 }
