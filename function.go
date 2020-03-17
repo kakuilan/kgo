@@ -101,6 +101,8 @@ func getEndian() binary.ByteOrder {
 	switch buf {
 	case [2]byte{0xCD, 0xAB}:
 		nativeEndian = binary.LittleEndian
+		//case [2]byte{0xAB, 0xCD}:
+		//	nativeEndian = binary.BigEndian
 	}
 
 	return nativeEndian
