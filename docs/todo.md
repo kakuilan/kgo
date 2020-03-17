@@ -113,7 +113,6 @@
 
 
 encrypt Encrypt/Decrypt
-https://github.com/henrylee2cn/goutil/blob/master/encrypt.go
 https://www.ctolib.com/topics-4140.html
 https://www.cnblogs.com/lavin/p/5373188.html
 https://github.com/sinlov/fastEncryptDecode
@@ -136,12 +135,16 @@ https://github.com/bocajim/helpers/blob/master/crypt.go
 https://github.com/nothollyhigh/kiss/tree/master/crypto
 https://my.oschina.net/qyyoung/blog/1486324
 https://github.com/iiinsomnia/yiigo/blob/master/crypto.go
-https://github.com/Teamwork/utils/aesutil/aesutil.go
 
 rsa
 http://doc.aiwaly.com/docs/golang/golang-1b9e5j9tn5g08
+
 aes
 http://doc.aiwaly.com/docs/golang/golang-1b9e47tisaoe4
+https://github.com/henrylee2cn/goutil/blob/master/encrypt.go
+https://github.com/Teamwork/utils/blob/master/aesutil/aesutil.go
+https://github.com/iiinsomnia/yiigo/blob/master/crypto.go
+
 
 pid
 https://github.com/bitnami/gonit/blob/master/utils/process.go
