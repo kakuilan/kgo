@@ -87,7 +87,7 @@
 - https://github.com/unknwon/com -x
 - https://github.com/huandu/xstrings -x
 - https://github.com/astaxie/beego/tree/develop/utils -x
-- https://github.com/pubgo/g
+- https://github.com/pubgo/g -x
 - https://github.com/layidao/utilx
 - https://github.com/siddontang/go
 
@@ -162,6 +162,12 @@ https://github.com/nothollyhigh/kiss/tree/master/crypto
 https://my.oschina.net/qyyoung/blog/1486324
 https://github.com/iiinsomnia/yiigo/blob/master/crypto.go
 https://github.com/Teamwork/utils/aesutil/aesutil.go
+
+rsa
+http://doc.aiwaly.com/docs/golang/golang-1b9e5j9tn5g08
+aes
+http://doc.aiwaly.com/docs/golang/golang-1b9e47tisaoe4
+
 
 
 json库

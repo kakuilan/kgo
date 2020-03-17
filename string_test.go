@@ -3206,3 +3206,19 @@ func BenchmarkRemoveEmoji(b *testing.B) {
 		KStr.RemoveEmoji(str)
 	}
 }
+
+func TestUuidV4(t *testing.T) {
+	res, err := KStr.UuidV4()
+
+	if res == "" || res == "00000000-0000-0000-0000-000000000000" || err != nil {
+		t.Error("UuidV4 fail")
+		return
+	}
+}
+
+func BenchmarkUuidV4(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.UuidV4()
+	}
+}
