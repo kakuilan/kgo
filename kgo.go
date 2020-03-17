@@ -154,6 +154,9 @@ const (
 	// 正则模式-邮箱
 	PATTERN_EMAIL = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
 
+	// 正则模式-用户名-英文
+	PATTERN_USERNAMEEN = `^[a-zA-Z0-9_.]+$`
+
 	// 正则模式-大陆手机号
 	PATTERN_MOBILECN = `^1[3-9]\d{9}$`
 
@@ -304,6 +307,7 @@ var (
 	RegSha256                = regexp.MustCompile(PATTERN_SHA256)
 	RegSha512                = regexp.MustCompile(PATTERN_SHA512)
 	RegEmoji                 = regexp.MustCompile(PATTERN_EMOJI)
+	RegUsernameen            = regexp.MustCompile(PATTERN_USERNAMEEN)
 
 	//	RegAscii                 = regexp.MustCompile(PATTERN_ASCII)
 

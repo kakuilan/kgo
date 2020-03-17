@@ -77,9 +77,9 @@ type CpuInfo struct {
 }
 
 var (
-	reTwoColumns = regexp.MustCompile("\t+: ")
-	reExtraSpace = regexp.MustCompile(" +")
-	reCacheSize  = regexp.MustCompile(`^(\d+) KB$`)
+	cpuRegTwoColumns = regexp.MustCompile("\t+: ")
+	cpuRegExtraSpace = regexp.MustCompile(" +")
+	cpuRegCacheSize  = regexp.MustCompile(`^(\d+) KB$`)
 )
 
 // IsWindows 当前操作系统是否Windows.
@@ -683,7 +683,7 @@ func (ko *LkkOS) GetCpuInfo() *CpuInfo {
 
 	s := bufio.NewScanner(f)
 	for s.Scan() {
-		if sl := reTwoColumns.Split(s.Text(), 2); sl != nil {
+		if sl := cpuRegTwoColumns.Split(s.Text(), 2); sl != nil {
 			switch sl[0] {
 			case "physical id":
 				cpuID = sl[1]
@@ -698,7 +698,7 @@ func (ko *LkkOS) GetCpuInfo() *CpuInfo {
 			case "model name":
 				if res.Model == "" {
 					// CPU model, as reported by /proc/cpuinfo, can be a bit ugly. Clean up...
-					model := reExtraSpace.ReplaceAllLiteralString(sl[1], " ")
+					model := cpuRegExtraSpace.ReplaceAllLiteralString(sl[1], " ")
 					res.Model = strings.Replace(model, "- ", "-", 1)
 				}
 			case "cpu MHz":
@@ -707,7 +707,7 @@ func (ko *LkkOS) GetCpuInfo() *CpuInfo {
 				}
 			case "cache size":
 				if res.Cache == 0 {
-					if m := reCacheSize.FindStringSubmatch(sl[1]); m != nil {
+					if m := cpuRegCacheSize.FindStringSubmatch(sl[1]); m != nil {
 						if cache, err := strconv.ParseUint(m[1], 10, 64); err == nil {
 							res.Cache = uint(cache)
 						}

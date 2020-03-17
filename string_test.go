@@ -3222,3 +3222,53 @@ func BenchmarkUuidV4(b *testing.B) {
 		_, _ = KStr.UuidV4()
 	}
 }
+
+func TestGravatar(t *testing.T) {
+	res1 := KStr.Gravatar("", 100)
+	res2 := KStr.Gravatar("hello@test.com", 150)
+
+	if res1 == "" || res2 == "" {
+		t.Error("Gravatar fail")
+		return
+	}
+}
+
+func BenchmarkGravatar(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Gravatar("hello@test.com", 150)
+	}
+}
+
+func TestAtWho(t *testing.T) {
+	var tests = []struct {
+		name     string
+		leng     int
+		expected []string
+	}{
+		{"", 0, []string{}},
+		{"@hellowor", 3, []string{"hellowor"}},
+		{"@hellowor", 5, []string{"hellowor"}},
+		{" @hellowor", 5, []string{"hellowor"}},
+		{"Hi, @hellowor", 5, []string{"hellowor"}},
+		{"Hi,@hellowor", 5, []string{"hellowor"}},
+		{"Hi, @hellowor, @tom", 3, []string{"tom"}},
+		{"Hi, @hellowor and @tom and @hellowor again", 3, []string{"hellowor", "tom"}},
+		{"@hellowor\nanother line @john", 3, []string{"hellowor", "john"}},
+		{"hellowor@gmail.com", 0, []string{}},
+		{"hellowor@gmail.com @test", 3, []string{"test"}},
+	}
+	for _, test := range tests {
+		actual := KStr.AtWho(test.name, test.leng)
+		if !KArr.IsEqualArray(test.expected, actual) {
+			t.Errorf("Expected KStr.EndsWith(%q, %d) to be %v, got %v", test.name, test.leng, test.expected, actual)
+		}
+	}
+}
+
+func BenchmarkAtWho(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.AtWho("Hi, @hellowor", 5)
+	}
+}
