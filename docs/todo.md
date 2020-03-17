@@ -82,7 +82,8 @@
 - https://github.com/gookit/goutil -x
 - https://github.com/henrylee2cn/utils -x
 - https://github.com/billmi/go-utils -x
-- https://github.com/zcalusic/sysinfo
+- https://github.com/zcalusic/sysinfo -x
+- https://github.com/mackerelio/go-osstat -x
 - https://github.com/unknwon/com -x
 - https://github.com/huandu/xstrings -x
 - https://github.com/astaxie/beego/tree/develop/utils -x
