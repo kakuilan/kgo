@@ -486,7 +486,7 @@ func getProcessPathByPid(pid int) string {
 }
 
 // pkcs7Padding PKCS7填充.
-// ciphertext为密钥;blockSize为分组长度;isZero是否零填充.
+// ciphertext为密文;blockSize为分组长度;isZero是否零填充.
 func pkcs7Padding(ciphertext []byte, blockSize int, isZero bool) []byte {
 	clen := len(ciphertext)
 	if ciphertext == nil || clen == 0 || blockSize <= 0 {

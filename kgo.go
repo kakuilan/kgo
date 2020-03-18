@@ -38,6 +38,8 @@ type (
 	LkkCaseSwitch uint8
 	// LkkPadType 枚举类型,字符串填充类型
 	LkkPadType uint8
+	// LkkPKCSType 枚举类型,PKCS填充类型
+	LkkPKCSType uint8
 
 	// FileFilter 文件过滤函数
 	FileFilter func(string) bool
@@ -117,6 +119,11 @@ const (
 	PAD_RIGHT LkkPadType = 1
 	// PAD_BOTH 两侧填充
 	PAD_BOTH LkkPadType = 2
+
+	// PKCS_0 PKCS 0值填充
+	PKCS0 LkkPKCSType = 0
+	// PKCS_7 即PKCS7
+	PKCS7 LkkPKCSType = 7
 
 	//默认浮点数精确小数位数
 	FLOAT_DECIMAL = 10
