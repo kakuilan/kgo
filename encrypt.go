@@ -1,15 +1,20 @@
 package kgo
 
 import (
+	"crypto/aes"
+	"crypto/cipher"
 	"crypto/hmac"
+	"crypto/rand"
 	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha512"
 	"encoding/base64"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"hash"
+	"io"
 	"strconv"
 	"strings"
 	"time"
@@ -271,4 +276,71 @@ func (ke *LkkEncrypt) HmacShaX(data, secret []byte, x uint16) string {
 	sha := hex.EncodeToString(h.Sum(nil))
 
 	return sha
+}
+
+// AesCBCEncrypt AES-CBC模式加密.
+// clearText为明文;key为密钥,长16/24/32;paddingType为填充方式,枚举(PKCS0,PKCS7),默认PKCS7.
+func (ke *LkkEncrypt) AesCBCEncrypt(clearText, key []byte, paddingType ...LkkPKCSType) ([]byte, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+
+	pt := PKCS7
+	blockSize := block.BlockSize()
+	if len(paddingType) > 0 {
+		pt = paddingType[0]
+	}
+	switch pt {
+	case PKCS0:
+		clearText = zeroPadding(clearText, blockSize)
+	case PKCS7:
+		clearText = pkcs7Padding(clearText, blockSize, false)
+	}
+
+	cipherText := make([]byte, blockSize+len(clearText))
+	iv := cipherText[:blockSize]
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		return nil, err
+	}
+	cipher.NewCBCEncrypter(block, iv).CryptBlocks(cipherText[blockSize:], clearText)
+	return cipherText, nil
+}
+
+// AesCBCDecrypt AES-CBC模式解密.
+// cipherText为密文;key为密钥,长16/24/32;paddingType为填充方式,枚举(PKCS0,PKCS7),默认PKCS7.
+func (ke *LkkEncrypt) AesCBCDecrypt(cipherText, key []byte, paddingType ...LkkPKCSType) ([]byte, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+
+	pt := PKCS7
+	if len(paddingType) > 0 {
+		pt = paddingType[0]
+	}
+
+	blockSize := block.BlockSize()
+	clen := len(cipherText)
+	if clen < blockSize {
+		return nil, errors.New("cipherText too short")
+	}
+
+	iv := cipherText[:blockSize]
+	cipherText = cipherText[blockSize:]
+	cipher.NewCBCDecrypter(block, iv).CryptBlocks(cipherText, cipherText)
+	clen = len(cipherText)
+	if clen > 1 && int(cipherText[clen-1]) > clen {
+		return nil, errors.New("aes CBC decrypt failed")
+	}
+
+	var plainText []byte
+	switch pt {
+	case PKCS0:
+		plainText = zeroUnPadding(cipherText)
+	case PKCS7:
+		plainText = pkcs7UnPadding(cipherText, blockSize)
+	}
+
+	return plainText, nil
 }
