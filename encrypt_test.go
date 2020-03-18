@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"crypto/aes"
 	"fmt"
 	"strings"
 	"testing"
@@ -243,5 +244,58 @@ func BenchmarkHmacShaX(b *testing.B) {
 	key := []byte("123456")
 	for i := 0; i < b.N; i++ {
 		KEncr.HmacShaX(str, key, 256)
+	}
+}
+
+func TestPkcs7Padding(t *testing.T) {
+	var emp1 []byte
+	var emp2 = []byte("")
+	key1 := []byte("1234")
+	dat1 := []byte{49, 50, 51, 52, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12}
+	dat2 := []byte{49, 50, 51, 52, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	//key1 := []byte("1111222233334444")
+	var tests = []struct {
+		cipher    []byte
+		orig      []byte
+		size      int
+		zero      bool
+		expected1 []byte
+		expected2 []byte
+	}{
+		{nil, nil, aes.BlockSize, false, nil, nil},
+		{emp1, emp1, aes.BlockSize, false, nil, nil},
+		{emp2, emp2, aes.BlockSize, false, nil, nil},
+		{key1, key1, 0, false, nil, nil},
+		{key1, dat1, aes.BlockSize, false, dat1, key1},
+		{key1, dat2, aes.BlockSize, true, dat2, nil},
+		{key1, dat2, aes.BlockSize, false, dat1, emp1},
+	}
+
+	for _, test := range tests {
+		actual1 := pkcs7Padding(test.cipher, test.size, test.zero)
+		if !KArr.IsEqualArray(actual1, test.expected1) {
+			t.Errorf("Expected pkcs7Padding(%v, %d, %t) to be %v, got %v", test.cipher, test.size, test.zero, test.expected1, actual1)
+		}
+
+		actual2 := pkcs7UnPadding(test.orig, test.size)
+		if !KArr.IsEqualArray(actual2, test.expected2) {
+			t.Errorf("Expected pkcs7UnPadding(%v, %d) to be %v, got %v", test.orig, test.size, test.expected2, actual2)
+		}
+	}
+}
+
+func BenchmarkPkcs7Padding(b *testing.B) {
+	b.ResetTimer()
+	str := []byte("1234")
+	for i := 0; i < b.N; i++ {
+		pkcs7Padding(str, 16, false)
+	}
+}
+
+func BenchmarkPkcs7UnPadding(b *testing.B) {
+	b.ResetTimer()
+	data := []byte{49, 50, 51, 52, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12}
+	for i := 0; i < b.N; i++ {
+		pkcs7UnPadding(data, 16)
 	}
 }

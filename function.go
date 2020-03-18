@@ -484,3 +484,60 @@ func getProcessPathByPid(pid int) string {
 	path, _ := os.Readlink(exe)
 	return path
 }
+
+// pkcs7Padding PKCS7填充.
+// ciphertext为密钥;blockSize为分组长度;isZero是否零填充.
+func pkcs7Padding(ciphertext []byte, blockSize int, isZero bool) []byte {
+	clen := len(ciphertext)
+	if ciphertext == nil || clen == 0 || blockSize <= 0 {
+		return nil
+	}
+
+	var padtext []byte
+	padding := blockSize - clen%blockSize
+	if isZero {
+		padtext = bytes.Repeat([]byte{0}, padding)
+	} else {
+		padtext = bytes.Repeat([]byte{byte(padding)}, padding)
+	}
+
+	return append(ciphertext, padtext...)
+}
+
+// pkcs7UnPadding PKCS7拆解.
+// origData为源数据;blockSize为分组长度.
+func pkcs7UnPadding(origData []byte, blockSize int) []byte {
+	olen := len(origData)
+	if origData == nil || olen == 0 || blockSize <= 0 || olen%blockSize != 0 {
+		return nil
+	}
+
+	unpadding := int(origData[olen-1])
+	if unpadding == 0 || unpadding > olen {
+		return nil
+	}
+
+	return origData[:(olen - unpadding)]
+}
+
+// pkcs5Padding PKCS5填充.
+func pkcs5Padding(ciphertext []byte) []byte {
+	return pkcs7Padding(ciphertext, 8, false)
+}
+
+// pkcs5UnPadding PKCS5拆解.
+func pkcs5UnPadding(origData []byte) []byte {
+	return pkcs7UnPadding(origData, 8)
+}
+
+// zeroPadding PKCS7使用0填充.
+func zeroPadding(ciphertext []byte, blockSize int) []byte {
+	return pkcs7Padding(ciphertext, blockSize, true)
+}
+
+// zeroUnPadding PKCS7-0拆解.
+func zeroUnPadding(origData []byte) []byte {
+	return bytes.TrimRightFunc(origData, func(r rune) bool {
+		return r == rune(0)
+	})
+}
