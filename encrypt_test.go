@@ -247,13 +247,12 @@ func BenchmarkHmacShaX(b *testing.B) {
 	}
 }
 
-func TestPkcs7Padding(t *testing.T) {
+func TestPkcs7PaddingUnPadding(t *testing.T) {
 	var emp1 []byte
 	var emp2 = []byte("")
 	key1 := []byte("1234")
 	dat1 := []byte{49, 50, 51, 52, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12}
 	dat2 := []byte{49, 50, 51, 52, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	//key1 := []byte("1111222233334444")
 	var tests = []struct {
 		cipher    []byte
 		orig      []byte
@@ -297,5 +296,69 @@ func BenchmarkPkcs7UnPadding(b *testing.B) {
 	data := []byte{49, 50, 51, 52, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12}
 	for i := 0; i < b.N; i++ {
 		pkcs7UnPadding(data, 16)
+	}
+}
+
+func TestPkcs5PaddingUnPadding(t *testing.T) {
+	key := []byte("hello")
+	ori := pkcs5Padding(key)
+	res := pkcs5UnPadding(ori)
+
+	if ori == nil {
+		t.Error("pkcs5Padding fail")
+		return
+	}
+
+	if !KArr.IsEqualArray(key, res) {
+		t.Error("pkcs5UnPadding fail")
+		return
+	}
+}
+
+func BenchmarkPkcs5Padding(b *testing.B) {
+	b.ResetTimer()
+	key := []byte("hello")
+	for i := 0; i < b.N; i++ {
+		pkcs5Padding(key)
+	}
+}
+
+func BenchmarkPkcs5UnPadding(b *testing.B) {
+	b.ResetTimer()
+	ori := []byte{104, 101, 108, 108, 111, 3, 3, 3}
+	for i := 0; i < b.N; i++ {
+		pkcs5UnPadding(ori)
+	}
+}
+
+func TestZeroPaddingUnPadding(t *testing.T) {
+	key := []byte("hello")
+	ori := zeroPadding(key, 16)
+	res := zeroUnPadding(ori)
+
+	if ori == nil {
+		t.Error("zeroPadding fail")
+		return
+	}
+
+	if !KArr.IsEqualArray(key, res) {
+		t.Error("zeroUnPadding fail")
+		return
+	}
+}
+
+func BenchmarkZeroPadding(b *testing.B) {
+	b.ResetTimer()
+	key := []byte("hello")
+	for i := 0; i < b.N; i++ {
+		pkcs5Padding(key)
+	}
+}
+
+func BenchmarkZeroUnPadding(b *testing.B) {
+	b.ResetTimer()
+	ori := []byte{104, 101, 108, 108, 111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	for i := 0; i < b.N; i++ {
+		pkcs5UnPadding(ori)
 	}
 }
