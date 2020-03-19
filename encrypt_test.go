@@ -299,38 +299,6 @@ func BenchmarkPkcs7UnPadding(b *testing.B) {
 	}
 }
 
-func TestPkcs5PaddingUnPadding(t *testing.T) {
-	key := []byte("hello")
-	ori := pkcs5Padding(key)
-	res := pkcs5UnPadding(ori)
-
-	if ori == nil {
-		t.Error("pkcs5Padding fail")
-		return
-	}
-
-	if !KArr.IsEqualArray(key, res) {
-		t.Error("pkcs5UnPadding fail")
-		return
-	}
-}
-
-func BenchmarkPkcs5Padding(b *testing.B) {
-	b.ResetTimer()
-	key := []byte("hello")
-	for i := 0; i < b.N; i++ {
-		pkcs5Padding(key)
-	}
-}
-
-func BenchmarkPkcs5UnPadding(b *testing.B) {
-	b.ResetTimer()
-	ori := []byte{104, 101, 108, 108, 111, 3, 3, 3}
-	for i := 0; i < b.N; i++ {
-		pkcs5UnPadding(ori)
-	}
-}
-
 func TestZeroPaddingUnPadding(t *testing.T) {
 	key := []byte("hello")
 	ori := zeroPadding(key, 16)
