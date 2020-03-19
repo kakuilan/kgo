@@ -278,9 +278,7 @@ func (ke *LkkEncrypt) HmacShaX(data, secret []byte, x uint16) string {
 	return sha
 }
 
-// AesCBCEncrypt AES-CBC密码分组链接(Cipher-block chaining)模式加密.
-// clearText为明文;key为密钥,长16/24/32;paddingType为填充方式,枚举(PKCS0,PKCS7),默认PKCS7.
-func (ke *LkkEncrypt) AesCBCEncrypt(clearText, key []byte, paddingType ...LkkPKCSType) ([]byte, error) {
+func (ke *LkkEncrypt) aesEncrypt(clearText, key []byte, mode string, paddingType ...LkkPKCSType) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
@@ -305,179 +303,96 @@ func (ke *LkkEncrypt) AesCBCEncrypt(clearText, key []byte, paddingType ...LkkPKC
 	//if _, err := io.ReadFull(rand.Reader, iv); err != nil {
 	//	return nil, err
 	//}
-	cipher.NewCBCEncrypter(block, iv).CryptBlocks(cipherText[blockSize:], clearText)
+
+	switch mode {
+	case "CBC":
+		cipher.NewCBCEncrypter(block, iv).CryptBlocks(cipherText[blockSize:], clearText)
+	case "CFB":
+		cipher.NewCFBEncrypter(block, iv).XORKeyStream(cipherText[blockSize:], clearText)
+	case "CTR":
+		cipher.NewCTR(block, iv).XORKeyStream(cipherText[blockSize:], clearText)
+	}
+
 	return cipherText, nil
+}
+
+func (ke *LkkEncrypt) aesDecrypt(cipherText, key []byte, mode string, paddingType ...LkkPKCSType) ([]byte, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+
+	pt := PKCS7
+	if len(paddingType) > 0 {
+		pt = paddingType[0]
+	}
+
+	blockSize := block.BlockSize()
+	clen := len(cipherText)
+	if clen < blockSize {
+		return nil, errors.New("cipherText too short")
+	}
+
+	iv := cipherText[:blockSize]
+	cipherText = cipherText[blockSize:]
+
+	switch mode {
+	case "CBC":
+		cipher.NewCBCDecrypter(block, iv).CryptBlocks(cipherText, cipherText)
+	case "CFB":
+		cipher.NewCFBDecrypter(block, iv).XORKeyStream(cipherText, cipherText)
+	case "CTR":
+		cipher.NewCTR(block, iv).XORKeyStream(cipherText, cipherText)
+	}
+
+	clen = len(cipherText)
+	if clen > 0 && int(cipherText[clen-1]) > clen {
+		return nil, errors.New(fmt.Sprintf("aes [%s] decrypt failed", mode))
+	}
+
+	var plainText []byte
+	switch pt {
+	case PKCS0:
+		plainText = zeroUnPadding(cipherText)
+	case PKCS7:
+		plainText = pkcs7UnPadding(cipherText, blockSize)
+	}
+
+	return plainText, nil
+}
+
+// AesCBCEncrypt AES-CBC密码分组链接(Cipher-block chaining)模式加密.
+// clearText为明文;key为密钥,长16/24/32;paddingType为填充方式,枚举(PKCS0,PKCS7),默认PKCS7.
+func (ke *LkkEncrypt) AesCBCEncrypt(clearText, key []byte, paddingType ...LkkPKCSType) ([]byte, error) {
+	return ke.aesEncrypt(clearText, key, "CBC", paddingType...)
 }
 
 // AesCBCDecrypt AES-CBC密码分组链接(Cipher-block chaining)模式解密.
 // cipherText为密文;key为密钥,长16/24/32;paddingType为填充方式,枚举(PKCS0,PKCS7),默认PKCS7.
 func (ke *LkkEncrypt) AesCBCDecrypt(cipherText, key []byte, paddingType ...LkkPKCSType) ([]byte, error) {
-	block, err := aes.NewCipher(key)
-	if err != nil {
-		return nil, err
-	}
-
-	pt := PKCS7
-	if len(paddingType) > 0 {
-		pt = paddingType[0]
-	}
-
-	blockSize := block.BlockSize()
-	clen := len(cipherText)
-	if clen < blockSize {
-		return nil, errors.New("cipherText too short")
-	}
-
-	iv := cipherText[:blockSize]
-	cipherText = cipherText[blockSize:]
-	cipher.NewCBCDecrypter(block, iv).CryptBlocks(cipherText, cipherText)
-	clen = len(cipherText)
-	if clen > 0 && int(cipherText[clen-1]) > clen {
-		return nil, errors.New("aes CBC decrypt failed")
-	}
-
-	var plainText []byte
-	switch pt {
-	case PKCS0:
-		plainText = zeroUnPadding(cipherText)
-	case PKCS7:
-		plainText = pkcs7UnPadding(cipherText, blockSize)
-	}
-
-	return plainText, nil
+	return ke.aesDecrypt(cipherText, key, "CBC", paddingType...)
 }
 
 // AesCFBEncrypt AES-CFB密文反馈(Cipher feedback)模式加密.
 // clearText为明文;key为密钥,长16/24/32;paddingType为填充方式,枚举(PKCS0,PKCS7),默认PKCS7.
 func (ke *LkkEncrypt) AesCFBEncrypt(clearText, key []byte, paddingType ...LkkPKCSType) ([]byte, error) {
-	block, err := aes.NewCipher(key)
-	if err != nil {
-		return nil, err
-	}
-
-	pt := PKCS7
-	blockSize := block.BlockSize()
-	if len(paddingType) > 0 {
-		pt = paddingType[0]
-	}
-
-	switch pt {
-	case PKCS0:
-		clearText = zeroPadding(clearText, blockSize)
-	case PKCS7:
-		clearText = pkcs7Padding(clearText, blockSize, false)
-	}
-
-	cipherText := make([]byte, blockSize+len(clearText))
-	//初始化向量
-	iv := cipherText[:blockSize]
-	_, _ = io.ReadFull(rand.Reader, iv)
-	cipher.NewCFBEncrypter(block, iv).XORKeyStream(cipherText[blockSize:], clearText)
-
-	return cipherText, nil
+	return ke.aesEncrypt(clearText, key, "CFB", paddingType...)
 }
 
 // AesCFBDecrypt AES-CFB密文反馈(Cipher feedback)模式解密.
 // cipherText为密文;key为密钥,长16/24/32;paddingType为填充方式,枚举(PKCS0,PKCS7),默认PKCS7.
 func (ke *LkkEncrypt) AesCFBDecrypt(cipherText, key []byte, paddingType ...LkkPKCSType) ([]byte, error) {
-	block, err := aes.NewCipher(key)
-	if err != nil {
-		return nil, err
-	}
-
-	pt := PKCS7
-	if len(paddingType) > 0 {
-		pt = paddingType[0]
-	}
-
-	blockSize := block.BlockSize()
-	clen := len(cipherText)
-	if clen < blockSize {
-		return nil, errors.New("cipherText too short")
-	}
-
-	iv := cipherText[:blockSize]
-	cipherText = cipherText[blockSize:]
-	cipher.NewCFBDecrypter(block, iv).XORKeyStream(cipherText, cipherText)
-	clen = len(cipherText)
-	if clen > 0 && int(cipherText[clen-1]) > clen {
-		return nil, errors.New("aes CFB decrypt failed")
-	}
-
-	var plainText []byte
-	switch pt {
-	case PKCS0:
-		plainText = zeroUnPadding(cipherText)
-	case PKCS7:
-		plainText = pkcs7UnPadding(cipherText, blockSize)
-	}
-
-	return plainText, nil
+	return ke.aesDecrypt(cipherText, key, "CFB", paddingType...)
 }
 
 // AesECBEncrypt AES-CTR计算器(Counter)模式加密.
 // clearText为明文;key为密钥,长16/24/32;paddingType为填充方式,枚举(PKCS0,PKCS7),默认PKCS7.
 func (ke *LkkEncrypt) AesCTREncrypt(clearText, key []byte, paddingType ...LkkPKCSType) ([]byte, error) {
-	block, err := aes.NewCipher(key)
-	if err != nil {
-		return nil, err
-	}
-
-	pt := PKCS7
-	blockSize := block.BlockSize()
-	if len(paddingType) > 0 {
-		pt = paddingType[0]
-	}
-	switch pt {
-	case PKCS0:
-		clearText = zeroPadding(clearText, blockSize)
-	case PKCS7:
-		clearText = pkcs7Padding(clearText, blockSize, false)
-	}
-
-	cipherText := make([]byte, blockSize+len(clearText))
-	//初始化向量
-	iv := cipherText[:blockSize]
-	_, _ = io.ReadFull(rand.Reader, iv)
-	cipher.NewCTR(block, iv).XORKeyStream(cipherText[blockSize:], clearText)
-
-	return cipherText, nil
+	return ke.aesEncrypt(clearText, key, "CTR", paddingType...)
 }
 
 // AesECBDecrypt AES-CTR计算器(Counter)模式解密.
 // cipherText为密文;key为密钥,长16/24/32;paddingType为填充方式,枚举(PKCS0,PKCS7),默认PKCS7.
 func (ke *LkkEncrypt) AesCTRDecrypt(cipherText, key []byte, paddingType ...LkkPKCSType) ([]byte, error) {
-	block, err := aes.NewCipher(key)
-	if err != nil {
-		return nil, err
-	}
-
-	pt := PKCS7
-	if len(paddingType) > 0 {
-		pt = paddingType[0]
-	}
-
-	blockSize := block.BlockSize()
-	clen := len(cipherText)
-	if clen < blockSize {
-		return nil, errors.New("cipherText too short")
-	}
-
-	iv := cipherText[:blockSize]
-	cipherText = cipherText[blockSize:]
-	cipher.NewCTR(block, iv).XORKeyStream(cipherText, cipherText)
-	clen = len(cipherText)
-	if clen > 1 && int(cipherText[clen-1]) > clen {
-		return nil, errors.New("aes CTR decrypt failed")
-	}
-
-	var plainText []byte
-	switch pt {
-	case PKCS0:
-		plainText = zeroUnPadding(cipherText)
-	case PKCS7:
-		plainText = pkcs7UnPadding(cipherText, blockSize)
-	}
-
-	return plainText, nil
+	return ke.aesDecrypt(cipherText, key, "CTR", paddingType...)
 }
