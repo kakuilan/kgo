@@ -138,12 +138,11 @@ https://github.com/iiinsomnia/yiigo/blob/master/crypto.go
 
 rsa
 http://doc.aiwaly.com/docs/golang/golang-1b9e5j9tn5g08
-
-aes
-http://doc.aiwaly.com/docs/golang/golang-1b9e47tisaoe4
-https://github.com/henrylee2cn/goutil/blob/master/encrypt.go
-https://github.com/Teamwork/utils/blob/master/aesutil/aesutil.go
-https://github.com/iiinsomnia/yiigo/blob/master/crypto.go
+https://studygolang.com/articles/6853
+https://studygolang.com/articles/5257
+https://blog.csdn.net/lhtzbj12/article/details/79427235
+https://github.com/brainattica/Golang-RSA-sample/blob/master/rsa_sample.go
+https://zhuanlan.zhihu.com/p/86320624
 
 
 pid
