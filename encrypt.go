@@ -280,7 +280,7 @@ func (ke *LkkEncrypt) HmacShaX(data, secret []byte, x uint16) string {
 
 // aesEncrypt AES加密.
 // clearText为明文;key为密钥,长度16/24/32;
-// mode为模式,枚举值(CBC,CFB,CTR);
+// mode为模式,枚举值(CBC,CFB,CTR,OFB);
 // paddingType为填充方式,枚举(PKCS_NONE,PKCS_ZERO,PKCS_SEVEN),默认PKCS_SEVEN.
 func (ke *LkkEncrypt) aesEncrypt(clearText, key []byte, mode string, paddingType ...LkkPKCSType) ([]byte, error) {
 	block, err := aes.NewCipher(key)
@@ -315,6 +315,8 @@ func (ke *LkkEncrypt) aesEncrypt(clearText, key []byte, mode string, paddingType
 		cipher.NewCFBEncrypter(block, iv).XORKeyStream(cipherText[blockSize:], clearText)
 	case "CTR":
 		cipher.NewCTR(block, iv).XORKeyStream(cipherText[blockSize:], clearText)
+	case "OFB":
+		cipher.NewOFB(block, iv).XORKeyStream(cipherText[blockSize:], clearText)
 	}
 
 	return cipherText, nil
@@ -322,7 +324,7 @@ func (ke *LkkEncrypt) aesEncrypt(clearText, key []byte, mode string, paddingType
 
 // aesDecrypt AES解密.
 // cipherText为密文;key为密钥,长度16/24/32;
-// mode为模式,枚举值(CBC,CFB,CTR);
+// mode为模式,枚举值(CBC,CFB,CTR,OFB);
 // paddingType为填充方式,枚举(PKCS_NONE,PKCS_ZERO,PKCS_SEVEN),默认PKCS_SEVEN.
 func (ke *LkkEncrypt) aesDecrypt(cipherText, key []byte, mode string, paddingType ...LkkPKCSType) ([]byte, error) {
 	block, err := aes.NewCipher(key)
@@ -351,10 +353,12 @@ func (ke *LkkEncrypt) aesDecrypt(cipherText, key []byte, mode string, paddingTyp
 		cipher.NewCFBDecrypter(block, iv).XORKeyStream(cipherText, cipherText)
 	case "CTR":
 		cipher.NewCTR(block, iv).XORKeyStream(cipherText, cipherText)
+	case "OFB":
+		cipher.NewOFB(block, iv).XORKeyStream(cipherText, cipherText)
 	}
 
 	clen = len(cipherText)
-	if clen > 0 && int(cipherText[clen-1]) > clen {
+	if pt != PKCS_NONE && clen > 0 && int(cipherText[clen-1]) > clen {
 		return nil, errors.New(fmt.Sprintf("aes [%s] decrypt failed", mode))
 	}
 
@@ -405,4 +409,16 @@ func (ke *LkkEncrypt) AesCTREncrypt(clearText, key []byte) ([]byte, error) {
 // cipherText为密文;key为密钥,长16/24/32.
 func (ke *LkkEncrypt) AesCTRDecrypt(cipherText, key []byte) ([]byte, error) {
 	return ke.aesDecrypt(cipherText, key, "CTR", PKCS_NONE)
+}
+
+// AesOFBEncrypt AES-OFB输出反馈(Output feedback)模式加密.适合对流数据加密.
+// clearText为明文;key为密钥,长16/24/32.
+func (ke *LkkEncrypt) AesOFBEncrypt(clearText, key []byte) ([]byte, error) {
+	return ke.aesEncrypt(clearText, key, "OFB", PKCS_NONE)
+}
+
+// AesOFBDecrypt AES-OFB输出反馈(Output feedback)模式解密.
+// cipherText为密文;key为密钥,长16/24/32.
+func (ke *LkkEncrypt) AesOFBDecrypt(cipherText, key []byte) ([]byte, error) {
+	return ke.aesDecrypt(cipherText, key, "OFB", PKCS_NONE)
 }

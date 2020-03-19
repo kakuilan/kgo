@@ -402,12 +402,21 @@ func BenchmarkAesCBCEncrypt(b *testing.B) {
 	}
 }
 
-func BenchmarkAesCBCDecrypt(b *testing.B) {
+func BenchmarkAesCBCDecryptZero(b *testing.B) {
 	b.ResetTimer()
 	enc := []byte{214, 214, 97, 208, 185, 68, 246, 40, 124, 3, 155, 58, 5, 84, 136, 10, 104, 101, 108, 108, 111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	key := []byte("1234567890123456")
 	for i := 0; i < b.N; i++ {
 		_, _ = KEncr.AesCBCDecrypt(enc, key, PKCS_ZERO)
+	}
+}
+
+func BenchmarkAesCBCDecryptSeven(b *testing.B) {
+	b.ResetTimer()
+	enc := []byte{17, 195, 8, 206, 231, 183, 143, 246, 244, 137, 216, 185, 120, 175, 90, 111, 104, 101, 108, 108, 111, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11}
+	key := []byte("1234567890123456")
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.AesCBCDecrypt(enc, key, PKCS_SEVEN)
 	}
 }
 
@@ -438,13 +447,6 @@ func TestAesCFBEncryptDecrypt(t *testing.T) {
 		return
 	}
 
-	enc = []byte{83, 28, 170, 254, 29, 174, 21, 129, 241, 233, 243, 84, 1, 250, 95, 122, 104, 101, 108, 108, 111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	des, err = KEncr.AesCFBDecrypt(enc, key)
-	if err == nil {
-		t.Error("AesCFBDecrypt fail")
-		return
-	}
-
 	_, err = KEncr.AesCFBDecrypt(enc, []byte("1"))
 	if err == nil {
 		t.Error("AesCFBDecrypt fail")
@@ -470,7 +472,7 @@ func BenchmarkAesCFBEncrypt(b *testing.B) {
 
 func BenchmarkAesCFBDecrypt(b *testing.B) {
 	b.ResetTimer()
-	enc := []byte{20, 193, 94, 23, 183, 173, 65, 237, 222, 161, 169, 129, 125, 200, 110, 132, 104, 101, 108, 108, 111, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11}
+	enc := []byte{150, 234, 226, 46, 34, 206, 171, 155, 186, 66, 116, 201, 63, 67, 227, 217, 104, 101, 108, 108, 111}
 	key := []byte("1234567890123456")
 	for i := 0; i < b.N; i++ {
 		_, _ = KEncr.AesCFBDecrypt(enc, key)
@@ -504,13 +506,6 @@ func TestAesCTREncryptDecrypt(t *testing.T) {
 		return
 	}
 
-	enc = []byte{83, 28, 170, 254, 29, 174, 21, 129, 241, 233, 243, 84, 1, 250, 95, 122, 104, 101, 108, 108, 111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	des, err = KEncr.AesCTRDecrypt(enc, key)
-	if err == nil {
-		t.Error("AesCTRDecrypt fail")
-		return
-	}
-
 	_, err = KEncr.AesCTRDecrypt(enc, []byte("1"))
 	if err == nil {
 		t.Error("AesCTRDecrypt fail")
@@ -522,9 +517,7 @@ func TestAesCTREncryptDecrypt(t *testing.T) {
 		t.Error("AesCTRDecrypt fail")
 		return
 	}
-	//fmt.Printf("%v \n", enc)
-	//fmt.Printf("%v \n", des)
-	//fmt.Printf("%s \n", des)
+
 }
 
 func BenchmarkAesCTREncrypt(b *testing.B) {
@@ -538,9 +531,68 @@ func BenchmarkAesCTREncrypt(b *testing.B) {
 
 func BenchmarkAesCTRDecrypt(b *testing.B) {
 	b.ResetTimer()
-	enc := []byte{120, 134, 68, 163, 146, 37, 245, 79, 12, 237, 58, 77, 188, 123, 24, 77, 104, 101, 108, 108, 111, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11}
+	enc := []byte{225, 187, 161, 145, 117, 191, 229, 20, 164, 43, 242, 23, 138, 241, 74, 27, 104, 101, 108, 108, 111}
 	key := []byte("1234567890123456")
 	for i := 0; i < b.N; i++ {
 		_, _ = KEncr.AesCTRDecrypt(enc, key)
+	}
+}
+
+func TestAesOFBEncryptDecrypt(t *testing.T) {
+	ori := []byte("hello")
+	key := []byte("1234567890123456")
+	emp := []byte("")
+	var err error
+	var enc, des []byte
+
+	_, err = KEncr.AesOFBEncrypt(ori, []byte("123"))
+	if err == nil {
+		t.Error("AesOFBEncrypt fail")
+		return
+	}
+
+	enc, err = KEncr.AesOFBEncrypt(ori, key)
+	des, err = KEncr.AesOFBDecrypt(enc, key)
+	if !KArr.IsEqualArray(ori, des) {
+		t.Error("AesOFBEncrypt fail")
+		return
+	}
+
+	enc, err = KEncr.AesOFBEncrypt(emp, key)
+	des, err = KEncr.AesOFBDecrypt(enc, key)
+	if !KArr.IsEqualArray(emp, des) {
+		t.Error("AesOFBEncrypt fail")
+		return
+	}
+
+	_, err = KEncr.AesOFBDecrypt(enc, []byte("1"))
+	if err == nil {
+		t.Error("AesOFBDecrypt fail")
+		return
+	}
+
+	_, err = KEncr.AesOFBDecrypt([]byte("1234"), key)
+	if err == nil {
+		t.Error("AesOFBDecrypt fail")
+		return
+	}
+
+}
+
+func BenchmarkAesOFBEncrypt(b *testing.B) {
+	b.ResetTimer()
+	ori := []byte("hello")
+	key := []byte("1234567890123456")
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.AesOFBEncrypt(ori, key)
+	}
+}
+
+func BenchmarkAesOFBDecrypt(b *testing.B) {
+	b.ResetTimer()
+	enc := []byte{66, 87, 29, 157, 2, 128, 196, 94, 141, 224, 221, 41, 162, 41, 159, 207, 104, 101, 108, 108, 111}
+	key := []byte("1234567890123456")
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.AesOFBDecrypt(enc, key)
 	}
 }
