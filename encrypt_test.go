@@ -362,3 +362,83 @@ func BenchmarkZeroUnPadding(b *testing.B) {
 		pkcs5UnPadding(ori)
 	}
 }
+
+func TestAesCBCEncryptDecrypt(t *testing.T) {
+	ori := []byte("hello")
+	key := []byte("1234567890123456")
+	emp := []byte("")
+	var err error
+	var enc, des []byte
+
+	_, err = KEncr.AesCBCEncrypt(ori, []byte("123"))
+	if err == nil {
+		t.Error("AesCBCEncrypt fail")
+		return
+	}
+
+	enc, err = KEncr.AesCBCEncrypt(ori, key)
+	des, err = KEncr.AesCBCDecrypt(enc, key)
+	if !KArr.IsEqualArray(ori, des) {
+		t.Error("AesCBCEncrypt fail")
+		return
+	}
+
+	enc, err = KEncr.AesCBCEncrypt(ori, key, PKCS7)
+	des, err = KEncr.AesCBCDecrypt(enc, key, PKCS7)
+	if !KArr.IsEqualArray(ori, des) {
+		t.Error("AesCBCEncrypt fail")
+		return
+	}
+
+	enc, err = KEncr.AesCBCEncrypt(emp, key, PKCS7)
+	des, err = KEncr.AesCBCDecrypt(enc, key, PKCS7)
+	if !KArr.IsEqualArray(emp, des) {
+		t.Error("AesCBCEncrypt fail")
+		return
+	}
+
+	enc, err = KEncr.AesCBCEncrypt(ori, key, PKCS0)
+	des, err = KEncr.AesCBCDecrypt(enc, key, PKCS0)
+	if !KArr.IsEqualArray(ori, des) {
+		t.Error("AesCBCEncrypt fail")
+		return
+	}
+
+	enc = []byte{83, 28, 170, 254, 29, 174, 21, 129, 241, 233, 243, 84, 1, 250, 95, 122, 104, 101, 108, 108, 111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	des, err = KEncr.AesCBCDecrypt(enc, key, PKCS0)
+	if err == nil {
+		t.Error("AesCBCDecrypt fail")
+		return
+	}
+
+	_, err = KEncr.AesCBCDecrypt(enc, []byte("1"))
+	if err == nil {
+		t.Error("AesCBCDecrypt fail")
+		return
+	}
+
+	_, err = KEncr.AesCBCDecrypt([]byte("1234"), key)
+	if err == nil {
+		t.Error("AesCBCDecrypt fail")
+		return
+	}
+
+}
+
+func BenchmarkAesCBCEncrypt(b *testing.B) {
+	b.ResetTimer()
+	ori := []byte("hello")
+	key := []byte("1234567890123456")
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.AesCBCEncrypt(ori, key)
+	}
+}
+
+func BenchmarkAesCBCDecrypt(b *testing.B) {
+	b.ResetTimer()
+	enc := []byte{214, 214, 97, 208, 185, 68, 246, 40, 124, 3, 155, 58, 5, 84, 136, 10, 104, 101, 108, 108, 111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	key := []byte("1234567890123456")
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.AesCBCDecrypt(enc, key, PKCS0)
+	}
+}

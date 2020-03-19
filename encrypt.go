@@ -300,9 +300,10 @@ func (ke *LkkEncrypt) AesCBCEncrypt(clearText, key []byte, paddingType ...LkkPKC
 
 	cipherText := make([]byte, blockSize+len(clearText))
 	iv := cipherText[:blockSize]
-	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-		return nil, err
-	}
+	_, _ = io.ReadFull(rand.Reader, iv)
+	//if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+	//	return nil, err
+	//}
 	cipher.NewCBCEncrypter(block, iv).CryptBlocks(cipherText[blockSize:], clearText)
 	return cipherText, nil
 }
