@@ -520,16 +520,6 @@ func pkcs7UnPadding(origData []byte, blockSize int) []byte {
 	return origData[:(olen - unpadding)]
 }
 
-// pkcs5Padding PKCS5填充.
-func pkcs5Padding(ciphertext []byte) []byte {
-	return pkcs7Padding(ciphertext, 8, false)
-}
-
-// pkcs5UnPadding PKCS5拆解.
-func pkcs5UnPadding(origData []byte) []byte {
-	return pkcs7UnPadding(origData, 8)
-}
-
 // zeroPadding PKCS7使用0填充.
 func zeroPadding(ciphertext []byte, blockSize int) []byte {
 	return pkcs7Padding(ciphertext, blockSize, true)
