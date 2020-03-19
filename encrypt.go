@@ -278,6 +278,7 @@ func (ke *LkkEncrypt) HmacShaX(data, secret []byte, x uint16) string {
 	return sha
 }
 
+// aesEncrypt AES加密.mode为模式,枚举值(CBC,CFB,CTR).
 func (ke *LkkEncrypt) aesEncrypt(clearText, key []byte, mode string, paddingType ...LkkPKCSType) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -316,6 +317,7 @@ func (ke *LkkEncrypt) aesEncrypt(clearText, key []byte, mode string, paddingType
 	return cipherText, nil
 }
 
+// aesDecrypt AES解密.mode为模式,枚举值(CBC,CFB,CTR).
 func (ke *LkkEncrypt) aesDecrypt(cipherText, key []byte, mode string, paddingType ...LkkPKCSType) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
