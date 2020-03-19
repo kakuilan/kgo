@@ -351,29 +351,29 @@ func TestAesCBCEncryptDecrypt(t *testing.T) {
 		return
 	}
 
-	enc, err = KEncr.AesCBCEncrypt(ori, key, PKCS7)
-	des, err = KEncr.AesCBCDecrypt(enc, key, PKCS7)
+	enc, err = KEncr.AesCBCEncrypt(ori, key, PKCS_SEVEN)
+	des, err = KEncr.AesCBCDecrypt(enc, key, PKCS_SEVEN)
 	if !KArr.IsEqualArray(ori, des) {
 		t.Error("AesCBCEncrypt fail")
 		return
 	}
 
-	enc, err = KEncr.AesCBCEncrypt(emp, key, PKCS7)
-	des, err = KEncr.AesCBCDecrypt(enc, key, PKCS7)
+	enc, err = KEncr.AesCBCEncrypt(emp, key, PKCS_SEVEN)
+	des, err = KEncr.AesCBCDecrypt(enc, key, PKCS_SEVEN)
 	if !KArr.IsEqualArray(emp, des) {
 		t.Error("AesCBCEncrypt fail")
 		return
 	}
 
-	enc, err = KEncr.AesCBCEncrypt(ori, key, PKCS0)
-	des, err = KEncr.AesCBCDecrypt(enc, key, PKCS0)
+	enc, err = KEncr.AesCBCEncrypt(ori, key, PKCS_ZERO)
+	des, err = KEncr.AesCBCDecrypt(enc, key, PKCS_ZERO)
 	if !KArr.IsEqualArray(ori, des) {
 		t.Error("AesCBCEncrypt fail")
 		return
 	}
 
 	enc = []byte{83, 28, 170, 254, 29, 174, 21, 129, 241, 233, 243, 84, 1, 250, 95, 122, 104, 101, 108, 108, 111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	des, err = KEncr.AesCBCDecrypt(enc, key, PKCS0)
+	des, err = KEncr.AesCBCDecrypt(enc, key, PKCS_ZERO)
 	if err == nil {
 		t.Error("AesCBCDecrypt fail")
 		return
@@ -407,7 +407,7 @@ func BenchmarkAesCBCDecrypt(b *testing.B) {
 	enc := []byte{214, 214, 97, 208, 185, 68, 246, 40, 124, 3, 155, 58, 5, 84, 136, 10, 104, 101, 108, 108, 111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	key := []byte("1234567890123456")
 	for i := 0; i < b.N; i++ {
-		_, _ = KEncr.AesCBCDecrypt(enc, key, PKCS0)
+		_, _ = KEncr.AesCBCDecrypt(enc, key, PKCS_ZERO)
 	}
 }
 
@@ -431,29 +431,15 @@ func TestAesCFBEncryptDecrypt(t *testing.T) {
 		return
 	}
 
-	enc, err = KEncr.AesCFBEncrypt(ori, key, PKCS7)
-	des, err = KEncr.AesCFBDecrypt(enc, key, PKCS7)
-	if !KArr.IsEqualArray(ori, des) {
-		t.Error("AesCFBEncrypt fail")
-		return
-	}
-
-	enc, err = KEncr.AesCFBEncrypt(emp, key, PKCS7)
-	des, err = KEncr.AesCFBDecrypt(enc, key, PKCS7)
+	enc, err = KEncr.AesCFBEncrypt(emp, key)
+	des, err = KEncr.AesCFBDecrypt(enc, key)
 	if !KArr.IsEqualArray(emp, des) {
 		t.Error("AesCFBEncrypt fail")
 		return
 	}
 
-	enc, err = KEncr.AesCFBEncrypt(ori, key, PKCS0)
-	des, err = KEncr.AesCFBDecrypt(enc, key, PKCS0)
-	if !KArr.IsEqualArray(ori, des) {
-		t.Error("AesCFBEncrypt fail")
-		return
-	}
-
 	enc = []byte{83, 28, 170, 254, 29, 174, 21, 129, 241, 233, 243, 84, 1, 250, 95, 122, 104, 101, 108, 108, 111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	des, err = KEncr.AesCFBDecrypt(enc, key, PKCS0)
+	des, err = KEncr.AesCFBDecrypt(enc, key)
 	if err == nil {
 		t.Error("AesCFBDecrypt fail")
 		return
@@ -511,29 +497,15 @@ func TestAesCTREncryptDecrypt(t *testing.T) {
 		return
 	}
 
-	enc, err = KEncr.AesCTREncrypt(ori, key, PKCS7)
-	des, err = KEncr.AesCTRDecrypt(enc, key, PKCS7)
-	if !KArr.IsEqualArray(ori, des) {
-		t.Error("AesCTREncrypt fail")
-		return
-	}
-
-	enc, err = KEncr.AesCTREncrypt(emp, key, PKCS7)
-	des, err = KEncr.AesCTRDecrypt(enc, key, PKCS7)
+	enc, err = KEncr.AesCTREncrypt(emp, key)
+	des, err = KEncr.AesCTRDecrypt(enc, key)
 	if !KArr.IsEqualArray(emp, des) {
 		t.Error("AesCTREncrypt fail")
 		return
 	}
 
-	enc, err = KEncr.AesCTREncrypt(ori, key, PKCS0)
-	des, err = KEncr.AesCTRDecrypt(enc, key, PKCS0)
-	if !KArr.IsEqualArray(ori, des) {
-		t.Error("AesCTREncrypt fail")
-		return
-	}
-
 	enc = []byte{83, 28, 170, 254, 29, 174, 21, 129, 241, 233, 243, 84, 1, 250, 95, 122, 104, 101, 108, 108, 111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	des, err = KEncr.AesCTRDecrypt(enc, key, PKCS0)
+	des, err = KEncr.AesCTRDecrypt(enc, key)
 	if err == nil {
 		t.Error("AesCTRDecrypt fail")
 		return

@@ -278,22 +278,25 @@ func (ke *LkkEncrypt) HmacShaX(data, secret []byte, x uint16) string {
 	return sha
 }
 
-// aesEncrypt AES加密.mode为模式,枚举值(CBC,CFB,CTR).
+// aesEncrypt AES加密.
+// clearText为明文;key为密钥,长度16/24/32;
+// mode为模式,枚举值(CBC,CFB,CTR);
+// paddingType为填充方式,枚举(PKCS_NONE,PKCS_ZERO,PKCS_SEVEN),默认PKCS_SEVEN.
 func (ke *LkkEncrypt) aesEncrypt(clearText, key []byte, mode string, paddingType ...LkkPKCSType) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
 	}
 
-	pt := PKCS7
+	pt := PKCS_SEVEN
 	blockSize := block.BlockSize()
 	if len(paddingType) > 0 {
 		pt = paddingType[0]
 	}
 	switch pt {
-	case PKCS0:
+	case PKCS_ZERO:
 		clearText = zeroPadding(clearText, blockSize)
-	case PKCS7:
+	case PKCS_SEVEN:
 		clearText = pkcs7Padding(clearText, blockSize, false)
 	}
 
@@ -317,14 +320,17 @@ func (ke *LkkEncrypt) aesEncrypt(clearText, key []byte, mode string, paddingType
 	return cipherText, nil
 }
 
-// aesDecrypt AES解密.mode为模式,枚举值(CBC,CFB,CTR).
+// aesDecrypt AES解密.
+// cipherText为密文;key为密钥,长度16/24/32;
+// mode为模式,枚举值(CBC,CFB,CTR);
+// paddingType为填充方式,枚举(PKCS_NONE,PKCS_ZERO,PKCS_SEVEN),默认PKCS_SEVEN.
 func (ke *LkkEncrypt) aesDecrypt(cipherText, key []byte, mode string, paddingType ...LkkPKCSType) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
 	}
 
-	pt := PKCS7
+	pt := PKCS_SEVEN
 	if len(paddingType) > 0 {
 		pt = paddingType[0]
 	}
@@ -354,47 +360,49 @@ func (ke *LkkEncrypt) aesDecrypt(cipherText, key []byte, mode string, paddingTyp
 
 	var plainText []byte
 	switch pt {
-	case PKCS0:
+	case PKCS_ZERO:
 		plainText = zeroUnPadding(cipherText)
-	case PKCS7:
+	case PKCS_SEVEN:
 		plainText = pkcs7UnPadding(cipherText, blockSize)
+	case PKCS_NONE:
+		plainText = cipherText
 	}
 
 	return plainText, nil
 }
 
-// AesCBCEncrypt AES-CBC密码分组链接(Cipher-block chaining)模式加密.
-// clearText为明文;key为密钥,长16/24/32;paddingType为填充方式,枚举(PKCS0,PKCS7),默认PKCS7.
+// AesCBCEncrypt AES-CBC密码分组链接(Cipher-block chaining)模式加密.加密无法并行,不适合对流数据加密.
+// clearText为明文;key为密钥,长16/24/32;paddingType为填充方式,枚举(PKCS_ZERO,PKCS_SEVEN),默认PKCS_SEVEN.
 func (ke *LkkEncrypt) AesCBCEncrypt(clearText, key []byte, paddingType ...LkkPKCSType) ([]byte, error) {
 	return ke.aesEncrypt(clearText, key, "CBC", paddingType...)
 }
 
 // AesCBCDecrypt AES-CBC密码分组链接(Cipher-block chaining)模式解密.
-// cipherText为密文;key为密钥,长16/24/32;paddingType为填充方式,枚举(PKCS0,PKCS7),默认PKCS7.
+// cipherText为密文;key为密钥,长16/24/32;paddingType为填充方式,枚举(PKCS_NONE,PKCS_ZERO,PKCS_SEVEN),默认PKCS_SEVEN.
 func (ke *LkkEncrypt) AesCBCDecrypt(cipherText, key []byte, paddingType ...LkkPKCSType) ([]byte, error) {
 	return ke.aesDecrypt(cipherText, key, "CBC", paddingType...)
 }
 
-// AesCFBEncrypt AES-CFB密文反馈(Cipher feedback)模式加密.
-// clearText为明文;key为密钥,长16/24/32;paddingType为填充方式,枚举(PKCS0,PKCS7),默认PKCS7.
-func (ke *LkkEncrypt) AesCFBEncrypt(clearText, key []byte, paddingType ...LkkPKCSType) ([]byte, error) {
-	return ke.aesEncrypt(clearText, key, "CFB", paddingType...)
+// AesCFBEncrypt AES-CFB密文反馈(Cipher feedback)模式加密.适合对流数据加密.
+// clearText为明文;key为密钥,长16/24/32.
+func (ke *LkkEncrypt) AesCFBEncrypt(clearText, key []byte) ([]byte, error) {
+	return ke.aesEncrypt(clearText, key, "CFB", PKCS_NONE)
 }
 
 // AesCFBDecrypt AES-CFB密文反馈(Cipher feedback)模式解密.
-// cipherText为密文;key为密钥,长16/24/32;paddingType为填充方式,枚举(PKCS0,PKCS7),默认PKCS7.
-func (ke *LkkEncrypt) AesCFBDecrypt(cipherText, key []byte, paddingType ...LkkPKCSType) ([]byte, error) {
-	return ke.aesDecrypt(cipherText, key, "CFB", paddingType...)
+// cipherText为密文;key为密钥,长16/24/32.
+func (ke *LkkEncrypt) AesCFBDecrypt(cipherText, key []byte) ([]byte, error) {
+	return ke.aesDecrypt(cipherText, key, "CFB", PKCS_NONE)
 }
 
 // AesECBEncrypt AES-CTR计算器(Counter)模式加密.
-// clearText为明文;key为密钥,长16/24/32;paddingType为填充方式,枚举(PKCS0,PKCS7),默认PKCS7.
-func (ke *LkkEncrypt) AesCTREncrypt(clearText, key []byte, paddingType ...LkkPKCSType) ([]byte, error) {
-	return ke.aesEncrypt(clearText, key, "CTR", paddingType...)
+// clearText为明文;key为密钥,长16/24/32.
+func (ke *LkkEncrypt) AesCTREncrypt(clearText, key []byte) ([]byte, error) {
+	return ke.aesEncrypt(clearText, key, "CTR", PKCS_NONE)
 }
 
 // AesECBDecrypt AES-CTR计算器(Counter)模式解密.
-// cipherText为密文;key为密钥,长16/24/32;paddingType为填充方式,枚举(PKCS0,PKCS7),默认PKCS7.
-func (ke *LkkEncrypt) AesCTRDecrypt(cipherText, key []byte, paddingType ...LkkPKCSType) ([]byte, error) {
-	return ke.aesDecrypt(cipherText, key, "CTR", paddingType...)
+// cipherText为密文;key为密钥,长16/24/32.
+func (ke *LkkEncrypt) AesCTRDecrypt(cipherText, key []byte) ([]byte, error) {
+	return ke.aesDecrypt(cipherText, key, "CTR", PKCS_NONE)
 }
