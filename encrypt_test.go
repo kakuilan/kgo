@@ -471,10 +471,6 @@ func TestAesCFBEncryptDecrypt(t *testing.T) {
 		return
 	}
 
-	//fmt.Printf("%v \n", enc)
-	//fmt.Printf("%v \n", des)
-	//fmt.Printf("%s \n", des)
-
 }
 
 func BenchmarkAesCFBEncrypt(b *testing.B) {
@@ -492,5 +488,87 @@ func BenchmarkAesCFBDecrypt(b *testing.B) {
 	key := []byte("1234567890123456")
 	for i := 0; i < b.N; i++ {
 		_, _ = KEncr.AesCFBDecrypt(enc, key)
+	}
+}
+
+func TestAesCTREncryptDecrypt(t *testing.T) {
+	ori := []byte("hello")
+	key := []byte("1234567890123456")
+	emp := []byte("")
+	var err error
+	var enc, des []byte
+
+	_, err = KEncr.AesCTREncrypt(ori, []byte("123"))
+	if err == nil {
+		t.Error("AesCTREncrypt fail")
+		return
+	}
+
+	enc, err = KEncr.AesCTREncrypt(ori, key)
+	des, err = KEncr.AesCTRDecrypt(enc, key)
+	if !KArr.IsEqualArray(ori, des) {
+		t.Error("AesCTREncrypt fail")
+		return
+	}
+
+	enc, err = KEncr.AesCTREncrypt(ori, key, PKCS7)
+	des, err = KEncr.AesCTRDecrypt(enc, key, PKCS7)
+	if !KArr.IsEqualArray(ori, des) {
+		t.Error("AesCTREncrypt fail")
+		return
+	}
+
+	enc, err = KEncr.AesCTREncrypt(emp, key, PKCS7)
+	des, err = KEncr.AesCTRDecrypt(enc, key, PKCS7)
+	if !KArr.IsEqualArray(emp, des) {
+		t.Error("AesCTREncrypt fail")
+		return
+	}
+
+	enc, err = KEncr.AesCTREncrypt(ori, key, PKCS0)
+	des, err = KEncr.AesCTRDecrypt(enc, key, PKCS0)
+	if !KArr.IsEqualArray(ori, des) {
+		t.Error("AesCTREncrypt fail")
+		return
+	}
+
+	enc = []byte{83, 28, 170, 254, 29, 174, 21, 129, 241, 233, 243, 84, 1, 250, 95, 122, 104, 101, 108, 108, 111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	des, err = KEncr.AesCTRDecrypt(enc, key, PKCS0)
+	if err == nil {
+		t.Error("AesCTRDecrypt fail")
+		return
+	}
+
+	_, err = KEncr.AesCTRDecrypt(enc, []byte("1"))
+	if err == nil {
+		t.Error("AesCTRDecrypt fail")
+		return
+	}
+
+	_, err = KEncr.AesCTRDecrypt([]byte("1234"), key)
+	if err == nil {
+		t.Error("AesCTRDecrypt fail")
+		return
+	}
+	//fmt.Printf("%v \n", enc)
+	//fmt.Printf("%v \n", des)
+	//fmt.Printf("%s \n", des)
+}
+
+func BenchmarkAesCTREncrypt(b *testing.B) {
+	b.ResetTimer()
+	ori := []byte("hello")
+	key := []byte("1234567890123456")
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.AesCTREncrypt(ori, key)
+	}
+}
+
+func BenchmarkAesCTRDecrypt(b *testing.B) {
+	b.ResetTimer()
+	enc := []byte{120, 134, 68, 163, 146, 37, 245, 79, 12, 237, 58, 77, 188, 123, 24, 77, 104, 101, 108, 108, 111, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11}
+	key := []byte("1234567890123456")
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.AesCTRDecrypt(enc, key)
 	}
 }

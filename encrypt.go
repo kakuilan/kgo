@@ -159,7 +159,7 @@ func (ke *LkkEncrypt) AuthCode(str, key string, encode bool, expiry int64) (stri
 	}
 }
 
-// PasswordHash 创建密码的散列值;costs为算法的cost,范围4~31,默认10,注意值越大越耗时.
+// PasswordHash 创建密码的散列值;costs为算法的cost,范围4~31,默认10;注意:值越大越耗时.
 func (ke *LkkEncrypt) PasswordHash(password []byte, costs ...int) ([]byte, error) {
 	var cost int
 	if len(costs) == 0 {
@@ -402,6 +402,73 @@ func (ke *LkkEncrypt) AesCFBDecrypt(cipherText, key []byte, paddingType ...LkkPK
 	clen = len(cipherText)
 	if clen > 0 && int(cipherText[clen-1]) > clen {
 		return nil, errors.New("aes CFB decrypt failed")
+	}
+
+	var plainText []byte
+	switch pt {
+	case PKCS0:
+		plainText = zeroUnPadding(cipherText)
+	case PKCS7:
+		plainText = pkcs7UnPadding(cipherText, blockSize)
+	}
+
+	return plainText, nil
+}
+
+// AesECBEncrypt AES-CTR计算器(Counter)模式加密.
+// clearText为明文;key为密钥,长16/24/32;paddingType为填充方式,枚举(PKCS0,PKCS7),默认PKCS7.
+func (ke *LkkEncrypt) AesCTREncrypt(clearText, key []byte, paddingType ...LkkPKCSType) ([]byte, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+
+	pt := PKCS7
+	blockSize := block.BlockSize()
+	if len(paddingType) > 0 {
+		pt = paddingType[0]
+	}
+	switch pt {
+	case PKCS0:
+		clearText = zeroPadding(clearText, blockSize)
+	case PKCS7:
+		clearText = pkcs7Padding(clearText, blockSize, false)
+	}
+
+	cipherText := make([]byte, blockSize+len(clearText))
+	//初始化向量
+	iv := cipherText[:blockSize]
+	_, _ = io.ReadFull(rand.Reader, iv)
+	cipher.NewCTR(block, iv).XORKeyStream(cipherText[blockSize:], clearText)
+
+	return cipherText, nil
+}
+
+// AesECBDecrypt AES-CTR计算器(Counter)模式解密.
+// cipherText为密文;key为密钥,长16/24/32;paddingType为填充方式,枚举(PKCS0,PKCS7),默认PKCS7.
+func (ke *LkkEncrypt) AesCTRDecrypt(cipherText, key []byte, paddingType ...LkkPKCSType) ([]byte, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+
+	pt := PKCS7
+	if len(paddingType) > 0 {
+		pt = paddingType[0]
+	}
+
+	blockSize := block.BlockSize()
+	clen := len(cipherText)
+	if clen < blockSize {
+		return nil, errors.New("cipherText too short")
+	}
+
+	iv := cipherText[:blockSize]
+	cipherText = cipherText[blockSize:]
+	cipher.NewCTR(block, iv).XORKeyStream(cipherText, cipherText)
+	clen = len(cipherText)
+	if clen > 1 && int(cipherText[clen-1]) > clen {
+		return nil, errors.New("aes CTR decrypt failed")
 	}
 
 	var plainText []byte
