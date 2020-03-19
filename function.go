@@ -486,10 +486,10 @@ func getProcessPathByPid(pid int) string {
 }
 
 // pkcs7Padding PKCS7填充.
-// ciphertext为密文;blockSize为分组长度;isZero是否零填充.
-func pkcs7Padding(ciphertext []byte, blockSize int, isZero bool) []byte {
-	clen := len(ciphertext)
-	if ciphertext == nil || clen == 0 || blockSize <= 0 {
+// cipherText为密文;blockSize为分组长度;isZero是否零填充.
+func pkcs7Padding(cipherText []byte, blockSize int, isZero bool) []byte {
+	clen := len(cipherText)
+	if cipherText == nil || clen == 0 || blockSize <= 0 {
 		return nil
 	}
 
@@ -501,7 +501,7 @@ func pkcs7Padding(ciphertext []byte, blockSize int, isZero bool) []byte {
 		padtext = bytes.Repeat([]byte{byte(padding)}, padding)
 	}
 
-	return append(ciphertext, padtext...)
+	return append(cipherText, padtext...)
 }
 
 // pkcs7UnPadding PKCS7拆解.
@@ -521,8 +521,8 @@ func pkcs7UnPadding(origData []byte, blockSize int) []byte {
 }
 
 // zeroPadding PKCS7使用0填充.
-func zeroPadding(ciphertext []byte, blockSize int) []byte {
-	return pkcs7Padding(ciphertext, blockSize, true)
+func zeroPadding(cipherText []byte, blockSize int) []byte {
+	return pkcs7Padding(cipherText, blockSize, true)
 }
 
 // zeroUnPadding PKCS7-0拆解.
