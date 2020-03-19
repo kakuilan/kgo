@@ -474,10 +474,28 @@ func (kc *LkkConvert) Byte2Hex(val []byte) string {
 	return hex.EncodeToString(val)
 }
 
+// Byte2Hexs 字节切片转16进制切片.
+func (kc *LkkConvert) Byte2Hexs(val []byte) []byte {
+	dst := make([]byte, hex.EncodedLen(len(val)))
+	hex.Encode(dst, val)
+	return dst
+}
+
 // Hex2Byte 16进制字符串转字节切片.
 func (kc *LkkConvert) Hex2Byte(str string) []byte {
 	h, _ := hex.DecodeString(str)
 	return h
+}
+
+// Hexs2Byte 16进制切片转byte切片.
+func (kc *LkkConvert) Hexs2Byte(val []byte) []byte {
+	dst := make([]byte, hex.DecodedLen(len(val)))
+	_, err := hex.Decode(dst, val)
+
+	if err != nil {
+		return nil
+	}
+	return dst
 }
 
 // GetPointerAddrInt 获取变量指针地址整型值.variable为变量.
