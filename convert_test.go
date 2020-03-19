@@ -846,6 +846,40 @@ func BenchmarkHex2Byte(b *testing.B) {
 	}
 }
 
+func TestByte2Hexs(t *testing.T) {
+	bs := []byte("hello")
+	res := KConv.Byte2Hexs(bs)
+	if string(res) != "68656c6c6f" {
+		t.Error("Byte2Hexs fail")
+		return
+	}
+}
+
+func BenchmarkByte2Hexs(b *testing.B) {
+	b.ResetTimer()
+	bs := []byte("hello")
+	for i := 0; i < b.N; i++ {
+		KConv.Byte2Hexs(bs)
+	}
+}
+
+func TestHexs2Byte(t *testing.T) {
+	str := []byte("68656c6c6f")
+	res := KConv.Hexs2Byte(str)
+	if string(res) != "hello" {
+		t.Error("Hexs2Byte fail")
+		return
+	}
+}
+
+func BenchmarkHexs2Byte(b *testing.B) {
+	b.ResetTimer()
+	str := []byte("68656c6c6f")
+	for i := 0; i < b.N; i++ {
+		KConv.Hexs2Byte(str)
+	}
+}
+
 func TestGetPointerAddrInt(t *testing.T) {
 	v1 := 1
 	v2 := []byte("hello")
