@@ -462,7 +462,7 @@ func (ke *LkkEncrypt) GenerateRsaKeys(bits int) (private []byte, public []byte, 
 	return
 }
 
-// RsaPublicEncrypt RSA公钥加密.比解密耗时.
+// RsaPublicEncrypt RSA公钥加密.
 // clearText为明文,publicKey为公钥.
 func (ke *LkkEncrypt) RsaPublicEncrypt(clearText, publicKey []byte) ([]byte, error) {
 	// 解密pem格式的公钥
@@ -483,7 +483,7 @@ func (ke *LkkEncrypt) RsaPublicEncrypt(clearText, publicKey []byte) ([]byte, err
 	return rsa.EncryptPKCS1v15(rand.Reader, pubKey, clearText)
 }
 
-// RsaPrivateDecrypt RSA私钥解密.
+// RsaPrivateDecrypt RSA私钥解密.比加密耗时.
 // cipherText为密文,privateKey为私钥.
 func (ke *LkkEncrypt) RsaPrivateDecrypt(cipherText, privateKey []byte) ([]byte, error) {
 	// 获取私钥
@@ -502,7 +502,7 @@ func (ke *LkkEncrypt) RsaPrivateDecrypt(cipherText, privateKey []byte) ([]byte, 
 	return rsa.DecryptPKCS1v15(rand.Reader, priv, cipherText)
 }
 
-// RsaPrivateEncrypt RSA私钥加密.
+// RsaPrivateEncrypt RSA私钥加密.比解密耗时.
 // clearText为明文,privateKey为私钥.
 func (ke *LkkEncrypt) RsaPrivateEncrypt(clearText, privateKey []byte) ([]byte, error) {
 	// 获取私钥
@@ -520,7 +520,7 @@ func (ke *LkkEncrypt) RsaPrivateEncrypt(clearText, privateKey []byte) ([]byte, e
 	return rsa.SignPKCS1v15(nil, priv, crypto.Hash(0), clearText)
 }
 
-// RsaPublicDecrypt RSA公钥解密.比加密耗时.
+// RsaPublicDecrypt RSA公钥解密.
 // cipherText为密文,publicKey为公钥.
 func (ke *LkkEncrypt) RsaPublicDecrypt(cipherText, publicKey []byte) ([]byte, error) {
 	// 解密pem格式的公钥
