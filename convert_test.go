@@ -870,6 +870,12 @@ func TestHexs2Byte(t *testing.T) {
 		t.Error("Hexs2Byte fail")
 		return
 	}
+
+	res = KConv.Hexs2Byte([]byte("68kl56c6c6f"))
+	if len(res) > 0 {
+		t.Error("Hexs2Byte fail")
+		return
+	}
 }
 
 func BenchmarkHexs2Byte(b *testing.B) {
