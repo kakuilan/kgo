@@ -143,7 +143,8 @@ https://studygolang.com/articles/5257
 https://blog.csdn.net/lhtzbj12/article/details/79427235
 https://github.com/brainattica/Golang-RSA-sample/blob/master/rsa_sample.go
 https://zhuanlan.zhihu.com/p/86320624
-
+https://github.com/nothollyhigh/kiss/blob/master/crypto/rsa.go
+https://segmentfault.com/a/1190000004151272
 
 pid
 https://github.com/bitnami/gonit/blob/master/utils/process.go

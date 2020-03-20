@@ -1,15 +1,19 @@
 package kgo
 
 import (
+	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/hmac"
 	"crypto/rand"
+	"crypto/rsa"
 	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha512"
+	"crypto/x509"
 	"encoding/base64"
 	"encoding/hex"
+	"encoding/pem"
 	"errors"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
@@ -421,4 +425,37 @@ func (ke *LkkEncrypt) AesOFBEncrypt(clearText, key []byte) ([]byte, error) {
 // cipherText为密文;key为密钥,长16/24/32.
 func (ke *LkkEncrypt) AesOFBDecrypt(cipherText, key []byte) ([]byte, error) {
 	return ke.aesDecrypt(cipherText, key, "OFB", PKCS_NONE)
+}
+
+// GenerateRsaKeys 生成RSA密钥对.bits为密钥位数,通常为1024或2048.
+func (ke *LkkEncrypt) GenerateRsaKeys(bits int) (private []byte, public []byte, err error) {
+	// 生成私钥文件
+	var privateKey *rsa.PrivateKey
+	privateKey, err = rsa.GenerateKey(rand.Reader, bits)
+	if err != nil {
+		return
+	}
+	derStream := x509.MarshalPKCS1PrivateKey(privateKey)
+	block := &pem.Block{
+		Type:  "RSA PRIVATE KEY",
+		Bytes: derStream,
+	}
+	privateBuff := new(bytes.Buffer)
+	_ = pem.Encode(privateBuff, block)
+
+	// 生成公钥文件
+	var derPkix []byte
+	publicKey := &privateKey.PublicKey
+	derPkix, _ = x509.MarshalPKIXPublicKey(publicKey)
+	block = &pem.Block{
+		Type:  "RSA PUBLIC KEY",
+		Bytes: derPkix,
+	}
+	publicBuff := new(bytes.Buffer)
+	_ = pem.Encode(publicBuff, block)
+
+	private = privateBuff.Bytes()
+	public = publicBuff.Bytes()
+
+	return
 }

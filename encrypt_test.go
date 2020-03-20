@@ -596,3 +596,28 @@ func BenchmarkAesOFBDecrypt(b *testing.B) {
 		_, _ = KEncr.AesOFBDecrypt(enc, key)
 	}
 }
+
+func TestGenerateRsaKeys(t *testing.T) {
+	_, _, err := KEncr.GenerateRsaKeys(1)
+	if err == nil {
+		t.Error("GenerateRsaKeys fail")
+		return
+	}
+
+	pri, pub, err := KEncr.GenerateRsaKeys(2048)
+	if len(pri) < 100 || len(pub) < 100 {
+		t.Error("GenerateRsaKeys fail")
+		return
+	}
+
+	if err != nil {
+		println(err.Error())
+	}
+}
+
+func BenchmarkGenerateRsaKeys(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _, _ = KEncr.GenerateRsaKeys(1024)
+	}
+}
