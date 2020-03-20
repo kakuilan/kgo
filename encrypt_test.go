@@ -621,3 +621,177 @@ func BenchmarkGenerateRsaKeys(b *testing.B) {
 		_, _, _ = KEncr.GenerateRsaKeys(1024)
 	}
 }
+
+func TestRsaPublicEncryptPrivateDecrypt(t *testing.T) {
+	var enc, des []byte
+	var err error
+	word := []byte("hello world")
+	pubkey1, _ := KFile.ReadFile("testdata/rsa/public_key.pem")
+	prikey1, _ := KFile.ReadFile("testdata/rsa/private_key.pem")
+	pubkey2 := `-----BEGIN RSA PRIVATE KEY-----
+MIICXAIBAAKBgQDteXRcRyppm5sOVvteo37Dmaidbx6YrV6QWZ0L9mGfCmSW1a/A
+d61kT6OoU0Z3DyId7vA9TtvULucEUpywPpSoP/r+820UHFihdyhcb1iy8Z3v6KUc
+arWzUOZpo0mc+o4hW2O1VnzNxLcXmhQOA9NdEOV/M+zxubFKo4VsY0ti9QIDAQAB
+AoGAZuD/MBsEnMv02LmGHPHnsQWYrtu8/ZfeJ9sq1kve7u+ptE7O3Sr7y0FVPU8W
+b+32cdFZ8rV/NuU63/yKNTBnZcbPwwGV9DmNpXy9YCdjwXkxfjYiDqUX9Fsxth1M
+EqMb0PRO85akxCKxxtMagHDHNWkQaVThLagG31sh5d38SwECQQDuVsbRTbEz/H/j
+Ip1NNU+8XERwMv1ac0LE9GhSRlqzUWDhukQ1gp9DmoKic8QMr6DS+JYvTCq38J8t
+LHMNmzcpAkEA/xJHH/MwRlUSHsfP+DGXBuue2cAyw3NVLgusNV222kIgDOLcVxLl
+8YOAgnheD5iI8+/GIVB4cXIfXKgqvzMC7QJAPUg8uMaEQLy02V8mGRsTFHiY9Ex4
+DlDCo0fApx8F5UOQaJnvPd8HOme5HTIs/6IM9RIL879e4IrTMtdSAfad+QJBANAc
+Opmv0mBgAnPItT8cPsvvrGCfdwuO6x2xemTkPE9hikLZSctlaOUfVNeem6f/3SWi
+-----END RSA PRIVATE KEY-----`
+	prikey2 := `-----BEGIN RSA PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDteXRcRyppm5sOVvteo37Dmaid
+bx6YrV6QWZ0L9mGfCmSW1a/Ad61kT6OoU0Z3DyId7vA9TtvULucEUpywPpSoP/r+
+820UHFihdyhcb1iy8Z3v6KUcarWzUOZpo0mc+o4hW2O1VnzNxLcXmhQOA9NdEOV/
+-----END RSA PUBLIC KEY-----`
+
+	enc, err = KEncr.RsaPublicEncrypt(word, pubkey1)
+	if err != nil {
+		t.Error("RsaPublicEncrypt fail")
+		return
+	}
+
+	des, err = KEncr.RsaPrivateDecrypt(enc, prikey1)
+	if err != nil {
+		t.Error("RsaPrivateDecrypt fail")
+		return
+	}
+
+	if !KArr.IsEqualArray(word, des) {
+		t.Error("RsaPrivateDecrypt fail")
+		return
+	}
+
+	_, err = KEncr.RsaPublicEncrypt(word, []byte("123"))
+	if err == nil {
+		t.Error("RsaPublicEncrypt fail")
+		return
+	}
+
+	_, err = KEncr.RsaPublicEncrypt(word, []byte(pubkey2))
+	if err == nil {
+		t.Error("RsaPublicEncrypt fail")
+		return
+	}
+
+	_, err = KEncr.RsaPrivateDecrypt(enc, []byte("123"))
+	if err == nil {
+		t.Error("RsaPrivateDecrypt fail")
+		return
+	}
+
+	_, err = KEncr.RsaPrivateDecrypt(enc, []byte(prikey2))
+	if err == nil {
+		t.Error("RsaPrivateDecrypt fail")
+		return
+	}
+
+}
+
+func BenchmarkRsaPublicEncrypt(b *testing.B) {
+	b.ResetTimer()
+	word := []byte("hello world")
+	pubkey, _ := KFile.ReadFile("testdata/rsa/public_key.pem")
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.RsaPublicEncrypt(word, pubkey)
+	}
+}
+
+func BenchmarkRsaPrivateDecrypt(b *testing.B) {
+	b.ResetTimer()
+	data := []byte{143, 167, 230, 243, 173, 106, 253, 203, 191, 77, 142, 78, 116, 8, 81, 120, 197, 206, 141, 219, 255, 210, 42, 71, 202, 47, 153, 60, 152, 163, 160, 226, 110, 102, 50, 20, 165, 181, 236, 160, 109, 229, 1, 11, 80, 164, 9, 56, 188, 66, 199, 227, 69, 88, 88, 143, 159, 211, 41, 169, 231, 215, 241, 35, 79, 208, 44, 43, 143, 163, 64, 107, 166, 128, 101, 106, 73, 248, 161, 36, 201, 161, 171, 241, 227, 114, 137, 28, 156, 63, 147, 52, 189, 230, 136, 90, 123, 21, 73, 172, 188, 8, 53, 98, 36, 185, 131, 171, 222, 52, 124, 48, 207, 82, 123, 234, 5, 97, 53, 47, 234, 6, 81, 118, 81, 161, 130, 172}
+	prikey, _ := KFile.ReadFile("testdata/rsa/private_key.pem")
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.RsaPrivateDecrypt(data, prikey)
+	}
+}
+
+func TestRsaPrivateEncryptPublicDecrypt(t *testing.T) {
+	var enc, des []byte
+	var err error
+	str := strings.Repeat("hello world", 10)
+	word := []byte(str)
+	pubkey1, _ := KFile.ReadFile("testdata/rsa/public_key.pem")
+	prikey1, _ := KFile.ReadFile("testdata/rsa/private_key.pem")
+	pubkey2 := `-----BEGIN RSA PRIVATE KEY-----
+MIICXAIBAAKBgQDteXRcRyppm5sOVvteo37Dmaidbx6YrV6QWZ0L9mGfCmSW1a/A
+d61kT6OoU0Z3DyId7vA9TtvULucEUpywPpSoP/r+820UHFihdyhcb1iy8Z3v6KUc
+arWzUOZpo0mc+o4hW2O1VnzNxLcXmhQOA9NdEOV/M+zxubFKo4VsY0ti9QIDAQAB
+AoGAZuD/MBsEnMv02LmGHPHnsQWYrtu8/ZfeJ9sq1kve7u+ptE7O3Sr7y0FVPU8W
+b+32cdFZ8rV/NuU63/yKNTBnZcbPwwGV9DmNpXy9YCdjwXkxfjYiDqUX9Fsxth1M
+EqMb0PRO85akxCKxxtMagHDHNWkQaVThLagG31sh5d38SwECQQDuVsbRTbEz/H/j
+Ip1NNU+8XERwMv1ac0LE9GhSRlqzUWDhukQ1gp9DmoKic8QMr6DS+JYvTCq38J8t
+LHMNmzcpAkEA/xJHH/MwRlUSHsfP+DGXBuue2cAyw3NVLgusNV222kIgDOLcVxLl
+8YOAgnheD5iI8+/GIVB4cXIfXKgqvzMC7QJAPUg8uMaEQLy02V8mGRsTFHiY9Ex4
+DlDCo0fApx8F5UOQaJnvPd8HOme5HTIs/6IM9RIL879e4IrTMtdSAfad+QJBANAc
+Opmv0mBgAnPItT8cPsvvrGCfdwuO6x2xemTkPE9hikLZSctlaOUfVNeem6f/3SWi
+-----END RSA PRIVATE KEY-----`
+	prikey2 := `-----BEGIN RSA PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDteXRcRyppm5sOVvteo37Dmaid
+bx6YrV6QWZ0L9mGfCmSW1a/Ad61kT6OoU0Z3DyId7vA9TtvULucEUpywPpSoP/r+
+820UHFihdyhcb1iy8Z3v6KUcarWzUOZpo0mc+o4hW2O1VnzNxLcXmhQOA9NdEOV/
+-----END RSA PUBLIC KEY-----`
+
+	enc, err = KEncr.RsaPrivateEncrypt(word, prikey1)
+	if err != nil {
+		println(err.Error())
+		t.Error("RsaPrivateEncrypt fail")
+		return
+	}
+
+	des, err = KEncr.RsaPublicDecrypt(enc, pubkey1)
+	if err != nil {
+		t.Error("RsaPublicDecrypt fail")
+		return
+	}
+
+	if !KArr.IsEqualArray(word, des) {
+		t.Error("RsaPublicDecrypt fail")
+		return
+	}
+
+	_, err = KEncr.RsaPrivateEncrypt(word, []byte("123"))
+	if err == nil {
+		t.Error("RsaPrivateEncrypt fail")
+		return
+	}
+
+	_, err = KEncr.RsaPrivateEncrypt(word, []byte(prikey2))
+	if err == nil {
+		t.Error("RsaPrivateEncrypt fail")
+		return
+	}
+
+	_, err = KEncr.RsaPublicDecrypt(enc, []byte("123"))
+	if err == nil {
+		t.Error("RsaPublicDecrypt fail")
+		return
+	}
+
+	_, err = KEncr.RsaPublicDecrypt(enc, []byte(pubkey2))
+	if err == nil {
+		t.Error("RsaPublicDecrypt fail")
+		return
+	}
+
+}
+
+func BenchmarkRsaPrivateEncrypt(b *testing.B) {
+	b.ResetTimer()
+	word := []byte("hello world")
+	prikey, _ := KFile.ReadFile("testdata/rsa/private_key.pem")
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.RsaPrivateEncrypt(word, prikey)
+	}
+}
+
+func BenchmarkRsaPublicDecrypt(b *testing.B) {
+	b.ResetTimer()
+	data := []byte{134, 85, 170, 196, 249, 255, 241, 73, 245, 105, 254, 226, 205, 183, 69, 1, 214, 60, 209, 162, 8, 50, 87, 148, 215, 2, 198, 212, 82, 5, 49, 39, 219, 182, 194, 12, 198, 23, 0, 99, 99, 145, 32, 138, 182, 104, 0, 190, 69, 46, 213, 2, 243, 139, 161, 15, 0, 69, 242, 145, 240, 86, 173, 242, 7, 71, 151, 160, 145, 21, 15, 117, 7, 202, 243, 70, 11, 105, 247, 198, 192, 213, 152, 56, 85, 76, 237, 38, 155, 78, 81, 212, 160, 223, 41, 54, 143, 110, 214, 97, 138, 180, 139, 240, 178, 14, 67, 77, 19, 169, 103, 222, 34, 172, 5, 141, 64, 8, 63, 17, 72, 180, 54, 59, 20, 105, 124, 221}
+	pubkey, _ := KFile.ReadFile("testdata/rsa/public_key.pem")
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.RsaPublicDecrypt(data, pubkey)
+	}
+}
