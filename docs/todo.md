@@ -105,46 +105,10 @@
 ### TODO 
 - 时间轮定时器
 - 简单http请求
-- rsa加解密
 - pid文件检查
 - 修正各函数的参数名称,尽量统一;弃用类似php不合理的函数名
 - 文件拷贝
 - 增加sync.go
-
-
-encrypt Encrypt/Decrypt
-https://www.ctolib.com/topics-4140.html
-https://www.cnblogs.com/lavin/p/5373188.html
-https://github.com/sinlov/fastEncryptDecode
-http://www.voidcn.com/article/p-pmecifun-bod.html
-https://blog.csdn.net/yue7603835/article/details/73395580
-https://gist.github.com/yinheli/3370e0e901329b639be4
-https://www.jishuwen.com/d/2PrM#tuit
-https://stackoverflow.com/questions/24072026/golang-aes-ecb-encryption
-http://ciika.com/2016/11/golang-aes-demo/
-http://wsztrush.com/2017/08/28/golang-first/
-http://www.lampnick.com/php/728
-https://segmentfault.com/a/1190000004151272
-https://www.tech1024.com/original/3015.html
-https://github.com/thinkoner/openssl
-https://heroims.github.io/2018/11/21/AES-128-CBC%20Base64%E5%8A%A0%E5%AF%86%E2%80%94%E2%80%94OC,Java,Golang%E8%81%94%E8%B0%83/
-https://smalltowntechblog.wordpress.com/2014/12/28/%E5%A6%82%E4%BD%95%E8%AE%93-aes-%E5%9C%A8-golang-%E8%88%87-androidjava-%E5%BE%97%E5%88%B0%E4%B8%80%E8%87%B4%E7%9A%84%E5%8A%A0%E8%A7%A3%E5%AF%86%E7%B5%90%E6%9E%9C/comment-page-1/
-https://www.itread01.com/content/1547577396.html
-https://stackoverflow.com/questions/18817336/golang-encrypting-a-string-with-aes-and-base64
-https://github.com/bocajim/helpers/blob/master/crypt.go
-https://github.com/nothollyhigh/kiss/tree/master/crypto
-https://my.oschina.net/qyyoung/blog/1486324
-https://github.com/iiinsomnia/yiigo/blob/master/crypto.go
-
-rsa
-http://doc.aiwaly.com/docs/golang/golang-1b9e5j9tn5g08
-https://studygolang.com/articles/6853
-https://studygolang.com/articles/5257
-https://blog.csdn.net/lhtzbj12/article/details/79427235
-https://github.com/brainattica/Golang-RSA-sample/blob/master/rsa_sample.go
-https://zhuanlan.zhihu.com/p/86320624
-https://github.com/nothollyhigh/kiss/blob/master/crypto/rsa.go
-https://segmentfault.com/a/1190000004151272
 
 pid
 https://github.com/bitnami/gonit/blob/master/utils/process.go

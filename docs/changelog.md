@@ -1,6 +1,70 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.0.5]- 2020-03-20
+#### Added
+- `KArr.InInt64Slice`
+- `KArr.InIntSlice`
+- `KArr.InStringSlice`
+- `KArr.IsEqualArray`
+- `KConv.Byte2Hexs`
+- `KConv.Hexs2Byte`
+- `KConv.Runes2Bytes`
+- `KEncr.AesCBCDecrypt`
+- `KEncr.AesCBCEncrypt`
+- `KEncr.AesCFBDecrypt`
+- `KEncr.AesCFBEncrypt`
+- `KEncr.AesCTRDecrypt`
+- `KEncr.AesCTREncrypt`
+- `KEncr.AesOFBDecrypt`
+- `KEncr.AesOFBEncrypt`
+- `KEncr.GenerateRsaKeys`
+- `KEncr.RsaPrivateDecrypt`
+- `KEncr.RsaPrivateEncrypt`
+- `KEncr.RsaPublicDecrypt`
+- `KEncr.RsaPublicEncrypt`
+- `KFile.AppendFile`
+- `KFile.GetFileMode`
+- `KFile.ReadFirstLine`
+- `KFile.ReadLastLine`
+- `KNum.Percent`
+- `KNum.RoundPlus`
+- `KOS.GetBiosInfo`
+- `KOS.GetBoardInfo`
+- `KOS.GetCpuInfo`
+- `KOS.IsProcessExists`
+- `KStr.AtWho`
+- `KStr.ClearUrlPrefix`
+- `KStr.ClearUrlSuffix`
+- `KStr.Gravatar`
+- `KStr.IsWord`
+- `KStr.RemoveEmoji`
+- `KStr.UuidV4`
+- `KTime.DaysBetween`
+- `KTime.EndOfDay`
+- `KTime.EndOfMonth`
+- `KTime.EndOfWeek`
+- `KTime.EndOfYear`
+- `KTime.StartOfDay`
+- `KTime.StartOfMonth`
+- `KTime.StartOfWeek`
+- `KTime.StartOfYear`
+
+#### Fixed
+- none
+
+#### Changed
+- `KFile.IsFile` 增加文件类型参数LkkFileType
+- `KFile.WriteFile` 增加权限参数perm
+- `KOS.Getenv` 增加默认值参数
+- `KStr.Random` 移除time.Sleep
+- `KTime.GetMonthDays` 放弃map,直接比较
+- rename `KOS.GetProcessExeByPid` to `KOS.GetProcessExecPath`
+- rename `KTime.Time` to `KTime.UnixTime`
+
+#### Removed
+- none
+
 ## [v0.0.4]- 2020-03-06
 #### Added
 - `KStr.Index`
