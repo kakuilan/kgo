@@ -544,12 +544,10 @@ func (ke *LkkEncrypt) RsaPublicDecrypt(cipherText, publicKey []byte) ([]byte, er
 	e := big.NewInt(int64(pubKey.E))
 	c.Exp(m, e, pubKey.N)
 	out := c.Bytes()
+	olen := len(out)
 	skip := 0
-	for i := 2; i < len(out); i++ {
-		if i+1 >= len(out) {
-			break
-		}
-		if out[i] == 0xff && out[i+1] == 0 {
+	for i := 2; i < olen; i++ {
+		if (i+1 < olen) && out[i] == 0xff && out[i+1] == 0 {
 			skip = i + 2
 			break
 		}
