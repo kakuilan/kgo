@@ -100,13 +100,13 @@
 - https://github.com/gobwas/pool
 - https://github.com/shirou/gopsutil
 - https://github.com/sunmi-OS/gocore
+- https://github.com/akhenakh/statgo
 
 
 ### TODO 
 - 时间轮定时器
 - 简单http请求
 - pid文件检查
-- 修正各函数的参数名称,尽量统一;弃用类似php不合理的函数名
 - 文件拷贝
 - 增加sync.go
 
@@ -233,9 +233,6 @@ go get current file path
 https://coderwall.com/p/_fmbug/go-get-path-to-current-file
 https://github.com/unknwon/gcblog/blob/master/content/04-go-caller.md
 https://colobu.com/2018/11/03/get-function-name-in-go/
-
-系统信息
-https://github.com/akhenakh/statgo
 
 
 
