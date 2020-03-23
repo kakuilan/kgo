@@ -90,6 +90,7 @@
 - https://github.com/pubgo/g -x
 - https://github.com/layidao/utilx -x
 - https://github.com/siddontang/go -x
+- https://github.com/sohaha/zlsgo
 
 
 ### 其他库
