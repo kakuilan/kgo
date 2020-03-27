@@ -91,6 +91,7 @@
 - https://github.com/layidao/utilx -x
 - https://github.com/siddontang/go -x
 - https://github.com/sohaha/zlsgo
+- https://github.com/ifree2017/EasyGoLib
 
 
 ### 其他库
