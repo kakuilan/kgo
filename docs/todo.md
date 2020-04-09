@@ -92,6 +92,7 @@
 - https://github.com/siddontang/go -x
 - https://github.com/sohaha/zlsgo
 - https://github.com/ifree2017/EasyGoLib
+- https://github.com/go-board/x-go
 
 
 ### 其他库
