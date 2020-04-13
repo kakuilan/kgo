@@ -93,6 +93,7 @@
 - https://github.com/sohaha/zlsgo
 - https://github.com/ifree2017/EasyGoLib
 - https://github.com/go-board/x-go
+- https://github.com/qiniu/x
 
 
 ### 其他库
