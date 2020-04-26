@@ -62,9 +62,15 @@ func (kn *LkkNumber) Range(min, max int) []int {
 	return a
 }
 
-// Abs 取绝对值.
-func (kn *LkkNumber) Abs(number float64) float64 {
+// AbsFloat 浮点型取绝对值.
+func (kn *LkkNumber) AbsFloat(number float64) float64 {
 	return math.Abs(number)
+}
+
+// AbsInt 整型取绝对值.
+func (kn *LkkNumber) AbsInt(number int64) int64 {
+	r := number >> 63
+	return (number ^ r) - r
 }
 
 // FloatEqual 比较两个浮点数是否相等.decimal为小数精确位数.
