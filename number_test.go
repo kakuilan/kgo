@@ -46,20 +46,37 @@ func BenchmarkRange(b *testing.B) {
 	}
 }
 
-func TestAbs(t *testing.T) {
+func TestAbsFloat(t *testing.T) {
 	num := -123.456
-	res := KNum.Abs(num)
-	if res < 0 {
-		t.Error("Abs fail")
+	res := KNum.AbsFloat(num)
+	if res <= 0 {
+		t.Error("AbsFloat fail")
 		return
 	}
 }
 
-func BenchmarkAbs(b *testing.B) {
+func BenchmarkAbsFloat(b *testing.B) {
 	b.ResetTimer()
 	num := -123.456
 	for i := 0; i < b.N; i++ {
-		KNum.Abs(num)
+		KNum.AbsFloat(num)
+	}
+}
+
+func TestAbsInt(t *testing.T) {
+	var num int64 = -123
+	res := KNum.AbsInt(num)
+	if res <= 0 {
+		t.Error("AbsInt fail")
+		return
+	}
+}
+
+func BenchmarkAbsInt(b *testing.B) {
+	b.ResetTimer()
+	var num int64 = -123
+	for i := 0; i < b.N; i++ {
+		KNum.AbsInt(num)
 	}
 }
 
