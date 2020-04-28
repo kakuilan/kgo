@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.0.6]- 2020-04-28
+#### Added
+- `KNum.AbsInt`
+
+#### Fixed
+- none
+
+#### Changed
+- rename `KNum.Abs` to `KNum.AbsFloat`
+
+#### Removed
+- none
+
 ## [v0.0.5]- 2020-03-20
 #### Added
 - `KArr.InInt64Slice`
