@@ -106,6 +106,8 @@
 - https://github.com/shirou/gopsutil
 - https://github.com/sunmi-OS/gocore
 - https://github.com/akhenakh/statgo
+- https://github.com/elastic/go-sysinfo
+- https://github.com/matishsiao/goInfo
 
 
 ### TODO 
