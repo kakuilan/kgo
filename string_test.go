@@ -946,6 +946,11 @@ func TestToCamelCase(t *testing.T) {
 		{"no_https", "NoHttps"},
 		{"_complex__case_", "_Complex_Case_"},
 		{"some words", "SomeWords"},
+		{"sayHello", "SayHello"},
+		{"SayHello", "SayHello"},
+		{"SayHelloWorld", "SayHelloWorld"},
+		{"DOYouOK", "DoYouOk"},
+		{"AReYouOK", "AreYouOk"},
 	}
 
 	for _, test := range tests {

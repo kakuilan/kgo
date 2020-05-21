@@ -939,6 +939,10 @@ func (ks *LkkString) ToCamelCase(str string) string {
 
 		if isCaseConnector(r1) {
 			r0 = unicode.ToUpper(r0)
+		} else if unicode.IsLower(r1) && unicode.IsUpper(r0) {
+			buf.WriteRune(r1)
+		} else if unicode.IsUpper(r1) && unicode.IsLower(r0) {
+			buf.WriteRune(r1)
 		} else {
 			r0 = unicode.ToLower(r0)
 			buf.WriteRune(r1)
