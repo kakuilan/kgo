@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.0.7]- 2020-05-21
+#### Added
+- none
+
+#### Fixed
+- 修复`KStr.ToCamelCase`将首字母大写的驼峰串(如SayHello->Sayhello)转换错误问题
+
+#### Changed
+- none
+
+#### Removed
+- none
+
 ## [v0.0.6]- 2020-04-28
 #### Added
 - `KNum.AbsInt`
