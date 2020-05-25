@@ -1,6 +1,6 @@
 module github.com/kakuilan/kgo
 
-go 1.13.5
+go 1.14.3
 
 require (
 	github.com/json-iterator/go v1.1.9
