@@ -60,6 +60,10 @@ KDbug.DumpStacks()
 
 ### 测试
 ```shell
+#使用go mod
+go mod tidy
+go mod vendor
+
 #单元测试
 go test
 
@@ -76,7 +80,7 @@ go tool cover -func=coverage.out #查看统计信息
 go tool cover -html=coverage.out #将统计信息转换为html
 
 #性能分析
-time go test -bench=. -benchmem -memprofile memprofile.out -cpuprofile profile.out
+time go test -timeout 30m -bench=. -benchmem -memprofile memprofile.out -cpuprofile profile.out
 go tool pprof profile.out
 go tool pprof -http=192.168.1.2:8081 /usr/bin/dot profile.out
 ```
