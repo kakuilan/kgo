@@ -26,6 +26,7 @@ import (
 // SystemInfo 系统信息
 type SystemInfo struct {
 	ServerName   string  `json:"server_name"`    //服务器名称
+	SystemOs     string  `json:"system_os"`      //操作系统名称
 	Runtime      int64   `json:"run_time"`       //服务运行时间,纳秒
 	GoroutineNum int     `json:"goroutine_num"`  //goroutine数量
 	CpuNum       int     `json:"cpu_num"`        //cpu核数
@@ -611,6 +612,7 @@ func (ko *LkkOS) GetSystemInfo() *SystemInfo {
 
 	return &SystemInfo{
 		ServerName:   serverName,
+		SystemOs:     runtime.GOOS,
 		Runtime:      int64(KTime.ServiceUptime()),
 		GoroutineNum: runtime.NumGoroutine(),
 		CpuNum:       runtime.NumCPU(),
