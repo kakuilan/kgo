@@ -95,6 +95,7 @@
 - https://github.com/go-board/x-go
 - https://github.com/qiniu/x
 - https://github.com/iiinsomnia/yiigo
+- https://github.com/xxjwxc/public
 
 
 ### 其他库
