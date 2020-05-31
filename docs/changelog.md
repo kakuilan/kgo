@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.0.8]- 2020-05-31
+#### Added
+- none
+
+#### Fixed
+- none
+
+#### Changed
+- `KOS.GetSystemInfo`增加`SystemOs`操作系统名称字段
+
+#### Removed
+- none
+
 ## [v0.0.7]- 2020-05-21
 #### Added
 - none
