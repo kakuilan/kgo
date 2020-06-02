@@ -99,6 +99,7 @@ func (ko *LkkOS) IsMac() bool {
 }
 
 // Pwd 获取当前程序运行所在的路径,注意和Getwd有所不同.
+// 若当前执行的是链接文件,则会指向真实二进制程序的所在目录.
 func (ko *LkkOS) Pwd() string {
 	var dir, ex string
 	var err error
