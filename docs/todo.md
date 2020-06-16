@@ -180,6 +180,7 @@ https://github.com/alex023/clock
 https://github.com/henrylee2cn/timer
 https://github.com/RussellLuo/timingwheel
 https://github.com/zhangwei1234/go-timer-wheel
+https://github.com/antlabs/timer
 
 serialize
 https://segmentfault.com/q/1010000010690732
