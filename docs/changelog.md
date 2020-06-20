@@ -1,6 +1,26 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.0.9]- 2020-06-20
+#### Added
+- none
+
+#### Fixed
+- none
+
+#### Changed
+- 修改`KEncr.Base64Encode`结果类型为[]byte
+- 修改`KEncr.Base64Decode`参数类型为[]byte
+- 修改`KEncr.Base64UrlEncode`结果类型为[]byte
+- 修改`KEncr.Base64UrlDecode`结果类型为[]byte
+- 修改`KEncr.AuthCode`参数和结果类型为[]byte
+- 修改`KEncr.EasyEncrypt`参数和结果类型为[]byte
+- 修改`KEncr.EasyDecrypt`参数和结果类型为[]byte
+- 修改`KEncr.HmacShaX`结果类型为[]byte
+
+#### Removed
+- none
+
 ## [v0.0.8]- 2020-05-31
 #### Added
 - none

@@ -117,7 +117,6 @@
 - pid文件检查
 - 文件拷贝
 - 增加sync.go
-- 修改AuthCode使用[]byte
 
 pid
 https://github.com/bitnami/gonit/blob/master/utils/process.go
