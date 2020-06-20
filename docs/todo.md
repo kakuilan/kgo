@@ -96,6 +96,7 @@
 - https://github.com/qiniu/x
 - https://github.com/iiinsomnia/yiigo
 - https://github.com/xxjwxc/public
+- https://github.com/deepzz0/go-com
 
 
 ### 其他库
