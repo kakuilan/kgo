@@ -354,7 +354,6 @@ func (kt *LkkTime) IsDate2time(str string) (bool, int64) {
 		str = str + reference[leng:19]
 	}
 
-	println("date:", str)
 	tim, err := KTime.Str2Timestamp(str)
 	if err != nil {
 		return false, 0
