@@ -77,7 +77,7 @@ func (kt *LkkTime) Str2Timestruct(str string, format ...string) (time.Time, erro
 		return time.Now(), errors.New("Str2Timestruct: parameter format error")
 	}
 
-	return time.ParseInLocation(f, str, time.Now().Location())
+	return time.ParseInLocation(f, str, Kuptime.Location())
 }
 
 // Str2Timestamp 将字符串转换为时间戳,秒.
