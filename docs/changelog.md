@@ -1,6 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.1.0]- 2020-06-22
+#### Added
+- none
+
+#### Fixed
+- none
+
+#### Changed
+- 修改`KTime.Str2Timestruct`使用本地时区而非UTC 
+
+#### Removed
+- none
+
 ## [v0.0.9]- 2020-06-20
 #### Added
 - none
