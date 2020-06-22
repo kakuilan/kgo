@@ -77,7 +77,7 @@ func (kt *LkkTime) Str2Timestruct(str string, format ...string) (time.Time, erro
 		return time.Now(), errors.New("Str2Timestruct: parameter format error")
 	}
 
-	return time.Parse(f, str)
+	return time.ParseInLocation(f, str, time.Now().Location())
 }
 
 // Str2Timestamp 将字符串转换为时间戳,秒.
@@ -354,6 +354,7 @@ func (kt *LkkTime) IsDate2time(str string) (bool, int64) {
 		str = str + reference[leng:19]
 	}
 
+	println("date:", str)
 	tim, err := KTime.Str2Timestamp(str)
 	if err != nil {
 		return false, 0
