@@ -524,6 +524,11 @@ func (ks *LkkString) Rtrim(str string, characterMask ...string) string {
 	return strings.TrimRight(str, mask)
 }
 
+// TrimBOM 移除字符串中的BOM
+func (ks *LkkString) TrimBOM(str []byte) []byte {
+	return bytes.Trim(str, "\xef\xbb\xbf")
+}
+
 // Chr 返回相对应于 ascii 所指定的单个字符.
 func (ks *LkkString) Chr(ascii int) string {
 	return string(ascii)

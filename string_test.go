@@ -7,7 +7,6 @@ import (
 	"testing"
 )
 
-
 type Student struct {
 	Name     string
 	Age      int32
@@ -656,6 +655,35 @@ func BenchmarkRtrim(b *testing.B) {
 	str := " hello world!你好 世界！　"
 	for i := 0; i < b.N; i++ {
 		KStr.Rtrim(str)
+	}
+}
+
+func TestTrimBOM(t *testing.T) {
+	tests := []struct {
+		str      []byte
+		expected string
+	}{
+		{[]byte{}, ""},
+		{[]byte("hello"), "hello"},
+		{[]byte("\xEF\xBB\xBF"), ""},
+		{[]byte("\xef\xbb\xbf"), ""},
+		{[]byte("\xEF\xBB\xBFhello"), "hello"},
+		{[]byte("\xEF\xBB\xBFworld"), "world"},
+	}
+	for _, test := range tests {
+		actual := KStr.TrimBOM(test.str)
+		if string(actual) != test.expected {
+			t.Errorf("Expected TrimBOM(%v) to be %v, got %v", test.str, test.expected, actual)
+			return
+		}
+	}
+}
+
+func BenchmarkTrimBOM(b *testing.B) {
+	b.ResetTimer()
+	str := []byte("\xEF\xBB\xBFhello")
+	for i := 0; i < b.N; i++ {
+		KStr.TrimBOM(str)
 	}
 }
 
