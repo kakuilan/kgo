@@ -1109,7 +1109,7 @@ func TestZipIszipUnzip(t *testing.T) {
 		return
 	}
 
-	_, err = KFile.Zip(zfile, "./testdata/dante.txt", "./testdata/gopher10th-small.jpg", "./vendor", "./vendor")
+	_, err = KFile.Zip(zfile, "./testdata/dante.txt", "./testdata/gopher10th-small.jpg", "./docs", "./docs")
 	if err != nil {
 		t.Error("Zip fail")
 		return
