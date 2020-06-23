@@ -1,6 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.1.1]- 2020-06-23
+#### Added
+- `KStr.Serialize`
+- `KStr.UnSerialize`
+- `KStr.TrimBOM`
+
+#### Fixed
+- none
+
+#### Changed
+- none
+
+#### Removed
+- none
+
 ## [v0.1.0]- 2020-06-22
 #### Added
 - none
