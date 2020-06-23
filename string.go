@@ -7,6 +7,7 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/base64"
+	"encoding/gob"
 	"encoding/hex"
 	"encoding/json"
 	"encoding/pem"
@@ -548,6 +549,32 @@ func (ks *LkkString) JsonDecode(data []byte, val interface{}) error {
 	return jsons.Unmarshal(data, val)
 }
 
+// Serialize 对变量进行序列化.
+func (ks *LkkString) Serialize(val interface{}) ([]byte, error) {
+	buf := bytes.Buffer{}
+	enc := gob.NewEncoder(&buf)
+	gob.Register(val)
+
+	err := enc.Encode(&val)
+	if err != nil {
+		return nil, err
+	}
+
+	return buf.Bytes(), nil
+}
+
+// UnSerialize 对字符串进行反序列化;其中registers注册对象,其类型必须和Serialize的一致.
+func (ks *LkkString) UnSerialize(data []byte, registers ...interface{}) (val interface{}, err error) {
+	for _, v := range registers {
+		gob.Register(v)
+	}
+
+	buf := bytes.NewBuffer(data)
+	dec := gob.NewDecoder(buf)
+	err = dec.Decode(&val)
+	return
+}
+
 // Addslashes 使用反斜线引用字符串.
 func (ks *LkkString) Addslashes(str string) string {
 	var buf bytes.Buffer
@@ -765,7 +792,7 @@ func (ks *LkkString) VersionCompare(version1, version2, operator string) bool {
 				}
 			} else if !(p1[0] >= '0' && p1[0] <= '9') && !(p2[0] >= '0' && p2[0] <= '9') { // all not digit
 				compare = special(p1, p2)
-			} else { // part is digit
+			} else {                              // part is digit
 				if p1[0] >= '0' && p1[0] <= '9' { // is digit
 					compare = special("#N#", p2)
 				} else {

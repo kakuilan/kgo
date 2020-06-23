@@ -97,6 +97,7 @@
 - https://github.com/iiinsomnia/yiigo
 - https://github.com/xxjwxc/public
 - https://github.com/deepzz0/go-com
+- https://github.com/hprose/hprose-go
 
 
 ### 其他库
@@ -115,9 +116,8 @@
 ### TODO 
 - 时间轮定时器
 - 简单http请求
-- pid文件检查
-- 文件拷贝
 - 增加sync.go
+- 支持windows
 
 pid
 https://github.com/bitnami/gonit/blob/master/utils/process.go
