@@ -7,6 +7,14 @@ import (
 	"testing"
 )
 
+
+type Student struct {
+	Name     string
+	Age      int32
+	Graduate bool
+}
+type Students []Student
+
 func TestNl2br(t *testing.T) {
 	str := `hello
 world!
@@ -3275,5 +3283,70 @@ func BenchmarkAtWho(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KStr.AtWho("Hi, @hellowor", 5)
+	}
+}
+
+func TestSerializeUnSerialize(t *testing.T) {
+	students := Students{}
+	students = append(students, Student{"Zhang3", 20, true})
+	students = append(students, Student{"Li4", 16, false})
+	students = append(students, Student{"Wang5", 18, false})
+
+	//序列化
+	res1, err1 := KStr.Serialize(students)
+	if err1 != nil {
+		t.Error("Serialize fail")
+		return
+	}
+
+	//反序列化
+	res2, err2 := KStr.UnSerialize(res1, Students{})
+	if err2 != nil {
+		t.Error("UnSerialize fail")
+		return
+	}
+
+	studs, ok := res2.(Students)
+	if !ok {
+		t.Error("UnSerialize fail [type]")
+		return
+	} else if len(studs) != len(students) {
+		t.Error("UnSerialize fail [data]")
+		return
+	}
+
+	//或者
+	onestu := &Student{"Zao6", 21, true}
+	res3, err3 := KStr.Serialize(onestu)
+	if err3 != nil {
+		t.Error("Serialize fail")
+		return
+	}
+	res4, err4 := KStr.UnSerialize(res3, &Student{})
+	if err4 != nil {
+		t.Error("UnSerialize fail")
+		return
+	}
+	_, ok = res4.(*Student)
+	if !ok {
+		t.Error("UnSerialize fail [type]")
+		return
+	}
+}
+
+func BenchmarkSerialize(b *testing.B) {
+	b.ResetTimer()
+	onestu := &Student{"Zao6", 21, true}
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.Serialize(onestu)
+	}
+}
+
+func BenchmarkUnSerialize(b *testing.B) {
+	b.ResetTimer()
+	onestu := &Student{"Zao6", 21, true}
+	data, _ := KStr.Serialize(onestu)
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.UnSerialize(data, &Student{})
 	}
 }

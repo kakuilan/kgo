@@ -8,6 +8,7 @@
 .settings
 .user.ini
 .vscode
+vendor/
 
 #file
 *.bin
@@ -35,5 +36,3 @@ _obj
 _test
 core
 thumbs.db
-
-vendor/!modules.txt
