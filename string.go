@@ -537,15 +537,15 @@ func (ks *LkkString) Ord(char string) rune {
 // JsonEncode 对变量进行 JSON 编码.
 // 依赖库github.com/json-iterator/go.
 func (ks *LkkString) JsonEncode(val interface{}) ([]byte, error) {
-	var json = jsoniter.ConfigCompatibleWithStandardLibrary
-	return json.Marshal(val)
+	var jsons = jsoniter.ConfigCompatibleWithStandardLibrary
+	return jsons.Marshal(val)
 }
 
 // JsonDecode 对 JSON 格式的字符串进行解码,注意val使用指针.
 // 依赖库github.com/json-iterator/go.
 func (ks *LkkString) JsonDecode(data []byte, val interface{}) error {
-	var json = jsoniter.ConfigCompatibleWithStandardLibrary
-	return json.Unmarshal(data, val)
+	var jsons = jsoniter.ConfigCompatibleWithStandardLibrary
+	return jsons.Unmarshal(data, val)
 }
 
 // Addslashes 使用反斜线引用字符串.
