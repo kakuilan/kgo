@@ -1,6 +1,18 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.1.2]- 2020-06-25
+#### Added
+- `KStr.Md5Byte`
+- `KStr.ShaXByte`
+
+#### Fixed
+- none
+
+#### Changed
+- rename `md5Str` to `md5Byte`
+- rename `shaXStr` to `shaXByte`
+
 ## [v0.1.1]- 2020-06-23
 #### Added
 - `KStr.Serialize`
