@@ -176,11 +176,59 @@ func TestStringShaX(t *testing.T) {
 	KStr.ShaX(str, 16)
 }
 
-func BenchmarkStringShaX(b *testing.B) {
+func BenchmarkStringShaX1(b *testing.B) {
+	b.ResetTimer()
+	str := "Hello world. (can you hear me?)"
+	for i := 0; i < b.N; i++ {
+		KStr.ShaX(str, 1)
+	}
+}
+
+func BenchmarkStringShaX256(b *testing.B) {
 	b.ResetTimer()
 	str := "Hello world. (can you hear me?)"
 	for i := 0; i < b.N; i++ {
 		KStr.ShaX(str, 256)
+	}
+}
+
+func BenchmarkStringShaX512(b *testing.B) {
+	b.ResetTimer()
+	str := "Hello world. (can you hear me?)"
+	for i := 0; i < b.N; i++ {
+		KStr.ShaX(str, 512)
+	}
+}
+
+func TestStringShaXByte(t *testing.T) {
+	res := KStr.ShaXByte([]byte(""), 256)
+	if res == nil {
+		t.Error("string ShaXByte fail")
+		return
+	}
+}
+
+func BenchmarkStringShaXByte1(b *testing.B) {
+	b.ResetTimer()
+	str := []byte("hello world!")
+	for i := 0; i < b.N; i++ {
+		KStr.ShaXByte(str, 1)
+	}
+}
+
+func BenchmarkStringShaXByte256(b *testing.B) {
+	b.ResetTimer()
+	str := []byte("hello world!")
+	for i := 0; i < b.N; i++ {
+		KStr.ShaXByte(str, 256)
+	}
+}
+
+func BenchmarkStringShaXByte512(b *testing.B) {
+	b.ResetTimer()
+	str := []byte("hello world!")
+	for i := 0; i < b.N; i++ {
+		KStr.ShaXByte(str, 512)
 	}
 }
 
