@@ -732,7 +732,7 @@ func (kf *LkkFile) ShaX(fpath string, x uint16) (string, error) {
 		return "", err
 	}
 
-	return string(shaXStr(data, x)), nil
+	return string(shaXByte(data, x)), nil
 }
 
 // Pathinfo 获取文件路径的信息,options的值为-1: all; 1: dirname; 2: basename; 4: extension; 8: filename.

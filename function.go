@@ -39,8 +39,8 @@ func md5Byte(str []byte, length uint8) []byte {
 	return res
 }
 
-// shaXStr 计算字符串的 shaX 散列值,x为1/256/512.
-func shaXStr(str []byte, x uint16) []byte {
+// shaXByte 计算字符串的 shaX 散列值,x为1/256/512.
+func shaXByte(str []byte, x uint16) []byte {
 	var h hash.Hash
 	switch x {
 	case 1:
@@ -53,7 +53,7 @@ func shaXStr(str []byte, x uint16) []byte {
 		h = sha512.New()
 		break
 	default:
-		panic("[shaXStr] x must be in [1, 256, 512]")
+		panic("[shaXByte] x must be in [1, 256, 512]")
 	}
 
 	h.Write(str)

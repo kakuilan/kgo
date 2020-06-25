@@ -152,7 +152,7 @@ func (ks *LkkString) Md5(str string, length uint8) string {
 
 // ShaX 计算字符串的 shaX 散列值,x为1/256/512 .
 func (ks *LkkString) ShaX(str string, x uint16) string {
-	return string(shaXStr([]byte(str), x))
+	return string(shaXByte([]byte(str), x))
 }
 
 // Random 生成随机字符串.
