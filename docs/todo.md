@@ -98,6 +98,9 @@
 - https://github.com/xxjwxc/public
 - https://github.com/deepzz0/go-com
 - https://github.com/hprose/hprose-go
+- https://github.com/wumansgy/goEncrypt
+- https://github.com/hyperjiang/php
+
 
 
 ### 其他库
@@ -111,6 +114,7 @@
 - https://github.com/akhenakh/statgo
 - https://github.com/elastic/go-sysinfo
 - https://github.com/matishsiao/goInfo
+- https://github.com/badoux/checkmail
 
 
 ### TODO 
