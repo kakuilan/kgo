@@ -4,13 +4,23 @@ golang 常用函数库/工具集,仅测试支持64位linux.
 总共420多个通用的方法,涵盖字符串、数组、文件、时间以及类型转换等操作.  
 
 ### 文档
-[![GoDoc](https://godoc.org/github.com/kakuilan/kgo?status.svg)](https://godoc.org/github.com/kakuilan/kgo)
+[![GoDoc](https://godoc.org/github.com/kakuilan/kgo?status.svg)](https://pkg.go.dev/github.com/kakuilan/kgo)
 [![Go Report Card](https://goreportcard.com/badge/github.com/kakuilan/kgo)](https://goreportcard.com/report/github.com/kakuilan/kgo)
 [![Build Status](https://travis-ci.org/kakuilan/kgo.svg?branch=master)](https://travis-ci.org/kakuilan/kgo)
 [![codecov](https://codecov.io/gh/kakuilan/kgo/branch/master/graph/badge.svg)](https://codecov.io/gh/kakuilan/kgo)
 [![Code Size](https://img.shields.io/github/languages/code-size/kakuilan/kgo.svg?style=flat-square)](https://github.com/kakuilan/kgo)
 [![Starts](https://img.shields.io/github/stars/kakuilan/kgo.svg)](https://github.com/kakuilan/kgo)
 [![Version](https://img.shields.io/github/v/tag/kakuilan/kgo)](https://img.shields.io/github/v/tag/kakuilan/kgo)
+
+### 安装使用
+安装
+```shell script
+go get -u github.com/kakuilan/kgo
+```
+引入
+```go
+import "github.com/kakuilan/kgo"
+```
 
 
 ### 函数接收器
