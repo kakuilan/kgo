@@ -77,7 +77,7 @@ func (ke *LkkEncrypt) AuthCode(str, key []byte, encode bool, expiry int64) ([]by
 	}
 
 	// 密钥
-	keyByte := md5Str(key, 32)
+	keyByte := md5Byte(key, 32)
 
 	// 密钥a会参与加解密
 	keya := keyByte[:16]
@@ -92,12 +92,12 @@ func (ke *LkkEncrypt) AuthCode(str, key []byte, encode bool, expiry int64) ([]by
 	} else {
 		now, _ := time.Now().MarshalBinary()
 		keycLen := 32 - DYNAMIC_KEY_LEN
-		timeBytes := md5Str(now, 32)
+		timeBytes := md5Byte(now, 32)
 		keyc = timeBytes[keycLen:]
 	}
 
 	// 参与运算的密钥
-	keyd := md5Str(append(keya, keyc...), 32)
+	keyd := md5Byte(append(keya, keyc...), 32)
 	cryptkey := append(keya, keyd...)
 	cryptkeyLen := len(cryptkey)
 	// 明文，前10位用来保存时间戳，解密时验证数据有效性，10到26位用来保存keyb(密钥b)，解密时会通过这个密钥验证数据完整性
@@ -112,7 +112,7 @@ func (ke *LkkEncrypt) AuthCode(str, key []byte, encode bool, expiry int64) ([]by
 		if expiry != 0 {
 			expiry = expiry + time.Now().Unix()
 		}
-		expMd5 := md5Str(append(str, keyb...), 16)
+		expMd5 := md5Byte(append(str, keyb...), 16)
 		str = []byte(fmt.Sprintf("%010d%s%s", expiry, expMd5, str))
 		//str = append([]byte(fmt.Sprintf("%010d", expiry)), append(expMd5, str...)...)
 	}
@@ -154,7 +154,7 @@ func (ke *LkkEncrypt) AuthCode(str, key []byte, encode bool, expiry int64) ([]by
 		}
 
 		expTime, _ := strconv.ParseInt(string(resdata[:10]), 10, 0)
-		if (expTime == 0 || expTime-time.Now().Unix() > 0) && string(resdata[10:26]) == string(md5Str(append(resdata[26:], keyb...), 16)) {
+		if (expTime == 0 || expTime-time.Now().Unix() > 0) && string(resdata[10:26]) == string(md5Byte(append(resdata[26:], keyb...), 16)) {
 			return resdata[26:], expTime
 		} else {
 			return nil, expTime
@@ -198,7 +198,7 @@ func (ke *LkkEncrypt) EasyEncrypt(data, key []byte) []byte {
 		return nil
 	}
 
-	keyByte := md5Str(key, 32)
+	keyByte := md5Byte(key, 32)
 	keyLen := len(keyByte)
 
 	var i, x, c int
@@ -230,7 +230,7 @@ func (ke *LkkEncrypt) EasyDecrypt(val, key []byte) []byte {
 		return nil
 	}
 
-	keyByte := md5Str(key, 32)
+	keyByte := md5Byte(key, 32)
 	if string(val[:DYNAMIC_KEY_LEN]) != string(keyByte[:DYNAMIC_KEY_LEN]) {
 		return nil
 	}
