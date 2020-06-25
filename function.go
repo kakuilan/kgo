@@ -21,7 +21,7 @@ import (
 	"unsafe"
 )
 
-// md5Byte 计算字符切片的 MD5 散列值.
+// md5Byte 计算字节切片的 MD5 散列值.
 func md5Byte(str []byte, length uint8) []byte {
 	var res []byte
 	h := md5.New()
@@ -39,7 +39,7 @@ func md5Byte(str []byte, length uint8) []byte {
 	return res
 }
 
-// shaXByte 计算字符串的 shaX 散列值,x为1/256/512.
+// shaXByte 计算字节切片的 shaX 散列值,x为1/256/512.
 func shaXByte(str []byte, x uint16) []byte {
 	var h hash.Hash
 	switch x {

@@ -107,7 +107,15 @@ func TestStringMd5(t *testing.T) {
 	}
 }
 
-func BenchmarkStringMd5(b *testing.B) {
+func BenchmarkStringMd5Str16(b *testing.B) {
+	b.ResetTimer()
+	str := "hello world!"
+	for i := 0; i < b.N; i++ {
+		_ = KStr.Md5(str, 16)
+	}
+}
+
+func BenchmarkStringMd5Str32(b *testing.B) {
 	b.ResetTimer()
 	str := "hello world!"
 	for i := 0; i < b.N; i++ {
@@ -115,19 +123,27 @@ func BenchmarkStringMd5(b *testing.B) {
 	}
 }
 
-func BenchmarkStringMd5Str16(b *testing.B) {
-	b.ResetTimer()
-	str := []byte("hello world!")
-	for i := 0; i < b.N; i++ {
-		md5Byte(str, 16)
+func TestStringMd5Byte(t *testing.T) {
+	res := KStr.Md5Byte([]byte(""), 16)
+	if res == nil {
+		t.Error("string Md5Byte fail")
+		return
 	}
 }
 
-func BenchmarkStringMd5Str32(b *testing.B) {
+func BenchmarkStringMd5Byte16(b *testing.B) {
 	b.ResetTimer()
 	str := []byte("hello world!")
 	for i := 0; i < b.N; i++ {
-		md5Byte(str, 32)
+		KStr.Md5Byte(str, 16)
+	}
+}
+
+func BenchmarkStringMd5Byte32(b *testing.B) {
+	b.ResetTimer()
+	str := []byte("hello world!")
+	for i := 0; i < b.N; i++ {
+		KStr.Md5Byte(str, 32)
 	}
 }
 

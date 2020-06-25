@@ -150,6 +150,11 @@ func (ks *LkkString) Md5(str string, length uint8) string {
 	return string(md5Byte([]byte(str), length))
 }
 
+// Md5 获取字节切片md5值,length指定结果长度32/16 .
+func (ks *LkkString) Md5Byte(str []byte, length uint8) []byte {
+	return md5Byte(str, length)
+}
+
 // ShaX 计算字符串的 shaX 散列值,x为1/256/512 .
 func (ks *LkkString) ShaX(str string, x uint16) string {
 	return string(shaXByte([]byte(str), x))
