@@ -698,7 +698,7 @@ func (ka *LkkArray) ArrayUnique(arr interface{}) []interface{} {
 		for i := 0; i < val.Len(); i++ {
 			item = val.Index(i).Interface()
 			str = fmt.Sprintf("%+v", item)
-			key = string(md5Str([]byte(str), 32))
+			key = string(md5Byte([]byte(str), 32))
 			if _, ok := mp[key]; !ok {
 				mp[key] = true
 				res = append(res, item)
@@ -708,7 +708,7 @@ func (ka *LkkArray) ArrayUnique(arr interface{}) []interface{} {
 		for _, k := range val.MapKeys() {
 			item = val.MapIndex(k).Interface()
 			str = fmt.Sprintf("%+v", item)
-			key = string(md5Str([]byte(str), 32))
+			key = string(md5Byte([]byte(str), 32))
 			if _, ok := mp[key]; !ok {
 				mp[key] = true
 				res = append(res, item)

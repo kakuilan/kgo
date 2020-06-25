@@ -21,8 +21,8 @@ import (
 	"unsafe"
 )
 
-// md5Str 计算字符串的 MD5 散列值.
-func md5Str(str []byte, length uint8) []byte {
+// md5Byte 计算字符切片的 MD5 散列值.
+func md5Byte(str []byte, length uint8) []byte {
 	var res []byte
 	h := md5.New()
 	h.Write(str)

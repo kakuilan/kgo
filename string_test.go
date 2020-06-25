@@ -119,7 +119,7 @@ func BenchmarkStringMd5Str16(b *testing.B) {
 	b.ResetTimer()
 	str := []byte("hello world!")
 	for i := 0; i < b.N; i++ {
-		md5Str(str, 16)
+		md5Byte(str, 16)
 	}
 }
 
@@ -127,7 +127,7 @@ func BenchmarkStringMd5Str32(b *testing.B) {
 	b.ResetTimer()
 	str := []byte("hello world!")
 	for i := 0; i < b.N; i++ {
-		md5Str(str, 32)
+		md5Byte(str, 32)
 	}
 }
 
