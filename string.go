@@ -160,6 +160,11 @@ func (ks *LkkString) ShaX(str string, x uint16) string {
 	return string(shaXByte([]byte(str), x))
 }
 
+// ShaX 计算字节切片的 shaX 散列值,x为1/256/512 .
+func (ks *LkkString) ShaXByte(str []byte, x uint16) []byte {
+	return shaXByte(str, x)
+}
+
 // Random 生成随机字符串.
 // length为长度,rtype为枚举:
 // RAND_STRING_ALPHA 字母;
