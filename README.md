@@ -1,7 +1,7 @@
 # kgo
 k`s golang helper/library/utils  
 golang 常用函数库/工具集,仅测试支持64位linux.  
-总共420多个通用的方法,涵盖字符串、数组、文件、时间以及类型转换等操作.  
+总共420多个通用的方法,涵盖字符串、数组、文件、时间、加密以及类型转换等操作.  
 
 ### 文档
 [![GoDoc](https://godoc.org/github.com/kakuilan/kgo?status.svg)](https://pkg.go.dev/github.com/kakuilan/kgo)
