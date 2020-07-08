@@ -100,6 +100,9 @@
 - https://github.com/hprose/hprose-go
 - https://github.com/wumansgy/goEncrypt
 - https://github.com/hyperjiang/php
+- github.com/Unknwon/com
+- github.com/thoas/go-funk
+
 
 
 
