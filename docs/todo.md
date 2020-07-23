@@ -104,6 +104,8 @@
 - github.com/thoas/go-funk
 - https://github.com/mitchellh/go-homedir
 - https://github.com/Kretech/xgo
+- github.com/qit-team/snow-core
+- github.com/willf/pad
 
 
 
