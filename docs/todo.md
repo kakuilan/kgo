@@ -91,7 +91,7 @@
 - https://github.com/layidao/utilx -x
 - https://github.com/siddontang/go -x
 - https://github.com/sohaha/zlsgo -x
-- https://github.com/ifree2017/EasyGoLib
+- https://github.com/ifree2017/EasyGoLib -x
 - https://github.com/go-board/x-go
 - https://github.com/qiniu/x
 - https://github.com/iiinsomnia/yiigo
