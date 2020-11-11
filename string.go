@@ -540,8 +540,8 @@ func (ks *LkkString) TrimBOM(str []byte) []byte {
 }
 
 // Chr 返回相对应于 ascii 所指定的单个字符.
-func (ks *LkkString) Chr(ascii int) string {
-	return string(ascii)
+func (ks *LkkString) Chr(chr int) string {
+	return string(rune(chr))
 }
 
 // Ord 将首字符转换为rune.
