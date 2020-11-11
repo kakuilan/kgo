@@ -1,6 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.1.3]- 2020-11-11
+#### Added
+- none
+
+#### Fixed
+- none
+
+#### Changed
+- 修改`KStr.Chr`,使用rune转换字符码
+- 修改`KDbug.CallMethod`错误提示
+
+#### Removed
+- none
+
 ## [v0.1.2]- 2020-06-25
 #### Added
 - `KStr.Md5Byte`
