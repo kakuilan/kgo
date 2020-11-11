@@ -247,7 +247,7 @@ func BenchmarkGetIpByHostname(b *testing.B) {
 }
 
 func TestGetIpsByDomain(t *testing.T) {
-	name := "google.com"
+	name := "baidu.com"
 	ips, err := KOS.GetIpsByDomain(name)
 	if err != nil || len(ips) == 0 {
 		t.Error("GetIpsByDomain fail")
@@ -263,7 +263,7 @@ func TestGetIpsByDomain(t *testing.T) {
 
 func BenchmarkGetIpsByDomain(b *testing.B) {
 	b.ResetTimer()
-	name := "google.com"
+	name := "baidu.com"
 	for i := 0; i < b.N; i++ {
 		_, _ = KOS.GetIpsByDomain(name)
 	}
@@ -720,9 +720,9 @@ func TestIsPortOpen(t *testing.T) {
 		{"", 23, "", false},
 		{"localhost", 0, "", false},
 		{"127.0.0.1", 23, "", false},
-		{"golang.org", 80, "udp", true},
-		{"golang.org", 80, "tcp", true},
-		{"www.google.com", "443", "tcp", true},
+		{"golang.google.cn", 80, "udp", true},
+		{"golang.google.cn", 80, "tcp", true},
+		{"www.baidu.com", "443", "tcp", true},
 	}
 	for _, test := range tests {
 		actual := KOS.IsPortOpen(test.host, test.port, test.protocol)
