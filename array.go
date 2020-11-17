@@ -587,11 +587,13 @@ func (ka *LkkArray) UniqueStrings(strs []string) (res []string) {
 func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}) []interface{} {
 	valA := reflect.ValueOf(arr1)
 	valB := reflect.ValueOf(arr2)
+	typA := valA.Kind()
+	typB := valB.Kind()
 	var diffArr []interface{}
 	var item interface{}
 	var notInB bool
 
-	if (valA.Kind() == reflect.Array || valA.Kind() == reflect.Slice) && (valB.Kind() == reflect.Array || valB.Kind() == reflect.Slice) {
+	if (typA == reflect.Array || typA == reflect.Slice) && (typB == reflect.Array || typB == reflect.Slice) {
 		//两者都是数组/切片
 		if valA.Len() == 0 {
 			return nil
@@ -613,7 +615,7 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}) []interface{} {
 				diffArr = append(diffArr, item)
 			}
 		}
-	} else if (valA.Kind() == reflect.Array || valA.Kind() == reflect.Slice) && (valB.Kind() == reflect.Map) {
+	} else if (typA == reflect.Array || typA == reflect.Slice) && (typB == reflect.Map) {
 		//A是数组/切片,B是字典
 		if valA.Len() == 0 {
 			return nil
@@ -635,7 +637,7 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}) []interface{} {
 				diffArr = append(diffArr, item)
 			}
 		}
-	} else if (valA.Kind() == reflect.Map) && (valB.Kind() == reflect.Array || valB.Kind() == reflect.Slice) {
+	} else if (typA == reflect.Map) && (typB == reflect.Array || typB == reflect.Slice) {
 		//A是字典,B是数组/切片
 		if len(valA.MapKeys()) == 0 {
 			return nil
@@ -657,7 +659,7 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}) []interface{} {
 				diffArr = append(diffArr, item)
 			}
 		}
-	} else if (valA.Kind() == reflect.Map) && (valB.Kind() == reflect.Map) {
+	} else if (typA == reflect.Map) && (typB == reflect.Map) {
 		//两者都是字典
 		if len(valA.MapKeys()) == 0 {
 			return nil
