@@ -1,7 +1,8 @@
 language: go
 sudo: false
 go:
-  - 1.15.4
+  - 1.14.12
+  - 1.15.5
 before_install:
   - go get golang.org/x/tools/cmd/cover
 script:
