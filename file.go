@@ -684,17 +684,31 @@ func (kf *LkkFile) FileTree(fpath string, ftype LkkFileTree, recursive bool, fil
 	return trees
 }
 
-// FormatDir 格式化路径,将"\","//"替换为"/",且以"/"结尾.
+// FormatDir 格式化目录,将"\","//"替换为"/",且以"/"结尾.
 func (kf *LkkFile) FormatDir(fpath string) string {
 	if fpath == "" {
 		return ""
 	}
 
-	// 将"\"替换为"/"
-	fpath = strings.ReplaceAll(fpath, "\\", "/")
+	fpath = formatPath(fpath)
 
-	str := RegFormatDir.ReplaceAllString(fpath, "/")
-	return strings.TrimRight(str, "/") + "/"
+	return strings.TrimRight(fpath, "/") + "/"
+}
+
+// FormatPath 格式化路径
+func (kf *LkkFile) FormatPath(fpath string) string {
+	if fpath == "" {
+		return ""
+	}
+
+	fpath = formatPath(fpath)
+	dir := kf.FormatDir(filepath.Dir(fpath))
+
+	if dir == `./` && !KStr.StartsWith(fpath, dir, false) {
+		return fpath
+	}
+
+	return dir + filepath.Base(fpath)
 }
 
 // Md5 获取文件md5值,length指定结果长度32/16.
@@ -1180,4 +1194,9 @@ func (kf *LkkFile) IsZip(fpath string) bool {
 	n, err := f.Read(buf)
 
 	return err == nil && n == 4 && bytes.Equal(buf, []byte("PK\x03\x04"))
+}
+
+func (kf *LkkFile) RelativePath(dest, rela string) string {
+	//TODO
+	return ""
 }
