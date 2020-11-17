@@ -700,15 +700,63 @@ func BenchmarkFileTree(b *testing.B) {
 }
 
 func TestFormatDir(t *testing.T) {
-	dir := `/usr\bin\\golang//fmt/\test\/hehe`
-	res := KFile.FormatDir(dir)
-	if strings.Contains(res, `\`) {
+	var res string
+	d1 := `/usr\bin\\golang//fmt/\test\/hehe`
+	d2 := `/usr|///tmp:\\\123/\abc<|\hello>\/%world?\\how$\\are`
+
+	res = KFile.FormatDir(d1)
+	if strings.Contains(res, `\`) || res != `/usr/bin/golang/fmt/test/hehe/` {
+		t.Error("FormatDir fail")
+		return
+	}
+
+	res = KFile.FormatDir(d2)
+	if strings.Contains(res, `\`) || res != `/usr/tmp/123/abc/hello/%world/how$/are/` {
+		t.Error("FormatDir fail")
+		return
+	}
+
+	r1 := KFile.FormatDir(".")
+	r2 := KFile.FormatDir("./")
+	if r1 != r2 || r2 != "./" {
 		t.Error("FormatDir fail")
 		return
 	}
 
 	KFile.FormatDir("")
 }
+
+func TestFormatPath(t *testing.T) {
+	p1 := `/usr\bin\\golang//fmt/\test\/hehe`
+	p2 := `/usr|///tmp:\\\123/\abc<|\hello>\/%world?\\how$\\are\@#test.png`
+	p3 := `test.log`
+	p4 := `./test.log`
+
+	res1 := KFile.FormatPath(p1)
+	res2 := KFile.FormatPath(p2)
+	res3 := KFile.FormatPath(p3)
+	res4 := KFile.FormatPath(p4)
+
+	if res1 != `/usr/bin/golang/fmt/test/hehe` {
+		t.Error("FormatPath fail")
+		return
+	}
+	if res2 != `/usr/tmp/123/abc/hello/%world/how$/are/@#test.png` {
+		t.Error("FormatPath fail")
+		return
+	}
+	if res3 != `test.log` {
+		t.Error("FormatPath fail")
+		return
+	}
+	if res4 != `./test.log` {
+		t.Error("FormatPath fail")
+		return
+	}
+
+	KFile.FormatPath("")
+}
+
 
 func BenchmarkFormatDir(b *testing.B) {
 	b.ResetTimer()

@@ -531,3 +531,14 @@ func zeroUnPadding(origData []byte) []byte {
 		return r == rune(0)
 	})
 }
+
+// formatPath 格式化路径
+func formatPath(fpath string) string {
+	//替换特殊字符
+	fpath = strings.NewReplacer(`|`, "", `:`, "", `<`, "", `>`, "", `?`, "", `\`, "/").Replace(fpath)
+	// 将"\"替换为"/"
+	//fpath = strings.ReplaceAll(fpath, "\\", "/")
+	//替换连续斜杠
+	fpath = RegFormatDir.ReplaceAllString(fpath, "/")
+	return fpath
+}
