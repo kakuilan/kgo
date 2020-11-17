@@ -688,6 +688,11 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}) []interface{} {
 	return diffArr
 }
 
+func (ka *LkkArray) ArrayIntersect(arr1, arr2 interface{}, compKey bool) map[interface{}]interface{} {
+	//TODO
+	return nil
+}
+
 // ArrayUnique 移除数组中重复的值.
 func (ka *LkkArray) ArrayUnique(arr interface{}) []interface{} {
 	val := reflect.ValueOf(arr)
