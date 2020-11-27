@@ -688,9 +688,182 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}) []interface{} {
 	return diffArr
 }
 
-func (ka *LkkArray) ArrayIntersect(arr1, arr2 interface{}, compKey bool) map[interface{}]interface{} {
-	//TODO
-	return nil
+// ArrayIntersect 计算数组(数组/切片/字典)的交集,返回在 arr1 中且在 arr2 里的元素,注意会同时返回键.
+// compareType为两个数组的比较方式,枚举类型,有 COMPARE_ONLY_VALUE 仅比较值, COMPARE_ONLY_KEY 仅比较键, COMPARE_BOTH_KEYVALUE 同时比较键和值.
+func (ka *LkkArray) ArrayIntersect(arr1, arr2 interface{}, compareType LkkArrCompareType) map[interface{}]interface{} {
+	valA := reflect.ValueOf(arr1)
+	valB := reflect.ValueOf(arr2)
+	typA := valA.Kind()
+	typB := valB.Kind()
+	interMap := make(map[interface{}]interface{})
+	var item interface{}
+	var chkKey bool
+	var chkVal bool
+	var chkRes bool
+
+	if (typA == reflect.Array || typA == reflect.Slice) && (typB == reflect.Array || typB == reflect.Slice) {
+		//两者都是数组/切片
+		if valA.Len() == 0 || valB.Len() == 0 {
+			println("----------aaaa00000000-----------")
+			return nil
+		}
+		for i := 0; i < valA.Len(); i++ {
+			item = valA.Index(i).Interface()
+			chkKey = false
+			chkVal = false
+			chkRes = false
+
+			for j := 0; j < valB.Len(); j++ {
+				chkKey = (i == j)
+				chkVal = reflect.DeepEqual(item, valB.Index(j).Interface())
+
+				if compareType == COMPARE_ONLY_KEY && chkKey {
+					println("----------00000000-----------")
+					chkRes = true
+					break
+				} else if compareType == COMPARE_ONLY_VALUE && chkVal {
+					println("----------11111111111-----------")
+					chkRes = true
+					break
+				} else if compareType == COMPARE_BOTH_KEYVALUE && chkKey && chkVal {
+					println("----------222222222222-----------")
+					chkRes = true
+					break
+				}
+			}
+
+			if chkRes {
+				println("----------3333333333-----------")
+				interMap[i] = item
+			}
+		}
+	} else if (typA == reflect.Array || typA == reflect.Slice) && (typB == reflect.Map) {
+		//A是数组/切片,B是字典
+		if valA.Len() == 0 || len(valB.MapKeys()) == 0 {
+			println("----------aaa11111-----------")
+			return nil
+		}
+		for i := 0; i < valA.Len(); i++ {
+			item = valA.Index(i).Interface()
+			chkKey = false
+			chkVal = false
+			chkRes = false
+
+			for _, k := range valB.MapKeys() {
+				chkKey = isInt(k.Interface()) && KConv.ToInt(k.Interface()) == i
+				chkVal = reflect.DeepEqual(item, valB.MapIndex(k).Interface())
+
+				if compareType == COMPARE_ONLY_KEY && chkKey {
+					println("----------4444444444-----------")
+					chkRes = true
+					break
+				} else if compareType == COMPARE_ONLY_VALUE && chkVal {
+					println("----------5555555555555-----------")
+					chkRes = true
+					break
+				} else if compareType == COMPARE_BOTH_KEYVALUE && chkKey && chkVal {
+					println("----------666666666-----------")
+					chkRes = true
+					break
+				}
+			}
+
+			if chkRes {
+				println("----------77777777777-----------")
+				interMap[i] = item
+			}
+		}
+	} else if (typA == reflect.Map) && (typB == reflect.Array || typB == reflect.Slice) {
+		//A是字典,B是数组/切片
+		if len(valA.MapKeys()) == 0 || valB.Len() == 0 {
+			println("----------aaaa222222-----------")
+			return nil
+		}
+		var kv int
+		for _, k := range valA.MapKeys() {
+			item = valA.MapIndex(k).Interface()
+			chkKey = false
+			chkVal = false
+			chkRes = false
+
+			if isInt(k.Interface()) {
+				println("----------88888888888-----------")
+				kv = KConv.ToInt(k.Interface())
+			} else {
+				println("----------9999999999-----------")
+				kv = -1
+			}
+
+			for i := 0; i < valB.Len(); i++ {
+				chkKey = kv == i
+				chkVal = reflect.DeepEqual(item, valB.Index(i).Interface())
+
+				if compareType == COMPARE_ONLY_KEY && chkKey {
+					println("----------10101010-----------")
+					chkRes = true
+					break
+				} else if compareType == COMPARE_ONLY_VALUE && chkVal {
+					println("----------11 111 11-----------")
+					chkRes = true
+					break
+				} else if compareType == COMPARE_BOTH_KEYVALUE && chkKey && chkVal {
+					println("----------12121212-----------")
+					chkRes = true
+					break
+				}
+			}
+
+			if chkRes {
+				println("----------13131313-----------")
+				interMap[k.Interface()] = item
+			}
+		}
+
+	} else if (typA == reflect.Map) && (typB == reflect.Map) {
+		//两者都是字典
+		if len(valA.MapKeys()) == 0 || len(valB.MapKeys()) == 0 {
+			println("----------aaaa333333-----------")
+			return nil
+		}
+
+		var kv string
+		for _, k := range valA.MapKeys() {
+			item = valA.MapIndex(k).Interface()
+			chkKey = false
+			chkVal = false
+			chkRes = false
+			kv = KConv.ToStr(k.Interface())
+
+			for _, k2 := range valB.MapKeys() {
+				chkKey = kv == KConv.ToStr(k2.Interface())
+				chkVal = reflect.DeepEqual(item, valB.MapIndex(k2).Interface())
+
+				if compareType == COMPARE_ONLY_KEY && chkKey {
+					println("----------141414-----------")
+					chkRes = true
+					break
+				} else if compareType == COMPARE_ONLY_VALUE && chkVal {
+					println("----------151515-----------")
+					chkRes = true
+					break
+				} else if compareType == COMPARE_BOTH_KEYVALUE && chkKey && chkVal {
+					println("----------161616-----------")
+					chkRes = true
+					break
+				}
+			}
+
+			if chkRes {
+				println("----------171717-----------")
+				interMap[k.Interface()] = item
+			}
+		}
+	} else {
+		println("----------181818-----------")
+		panic("[ArrayIntersect]arr1, arr2 type must be array, slice or map")
+	}
+
+	return interMap
 }
 
 // ArrayUnique 移除数组中重复的值.

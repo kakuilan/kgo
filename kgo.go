@@ -40,6 +40,8 @@ type (
 	LkkPadType uint8
 	// LkkPKCSType 枚举类型,PKCS填充类型
 	LkkPKCSType int8
+	// LkkArrCompareType 枚举类型,数组比较类型
+	LkkArrCompareType uint8
 
 	// FileFilter 文件过滤函数
 	FileFilter func(string) bool
@@ -126,6 +128,13 @@ const (
 	PKCS_ZERO LkkPKCSType = 0
 	// PKCS_SEVEN 即PKCS7
 	PKCS_SEVEN LkkPKCSType = 7
+
+	// COMPARE_ONLY_VALUE 仅比较值
+	COMPARE_ONLY_VALUE LkkArrCompareType = 0
+	// COMPARE_ONLY_KEY 仅比较键
+	COMPARE_ONLY_KEY LkkArrCompareType = 1
+	// COMPARE_BOTH_KEYVALUE 同时比较键和值
+	COMPARE_BOTH_KEYVALUE LkkArrCompareType = 2
 
 	//默认浮点数精确小数位数
 	FLOAT_DECIMAL = 10
