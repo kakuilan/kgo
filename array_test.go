@@ -5,6 +5,25 @@ import (
 	"testing"
 )
 
+func TestArrayIntersect(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	ar1 := []string{"aa", "bb", "cc", "dd", ""}
+	ar2 := []string{"bb", "cc", "ff", "gg", ""}
+	//mp1 := map[string]string{"a": "1", "b": "2", "c": "3", "d": "4", "e": ""}
+	//mp2 := map[string]string{"a": "0", "b": "2", "c": "4", "g": "4", "h": ""}
+	//ar3 := []string{}
+	//mp3 := make(map[string]string)
+
+	res0 := KArr.ArrayIntersect(ar1, ar2, COMPARE_ONLY_VALUE)
+	fmt.Printf("%+v\n", res0)
+
+}
+
 func TestInArray(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
