@@ -583,109 +583,158 @@ func (ka *LkkArray) UniqueStrings(strs []string) (res []string) {
 	return
 }
 
-// ArrayDiff 计算数组(数组/切片/字典)的差集,返回在 arr1 中但是不在 arr2 里,且非空元素(nil,'')的值.
-func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}) []interface{} {
+// ArrayDiff
+func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, compareType LkkArrCompareType) map[interface{}]interface{} {
 	valA := reflect.ValueOf(arr1)
 	valB := reflect.ValueOf(arr2)
 	typA := valA.Kind()
 	typB := valB.Kind()
-	var diffArr []interface{}
+	resMap := make(map[interface{}]interface{})
 	var item interface{}
-	var notInB bool
+	var chkKey bool
+	var chkVal bool
+	var chkRes bool
 
 	if (typA == reflect.Array || typA == reflect.Slice) && (typB == reflect.Array || typB == reflect.Slice) {
 		//两者都是数组/切片
 		if valA.Len() == 0 {
 			return nil
-		} else if valB.Len() == 0 {
-			return arrayValues(arr1, true)
 		}
-
 		for i := 0; i < valA.Len(); i++ {
 			item = valA.Index(i).Interface()
-			notInB = true
+			chkKey = false
+			chkVal = false
+			chkRes = true
+
 			for j := 0; j < valB.Len(); j++ {
-				if reflect.DeepEqual(item, valB.Index(j).Interface()) {
-					notInB = false
+				chkKey = (i == j)
+				chkVal = reflect.DeepEqual(item, valB.Index(j).Interface())
+
+				if compareType == COMPARE_ONLY_KEY && chkKey {
+					chkRes = false
+					break
+				} else if compareType == COMPARE_ONLY_VALUE && chkVal {
+					chkRes = false
+					break
+				} else if compareType == COMPARE_BOTH_KEYVALUE && chkKey && chkVal {
+					chkRes = false
 					break
 				}
 			}
 
-			if notInB {
-				diffArr = append(diffArr, item)
+			if chkRes {
+				resMap[i] = item
 			}
 		}
 	} else if (typA == reflect.Array || typA == reflect.Slice) && (typB == reflect.Map) {
 		//A是数组/切片,B是字典
 		if valA.Len() == 0 {
 			return nil
-		} else if len(valB.MapKeys()) == 0 {
-			return arrayValues(arr1, true)
 		}
-
 		for i := 0; i < valA.Len(); i++ {
 			item = valA.Index(i).Interface()
-			notInB = true
+			chkKey = false
+			chkVal = false
+			chkRes = true
+
 			for _, k := range valB.MapKeys() {
-				if reflect.DeepEqual(item, valB.MapIndex(k).Interface()) {
-					notInB = false
+				chkKey = isInt(k.Interface()) && KConv.ToInt(k.Interface()) == i
+				chkVal = reflect.DeepEqual(item, valB.MapIndex(k).Interface())
+
+				if compareType == COMPARE_ONLY_KEY && chkKey {
+					chkRes = false
+					break
+				} else if compareType == COMPARE_ONLY_VALUE && chkVal {
+					chkRes = false
+					break
+				} else if compareType == COMPARE_BOTH_KEYVALUE && chkKey && chkVal {
+					chkRes = false
 					break
 				}
 			}
 
-			if notInB {
-				diffArr = append(diffArr, item)
+			if chkRes {
+				resMap[i] = item
 			}
 		}
 	} else if (typA == reflect.Map) && (typB == reflect.Array || typB == reflect.Slice) {
 		//A是字典,B是数组/切片
 		if len(valA.MapKeys()) == 0 {
 			return nil
-		} else if valB.Len() == 0 {
-			return arrayValues(arr1, true)
 		}
 
+		var kv int
 		for _, k := range valA.MapKeys() {
 			item = valA.MapIndex(k).Interface()
-			notInB = true
+			chkKey = false
+			chkVal = false
+			chkRes = true
+
+			if isInt(k.Interface()) {
+				kv = KConv.ToInt(k.Interface())
+			} else {
+				kv = -1
+			}
+
 			for i := 0; i < valB.Len(); i++ {
-				if reflect.DeepEqual(item, valB.Index(i).Interface()) {
-					notInB = false
+				chkKey = kv == i
+				chkVal = reflect.DeepEqual(item, valB.Index(i).Interface())
+
+				if compareType == COMPARE_ONLY_KEY && chkKey {
+					chkRes = false
+					break
+				} else if compareType == COMPARE_ONLY_VALUE && chkVal {
+					chkRes = false
+					break
+				} else if compareType == COMPARE_BOTH_KEYVALUE && chkKey && chkVal {
+					chkRes = false
 					break
 				}
 			}
 
-			if notInB {
-				diffArr = append(diffArr, item)
+			if chkRes {
+				resMap[k.Interface()] = item
 			}
 		}
 	} else if (typA == reflect.Map) && (typB == reflect.Map) {
 		//两者都是字典
 		if len(valA.MapKeys()) == 0 {
 			return nil
-		} else if len(valB.MapKeys()) == 0 {
-			return arrayValues(arr1, true)
 		}
 
+		var kv string
 		for _, k := range valA.MapKeys() {
 			item = valA.MapIndex(k).Interface()
-			notInB = true
+			chkKey = false
+			chkVal = false
+			chkRes = true
+			kv = KConv.ToStr(k.Interface())
+
 			for _, k2 := range valB.MapKeys() {
-				if reflect.DeepEqual(item, valB.MapIndex(k2).Interface()) {
-					notInB = false
+				chkKey = kv == KConv.ToStr(k2.Interface())
+				chkVal = reflect.DeepEqual(item, valB.MapIndex(k2).Interface())
+
+				if compareType == COMPARE_ONLY_KEY && chkKey {
+					chkRes = false
+					break
+				} else if compareType == COMPARE_ONLY_VALUE && chkVal {
+					chkRes = false
+					break
+				} else if compareType == COMPARE_BOTH_KEYVALUE && chkKey && chkVal {
+					chkRes = false
 					break
 				}
 			}
 
-			if notInB {
-				diffArr = append(diffArr, item)
+			if chkRes {
+				resMap[k.Interface()] = item
 			}
 		}
 	} else {
 		panic("[ArrayDiff]arr1, arr2 type must be array, slice or map")
 	}
 
-	return diffArr
+	return resMap
 }
 
 // ArrayIntersect 计算数组(数组/切片/字典)的交集,返回在 arr1 中且在 arr2 里的元素,注意会同时返回键.
@@ -695,7 +744,7 @@ func (ka *LkkArray) ArrayIntersect(arr1, arr2 interface{}, compareType LkkArrCom
 	valB := reflect.ValueOf(arr2)
 	typA := valA.Kind()
 	typB := valB.Kind()
-	interMap := make(map[interface{}]interface{})
+	resMap := make(map[interface{}]interface{})
 	var item interface{}
 	var chkKey bool
 	var chkVal bool
@@ -729,7 +778,7 @@ func (ka *LkkArray) ArrayIntersect(arr1, arr2 interface{}, compareType LkkArrCom
 			}
 
 			if chkRes {
-				interMap[i] = item
+				resMap[i] = item
 			}
 		}
 	} else if (typA == reflect.Array || typA == reflect.Slice) && (typB == reflect.Map) {
@@ -760,7 +809,7 @@ func (ka *LkkArray) ArrayIntersect(arr1, arr2 interface{}, compareType LkkArrCom
 			}
 
 			if chkRes {
-				interMap[i] = item
+				resMap[i] = item
 			}
 		}
 	} else if (typA == reflect.Map) && (typB == reflect.Array || typB == reflect.Slice) {
@@ -798,7 +847,7 @@ func (ka *LkkArray) ArrayIntersect(arr1, arr2 interface{}, compareType LkkArrCom
 			}
 
 			if chkRes {
-				interMap[k.Interface()] = item
+				resMap[k.Interface()] = item
 			}
 		}
 
@@ -833,14 +882,14 @@ func (ka *LkkArray) ArrayIntersect(arr1, arr2 interface{}, compareType LkkArrCom
 			}
 
 			if chkRes {
-				interMap[k.Interface()] = item
+				resMap[k.Interface()] = item
 			}
 		}
 	} else {
 		panic("[ArrayIntersect]arr1, arr2 type must be array, slice or map")
 	}
 
-	return interMap
+	return resMap
 }
 
 // ArrayUnique 移除数组中重复的值.
