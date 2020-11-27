@@ -850,60 +850,64 @@ func TestArrayDiff(t *testing.T) {
 		}
 	}()
 
-	ar1 := []string{"aa", "bb", "cc", "dd", ""}
-	ar2 := []string{"bb", "cc", "ff", "gg", ""}
-	mp1 := map[string]string{"a": "1", "b": "2", "c": "3", "d": "4", "e": ""}
-	mp2 := map[string]string{"a": "0", "b": "2", "c": "4", "g": "4", "h": ""}
+	ar1 := []string{"aa", "bb", "cc", "dd", "ee", "", "hh"}
+	ar2 := []string{"bb", "cc", "ff", "gg", "ee", ""}
+	mp1 := map[string]string{"a": "1", "b": "2", "c": "3", "d": "4", "e": "", "2": "cc", "3": "no"}
+	mp2 := map[string]string{"a": "0", "b": "2", "c": "4", "g": "4", "h": "", "2": "cc"}
+	ar3 := []string{}
+	mp3 := make(map[string]string)
 
-	var ar3 []string
-	var mp3 = make(map[string]string)
+	res0 := KArr.ArrayDiff(ar3, ar1, COMPARE_ONLY_VALUE)
+	res1 := KArr.ArrayDiff(ar1, ar2, COMPARE_ONLY_VALUE)
+	res2 := KArr.ArrayDiff(ar1, ar2, COMPARE_ONLY_KEY)
+	res3 := KArr.ArrayDiff(ar1, ar2, COMPARE_BOTH_KEYVALUE)
 
-	res1 := KArr.ArrayDiff(ar1, ar2)
-	res2 := KArr.ArrayDiff(mp1, mp2)
-	if len(res1) != len(res2) {
+	if res0 != nil || len(res1) != 3 || len(res2) != 1 || len(res3) != 1 {
 		t.Error("ArrayDiff fail")
 		return
 	}
 
-	res5 := KArr.ArrayDiff(ar3, ar1)
-	res6 := KArr.ArrayDiff(ar1, ar3)
-	if len(res5) != 0 || len(res6) != 4 {
+	res4 := KArr.ArrayDiff(ar3, mp1, COMPARE_ONLY_VALUE)
+	res5 := KArr.ArrayDiff(ar1, mp1, COMPARE_ONLY_VALUE)
+	res6 := KArr.ArrayDiff(ar1, mp1, COMPARE_ONLY_KEY)
+	res7 := KArr.ArrayDiff(ar1, mp1, COMPARE_BOTH_KEYVALUE)
+
+	if res4 != nil || len(res5) != 5 || len(res6) != 5 || len(res7) != 4 {
 		t.Error("ArrayDiff fail")
 		return
 	}
 
-	res7 := KArr.ArrayDiff(mp3, mp1)
-	res8 := KArr.ArrayDiff(mp1, mp3)
-	if len(res7) != 0 || len(res8) != 4 {
+	res8 := KArr.ArrayDiff(mp3, ar1, COMPARE_ONLY_VALUE)
+	res9 := KArr.ArrayDiff(mp1, ar1, COMPARE_ONLY_VALUE)
+	res10 := KArr.ArrayDiff(mp1, ar1, COMPARE_ONLY_KEY)
+	res11 := KArr.ArrayDiff(mp1, ar1, COMPARE_BOTH_KEYVALUE)
+
+	if res8 != nil || len(res9) != 5 || len(res10) != 5 || len(res11) != 4 {
 		t.Error("ArrayDiff fail")
 		return
 	}
 
-	res9 := KArr.ArrayDiff(ar3, mp1)
-	res10 := KArr.ArrayDiff(ar1, mp3)
-	res11 := KArr.ArrayDiff(ar1, mp1)
-	if len(res9) != 0 || len(res10) != len(res11) {
+	res12 := KArr.ArrayDiff(mp3, mp2, COMPARE_ONLY_VALUE)
+	res13 := KArr.ArrayDiff(mp1, mp2, COMPARE_ONLY_VALUE)
+	res14 := KArr.ArrayDiff(mp1, mp2, COMPARE_ONLY_KEY)
+	res15 := KArr.ArrayDiff(mp1, mp2, COMPARE_BOTH_KEYVALUE)
+
+	if res12 != nil || len(res13) != 3 || len(res14) != 3 || len(res15) != 1 {
 		t.Error("ArrayDiff fail")
 		return
 	}
 
-	res12 := KArr.ArrayDiff(mp3, ar1)
-	res13 := KArr.ArrayDiff(mp1, ar3)
-	res14 := KArr.ArrayDiff(mp1, ar1)
-	if len(res12) != 0 || len(res13) != len(res14) {
-		t.Error("ArrayDiff fail")
-		return
-	}
+	//fmt.Printf("%+v\n", res12)
 
-	KArr.ArrayDiff("hello", ar1)
+	KArr.ArrayDiff("hello", 1234, COMPARE_ONLY_VALUE)
 }
 
 func BenchmarkArrayDiff(b *testing.B) {
 	b.ResetTimer()
-	ar1 := []string{"aa", "bb", "cc", "dd", ""}
-	ar2 := []string{"bb", "cc", "ff", "gg", ""}
+	mp1 := map[string]string{"a": "1", "b": "2", "c": "3", "d": "4", "e": "", "2": "cc", "3": "no"}
+	mp2 := map[string]string{"a": "0", "b": "2", "c": "4", "g": "4", "h": "", "2": "cc"}
 	for i := 0; i < b.N; i++ {
-		KArr.ArrayDiff(ar1, ar2)
+		KArr.ArrayDiff(mp1, mp2, COMPARE_BOTH_KEYVALUE)
 	}
 }
 
