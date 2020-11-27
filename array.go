@@ -583,7 +583,8 @@ func (ka *LkkArray) UniqueStrings(strs []string) (res []string) {
 	return
 }
 
-// ArrayDiff
+// ArrayDiff 计算数组(数组/切片/字典)的交集,返回在 arr1 中但不在 arr2 里的元素,注意会同时返回键.
+// compareType为两个数组的比较方式,枚举类型,有 COMPARE_ONLY_VALUE 仅比较值, COMPARE_ONLY_KEY 仅比较键, COMPARE_BOTH_KEYVALUE 同时比较键和值.
 func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, compareType LkkArrCompareType) map[interface{}]interface{} {
 	valA := reflect.ValueOf(arr1)
 	valB := reflect.ValueOf(arr2)
@@ -616,7 +617,7 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, compareType LkkArrCompareT
 				} else if compareType == COMPARE_ONLY_VALUE && chkVal {
 					chkRes = false
 					break
-				} else if compareType == COMPARE_BOTH_KEYVALUE && chkKey && chkVal {
+				} else if compareType == COMPARE_BOTH_KEYVALUE && (chkKey || chkVal) {
 					chkRes = false
 					break
 				}
@@ -647,7 +648,7 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, compareType LkkArrCompareT
 				} else if compareType == COMPARE_ONLY_VALUE && chkVal {
 					chkRes = false
 					break
-				} else if compareType == COMPARE_BOTH_KEYVALUE && chkKey && chkVal {
+				} else if compareType == COMPARE_BOTH_KEYVALUE && (chkKey || chkVal) {
 					chkRes = false
 					break
 				}
@@ -686,7 +687,7 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, compareType LkkArrCompareT
 				} else if compareType == COMPARE_ONLY_VALUE && chkVal {
 					chkRes = false
 					break
-				} else if compareType == COMPARE_BOTH_KEYVALUE && chkKey && chkVal {
+				} else if compareType == COMPARE_BOTH_KEYVALUE && (chkKey || chkVal) {
 					chkRes = false
 					break
 				}
@@ -720,7 +721,7 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, compareType LkkArrCompareT
 				} else if compareType == COMPARE_ONLY_VALUE && chkVal {
 					chkRes = false
 					break
-				} else if compareType == COMPARE_BOTH_KEYVALUE && chkKey && chkVal {
+				} else if compareType == COMPARE_BOTH_KEYVALUE && (chkKey || chkVal) {
 					chkRes = false
 					break
 				}

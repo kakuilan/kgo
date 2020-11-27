@@ -40,7 +40,7 @@ type (
 	LkkPadType uint8
 	// LkkPKCSType 枚举类型,PKCS填充类型
 	LkkPKCSType int8
-	// LkkArrCompareType 枚举类型,数组比较类型
+	// LkkArrCompareType 枚举类型,数组比较方式
 	LkkArrCompareType uint8
 
 	// FileFilter 文件过滤函数
