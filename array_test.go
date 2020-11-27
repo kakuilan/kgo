@@ -5,25 +5,6 @@ import (
 	"testing"
 )
 
-func TestArrayIntersect(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
-	ar1 := []string{"aa", "bb", "cc", "dd", ""}
-	ar2 := []string{"bb", "cc", "ff", "gg", ""}
-	//mp1 := map[string]string{"a": "1", "b": "2", "c": "3", "d": "4", "e": ""}
-	//mp2 := map[string]string{"a": "0", "b": "2", "c": "4", "g": "4", "h": ""}
-	//ar3 := []string{}
-	//mp3 := make(map[string]string)
-
-	res0 := KArr.ArrayIntersect(ar1, ar2, COMPARE_ONLY_VALUE)
-	fmt.Printf("%+v\n", res0)
-
-}
-
 func TestInArray(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -923,6 +904,71 @@ func BenchmarkArrayDiff(b *testing.B) {
 	ar2 := []string{"bb", "cc", "ff", "gg", ""}
 	for i := 0; i < b.N; i++ {
 		KArr.ArrayDiff(ar1, ar2)
+	}
+}
+
+func TestArrayIntersect(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	ar1 := []string{"aa", "bb", "cc", "dd", "ee", ""}
+	ar2 := []string{"bb", "cc", "ff", "gg", "ee", ""}
+	mp1 := map[string]string{"a": "1", "b": "2", "c": "3", "d": "4", "e": "", "2": "cc", "3": "no"}
+	mp2 := map[string]string{"a": "0", "b": "2", "c": "4", "g": "4", "h": "", "2": "cc"}
+	ar3 := []string{}
+	mp3 := make(map[string]string)
+
+	res0 := KArr.ArrayIntersect(ar1, ar3, COMPARE_ONLY_VALUE)
+	res1 := KArr.ArrayIntersect(ar1, ar2, COMPARE_ONLY_VALUE)
+	res2 := KArr.ArrayIntersect(ar1, ar2, COMPARE_ONLY_KEY)
+	res3 := KArr.ArrayIntersect(ar1, ar2, COMPARE_BOTH_KEYVALUE)
+
+	if res0 != nil || len(res1) != 4 || len(res2) != 6 || len(res3) != 2 {
+		t.Error("ArrayIntersect fail")
+		return
+	}
+
+	res4 := KArr.ArrayIntersect(ar3, mp1, COMPARE_ONLY_VALUE)
+	res5 := KArr.ArrayIntersect(ar1, mp1, COMPARE_ONLY_VALUE)
+	res6 := KArr.ArrayIntersect(ar1, mp1, COMPARE_ONLY_KEY)
+	res7 := KArr.ArrayIntersect(ar1, mp1, COMPARE_BOTH_KEYVALUE)
+	if res4 != nil || len(res5) != 2 || len(res6) != 2 || len(res7) != 1 {
+		t.Error("ArrayIntersect fail")
+		return
+	}
+
+	res8 := KArr.ArrayIntersect(mp1, ar3, COMPARE_ONLY_VALUE)
+	res9 := KArr.ArrayIntersect(mp1, ar1, COMPARE_ONLY_VALUE)
+	res10 := KArr.ArrayIntersect(mp1, ar1, COMPARE_ONLY_KEY)
+	res11 := KArr.ArrayIntersect(mp1, ar1, COMPARE_BOTH_KEYVALUE)
+	if res8 != nil || len(res9) != 2 || len(res10) != 2 || len(res11) != 1 {
+		t.Error("ArrayIntersect fail")
+		return
+	}
+
+	res12 := KArr.ArrayIntersect(mp1, mp3, COMPARE_ONLY_VALUE)
+	res13 := KArr.ArrayIntersect(mp1, mp2, COMPARE_ONLY_VALUE)
+	res14 := KArr.ArrayIntersect(mp1, mp2, COMPARE_ONLY_KEY)
+	res15 := KArr.ArrayIntersect(mp1, mp2, COMPARE_BOTH_KEYVALUE)
+	if res12 != nil || len(res13) != 4 || len(res14) != 4 || len(res15) != 2 {
+		t.Error("ArrayIntersect fail")
+		return
+	}
+
+	//fmt.Printf("%+v\n", res12)
+
+	KArr.ArrayIntersect("hello", 1234, COMPARE_ONLY_VALUE)
+}
+
+func BenchmarkArrayIntersect(b *testing.B) {
+	b.ResetTimer()
+	mp1 := map[string]string{"a": "1", "b": "2", "c": "3", "d": "4", "e": "", "2": "cc", "3": "no"}
+	mp2 := map[string]string{"a": "0", "b": "2", "c": "4", "g": "4", "h": "", "2": "cc"}
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayIntersect(mp1, mp2, COMPARE_BOTH_KEYVALUE)
 	}
 }
 
