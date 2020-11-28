@@ -367,7 +367,7 @@ func (kn *LkkNumber) IsWhole(value float64) bool {
 
 // IsNatural 数值是否为自然数.
 func (kn *LkkNumber) IsNatural(value float64) bool {
-	return kn.IsWhole(value) && kn.IsPositive(value)
+	return kn.IsWhole(value) && kn.IsNonNegative(value)
 }
 
 // InRangeInt 数值是否在2个整数范围内.
