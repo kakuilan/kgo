@@ -54,12 +54,18 @@ func (kn *LkkNumber) NumberFormat(number float64, decimal uint8, point, thousand
 }
 
 // Range 根据范围创建数组,包含指定的元素.
-func (kn *LkkNumber) Range(min, max int) []int {
-	a := make([]int, max-min+1)
-	for i := range a {
-		a[i] = min + i
+// start为起始元素值,end为末尾元素值.若start<end,返回升序的数组;若start>end,返回降序的数组.
+func (kn *LkkNumber) Range(start, end int) []int {
+	res := make([]int, kn.AbsInt(int64(end-start))+1)
+	for i := range res {
+		if end > start {
+			res[i] = start + i
+		} else {
+			res[i] = start - i
+		}
+
 	}
-	return a
+	return res
 }
 
 // AbsFloat 浮点型取绝对值.

@@ -29,14 +29,26 @@ func BenchmarkNumberFormat(b *testing.B) {
 }
 
 func TestRange(t *testing.T) {
-	min := 1
-	max := 5
-	res := KNum.Range(min, max)
-	if len(res) != max-min+1 {
+	var start,end int = 1,5
+	res0 := KNum.Range(start, end)
+	if(len(res0)!=5 || res0[0]!=start) {
 		t.Error("Range fail")
 		return
 	}
 
+	start,end = 5,1
+	res1 := KNum.Range(start, end)
+	if(len(res1)!=5 || res1[0]!=start) {
+		t.Error("Range fail")
+		return
+	}
+
+	start,end = 3,3
+	res2 := KNum.Range(start, end)
+	if(len(res2)!=1) {
+		t.Error("Range fail")
+		return
+	}
 }
 
 func BenchmarkRange(b *testing.B) {
