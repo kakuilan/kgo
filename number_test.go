@@ -535,7 +535,7 @@ func BenchmarkPow(b *testing.B) {
 func TestLog(t *testing.T) {
 	res1 := KNum.Log(100, 10)
 	res2 := KNum.Log(16, 2)
-	if int(res1) != 1 || int(res2) != 4 {
+	if int(res1) != 2 || int(res2) != 4 {
 		t.Error("Log fail")
 		return
 	}
