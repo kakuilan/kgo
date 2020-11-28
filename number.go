@@ -328,14 +328,16 @@ func (kn *LkkNumber) IsEven(val int) bool {
 }
 
 // NumSign 返回数值的符号.值>0为1,<0为-1,其他为0.
-func (kn *LkkNumber) NumSign(value float64) float64 {
+func (kn *LkkNumber) NumSign(value float64) (res int8) {
 	if value > 0 {
-		return 1
+		res = 1
 	} else if value < 0 {
-		return -1
+		res = -1
 	} else {
-		return 0
+		res = 0
 	}
+
+	return
 }
 
 // IsNegative 数值是否为负数.
