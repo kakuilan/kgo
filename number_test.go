@@ -764,7 +764,7 @@ func TestIsNatural(t *testing.T) {
 		param    float64
 		expected bool
 	}{
-		{0, false},
+		{0, true},
 		{-1, false},
 		{10, true},
 		{3.14, false},
