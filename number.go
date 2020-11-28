@@ -285,9 +285,14 @@ func (kn *LkkNumber) Expm1(x float64) float64 {
 	return math.Exp(x) - 1
 }
 
-// Pow 指数表达式.
+// Pow 指数表达式,求x的y次方.
 func (kn *LkkNumber) Pow(x, y float64) float64 {
 	return math.Pow(x, y)
+}
+
+// Log 对数表达式,求以y为底x的对数.
+func (kn *LkkNumber) Log(x, y float64) float64 {
+	return math.Log(x) / math.Log(y)
 }
 
 // ByteFormat 格式化文件比特大小.
