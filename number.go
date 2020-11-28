@@ -63,7 +63,6 @@ func (kn *LkkNumber) Range(start, end int) []int {
 		} else {
 			res[i] = start - i
 		}
-
 	}
 	return res
 }
@@ -540,4 +539,26 @@ func (kn *LkkNumber) GeoDistance(lng1, lat1, lng2, lat2 float64) float64 {
 // IsNan 是否为“非数值”.
 func (kn *LkkNumber) IsNan(val float64) bool {
 	return math.IsNaN(val)
+}
+
+// IsNaturalRange 是否连续的自然数数组/切片,如[0,1,2,3...],其中不能有间断.
+// strict为是否严格检查元素的顺序.
+func (kn *LkkNumber) IsNaturalRange(arr []int, strict bool) (res bool) {
+	n := len(arr)
+	if n == 0 {
+		return
+	}
+
+	orig := kn.Range(0, n-1)
+	ctyp := COMPARE_ONLY_VALUE
+
+	if strict {
+		ctyp = COMPARE_BOTH_KEYVALUE
+	}
+
+	diff := KArr.ArrayDiff(orig, arr, ctyp)
+	fmt.Printf("%v\n", diff)
+
+	res = len(diff) == 0
+	return
 }

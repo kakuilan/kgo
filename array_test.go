@@ -5,6 +5,25 @@ import (
 	"testing"
 )
 
+func TestIsNaturalRange(t *testing.T) {
+	arr1 := []int{1,2,3}
+	arr2 := []int{0, 3, 1, 2}
+	arr3 := []int{0, 1, 2, 3}
+	arr4 := []int{0, 1, 3, 4}
+
+	res1 := KNum.IsNaturalRange(arr1, false)
+
+	res2 := KNum.IsNaturalRange(arr2, false)
+	res3 := KNum.IsNaturalRange(arr2, true)
+
+	res4 := KNum.IsNaturalRange(arr3, false)
+	res5 := KNum.IsNaturalRange(arr3, true)
+
+	res6 := KNum.IsNaturalRange(arr4, false)
+
+	println(res1, res2, res3, res4, res5, res6)
+}
+
 func TestInArray(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
