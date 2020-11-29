@@ -12,16 +12,30 @@ func TestIsNaturalRange(t *testing.T) {
 	arr4 := []int{0, 1, 3, 4}
 
 	res1 := KNum.IsNaturalRange(arr1, false)
+	if res1 {
+		t.Error("IsNaturalRange fail")
+		return
+	}
 
 	res2 := KNum.IsNaturalRange(arr2, false)
 	res3 := KNum.IsNaturalRange(arr2, true)
+	if !res2 || res3 {
+		t.Error("IsNaturalRange fail")
+		return
+	}
 
 	res4 := KNum.IsNaturalRange(arr3, false)
 	res5 := KNum.IsNaturalRange(arr3, true)
+	if !res4 || !res5 {
+		t.Error("IsNaturalRange fail")
+		return
+	}
 
 	res6 := KNum.IsNaturalRange(arr4, false)
-
-	println(res1, res2, res3, res4, res5, res6)
+	if res6 {
+		t.Error("IsNaturalRange fail")
+		return
+	}
 }
 
 func TestInArray(t *testing.T) {
