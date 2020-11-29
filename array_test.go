@@ -38,6 +38,14 @@ func TestIsNaturalRange(t *testing.T) {
 	}
 }
 
+func BenchmarkIsNaturalRange(b *testing.B) {
+	b.ResetTimer()
+	arr := []int{0, 1, 2, 3}
+	for i := 0; i < b.N; i++ {
+		KNum.IsNaturalRange(arr, false)
+	}
+}
+
 func TestInArray(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
