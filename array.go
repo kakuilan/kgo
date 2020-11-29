@@ -584,63 +584,65 @@ func (ka *LkkArray) UniqueStrings(strs []string) (res []string) {
 }
 
 // ArrayDiff 计算数组(数组/切片/字典)的交集,返回在 arr1 中但不在 arr2 里的元素,注意会同时返回键.
-// compareType为两个数组的比较方式,枚举类型,有 COMPARE_ONLY_VALUE 仅比较值, COMPARE_ONLY_KEY 仅比较键, COMPARE_BOTH_KEYVALUE 同时比较键和值.
+// compareType为两个数组的比较方式,枚举类型,有:
+// COMPARE_ONLY_VALUE 根据元素值比较, 返回在 arr1 中但是不在arr2 里的值;
+// COMPARE_ONLY_KEY 根据 arr1 中的键名和 arr2 进行比较,返回不同键名的项;
+// COMPARE_BOTH_KEYVALUE 同时比较键和值.
 func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, compareType LkkArrCompareType) map[interface{}]interface{} {
 	valA := reflect.ValueOf(arr1)
 	valB := reflect.ValueOf(arr2)
 	typA := valA.Kind()
 	typB := valB.Kind()
+	lenA := valA.Len()
+	lenB := valB.Len()
 	resMap := make(map[interface{}]interface{})
-	var item interface{}
+	var iteA, iteB interface{}
 	var chkKey bool
 	var chkVal bool
 	var chkRes bool
 
 	if (typA == reflect.Array || typA == reflect.Slice) && (typB == reflect.Array || typB == reflect.Slice) {
 		//两者都是数组/切片
-		if valA.Len() == 0 {
+		if lenA == 0 {
 			return nil
 		}
-		for i := 0; i < valA.Len(); i++ {
-			item = valA.Index(i).Interface()
-			chkKey = false
-			chkVal = false
+		for i := 0; i < lenA; i++ {
+			iteA = valA.Index(i).Interface()
 			chkRes = true
 
-			for j := 0; j < valB.Len(); j++ {
-				chkKey = (i == j)
-				chkVal = reflect.DeepEqual(item, valB.Index(j).Interface())
-
-				if compareType == COMPARE_ONLY_KEY && chkKey {
-					chkRes = false
-					break
-				} else if compareType == COMPARE_ONLY_VALUE && chkVal {
-					chkRes = false
-					break
-				} else if compareType == COMPARE_BOTH_KEYVALUE && (chkKey || chkVal) {
-					chkRes = false
-					break
+			if compareType == COMPARE_BOTH_KEYVALUE {
+				if i < lenB {
+					iteB = valB.Index(i).Interface()
+					chkRes = !reflect.DeepEqual(iteA, iteB)
+				}
+			} else if compareType == COMPARE_ONLY_KEY {
+				chkRes = lenB > 0 && i >= lenB
+			} else if compareType == COMPARE_ONLY_VALUE {
+				for j := 0; j < lenB; j++ {
+					chkVal = reflect.DeepEqual(iteA, valB.Index(j).Interface())
+					if chkVal {
+						chkRes = false
+						break
+					}
 				}
 			}
 
 			if chkRes {
-				resMap[i] = item
+				resMap[i] = iteA
 			}
 		}
 	} else if (typA == reflect.Array || typA == reflect.Slice) && (typB == reflect.Map) {
 		//A是数组/切片,B是字典
-		if valA.Len() == 0 {
+		if lenA == 0 {
 			return nil
 		}
-		for i := 0; i < valA.Len(); i++ {
-			item = valA.Index(i).Interface()
-			chkKey = false
-			chkVal = false
+		for i := 0; i < lenA; i++ {
+			iteA = valA.Index(i).Interface()
 			chkRes = true
 
 			for _, k := range valB.MapKeys() {
 				chkKey = isInt(k.Interface()) && KConv.ToInt(k.Interface()) == i
-				chkVal = reflect.DeepEqual(item, valB.MapIndex(k).Interface())
+				chkVal = reflect.DeepEqual(iteA, valB.MapIndex(k).Interface())
 
 				if compareType == COMPARE_ONLY_KEY && chkKey {
 					chkRes = false
@@ -648,26 +650,25 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, compareType LkkArrCompareT
 				} else if compareType == COMPARE_ONLY_VALUE && chkVal {
 					chkRes = false
 					break
-				} else if compareType == COMPARE_BOTH_KEYVALUE && (chkKey || chkVal) {
+				} else if compareType == COMPARE_BOTH_KEYVALUE && (chkKey && chkVal) {
 					chkRes = false
 					break
 				}
 			}
 
 			if chkRes {
-				resMap[i] = item
+				resMap[i] = iteA
 			}
 		}
 	} else if (typA == reflect.Map) && (typB == reflect.Array || typB == reflect.Slice) {
 		//A是字典,B是数组/切片
-		if len(valA.MapKeys()) == 0 {
+		if lenA == 0 {
 			return nil
 		}
 
 		var kv int
 		for _, k := range valA.MapKeys() {
-			item = valA.MapIndex(k).Interface()
-			chkKey = false
+			iteA = valA.MapIndex(k).Interface()
 			chkVal = false
 			chkRes = true
 
@@ -677,24 +678,25 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, compareType LkkArrCompareT
 				kv = -1
 			}
 
-			for i := 0; i < valB.Len(); i++ {
-				chkKey = kv == i
-				chkVal = reflect.DeepEqual(item, valB.Index(i).Interface())
-
-				if compareType == COMPARE_ONLY_KEY && chkKey {
-					chkRes = false
-					break
-				} else if compareType == COMPARE_ONLY_VALUE && chkVal {
-					chkRes = false
-					break
-				} else if compareType == COMPARE_BOTH_KEYVALUE && (chkKey || chkVal) {
-					chkRes = false
-					break
+			if compareType == COMPARE_BOTH_KEYVALUE {
+				if kv >= 0 && kv < lenB {
+					iteB = valB.Index(kv).Interface()
+					chkRes = !reflect.DeepEqual(iteA, iteB)
+				}
+			} else if compareType == COMPARE_ONLY_KEY {
+				chkRes = (kv < 0 || kv >= lenB)
+			} else if compareType == COMPARE_ONLY_VALUE {
+				for i := 0; i < valB.Len(); i++ {
+					chkVal = reflect.DeepEqual(iteA, valB.Index(i).Interface())
+					if chkVal {
+						chkRes = false
+						break
+					}
 				}
 			}
 
 			if chkRes {
-				resMap[k.Interface()] = item
+				resMap[k.Interface()] = iteA
 			}
 		}
 	} else if (typA == reflect.Map) && (typB == reflect.Map) {
@@ -705,7 +707,7 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, compareType LkkArrCompareT
 
 		var kv string
 		for _, k := range valA.MapKeys() {
-			item = valA.MapIndex(k).Interface()
+			iteA = valA.MapIndex(k).Interface()
 			chkKey = false
 			chkVal = false
 			chkRes = true
@@ -713,7 +715,7 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, compareType LkkArrCompareT
 
 			for _, k2 := range valB.MapKeys() {
 				chkKey = kv == KConv.ToStr(k2.Interface())
-				chkVal = reflect.DeepEqual(item, valB.MapIndex(k2).Interface())
+				chkVal = reflect.DeepEqual(iteA, valB.MapIndex(k2).Interface())
 
 				if compareType == COMPARE_ONLY_KEY && chkKey {
 					chkRes = false
@@ -728,7 +730,7 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, compareType LkkArrCompareT
 			}
 
 			if chkRes {
-				resMap[k.Interface()] = item
+				resMap[k.Interface()] = iteA
 			}
 		}
 	} else {
