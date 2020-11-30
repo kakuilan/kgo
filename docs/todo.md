@@ -256,4 +256,6 @@ https://github.com/unknwon/gcblog/blob/master/content/04-go-caller.md
 https://colobu.com/2018/11/03/get-function-name-in-go/
 
 
+DeleteSlice 删除切片元素/多个
+https://blog.csdn.net/yue7603835/article/details/71196181
 
