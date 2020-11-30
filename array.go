@@ -596,7 +596,7 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, compareType LkkArrCompareT
 	lenA := valA.Len()
 	lenB := valB.Len()
 	resMap := make(map[interface{}]interface{})
-	var iteA, iteB interface{}
+	var iteA interface{}
 	var chkKey bool
 	var chkVal bool
 	var chkRes bool
@@ -612,8 +612,7 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, compareType LkkArrCompareT
 
 			if compareType == COMPARE_BOTH_KEYVALUE {
 				if i < lenB {
-					iteB = valB.Index(i).Interface()
-					chkRes = !reflect.DeepEqual(iteA, iteB)
+					chkRes = !reflect.DeepEqual(iteA, valB.Index(i).Interface())
 				}
 			} else if compareType == COMPARE_ONLY_KEY {
 				chkRes = lenB > 0 && i >= lenB
@@ -669,7 +668,6 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, compareType LkkArrCompareT
 		var kv int
 		for _, k := range valA.MapKeys() {
 			iteA = valA.MapIndex(k).Interface()
-			chkVal = false
 			chkRes = true
 
 			if isInt(k.Interface()) {
@@ -680,13 +678,12 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, compareType LkkArrCompareT
 
 			if compareType == COMPARE_BOTH_KEYVALUE {
 				if kv >= 0 && kv < lenB {
-					iteB = valB.Index(kv).Interface()
-					chkRes = !reflect.DeepEqual(iteA, iteB)
+					chkRes = !reflect.DeepEqual(iteA, valB.Index(kv).Interface())
 				}
 			} else if compareType == COMPARE_ONLY_KEY {
 				chkRes = (kv < 0 || kv >= lenB)
 			} else if compareType == COMPARE_ONLY_VALUE {
-				for i := 0; i < valB.Len(); i++ {
+				for i := 0; i < lenB; i++ {
 					chkVal = reflect.DeepEqual(iteA, valB.Index(i).Interface())
 					if chkVal {
 						chkRes = false
@@ -701,15 +698,13 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, compareType LkkArrCompareT
 		}
 	} else if (typA == reflect.Map) && (typB == reflect.Map) {
 		//两者都是字典
-		if len(valA.MapKeys()) == 0 {
+		if lenA == 0 {
 			return nil
 		}
 
 		var kv string
 		for _, k := range valA.MapKeys() {
 			iteA = valA.MapIndex(k).Interface()
-			chkKey = false
-			chkVal = false
 			chkRes = true
 			kv = KConv.ToStr(k.Interface())
 

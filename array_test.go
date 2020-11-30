@@ -5,67 +5,6 @@ import (
 	"testing"
 )
 
-func TestArrayDiff(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
-	ar1 := []string{"aa", "bb", "cc", "dd", "ee", "", "hh"}
-	ar2 := []string{"bb", "cc", "ff", "gg", "ee", ""}
-	mp1 := map[string]string{"a": "1", "b": "2", "c": "3", "d": "4", "e": "", "2": "cc", "3": "no"}
-	mp2 := map[string]string{"a": "0", "b": "2", "c": "4", "g": "4", "h": "", "2": "cc"}
-	ar3 := []string{}
-	mp3 := make(map[string]string)
-
-	res7 := KArr.ArrayDiff(ar1, mp1, COMPARE_BOTH_KEYVALUE)
-
-	res0 := KArr.ArrayDiff(ar3, ar1, COMPARE_ONLY_VALUE)
-	res1 := KArr.ArrayDiff(ar1, ar2, COMPARE_ONLY_VALUE)
-	res2 := KArr.ArrayDiff(ar1, ar2, COMPARE_ONLY_KEY)
-	res3 := KArr.ArrayDiff(ar1, ar2, COMPARE_BOTH_KEYVALUE)
-
-	if res0 != nil || len(res1) != 3 || len(res2) != 1 || len(res3) != 1 {
-		t.Error("ArrayDiff fail")
-		return
-	}
-
-	res4 := KArr.ArrayDiff(ar3, mp1, COMPARE_ONLY_VALUE)
-	res5 := KArr.ArrayDiff(ar1, mp1, COMPARE_ONLY_VALUE)
-	res6 := KArr.ArrayDiff(ar1, mp1, COMPARE_ONLY_KEY)
-	//res7 := KArr.ArrayDiff(ar1, mp1, COMPARE_BOTH_KEYVALUE)
-
-	if res4 != nil || len(res5) != 5 || len(res6) != 5 || len(res7) != 4 {
-		t.Error("ArrayDiff fail")
-		return
-	}
-
-	res8 := KArr.ArrayDiff(mp3, ar1, COMPARE_ONLY_VALUE)
-	res9 := KArr.ArrayDiff(mp1, ar1, COMPARE_ONLY_VALUE)
-	res10 := KArr.ArrayDiff(mp1, ar1, COMPARE_ONLY_KEY)
-	res11 := KArr.ArrayDiff(mp1, ar1, COMPARE_BOTH_KEYVALUE)
-
-	if res8 != nil || len(res9) != 5 || len(res10) != 5 || len(res11) != 4 {
-		t.Error("ArrayDiff fail")
-		return
-	}
-
-	res12 := KArr.ArrayDiff(mp3, mp2, COMPARE_ONLY_VALUE)
-	res13 := KArr.ArrayDiff(mp1, mp2, COMPARE_ONLY_VALUE)
-	res14 := KArr.ArrayDiff(mp1, mp2, COMPARE_ONLY_KEY)
-	res15 := KArr.ArrayDiff(mp1, mp2, COMPARE_BOTH_KEYVALUE)
-
-	if res12 != nil || len(res13) != 3 || len(res14) != 3 || len(res15) != 1 {
-		t.Error("ArrayDiff fail")
-		return
-	}
-
-	//fmt.Printf("%+v\n", res12)
-
-	KArr.ArrayDiff("hello", 1234, COMPARE_ONLY_VALUE)
-}
-
 
 func TestIsNaturalRange(t *testing.T) {
 	arr1 := []int{1,2,3}
@@ -946,6 +885,64 @@ func BenchmarkJoinInts(b *testing.B) {
 	}
 }
 
+func TestArrayDiff(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	ar1 := []string{"aa", "bb", "cc", "dd", "ee", "", "hh"}
+	ar2 := []string{"bb", "cc", "ff", "gg", "ee", ""}
+	mp1 := map[string]string{"a": "1", "b": "2", "c": "3", "d": "4", "e": "", "2": "cc", "3": "no"}
+	mp2 := map[string]string{"a": "0", "b": "2", "c": "4", "g": "4", "h": "", "2": "cc"}
+	ar3 := []string{}
+	mp3 := make(map[string]string)
+
+	res0 := KArr.ArrayDiff(ar3, ar1, COMPARE_ONLY_VALUE)
+	res1 := KArr.ArrayDiff(ar1, ar2, COMPARE_ONLY_VALUE)
+	res2 := KArr.ArrayDiff(ar1, ar2, COMPARE_ONLY_KEY)
+	res3 := KArr.ArrayDiff(ar1, ar2, COMPARE_BOTH_KEYVALUE)
+
+	if res0 != nil || len(res1) != 3 || len(res2) != 1 || len(res3) != 5 {
+		t.Error("ArrayDiff fail")
+		return
+	}
+
+	res4 := KArr.ArrayDiff(ar3, mp1, COMPARE_ONLY_VALUE)
+	res5 := KArr.ArrayDiff(ar1, mp1, COMPARE_ONLY_VALUE)
+	res6 := KArr.ArrayDiff(ar1, mp1, COMPARE_ONLY_KEY)
+	res7 := KArr.ArrayDiff(ar1, mp1, COMPARE_BOTH_KEYVALUE)
+
+	if res4 != nil || len(res5) != 5 || len(res6) != 5 || len(res7) != 6 {
+		t.Error("ArrayDiff fail")
+		return
+	}
+
+	res8 := KArr.ArrayDiff(mp3, ar1, COMPARE_ONLY_VALUE)
+	res9 := KArr.ArrayDiff(mp1, ar1, COMPARE_ONLY_VALUE)
+	res10 := KArr.ArrayDiff(mp1, ar1, COMPARE_ONLY_KEY)
+	res11 := KArr.ArrayDiff(mp1, ar1, COMPARE_BOTH_KEYVALUE)
+
+	if res8 != nil || len(res9) != 5 || len(res10) != 5 || len(res11) != 6 {
+		t.Error("ArrayDiff fail")
+		return
+	}
+
+	res12 := KArr.ArrayDiff(mp3, mp2, COMPARE_ONLY_VALUE)
+	res13 := KArr.ArrayDiff(mp1, mp2, COMPARE_ONLY_VALUE)
+	res14 := KArr.ArrayDiff(mp1, mp2, COMPARE_ONLY_KEY)
+	res15 := KArr.ArrayDiff(mp1, mp2, COMPARE_BOTH_KEYVALUE)
+
+	if res12 != nil || len(res13) != 3 || len(res14) != 3 || len(res15) != 1 {
+		t.Error("ArrayDiff fail")
+		return
+	}
+
+	//fmt.Printf("%+v\n", res12)
+
+	KArr.ArrayDiff("hello", 1234, COMPARE_ONLY_VALUE)
+}
 
 func BenchmarkArrayDiff(b *testing.B) {
 	b.ResetTimer()
