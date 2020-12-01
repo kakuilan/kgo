@@ -557,7 +557,6 @@ func (kn *LkkNumber) IsNaturalRange(arr []int, strict bool) (res bool) {
 	}
 
 	diff := KArr.ArrayDiff(orig, arr, ctyp)
-	fmt.Printf("%v\n", diff)
 
 	res = len(diff) == 0
 	return
