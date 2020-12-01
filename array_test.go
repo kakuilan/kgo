@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"fmt"
+	"math"
 	"testing"
 )
 
