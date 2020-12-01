@@ -386,13 +386,13 @@ func (ka *LkkArray) ArrayColumn(arr interface{}, columnKey string) []interface{}
 	return res
 }
 
-// ArrayPush 将一个或多个元素压入s数组的末尾(入栈),返回处理之后数组的元素个数.
+// ArrayPush 将一个或多个元素压入数组的末尾(入栈),返回处理之后数组的元素个数.
 func (ka *LkkArray) ArrayPush(s *[]interface{}, elements ...interface{}) int {
 	*s = append(*s, elements...)
 	return len(*s)
 }
 
-// ArrayPop 弹出s数组最后一个元素(出栈),并返回该元素.
+// ArrayPop 弹出数组最后一个元素(出栈),并返回该元素.
 func (ka *LkkArray) ArrayPop(s *[]interface{}) interface{} {
 	if len(*s) == 0 {
 		return nil
