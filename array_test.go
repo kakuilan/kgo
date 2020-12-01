@@ -5,48 +5,6 @@ import (
 	"testing"
 )
 
-
-func TestIsNaturalRange(t *testing.T) {
-	arr1 := []int{1,2,3}
-	arr2 := []int{0, 3, 1, 2}
-	arr3 := []int{0, 1, 2, 3}
-	arr4 := []int{0, 1, 3, 4}
-
-	res1 := KNum.IsNaturalRange(arr1, false)
-	if res1 {
-		t.Error("IsNaturalRange fail")
-		return
-	}
-
-	res2 := KNum.IsNaturalRange(arr2, false)
-	res3 := KNum.IsNaturalRange(arr2, true)
-	if !res2 || res3 {
-		t.Error("IsNaturalRange fail")
-		return
-	}
-
-	res4 := KNum.IsNaturalRange(arr3, false)
-	res5 := KNum.IsNaturalRange(arr3, true)
-	if !res4 || !res5 {
-		t.Error("IsNaturalRange fail")
-		return
-	}
-
-	res6 := KNum.IsNaturalRange(arr4, false)
-	if res6 {
-		t.Error("IsNaturalRange fail")
-		return
-	}
-}
-
-func BenchmarkIsNaturalRange(b *testing.B) {
-	b.ResetTimer()
-	arr := []int{0, 1, 2, 3}
-	for i := 0; i < b.N; i++ {
-		KNum.IsNaturalRange(arr, false)
-	}
-}
-
 func TestInArray(t *testing.T) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -981,6 +939,7 @@ func TestArrayIntersect(t *testing.T) {
 	res5 := KArr.ArrayIntersect(ar1, mp1, COMPARE_ONLY_VALUE)
 	res6 := KArr.ArrayIntersect(ar1, mp1, COMPARE_ONLY_KEY)
 	res7 := KArr.ArrayIntersect(ar1, mp1, COMPARE_BOTH_KEYVALUE)
+
 	if res4 != nil || len(res5) != 2 || len(res6) != 2 || len(res7) != 1 {
 		t.Error("ArrayIntersect fail")
 		return
@@ -990,6 +949,7 @@ func TestArrayIntersect(t *testing.T) {
 	res9 := KArr.ArrayIntersect(mp1, ar1, COMPARE_ONLY_VALUE)
 	res10 := KArr.ArrayIntersect(mp1, ar1, COMPARE_ONLY_KEY)
 	res11 := KArr.ArrayIntersect(mp1, ar1, COMPARE_BOTH_KEYVALUE)
+
 	if res8 != nil || len(res9) != 2 || len(res10) != 2 || len(res11) != 1 {
 		t.Error("ArrayIntersect fail")
 		return
@@ -999,6 +959,7 @@ func TestArrayIntersect(t *testing.T) {
 	res13 := KArr.ArrayIntersect(mp1, mp2, COMPARE_ONLY_VALUE)
 	res14 := KArr.ArrayIntersect(mp1, mp2, COMPARE_ONLY_KEY)
 	res15 := KArr.ArrayIntersect(mp1, mp2, COMPARE_BOTH_KEYVALUE)
+
 	if res12 != nil || len(res13) != 4 || len(res14) != 4 || len(res15) != 2 {
 		t.Error("ArrayIntersect fail")
 		return

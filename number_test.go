@@ -1202,3 +1202,44 @@ func BenchmarkPercent(b *testing.B) {
 		KNum.IsNan(123.456)
 	}
 }
+
+func TestIsNaturalRange(t *testing.T) {
+	arr1 := []int{1,2,3}
+	arr2 := []int{0, 3, 1, 2}
+	arr3 := []int{0, 1, 2, 3}
+	arr4 := []int{0, 1, 3, 4}
+
+	res1 := KNum.IsNaturalRange(arr1, false)
+	if res1 {
+		t.Error("IsNaturalRange fail")
+		return
+	}
+
+	res2 := KNum.IsNaturalRange(arr2, false)
+	res3 := KNum.IsNaturalRange(arr2, true)
+	if !res2 || res3 {
+		t.Error("IsNaturalRange fail")
+		return
+	}
+
+	res4 := KNum.IsNaturalRange(arr3, false)
+	res5 := KNum.IsNaturalRange(arr3, true)
+	if !res4 || !res5 {
+		t.Error("IsNaturalRange fail")
+		return
+	}
+
+	res6 := KNum.IsNaturalRange(arr4, false)
+	if res6 {
+		t.Error("IsNaturalRange fail")
+		return
+	}
+}
+
+func BenchmarkIsNaturalRange(b *testing.B) {
+	b.ResetTimer()
+	arr := []int{0, 1, 2, 3}
+	for i := 0; i < b.N; i++ {
+		KNum.IsNaturalRange(arr, false)
+	}
+}
