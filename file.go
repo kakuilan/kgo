@@ -1195,8 +1195,3 @@ func (kf *LkkFile) IsZip(fpath string) bool {
 
 	return err == nil && n == 4 && bytes.Equal(buf, []byte("PK\x03\x04"))
 }
-
-func (kf *LkkFile) RelativePath(dest, rela string) string {
-	//TODO
-	return ""
-}
