@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-// InArray 元素是否在数组(切片/字典)内.
+// InArray 元素needle 是否在数组haystack(切片/字典)内.
 func (ka *LkkArray) InArray(needle interface{}, haystack interface{}) bool {
 	val := reflect.ValueOf(haystack)
 	switch val.Kind() {
@@ -235,7 +235,7 @@ func (ka *LkkArray) ArrayChunk(arr interface{}, size int) [][]interface{} {
 	}
 }
 
-// ArrayPad 以指定长度将一个值item填充进数组/切片.
+// ArrayPad 以指定长度将一个值item填充进arr数组/切片.
 // 若 size 为正，则填补到数组的右侧，如果为负则从左侧开始填补;
 // 若 size 的绝对值小于或等于 arr 数组的长度则没有任何填补.
 func (ka *LkkArray) ArrayPad(arr interface{}, size int, item interface{}) []interface{} {
@@ -338,8 +338,10 @@ func (ka *LkkArray) ArrayRand(arr interface{}, num int) []interface{} {
 	}
 }
 
-// ArrayColumn 返回数组(切片/字典)中指定的一列.
-// arr的元素必须是字典;该方法效率低,因为嵌套了两层反射和遍历.
+// ArrayColumn 返回数组(切片/字典)中元素指定的一列.
+// arr的元素必须是字典;
+// columnKey为元素的字段名;
+// 该方法效率较低.
 func (ka *LkkArray) ArrayColumn(arr interface{}, columnKey string) []interface{} {
 	val := reflect.ValueOf(arr)
 	var res []interface{}
@@ -384,13 +386,13 @@ func (ka *LkkArray) ArrayColumn(arr interface{}, columnKey string) []interface{}
 	return res
 }
 
-// ArrayPush 将一个或多个元素压入数组的末尾(入栈),返回处理之后数组的元素个数.
+// ArrayPush 将一个或多个元素压入s数组的末尾(入栈),返回处理之后数组的元素个数.
 func (ka *LkkArray) ArrayPush(s *[]interface{}, elements ...interface{}) int {
 	*s = append(*s, elements...)
 	return len(*s)
 }
 
-// ArrayPop 弹出数组最后一个元素(出栈),并返回该元素.
+// ArrayPop 弹出s数组最后一个元素(出栈),并返回该元素.
 func (ka *LkkArray) ArrayPop(s *[]interface{}) interface{} {
 	if len(*s) == 0 {
 		return nil
@@ -905,7 +907,7 @@ func (ka *LkkArray) ArrayUnique(arr interface{}) []interface{} {
 }
 
 // ArraySearchItem 从数组中搜索对应元素(单个).
-// arr为要查找的数组,condition为条件字典.
+// arr为要查找的数组,元素必须为字典;condition为条件字典.
 func (ka *LkkArray) ArraySearchItem(arr interface{}, condition map[string]interface{}) (res interface{}) {
 	// 条件为空
 	if len(condition) == 0 {
@@ -936,7 +938,7 @@ func (ka *LkkArray) ArraySearchItem(arr interface{}, condition map[string]interf
 }
 
 // ArraySearchMutil 从数组中搜索对应元素(多个).
-// arr为要查找的数组,condition为条件字典.
+// arr为要查找的数组,元素必须为字典;condition为条件字典.
 func (ka *LkkArray) ArraySearchMutil(arr interface{}, condition map[string]interface{}) (res []interface{}) {
 	// 条件为空
 	if len(condition) == 0 {
