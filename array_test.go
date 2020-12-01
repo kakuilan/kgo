@@ -2,7 +2,6 @@ package kgo
 
 import (
 	"fmt"
-	"math"
 	"testing"
 )
 
@@ -1335,5 +1334,37 @@ func BenchmarkIsMap(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KArr.IsMap("hello")
+	}
+}
+
+func TestDeleteSliceItems(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("recover...:", r)
+		}
+	}()
+
+	arr := []string{"a", "b", "c", "d", "e", "f", "g", "h", "i"}
+
+	res0, del0 := KArr.DeleteSliceItems([]int{}, 2)
+	if len(res0) != 0 || del0 != 0 {
+		t.Error("DeleteSliceItems fail")
+		return
+	}
+
+	res1, del1 := KArr.DeleteSliceItems(arr, 1, 4, 7, -3, 36)
+	if len(res1) != 6 || del1 != 3 {
+		t.Error("DeleteSliceItems fail")
+		return
+	}
+
+	KArr.DeleteSliceItems("", 2)
+}
+
+func BenchmarkDeleteSliceItems(b *testing.B) {
+	b.ResetTimer()
+	arr := []string{"a", "b", "c", "d", "e", "f", "g", "h", "i"}
+	for i := 0; i < b.N; i++ {
+		_, _ = KArr.DeleteSliceItems(arr, 1, 4, 7, -3, 36)
 	}
 }
