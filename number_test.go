@@ -29,23 +29,23 @@ func BenchmarkNumberFormat(b *testing.B) {
 }
 
 func TestRange(t *testing.T) {
-	var start,end int = 1,5
+	var start, end int = 1, 5
 	res0 := KNum.Range(start, end)
-	if(len(res0)!=5 || res0[0]!=start) {
+	if len(res0) != 5 || res0[0] != start {
 		t.Error("Range fail")
 		return
 	}
 
-	start,end = 5,1
+	start, end = 5, 1
 	res1 := KNum.Range(start, end)
-	if(len(res1)!=5 || res1[0]!=start) {
+	if len(res1) != 5 || res1[0] != start {
 		t.Error("Range fail")
 		return
 	}
 
-	start,end = 3,3
+	start, end = 3, 3
 	res2 := KNum.Range(start, end)
-	if(len(res2)!=1) {
+	if len(res2) != 1 {
 		t.Error("Range fail")
 		return
 	}
@@ -1159,8 +1159,10 @@ func BenchmarkGeoDistance(b *testing.B) {
 func TestIsNan(t *testing.T) {
 	res1 := KNum.IsNan(math.Acos(1.01))
 	res2 := KNum.IsNan(123.456)
+	res3 := KNum.IsNan("4.367")
+	res4 := KNum.IsNan("hello")
 
-	if !res1 || res2 {
+	if !res1 || res2 || res3 || !res4 {
 		t.Error("IsNan fail")
 		return
 	}
@@ -1199,12 +1201,12 @@ func TestPercent(t *testing.T) {
 func BenchmarkPercent(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KNum.IsNan(123.456)
+		KNum.Percent(23.456, 68)
 	}
 }
 
 func TestIsNaturalRange(t *testing.T) {
-	arr1 := []int{1,2,3}
+	arr1 := []int{1, 2, 3}
 	arr2 := []int{0, 3, 1, 2}
 	arr3 := []int{0, 1, 2, 3}
 	arr4 := []int{0, 1, 3, 4}

@@ -537,8 +537,12 @@ func (kn *LkkNumber) GeoDistance(lng1, lat1, lng2, lat2 float64) float64 {
 }
 
 // IsNan 是否为“非数值”.
-func (kn *LkkNumber) IsNan(val float64) bool {
-	return math.IsNaN(val)
+func (kn *LkkNumber) IsNan(val interface{}) bool {
+	if isFloat(val) {
+		return math.IsNaN(KConv.ToFloat(val))
+	}
+
+	return !isNumeric(val)
 }
 
 // IsNaturalRange 是否连续的自然数数组/切片,如[0,1,2,3...],其中不能有间断.
