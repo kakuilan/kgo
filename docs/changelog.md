@@ -1,6 +1,27 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [v0.1.4]- 2020-12-1
+#### Added
+- 新增`KArr.ArrayIntersect`,求数组交集
+- 新增`KArr.DeleteSliceItems`,删除切片多个元素
+- 新增`KFile.FormatPath`,格式化路径
+- 新增`KNum.IsNaturalRange`,是否自然数数组
+- 新增`KNum.Log`,求任意底数的对数
+
+#### Fixed
+- 修改`KNum.IsNatural`,自然数包含0
+
+#### Changed
+- 修改`KArr.ArrayDiff`,增加比较方式参数`compareType`,返回字典
+- 修改`KFile.FormatDir`,过滤特殊字符
+- 修改`KNum.IsNan`,接收任意类型参数
+- 修改`KNum.NumSign`,结果类型为int8
+- 修改`KNum.Range`,支持生成降序的数组
+
+#### Removed
+- none
+
 ## [v0.1.3]- 2020-11-11
 #### Added
 - none
