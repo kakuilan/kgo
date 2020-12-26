@@ -65,7 +65,7 @@ res, err := KEncr.PasswordHash([]byte("123456"))
 KDbug.DumpStacks()
 ```
 
-具体函数请查看[godoc](https://godoc.org/github.com/kakuilan/kgo),更多示例请参考*_test.go文件.
+具体函数请查看[godoc](https://pkg.go.dev/github.com/kakuilan/kgo),更多示例请参考*_test.go文件.
 
 
 
