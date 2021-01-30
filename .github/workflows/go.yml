@@ -48,3 +48,25 @@ jobs:
 
       - name: Test
         run: go test -v -mod=mod -race -coverprofile=coverage.txt -covermode=atomic
+
+  test-win:
+    name: TestWindows
+    needs: Lint
+    strategy:
+      matrix:
+        go: [ 1.14.x, 1.15.x ]
+        os: [ windows-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go }}
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Test
+        run: go test -v -mod=mod -race
