@@ -25,7 +25,7 @@ jobs:
         uses: golangci/golangci-lint-action@v2
         with:
           version: v1.29
-          args: --issues-exit-code=0 --timeout=5m
+          args: --issues-exit-code=0 --timeout=10m
 
   test:
     name: UnitTesting
@@ -44,4 +44,7 @@ jobs:
           go-version: ${{ matrix.go }}
 
       - name: Test
-        run: go test -v -mod=mod -covermode=count -coverprofile=coverage.out ./...
+        run: go test -v -mod=mod -race -coverprofile=coverage.txt -covermode=atomic
+
+      - name: Upload coverage to Codecov
+        run: bash <(curl -s https://codecov.io/bash)
