@@ -54,7 +54,4 @@ jobs:
           path: ${{ env.GOPATH }}/src/github.com/${{ github.repository }}
 
       - name: Test
-        run: go test -v -mod=mod -race -coverprofile=coverage.txt -covermode=atomic
-
-      - name: Upload coverage to Codecov
-        run: bash <(curl -s https://codecov.io/bash)
+        run: go test -v -mod=mod
