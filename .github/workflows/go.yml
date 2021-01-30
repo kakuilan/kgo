@@ -35,16 +35,26 @@ jobs:
         go: [ 1.14.x, 1.15.x ]
         os: [ ubuntu-latest, macos-latest, windows-latest ]
     runs-on: ${{ matrix.os }}
+    env:
+      GOPATH: ${{ github.workspace }}
+      GO111MODULE: off
+    defaults:
+      run:
+        working-directory: ${{ env.GOPATH }}/src/github.com/${{ github.repository }}
     steps:
-      - uses: actions/checkout@v2
-
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go }}
 
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+          path: ${{ env.GOPATH }}/src/github.com/${{ github.repository }}
+
       - name: Test
-        run: go test -v -race -coverprofile=coverage.txt -covermode=atomic
+        run: go test -v -mod=mod -race -coverprofile=coverage.txt -covermode=atomic
 
       - name: Upload coverage to Codecov
         run: bash <(curl -s https://codecov.io/bash)
