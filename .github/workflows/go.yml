@@ -72,4 +72,13 @@ jobs:
           fetch-depth: 1
 
       - name: Test
-        run: go test -v -mod=mod -race -coverprofile=coverageout -covermode=atomic
+        run: go test -v -mod=mod -race -coverprofile=coverageout -covermode=count
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          files: coverageout
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: false # optional (default = false)
+          verbose: true # optional (default = false)
