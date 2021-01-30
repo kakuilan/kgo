@@ -44,7 +44,7 @@ jobs:
           go-version: ${{ matrix.go }}
 
       - name: Test
-        run: go test -v -mod=mod -race -coverprofile=coverage.txt -covermode=atomic
+        run: go test -v -race -coverprofile=coverage.txt -covermode=atomic
 
       - name: Upload coverage to Codecov
         run: bash <(curl -s https://codecov.io/bash)
