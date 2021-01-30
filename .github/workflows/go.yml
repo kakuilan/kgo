@@ -51,7 +51,7 @@ jobs:
 
       - name: Upload coverage to Codecov
         run: bash <(curl -s https://codecov.io/bash)
-      
+
   test-win:
     name: TestWindows
     needs: Lint
@@ -72,4 +72,4 @@ jobs:
           fetch-depth: 1
 
       - name: Test
-        run: go test -v -mod=mod -race
+        run: go test -v -mod=mod -race -coverprofile=coverageout -covermode=atomic
