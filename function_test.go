@@ -13,8 +13,6 @@ func init() {
 var randomName = gofakeit.Name()
 
 func TestFun_md5Byte(t *testing.T) {
-	println(randomName)
-
 	res1 := md5Byte([]byte(""), 32)
 	res2 := md5Byte([]byte(randomName), 24)
 	res3 := md5Byte([]byte(randomName), 0)
@@ -27,6 +25,7 @@ func TestFun_md5Byte(t *testing.T) {
 }
 
 func BenchmarkFun_md5Byte(b *testing.B) {
+	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = md5Byte([]byte(randomName), 32)
 	}
