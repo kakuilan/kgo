@@ -43,7 +43,7 @@ func BenchmarkArray_ArrayChunk(b *testing.B) {
 func TestArray_ArrayColumn_Struct(t *testing.T) {
 	defer func() {
 		r := recover()
-		assert.Contains(t, r, "[ArrayColumn]`arr type must be array")
+		assert.Contains(t, r, "[ArrayColumn]`arr type must be")
 	}()
 
 	var p1, p2, p3, p4 sPerson
@@ -55,10 +55,7 @@ func TestArray_ArrayColumn_Struct(t *testing.T) {
 	var ps = make(sPersons, 4)
 	var org = new(sOrganization)
 
-	ps[0] = p1
-	ps[1] = p2
-	ps[2] = p3
-	ps[3] = p4
+	ps = append(ps, p1, p2, p3, p4)
 
 	org.Leader = p1
 	org.Assistant = p2
@@ -73,10 +70,31 @@ func TestArray_ArrayColumn_Struct(t *testing.T) {
 	res = KArr.ArrayColumn(*org, "Age")
 	assert.NotEmpty(t, res)
 
+	res = KArr.ArrayColumn(*org, "age")
+	assert.Empty(t, res)
+
 	// type err
 	KArr.ArrayColumn(org, "Age")
 }
 
 func TestArray_ArrayColumn_Map(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[GetFieldValue]`arr must be")
+	}()
 
+	var arr map[string]interface{}
+	var res []interface{}
+
+	jsonStr := `{"person1":{"name":"zhang3","age":23,"sex":1},"person2":{"name":"li4","age":30,"sex":1},"person3":{"name":"wang5","age":25,"sex":0},"person4":{"name":"zhao6","age":50,"sex":0}}`
+	_ = KStr.JsonDecode([]byte(jsonStr), &arr)
+
+	res = KArr.ArrayColumn(arr, "name")
+	assert.NotEmpty(t, res)
+
+	res = KArr.ArrayColumn(arr, "Name")
+	assert.Empty(t, res)
+
+	arr["person5"] = "hello"
+	KArr.ArrayColumn(arr, "name")
 }
