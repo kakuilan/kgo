@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"bytes"
+	"github.com/json-iterator/go"
 )
 
 // Addslashes 使用反斜线引用字符串.
@@ -35,3 +36,16 @@ func (ks *LkkString) Stripslashes(str string) string {
 	return buf.String()
 }
 
+// JsonEncode 对val变量进行 JSON 编码.
+// 依赖库github.com/json-iterator/go.
+func (ks *LkkString) JsonEncode(val interface{}) ([]byte, error) {
+	var jsons = jsoniter.ConfigCompatibleWithStandardLibrary
+	return jsons.Marshal(val)
+}
+
+// JsonDecode 对 JSON 格式的str字符串进行解码,注意res使用指针.
+// 依赖库github.com/json-iterator/go.
+func (ks *LkkString) JsonDecode(str []byte, res interface{}) error {
+	var jsons = jsoniter.ConfigCompatibleWithStandardLibrary
+	return jsons.Unmarshal(str, res)
+}

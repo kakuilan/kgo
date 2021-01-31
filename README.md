@@ -22,6 +22,9 @@ go get -u github.com/kakuilan/kgo
 import "github.com/kakuilan/kgo"
 ```
 
+### 依赖的第三方库
+- github.com/json-iterator/go
+
 
 ### 函数接收器
 - *KFile* 为文件操作,如
