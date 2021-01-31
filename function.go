@@ -9,7 +9,7 @@ import (
 func md5Byte(str []byte, length uint8) []byte {
 	var res []byte
 	h := md5.New()
-	h.Write(str)
+	_, _ = h.Write(str)
 
 	hBytes := h.Sum(nil)
 	dst := make([]byte, hex.EncodedLen(len(hBytes)))
