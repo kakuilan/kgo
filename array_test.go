@@ -1,15 +1,14 @@
 package kgo
 
 import (
+	"github.com/brianvoe/gofakeit/v6"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-var strSli = []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"}
-
 func TestArray_ArrayChunk(t *testing.T) {
 	size := 3
-	res := KArr.ArrayChunk(strSli, size)
+	res := KArr.ArrayChunk(ssSingle, size)
 	assert.Equal(t, 4, len(res))
 
 	item := res[0]
@@ -23,7 +22,7 @@ func TestArray_ArrayChunk_PanicSize(t *testing.T) {
 		r := recover()
 		assert.Equal(t, "[ArrayChunk]`size cannot be less than 1", r)
 	}()
-	KArr.ArrayChunk(strSli, 0)
+	KArr.ArrayChunk(ssSingle, 0)
 }
 
 func TestArray_ArrayChunk_PanicType(t *testing.T) {
@@ -37,6 +36,35 @@ func TestArray_ArrayChunk_PanicType(t *testing.T) {
 func BenchmarkArray_ArrayChunk(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KArr.ArrayChunk(strSli, 3)
+		KArr.ArrayChunk(ssSingle, 3)
 	}
+}
+
+func TestArray_ArrayColumn(t *testing.T) {
+	var p1, p2, p3, p4 sPerson
+	gofakeit.Struct(&p1)
+	gofakeit.Struct(&p2)
+	gofakeit.Struct(&p3)
+	gofakeit.Struct(&p4)
+
+	var ps = make(sPersons, 4)
+	var org = new(sOrganization)
+
+	ps[0] = p1
+	ps[1] = p2
+	ps[2] = p3
+	ps[3] = p4
+
+	org.Leader = p1
+	org.Assistant = p2
+	org.Member = p3
+	org.Substitute = p4
+
+	var res []interface{}
+
+	res = KArr.ArrayColumn(ps, "Name")
+	assert.NotEmpty(t, res)
+
+	res = KArr.ArrayColumn(*org, "Age")
+	assert.NotEmpty(t, res)
 }
