@@ -17,8 +17,8 @@ func TestString_Addslashes(t *testing.T) {
 }
 
 func BenchmarkString_Addslashes(b *testing.B) {
-	b.ResetTimer()
 	str := "Is your name O'reilly?"
+	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KStr.Addslashes(str)
 	}

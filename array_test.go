@@ -98,3 +98,18 @@ func TestArray_ArrayColumn_Map(t *testing.T) {
 	arr["person5"] = "hello"
 	KArr.ArrayColumn(arr, "name")
 }
+
+func BenchmarkArray_ArrayColumn(b *testing.B) {
+	var p1, p2, p3, p4 sPerson
+	var ps = make(sPersons, 4)
+	gofakeit.Struct(&p1)
+	gofakeit.Struct(&p2)
+	gofakeit.Struct(&p3)
+	gofakeit.Struct(&p4)
+	ps = append(ps, p1, p2, p3, p4)
+
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = KArr.ArrayColumn(ps, "Name")
+	}
+}
