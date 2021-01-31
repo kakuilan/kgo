@@ -40,7 +40,12 @@ func BenchmarkArray_ArrayChunk(b *testing.B) {
 	}
 }
 
-func TestArray_ArrayColumn(t *testing.T) {
+func TestArray_ArrayColumn_Struct(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArrayColumn]`arr type must be array")
+	}()
+
 	var p1, p2, p3, p4 sPerson
 	gofakeit.Struct(&p1)
 	gofakeit.Struct(&p2)
@@ -67,4 +72,11 @@ func TestArray_ArrayColumn(t *testing.T) {
 
 	res = KArr.ArrayColumn(*org, "Age")
 	assert.NotEmpty(t, res)
+
+	// type err
+	KArr.ArrayColumn(org, "Age")
+}
+
+func TestArray_ArrayColumn_Map(t *testing.T) {
+
 }

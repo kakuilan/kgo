@@ -58,21 +58,21 @@ func (ka *LkkArray) ArrayColumn(arr interface{}, columnKey string) []interface{}
 	switch val.Kind() {
 	case reflect.Array, reflect.Slice:
 		for i := 0; i < val.Len(); i++ {
-			item = GetArrayFieldValue(val.Index(i).Interface(), columnKey)
+			item = GetFieldValue(val.Index(i).Interface(), columnKey)
 			if item != nil {
 				res = append(res, item)
 			}
 		}
 	case reflect.Struct:
 		for i := 0; i < val.NumField(); i++ {
-			item = GetArrayFieldValue(val.Field(i).Interface(), columnKey)
+			item = GetFieldValue(val.Field(i).Interface(), columnKey)
 			if item != nil {
 				res = append(res, item)
 			}
 		}
 	case reflect.Map:
 		for _, k := range val.MapKeys() {
-			item = GetArrayFieldValue(val.MapIndex(k).Interface(), columnKey)
+			item = GetFieldValue(val.MapIndex(k).Interface(), columnKey)
 			if item != nil {
 				res = append(res, item)
 			}
