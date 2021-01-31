@@ -25,8 +25,8 @@ func md5Byte(str []byte, length uint8) []byte {
 	return res
 }
 
-// GetArrayFieldValue 获取数组(字典/结构体)的字段值,fieldName为字段名.
-func GetArrayFieldValue(arr interface{}, fieldName string) interface{} {
+// GetFieldValue 获取(字典/结构体的)字段值;fieldName为字段名,大小写敏感.
+func GetFieldValue(arr interface{}, fieldName string) interface{} {
 	var res interface{}
 
 	val := reflect.ValueOf(arr)
@@ -51,4 +51,9 @@ func GetArrayFieldValue(arr interface{}, fieldName string) interface{} {
 	}
 
 	return res
+}
+
+// GetVariateType 获取变量类型.
+func GetVariateType(v interface{}) string {
+	return fmt.Sprintf("%T", v)
 }
