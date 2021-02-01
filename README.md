@@ -14,7 +14,7 @@ golang 常用函数库/工具集,仅测试支持有限的64位系统.
 [![Starts](https://img.shields.io/github/stars/kakuilan/kgo.svg)](https://github.com/kakuilan/kgo)
 [![Version](https://img.shields.io/github/v/tag/kakuilan/kgo)](https://img.shields.io/github/v/tag/kakuilan/kgo)
 
-### 测试支持(v0.1.5及以后)
+### 测试支持(v0.1.5及以后,正在开发中)
 
 - GO版本
     - 1.14.x
