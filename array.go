@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"fmt"
 	"math"
 	"reflect"
 )
@@ -115,4 +116,40 @@ func (ka *LkkArray) SliceShift(s *[]interface{}) interface{} {
 	e := (*s)[0]
 	*s = (*s)[1:]
 	return e
+}
+
+// ArrayKeyExists 检查arr(数组/切片/字典/结构体)里是否有key指定的键名(索引/字段).
+func (ka *LkkArray) ArrayKeyExists(key interface{}, arr interface{}) bool {
+	if key == nil {
+		return false
+	}
+
+	val := reflect.ValueOf(arr)
+	switch val.Kind() {
+	case reflect.Array, reflect.Slice:
+		var keyInt int
+		var keyIsInt, ok bool
+		if keyInt, ok = key.(int); ok {
+			keyIsInt = true
+		}
+
+		length := val.Len()
+		if keyIsInt && length > 0 && keyInt >= 0 && keyInt < length {
+			return true
+		}
+	case reflect.Struct:
+		field := val.FieldByName(fmt.Sprintf("%s", key))
+		if field.IsValid() {
+			return true
+		}
+	case reflect.Map:
+		for _, k := range val.MapKeys() {
+			if fmt.Sprintf("%s", key) == fmt.Sprintf("%s", k) || reflect.DeepEqual(key, k) {
+				return true
+			}
+		}
+	default:
+		panic("[ArrayKeyExists]`arr type must be array/slice/struct/map; but : " + val.Kind().String())
+	}
+	return false
 }

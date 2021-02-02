@@ -47,7 +47,7 @@ func GetFieldValue(arr interface{}, fieldName string) interface{} {
 			}
 		}
 	default:
-		panic("[GetFieldValue]`arr must be struct or map; but : " + val.Kind().String())
+		panic("[GetFieldValue]`arr type must be struct or map; but : " + val.Kind().String())
 	}
 
 	return res

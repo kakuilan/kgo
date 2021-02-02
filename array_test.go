@@ -80,14 +80,13 @@ func TestArray_ArrayColumn_Struct(t *testing.T) {
 func TestArray_ArrayColumn_Map(t *testing.T) {
 	defer func() {
 		r := recover()
-		assert.Contains(t, r, "[GetFieldValue]`arr must be")
+		assert.Contains(t, r, "[GetFieldValue]`arr type must be")
 	}()
 
 	var arr map[string]interface{}
 	var res []interface{}
 
-	jsonStr := `{"person1":{"name":"zhang3","age":23,"sex":1},"person2":{"name":"li4","age":30,"sex":1},"person3":{"name":"wang5","age":25,"sex":0},"person4":{"name":"zhao6","age":50,"sex":0}}`
-	_ = KStr.JsonDecode([]byte(jsonStr), &arr)
+	_ = KStr.JsonDecode([]byte(personsJson), &arr)
 
 	res = KArr.ArrayColumn(arr, "name")
 	assert.NotEmpty(t, res)
@@ -189,4 +188,37 @@ func BenchmarkArray_SliceShift(b *testing.B) {
 			KArr.SliceShift(&item)
 		}
 	}
+}
+
+func TestArray_ArrayKeyExists(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArrayKeyExists]`arr type must be")
+	}()
+
+	chk1 := KArr.ArrayKeyExists(len(naturalArr)-1, naturalArr)
+	assert.True(t, chk1)
+
+	chk2 := KArr.ArrayKeyExists(len(slItf)-1, slItf)
+	assert.True(t, chk2)
+
+	var person sPerson
+	gofakeit.Struct(&person)
+	chk3 := KArr.ArrayKeyExists("Name", person)
+	chk4 := KArr.ArrayKeyExists("name", person)
+	assert.True(t, chk3)
+	assert.False(t, chk4)
+
+	var persons map[string]interface{}
+	_ = KStr.JsonDecode([]byte(personsJson), &persons)
+	chk5 := KArr.ArrayKeyExists("person1", persons)
+	chk6 := KArr.ArrayKeyExists("Age", persons)
+	assert.True(t, chk5)
+	assert.False(t, chk6)
+
+	var key interface{}
+	chk7 := KArr.ArrayKeyExists(key, persons)
+	assert.False(t, chk7)
+
+	KArr.ArrayKeyExists(1, nil)
 }
