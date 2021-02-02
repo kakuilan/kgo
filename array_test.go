@@ -222,3 +222,28 @@ func TestArray_ArrayKeyExists(t *testing.T) {
 
 	KArr.ArrayKeyExists(1, nil)
 }
+
+func BenchmarkArray_ArrayKeyExists_Slice(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayKeyExists(1, naturalArr)
+	}
+}
+
+func BenchmarkArray_ArrayKeyExists_Struct(b *testing.B) {
+	var person sPerson
+	gofakeit.Struct(&person)
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayKeyExists("Name", person)
+	}
+}
+
+func BenchmarkArray_ArrayKeyExists_Map(b *testing.B) {
+	var persons map[string]interface{}
+	_ = KStr.JsonDecode([]byte(personsJson), &persons)
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayKeyExists("person1", persons)
+	}
+}
