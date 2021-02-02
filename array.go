@@ -100,3 +100,19 @@ func (ka *LkkArray) SlicePop(s *[]interface{}) interface{} {
 	*s = (*s)[:ep]
 	return e
 }
+
+// SliceUnshift 在切片开头插入一个或多个元素,返回处理之后切片的元素个数.
+func (ka *LkkArray) SliceUnshift(s *[]interface{}, elements ...interface{}) int {
+	*s = append(elements, *s...)
+	return len(*s)
+}
+
+// SliceShift 将切片开头的元素移出,并返回该元素.
+func (ka *LkkArray) SliceShift(s *[]interface{}) interface{} {
+	if len(*s) == 0 {
+		return nil
+	}
+	e := (*s)[0]
+	*s = (*s)[1:]
+	return e
+}

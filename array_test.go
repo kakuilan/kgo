@@ -152,3 +152,41 @@ func BenchmarkArray_SlicePop(b *testing.B) {
 		}
 	}
 }
+
+func TestArray_SliceUnshift_SliceShift(t *testing.T) {
+	var ss []interface{}
+	var item interface{}
+	lenght := KArr.SliceUnshift(&ss, slItf...)
+	assert.Greater(t, lenght, 1)
+
+	for i := 0; i < lenght; i++ {
+		item = KArr.SliceShift(&ss)
+		assert.NotEmpty(t, item)
+	}
+}
+
+func BenchmarkArray_SliceUnshift(b *testing.B) {
+	var ss []interface{}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		ss = nil
+		KArr.SliceUnshift(&ss, slItf...)
+	}
+}
+
+func BenchmarkArray_SliceShift(b *testing.B) {
+	var ss [][]interface{}
+	var sub []interface{}
+	for j := 0; j < 10000000; j++ {
+		sub = nil
+		copy(sub, slItf)
+		ss = append(ss, sub)
+	}
+
+	b.ResetTimer()
+	for _, item := range ss {
+		for i := 0; i < len(item); i++ {
+			KArr.SliceShift(&item)
+		}
+	}
+}
