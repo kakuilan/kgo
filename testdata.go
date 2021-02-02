@@ -24,3 +24,5 @@ type sOrganization struct {
 //单字符切片
 var ssSingle = []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"}
 
+//接口切片
+var slItf = []interface{}{1, 2, 3, 3.14, 6.67428, true, 'a', 'b', 'c', "hello", "你好"}

@@ -83,3 +83,20 @@ func (ka *LkkArray) ArrayColumn(arr interface{}, columnKey string) []interface{}
 
 	return res
 }
+
+// SlicePush 将一个或多个元素压入切片的末尾(入栈),返回处理之后切片的元素个数.
+func (ka *LkkArray) SlicePush(s *[]interface{}, elements ...interface{}) int {
+	*s = append(*s, elements...)
+	return len(*s)
+}
+
+// SlicePop 弹出切片最后一个元素(出栈),并返回该元素.
+func (ka *LkkArray) SlicePop(s *[]interface{}) interface{} {
+	if len(*s) == 0 {
+		return nil
+	}
+	ep := len(*s) - 1
+	e := (*s)[ep]
+	*s = (*s)[:ep]
+	return e
+}
