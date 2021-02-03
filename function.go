@@ -2,10 +2,12 @@ package kgo
 
 import (
 	"crypto/md5"
+	"encoding/binary"
 	"encoding/hex"
 	"fmt"
 	"reflect"
 	"strconv"
+	"unsafe"
 )
 
 // isArrayOrSlice 检查变量是否数组或切片.
@@ -94,6 +96,73 @@ func isNumeric(val interface{}) bool {
 	}
 
 	return false
+}
+
+// isLittleEndian 系统字节序类型是否小端存储.
+func isLittleEndian() bool {
+	var i int32 = 0x01020304
+
+	// 将int32类型的指针转换为byte类型的指针
+	u := unsafe.Pointer(&i)
+	pb := (*byte)(u)
+
+	// 取得pb位置对应的值
+	b := *pb
+
+	// 由于b是byte类型的,最多保存8位,那么只能取得开始的8位
+	// 小端: 04 (03 02 01)
+	// 大端: 01 (02 03 04)
+	return (b == 0x04)
+}
+
+// getEndian 获取系统字节序类型,小端返回binary.LittleEndian,大端返回binary.BigEndian .
+func getEndian() binary.ByteOrder {
+	var nativeEndian binary.ByteOrder = binary.BigEndian
+	buf := [2]byte{}
+	*(*uint16)(unsafe.Pointer(&buf[0])) = uint16(0xABCD)
+
+	switch buf {
+	case [2]byte{0xCD, 0xAB}:
+		nativeEndian = binary.LittleEndian
+		//case [2]byte{0xAB, 0xCD}:
+		//	nativeEndian = binary.BigEndian
+	}
+
+	return nativeEndian
+}
+
+// numeric2Float 将数值转换为float64.
+func numeric2Float(val interface{}) (res float64, err error) {
+	switch val.(type) {
+	case int:
+		res = float64(val.(int))
+	case int8:
+		res = float64(val.(int8))
+	case int16:
+		res = float64(val.(int16))
+	case int32:
+		res = float64(val.(int32))
+	case int64:
+		res = float64(val.(int64))
+	case uint:
+		res = float64(val.(uint))
+	case uint8:
+		res = float64(val.(uint8))
+	case uint16:
+		res = float64(val.(uint16))
+	case uint32:
+		res = float64(val.(uint32))
+	case uint64:
+		res = float64(val.(uint64))
+	case float32:
+		res = float64(val.(float32))
+	case float64:
+		res = val.(float64)
+	case string:
+		str := val.(string)
+		res, err = strconv.ParseFloat(str, 64)
+	}
+	return
 }
 
 // md5Byte 计算字节切片的 MD5 散列值.
