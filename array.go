@@ -79,7 +79,7 @@ func (ka *LkkArray) ArrayColumn(arr interface{}, columnKey string) []interface{}
 			}
 		}
 	default:
-		panic("[ArrayColumn]`arr type must be array, slice, struct or map; but : " + val.Kind().String())
+		panic("[ArrayColumn]`arr type must be array|slice|struct|map; but : " + val.Kind().String())
 	}
 
 	return res
@@ -149,7 +149,7 @@ func (ka *LkkArray) ArrayKeyExists(key interface{}, arr interface{}) bool {
 			}
 		}
 	default:
-		panic("[ArrayKeyExists]`arr type must be array/slice/struct/map; but : " + val.Kind().String())
+		panic("[ArrayKeyExists]`arr type must be array|slice|struct|map; but : " + val.Kind().String())
 	}
 	return false
 }

@@ -11,6 +11,7 @@ import (
 	"hash"
 	"reflect"
 	"strconv"
+	"strings"
 	"unsafe"
 )
 
@@ -18,7 +19,7 @@ import (
 // chkType为检查类型,枚举值有(1仅数组,2仅切片,3数组或切片);结果为-1表示非,>=0表示是(数组长度).
 func isArrayOrSlice(val interface{}, chkType uint8) int {
 	if chkType != 1 && chkType != 2 && chkType != 3 {
-		panic(fmt.Sprintf("[isArrayOrSlice]`chkType refValue must in [1, 2, 3]; but: %d", chkType))
+		panic(fmt.Sprintf("[isArrayOrSlice]`chkType must in [1, 2, 3]; but: %d", chkType))
 	}
 
 	var res = -1
@@ -243,10 +244,77 @@ func arrayValues(arr interface{}, filterZero bool) []interface{} {
 			}
 		}
 	default:
-		panic("[arrayValues]`arr type must be array/slice/struct/map; but : " + val.Kind().String())
+		panic("[arrayValues]`arr type must be array|slice|struct|map; but : " + val.Kind().String())
 	}
 
 	return res
+}
+
+// reflectPtr 获取反射的指向.
+func reflectPtr(r reflect.Value) reflect.Value {
+	// 如果是指针,则获取其所指向的元素
+	if r.Kind() == reflect.Ptr {
+		r = r.Elem()
+	}
+	return r
+}
+
+// creditChecksum 计算身份证校验码,其中id为身份证号码.
+func creditChecksum(id string) byte {
+	//∑(ai×Wi)(mod 11)
+	// 加权因子
+	factor := []int{7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2}
+	// 校验位对应值
+	code := []byte{'1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'}
+
+	leng := len(id)
+	sum := 0
+	for i, char := range id[:leng-1] {
+		num, _ := strconv.Atoi(string(char))
+		sum += num * factor[i]
+	}
+
+	return code[sum%11]
+}
+
+// compareConditionMap 比对数组是否匹配条件.condition为条件字典,arr为要比对的数据(字典/结构体).
+func compareConditionMap(condition map[interface{}]interface{}, arr interface{}) (res interface{}) {
+	val := reflect.ValueOf(arr)
+	switch val.Kind() {
+	case reflect.Map:
+		condLen := len(condition)
+		chkNum := 0
+		if condLen > 0 {
+			for _, k := range val.MapKeys() {
+				if condVal, ok := condition[k.String()]; ok && reflect.DeepEqual(val.MapIndex(k).Interface(), condVal) {
+					chkNum++
+				}
+			}
+		}
+
+		if chkNum == condLen {
+			res = arr
+		}
+	default:
+		return
+	}
+
+	return
+}
+
+// getTrimMask 获取要修剪的字符串集合,masks为要屏蔽的字符切片.
+func getTrimMask(masks []string) string {
+	var str string
+	if len(masks) == 0 {
+		str = " \t\n\r\v\f\x00　"
+	} else {
+		str = strings.Join(masks, "")
+	}
+	return str
+}
+
+func methodExists() {
+	//TODO 方法是否存在
 }
 
 // GetFieldValue 获取(字典/结构体的)字段值;fieldName为字段名,大小写敏感.
@@ -271,7 +339,7 @@ func GetFieldValue(arr interface{}, fieldName string) interface{} {
 			}
 		}
 	default:
-		panic("[GetFieldValue]`arr type must be struct or map; but : " + val.Kind().String())
+		panic("[GetFieldValue]`arr type must be struct|map; but : " + val.Kind().String())
 	}
 
 	return res
