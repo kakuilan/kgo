@@ -2,9 +2,13 @@ package kgo
 
 import (
 	"crypto/md5"
+	"crypto/sha1"
+	"crypto/sha256"
+	"crypto/sha512"
 	"encoding/binary"
 	"encoding/hex"
 	"fmt"
+	"hash"
 	"reflect"
 	"strconv"
 	"unsafe"
@@ -180,6 +184,31 @@ func md5Byte(str []byte, length uint8) []byte {
 		res = dst
 	}
 
+	return res
+}
+
+// shaXByte 计算字节切片的 shaX 散列值,x为1/256/512.
+func shaXByte(str []byte, x uint16) []byte {
+	var h hash.Hash
+	switch x {
+	case 1:
+		h = sha1.New()
+		break
+	case 256:
+		h = sha256.New()
+		break
+	case 512:
+		h = sha512.New()
+		break
+	default:
+		panic(fmt.Sprintf("[shaXByte]`x must be in [1, 256, 512]; but: %d", x))
+	}
+
+	h.Write(str)
+
+	hBytes := h.Sum(nil)
+	res := make([]byte, hex.EncodedLen(len(hBytes)))
+	hex.Encode(res, hBytes)
 	return res
 }
 
