@@ -212,6 +212,43 @@ func shaXByte(str []byte, x uint16) []byte {
 	return res
 }
 
+// arrayValues 返回arr(数组/切片/字典/结构体)中所有的值.
+// filterZero 是否过滤零值元素(nil,false,0,'',[]),true时排除零值元素,false时保留零值元素.
+func arrayValues(arr interface{}, filterZero bool) []interface{} {
+	var res []interface{}
+	var fieldVal reflect.Value
+	val := reflect.ValueOf(arr)
+	switch val.Kind() {
+	case reflect.Array, reflect.Slice:
+		for i := 0; i < val.Len(); i++ {
+			fieldVal = val.Index(i)
+			if !filterZero || (filterZero && !fieldVal.IsNil() && !fieldVal.IsZero()) {
+				res = append(res, fieldVal.Interface())
+			}
+		}
+	case reflect.Struct:
+		for i := 0; i < val.NumField(); i++ {
+			fieldVal = val.Field(i)
+			if fieldVal.IsValid() && fieldVal.CanInterface() {
+				if !filterZero || (filterZero && !fieldVal.IsNil() && !fieldVal.IsZero()) {
+					res = append(res, fieldVal.Interface())
+				}
+			}
+		}
+	case reflect.Map:
+		for _, k := range val.MapKeys() {
+			fieldVal = val.MapIndex(k)
+			if !filterZero || (filterZero && !fieldVal.IsNil() && !fieldVal.IsZero()) {
+				res = append(res, fieldVal.Interface())
+			}
+		}
+	default:
+		panic("[arrayValues]`arr type must be array/slice/struct/map; but : " + val.Kind().String())
+	}
+
+	return res
+}
+
 // GetFieldValue 获取(字典/结构体的)字段值;fieldName为字段名,大小写敏感.
 func GetFieldValue(arr interface{}, fieldName string) interface{} {
 	var res interface{}
