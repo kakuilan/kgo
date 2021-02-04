@@ -278,25 +278,36 @@ func creditChecksum(id string) byte {
 }
 
 // compareConditionMap 比对数组是否匹配条件.condition为条件字典,arr为要比对的数据(字典/结构体).
-func compareConditionMap(condition map[interface{}]interface{}, arr interface{}) (res interface{}) {
+func compareConditionMap(condition map[string]interface{}, arr interface{}) (res interface{}) {
 	val := reflect.ValueOf(arr)
-	switch val.Kind() {
-	case reflect.Map:
-		condLen := len(condition)
+	conNum := len(condition)
+	if conNum > 0 {
 		chkNum := 0
-		if condLen > 0 {
-			for _, k := range val.MapKeys() {
-				if condVal, ok := condition[k.String()]; ok && reflect.DeepEqual(val.MapIndex(k).Interface(), condVal) {
+
+		switch val.Kind() {
+		case reflect.Struct:
+			var field reflect.Value
+			for k, v := range condition {
+				field = val.FieldByName(k)
+				if field.IsValid() && reflect.DeepEqual(field.Interface(), v) {
 					chkNum++
 				}
 			}
+		case reflect.Map:
+			if conNum > 0 {
+				for _, k := range val.MapKeys() {
+					if condVal, ok := condition[k.String()]; ok && reflect.DeepEqual(val.MapIndex(k).Interface(), condVal) {
+						chkNum++
+					}
+				}
+			}
+		default:
+			panic("[compareConditionMap]`arr type must be struct|map; but : " + val.Kind().String())
 		}
 
-		if chkNum == condLen {
+		if chkNum == conNum {
 			res = arr
 		}
-	default:
-		return
 	}
 
 	return
