@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"bytes"
 	"crypto/md5"
 	"crypto/sha1"
 	"crypto/sha256"
@@ -12,6 +13,8 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"unicode"
+	"unicode/utf8"
 	"unsafe"
 )
 
@@ -324,8 +327,190 @@ func getTrimMask(masks []string) string {
 	return str
 }
 
-func methodExists() {
-	//TODO 方法是否存在
+// methodExists 检查val结构体中是否存在methodName方法.
+func methodExists(val interface{}, methodName string) (bool, error) {
+	valRef := reflect.ValueOf(val)
+
+	if valRef.Type().Kind() != reflect.Ptr {
+		valRef = reflect.New(reflect.TypeOf(val))
+	}
+
+	method := valRef.MethodByName(methodName)
+	if !method.IsValid() {
+		return false, fmt.Errorf("Method `%s` not exists in interface `%s`", methodName, valRef.Type())
+	}
+
+	return true, nil
+}
+
+// getMethod 获取val结构体的methodName方法.
+func getMethod(val interface{}, methodName string) reflect.Value {
+	m, b := reflect.TypeOf(val).MethodByName(methodName)
+	if !b {
+		return reflect.ValueOf(nil)
+	}
+	return m.Func
+}
+
+// camelCaseToLowerCase 驼峰转为小写.
+func camelCaseToLowerCase(str string, connector rune) string {
+	if len(str) == 0 {
+		return ""
+	}
+
+	buf := &bytes.Buffer{}
+	var prev, r0, r1 rune
+	var size int
+
+	r0 = connector
+
+	for len(str) > 0 {
+		prev = r0
+		r0, size = utf8.DecodeRuneInString(str)
+		str = str[size:]
+
+		switch {
+		case r0 == utf8.RuneError:
+			continue
+
+		case unicode.IsUpper(r0):
+			if prev != connector && !unicode.IsNumber(prev) {
+				buf.WriteRune(connector)
+			}
+
+			buf.WriteRune(unicode.ToLower(r0))
+
+			if len(str) == 0 {
+				break
+			}
+
+			r0, size = utf8.DecodeRuneInString(str)
+			str = str[size:]
+
+			if !unicode.IsUpper(r0) {
+				buf.WriteRune(r0)
+				break
+			}
+
+			// find next non-upper-case character and insert connector properly.
+			// it's designed to convert `HTTPServer` to `http_server`.
+			// if there are more than 2 adjacent upper case characters in a word,
+			// treat them as an abbreviation plus a normal word.
+			for len(str) > 0 {
+				r1 = r0
+				r0, size = utf8.DecodeRuneInString(str)
+				str = str[size:]
+
+				if r0 == utf8.RuneError {
+					buf.WriteRune(unicode.ToLower(r1))
+					break
+				}
+
+				if !unicode.IsUpper(r0) {
+					if isCaseConnector(r0) {
+						r0 = connector
+
+						buf.WriteRune(unicode.ToLower(r1))
+					} else if unicode.IsNumber(r0) {
+						// treat a number as an upper case rune
+						// so that both `http2xx` and `HTTP2XX` can be converted to `http_2xx`.
+						buf.WriteRune(unicode.ToLower(r1))
+						buf.WriteRune(connector)
+						buf.WriteRune(r0)
+					} else {
+						buf.WriteRune(connector)
+						buf.WriteRune(unicode.ToLower(r1))
+						buf.WriteRune(r0)
+					}
+
+					break
+				}
+
+				buf.WriteRune(unicode.ToLower(r1))
+			}
+
+			if len(str) == 0 || r0 == connector {
+				buf.WriteRune(unicode.ToLower(r0))
+			}
+
+		case unicode.IsNumber(r0):
+			if prev != connector && !unicode.IsNumber(prev) {
+				buf.WriteRune(connector)
+			}
+
+			buf.WriteRune(r0)
+
+		default:
+			if isCaseConnector(r0) {
+				r0 = connector
+			}
+
+			buf.WriteRune(r0)
+		}
+	}
+
+	return buf.String()
+}
+
+// isCaseConnector 是否字符转换连接符.
+func isCaseConnector(r rune) bool {
+	return r == '-' || r == '_' || unicode.IsSpace(r)
+}
+
+// pkcs7Padding PKCS7填充.
+// cipherText为密文;blockSize为分组长度;isZero是否零填充.
+func pkcs7Padding(cipherText []byte, blockSize int, isZero bool) []byte {
+	clen := len(cipherText)
+	if cipherText == nil || clen == 0 || blockSize <= 0 {
+		return nil
+	}
+
+	var padtext []byte
+	padding := blockSize - clen%blockSize
+	if isZero {
+		padtext = bytes.Repeat([]byte{0}, padding)
+	} else {
+		padtext = bytes.Repeat([]byte{byte(padding)}, padding)
+	}
+
+	return append(cipherText, padtext...)
+}
+
+// pkcs7UnPadding PKCS7拆解.
+// origData为源数据;blockSize为分组长度.
+func pkcs7UnPadding(origData []byte, blockSize int) []byte {
+	olen := len(origData)
+	if origData == nil || olen == 0 || blockSize <= 0 || olen%blockSize != 0 {
+		return nil
+	}
+
+	unpadding := int(origData[olen-1])
+	if unpadding == 0 || unpadding > olen {
+		return nil
+	}
+
+	return origData[:(olen - unpadding)]
+}
+
+// zeroPadding PKCS7使用0填充.
+func zeroPadding(cipherText []byte, blockSize int) []byte {
+	return pkcs7Padding(cipherText, blockSize, true)
+}
+
+// zeroUnPadding PKCS7-0拆解.
+func zeroUnPadding(origData []byte) []byte {
+	return bytes.TrimRightFunc(origData, func(r rune) bool {
+		return r == rune(0)
+	})
+}
+
+// formatPath 格式化路径
+func formatPath(fpath string) string {
+	//替换特殊字符
+	fpath = strings.NewReplacer(`|`, "", `:`, "", `<`, "", `>`, "", `?`, "", `\`, "/").Replace(fpath)
+	//替换连续斜杠
+	fpath = RegFormatDir.ReplaceAllString(fpath, "/")
+	return fpath
 }
 
 // GetFieldValue 获取(字典/结构体的)字段值;fieldName为字段名,大小写敏感.

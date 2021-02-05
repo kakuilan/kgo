@@ -260,3 +260,6 @@ https://colobu.com/2018/11/03/get-function-name-in-go/
 DeleteSlice 删除切片元素/多个
 https://blog.csdn.net/yue7603835/article/details/71196181
 
+golang 根据PID获取进程的执行路径
+https://www.systutorials.com/how-to-get-the-running-process-pid-in-go/
+https://blog.csdn.net/weixin_42324368/article/details/107872138
