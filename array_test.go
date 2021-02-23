@@ -20,7 +20,7 @@ func TestArray_ArrayChunk(t *testing.T) {
 func TestArray_ArrayChunk_PanicSize(t *testing.T) {
 	defer func() {
 		r := recover()
-		assert.Equal(t, "[ArrayChunk]`size cannot be less than 1", r)
+		assert.Contains(t, r, "[ArrayChunk]`size cannot be")
 	}()
 	KArr.ArrayChunk(ssSingle, 0)
 }
@@ -28,7 +28,7 @@ func TestArray_ArrayChunk_PanicSize(t *testing.T) {
 func TestArray_ArrayChunk_PanicType(t *testing.T) {
 	defer func() {
 		r := recover()
-		assert.Equal(t, "[ArrayChunk]`arr type must be array or slice", r)
+		assert.Contains(t, r, "[ArrayChunk]`arr type must be")
 	}()
 	KArr.ArrayChunk("hello", 2)
 }
@@ -245,5 +245,29 @@ func BenchmarkArray_ArrayKeyExists_Map(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KArr.ArrayKeyExists("person1", persons)
+	}
+}
+
+func TestArray_ArrayReverse(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArrayReverse]`arr type must be")
+	}()
+
+	res1 := KArr.ArrayReverse(naturalArr)
+	itm1 := KArr.SlicePop(&res1)
+	assert.Equal(t, 0, itm1)
+
+	res2 := KArr.ArrayReverse(ssSingle)
+	itm2 := KArr.SlicePop(&res2)
+	assert.Equal(t, "a", itm2)
+
+	KArr.ArrayReverse("hello")
+}
+
+func BenchmarkArray_ArrayReverse(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayReverse(naturalArr)
 	}
 }

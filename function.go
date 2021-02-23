@@ -337,7 +337,7 @@ func methodExists(val interface{}, methodName string) (bool, error) {
 
 	method := valRef.MethodByName(methodName)
 	if !method.IsValid() {
-		return false, fmt.Errorf("Method `%s` not exists in interface `%s`", methodName, valRef.Type())
+		return false, fmt.Errorf("[methodExists] Method `%s` not exists in interface `%s`", methodName, valRef.Type())
 	}
 
 	return true, nil
