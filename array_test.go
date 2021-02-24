@@ -305,3 +305,15 @@ func BenchmarkArray_Implode(b *testing.B) {
 		KArr.Implode(",", naturalArr)
 	}
 }
+
+func TestArray_JoinStrings(t *testing.T) {
+	res := KArr.JoinStrings(",", ssSingle)
+	assert.Contains(t, res, "a,b,c,d,e,f,g,h,i,j,k")
+}
+
+func BenchmarkArray_JoinStrings(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.JoinStrings(",", ssSingle)
+	}
+}

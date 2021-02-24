@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math"
 	"reflect"
+	"strings"
 )
 
 // ArrayChunk 将一个数组/切片分割成多个,size为每个子数组的长度.
@@ -222,4 +223,23 @@ func (ka *LkkArray) Implode(delimiter string, arr interface{}) string {
 	}
 
 	return buf.String()
+}
+
+// JoinStrings 使用分隔符delimiter连接字符串切片strs.效率比Implode高.
+func (ka *LkkArray) JoinStrings(delimiter string, strs []string) (res string) {
+	length := len(strs)
+	if length == 0 {
+		return
+	}
+
+	var sb strings.Builder
+	for _, str := range strs {
+		sb.WriteString(str)
+		if length--; length > 0 {
+			sb.WriteString(delimiter)
+		}
+	}
+	res = sb.String()
+
+	return
 }
