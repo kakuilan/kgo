@@ -346,3 +346,15 @@ func BenchmarkArray_UniqueInts(b *testing.B) {
 		KArr.UniqueInts(intSlc)
 	}
 }
+
+func TestArray_Unique64Ints(t *testing.T) {
+	res := KArr.Unique64Ints(int64Slc)
+	assert.Less(t, len(res), len(int64Slc))
+}
+
+func BenchmarkArray_Unique64Ints(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.Unique64Ints(int64Slc)
+	}
+}

@@ -277,3 +277,15 @@ func (ka *LkkArray) UniqueInts(ints []int) (res []int) {
 	}
 	return
 }
+
+// Unique64Ints 移除64位整数切片中的重复值.
+func (ka *LkkArray) Unique64Ints(ints []int64) (res []int64) {
+	seen := make(map[int64]bool)
+	for _, num := range ints {
+		if _, ok := seen[num]; !ok {
+			seen[num] = true
+			res = append(res, num)
+		}
+	}
+	return
+}
