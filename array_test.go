@@ -331,3 +331,18 @@ func BenchmarkArray_JoinInts(b *testing.B) {
 		KArr.JoinInts(",", ints)
 	}
 }
+
+func TestArray_UniqueInts(t *testing.T) {
+	sl := naturalArr[:]
+	sl = append(sl, 1, 2, 3, 4, 5, 6)
+	res := KArr.UniqueInts(sl)
+
+	assert.Equal(t, len(naturalArr), len(res))
+}
+
+func BenchmarkArray_UniqueInts(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.UniqueInts(intSlc)
+	}
+}

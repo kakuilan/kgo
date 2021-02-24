@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math"
 	"reflect"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -261,5 +262,18 @@ func (ka *LkkArray) JoinInts(delimiter string, ints []int) (res string) {
 	}
 	res = sb.String()
 
+	return
+}
+
+// UniqueInts 移除整数切片中的重复值.
+func (ka *LkkArray) UniqueInts(ints []int) (res []int) {
+	sort.Ints(ints)
+	var last int
+	for i, num := range ints {
+		if i == 0 || num != last {
+			res = append(res, num)
+		}
+		last = num
+	}
 	return
 }

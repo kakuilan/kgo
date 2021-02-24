@@ -613,3 +613,8 @@ func toStr(val interface{}) string {
 
 	return fmt.Sprintf("%v", val)
 }
+
+// dumpPrint 打印调试变量.
+func dumpPrint(v interface{}) {
+	fmt.Printf("%+v\n", v)
+}
