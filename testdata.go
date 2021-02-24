@@ -32,3 +32,7 @@ var slItf = []interface{}{1, 2, 3, 3.14, 6.67428, true, 'a', 'b', 'c', "hello", 
 
 //persons JSON串
 var personsJson = `{"person1":{"name":"zhang3","age":23,"sex":1},"person2":{"name":"li4","age":30,"sex":1},"person3":{"name":"wang5","age":25,"sex":0},"person4":{"name":"zhao6","age":50,"sex":0}}`
+
+//字符串map
+var strMp1 = map[string]string{"a": "1", "b": "2", "c": "3", "d": "4", "e": "", "2": "cc", "3": "no"}
+//var strMp2 = map[string]string{"a": "0", "b": "2", "c": "4", "g": "4", "h": "", "2": "cc"}

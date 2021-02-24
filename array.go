@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"bytes"
 	"fmt"
 	"math"
 	"reflect"
@@ -173,4 +174,52 @@ func (ka *LkkArray) ArrayReverse(arr interface{}) []interface{} {
 	default:
 		panic("[ArrayReverse]`arr type must be array|slice")
 	}
+}
+
+// Implode 用delimiter将数组(数组/切片/字典/结构体)的值连接为一个字符串.
+func (ka *LkkArray) Implode(delimiter string, arr interface{}) string {
+	val := reflect.ValueOf(arr)
+	var buf bytes.Buffer
+	var length, j int
+	switch val.Kind() {
+	case reflect.Array, reflect.Slice:
+		length = val.Len()
+		if length == 0 {
+			return ""
+		}
+		j = length
+		for i := 0; i < length; i++ {
+			buf.WriteString(toStr(val.Index(i).Interface()))
+			if j--; j > 0 {
+				buf.WriteString(delimiter)
+			}
+		}
+	case reflect.Struct:
+		length = val.NumField()
+		if length == 0 {
+			return ""
+		}
+		j = length
+		for i := 0; i < length; i++ {
+			buf.WriteString(toStr(val.Field(i).Interface()))
+			if j--; j > 0 {
+				buf.WriteString(delimiter)
+			}
+		}
+	case reflect.Map:
+		length = len(val.MapKeys())
+		if length == 0 {
+			return ""
+		}
+		for _, k := range val.MapKeys() {
+			buf.WriteString(toStr(val.MapIndex(k).Interface()))
+			if length--; length > 0 {
+				buf.WriteString(delimiter)
+			}
+		}
+	default:
+		panic("[Implode]`arr type must be array|slice|struct|map")
+	}
+
+	return buf.String()
 }

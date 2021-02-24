@@ -271,3 +271,37 @@ func BenchmarkArray_ArrayReverse(b *testing.B) {
 		KArr.ArrayReverse(naturalArr)
 	}
 }
+
+func TestArray_Implode(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[Implode]`arr type must be")
+	}()
+
+	//数组
+	res1 := KArr.Implode(",", naturalArr)
+	assert.Contains(t, res1, "0,1,2,3,4,5,6,7,8,9,10")
+
+	//切片
+	res2 := KArr.Implode(",", ssSingle)
+	assert.Contains(t, res2, "a,b,c,d,e,f,g,h,i,j,k")
+
+	//结构体
+	var p1 sPerson
+	gofakeit.Struct(&p1)
+	res3 := KArr.Implode(",", p1)
+	assert.NotEmpty(t, res3)
+
+	//map
+	res4 := KArr.Implode(",", strMp1)
+	assert.NotEmpty(t, res4)
+
+	KArr.Implode(",", "hello")
+}
+
+func BenchmarkArray_Implode(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.Implode(",", naturalArr)
+	}
+}

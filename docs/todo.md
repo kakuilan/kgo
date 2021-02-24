@@ -263,3 +263,10 @@ https://blog.csdn.net/yue7603835/article/details/71196181
 golang 根据PID获取进程的执行路径
 https://www.systutorials.com/how-to-get-the-running-process-pid-in-go/
 https://blog.csdn.net/weixin_42324368/article/details/107872138
+
+结构体转MAP
+https://github.com/fatih/structs
+https://www.liwenzhou.com/posts/Go/struct2map/
+https://www.cnblogs.com/liang1101/p/6741262.html
+https://www.cnblogs.com/Detector/p/9746284.html
+https://juejin.cn/post/6855129007193915400
