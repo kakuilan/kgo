@@ -317,3 +317,17 @@ func BenchmarkArray_JoinStrings(b *testing.B) {
 		KArr.JoinStrings(",", ssSingle)
 	}
 }
+
+func TestArray_JoinInts(t *testing.T) {
+	ints := naturalArr[:]
+	res := KArr.JoinInts(",", ints)
+	assert.Contains(t, res, "0,1,2,3,4,5,6,7,8,9,10")
+}
+
+func BenchmarkArray_JoinInts(b *testing.B) {
+	b.ResetTimer()
+	ints := naturalArr[:]
+	for i := 0; i < b.N; i++ {
+		KArr.JoinInts(",", ints)
+	}
+}
