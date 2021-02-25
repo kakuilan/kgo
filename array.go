@@ -289,3 +289,17 @@ func (ka *LkkArray) Unique64Ints(ints []int64) (res []int64) {
 	}
 	return
 }
+
+// UniqueStrings 移除字符串切片中的重复值.
+func (ka *LkkArray) UniqueStrings(strs []string) (res []string) {
+	sort.Strings(strs)
+	var last string
+	for _, str := range strs {
+		if str != last {
+			res = append(res, str)
+		}
+		last = str
+	}
+
+	return
+}

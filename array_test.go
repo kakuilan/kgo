@@ -336,7 +336,6 @@ func TestArray_UniqueInts(t *testing.T) {
 	sl := naturalArr[:]
 	sl = append(sl, 1, 2, 3, 4, 5, 6)
 	res := KArr.UniqueInts(sl)
-
 	assert.Equal(t, len(naturalArr), len(res))
 }
 
@@ -356,5 +355,21 @@ func BenchmarkArray_Unique64Ints(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KArr.Unique64Ints(int64Slc)
+	}
+}
+
+func TestArray_UniqueStrings(t *testing.T) {
+	sl := ssSingle[:]
+	sl = append(sl, "a", "b", "c", "d", "e")
+	res := KArr.UniqueStrings(sl)
+	assert.Equal(t, len(ssSingle), len(res))
+}
+
+func BenchmarkArray_UniqueStrings(b *testing.B) {
+	b.ResetTimer()
+	sl := ssSingle[:]
+	sl = append(sl, "a", "b", "c", "d", "e")
+	for i := 0; i < b.N; i++ {
+		KArr.UniqueStrings(sl)
 	}
 }
