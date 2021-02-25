@@ -204,9 +204,12 @@ func (ka *LkkArray) Implode(delimiter string, arr interface{}) string {
 		}
 		j = length
 		for i := 0; i < length; i++ {
-			buf.WriteString(toStr(val.Field(i).Interface()))
-			if j--; j > 0 {
-				buf.WriteString(delimiter)
+			j--
+			if val.Field(i).CanInterface() {
+				buf.WriteString(toStr(val.Field(i).Interface()))
+				if j > 0 {
+					buf.WriteString(delimiter)
+				}
 			}
 		}
 	case reflect.Map:

@@ -9,6 +9,7 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"hash"
 	"reflect"
@@ -234,7 +235,7 @@ func arrayValues(arr interface{}, filterZero bool) []interface{} {
 	case reflect.Struct:
 		for i := 0; i < val.NumField(); i++ {
 			fieldVal = val.Field(i)
-			if fieldVal.IsValid() && fieldVal.CanInterface() {
+			if fieldVal.CanInterface() {
 				if !filterZero || (filterZero && !fieldVal.IsNil() && !fieldVal.IsZero()) {
 					res = append(res, fieldVal.Interface())
 				}
@@ -261,6 +262,43 @@ func reflectPtr(r reflect.Value) reflect.Value {
 		r = r.Elem()
 	}
 	return r
+}
+
+// structVal 获取结构体的反射值
+func structVal(obj interface{}) (reflect.Value, error) {
+	v := reflect.ValueOf(obj)
+
+	for v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
+
+	if v.Kind() != reflect.Struct {
+		return v, errors.New("[structVal]`obj type must be struct; but : " + v.Kind().String())
+	}
+
+	return v, nil
+}
+
+// structFields 获取结构体的字段;all是否包含所有字段(包括未导出的).
+func structFields(obj interface{}, all bool) ([]reflect.StructField, error) {
+	v, e := structVal(obj)
+	if e != nil {
+		return nil, e
+	}
+
+	var fs []reflect.StructField
+	var t = v.Type()
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		// 不能访问未导出的字段
+		if !all && field.PkgPath != "" {
+			continue
+		}
+
+		fs = append(fs, field)
+	}
+
+	return fs, nil
 }
 
 // creditChecksum 计算身份证校验码,其中id为身份证号码.
@@ -293,7 +331,7 @@ func compareConditionMap(condition map[string]interface{}, arr interface{}) (res
 			var field reflect.Value
 			for k, v := range condition {
 				field = val.FieldByName(k)
-				if field.IsValid() && reflect.DeepEqual(field.Interface(), v) {
+				if field.IsValid() && field.CanInterface() && reflect.DeepEqual(field.Interface(), v) {
 					chkNum++
 				}
 			}
@@ -513,9 +551,7 @@ func GetFieldValue(arr interface{}, fieldName string) interface{} {
 	switch val.Kind() {
 	case reflect.Struct:
 		field := val.FieldByName(fieldName)
-		if !field.IsValid() {
-			break
-		} else if !field.CanInterface() {
+		if !field.IsValid() || !field.CanInterface() {
 			break
 		}
 		res = field.Interface()
@@ -617,4 +653,29 @@ func toStr(val interface{}) string {
 // dumpPrint 打印调试变量.
 func dumpPrint(v interface{}) {
 	fmt.Printf("%+v\n", v)
+}
+
+// struct2Map 结构体转为字典;tagName为要导出的标签名,可以为空,为空时将导出所有公开字段.
+func struct2Map(obj interface{}, tagName string) (map[string]interface{}, error) {
+	v, e := structVal(obj)
+	if e != nil {
+		return nil, e
+	}
+
+	t := v.Type()
+	var res = make(map[string]interface{})
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		if v.Field(i).CanInterface() {
+			if tagName != "" {
+				if tagValue := field.Tag.Get(tagName); tagValue != "" {
+					res[tagValue] = v.Field(i).Interface()
+				}
+			} else {
+				res[field.Name] = v.Field(i).Interface()
+			}
+		}
+	}
+
+	return res, nil
 }

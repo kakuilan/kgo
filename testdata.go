@@ -4,10 +4,12 @@ package kgo
 
 //类型-人员
 type sPerson struct {
-	Name   string `fake:"{name}"`
-	Addr   string `fake:"{city}"`
-	Age    int    `fake:"{number:1,99}"`
-	Gender bool   `fake:"{bool}"`
+	secret string `json:"secret"`
+	Name   string `fake:"{name}" json:"name"`
+	Addr   string `fake:"{city}" json:"city"`
+	Age    int    `fake:"{number:1,99}" json:"age"`
+	Gender bool   `fake:"{bool}" json:"gender"`
+	other  int    `json:"other"`
 }
 
 //类型-人群
