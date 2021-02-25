@@ -373,3 +373,92 @@ func BenchmarkArray_UniqueStrings(b *testing.B) {
 		KArr.UniqueStrings(sl)
 	}
 }
+
+func TestArray_ArrayDiff(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArrayDiff]`arr1,arr2 type must be")
+	}()
+
+	var res, res2 map[interface{}]interface{}
+	//var ok bool
+
+	//数组-切片
+	res = KArr.ArrayDiff(strSl1, strSl2, COMPARE_ONLY_VALUE)
+	assert.NotEmpty(t, res)
+
+	res = KArr.ArrayDiff(strSl1, strSl2, COMPARE_ONLY_KEY)
+	assert.NotEmpty(t, res)
+
+	res2 = KArr.ArrayDiff(strSl1, strSl2, COMPARE_BOTH_KEYVALUE)
+	assert.Greater(t, len(res2), len(res))
+
+	res = KArr.ArrayDiff(strSlEmp, strSl1, COMPARE_ONLY_VALUE)
+	assert.Empty(t, res)
+
+	//数组-字典
+	res = KArr.ArrayDiff(strSl1, strMp1, COMPARE_ONLY_VALUE)
+	assert.NotEmpty(t, res)
+
+	res = KArr.ArrayDiff(strSl1, strMp1, COMPARE_ONLY_KEY)
+	assert.NotEmpty(t, res)
+
+	res2 = KArr.ArrayDiff(strSl1, strMp1, COMPARE_BOTH_KEYVALUE)
+	assert.Greater(t, len(res2), len(res))
+
+	res = KArr.ArrayDiff(strSlEmp, strMp1, COMPARE_ONLY_VALUE)
+	assert.Empty(t, res)
+
+	//字典-数组
+	res = KArr.ArrayDiff(strMp1, strSl1, COMPARE_ONLY_VALUE)
+	assert.NotEmpty(t, res)
+
+	res = KArr.ArrayDiff(strMp1, strSl1, COMPARE_ONLY_KEY)
+	assert.NotEmpty(t, res)
+
+	res2 = KArr.ArrayDiff(strMp1, strSl1, COMPARE_BOTH_KEYVALUE)
+	assert.Greater(t, len(res2), len(res))
+
+	res = KArr.ArrayDiff(strMpEmp, strSl1, COMPARE_ONLY_VALUE)
+	assert.Empty(t, res)
+
+	//字典-字典
+	res = KArr.ArrayDiff(strMp1, strMp2, COMPARE_ONLY_VALUE)
+	assert.NotEmpty(t, res)
+
+	res = KArr.ArrayDiff(strMp1, strMp2, COMPARE_ONLY_KEY)
+	assert.NotEmpty(t, res)
+
+	res2 = KArr.ArrayDiff(strMp1, strMp2, COMPARE_BOTH_KEYVALUE)
+	assert.NotEmpty(t, res2)
+
+	KArr.ArrayDiff("hello", 1234, COMPARE_ONLY_VALUE)
+}
+
+func BenchmarkArray_ArrayDiff_A1A(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayDiff(strSl1, strSl2, COMPARE_ONLY_VALUE)
+	}
+}
+
+func BenchmarkArray_ArrayDiff_A1M(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayDiff(strSl1, strMp1, COMPARE_ONLY_VALUE)
+	}
+}
+
+func BenchmarkArray_ArrayDiff_M1A(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayDiff(strMp1, strSl1, COMPARE_ONLY_VALUE)
+	}
+}
+
+func BenchmarkArray_ArrayDiff_M1M(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayDiff(strMp1, strMp2, COMPARE_ONLY_VALUE)
+	}
+}

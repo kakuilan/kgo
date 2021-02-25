@@ -638,6 +638,69 @@ func CallFunc(f interface{}, args ...interface{}) (results []interface{}, err er
 	return
 }
 
+// str2Int 将字符串转换为int;其中"true", "TRUE", "True"为1.
+func str2Int(val string) (res int) {
+	if val == "true" || val == "TRUE" || val == "True" {
+		res = 1
+		return
+	}
+
+	res, _ = strconv.Atoi(val)
+	return
+}
+
+// str2IntStrict 严格将字符串转换为有符号整型;bitSize为类型位数,strict为是否严格检查.
+func str2IntStrict(val string, bitSize int, strict bool) int64 {
+	res, err := strconv.ParseInt(val, 0, bitSize)
+	if err != nil {
+		if strict {
+			panic(err)
+		}
+	}
+	return res
+}
+
+// str2UintStrict 严格将字符串转换为无符号整型;bitSize为类型位数,strict为是否严格检查.
+func str2UintStrict(val string, bitSize int, strict bool) uint64 {
+	res, err := strconv.ParseUint(val, 0, bitSize)
+	if err != nil {
+		if strict {
+			panic(err)
+		}
+	}
+	return res
+}
+
+// str2FloatStrict 严格将字符串转换为浮点型;bitSize为类型位数,strict为是否严格检查.
+func str2FloatStrict(val string, bitSize int, strict bool) float64 {
+	res, err := strconv.ParseFloat(val, bitSize)
+	if err != nil {
+		if strict {
+			panic(err)
+		}
+	}
+	return res
+}
+
+// str2Float64 将字符串转换为float64;其中"true", "TRUE", "True"为1.0 .
+func str2Float64(val string) (res float64) {
+	if val == "true" || val == "TRUE" || val == "True" {
+		res = 1.0
+	} else {
+		res = float64(str2FloatStrict(val, 64, false))
+	}
+
+	return
+}
+
+// bool2Int 将布尔值转换为整型.
+func bool2Int(val bool) int {
+	if val {
+		return 1
+	}
+	return 0
+}
+
 // toStr 强制将变量转换为字符串.
 func toStr(val interface{}) string {
 	//先处理其他类型
@@ -672,6 +735,84 @@ func toStr(val interface{}) string {
 	}
 
 	return fmt.Sprintf("%v", val)
+}
+
+// toInt 强制将变量转换为整型;其中true或"true"为1.
+func toInt(val interface{}) int {
+	switch val.(type) {
+	case int:
+		return val.(int)
+	case int8:
+		return int(val.(int8))
+	case int16:
+		return int(val.(int16))
+	case int32:
+		return int(val.(int32))
+	case int64:
+		return int(val.(int64))
+	case uint:
+		return int(val.(uint))
+	case uint8:
+		return int(val.(uint8))
+	case uint16:
+		return int(val.(uint16))
+	case uint32:
+		return int(val.(uint32))
+	case uint64:
+		return int(val.(uint64))
+	case float32:
+		return int(val.(float32))
+	case float64:
+		return int(val.(float64))
+	case []uint8:
+		return str2Int(string(val.([]uint8)))
+	case string:
+		return str2Int(val.(string))
+	case bool:
+		return bool2Int(val.(bool))
+	default:
+		return 0
+	}
+}
+
+// toFloat 强制将变量转换为浮点型;其中true或"true"为1.0 .
+func toFloat(val interface{}) (res float64) {
+	switch val.(type) {
+	case int:
+		res = float64(val.(int))
+	case int8:
+		res = float64(val.(int8))
+	case int16:
+		res = float64(val.(int16))
+	case int32:
+		res = float64(val.(int32))
+	case int64:
+		res = float64(val.(int64))
+	case uint:
+		res = float64(val.(uint))
+	case uint8:
+		res = float64(val.(uint8))
+	case uint16:
+		res = float64(val.(uint16))
+	case uint32:
+		res = float64(val.(uint32))
+	case uint64:
+		res = float64(val.(uint64))
+	case float32:
+		res = float64(val.(float32))
+	case float64:
+		res = val.(float64)
+	case []uint8:
+		res = str2Float64(string(val.([]uint8)))
+	case string:
+		res = str2Float64(val.(string))
+	case bool:
+		if val.(bool) {
+			res = 1.0
+		}
+	}
+
+	return
 }
 
 // dumpPrint 打印调试变量.

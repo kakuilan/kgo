@@ -42,5 +42,10 @@ var personsJson = `{"person1":{"name":"zhang3","age":23,"sex":1},"person2":{"nam
 
 //字符串map
 var strMp1 = map[string]string{"a": "1", "b": "2", "c": "3", "d": "4", "e": "", "2": "cc", "3": "no"}
+var strMp2 = map[string]string{"a": "0", "b": "2", "c": "4", "g": "4", "h": "", "2": "cc"}
+var strMpEmp = make(map[string]string)
 
-//var strMp2 = map[string]string{"a": "0", "b": "2", "c": "4", "g": "4", "h": "", "2": "cc"}
+//字符串切片
+var strSl1 = []string{"aa", "bb", "cc", "dd", "ee", "", "hh", "ii"}
+var strSl2 = []string{"bb", "cc", "ff", "gg", "ee", "", "gg"}
+var strSlEmp = []string{}
