@@ -10,6 +10,7 @@ type sPerson struct {
 	Age    int    `fake:"{number:1,99}" json:"age"`
 	Gender bool   `fake:"{bool}" json:"gender"`
 	other  int    `json:"other"`
+	none   bool
 }
 
 //类型-人群

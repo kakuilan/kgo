@@ -264,6 +264,30 @@ func reflectPtr(r reflect.Value) reflect.Value {
 	return r
 }
 
+// reflect2Itf 将反射值转为接口(原值)
+func reflect2Itf(r reflect.Value) (res interface{}) {
+	switch r.Kind() {
+	case reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int, reflect.Int64:
+		res = r.Int()
+	case reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint, reflect.Uint64:
+		res = r.Uint()
+	case reflect.Float32, reflect.Float64:
+		res = r.Float()
+	case reflect.String:
+		res = r.String()
+	case reflect.Bool:
+		res = r.Bool()
+	default:
+		if r.CanInterface() {
+			res = r.Interface()
+		} else {
+			res = r
+		}
+	}
+
+	return
+}
+
 // structVal 获取结构体的反射值
 func structVal(obj interface{}) (reflect.Value, error) {
 	v := reflect.ValueOf(obj)
@@ -655,7 +679,7 @@ func dumpPrint(v interface{}) {
 	fmt.Printf("%+v\n", v)
 }
 
-// struct2Map 结构体转为字典;tagName为要导出的标签名,可以为空,为空时将导出所有公开字段.
+// struct2Map 结构体转为字典;tagName为要导出的标签名,可以为空,为空时将导出所有字段.
 func struct2Map(obj interface{}, tagName string) (map[string]interface{}, error) {
 	v, e := structVal(obj)
 	if e != nil {
@@ -666,14 +690,12 @@ func struct2Map(obj interface{}, tagName string) (map[string]interface{}, error)
 	var res = make(map[string]interface{})
 	for i := 0; i < t.NumField(); i++ {
 		field := t.Field(i)
-		if v.Field(i).CanInterface() {
-			if tagName != "" {
-				if tagValue := field.Tag.Get(tagName); tagValue != "" {
-					res[tagValue] = v.Field(i).Interface()
-				}
-			} else {
-				res[field.Name] = v.Field(i).Interface()
+		if tagName != "" {
+			if tagValue := field.Tag.Get(tagName); tagValue != "" {
+				res[tagValue] = reflect2Itf(v.Field(i))
 			}
+		} else {
+			res[field.Name] = reflect2Itf(v.Field(i))
 		}
 	}
 

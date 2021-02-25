@@ -18,7 +18,13 @@ func TestConvert_Struct2Map(t *testing.T) {
 	_, ok = mp1["name"]
 	assert.True(t, ok)
 
+	_, ok = mp1["none"]
+	assert.False(t, ok)
+
 	_, ok = mp2["Age"]
+	assert.True(t, ok)
+
+	_, ok = mp2["none"]
 	assert.True(t, ok)
 }
 
