@@ -820,3 +820,37 @@ func BenchmarkArray_DeleteSliceItems(b *testing.B) {
 		KArr.DeleteSliceItems(naturalArr, 3, 5, 8)
 	}
 }
+
+func TestArray_InArray(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[InArray]`haystack type must be")
+	}()
+
+	var res bool
+
+	res = KArr.InArray(9, naturalArr)
+	assert.True(t, res)
+
+	res = KArr.InArray(personMp3, personMps)
+	assert.True(t, res)
+
+	res = KArr.InArray(personMp3, crowd)
+	assert.False(t, res)
+
+	KArr.InArray(9, strHello)
+}
+
+func BenchmarkArray_InArray_Arr(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.InArray(9, naturalArr)
+	}
+}
+
+func BenchmarkArray_InArray_Map(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.InArray(personMp3, personMps)
+	}
+}
