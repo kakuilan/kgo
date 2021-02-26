@@ -125,12 +125,18 @@ func (ka *LkkArray) SliceShift(s *[]interface{}) interface{} {
 
 // ArrayKeyExists 检查arr(数组/切片/字典/结构体)里是否有key指定的键名(索引/字段).
 func (ka *LkkArray) ArrayKeyExists(key interface{}, arr interface{}) bool {
+	val := reflect.ValueOf(arr)
+	typ := val.Kind()
+
+	if typ != reflect.Array && typ != reflect.Slice && typ != reflect.Struct && typ != reflect.Map {
+		panic("[ArrayKeyExists]`arr type must be array|slice|struct|map; but : " + typ.String())
+	}
+
 	if key == nil {
 		return false
 	}
 
-	val := reflect.ValueOf(arr)
-	switch val.Kind() {
+	switch typ {
 	case reflect.Array, reflect.Slice:
 		var keyInt int
 		var keyIsInt, ok bool
@@ -153,9 +159,8 @@ func (ka *LkkArray) ArrayKeyExists(key interface{}, arr interface{}) bool {
 				return true
 			}
 		}
-	default:
-		panic("[ArrayKeyExists]`arr type must be array|slice|struct|map; but : " + val.Kind().String())
 	}
+
 	return false
 }
 
@@ -655,6 +660,38 @@ func (ka *LkkArray) ArraySearchItem(arr interface{}, condition map[string]interf
 		}
 	default:
 		panic("[ArraySearchItem]`arr type must be array|slice|map")
+	}
+
+	return
+}
+
+// ArraySearchMutil 从数组(切片/字典)中搜索对应元素(多个).
+// arr为要查找的数组,元素必须为字典/结构体;condition为条件字典.
+func (ka *LkkArray) ArraySearchMutil(arr interface{}, condition map[string]interface{}) (res []interface{}) {
+	// 条件为空
+	if len(condition) == 0 {
+		return
+	}
+
+	val := reflect.ValueOf(arr)
+	var item interface{}
+	switch val.Kind() {
+	case reflect.Array, reflect.Slice:
+		for i := 0; i < val.Len(); i++ {
+			item = compareConditionMap(condition, val.Index(i).Interface())
+			if item != nil {
+				res = append(res, item)
+			}
+		}
+	case reflect.Map:
+		for _, k := range val.MapKeys() {
+			item = compareConditionMap(condition, val.MapIndex(k).Interface())
+			if item != nil {
+				res = append(res, item)
+			}
+		}
+	default:
+		panic("[ArraySearchMutil]arr type must be array, slice or map")
 	}
 
 	return
