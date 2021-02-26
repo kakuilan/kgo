@@ -228,7 +228,14 @@ func arrayValues(arr interface{}, filterZero bool) []interface{} {
 	case reflect.Array, reflect.Slice:
 		for i := 0; i < val.Len(); i++ {
 			fieldVal = val.Index(i)
-			if !filterZero || (filterZero && !fieldVal.IsNil() && !fieldVal.IsZero()) {
+			if !filterZero || (filterZero && !fieldVal.IsZero()) {
+				res = append(res, fieldVal.Interface())
+			}
+		}
+	case reflect.Map:
+		for _, k := range val.MapKeys() {
+			fieldVal = val.MapIndex(k)
+			if !filterZero || (filterZero && !fieldVal.IsZero()) {
 				res = append(res, fieldVal.Interface())
 			}
 		}
@@ -236,20 +243,13 @@ func arrayValues(arr interface{}, filterZero bool) []interface{} {
 		for i := 0; i < val.NumField(); i++ {
 			fieldVal = val.Field(i)
 			if fieldVal.CanInterface() {
-				if !filterZero || (filterZero && !fieldVal.IsNil() && !fieldVal.IsZero()) {
+				if !filterZero || (filterZero && !fieldVal.IsZero()) {
 					res = append(res, fieldVal.Interface())
 				}
 			}
 		}
-	case reflect.Map:
-		for _, k := range val.MapKeys() {
-			fieldVal = val.MapIndex(k)
-			if !filterZero || (filterZero && !fieldVal.IsNil() && !fieldVal.IsZero()) {
-				res = append(res, fieldVal.Interface())
-			}
-		}
 	default:
-		panic("[arrayValues]`arr type must be array|slice|struct|map; but : " + val.Kind().String())
+		panic("[arrayValues]`arr type must be array|slice|map|struct; but : " + val.Kind().String())
 	}
 
 	return res

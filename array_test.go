@@ -19,6 +19,9 @@ func TestArray_ArrayKeys(t *testing.T) {
 	res = KArr.ArrayKeys(colorMp)
 	assert.Equal(t, len(colorMp), len(res))
 
+	res = KArr.ArrayKeys(personS1)
+	assert.NotEmpty(t, res)
+
 	KArr.ArrayKeys(strHello)
 }
 
@@ -26,6 +29,65 @@ func BenchmarkArray_ArrayKeys(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KArr.ArrayKeys(naturalArr)
+	}
+}
+
+func TestArray_ArrayValues(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[arrayValues]`arr type must be")
+	}()
+
+	var res []interface{}
+
+	res = KArr.ArrayValues(slItf, false)
+	assert.Equal(t, len(slItf), len(res))
+
+	//将排除nil
+	res = KArr.ArrayValues(slItf, true)
+	assert.Greater(t, len(slItf), len(res))
+
+	//将排除0
+	res = KArr.ArrayValues(int64Slc, true)
+	assert.Greater(t, len(int64Slc), len(res))
+
+	//将排除0.0
+	res = KArr.ArrayValues(floSlc, true)
+	assert.Greater(t, len(floSlc), len(res))
+
+	//将排除false
+	res = KArr.ArrayValues(booSlc, true)
+	assert.Greater(t, len(booSlc), len(res))
+
+	//将排除""
+	res = KArr.ArrayValues(colorMp, true)
+	assert.Greater(t, len(colorMp), len(res))
+
+	//结构体
+	res = KArr.ArrayValues(personS1, false)
+	assert.NotEmpty(t, res)
+
+	KArr.ArrayValues(strHello, false)
+}
+
+func BenchmarkArray_ArrayValues_Arr(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayValues(slItf, false)
+	}
+}
+
+func BenchmarkArray_ArrayValues_Map(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayValues(colorMp, false)
+	}
+}
+
+func BenchmarkArray_ArrayValues_Struct(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayValues(personS1, false)
 	}
 }
 
@@ -116,10 +178,8 @@ func TestArray_SlicePush_SlicePop(t *testing.T) {
 	lenght := KArr.SlicePush(&ss, slItf...)
 	assert.Greater(t, lenght, 1)
 
-	for i := 0; i < lenght; i++ {
-		item = KArr.SlicePop(&ss)
-		assert.NotEmpty(t, item)
-	}
+	item = KArr.SlicePop(&ss)
+	assert.NotEmpty(t, item)
 }
 
 func BenchmarkArray_SlicePush(b *testing.B) {
@@ -154,10 +214,8 @@ func TestArray_SliceUnshift_SliceShift(t *testing.T) {
 	lenght := KArr.SliceUnshift(&ss, slItf...)
 	assert.Greater(t, lenght, 1)
 
-	for i := 0; i < lenght; i++ {
-		item = KArr.SliceShift(&ss)
-		assert.NotEmpty(t, item)
-	}
+	item = KArr.SliceShift(&ss)
+	assert.NotEmpty(t, item)
 }
 
 func BenchmarkArray_SliceUnshift(b *testing.B) {

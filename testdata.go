@@ -53,11 +53,14 @@ var naturalArr = [...]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 var intSlc = []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 11, 12, 13, 14, 15}
 var int64Slc = []int64{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 11, 12, 13, 14, 15}
 
+//浮点切片
+var floSlc = []float32{1.23, 0.0, 3.14159, 2.99792458, 6.6260755, 1.60217733}
+
+//布尔切片
+var booSlc = []bool{true, true, false, true, false, true, true}
+
 //单字符切片
 var ssSingle = []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"}
-
-//接口切片
-var slItf = []interface{}{1, 2, 3, 3.14, 6.67428, true, 'a', 'b', 'c', "hello", "你好"}
 
 //persons JSON串
 var personsJson = `{"person1":{"name":"zhang3","age":23,"sex":1},"person2":{"name":"li4","age":30,"sex":1},"person3":{"name":"wang5","age":25,"sex":0},"person4":{"name":"zhao6","age":50,"sex":0}}`
@@ -66,12 +69,15 @@ var personsJson = `{"person1":{"name":"zhang3","age":23,"sex":1},"person2":{"nam
 var strMp1 = map[string]string{"a": "1", "b": "2", "c": "3", "d": "4", "e": "", "2": "cc", "3": "no"}
 var strMp2 = map[string]string{"a": "0", "b": "2", "c": "4", "g": "4", "h": "", "2": "cc"}
 var strMpEmp = make(map[string]string)
-var colorMp = map[string]string{"a": "green", "0": "red", "b": "green", "1": "blue", "2": "red", "c": "yellow"}
+var colorMp = map[string]string{"a": "green", "0": "red", "b": "green", "1": "blue", "2": "red", "c": "yellow", "n":""}
 
 //字符串切片
 var strSl1 = []string{"aa", "bb", "cc", "dd", "ee", "", "hh", "ii"}
 var strSl2 = []string{"bb", "cc", "ff", "gg", "ee", "", "gg"}
 var strSlEmp = []string{}
+
+//接口切片
+var slItf = []interface{}{99, 0, 1, 2, 0.0, 3, false, 3.14, 6.67428, true, 'a', "", 'b', nil, 'c', "hello", strSlEmp, "你好"}
 
 //字符串
 var strHello = "Hello World!"

@@ -12,28 +12,43 @@ import (
 	"time"
 )
 
-// ArrayKeys 返回数组(切片/字典)中所有的键名.
+// ArrayKeys 返回数组(切片/字典/结构体)中所有的键名;如果是结构体,只返回公开的字段.
 func (ka *LkkArray) ArrayKeys(arr interface{}) []interface{} {
 	val := reflect.ValueOf(arr)
 	typ := val.Kind()
-	if typ != reflect.Array && typ != reflect.Slice && typ != reflect.Map {
-		panic("[ArrayKeys]`arr type must be array|slice|map; but : " + typ.String())
+	if typ != reflect.Array && typ != reflect.Slice && typ != reflect.Struct && typ != reflect.Map {
+		panic("[ArrayKeys]`arr type must be array|slice|map|struct; but : " + typ.String())
 	}
 
-	num := val.Len()
-	res := make([]interface{}, num)
+	var res []interface{}
 	switch typ {
 	case reflect.Array, reflect.Slice:
-		for i := 0; i < num; i++ {
-			res[i] = i
+		for i := 0; i < val.Len(); i++ {
+			res = append(res, i)
 		}
 	case reflect.Map:
-		for i, k := range val.MapKeys() {
-			res[i] = k
+		for _, k := range val.MapKeys() {
+			res = append(res, k)
+		}
+	case reflect.Struct:
+		var t = val.Type()
+		for i := 0; i < t.NumField(); i++ {
+			field := t.Field(i)
+			// 不能访问未导出的字段
+			if field.PkgPath != "" {
+				continue
+			}
+			res = append(res, field.Name)
 		}
 	}
 
 	return res
+}
+
+// ArrayValues 返回arr(数组/切片/字典/结构体)中所有的值;如果是结构体,只返回公开字段的值.
+// filterZero 是否过滤零值元素(nil,false,0,"",[]),true时排除零值元素,false时保留零值元素.
+func (ka *LkkArray) ArrayValues(arr interface{}, filterNil bool) []interface{} {
+	return arrayValues(arr, filterNil)
 }
 
 // ArrayChunk 将一个数组/切片分割成多个,size为每个子数组的长度.
