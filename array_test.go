@@ -738,3 +738,23 @@ func BenchmarkArray_IsSlice(b *testing.B) {
 		KArr.IsSlice(intSlc)
 	}
 }
+
+func TestArray_IsArrayOrSlice(t *testing.T) {
+	var res bool
+
+	res = KArr.IsArrayOrSlice(intSlc)
+	assert.True(t, res)
+
+	res = KArr.IsArrayOrSlice(naturalArr)
+	assert.True(t, res)
+
+	res = KArr.IsArrayOrSlice(strHello)
+	assert.False(t, res)
+}
+
+func BenchmarkArray_IsArrayOrSlice(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.IsArrayOrSlice(intSlc)
+	}
+}
