@@ -871,3 +871,20 @@ func BenchmarkArray_InIntSlice(b *testing.B) {
 		KArr.InIntSlice(9, intSlc)
 	}
 }
+
+func TestArray_InInt64Slice(t *testing.T) {
+	var res bool
+
+	res = KArr.InInt64Slice(9, int64Slc)
+	assert.True(t, res)
+
+	res = KArr.InInt64Slice(99, int64Slc)
+	assert.False(t, res)
+}
+
+func BenchmarkArray_InInt64Slice(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.InInt64Slice(9, int64Slc)
+	}
+}
