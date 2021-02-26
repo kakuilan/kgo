@@ -778,3 +778,28 @@ func BenchmarkArray_IsMap(b *testing.B) {
 		KArr.IsMap(colorMp)
 	}
 }
+
+func TestArray_DeleteSliceItems(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[DeleteSliceItems]`val type must be")
+	}()
+
+	var res []interface{}
+	var del int
+
+	res, del = KArr.DeleteSliceItems(naturalArr, 3, 5, 8)
+	assert.Greater(t, len(naturalArr), len(res))
+
+	res, del = KArr.DeleteSliceItems(int64Slc, 2, 4, 9)
+	assert.Greater(t, del, 0)
+
+	_, _ = KArr.DeleteSliceItems(strHello, 3, 5, 8)
+}
+
+func BenchmarkArray_DeleteSliceItems(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.DeleteSliceItems(naturalArr, 3, 5, 8)
+	}
+}
