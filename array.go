@@ -781,3 +781,9 @@ func (ka *LkkArray) IsArrayOrSlice(val interface{}) bool {
 	l := lenArrayOrSlice(val, 3)
 	return l >= 0
 }
+
+// IsMap 检查变量是否字典.
+func (ka *LkkArray) IsMap(val interface{}) bool {
+	return isMap(val)
+}
+

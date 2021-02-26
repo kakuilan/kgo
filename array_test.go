@@ -758,3 +758,23 @@ func BenchmarkArray_IsArrayOrSlice(b *testing.B) {
 		KArr.IsArrayOrSlice(intSlc)
 	}
 }
+
+func TestArray_IsMap(t *testing.T) {
+	var res bool
+
+	res = KArr.IsMap(colorMp)
+	assert.True(t, res)
+
+	res = KArr.IsMap(strMpEmp)
+	assert.True(t, res)
+
+	res = KArr.IsMap(naturalArr)
+	assert.False(t, res)
+}
+
+func BenchmarkArray_IsMap(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.IsMap(colorMp)
+	}
+}
