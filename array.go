@@ -782,9 +782,14 @@ func (ka *LkkArray) IsArrayOrSlice(val interface{}) bool {
 	return l >= 0
 }
 
-// IsMap 检查变量是否字典.
+// IsMap 变量是否字典.
 func (ka *LkkArray) IsMap(val interface{}) bool {
 	return isMap(val)
+}
+
+// IsStruct 变量是否结构体.
+func (ka *LkkArray) IsStruct(val interface{}) bool {
+	return isStruct(val)
 }
 
 // DeleteSliceItems 删除数组/切片的元素,返回一个新切片.

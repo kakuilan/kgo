@@ -779,6 +779,23 @@ func BenchmarkArray_IsMap(b *testing.B) {
 	}
 }
 
+func TestArray_IsStruct(t *testing.T) {
+	var res bool
+
+	res = KArr.IsStruct(personS1)
+	assert.True(t, res)
+
+	res = KArr.IsStruct(naturalArr)
+	assert.False(t, res)
+}
+
+func BenchmarkArray_IsStruct(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.IsStruct(personS1)
+	}
+}
+
 func TestArray_DeleteSliceItems(t *testing.T) {
 	defer func() {
 		r := recover()
