@@ -351,6 +351,14 @@ func compareConditionMap(condition map[string]interface{}, arr interface{}) (res
 		chkNum := 0
 
 		switch val.Kind() {
+		case reflect.Map:
+			if conNum > 0 {
+				for _, k := range val.MapKeys() {
+					if condVal, ok := condition[k.String()]; ok && reflect.DeepEqual(val.MapIndex(k).Interface(), condVal) {
+						chkNum++
+					}
+				}
+			}
 		case reflect.Struct:
 			var field reflect.Value
 			for k, v := range condition {
@@ -360,16 +368,8 @@ func compareConditionMap(condition map[string]interface{}, arr interface{}) (res
 					chkNum++
 				}
 			}
-		case reflect.Map:
-			if conNum > 0 {
-				for _, k := range val.MapKeys() {
-					if condVal, ok := condition[k.String()]; ok && reflect.DeepEqual(val.MapIndex(k).Interface(), condVal) {
-						chkNum++
-					}
-				}
-			}
 		default:
-			panic("[compareConditionMap]`arr type must be struct|map; but : " + val.Kind().String())
+			panic("[compareConditionMap]`arr type must be map|struct; but : " + val.Kind().String())
 		}
 
 		if chkNum == conNum {
@@ -572,12 +572,6 @@ func zeroUnPadding(origData []byte) []byte {
 func GetFieldValue(arr interface{}, fieldName string) (res interface{}, err error) {
 	val := reflect.ValueOf(arr)
 	switch val.Kind() {
-	case reflect.Struct:
-		field := val.FieldByName(fieldName)
-		if !field.IsValid() || !field.CanInterface() {
-			break
-		}
-		res = field.Interface()
 	case reflect.Map:
 		for _, subKey := range val.MapKeys() {
 			if fmt.Sprintf("%s", subKey) == fieldName {
@@ -585,8 +579,14 @@ func GetFieldValue(arr interface{}, fieldName string) (res interface{}, err erro
 				break
 			}
 		}
+	case reflect.Struct:
+		field := val.FieldByName(fieldName)
+		if !field.IsValid() || !field.CanInterface() {
+			break
+		}
+		res = field.Interface()
 	default:
-		err = errors.New("[GetFieldValue]`arr type must be struct|map; but : " + val.Kind().String())
+		err = errors.New("[GetFieldValue]`arr type must be map|struct; but : " + val.Kind().String())
 	}
 
 	return

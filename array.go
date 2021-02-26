@@ -110,13 +110,6 @@ func (ka *LkkArray) ArrayColumn(arr interface{}, columnKey string) []interface{}
 				res = append(res, item)
 			}
 		}
-	case reflect.Struct:
-		for i := 0; i < val.NumField(); i++ {
-			item, err = GetFieldValue(reflect2Itf(val.Field(i)), columnKey)
-			if item != nil && err == nil {
-				res = append(res, item)
-			}
-		}
 	case reflect.Map:
 		for _, k := range val.MapKeys() {
 			item, err = GetFieldValue(val.MapIndex(k).Interface(), columnKey)
@@ -124,8 +117,15 @@ func (ka *LkkArray) ArrayColumn(arr interface{}, columnKey string) []interface{}
 				res = append(res, item)
 			}
 		}
+	case reflect.Struct:
+		for i := 0; i < val.NumField(); i++ {
+			item, err = GetFieldValue(reflect2Itf(val.Field(i)), columnKey)
+			if item != nil && err == nil {
+				res = append(res, item)
+			}
+		}
 	default:
-		panic("[ArrayColumn]`arr type must be array|slice|struct|map; but : " + val.Kind().String())
+		panic("[ArrayColumn]`arr type must be array|slice|map|struct; but : " + val.Kind().String())
 	}
 
 	return res
@@ -170,7 +170,7 @@ func (ka *LkkArray) ArrayKeyExists(key interface{}, arr interface{}) bool {
 	typ := val.Kind()
 
 	if typ != reflect.Array && typ != reflect.Slice && typ != reflect.Struct && typ != reflect.Map {
-		panic("[ArrayKeyExists]`arr type must be array|slice|struct|map; but : " + typ.String())
+		panic("[ArrayKeyExists]`arr type must be array|slice|map|struct; but : " + typ.String())
 	}
 
 	if key == nil {
@@ -189,16 +189,16 @@ func (ka *LkkArray) ArrayKeyExists(key interface{}, arr interface{}) bool {
 		if keyIsInt && length > 0 && keyInt >= 0 && keyInt < length {
 			return true
 		}
-	case reflect.Struct:
-		field := val.FieldByName(fmt.Sprintf("%s", key))
-		if field.IsValid() {
-			return true
-		}
 	case reflect.Map:
 		for _, k := range val.MapKeys() {
 			if fmt.Sprintf("%s", key) == fmt.Sprintf("%s", k) || reflect.DeepEqual(key, k) {
 				return true
 			}
+		}
+	case reflect.Struct:
+		field := val.FieldByName(fmt.Sprintf("%s", key))
+		if field.IsValid() {
+			return true
 		}
 	}
 
@@ -244,6 +244,17 @@ func (ka *LkkArray) Implode(delimiter string, arr interface{}) string {
 				buf.WriteString(delimiter)
 			}
 		}
+	case reflect.Map:
+		length = len(val.MapKeys())
+		if length == 0 {
+			return ""
+		}
+		for _, k := range val.MapKeys() {
+			buf.WriteString(toStr(val.MapIndex(k).Interface()))
+			if length--; length > 0 {
+				buf.WriteString(delimiter)
+			}
+		}
 	case reflect.Struct:
 		length = val.NumField()
 		if length == 0 {
@@ -259,19 +270,8 @@ func (ka *LkkArray) Implode(delimiter string, arr interface{}) string {
 				}
 			}
 		}
-	case reflect.Map:
-		length = len(val.MapKeys())
-		if length == 0 {
-			return ""
-		}
-		for _, k := range val.MapKeys() {
-			buf.WriteString(toStr(val.MapIndex(k).Interface()))
-			if length--; length > 0 {
-				buf.WriteString(delimiter)
-			}
-		}
 	default:
-		panic("[Implode]`arr type must be array|slice|struct|map; but : " + val.Kind().String())
+		panic("[Implode]`arr type must be array|slice|map|struct; but : " + val.Kind().String())
 	}
 
 	return buf.String()
