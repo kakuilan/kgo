@@ -549,3 +549,36 @@ func BenchmarkArray_ArrayIntersect_M1M(b *testing.B) {
 		KArr.ArrayIntersect(strMp1, strMp2, COMPARE_ONLY_VALUE)
 	}
 }
+
+func TestArray_ArrayUnique(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArrayUnique]`arr type must be")
+	}()
+
+	var res []interface{}
+
+	//数组切片
+	res = KArr.ArrayUnique(intSlc)
+	assert.Less(t, len(res), len(intSlc))
+
+	//字典
+	res = KArr.ArrayUnique(colorMp)
+	assert.Less(t, len(res), len(colorMp))
+
+	KArr.ArrayUnique("hello")
+}
+
+func BenchmarkArray_ArrayUnique_Arr(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayUnique(intSlc)
+	}
+}
+
+func BenchmarkArray_ArrayUnique_Map(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayUnique(colorMp)
+	}
+}
