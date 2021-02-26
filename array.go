@@ -758,3 +758,26 @@ func (ka *LkkArray) IsEqualArray(expected, actual interface{}) bool {
 
 	return reflect.DeepEqual(expectedMap, actualMap)
 }
+
+// Length 获取数组/切片的长度;结果为-1表示变量不是数组或切片.
+func (ka *LkkArray) Length(val interface{}) int {
+	return lenArrayOrSlice(val, 3)
+}
+
+// IsArray 变量是否数组.
+func (ka *LkkArray) IsArray(val interface{}) bool {
+	l := lenArrayOrSlice(val, 1)
+	return l >= 0
+}
+
+// IsSlice 变量是否切片.
+func (ka *LkkArray) IsSlice(val interface{}) bool {
+	l := lenArrayOrSlice(val, 2)
+	return l >= 0
+}
+
+// IsArrayOrSlice 变量是否数组或切片.
+func (ka *LkkArray) IsArrayOrSlice(val interface{}) bool {
+	l := lenArrayOrSlice(val, 3)
+	return l >= 0
+}

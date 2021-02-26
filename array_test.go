@@ -600,7 +600,7 @@ func TestArray_ArraySearchMutil(t *testing.T) {
 	assert.NotEmpty(t, res)
 
 	//子元素为结构体
-	cond2 := map[string]interface{}{"Gender": true}
+	cond2 := map[string]interface{}{"Gender": false}
 	res = KArr.ArraySearchMutil(perStuMps, cond2)
 	assert.NotEmpty(t, res)
 
@@ -679,5 +679,22 @@ func BenchmarkArray_IsEqualArray(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KArr.IsEqualArray(naturalArr, ssSingle)
+	}
+}
+
+func TestArray_Length(t *testing.T) {
+	var res int
+	res = KArr.Length(naturalArr)
+	assert.Equal(t, res, len(naturalArr))
+
+	//非数组或切片
+	res = KArr.Length("hello")
+	assert.Equal(t, -1, res)
+}
+
+func BenchmarkArray_Length(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.Length(naturalArr)
 	}
 }

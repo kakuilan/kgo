@@ -20,11 +20,11 @@ import (
 	"unsafe"
 )
 
-// isArrayOrSlice 检查变量是否数组或切片.
-// chkType为检查类型,枚举值有(1仅数组,2仅切片,3数组或切片);结果为-1表示非,>=0表示是(数组长度).
-func isArrayOrSlice(val interface{}, chkType uint8) int {
+// lenArrayOrSlice 获取数组/切片的长度.
+// chkType为检查类型,枚举值有(1仅数组,2仅切片,3数组或切片);结果为-1表示变量不是数组或切片,>=0表示合法长度.
+func lenArrayOrSlice(val interface{}, chkType uint8) int {
 	if chkType != 1 && chkType != 2 && chkType != 3 {
-		panic(fmt.Sprintf("[isArrayOrSlice]`chkType must in [1, 2, 3]; but: %d", chkType))
+		chkType = 3
 	}
 
 	var res = -1
