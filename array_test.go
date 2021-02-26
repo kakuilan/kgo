@@ -1006,9 +1006,34 @@ func BenchmarkArray_SliceFill(b *testing.B) {
 }
 
 func TestArray_ArrayFlip(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArrayFlip]`arr type must be")
+	}()
+
 	var res map[interface{}]interface{}
+	var chk bool
 
 	res = KArr.ArrayFlip(naturalArr)
-	assert.NotEmpty(t, res)
+	chk = KArr.IsEqualArray(naturalArr, KArr.ArrayValues(res, false))
+	assert.True(t, chk)
 
+	res = KArr.ArrayFlip(colorMp)
+	assert.GreaterOrEqual(t, len(colorMp), len(res))
+
+	KArr.ArrayFlip(strHello)
+}
+
+func BenchmarkArray_ArrayFlip_Arr(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayFlip(naturalArr)
+	}
+}
+
+func BenchmarkArray_ArrayFlip_Map(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayFlip(colorMp)
+	}
 }

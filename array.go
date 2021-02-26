@@ -940,17 +940,20 @@ func (ka *LkkArray) SliceFill(val interface{}, num int) []interface{} {
 func (ka *LkkArray) ArrayFlip(arr interface{}) map[interface{}]interface{} {
 	res := make(map[interface{}]interface{})
 	val := reflect.ValueOf(arr)
+	var key interface{}
 	switch val.Kind() {
 	case reflect.Array, reflect.Slice:
 		for i := 0; i < val.Len(); i++ {
-			if val.Index(i).Interface() != nil && fmt.Sprintf("%v", val.Index(i).Interface()) != "" {
-				res[val.Index(i).Interface()] = i
+			key = val.Index(i).Interface()
+			if key != nil && fmt.Sprintf("%v", key) != "" {
+				res[key] = i
 			}
 		}
 	case reflect.Map:
 		for _, k := range val.MapKeys() {
-			if val.MapIndex(k).Interface() != nil && fmt.Sprintf("%v", val.MapIndex(k).Interface()) != "" {
-				res[val.MapIndex(k).Interface()] = k
+			key = val.MapIndex(k).Interface()
+			if key != nil && fmt.Sprintf("%v", key) != "" {
+				res[key] = k
 			}
 		}
 	default:
