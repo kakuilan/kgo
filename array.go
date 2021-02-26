@@ -59,26 +59,27 @@ func (ka *LkkArray) ArrayChunk(arr interface{}, size int) [][]interface{} {
 func (ka *LkkArray) ArrayColumn(arr interface{}, columnKey string) []interface{} {
 	val := reflect.ValueOf(arr)
 	var res []interface{}
+	var err error
 	var item interface{}
 	switch val.Kind() {
 	case reflect.Array, reflect.Slice:
 		for i := 0; i < val.Len(); i++ {
-			item = GetFieldValue(val.Index(i).Interface(), columnKey)
-			if item != nil {
+			item, err = GetFieldValue(val.Index(i).Interface(), columnKey)
+			if item != nil && err == nil {
 				res = append(res, item)
 			}
 		}
 	case reflect.Struct:
 		for i := 0; i < val.NumField(); i++ {
-			item = GetFieldValue(val.Field(i).Interface(), columnKey)
-			if item != nil {
+			item, err = GetFieldValue(reflect2Itf(val.Field(i)), columnKey)
+			if item != nil && err == nil {
 				res = append(res, item)
 			}
 		}
 	case reflect.Map:
 		for _, k := range val.MapKeys() {
-			item = GetFieldValue(val.MapIndex(k).Interface(), columnKey)
-			if item != nil {
+			item, err = GetFieldValue(val.MapIndex(k).Interface(), columnKey)
+			if item != nil && err == nil {
 				res = append(res, item)
 			}
 		}
@@ -626,4 +627,35 @@ func (ka *LkkArray) ArrayUnique(arr interface{}) []interface{} {
 	}
 
 	return res
+}
+
+// ArraySearchItem 从数组(切片/字典)中搜索对应元素(单个).
+// arr为要查找的数组,元素必须为字典/结构体;condition为条件字典.
+func (ka *LkkArray) ArraySearchItem(arr interface{}, condition map[string]interface{}) (res interface{}) {
+	// 条件为空
+	if len(condition) == 0 {
+		return
+	}
+
+	val := reflect.ValueOf(arr)
+	switch val.Kind() {
+	case reflect.Array, reflect.Slice:
+		for i := 0; i < val.Len(); i++ {
+			res = compareConditionMap(condition, val.Index(i).Interface())
+			if res != nil {
+				return
+			}
+		}
+	case reflect.Map:
+		for _, k := range val.MapKeys() {
+			res = compareConditionMap(condition, val.MapIndex(k).Interface())
+			if res != nil {
+				return
+			}
+		}
+	default:
+		panic("[ArraySearchItem]`arr type must be array|slice|map")
+	}
+
+	return
 }

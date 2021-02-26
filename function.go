@@ -355,6 +355,7 @@ func compareConditionMap(condition map[string]interface{}, arr interface{}) (res
 			var field reflect.Value
 			for k, v := range condition {
 				field = val.FieldByName(k)
+
 				if field.IsValid() && field.CanInterface() && reflect.DeepEqual(field.Interface(), v) {
 					chkNum++
 				}
@@ -568,9 +569,7 @@ func zeroUnPadding(origData []byte) []byte {
 }
 
 // GetFieldValue 获取(字典/结构体的)字段值;fieldName为字段名,大小写敏感.
-func GetFieldValue(arr interface{}, fieldName string) interface{} {
-	var res interface{}
-
+func GetFieldValue(arr interface{}, fieldName string) (res interface{}, err error) {
 	val := reflect.ValueOf(arr)
 	switch val.Kind() {
 	case reflect.Struct:
@@ -587,10 +586,10 @@ func GetFieldValue(arr interface{}, fieldName string) interface{} {
 			}
 		}
 	default:
-		panic("[GetFieldValue]`arr type must be struct|map; but : " + val.Kind().String())
+		err = errors.New("[GetFieldValue]`arr type must be struct|map; but : " + val.Kind().String())
 	}
 
-	return res
+	return
 }
 
 // GetVariateType 获取变量类型.
@@ -815,9 +814,11 @@ func toFloat(val interface{}) (res float64) {
 	return
 }
 
-// dumpPrint 打印调试变量.
-func dumpPrint(v interface{}) {
-	fmt.Printf("%+v\n", v)
+// dumpPrint 打印调试变量,变量可多个.
+func dumpPrint(vs ...interface{}) {
+	for _, v := range vs {
+		fmt.Printf("%+v\n", v)
+	}
 }
 
 // struct2Map 结构体转为字典;tagName为要导出的标签名,可以为空,为空时将导出所有字段.

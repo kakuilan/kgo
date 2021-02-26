@@ -1,7 +1,6 @@
 package kgo
 
 import (
-	"github.com/brianvoe/gofakeit/v6"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -46,70 +45,43 @@ func TestArray_ArrayColumn_Struct(t *testing.T) {
 		assert.Contains(t, r, "[ArrayColumn]`arr type must be")
 	}()
 
-	var p1, p2, p3, p4 sPerson
-	gofakeit.Struct(&p1)
-	gofakeit.Struct(&p2)
-	gofakeit.Struct(&p3)
-	gofakeit.Struct(&p4)
-
-	var ps = make(sPersons, 4)
-	var org = new(sOrganization)
-
-	ps = append(ps, p1, p2, p3, p4)
-
-	org.Leader = p1
-	org.Assistant = p2
-	org.Member = p3
-	org.Substitute = p4
-
 	var res []interface{}
 
-	res = KArr.ArrayColumn(ps, "Name")
+	res = KArr.ArrayColumn(crowd, "Name")
 	assert.NotEmpty(t, res)
 
-	res = KArr.ArrayColumn(*org, "Age")
+	res = KArr.ArrayColumn(*orgS1, "Age")
 	assert.NotEmpty(t, res)
 
-	res = KArr.ArrayColumn(*org, "age")
+	res = KArr.ArrayColumn(*orgS1, "age")
 	assert.Empty(t, res)
 
 	// type err
-	KArr.ArrayColumn(org, "Age")
+	KArr.ArrayColumn(orgS1, "Age")
 }
 
 func TestArray_ArrayColumn_Map(t *testing.T) {
-	defer func() {
-		r := recover()
-		assert.Contains(t, r, "[GetFieldValue]`arr type must be")
-	}()
-
 	var arr map[string]interface{}
 	var res []interface{}
 
 	_ = KStr.JsonDecode([]byte(personsJson), &arr)
 
-	res = KArr.ArrayColumn(arr, "name")
-	assert.NotEmpty(t, res)
-
 	res = KArr.ArrayColumn(arr, "Name")
 	assert.Empty(t, res)
 
+	res = KArr.ArrayColumn(arr, "name")
+	assert.NotEmpty(t, res)
+
+	//新元素类型错误
 	arr["person5"] = "hello"
-	KArr.ArrayColumn(arr, "name")
+	res2 := KArr.ArrayColumn(arr, "name")
+	assert.Equal(t, len(res), len(res2))
 }
 
 func BenchmarkArray_ArrayColumn(b *testing.B) {
-	var p1, p2, p3, p4 sPerson
-	var ps = make(sPersons, 4)
-	gofakeit.Struct(&p1)
-	gofakeit.Struct(&p2)
-	gofakeit.Struct(&p3)
-	gofakeit.Struct(&p4)
-	ps = append(ps, p1, p2, p3, p4)
-
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = KArr.ArrayColumn(ps, "Name")
+		_ = KArr.ArrayColumn(crowd, "Name")
 	}
 }
 
@@ -202,10 +174,8 @@ func TestArray_ArrayKeyExists(t *testing.T) {
 	chk2 := KArr.ArrayKeyExists(len(slItf)-1, slItf)
 	assert.True(t, chk2)
 
-	var person sPerson
-	gofakeit.Struct(&person)
-	chk3 := KArr.ArrayKeyExists("Name", person)
-	chk4 := KArr.ArrayKeyExists("name", person)
+	chk3 := KArr.ArrayKeyExists("Name", personS1)
+	chk4 := KArr.ArrayKeyExists("name", personS1)
 	assert.True(t, chk3)
 	assert.False(t, chk4)
 
@@ -231,11 +201,9 @@ func BenchmarkArray_ArrayKeyExists_Slice(b *testing.B) {
 }
 
 func BenchmarkArray_ArrayKeyExists_Struct(b *testing.B) {
-	var person sPerson
-	gofakeit.Struct(&person)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KArr.ArrayKeyExists("Name", person)
+		KArr.ArrayKeyExists("Name", personS1)
 	}
 }
 
@@ -287,9 +255,7 @@ func TestArray_Implode(t *testing.T) {
 	assert.Contains(t, res2, "a,b,c,d,e,f,g,h,i,j,k")
 
 	//结构体
-	var p1 sPerson
-	gofakeit.Struct(&p1)
-	res3 := KArr.Implode(",", p1)
+	res3 := KArr.Implode(",", personS1)
 	assert.NotEmpty(t, res3)
 
 	//map
@@ -580,5 +546,42 @@ func BenchmarkArray_ArrayUnique_Map(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KArr.ArrayUnique(colorMp)
+	}
+}
+
+func TestArray_ArraySearchItem(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArraySearchItem]`arr type must be")
+	}()
+
+	var res interface{}
+
+	//子元素为字典
+	cond1 := map[string]interface{}{"age": 21, "naction": "cn"}
+	res = KArr.ArraySearchItem(personMps, cond1)
+	assert.NotEmpty(t, res)
+
+	//子元素为结构体
+	cond2 := map[string]interface{}{"Gender": false}
+	res = KArr.ArraySearchItem(perStuMps, cond2)
+	assert.NotEmpty(t, res)
+
+	KArr.ArraySearchItem("hello", map[string]interface{}{"a": 1})
+}
+
+func BenchmarkArray_ArraySearchItem_Arr(b *testing.B) {
+	b.ResetTimer()
+	cond := map[string]interface{}{"age": 21, "naction": "cn"}
+	for i := 0; i < b.N; i++ {
+		KArr.ArraySearchItem(personMps, cond)
+	}
+}
+
+func BenchmarkArray_ArraySearchItem_Map(b *testing.B) {
+	b.ResetTimer()
+	cond := map[string]interface{}{"Gender": false}
+	for i := 0; i < b.N; i++ {
+		KArr.ArraySearchItem(perStuMps, cond)
 	}
 }
