@@ -645,3 +645,39 @@ func BenchmarkArray_ArrayShuffle(b *testing.B) {
 		KArr.ArrayShuffle(naturalArr)
 	}
 }
+
+func TestArray_IsEqualArray(t *testing.T) {
+	var res bool
+
+	res = KArr.IsEqualArray(naturalArr, ssSingle)
+	assert.False(t, res)
+
+	arr := KArr.ArrayShuffle(ssSingle)
+	res = KArr.IsEqualArray(arr, ssSingle)
+	assert.True(t, res)
+}
+
+func TestArray_IsEqualArray_Panic_Expected(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[IsEqualArray]`expected type must be")
+	}()
+
+	KArr.IsEqualArray("hello", ssSingle)
+}
+
+func TestArray_IsEqualArray_Panic_Actual(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[IsEqualArray]`actual type must be")
+	}()
+
+	KArr.IsEqualArray(ssSingle, "hello")
+}
+
+func BenchmarkArray_IsEqualArray(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.IsEqualArray(naturalArr, ssSingle)
+	}
+}
