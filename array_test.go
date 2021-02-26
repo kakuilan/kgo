@@ -854,3 +854,20 @@ func BenchmarkArray_InArray_Map(b *testing.B) {
 		KArr.InArray(personMp3, personMps)
 	}
 }
+
+func TestArray_InIntSlice(t *testing.T) {
+	var res bool
+
+	res = KArr.InIntSlice(9, intSlc)
+	assert.True(t, res)
+
+	res = KArr.InIntSlice(99, intSlc)
+	assert.False(t, res)
+}
+
+func BenchmarkArray_InIntSlice(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.InIntSlice(9, intSlc)
+	}
+}

@@ -852,3 +852,13 @@ func (ka *LkkArray) InArray(needle interface{}, haystack interface{}) bool {
 
 	return false
 }
+
+// InIntSlice 是否在整型数组/切片内.
+func (ka *LkkArray) InIntSlice(i int, list []int) bool {
+	for _, item := range list {
+		if item == i {
+			return true
+		}
+	}
+	return false
+}
