@@ -882,3 +882,17 @@ func (ka *LkkArray) InStringSlice(str string, list []string) bool {
 	}
 	return false
 }
+
+// SliceFill 用给定的值val填充切片,num为插入元素的数量.
+func (ka *LkkArray) SliceFill(val interface{}, num int) []interface{} {
+	if num <= 0 {
+		return nil
+	}
+
+	var res = make([]interface{}, num)
+	for i := 0; i < num; i++ {
+		res[i] = val
+	}
+
+	return res
+}

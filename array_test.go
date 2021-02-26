@@ -905,3 +905,20 @@ func BenchmarkArray_InStringSlice(b *testing.B) {
 		KArr.InStringSlice("c", ssSingle)
 	}
 }
+
+func TestArray_SliceFill(t *testing.T) {
+	var res []interface{}
+
+	res = KArr.SliceFill(strHello, 9)
+	assert.Equal(t, 9, len(res))
+
+	res = KArr.SliceFill(strHello, 0)
+	assert.Empty(t, res)
+}
+
+func BenchmarkArray_SliceFill(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.SliceFill(strHello, 9)
+	}
+}
