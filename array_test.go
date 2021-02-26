@@ -585,3 +585,40 @@ func BenchmarkArray_ArraySearchItem_Map(b *testing.B) {
 		KArr.ArraySearchItem(perStuMps, cond)
 	}
 }
+
+func TestArray_ArraySearchMutil(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArraySearchMutil]`arr type must be")
+	}()
+
+	var res []interface{}
+
+	//子元素为字典
+	cond1 := map[string]interface{}{"age": 21, "naction": "cn"}
+	res = KArr.ArraySearchMutil(personMps, cond1)
+	assert.NotEmpty(t, res)
+
+	//子元素为结构体
+	cond2 := map[string]interface{}{"Gender": true}
+	res = KArr.ArraySearchMutil(perStuMps, cond2)
+	assert.NotEmpty(t, res)
+
+	KArr.ArraySearchMutil("hello", map[string]interface{}{"a": 1})
+}
+
+func BenchmarkArray_ArraySearchMutil_Arr(b *testing.B) {
+	b.ResetTimer()
+	cond := map[string]interface{}{"age": 21, "naction": "cn"}
+	for i := 0; i < b.N; i++ {
+		KArr.ArraySearchMutil(personMps, cond)
+	}
+}
+
+func BenchmarkArray_ArraySearchMutil_Map(b *testing.B) {
+	b.ResetTimer()
+	cond := map[string]interface{}{"Gender": false}
+	for i := 0; i < b.N; i++ {
+		KArr.ArraySearchMutil(perStuMps, cond)
+	}
+}

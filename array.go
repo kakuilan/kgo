@@ -48,7 +48,7 @@ func (ka *LkkArray) ArrayChunk(arr interface{}, size int) [][]interface{} {
 
 		return res
 	default:
-		panic("[ArrayChunk]`arr type must be array|slice")
+		panic("[ArrayChunk]`arr type must be array|slice; but : " + val.Kind().String())
 	}
 }
 
@@ -181,7 +181,7 @@ func (ka *LkkArray) ArrayReverse(arr interface{}) []interface{} {
 
 		return res
 	default:
-		panic("[ArrayReverse]`arr type must be array|slice")
+		panic("[ArrayReverse]`arr type must be array|slice; but : " + val.Kind().String())
 	}
 }
 
@@ -230,7 +230,7 @@ func (ka *LkkArray) Implode(delimiter string, arr interface{}) string {
 			}
 		}
 	default:
-		panic("[Implode]`arr type must be array|slice|struct|map")
+		panic("[Implode]`arr type must be array|slice|struct|map; but : " + val.Kind().String())
 	}
 
 	return buf.String()
@@ -325,7 +325,7 @@ func (ka *LkkArray) ArrayDiff(arr1, arr2 interface{}, compareType LkkArrCompareT
 	typB := valB.Kind()
 
 	if (typA != reflect.Array && typA != reflect.Slice && typA != reflect.Map) || (typB != reflect.Array && typB != reflect.Slice && typB != reflect.Map) {
-		panic("[ArrayDiff]`arr1,arr2 type must be array|slice|map")
+		panic("[ArrayDiff]`arr1,arr2 type must be array|slice|map; but : " + typA.String() + "/" + typB.String())
 	}
 
 	lenA := valA.Len()
@@ -468,7 +468,7 @@ func (ka *LkkArray) ArrayIntersect(arr1, arr2 interface{}, compareType LkkArrCom
 	typB := valB.Kind()
 
 	if (typA != reflect.Array && typA != reflect.Slice && typA != reflect.Map) || (typB != reflect.Array && typB != reflect.Slice && typB != reflect.Map) {
-		panic("[ArrayIntersect]`arr1,arr2 type must be array|slice|map")
+		panic("[ArrayIntersect]`arr1,arr2 type must be array|slice|map; but : " + typA.String() + "/" + typB.String())
 	}
 
 	lenA := valA.Len()
@@ -628,7 +628,7 @@ func (ka *LkkArray) ArrayUnique(arr interface{}) map[interface{}]interface{} {
 			}
 		}
 	default:
-		panic("[ArrayUnique]`arr type must be array|slice|map")
+		panic("[ArrayUnique]`arr type must be array|slice|map; but : " + val.Kind().String())
 	}
 
 	return res
@@ -637,13 +637,18 @@ func (ka *LkkArray) ArrayUnique(arr interface{}) map[interface{}]interface{} {
 // ArraySearchItem 从数组(切片/字典)中搜索对应元素(单个).
 // arr为要查找的数组,元素必须为字典/结构体;condition为条件字典.
 func (ka *LkkArray) ArraySearchItem(arr interface{}, condition map[string]interface{}) (res interface{}) {
+	val := reflect.ValueOf(arr)
+	typ := val.Kind()
+	if typ != reflect.Array && typ != reflect.Slice && typ != reflect.Map {
+		panic("[ArraySearchItem]`arr type must be array|slice|map; but : " + typ.String())
+	}
+
 	// 条件为空
 	if len(condition) == 0 {
 		return
 	}
 
-	val := reflect.ValueOf(arr)
-	switch val.Kind() {
+	switch typ {
 	case reflect.Array, reflect.Slice:
 		for i := 0; i < val.Len(); i++ {
 			res = compareConditionMap(condition, val.Index(i).Interface())
@@ -658,8 +663,6 @@ func (ka *LkkArray) ArraySearchItem(arr interface{}, condition map[string]interf
 				return
 			}
 		}
-	default:
-		panic("[ArraySearchItem]`arr type must be array|slice|map")
 	}
 
 	return
@@ -668,14 +671,19 @@ func (ka *LkkArray) ArraySearchItem(arr interface{}, condition map[string]interf
 // ArraySearchMutil 从数组(切片/字典)中搜索对应元素(多个).
 // arr为要查找的数组,元素必须为字典/结构体;condition为条件字典.
 func (ka *LkkArray) ArraySearchMutil(arr interface{}, condition map[string]interface{}) (res []interface{}) {
+	val := reflect.ValueOf(arr)
+	typ := val.Kind()
+	if typ != reflect.Array && typ != reflect.Slice && typ != reflect.Map {
+		panic("[ArraySearchMutil]`arr type must be array|slice|map; but : " + typ.String())
+	}
+
 	// 条件为空
 	if len(condition) == 0 {
 		return
 	}
 
-	val := reflect.ValueOf(arr)
 	var item interface{}
-	switch val.Kind() {
+	switch typ {
 	case reflect.Array, reflect.Slice:
 		for i := 0; i < val.Len(); i++ {
 			item = compareConditionMap(condition, val.Index(i).Interface())
@@ -690,8 +698,6 @@ func (ka *LkkArray) ArraySearchMutil(arr interface{}, condition map[string]inter
 				res = append(res, item)
 			}
 		}
-	default:
-		panic("[ArraySearchMutil]arr type must be array, slice or map")
 	}
 
 	return
