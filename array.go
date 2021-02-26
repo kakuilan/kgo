@@ -4,10 +4,12 @@ import (
 	"bytes"
 	"fmt"
 	"math"
+	"math/rand"
 	"reflect"
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // ArrayChunk 将一个数组/切片分割成多个,size为每个子数组的长度.
@@ -701,4 +703,27 @@ func (ka *LkkArray) ArraySearchMutil(arr interface{}, condition map[string]inter
 	}
 
 	return
+}
+
+// ArrayShuffle 打乱数组/切片排序.
+func (ka *LkkArray) ArrayShuffle(arr interface{}) []interface{} {
+	val := reflect.ValueOf(arr)
+	typ := val.Kind()
+	if typ != reflect.Array && typ != reflect.Slice {
+		panic("[ArrayShuffle]`arr type must be array|slice; but : " + typ.String())
+	}
+
+	num := val.Len()
+	res := make([]interface{}, num)
+
+	for i := 0; i < num; i++ {
+		res[i] = val.Index(i).Interface()
+	}
+
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	r.Shuffle(num, func(i, j int) {
+		res[i], res[j] = res[j], res[i]
+	})
+
+	return res
 }

@@ -622,3 +622,26 @@ func BenchmarkArray_ArraySearchMutil_Map(b *testing.B) {
 		KArr.ArraySearchMutil(perStuMps, cond)
 	}
 }
+
+func TestArray_ArrayShuffle(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArrayShuffle]`arr type must be")
+	}()
+
+	var res []interface{}
+	res = KArr.ArrayShuffle(naturalArr)
+	assert.NotEqual(t, toStr(res), toStr(naturalArr))
+
+	res = KArr.ArrayShuffle(ssSingle)
+	assert.NotEqual(t, toStr(res), toStr(ssSingle))
+
+	KArr.ArrayShuffle("hello")
+}
+
+func BenchmarkArray_ArrayShuffle(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayShuffle(naturalArr)
+	}
+}
