@@ -29,7 +29,7 @@ func TestArray_ArrayChunk_PanicType(t *testing.T) {
 		r := recover()
 		assert.Contains(t, r, "[ArrayChunk]`arr type must be")
 	}()
-	KArr.ArrayChunk("hello", 2)
+	KArr.ArrayChunk(strHello, 2)
 }
 
 func BenchmarkArray_ArrayChunk(b *testing.B) {
@@ -73,7 +73,7 @@ func TestArray_ArrayColumn_Map(t *testing.T) {
 	assert.NotEmpty(t, res)
 
 	//新元素类型错误
-	arr["person5"] = "hello"
+	arr["person5"] = strHello
 	res2 := KArr.ArrayColumn(arr, "name")
 	assert.Equal(t, len(res), len(res2))
 }
@@ -230,7 +230,7 @@ func TestArray_ArrayReverse(t *testing.T) {
 	itm2 := KArr.SlicePop(&res2)
 	assert.Equal(t, "a", itm2)
 
-	KArr.ArrayReverse("hello")
+	KArr.ArrayReverse(strHello)
 }
 
 func BenchmarkArray_ArrayReverse(b *testing.B) {
@@ -262,7 +262,7 @@ func TestArray_Implode(t *testing.T) {
 	res4 := KArr.Implode(",", strMp1)
 	assert.NotEmpty(t, res4)
 
-	KArr.Implode(",", "hello")
+	KArr.Implode(",", strHello)
 }
 
 func BenchmarkArray_Implode(b *testing.B) {
@@ -397,7 +397,7 @@ func TestArray_ArrayDiff(t *testing.T) {
 	res2 = KArr.ArrayDiff(strMp1, strMp2, COMPARE_BOTH_KEYVALUE)
 	assert.NotEmpty(t, res2)
 
-	KArr.ArrayDiff("hello", 1234, COMPARE_ONLY_VALUE)
+	KArr.ArrayDiff(strHello, 1234, COMPARE_ONLY_VALUE)
 }
 
 func BenchmarkArray_ArrayDiff_A1A(b *testing.B) {
@@ -485,7 +485,7 @@ func TestArray_ArrayIntersect(t *testing.T) {
 	res2 = KArr.ArrayIntersect(strMp1, strMp2, COMPARE_BOTH_KEYVALUE)
 	assert.NotEmpty(t, res2)
 
-	KArr.ArrayIntersect("hello", 1234, COMPARE_ONLY_VALUE)
+	KArr.ArrayIntersect(strHello, 1234, COMPARE_ONLY_VALUE)
 }
 
 func BenchmarkArray_ArrayIntersect_A1A(b *testing.B) {
@@ -532,7 +532,7 @@ func TestArray_ArrayUnique(t *testing.T) {
 	res = KArr.ArrayUnique(colorMp)
 	assert.Less(t, len(res), len(colorMp))
 
-	KArr.ArrayUnique("hello")
+	KArr.ArrayUnique(strHello)
 }
 
 func BenchmarkArray_ArrayUnique_Arr(b *testing.B) {
@@ -567,7 +567,7 @@ func TestArray_ArraySearchItem(t *testing.T) {
 	res = KArr.ArraySearchItem(perStuMps, cond2)
 	assert.NotEmpty(t, res)
 
-	KArr.ArraySearchItem("hello", map[string]interface{}{"a": 1})
+	KArr.ArraySearchItem(strHello, map[string]interface{}{"a": 1})
 }
 
 func BenchmarkArray_ArraySearchItem_Arr(b *testing.B) {
@@ -604,7 +604,7 @@ func TestArray_ArraySearchMutil(t *testing.T) {
 	res = KArr.ArraySearchMutil(perStuMps, cond2)
 	assert.NotEmpty(t, res)
 
-	KArr.ArraySearchMutil("hello", map[string]interface{}{"a": 1})
+	KArr.ArraySearchMutil(strHello, map[string]interface{}{"a": 1})
 }
 
 func BenchmarkArray_ArraySearchMutil_Arr(b *testing.B) {
@@ -636,7 +636,7 @@ func TestArray_ArrayShuffle(t *testing.T) {
 	res = KArr.ArrayShuffle(ssSingle)
 	assert.NotEqual(t, toStr(res), toStr(ssSingle))
 
-	KArr.ArrayShuffle("hello")
+	KArr.ArrayShuffle(strHello)
 }
 
 func BenchmarkArray_ArrayShuffle(b *testing.B) {
@@ -663,7 +663,7 @@ func TestArray_IsEqualArray_Panic_Expected(t *testing.T) {
 		assert.Contains(t, r, "[IsEqualArray]`expected type must be")
 	}()
 
-	KArr.IsEqualArray("hello", ssSingle)
+	KArr.IsEqualArray(strHello, ssSingle)
 }
 
 func TestArray_IsEqualArray_Panic_Actual(t *testing.T) {
@@ -672,7 +672,7 @@ func TestArray_IsEqualArray_Panic_Actual(t *testing.T) {
 		assert.Contains(t, r, "[IsEqualArray]`actual type must be")
 	}()
 
-	KArr.IsEqualArray(ssSingle, "hello")
+	KArr.IsEqualArray(ssSingle, strHello)
 }
 
 func BenchmarkArray_IsEqualArray(b *testing.B) {
@@ -688,7 +688,7 @@ func TestArray_Length(t *testing.T) {
 	assert.Equal(t, res, len(naturalArr))
 
 	//非数组或切片
-	res = KArr.Length("hello")
+	res = KArr.Length(strHello)
 	assert.Equal(t, -1, res)
 }
 
@@ -696,5 +696,25 @@ func BenchmarkArray_Length(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KArr.Length(naturalArr)
+	}
+}
+
+func TestArray_IsArray(t *testing.T) {
+	var res bool
+
+	res = KArr.IsArray(naturalArr)
+	assert.True(t, res)
+
+	res = KArr.IsArray(intSlc)
+	assert.False(t, res)
+
+	res = KArr.IsArray(strHello)
+	assert.False(t, res)
+}
+
+func BenchmarkArray_IsArray(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.IsArray(naturalArr)
 	}
 }

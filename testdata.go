@@ -73,6 +73,9 @@ var strSl1 = []string{"aa", "bb", "cc", "dd", "ee", "", "hh", "ii"}
 var strSl2 = []string{"bb", "cc", "ff", "gg", "ee", "", "gg"}
 var strSlEmp = []string{}
 
+//字符串
+var strHello = "Hello World!"
+
 func init() {
 	gofakeit.Struct(&personS1)
 	gofakeit.Struct(&personS2)
