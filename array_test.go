@@ -5,6 +5,30 @@ import (
 	"testing"
 )
 
+func TestArray_ArrayKeys(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArrayKeys]`arr type must be")
+	}()
+
+	var res []interface{}
+
+	res = KArr.ArrayKeys(naturalArr)
+	assert.Equal(t, len(naturalArr), len(res))
+
+	res = KArr.ArrayKeys(colorMp)
+	assert.Equal(t, len(colorMp), len(res))
+
+	KArr.ArrayKeys(strHello)
+}
+
+func BenchmarkArray_ArrayKeys(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayKeys(naturalArr)
+	}
+}
+
 func TestArray_ArrayChunk(t *testing.T) {
 	size := 3
 	res := KArr.ArrayChunk(ssSingle, size)
@@ -921,4 +945,12 @@ func BenchmarkArray_SliceFill(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		KArr.SliceFill(strHello, 9)
 	}
+}
+
+func TestArray_ArrayFlip(t *testing.T) {
+	var res map[interface{}]interface{}
+
+	res = KArr.ArrayFlip(naturalArr)
+	assert.NotEmpty(t, res)
+
 }
