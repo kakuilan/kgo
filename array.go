@@ -599,22 +599,22 @@ func (ka *LkkArray) ArrayIntersect(arr1, arr2 interface{}, compareType LkkArrCom
 	return resMap
 }
 
-// ArrayUnique 移除数组(切片/字典)中重复的值.
-func (ka *LkkArray) ArrayUnique(arr interface{}) []interface{} {
-	val := reflect.ValueOf(arr)
-	var res []interface{}
+// ArrayUnique 移除数组(切片/字典)中重复的值,返回字典,保留键名.
+func (ka *LkkArray) ArrayUnique(arr interface{}) map[interface{}]interface{} {
 	var item interface{}
 	var str, key string
-	mp := make(map[string]interface{})
+	val := reflect.ValueOf(arr)
+	chkMp := make(map[string]interface{})
+	res := make(map[interface{}]interface{})
 	switch val.Kind() {
 	case reflect.Array, reflect.Slice:
 		for i := 0; i < val.Len(); i++ {
 			item = val.Index(i).Interface()
 			str = fmt.Sprintf("%+v", item)
 			key = string(md5Byte([]byte(str), 32))
-			if _, ok := mp[key]; !ok {
-				mp[key] = true
-				res = append(res, item)
+			if _, ok := chkMp[key]; !ok {
+				chkMp[key] = true
+				res[i] = item
 			}
 		}
 	case reflect.Map:
@@ -622,9 +622,9 @@ func (ka *LkkArray) ArrayUnique(arr interface{}) []interface{} {
 			item = val.MapIndex(k).Interface()
 			str = fmt.Sprintf("%+v", item)
 			key = string(md5Byte([]byte(str), 32))
-			if _, ok := mp[key]; !ok {
-				mp[key] = true
-				res = append(res, item)
+			if _, ok := chkMp[key]; !ok {
+				chkMp[key] = true
+				res[reflect2Itf(k)] = item
 			}
 		}
 	default:

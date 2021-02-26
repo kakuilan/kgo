@@ -522,7 +522,7 @@ func TestArray_ArrayUnique(t *testing.T) {
 		assert.Contains(t, r, "[ArrayUnique]`arr type must be")
 	}()
 
-	var res []interface{}
+	var res map[interface{}]interface{}
 
 	//数组切片
 	res = KArr.ArrayUnique(intSlc)
