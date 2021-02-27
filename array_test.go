@@ -1037,3 +1037,24 @@ func BenchmarkArray_ArrayFlip_Map(b *testing.B) {
 		KArr.ArrayFlip(colorMp)
 	}
 }
+
+func TestArray_MergeSlice(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[MergeSlice]`ss type must be")
+	}()
+
+	var res, res2 []interface{}
+	res = KArr.MergeSlice(false, naturalArr, floSlc, booSlc, strSl1)
+	res2 = KArr.MergeSlice(true, naturalArr, floSlc, booSlc, strSl1)
+	assert.Greater(t, len(res), len(res2))
+
+	KArr.MergeSlice(false, naturalArr, strHello, booSlc, strSl1)
+}
+
+func BenchmarkArray_MergeSlice(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.MergeSlice(false, naturalArr, intSlc, strSl1)
+	}
+}

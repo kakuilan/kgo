@@ -47,8 +47,8 @@ func (ka *LkkArray) ArrayKeys(arr interface{}) []interface{} {
 
 // ArrayValues 返回arr(数组/切片/字典/结构体)中所有的值;如果是结构体,只返回公开字段的值.
 // filterZero 是否过滤零值元素(nil,false,0,"",[]),true时排除零值元素,false时保留零值元素.
-func (ka *LkkArray) ArrayValues(arr interface{}, filterNil bool) []interface{} {
-	return arrayValues(arr, filterNil)
+func (ka *LkkArray) ArrayValues(arr interface{}, filterZero bool) []interface{} {
+	return arrayValues(arr, filterZero)
 }
 
 // ArrayChunk 将一个数组/切片分割成多个,size为每个子数组的长度.
@@ -958,6 +958,44 @@ func (ka *LkkArray) ArrayFlip(arr interface{}) map[interface{}]interface{} {
 		}
 	default:
 		panic("[ArrayFlip]`arr type must be array|slice|map")
+	}
+
+	return res
+}
+
+// MergeSlice 合并一个或多个数组/切片.
+// filterZero 是否过滤零值元素(nil,false,0,'',[]),true时排除零值元素,false时保留零值元素.
+// ss是元素为数组/切片的切片.
+func (ka *LkkArray) MergeSlice(filterZero bool, ss ...interface{}) []interface{} {
+	var res []interface{}
+	switch len(ss) {
+	case 0:
+		break
+	default:
+		n := 0
+		for i, v := range ss {
+			chkLen := lenArrayOrSlice(v, 3)
+			if chkLen == -1 {
+				msg := fmt.Sprintf("[MergeSlice]`ss type must be array|slice, but [%d]th item not is.", i)
+				panic(msg)
+			} else {
+				n += chkLen
+			}
+		}
+		res = make([]interface{}, 0, n)
+		var item interface{}
+		for _, v := range ss {
+			val := reflect.ValueOf(v)
+			switch val.Kind() {
+			case reflect.Array, reflect.Slice:
+				for i := 0; i < val.Len(); i++ {
+					item = val.Index(i).Interface()
+					if !filterZero || (filterZero && !val.Index(i).IsZero()) {
+						res = append(res, item)
+					}
+				}
+			}
+		}
 	}
 
 	return res
