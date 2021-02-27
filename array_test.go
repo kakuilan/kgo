@@ -1080,12 +1080,27 @@ func BenchmarkArray_MergeSlice(b *testing.B) {
 }
 
 func TestArray_MergeMap(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[MergeMap]`ss type must be")
+	}()
 
-	var res, res2 map[interface{}]interface{}
+	var res map[interface{}]interface{}
+	var chk bool
 
-	res = KArr.MergeMap(true, personMp1, personMp2)
-	assert.Equal(t, len(personMp2), len(res))
+	res = KArr.MergeMap(personMp1, personMp2)
+	chk = KArr.IsEqualMap(personMp2, res)
+	assert.True(t, chk)
 
-	dumpPrint(res, res2)
+	res = KArr.MergeMap(personMp1, colorMp)
+	assert.Greater(t, len(res), len(personMp1))
 
+	KArr.MergeMap(personMp1, strHello)
+}
+
+func BenchmarkArray_MergeMap(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.MergeMap(personMp1, personMp2)
+	}
 }

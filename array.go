@@ -815,15 +815,17 @@ func (ka *LkkArray) IsEqualMap(arr1, arr2 interface{}) bool {
 		return false
 	}
 
-	var format string = "%#v"
+	var key string
 	expectedMap := make(map[string]interface{})
 	actualMap := make(map[string]interface{})
 
 	for _, k := range valA.MapKeys() {
-		expectedMap[k.String()] = fmt.Sprintf(format, valA.MapIndex(k).Interface())
+		key = fmt.Sprintf("%v", k)
+		expectedMap[key] = fmt.Sprintf("%#v", valA.MapIndex(k).Interface())
 	}
 	for _, k := range valB.MapKeys() {
-		actualMap[k.String()] = fmt.Sprintf(format, valB.MapIndex(k).Interface())
+		key = fmt.Sprintf("%v", k)
+		actualMap[key] = fmt.Sprintf("%#v", valB.MapIndex(k).Interface())
 	}
 
 	return reflect.DeepEqual(expectedMap, actualMap)
@@ -1033,8 +1035,8 @@ func (ka *LkkArray) MergeSlice(filterZero bool, ss ...interface{}) []interface{}
 }
 
 // MergeMap 合并字典,相同的键名时,后面的值将覆盖前一个值.
-// key2Str是否将键转换为字符串;ss是元素为字典的切片.
-func (ka *LkkArray) MergeMap(key2Str bool, ss ...interface{}) map[interface{}]interface{} {
+// ss是元素为字典的切片.
+func (ka *LkkArray) MergeMap(ss ...interface{}) map[interface{}]interface{} {
 	res := make(map[interface{}]interface{})
 	switch len(ss) {
 	case 0:
@@ -1045,11 +1047,7 @@ func (ka *LkkArray) MergeMap(key2Str bool, ss ...interface{}) map[interface{}]in
 			switch val.Kind() {
 			case reflect.Map:
 				for _, k := range val.MapKeys() {
-					if key2Str {
-						res[k.String()] = val.MapIndex(k).Interface()
-					} else {
-						res[k] = val.MapIndex(k).Interface()
-					}
+					res[reflect2Itf(k)] = val.MapIndex(k).Interface()
 				}
 			default:
 				panic(fmt.Sprintf("[MergeMap]`ss type must be map, but [%d]th item not is.", i))
