@@ -729,7 +729,22 @@ func BenchmarkArray_ArrayShuffle(b *testing.B) {
 }
 
 func TestArray_IsEqualArray(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[IsEqualArray]`arr1,arr2 type must be")
+	}()
+
 	var res bool
+
+	ss1 := ssSingle[:]
+	ss2 := KArr.ArrayShuffle(ssSingle)
+
+	//严格检查元素类型
+	res = KArr.IsEqualArray(ssSingle, ss1)
+	assert.True(t, res)
+
+	res = KArr.IsEqualArray(ssSingle, ss2)
+	assert.True(t, res)
 
 	res = KArr.IsEqualArray(naturalArr, ssSingle)
 	assert.False(t, res)
@@ -737,24 +752,8 @@ func TestArray_IsEqualArray(t *testing.T) {
 	arr := KArr.ArrayShuffle(ssSingle)
 	res = KArr.IsEqualArray(arr, ssSingle)
 	assert.True(t, res)
-}
-
-func TestArray_IsEqualArray_Panic_Expected(t *testing.T) {
-	defer func() {
-		r := recover()
-		assert.Contains(t, r, "[IsEqualArray]`expected type must be")
-	}()
 
 	KArr.IsEqualArray(strHello, ssSingle)
-}
-
-func TestArray_IsEqualArray_Panic_Actual(t *testing.T) {
-	defer func() {
-		r := recover()
-		assert.Contains(t, r, "[IsEqualArray]`actual type must be")
-	}()
-
-	KArr.IsEqualArray(ssSingle, strHello)
 }
 
 func BenchmarkArray_IsEqualArray(b *testing.B) {
@@ -1057,4 +1056,15 @@ func BenchmarkArray_MergeSlice(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		KArr.MergeSlice(false, naturalArr, intSlc, strSl1)
 	}
+}
+
+func TestArray_MergeMap(t *testing.T) {
+
+	var res, res2 map[interface{}]interface{}
+
+	res = KArr.MergeMap(true, personMp1, personMp2)
+	assert.Equal(t, len(personMp2), len(res))
+
+	dumpPrint(res, res2)
+
 }

@@ -767,32 +767,32 @@ func (ka *LkkArray) ArrayShuffle(arr interface{}) []interface{} {
 	return res
 }
 
-// IsEqualArray 两个数组/切片是否相同(不管元素顺序);expected, actual 是要比较的数组/切片.
-func (ka *LkkArray) IsEqualArray(expected, actual interface{}) bool {
-	var itmAsStr string
+// IsEqualArray 两个数组/切片是否相同(不管元素顺序);
+// arr1, arr2 是要比较的数组/切片.
+func (ka *LkkArray) IsEqualArray(arr1, arr2 interface{}) bool {
+	valA := reflect.ValueOf(arr1)
+	valB := reflect.ValueOf(arr2)
+	typA := valA.Kind()
+	typB := valB.Kind()
 
-	expectedMap := map[string]bool{}
-	val := reflect.ValueOf(expected)
-	switch val.Kind() {
-	case reflect.Array, reflect.Slice:
-		for i := 0; i < val.Len(); i++ {
-			itmAsStr = fmt.Sprintf("%#v", val.Index(i).Interface())
-			expectedMap[itmAsStr] = true
-		}
-	default:
-		panic("[IsEqualArray]`expected type must be array|slice")
+	if (typA != reflect.Array && typA != reflect.Slice) || (typB != reflect.Array && typB != reflect.Slice) {
+		panic("[IsEqualArray]`arr1,arr2 type must be array|slice; but : " + typA.String() + "/" + typB.String())
 	}
 
-	actualMap := map[string]bool{}
-	val = reflect.ValueOf(actual)
-	switch val.Kind() {
-	case reflect.Array, reflect.Slice:
-		for i := 0; i < val.Len(); i++ {
-			itmAsStr = fmt.Sprintf("%#v", val.Index(i).Interface())
-			actualMap[itmAsStr] = true
-		}
-	default:
-		panic("[IsEqualArray]`actual type must be array|slice")
+	length := valA.Len()
+	if length != valB.Len() {
+		return false
+	}
+
+	var itmAStr, itmBstr string
+	var format string = "%#v"
+	expectedMap := make(map[string]bool)
+	actualMap := make(map[string]bool)
+	for i := 0; i < length; i++ {
+		itmAStr = fmt.Sprintf(format, valA.Index(i).Interface())
+		itmBstr = fmt.Sprintf(format, valB.Index(i).Interface())
+		expectedMap[itmAStr] = true
+		actualMap[itmBstr] = true
 	}
 
 	return reflect.DeepEqual(expectedMap, actualMap)
@@ -998,5 +998,32 @@ func (ka *LkkArray) MergeSlice(filterZero bool, ss ...interface{}) []interface{}
 		}
 	}
 
+	return res
+}
+
+// MergeMap 合并字典,相同的键名时,后面的值将覆盖前一个值.
+// key2Str是否将键转换为字符串;ss是元素为字典的切片.
+func (ka *LkkArray) MergeMap(key2Str bool, ss ...interface{}) map[interface{}]interface{} {
+	res := make(map[interface{}]interface{})
+	switch len(ss) {
+	case 0:
+		break
+	default:
+		for i, v := range ss {
+			val := reflect.ValueOf(v)
+			switch val.Kind() {
+			case reflect.Map:
+				for _, k := range val.MapKeys() {
+					if key2Str {
+						res[k.String()] = val.MapIndex(k).Interface()
+					} else {
+						res[k] = val.MapIndex(k).Interface()
+					}
+				}
+			default:
+				panic(fmt.Sprintf("[MergeMap]`ss type must be map, but [%d]th item not is.", i))
+			}
+		}
+	}
 	return res
 }
