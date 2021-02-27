@@ -767,7 +767,7 @@ func (ka *LkkArray) ArrayShuffle(arr interface{}) []interface{} {
 	return res
 }
 
-// IsEqualArray 两个数组/切片是否相同(不管元素顺序);
+// IsEqualArray 两个数组/切片是否相同(不管元素顺序),且不会检查元素类型;
 // arr1, arr2 是要比较的数组/切片.
 func (ka *LkkArray) IsEqualArray(arr1, arr2 interface{}) bool {
 	valA := reflect.ValueOf(arr1)
@@ -793,6 +793,37 @@ func (ka *LkkArray) IsEqualArray(arr1, arr2 interface{}) bool {
 		itmBstr = fmt.Sprintf(format, valB.Index(i).Interface())
 		expectedMap[itmAStr] = true
 		actualMap[itmBstr] = true
+	}
+
+	return reflect.DeepEqual(expectedMap, actualMap)
+}
+
+// IsEqualMap 两个字典是否相同(不管键顺序),且不会严格检查元素类型;
+// arr1, arr2 是要比较的字典.
+func (ka *LkkArray) IsEqualMap(arr1, arr2 interface{}) bool {
+	valA := reflect.ValueOf(arr1)
+	valB := reflect.ValueOf(arr2)
+	typA := valA.Kind()
+	typB := valB.Kind()
+
+	if typA != reflect.Map || typB != reflect.Map {
+		panic("[IsEqualMap]`arr1,arr2 type must be array|slice; but : " + typA.String() + "/" + typB.String())
+	}
+
+	length := valA.Len()
+	if length != valB.Len() {
+		return false
+	}
+
+	var format string = "%#v"
+	expectedMap := make(map[string]interface{})
+	actualMap := make(map[string]interface{})
+
+	for _, k := range valA.MapKeys() {
+		expectedMap[k.String()] = fmt.Sprintf(format, valA.MapIndex(k).Interface())
+	}
+	for _, k := range valB.MapKeys() {
+		actualMap[k.String()] = fmt.Sprintf(format, valB.MapIndex(k).Interface())
 	}
 
 	return reflect.DeepEqual(expectedMap, actualMap)

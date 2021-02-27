@@ -739,7 +739,6 @@ func TestArray_IsEqualArray(t *testing.T) {
 	ss1 := ssSingle[:]
 	ss2 := KArr.ArrayShuffle(ssSingle)
 
-	//严格检查元素类型
 	res = KArr.IsEqualArray(ssSingle, ss1)
 	assert.True(t, res)
 
@@ -749,10 +748,6 @@ func TestArray_IsEqualArray(t *testing.T) {
 	res = KArr.IsEqualArray(naturalArr, ssSingle)
 	assert.False(t, res)
 
-	arr := KArr.ArrayShuffle(ssSingle)
-	res = KArr.IsEqualArray(arr, ssSingle)
-	assert.True(t, res)
-
 	KArr.IsEqualArray(strHello, ssSingle)
 }
 
@@ -760,6 +755,32 @@ func BenchmarkArray_IsEqualArray(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KArr.IsEqualArray(naturalArr, ssSingle)
+	}
+}
+
+func TestArray_IsEqualMap(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[IsEqualMap]`arr1,arr2 type must be")
+	}()
+
+	var res bool
+
+	mp1, _ := struct2Map(orgS1, "")
+	mp2, _ := struct2Map(orgS1, "")
+	res = KArr.IsEqualMap(mp1, mp2)
+	assert.True(t, res)
+
+	res = KArr.IsEqualMap(personMp1, personMp2)
+	assert.False(t, res)
+
+	KArr.IsEqualMap(personMp1, strHello)
+}
+
+func BenchmarkArray_IsEqualMap(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.IsEqualMap(personMp1, personMp2)
 	}
 }
 
