@@ -1202,6 +1202,7 @@ func TestArray_CutSlice(t *testing.T) {
 	res = KArr.CutSlice(naturalArr, -3, 2)
 	assert.Equal(t, 2, len(res))
 
+	//数量超出
 	res = KArr.CutSlice(naturalArr, -3, 6)
 	assert.Equal(t, 3, len(res))
 }
