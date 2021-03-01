@@ -1104,3 +1104,39 @@ func BenchmarkArray_MergeMap(b *testing.B) {
 		KArr.MergeMap(personMp1, personMp2)
 	}
 }
+
+func TestArray_ArrayPad(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArrayPad]`arr type must be")
+	}()
+
+	var res []interface{}
+	var chk bool
+
+	//原切片为空
+	res = KArr.ArrayPad(strSlEmp, 5, 1)
+	assert.Equal(t, 5, len(res))
+
+	//填充长度<=原切片长度
+	res = KArr.ArrayPad(strSl1, 6, strHello)
+	chk = KArr.IsEqualArray(strSl1, res)
+	assert.True(t, chk)
+
+	//填充长度>原切片长度
+	res = KArr.ArrayPad(strSl1, 9, strHello)
+	assert.Equal(t, 9, len(res))
+
+	//填充方向从左开始
+	res = KArr.ArrayPad(strSl1, -9, strHello)
+	assert.Equal(t, 9, len(res))
+
+	KArr.ArrayPad(strHello, -9, strHello)
+}
+
+func BenchmarkArray_ArrayPad(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayPad(strSl1, 16, strHello)
+	}
+}
