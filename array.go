@@ -1096,3 +1096,50 @@ func (ka *LkkArray) ArrayPad(arr interface{}, size int, item interface{}) []inte
 		panic("[ArrayPad]`arr type must be array|slice")
 	}
 }
+
+// ArrayRand 从数组(切片/字典)中随机取出num个元素.
+func (ka *LkkArray) ArrayRand(arr interface{}, num int) []interface{} {
+	val := reflect.ValueOf(arr)
+	typ := val.Kind()
+	if typ != reflect.Array && typ != reflect.Slice && typ != reflect.Map {
+		panic("[ArrayRand]`arr type must be array|slice|map")
+	}
+	if num < 1 {
+		panic("[ArrayRand]`num cannot be less than 1")
+	}
+
+	length := val.Len()
+	if length == 0 {
+		return nil
+	}
+	if num > length {
+		num = length
+	}
+	res := make([]interface{}, num)
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+
+	switch typ {
+	case reflect.Array, reflect.Slice:
+		for i, v := range r.Perm(length) {
+			if i < num {
+				res[i] = val.Index(v).Interface()
+			} else {
+				break
+			}
+		}
+	case reflect.Map:
+		var ks []reflect.Value
+		for _, k := range val.MapKeys() {
+			ks = append(ks, k)
+		}
+		for i, v := range r.Perm(length) {
+			if i < num {
+				res[i] = val.MapIndex(ks[v]).Interface()
+			} else {
+				break
+			}
+		}
+	}
+
+	return res
+}

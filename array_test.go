@@ -647,7 +647,6 @@ func TestArray_ArraySearchItem(t *testing.T) {
 	//子元素为结构体
 	cond2 := map[string]interface{}{"Gender": false}
 	res = KArr.ArraySearchItem(perStuMps, cond2)
-	assert.NotEmpty(t, res)
 
 	KArr.ArraySearchItem(strHello, map[string]interface{}{"a": 1})
 }
@@ -684,7 +683,6 @@ func TestArray_ArraySearchMutil(t *testing.T) {
 	//子元素为结构体
 	cond2 := map[string]interface{}{"Gender": false}
 	res = KArr.ArraySearchMutil(perStuMps, cond2)
-	assert.NotEmpty(t, res)
 
 	KArr.ArraySearchMutil(strHello, map[string]interface{}{"a": 1})
 }
@@ -1138,5 +1136,53 @@ func BenchmarkArray_ArrayPad(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KArr.ArrayPad(strSl1, 16, strHello)
+	}
+}
+
+func TestArray_ArrayRand(t *testing.T) {
+	var res []interface{}
+
+	//空数组
+	res = KArr.ArrayRand(strSlEmp, 2)
+	assert.Empty(t, res)
+
+	//切片
+	res = KArr.ArrayRand(ssSingle, 3)
+	assert.Equal(t, 3, len(res))
+
+	//字典
+	res = KArr.ArrayRand(strMp1, 3)
+	assert.Equal(t, 3, len(res))
+}
+
+func TestArray_Panic_Arr(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArrayRand]`arr type must be")
+	}()
+
+	KArr.ArrayRand(strHello, 3)
+}
+
+func TestArray_Panic_Num(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArrayRand]`num cannot be")
+	}()
+
+	KArr.ArrayRand(strMp1, -3)
+}
+
+func BenchmarkArray_ArrayRand_Arr(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayRand(ssSingle, 3)
+	}
+}
+
+func BenchmarkArray_ArrayRand_Map(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayRand(strMp1, 3)
 	}
 }
