@@ -1143,3 +1143,35 @@ func (ka *LkkArray) ArrayRand(arr interface{}, num int) []interface{} {
 
 	return res
 }
+
+// CutSlice 裁剪切片,返回根据offset(起始位置)和size(数量)参数所指定的arr(数组/切片)中的一段切片.
+func (ka *LkkArray) CutSlice(arr interface{}, offset, size int) []interface{} {
+	if size < 1 {
+		panic("[CutSlice]`size cannot be less than 1")
+	}
+
+	val := reflect.ValueOf(arr)
+	switch val.Kind() {
+	case reflect.Array, reflect.Slice:
+		length := val.Len()
+		if length == 0 || (offset > 0 && offset > length-1) {
+			return nil
+		}
+
+		items := make([]interface{}, length)
+		for i := 0; i < val.Len(); i++ {
+			items[i] = val.Index(i).Interface()
+		}
+
+		if offset < 0 {
+			offset = offset%length + length
+		}
+		end := offset + size
+		if end < length {
+			return items[offset:end]
+		}
+		return items[offset:]
+	default:
+		panic("[CutSlice]`arr type must be array|slice")
+	}
+}

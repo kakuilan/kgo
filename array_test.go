@@ -1186,3 +1186,45 @@ func BenchmarkArray_ArrayRand_Map(b *testing.B) {
 		KArr.ArrayRand(strMp1, 3)
 	}
 }
+
+func TestArray_CutSlice(t *testing.T) {
+	var res []interface{}
+
+	//取空数组
+	res = KArr.CutSlice(strSlEmp, 0, 1)
+	assert.Empty(t, res)
+
+	//正向
+	res = KArr.CutSlice(naturalArr, 1, 2)
+	assert.Equal(t, 2, len(res))
+
+	//反向
+	res = KArr.CutSlice(naturalArr, -3, 2)
+	assert.Equal(t, 2, len(res))
+
+	res = KArr.CutSlice(naturalArr, -3, 6)
+	assert.Equal(t, 3, len(res))
+}
+
+func TestArray_CutSlice_Panic_Arr(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[CutSlice]`arr type must be")
+	}()
+	KArr.CutSlice(strHello, 1, 2)
+}
+
+func TestArray_CutSlice_Panic_Size(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[CutSlice]`size cannot be")
+	}()
+	KArr.CutSlice(naturalArr, -3, -2)
+}
+
+func BenchmarkArray_CutSlice(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.CutSlice(naturalArr, 1, 5)
+	}
+}
