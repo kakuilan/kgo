@@ -81,11 +81,31 @@ func TestConver_Float2Str(t *testing.T) {
 
 	res = KConv.Float2Str(flPi4, 9)
 	assert.Equal(t, 11, len(res))
+
+	res = KConv.Float2Str(true, 9)
+	assert.Empty(t, res)
 }
 
 func BenchmarkConver_Float2Str(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Float2Str(flPi2, 3)
+	}
+}
+
+func TestConver_Bool2Str(t *testing.T) {
+	var res string
+
+	res = KConv.Bool2Str(true)
+	assert.Equal(t, "true", res)
+
+	res = KConv.Bool2Str(false)
+	assert.Equal(t, "false", res)
+}
+
+func BenchmarkConver_Bool2Str(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Bool2Str(true)
 	}
 }

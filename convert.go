@@ -50,3 +50,11 @@ func (kc *LkkConvert) Float2Str(val interface{}, decimal int) string {
 		}
 	}
 }
+
+// Bool2Str 将布尔值转换为字符串.
+func (kc *LkkConvert) Bool2Str(val bool) string {
+	if val {
+		return "true"
+	}
+	return "false"
+}
