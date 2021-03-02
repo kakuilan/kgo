@@ -109,3 +109,20 @@ func BenchmarkConver_Bool2Str(b *testing.B) {
 		KConv.Bool2Str(true)
 	}
 }
+
+func TestConver_Bool2Int(t *testing.T) {
+	var res int
+
+	res = KConv.Bool2Int(true)
+	assert.Equal(t, 1, res)
+
+	res = KConv.Bool2Int(false)
+	assert.Equal(t, 0, res)
+}
+
+func BenchmarkConver_Bool2Int(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Bool2Int(true)
+	}
+}

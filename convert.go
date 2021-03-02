@@ -58,3 +58,11 @@ func (kc *LkkConvert) Bool2Str(val bool) string {
 	}
 	return "false"
 }
+
+// Bool2Int 将布尔值转换为整型.
+func (kc *LkkConvert) Bool2Int(val bool) int {
+	if val {
+		return 1
+	}
+	return 0
+}
