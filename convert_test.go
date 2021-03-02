@@ -65,3 +65,27 @@ func BenchmarkConver_Int2Str(b *testing.B) {
 		KConv.Int2Str(123456789)
 	}
 }
+
+func TestConver_Float2Str(t *testing.T) {
+	var res string
+
+	//小数位为负数
+	res = KConv.Float2Str(flPi1, -2)
+	assert.Equal(t, 4, len(res))
+
+	res = KConv.Float2Str(flPi2, 3)
+	assert.Equal(t, 5, len(res))
+
+	res = KConv.Float2Str(flPi3, 3)
+	assert.Equal(t, 5, len(res))
+
+	res = KConv.Float2Str(flPi4, 9)
+	assert.Equal(t, 11, len(res))
+}
+
+func BenchmarkConver_Float2Str(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Float2Str(flPi2, 3)
+	}
+}

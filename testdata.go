@@ -69,7 +69,7 @@ var personsJson = `{"person1":{"name":"zhang3","age":23,"sex":1},"person2":{"nam
 var strMp1 = map[string]string{"a": "1", "b": "2", "c": "3", "d": "4", "e": "", "2": "cc", "3": "no"}
 var strMp2 = map[string]string{"a": "0", "b": "2", "c": "4", "g": "4", "h": "", "2": "cc"}
 var strMpEmp = make(map[string]string)
-var colorMp = map[string]string{"a": "green", "0": "red", "b": "green", "1": "blue", "2": "red", "c": "yellow", "n":""}
+var colorMp = map[string]string{"a": "green", "0": "red", "b": "green", "1": "blue", "2": "red", "c": "yellow", "n": ""}
 
 //字符串切片
 var strSl1 = []string{"aa", "bb", "cc", "dd", "ee", "", "hh", "ii"}
@@ -81,6 +81,15 @@ var slItf = []interface{}{99, 0, 1, 2, 0.0, 3, false, 3.14, 6.67428, true, 'a', 
 
 //字符串
 var strHello = "Hello World!"
+
+//类型-圆周率
+type fPi32 float32
+type fPi64 float64
+
+var flPi1 float32 = 3.141592456
+var flPi2 float64 = 3.141592456
+var flPi3 fPi32 = 3.141592456
+var flPi4 fPi64 = 3.141592456
 
 func init() {
 	gofakeit.Struct(&personS1)
