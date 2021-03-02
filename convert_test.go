@@ -155,3 +155,21 @@ func BenchmarkConver_Str2Int(b *testing.B) {
 		KConv.Str2Int("1234567")
 	}
 }
+
+func TestConver_Str2Int8(t *testing.T) {
+	var res int8
+	var now = toStr(Kuptime.UnixNano())
+
+	res = KConv.Str2Int8("99")
+	assert.Equal(t, int8(99), res)
+
+	res = KConv.Str2Int8(now)
+	assert.Equal(t, int8(127), res)
+}
+
+func BenchmarkConver_Str2Int8(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Int8("99")
+	}
+}

@@ -76,3 +76,8 @@ func (kc *LkkConvert) Str2Int(val string) int {
 func (kc *LkkConvert) Str2IntStrict(val string, bitSize int, strict bool) int64 {
 	return str2IntStrict(val, bitSize, strict)
 }
+
+// Str2Int8 将字符串转换为int8.
+func (kc *LkkConvert) Str2Int8(val string) int8 {
+	return int8(str2IntStrict(val, 8, false))
+}
