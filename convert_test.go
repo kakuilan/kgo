@@ -45,3 +45,23 @@ func BenchmarkConvert_Struct2Map_NoTag(b *testing.B) {
 		_, _ = KConv.Struct2Map(p1, "")
 	}
 }
+
+func TestConver_Int2Str(t *testing.T) {
+	var res string
+
+	res = KConv.Int2Str(0)
+	assert.NotEmpty(t, res)
+
+	res = KConv.Int2Str(31.4)
+	assert.Empty(t, res)
+
+	res = KConv.Int2Str(PKCS_SEVEN)
+	assert.Equal(t, "7", res)
+}
+
+func BenchmarkConver_Int2Str(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Int2Str(123456789)
+	}
+}
