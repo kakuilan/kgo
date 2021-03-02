@@ -86,3 +86,8 @@ func (kc *LkkConvert) Str2Int8(val string) int8 {
 func (kc *LkkConvert) Str2Int16(val string) int16 {
 	return int16(str2IntStrict(val, 16, false))
 }
+
+// Str2Int32 将字符串转换为int32.
+func (kc *LkkConvert) Str2Int32(val string) int32 {
+	return int32(str2IntStrict(val, 32, false))
+}
