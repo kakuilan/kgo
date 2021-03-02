@@ -126,3 +126,32 @@ func BenchmarkConver_Bool2Int(b *testing.B) {
 		KConv.Bool2Int(true)
 	}
 }
+
+func TestConver_Str2Int(t *testing.T) {
+	var res int
+
+	res = KConv.Str2Int("123")
+	assert.Equal(t, 123, res)
+
+	res = KConv.Str2Int("TRUE")
+	assert.Equal(t, 1, res)
+
+	res = KConv.Str2Int("")
+	assert.Equal(t, 0, res)
+
+	res = KConv.Str2Int(strHello)
+	assert.Equal(t, 0, res)
+
+	res = KConv.Str2Int("123.456")
+	assert.Equal(t, 123, res)
+
+	res = KConv.Str2Int("123.678")
+	assert.Equal(t, 123, res)
+}
+
+func BenchmarkConver_Str2Int(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Int("1234567")
+	}
+}

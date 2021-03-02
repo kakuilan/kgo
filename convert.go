@@ -66,3 +66,13 @@ func (kc *LkkConvert) Bool2Int(val bool) int {
 	}
 	return 0
 }
+
+// Str2Int 将字符串转换为int.其中"true", "TRUE", "True"为1;若为浮点字符串,则取整数部分.
+func (kc *LkkConvert) Str2Int(val string) int {
+	return str2Int(val)
+}
+
+// Str2IntStrict 严格将字符串转换为有符号整型;bitSize为类型位数,strict为是否严格检查.
+func (kc *LkkConvert) Str2IntStrict(val string, bitSize int, strict bool) int64 {
+	return str2IntStrict(val, bitSize, strict)
+}

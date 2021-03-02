@@ -637,11 +637,14 @@ func CallFunc(f interface{}, args ...interface{}) (results []interface{}, err er
 	return
 }
 
-// str2Int 将字符串转换为int;其中"true", "TRUE", "True"为1.
+// str2Int 将字符串转换为int.其中"true", "TRUE", "True"为1;若为浮点字符串,则取整数部分.
 func str2Int(val string) (res int) {
 	if val == "true" || val == "TRUE" || val == "True" {
 		res = 1
 		return
+	} else if ok := RegFloat.MatchString(val); ok {
+		fl, _ := strconv.ParseFloat(val, 1)
+		return int(fl)
 	}
 
 	res, _ = strconv.Atoi(val)
