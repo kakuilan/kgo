@@ -91,6 +91,10 @@ var flPi2 float64 = 3.141592456
 var flPi3 fPi32 = 3.141592456
 var flPi4 fPi64 = 3.141592456
 
+// 当前时间
+//var nowNanoInt = Kuptime.UnixNano()
+var nowNanoStr = toStr(Kuptime.UnixNano())
+
 func init() {
 	gofakeit.Struct(&personS1)
 	gofakeit.Struct(&personS2)
