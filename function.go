@@ -674,28 +674,6 @@ func str2Uint(val string) (res uint) {
 	return
 }
 
-// str2IntStrict 严格将字符串转换为有符号整型;bitSize为类型位数;strict为是否严格检查,若为true且字符串非数值类型,则报异常.
-func str2IntStrict(val string, bitSize int, strict bool) int64 {
-	res, err := strconv.ParseInt(val, 0, bitSize)
-	if err != nil {
-		if strict {
-			panic(err)
-		}
-	}
-	return res
-}
-
-// str2UintStrict 严格将字符串转换为无符号整型;bitSize为类型位数;strict为是否严格检查,若为true且字符串非数值类型,则报异常.
-func str2UintStrict(val string, bitSize int, strict bool) uint64 {
-	res, err := strconv.ParseUint(val, 0, bitSize)
-	if err != nil {
-		if strict {
-			panic(err)
-		}
-	}
-	return res
-}
-
 // str2FloatStrict 严格将字符串转换为浮点型;bitSize为类型位数,strict为是否严格检查.
 func str2FloatStrict(val string, bitSize int, strict bool) float64 {
 	res, err := strconv.ParseFloat(val, bitSize)

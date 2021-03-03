@@ -72,58 +72,55 @@ func (kc *LkkConvert) Str2Int(val string) int {
 	return str2Int(val)
 }
 
-// Str2IntStrict 严格将字符串转换为有符号整型;bitSize为类型位数;strict为是否严格检查,若为true且字符串非数值类型,则报异常.
-func (kc *LkkConvert) Str2IntStrict(val string, bitSize int, strict bool) int64 {
-	return str2IntStrict(val, bitSize, strict)
-}
-
 // Str2Int8 将字符串转换为int8.
 func (kc *LkkConvert) Str2Int8(val string) int8 {
-	return int8(str2IntStrict(val, 8, false))
+	res, _ := strconv.ParseInt(val, 0, 8)
+	return int8(res)
 }
 
 // Str2Int16 将字符串转换为int16.
 func (kc *LkkConvert) Str2Int16(val string) int16 {
-	return int16(str2IntStrict(val, 16, false))
+	res, _ := strconv.ParseInt(val, 0, 16)
+	return int16(res)
 }
 
 // Str2Int32 将字符串转换为int32.
 func (kc *LkkConvert) Str2Int32(val string) int32 {
-	return int32(str2IntStrict(val, 32, false))
+	res, _ := strconv.ParseInt(val, 0, 32)
+	return int32(res)
 }
 
 // Str2Int64 将字符串转换为int64.
 func (kc *LkkConvert) Str2Int64(val string) int64 {
-	return str2IntStrict(val, 64, false)
+	res, _ := strconv.ParseInt(val, 0, 64)
+	return res
 }
 
-// Str2Uint 将字符串转换为uint.
+// Str2Uint 将字符串转换为uint.其中"true", "TRUE", "True"为1;若为浮点字符串,则取整数部分;若为负值则取0.
 func (kc *LkkConvert) Str2Uint(val string) uint {
 	return str2Uint(val)
 }
 
-// Str2UintStrict 严格将字符串转换为无符号整型;bitSize为类型位数;strict为是否严格检查,若为true且字符串非数值类型,则报异常.
-func (kc *LkkConvert) Str2UintStrict(val string, bitSize int, strict bool) uint64 {
-	return str2UintStrict(val, bitSize, strict)
-}
-
 // Str2Uint8 将字符串转换为uint8.
 func (kc *LkkConvert) Str2Uint8(val string) uint8 {
-	return uint8(str2UintStrict(val, 8, false))
+	res, _ := strconv.ParseUint(val, 0, 8)
+	return uint8(res)
 }
 
 // Str2Uint16 将字符串转换为uint16.
 func (kc *LkkConvert) Str2Uint16(val string) uint16 {
-	return uint16(str2UintStrict(val, 16, false))
+	res, _ := strconv.ParseUint(val, 0, 16)
+	return uint16(res)
 }
 
 // Str2Uint32 将字符串转换为uint32.
 func (kc *LkkConvert) Str2Uint32(val string) uint32 {
-	return uint32(str2UintStrict(val, 32, false))
+	res, _ := strconv.ParseUint(val, 0, 32)
+	return uint32(res)
 }
 
 // Str2Uint64 将字符串转换为uint64.
 func (kc *LkkConvert) Str2Uint64(val string) uint64 {
-	return uint64(str2UintStrict(val, 64, false))
+	res, _ := strconv.ParseUint(val, 0, 64)
+	return res
 }
-

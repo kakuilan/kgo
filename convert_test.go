@@ -238,16 +238,6 @@ func BenchmarkConver_Str2Int64(b *testing.B) {
 	}
 }
 
-func TestConver_Str2IntStrict_Panic(t *testing.T) {
-	defer func() {
-		r := recover()
-		assert.NotEmpty(t, r)
-	}()
-
-	//非数值字符串
-	KConv.Str2IntStrict("abc123", 8, true)
-}
-
 func TestConver_Str2Uint(t *testing.T) {
 	var res uint
 
@@ -364,14 +354,4 @@ func BenchmarkConver_Str2Uint64(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Uint64("99")
 	}
-}
-
-func TestConver_Str2UintStrict_Panic(t *testing.T) {
-	defer func() {
-		r := recover()
-		assert.NotEmpty(t, r)
-	}()
-
-	//非数值字符串
-	KConv.Str2UintStrict("abc-123", 8, true)
 }
