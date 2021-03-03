@@ -97,12 +97,22 @@ func (kc *LkkConvert) Str2Int64(val string) int64 {
 	return str2IntStrict(val, 64, false)
 }
 
+// Str2Uint 将字符串转换为uint.
+func (kc *LkkConvert) Str2Uint(val string) uint {
+	return str2Uint(val)
+}
+
 // Str2UintStrict 严格将字符串转换为无符号整型;bitSize为类型位数;strict为是否严格检查,若为true且字符串非数值类型,则报异常.
 func (kc *LkkConvert) Str2UintStrict(val string, bitSize int, strict bool) uint64 {
 	return str2UintStrict(val, bitSize, strict)
 }
 
-// Str2Uint 将字符串转换为uint.
-func (kc *LkkConvert) Str2Uint(val string) uint {
-	return str2Uint(val)
+// Str2Uint8 将字符串转换为uint8.
+func (kc *LkkConvert) Str2Uint8(val string) uint8 {
+	return uint8(str2UintStrict(val, 8, false))
+}
+
+// Str2Uint16 将字符串转换为uint16.
+func (kc *LkkConvert) Str2Uint16(val string) uint16 {
+	return uint16(str2UintStrict(val, 16, false))
 }

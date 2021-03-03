@@ -297,3 +297,37 @@ func BenchmarkConver_Str2Uint_Int(b *testing.B) {
 		KConv.Str2Uint("1234567")
 	}
 }
+
+func TestConver_Str2Uint8(t *testing.T) {
+	var res uint8
+
+	res = KConv.Str2Uint8("99")
+	assert.Equal(t, uint8(99), res)
+
+	res = KConv.Str2Uint8(nowNanoStr)
+	assert.Equal(t, uint8(255), res)
+}
+
+func BenchmarkConver_Str2Uint8(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Uint8("99")
+	}
+}
+
+func TestConver_Str2Uint16(t *testing.T) {
+	var res uint16
+
+	res = KConv.Str2Uint16("99")
+	assert.Equal(t, uint16(99), res)
+
+	res = KConv.Str2Uint16(nowNanoStr)
+	assert.Equal(t, uint16(65535), res)
+}
+
+func BenchmarkConver_Str2Uint16(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Uint16("99")
+	}
+}
