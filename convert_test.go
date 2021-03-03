@@ -365,3 +365,13 @@ func BenchmarkConver_Str2Uint64(b *testing.B) {
 		KConv.Str2Uint64("99")
 	}
 }
+
+func TestConver_Str2UintStrict_Panic(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.NotEmpty(t, r)
+	}()
+
+	//非数值字符串
+	KConv.Str2UintStrict("abc-123", 8, true)
+}
