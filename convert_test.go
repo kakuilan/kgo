@@ -149,7 +149,21 @@ func TestConver_Str2Int(t *testing.T) {
 	assert.Equal(t, 123, res)
 }
 
-func BenchmarkConver_Str2Int(b *testing.B) {
+func BenchmarkConver_Str2Int_Bool(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Int("TRUE")
+	}
+}
+
+func BenchmarkConver_Str2Int_Float(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Int("1234.567")
+	}
+}
+
+func BenchmarkConver_Str2Int_Int(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Int("1234567")
@@ -221,5 +235,65 @@ func BenchmarkConver_Str2Int64(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Int64("99")
+	}
+}
+
+func TestConver_Str2IntStrict_Panic(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.NotEmpty(t, r)
+	}()
+
+	//非数值字符串
+	KConv.Str2IntStrict("abc123", 8, true)
+}
+
+func TestConver_Str2Uint(t *testing.T) {
+	var res uint
+
+	res = KConv.Str2Uint("TRUE")
+	assert.Equal(t, uint(1), res)
+
+	res = KConv.Str2Uint("")
+	assert.Equal(t, uint(0), res)
+
+	res = KConv.Str2Uint(strHello)
+	assert.Equal(t, uint(0), res)
+
+	res = KConv.Str2Uint("123.456")
+	assert.Equal(t, uint(123), res)
+
+	//不合法的
+	res = KConv.Str2Uint(" 123.456")
+	assert.Equal(t, uint(0), res)
+
+	res = KConv.Str2Uint("123.678")
+	assert.Equal(t, uint(123), res)
+
+	res = KConv.Str2Uint("125")
+	assert.Equal(t, uint(125), res)
+
+	res = KConv.Str2Uint("-125")
+	assert.Equal(t, uint(0), res)
+}
+
+func BenchmarkConver_Str2Uint_Bool(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Uint("TRUE")
+	}
+}
+
+func BenchmarkConver_Str2Uint_Float(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Uint("1234.567")
+	}
+}
+
+func BenchmarkConver_Str2Uint_Int(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Uint("1234567")
 	}
 }

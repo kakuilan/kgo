@@ -72,7 +72,7 @@ func (kc *LkkConvert) Str2Int(val string) int {
 	return str2Int(val)
 }
 
-// Str2IntStrict 严格将字符串转换为有符号整型;bitSize为类型位数,strict为是否严格检查.
+// Str2IntStrict 严格将字符串转换为有符号整型;bitSize为类型位数;strict为是否严格检查,若为true且字符串非数值类型,则报异常.
 func (kc *LkkConvert) Str2IntStrict(val string, bitSize int, strict bool) int64 {
 	return str2IntStrict(val, bitSize, strict)
 }
@@ -95,4 +95,14 @@ func (kc *LkkConvert) Str2Int32(val string) int32 {
 // Str2Int64 将字符串转换为int64.
 func (kc *LkkConvert) Str2Int64(val string) int64 {
 	return str2IntStrict(val, 64, false)
+}
+
+// Str2UintStrict 严格将字符串转换为无符号整型;bitSize为类型位数;strict为是否严格检查,若为true且字符串非数值类型,则报异常.
+func (kc *LkkConvert) Str2UintStrict(val string, bitSize int, strict bool) uint64 {
+	return str2UintStrict(val, bitSize, strict)
+}
+
+// Str2Uint 将字符串转换为uint.
+func (kc *LkkConvert) Str2Uint(val string) uint {
+	return str2Uint(val)
 }

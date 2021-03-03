@@ -644,14 +644,37 @@ func str2Int(val string) (res int) {
 		return
 	} else if ok := RegFloat.MatchString(val); ok {
 		fl, _ := strconv.ParseFloat(val, 1)
-		return int(fl)
+		res = int(fl)
+		return
 	}
 
 	res, _ = strconv.Atoi(val)
 	return
 }
 
-// str2IntStrict 严格将字符串转换为有符号整型;bitSize为类型位数,strict为是否严格检查.
+// str2Int 将字符串转换为uint.其中"true", "TRUE", "True"为1;若为浮点字符串,则取整数部分;若为负值则为0.
+func str2Uint(val string) (res uint) {
+	if val == "true" || val == "TRUE" || val == "True" {
+		res = 1
+		return
+	} else if ok := RegFloat.MatchString(val); ok {
+		fl, _ := strconv.ParseFloat(val, 1)
+		if fl > 0 {
+			res = uint(fl)
+		}
+
+		return
+	}
+
+	n, e := strconv.Atoi(val)
+	if e == nil && n > 0 {
+		res = uint(n)
+	}
+
+	return
+}
+
+// str2IntStrict 严格将字符串转换为有符号整型;bitSize为类型位数;strict为是否严格检查,若为true且字符串非数值类型,则报异常.
 func str2IntStrict(val string, bitSize int, strict bool) int64 {
 	res, err := strconv.ParseInt(val, 0, bitSize)
 	if err != nil {
@@ -662,7 +685,7 @@ func str2IntStrict(val string, bitSize int, strict bool) int64 {
 	return res
 }
 
-// str2UintStrict 严格将字符串转换为无符号整型;bitSize为类型位数,strict为是否严格检查.
+// str2UintStrict 严格将字符串转换为无符号整型;bitSize为类型位数;strict为是否严格检查,若为true且字符串非数值类型,则报异常.
 func str2UintStrict(val string, bitSize int, strict bool) uint64 {
 	res, err := strconv.ParseUint(val, 0, bitSize)
 	if err != nil {
