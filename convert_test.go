@@ -206,3 +206,20 @@ func BenchmarkConver_Str2Int32(b *testing.B) {
 		KConv.Str2Int32("99")
 	}
 }
+
+func TestConver_Str2Int64(t *testing.T) {
+	var res int64
+
+	res = KConv.Str2Int64("99")
+	assert.Equal(t, int64(99), res)
+
+	res = KConv.Str2Int64(nowNanoStr)
+	assert.Greater(t, res, int64(2147483648))
+}
+
+func BenchmarkConver_Str2Int64(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Int64("99")
+	}
+}
