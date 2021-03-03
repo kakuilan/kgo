@@ -468,3 +468,21 @@ func BenchmarkConver_Str2Bytes(b *testing.B) {
 		KConv.Str2Bytes(strHello)
 	}
 }
+
+func TestConver_Bytes2Str(t *testing.T) {
+	var res string
+
+	res = KConv.Bytes2Str([]byte{})
+	assert.Equal(t, "", res)
+
+	res = KConv.Bytes2Str([]byte(strHello))
+	assert.NotEmpty(t, res)
+}
+
+func BenchmarkConver_Bytes2Str(b *testing.B) {
+	var bs = []byte(strHello)
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Bytes2Str(bs)
+	}
+}

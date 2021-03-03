@@ -146,3 +146,8 @@ func (kc *LkkConvert) Str2Bool(val string) bool {
 func (kc *LkkConvert) Str2Bytes(val string) []byte {
 	return str2Bytes(val)
 }
+
+// Bytes2Str 将字节切片转换为字符串.
+func (kc *LkkConvert) Bytes2Str(val []byte) string {
+	return bytes2Str(val)
+}
