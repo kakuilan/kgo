@@ -331,3 +331,20 @@ func BenchmarkConver_Str2Uint16(b *testing.B) {
 		KConv.Str2Uint16("99")
 	}
 }
+
+func TestConver_Str2Uint32(t *testing.T) {
+	var res uint32
+
+	res = KConv.Str2Uint32("99")
+	assert.Equal(t, uint32(99), res)
+
+	res = KConv.Str2Uint32(nowNanoStr)
+	assert.Equal(t, uint32(4294967295), res)
+}
+
+func BenchmarkConver_Str2Uint32(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Uint32("99")
+	}
+}

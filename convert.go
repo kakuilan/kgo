@@ -116,3 +116,8 @@ func (kc *LkkConvert) Str2Uint8(val string) uint8 {
 func (kc *LkkConvert) Str2Uint16(val string) uint16 {
 	return uint16(str2UintStrict(val, 16, false))
 }
+
+// Str2Uint32 将字符串转换为uint32.
+func (kc *LkkConvert) Str2Uint32(val string) uint32 {
+	return uint32(str2UintStrict(val, 32, false))
+}
