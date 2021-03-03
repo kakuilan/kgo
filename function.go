@@ -674,15 +674,16 @@ func str2Uint(val string) (res uint) {
 	return
 }
 
-// str2FloatStrict 严格将字符串转换为浮点型;bitSize为类型位数,strict为是否严格检查.
-func str2FloatStrict(val string, bitSize int, strict bool) float64 {
-	res, err := strconv.ParseFloat(val, bitSize)
-	if err != nil {
-		if strict {
-			panic(err)
-		}
+// str2Float32 将字符串转换为float32;其中"true", "TRUE", "True"为1.0 .
+func str2Float32(val string) (res float32) {
+	if val == "true" || val == "TRUE" || val == "True" {
+		res = 1.0
+	} else {
+		r, _ := strconv.ParseFloat(val, 32)
+		res = float32(r)
 	}
-	return res
+
+	return
 }
 
 // str2Float64 将字符串转换为float64;其中"true", "TRUE", "True"为1.0 .
@@ -690,7 +691,18 @@ func str2Float64(val string) (res float64) {
 	if val == "true" || val == "TRUE" || val == "True" {
 		res = 1.0
 	} else {
-		res = float64(str2FloatStrict(val, 64, false))
+		res, _ = strconv.ParseFloat(val, 64)
+	}
+
+	return
+}
+
+// str2Bool 将字符串转换为布尔值.
+// 1, t, T, TRUE, true, True 等字符串为真;
+// 0, f, F, FALSE, false, False 等字符串为假.
+func str2Bool(val string) (res bool) {
+	if val != "" {
+		res, _ = strconv.ParseBool(val)
 	}
 
 	return

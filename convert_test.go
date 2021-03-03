@@ -395,3 +395,59 @@ func BenchmarkConver_Str2Float64(b *testing.B) {
 		KConv.Str2Float64("123.556")
 	}
 }
+
+func TestConver_Str2Bool(t *testing.T) {
+	var res bool
+
+	//true
+	res = KConv.Str2Bool("1")
+	assert.True(t, res)
+
+	res = KConv.Str2Bool("t")
+	assert.True(t, res)
+
+	res = KConv.Str2Bool("T")
+	assert.True(t, res)
+
+	res = KConv.Str2Bool("TRUE")
+	assert.True(t, res)
+
+	res = KConv.Str2Bool("true")
+	assert.True(t, res)
+
+	res = KConv.Str2Bool("True")
+	assert.True(t, res)
+
+	//false
+	res = KConv.Str2Bool("0")
+	assert.False(t, res)
+
+	res = KConv.Str2Bool("f")
+	assert.False(t, res)
+
+	res = KConv.Str2Bool("F")
+	assert.False(t, res)
+
+	res = KConv.Str2Bool("FALSE")
+	assert.False(t, res)
+
+	res = KConv.Str2Bool("false")
+	assert.False(t, res)
+
+	res = KConv.Str2Bool("False")
+	assert.False(t, res)
+
+	//other
+	res = KConv.Str2Bool("2")
+	assert.False(t, res)
+
+	res = KConv.Str2Bool(strHello)
+	assert.False(t, res)
+}
+
+func BenchmarkConver_Str2Bool(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Bool(strHello)
+	}
+}
