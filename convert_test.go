@@ -503,3 +503,21 @@ func BenchmarkConver_Str2BytesUnsafe(b *testing.B) {
 		KConv.Str2BytesUnsafe(strHello)
 	}
 }
+
+func TestConver_Bytes2StrUnsafe(t *testing.T) {
+	var res string
+
+	res = KConv.Bytes2StrUnsafe([]byte{})
+	assert.Equal(t, "", res)
+
+	res = KConv.Bytes2StrUnsafe([]byte(strHello))
+	assert.NotEmpty(t, res)
+}
+
+func BenchmarkConver_Bytes2StrUnsafe(b *testing.B) {
+	var bs = []byte(strHello)
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Bytes2StrUnsafe(bs)
+	}
+}

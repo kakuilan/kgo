@@ -740,6 +740,12 @@ func str2BytesUnsafe(val string) []byte {
 	return *(*[]byte)(unsafe.Pointer(psHeader))
 }
 
+// bytes2StrUnsafe (非安全的)将字节切片转换为字符串.
+// 零拷贝,不安全.效率是string([]byte{})的百倍以上,且转换量越大效率优势越明显.
+func bytes2StrUnsafe(val []byte) string {
+	return *(*string)(unsafe.Pointer(&val))
+}
+
 // toStr 强制将变量转换为字符串.
 func toStr(val interface{}) string {
 	//先处理其他类型
