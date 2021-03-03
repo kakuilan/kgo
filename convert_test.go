@@ -375,3 +375,23 @@ func BenchmarkConver_Str2Float32(b *testing.B) {
 		KConv.Str2Float32("123.556")
 	}
 }
+
+func TestConver_Str2Float64(t *testing.T) {
+	var res float64
+
+	res = KConv.Str2Float64("true")
+	assert.Equal(t, float64(1), res)
+
+	res = KConv.Str2Float64("")
+	assert.Equal(t, float64(0), res)
+
+	res = KConv.Str2Float64("123.556")
+	assert.Equal(t, float64(123.556), res)
+}
+
+func BenchmarkConver_Str2Float64(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Str2Float64("123.556")
+	}
+}
