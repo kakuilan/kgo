@@ -80,7 +80,7 @@ var strSlEmp = []string{}
 var slItf = []interface{}{99, 0, 1, 2, 0.0, 3, false, 3.14, 6.67428, true, 'a', "", 'b', nil, 'c', "hello", strSlEmp, "你好"}
 
 //字符串
-var strHello = "Hello World!"
+var strHello = "Hello World! 你好！"
 
 //类型-圆周率
 type fPi32 float32

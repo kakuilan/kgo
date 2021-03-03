@@ -716,6 +716,16 @@ func bool2Int(val bool) int {
 	return 0
 }
 
+// str2Bytes 将字符串转换为字节切片.
+func str2Bytes(val string) []byte {
+	return []byte(val)
+}
+
+// bytes2Str 将字节切片转换为字符串.
+func bytes2Str(val []byte) string {
+	return string(val)
+}
+
 // toStr 强制将变量转换为字符串.
 func toStr(val interface{}) string {
 	//先处理其他类型

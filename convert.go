@@ -141,3 +141,8 @@ func (kc *LkkConvert) Str2Float64(val string) float64 {
 func (kc *LkkConvert) Str2Bool(val string) bool {
 	return str2Bool(val)
 }
+
+// Str2Bytes 将字符串转换为字节切片.
+func (kc *LkkConvert) Str2Bytes(val string) []byte {
+	return str2Bytes(val)
+}
