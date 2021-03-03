@@ -151,3 +151,12 @@ func (kc *LkkConvert) Str2Bytes(val string) []byte {
 func (kc *LkkConvert) Bytes2Str(val []byte) string {
 	return bytes2Str(val)
 }
+
+// Str2BytesUnsafe (非安全的)将字符串转换为字节切片.
+// 该方法零拷贝,但不安全.它直接转换底层指针,两者指向的相同的内存,改一个另外一个也会变.
+// 仅当临时需将长字符串转换且不长时间保存时可以使用.
+// 转换之后若没做其他操作直接改变里面的字符,则程序会崩溃.
+// 如 b:=Str2BytesUnsafe("xxx"); b[1]='d'; 程序将panic.
+func (kc *LkkConvert) Str2BytesUnsafe(val string) []byte {
+	return str2BytesUnsafe(val)
+}

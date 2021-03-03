@@ -726,6 +726,20 @@ func bytes2Str(val []byte) string {
 	return string(val)
 }
 
+// str2BytesUnsafe (非安全的)将字符串转换为字节切片.
+// 该方法零拷贝,但不安全.它直接转换底层指针,两者指向的相同的内存,改一个另外一个也会变.
+// 仅当临时需将长字符串转换且不长时间保存时可以使用.
+// 转换之后若没做其他操作直接改变里面的字符,则程序会崩溃.
+// 如 b:=str2BytesUnsafe("xxx"); b[1]='d'; 程序将panic.
+func str2BytesUnsafe(val string) []byte {
+	psHeader := &reflect.SliceHeader{}
+	strHeader := (*reflect.StringHeader)(unsafe.Pointer(&val))
+	psHeader.Data = strHeader.Data
+	psHeader.Len = strHeader.Len
+	psHeader.Cap = strHeader.Len
+	return *(*[]byte)(unsafe.Pointer(psHeader))
+}
+
 // toStr 强制将变量转换为字符串.
 func toStr(val interface{}) string {
 	//先处理其他类型
