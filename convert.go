@@ -167,7 +167,12 @@ func (kc *LkkConvert) Bytes2StrUnsafe(val []byte) string {
 	return bytes2StrUnsafe(val)
 }
 
-// Dec2Bin 将十进制转换为二进制.
+// Dec2Bin 将十进制转换为二进制字符串.
 func (kc *LkkConvert) Dec2Bin(number int64) string {
 	return dec2Bin(number)
+}
+
+// Bin2Dec 将二进制字符串转换为十进制.
+func (kc *LkkConvert) Bin2Dec(str string) (int64, error) {
+	return bin2Dec(str)
 }

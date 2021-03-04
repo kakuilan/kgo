@@ -538,3 +538,20 @@ func BenchmarkConver_Dec2Bin(b *testing.B) {
 		KConv.Dec2Bin(16)
 	}
 }
+
+func TestConver_Bin2Dec(t *testing.T) {
+	var res int64
+
+	res, _ = KConv.Bin2Dec("1000")
+	assert.Equal(t, int64(8), res)
+
+	res, _ = KConv.Bin2Dec("10000")
+	assert.Equal(t, int64(16), res)
+}
+
+func BenchmarkConver_Bin2Dec(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KConv.Bin2Dec("10000")
+	}
+}
