@@ -521,3 +521,20 @@ func BenchmarkConver_Bytes2StrUnsafe(b *testing.B) {
 		KConv.Bytes2StrUnsafe(bs)
 	}
 }
+
+func TestConver_Dec2Bin(t *testing.T) {
+	var res string
+
+	res = KConv.Dec2Bin(8)
+	assert.Equal(t, "1000", res)
+
+	res = KConv.Dec2Bin(16)
+	assert.Equal(t, "10000", res)
+}
+
+func BenchmarkConver_Dec2Bin(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Dec2Bin(16)
+	}
+}

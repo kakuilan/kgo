@@ -20,6 +20,14 @@ import (
 	"unsafe"
 )
 
+// dumpPrint 打印调试变量,变量可多个.
+func dumpPrint(vs ...interface{}) {
+	for _, v := range vs {
+		fmt.Printf("%+v\n", v)
+		//fmt.Printf("%#v\n", v)
+	}
+}
+
 // lenArrayOrSlice 获取数组/切片的长度.
 // chkType为检查类型,枚举值有(1仅数组,2仅切片,3数组或切片);结果为-1表示变量不是数组或切片,>=0表示合法长度.
 func lenArrayOrSlice(val interface{}, chkType uint8) int {
@@ -860,14 +868,6 @@ func toFloat(val interface{}) (res float64) {
 	return
 }
 
-// dumpPrint 打印调试变量,变量可多个.
-func dumpPrint(vs ...interface{}) {
-	for _, v := range vs {
-		fmt.Printf("%+v\n", v)
-		//fmt.Printf("%#v\n", v)
-	}
-}
-
 // struct2Map 结构体转为字典;tagName为要导出的标签名,可以为空,为空时将导出所有字段.
 func struct2Map(obj interface{}, tagName string) (map[string]interface{}, error) {
 	v, e := structVal(obj)
@@ -890,3 +890,9 @@ func struct2Map(obj interface{}, tagName string) (map[string]interface{}, error)
 
 	return res, nil
 }
+
+// dec2Bin 将十进制转换为二进制.
+func dec2Bin(number int64) string {
+	return strconv.FormatInt(number, 2)
+}
+
