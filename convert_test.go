@@ -530,6 +530,8 @@ func TestConver_Dec2Bin(t *testing.T) {
 
 	res = KConv.Dec2Bin(16)
 	assert.Equal(t, "10000", res)
+
+	res = KConv.Dec2Bin(16)
 }
 
 func BenchmarkConver_Dec2Bin(b *testing.B) {
@@ -541,17 +543,46 @@ func BenchmarkConver_Dec2Bin(b *testing.B) {
 
 func TestConver_Bin2Dec(t *testing.T) {
 	var res int64
+	var err error
 
 	res, _ = KConv.Bin2Dec("1000")
 	assert.Equal(t, int64(8), res)
 
 	res, _ = KConv.Bin2Dec("10000")
 	assert.Equal(t, int64(16), res)
+
+	//不合法
+	_, err = KConv.Bin2Dec(strHello)
+	assert.NotNil(t, err)
 }
 
 func BenchmarkConver_Bin2Dec(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _ = KConv.Bin2Dec("10000")
+	}
+}
+
+func TestConver_Hex2Bin(t *testing.T) {
+	var res string
+	var dec int64
+	var err error
+
+	res, err = KConv.Hex2Bin("123abff")
+	assert.Nil(t, err)
+
+	res, err = KConv.Hex2Bin("22d4ba5a44")
+	dec, _ = KConv.Bin2Dec(res)
+	assert.Equal(t, intAstronomicalUnit, dec)
+
+	//不合法
+	_, err = KConv.Hex2Bin(strHello)
+	assert.NotNil(t, err)
+}
+
+func BenchmarkConver_Hex2Bin(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KConv.Hex2Bin("22d4ba5a44")
 	}
 }

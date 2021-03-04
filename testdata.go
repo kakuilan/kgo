@@ -46,6 +46,24 @@ var personMps = []interface{}{personMp1, personMp2, personMp3, personMp4, person
 //字典-结构体人员
 var perStuMps map[string]sPerson
 
+//类型-圆周率
+type fPi32 float32
+type fPi64 float64
+
+var flPi1 float32 = 3.141592456
+var flPi2 float64 = 3.141592456
+var flPi3 fPi32 = 3.141592456
+var flPi4 fPi64 = 3.141592456
+
+//数值
+var intSpeedLight int = 299792458            //光速
+var intAstronomicalUnit int64 = 149597870660 //天文单位
+var floSpeedLight float32 = 2.99792458
+//var floAvogadro = 6.02214129e23   // 阿伏伽德罗常数
+//var floPlanck = 6.62606957e-34    // 普朗克常数
+//var floGravitional = 6.673e-11    //重力常数
+//var floPermittivity = 8.85419e-12 //真空介电常数
+
 //自然数数组
 var naturalArr = [...]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
@@ -54,7 +72,7 @@ var intSlc = []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 11, 12, 1
 var int64Slc = []int64{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 11, 12, 13, 14, 15}
 
 //浮点切片
-var floSlc = []float32{1.23, 0.0, 3.14159, 2.99792458, 6.6260755, 1.60217733}
+var floSlc = []float32{1.23, 0.0, flPi1, floSpeedLight, 6.6260755, 1.60217733}
 
 //布尔切片
 var booSlc = []bool{true, true, false, true, false, true, true}
@@ -81,15 +99,6 @@ var slItf = []interface{}{99, 0, 1, 2, 0.0, 3, false, 3.14, 6.67428, true, 'a', 
 
 //字符串
 var strHello = "Hello World! 你好！"
-
-//类型-圆周率
-type fPi32 float32
-type fPi64 float64
-
-var flPi1 float32 = 3.141592456
-var flPi2 float64 = 3.141592456
-var flPi3 fPi32 = 3.141592456
-var flPi4 fPi64 = 3.141592456
 
 // 当前时间
 //var nowNanoInt = Kuptime.UnixNano()

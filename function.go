@@ -892,8 +892,8 @@ func struct2Map(obj interface{}, tagName string) (map[string]interface{}, error)
 }
 
 // dec2Bin 将十进制转换为二进制字符串.
-func dec2Bin(number int64) string {
-	return strconv.FormatInt(number, 2)
+func dec2Bin(num int64) string {
+	return strconv.FormatInt(num, 2)
 }
 
 // bin2Dec 将二进制字符串转换为十进制.
@@ -903,4 +903,13 @@ func bin2Dec(str string) (int64, error) {
 		return 0, err
 	}
 	return i, nil
+}
+
+// hex2Bin 将十六进制字符串转换为二进制字符串.
+func hex2Bin(str string) (string, error) {
+	i, err := strconv.ParseInt(str, 16, 0)
+	if err != nil {
+		return "", err
+	}
+	return strconv.FormatInt(i, 2), nil
 }
