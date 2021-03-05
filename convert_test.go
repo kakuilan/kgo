@@ -622,3 +622,22 @@ func BenchmarkConver_Dec2Hex(b *testing.B) {
 		KConv.Dec2Hex(intAstronomicalUnit)
 	}
 }
+
+func TestConver_Hex2Dec(t *testing.T) {
+	var res int64
+	var err error
+
+	res, err = KConv.Hex2Dec(hexAstronomicalUnit)
+	assert.Equal(t, intAstronomicalUnit, res)
+
+	//不合法
+	_, err = KConv.Hex2Dec(strHello)
+	assert.NotNil(t, err)
+}
+
+func BenchmarkConver_Hex2Dec(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KConv.Hex2Dec(hexAstronomicalUnit)
+	}
+}
