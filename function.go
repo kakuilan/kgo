@@ -923,3 +923,7 @@ func bin2Hex(str string) (string, error) {
 	return strconv.FormatInt(i, 16), nil
 }
 
+// dec2Hex 将十进制转换为十六进制.
+func dec2Hex(num int64) string {
+	return strconv.FormatInt(num, 16)
+}

@@ -186,3 +186,8 @@ func (kc *LkkConvert) Hex2Bin(str string) (string, error) {
 func (kc *LkkConvert) Bin2Hex(str string) (string, error) {
 	return bin2Hex(str)
 }
+
+// Dec2Hex 将十进制转换为十六进制.
+func (kc *LkkConvert) Dec2Hex(num int64) string {
+	return dec2Hex(num)
+}

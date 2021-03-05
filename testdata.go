@@ -59,6 +59,7 @@ var flPi4 fPi64 = 3.141592456
 var intSpeedLight int = 299792458            //光速
 var intAstronomicalUnit int64 = 149597870660 //天文单位
 var floSpeedLight float32 = 2.99792458
+
 //var floAvogadro = 6.02214129e23   // 阿伏伽德罗常数
 //var floPlanck = 6.62606957e-34    // 普朗克常数
 //var floGravitional = 6.673e-11    //重力常数
@@ -99,6 +100,9 @@ var slItf = []interface{}{99, 0, 1, 2, 0.0, 3, false, 3.14, 6.67428, true, 'a', 
 
 //字符串
 var strHello = "Hello World! 你好！"
+var binAstronomicalUnit = "10001011010100101110100101101001000100" //intAstronomicalUnit的二进制
+var hexAstronomicalUnit = "22d4ba5a44" //intAstronomicalUnit的16进制
+
 
 // 当前时间
 //var nowNanoInt = Kuptime.UnixNano()

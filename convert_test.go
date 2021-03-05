@@ -571,7 +571,7 @@ func TestConver_Hex2Bin(t *testing.T) {
 	res, err = KConv.Hex2Bin("123abff")
 	assert.Nil(t, err)
 
-	res, err = KConv.Hex2Bin("22d4ba5a44")
+	res, err = KConv.Hex2Bin(hexAstronomicalUnit)
 	dec, _ = KConv.Bin2Dec(res)
 	assert.Equal(t, intAstronomicalUnit, dec)
 
@@ -583,7 +583,7 @@ func TestConver_Hex2Bin(t *testing.T) {
 func BenchmarkConver_Hex2Bin(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = KConv.Hex2Bin("22d4ba5a44")
+		_, _ = KConv.Hex2Bin(hexAstronomicalUnit)
 	}
 }
 
@@ -591,8 +591,8 @@ func TestConver_Bin2Hex(t *testing.T) {
 	var res string
 	var err error
 
-	res, err = KConv.Bin2Hex("10001011010100101110100101101001000100")
-	assert.Equal(t, "22d4ba5a44", res)
+	res, err = KConv.Bin2Hex(binAstronomicalUnit)
+	assert.Equal(t, hexAstronomicalUnit, res)
 
 	//不合法
 	_, err = KConv.Bin2Hex(strHello)
@@ -602,6 +602,23 @@ func TestConver_Bin2Hex(t *testing.T) {
 func BenchmarkConver_Bin2Hex(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = KConv.Bin2Hex("10001011010100101110100101101001000100")
+		_, _ = KConv.Bin2Hex(binAstronomicalUnit)
+	}
+}
+
+func TestConver_Dec2Hex(t *testing.T) {
+	var res string
+
+	res = KConv.Dec2Hex(intAstronomicalUnit)
+	assert.Equal(t, hexAstronomicalUnit, res)
+
+	res = KConv.Dec2Hex(0)
+	assert.Equal(t, "0", res)
+}
+
+func BenchmarkConver_Dec2Hex(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Dec2Hex(intAstronomicalUnit)
 	}
 }
