@@ -102,6 +102,7 @@ var slItf = []interface{}{99, 0, 1, 2, 0.0, 3, false, 3.14, 6.67428, true, 'a', 
 var strHello = "Hello World! 你好！"
 var binAstronomicalUnit = "10001011010100101110100101101001000100" //intAstronomicalUnit的二进制
 var hexAstronomicalUnit = "22d4ba5a44" //intAstronomicalUnit的16进制
+var otcAstronomicalUnit = "2132456455104" //intAstronomicalUnit的8进制
 
 
 // 当前时间

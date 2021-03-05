@@ -196,3 +196,8 @@ func (kc *LkkConvert) Dec2Hex(num int64) string {
 func (kc *LkkConvert) Hex2Dec(str string) (int64, error) {
 	return hex2Dec(str)
 }
+
+// Dec2Oct 将十进制转换为八进制.
+func (kc *LkkConvert) Dec2Oct(num int64) string {
+	return dec2Oct(num)
+}

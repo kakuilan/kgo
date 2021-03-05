@@ -641,3 +641,20 @@ func BenchmarkConver_Hex2Dec(b *testing.B) {
 		_, _ = KConv.Hex2Dec(hexAstronomicalUnit)
 	}
 }
+
+func TestConver_Dec2Oct(t *testing.T) {
+	var res string
+
+	res = KConv.Dec2Oct(intAstronomicalUnit)
+	assert.Equal(t, otcAstronomicalUnit, res)
+
+	res = KConv.Dec2Oct(0)
+	assert.Equal(t, "0", res)
+}
+
+func BenchmarkConver_Dec2Oct(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Dec2Oct(intAstronomicalUnit)
+	}
+}

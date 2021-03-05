@@ -938,3 +938,8 @@ func hex2Dec(str string) (int64, error) {
 	// bitSize 表示结果的位宽（包括符号位），0 表示最大位宽
 	return strconv.ParseInt(str[start:], 16, 0)
 }
+
+// dec2Oct 将十进制转换为八进制.
+func dec2Oct(num int64) string {
+	return strconv.FormatInt(num, 8)
+}
