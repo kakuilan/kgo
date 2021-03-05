@@ -658,3 +658,22 @@ func BenchmarkConver_Dec2Oct(b *testing.B) {
 		KConv.Dec2Oct(intAstronomicalUnit)
 	}
 }
+
+func TestConver_Oct2Dec(t *testing.T) {
+	var res int64
+	var err error
+
+	res, err = KConv.Oct2Dec(otcAstronomicalUnit)
+	assert.Equal(t, intAstronomicalUnit, res)
+
+	//不合法
+	_, err = KConv.Oct2Dec(strHello)
+	assert.NotNil(t, err)
+}
+
+func BenchmarkConver_Oct2Dec(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KConv.Oct2Dec(otcAstronomicalUnit)
+	}
+}
