@@ -586,3 +586,22 @@ func BenchmarkConver_Hex2Bin(b *testing.B) {
 		_, _ = KConv.Hex2Bin("22d4ba5a44")
 	}
 }
+
+func TestConver_Bin2Hex(t *testing.T) {
+	var res string
+	var err error
+
+	res, err = KConv.Bin2Hex("10001011010100101110100101101001000100")
+	assert.Equal(t, "22d4ba5a44", res)
+
+	//不合法
+	_, err = KConv.Bin2Hex(strHello)
+	assert.NotNil(t, err)
+}
+
+func BenchmarkConver_Bin2Hex(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KConv.Bin2Hex("10001011010100101110100101101001000100")
+	}
+}
