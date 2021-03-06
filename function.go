@@ -605,25 +605,25 @@ func GetVariateType(v interface{}) string {
 	return fmt.Sprintf("%T", v)
 }
 
-// ValidFunc 检查是否函数,并且参数个数、类型是否正确.
+// VerifyFunc 验证是否函数,并且参数个数、类型是否正确.
 // 返回有效的函数、有效的参数.
-func ValidFunc(f interface{}, args ...interface{}) (vf reflect.Value, vargs []reflect.Value, err error) {
+func VerifyFunc(f interface{}, args ...interface{}) (vf reflect.Value, vargs []reflect.Value, err error) {
 	vf = reflect.ValueOf(f)
 	if vf.Kind() != reflect.Func {
-		return reflect.ValueOf(nil), nil, fmt.Errorf("[ValidFunc] %v is not the function", f)
+		return reflect.ValueOf(nil), nil, fmt.Errorf("[VerifyFunc] %v is not the function", f)
 	}
 
 	tf := vf.Type()
 	_len := len(args)
 	if tf.NumIn() != _len {
-		return reflect.ValueOf(nil), nil, fmt.Errorf("[ValidFunc] %d number of the argument is incorrect", _len)
+		return reflect.ValueOf(nil), nil, fmt.Errorf("[VerifyFunc] %d number of the argument is incorrect", _len)
 	}
 
 	vargs = make([]reflect.Value, _len)
 	for i := 0; i < _len; i++ {
 		typ := tf.In(i).Kind()
 		if (typ != reflect.Interface) && (typ != reflect.TypeOf(args[i]).Kind()) {
-			return reflect.ValueOf(nil), nil, fmt.Errorf("[ValidFunc] %d-td argument`s type is incorrect", i+1)
+			return reflect.ValueOf(nil), nil, fmt.Errorf("[VerifyFunc] %d-td argument`s type is incorrect", i+1)
 		}
 		vargs[i] = reflect.ValueOf(args[i])
 	}
@@ -632,7 +632,7 @@ func ValidFunc(f interface{}, args ...interface{}) (vf reflect.Value, vargs []re
 
 // CallFunc 动态调用函数.
 func CallFunc(f interface{}, args ...interface{}) (results []interface{}, err error) {
-	vf, vargs, _err := ValidFunc(f, args...)
+	vf, vargs, _err := VerifyFunc(f, args...)
 	if _err != nil {
 		return nil, _err
 	}

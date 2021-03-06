@@ -1,7 +1,9 @@
 package kgo
 
 import (
+	"encoding/binary"
 	"fmt"
+	"net"
 	"reflect"
 	"strconv"
 )
@@ -205,4 +207,36 @@ func (kc *LkkConvert) Dec2Oct(num int64) string {
 // Oct2Dec 将八进制转换为十进制.
 func (kc *LkkConvert) Oct2Dec(str string) (int64, error) {
 	return oct2Dec(str)
+}
+
+// BaseConvert 进制转换,在任意进制之间转换数字.
+// num为输入数值,frombase为原进制,tobase为结果进制.
+func (kc *LkkConvert) BaseConvert(num string, frombase, tobase int) (string, error) {
+	i, err := strconv.ParseInt(num, frombase, 0)
+	if err != nil {
+		return "", err
+	}
+	return strconv.FormatInt(i, tobase), nil
+}
+
+// Ip2Long 将 IPV4 的字符串互联网协议转换成长整型数字.
+func (kc *LkkConvert) Ip2Long(ipAddress string) uint32 {
+	ip := net.ParseIP(ipAddress)
+	if ip == nil {
+		return 0
+	}
+	return binary.BigEndian.Uint32(ip.To4())
+}
+
+// Long2Ip 将长整型转化为字符串形式带点的互联网标准格式地址(IPV4).
+func (kc *LkkConvert) Long2Ip(properAddress uint32) string {
+	ipByte := make([]byte, 4)
+	binary.BigEndian.PutUint32(ipByte, properAddress)
+	ip := net.IP(ipByte)
+	return ip.String()
+}
+
+// ToStr 强制将变量转换为字符串.
+func (kc *LkkConvert) ToStr(val interface{}) string {
+	return toStr(val)
 }

@@ -60,10 +60,34 @@ var intSpeedLight int = 299792458            //光速
 var intAstronomicalUnit int64 = 149597870660 //天文单位
 var floSpeedLight float32 = 2.99792458
 
-//var floAvogadro = 6.02214129e23   // 阿伏伽德罗常数
-//var floPlanck = 6.62606957e-34    // 普朗克常数
-//var floGravitional = 6.673e-11    //重力常数
-//var floPermittivity = 8.85419e-12 //真空介电常数
+var floAvogadro float64 = 6.02214129e23   // 阿伏伽德罗常数
+var floPlanck float64 = 6.62606957e-34    // 普朗克常数
+var floGravitional float64 = 6.673e-11    //重力常数
+var floPermittivity float64 = 8.85419e-12 //真空介电常数
+
+//字符串
+var strHello = "Hello World! 你好！"
+var strSpeedLight = "299792458"
+var binAstronomicalUnit = "10001011010100101110100101101001000100" //intAstronomicalUnit的二进制
+var hexAstronomicalUnit = "22d4ba5a44"                             //intAstronomicalUnit的16进制
+var otcAstronomicalUnit = "2132456455104"                          //intAstronomicalUnit的8进制
+
+//当前时间
+var nowNanoInt = Kuptime.UnixNano()
+var nowNanoStr = toStr(Kuptime.UnixNano())
+
+//IP
+var noneIp = "0.0.0.0"
+var localIp = "127.0.0.1"
+var localIpInt uint32 = 2130706433
+var lanIp = "192.168.0.1"
+var lanIpInt uint32 = 3232235521
+var dockerIp = "172.16.0.1"
+var baiduIpv4 = "39.156.69.79"
+var googleIpv4 = "172.217.26.142"
+var googleIpv6 = "2404:6800:4005:80f::200e"
+var publicIp1 = "199.232.96.133"
+var publicIp2 = "140.82.114.3"
 
 //自然数数组
 var naturalArr = [...]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
@@ -73,7 +97,8 @@ var intSlc = []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 11, 12, 1
 var int64Slc = []int64{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 11, 12, 13, 14, 15}
 
 //浮点切片
-var floSlc = []float32{1.23, 0.0, flPi1, floSpeedLight, 6.6260755, 1.60217733}
+var flo32Slc = []float32{1.23, 0.0, flPi1, floSpeedLight, 6.6260755, 1.60217733}
+var flo64Slc = []float64{flPi2, floAvogadro, floPlanck, floGravitional, floPermittivity}
 
 //布尔切片
 var booSlc = []bool{true, true, false, true, false, true, true}
@@ -96,18 +121,11 @@ var strSl2 = []string{"bb", "cc", "ff", "gg", "ee", "", "gg"}
 var strSlEmp = []string{}
 
 //接口切片
-var slItf = []interface{}{99, 0, 1, 2, 0.0, 3, false, 3.14, 6.67428, true, 'a', "", 'b', nil, 'c', "hello", strSlEmp, "你好"}
+var slItf = []interface{}{99, 0, 1, 2, 0.0, 3, false, 3.14, 6.67428, true, 'a', "", 'b', nil, 'c', intSpeedLight, "hello", nowNanoInt, strSlEmp, "你好"}
 
-//字符串
-var strHello = "Hello World! 你好！"
-var binAstronomicalUnit = "10001011010100101110100101101001000100" //intAstronomicalUnit的二进制
-var hexAstronomicalUnit = "22d4ba5a44" //intAstronomicalUnit的16进制
-var otcAstronomicalUnit = "2132456455104" //intAstronomicalUnit的8进制
-
-
-// 当前时间
-//var nowNanoInt = Kuptime.UnixNano()
-var nowNanoStr = toStr(Kuptime.UnixNano())
+//回调函数
+var fnCb1 CallBack
+var fnPtr1 = &fnCb1
 
 func init() {
 	gofakeit.Struct(&personS1)

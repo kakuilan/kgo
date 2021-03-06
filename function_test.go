@@ -1,32 +1,44 @@
 package kgo
 
 import (
-	"github.com/brianvoe/gofakeit/v6"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-func init() {
-	gofakeit.Seed(0)
+func TestFun_GetVariateType(t *testing.T) {
+	var res string
+
+	res = GetVariateType(1)
+	assert.Equal(t, "int", res)
+
+	res = GetVariateType(intAstronomicalUnit)
+	assert.Equal(t, "int64", res)
+
+	res = GetVariateType(flPi1)
+	assert.Equal(t, "float32", res)
+
+	res = GetVariateType(floAvogadro)
+	assert.Equal(t, "float64", res)
+
+	res = GetVariateType(strHello)
+	assert.Equal(t, "string", res)
+
+	res = GetVariateType(true)
+	assert.Equal(t, "bool", res)
+
+	res = GetVariateType(rune('你'))
+	assert.Equal(t, "int32", res)
+
+	res = GetVariateType('你')
+	assert.Equal(t, "int32", res)
+
+	res = GetVariateType([]byte("你好"))
+	assert.Equal(t, "[]uint8", res)
 }
 
-var randomName = gofakeit.Name()
-
-func TestFun_md5Byte(t *testing.T) {
-	res1 := md5Byte([]byte(""), 32)
-	res2 := md5Byte([]byte(randomName), 24)
-	res3 := md5Byte([]byte(randomName), 0)
-	res4 := md5Byte([]byte(randomName), 64)
-
-	assert.Equal(t, 32, len(res1))
-	assert.Equal(t, 24, len(res2))
-	assert.NotEqual(t, 0, len(res3))
-	assert.NotEqual(t, 64, len(res4))
-}
-
-func BenchmarkFun_md5Byte(b *testing.B) {
+func BenchmarkFun_GetVariateType(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_ = md5Byte([]byte(randomName), 32)
+		GetVariateType(intAstronomicalUnit)
 	}
 }

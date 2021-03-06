@@ -677,3 +677,93 @@ func BenchmarkConver_Oct2Dec(b *testing.B) {
 		_, _ = KConv.Oct2Dec(otcAstronomicalUnit)
 	}
 }
+
+func TestConver_BaseConvert(t *testing.T) {
+	var res string
+	var err error
+
+	res, err = KConv.BaseConvert(toStr(intAstronomicalUnit), 10, 16)
+	assert.Equal(t, hexAstronomicalUnit, res)
+
+	//不合法
+	_, err = KConv.BaseConvert(strHello, 10, 8)
+	assert.NotNil(t, err)
+}
+
+func BenchmarkConver_BaseConvert(b *testing.B) {
+	b.ResetTimer()
+	s := toStr(intAstronomicalUnit)
+	for i := 0; i < b.N; i++ {
+		_, _ = KConv.BaseConvert(s, 10, 16)
+	}
+}
+
+func TestConver_Ip2Long(t *testing.T) {
+	var res uint32
+
+	res = KConv.Ip2Long(localIp)
+	assert.Equal(t, localIpInt, res)
+
+	res = KConv.Ip2Long(lanIp)
+	assert.Equal(t, lanIpInt, res)
+
+	res = KConv.Ip2Long("")
+	assert.Equal(t, uint32(0), res)
+}
+
+func BenchmarkConver_Ip2Long(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Ip2Long(localIp)
+	}
+}
+
+func TestConver_Long2Ip(t *testing.T) {
+	var res string
+
+	res = KConv.Long2Ip(localIpInt)
+	assert.Equal(t, localIp, res)
+
+	res = KConv.Long2Ip(lanIpInt)
+	assert.Equal(t, lanIp, res)
+
+	res = KConv.Long2Ip(0)
+	assert.Equal(t, noneIp, res)
+}
+
+func BenchmarkConver_Long2Ip(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Long2Ip(localIpInt)
+	}
+}
+
+func TestConver_ToStr(t *testing.T) {
+	var tests = []struct {
+		input    interface{}
+		expected string
+	}{
+		{nil, ""},
+		{true, "true"},
+		{strHello, strHello},
+		{intSpeedLight, strSpeedLight},
+		{localIpInt, "2130706433"},
+		//{floSpeedLight, "2.99792458"},
+		{"", ""},
+		{"", ""},
+		{"", ""},
+		{"", ""},
+		{"", ""},
+		{"", ""},
+		{"", ""},
+		{"", ""},
+		{"", ""},
+		{"", ""},
+	}
+
+	for _, test := range tests {
+		actual := KConv.ToStr(test.input)
+		dumpPrint(actual)
+		assert.Equal(t, test.expected, actual)
+	}
+}

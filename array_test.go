@@ -1063,8 +1063,8 @@ func TestArray_MergeSlice(t *testing.T) {
 	}()
 
 	var res, res2 []interface{}
-	res = KArr.MergeSlice(false, naturalArr, floSlc, booSlc, strSl1)
-	res2 = KArr.MergeSlice(true, naturalArr, floSlc, booSlc, strSl1)
+	res = KArr.MergeSlice(false, naturalArr, flo32Slc, booSlc, strSl1)
+	res2 = KArr.MergeSlice(true, naturalArr, flo32Slc, booSlc, strSl1)
 	assert.Greater(t, len(res), len(res2))
 
 	KArr.MergeSlice(false, naturalArr, strHello, booSlc, strSl1)
