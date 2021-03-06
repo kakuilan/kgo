@@ -953,3 +953,66 @@ func oct2Dec(str string) (int64, error) {
 
 	return strconv.ParseInt(str[start:], 8, 0)
 }
+
+// getIntersectStrings 获取两个字符串相同部分的切片.
+// minLen为子串最小长度,为0则不限制.
+func getIntersectStrings(minLen int, str1, str2 string) (res []string) {
+	var lenA, lenB, runesLen int
+	var runes []rune
+	var longStr, itm string
+	var chkMap = make(map[string]bool)
+	var chk, ok bool
+
+	lenA = len(str1)
+	lenB = len(str2)
+
+	if lenA == 0 || lenB == 0 {
+		return
+	}
+
+	if lenA > lenB {
+		longStr = str1
+		runes = []rune(str2)
+	} else {
+		longStr = str2
+		runes = []rune(str1)
+	}
+	runesLen = len(runes)
+
+	for i := 0; i < runesLen; i++ {
+		for j := i + 1; j <= runesLen; j++ {
+			itm = string(runes[i:j])
+			if minLen == 0 || (minLen > 0 && len(itm) >= minLen) {
+				_, ok = chkMap[itm]
+				if !ok {
+					chk = strings.Contains(longStr, itm)
+					chkMap[itm] = true
+					if chk {
+						res = append(res, itm)
+					}
+				}
+			}
+		}
+	}
+
+	return
+}
+
+// longestSameString 获取两个字符串最长相同的子串.
+func longestSameString(str1, str2 string) (res string) {
+	var resLen, itmLen int
+	strs := getIntersectStrings(0, str1, str2)
+	if len(strs) > 0 {
+		res = strs[0]
+		resLen = len(res)
+		for _, v := range strs {
+			itmLen = len(v)
+			if itmLen > resLen {
+				res = v
+				resLen = itmLen
+			}
+		}
+	}
+
+	return
+}
