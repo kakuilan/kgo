@@ -52,8 +52,8 @@ func TestArray_ArrayValues(t *testing.T) {
 	assert.Greater(t, len(int64Slc), len(res))
 
 	//将排除0.0
-	res = KArr.ArrayValues(floSlc, true)
-	assert.Greater(t, len(floSlc), len(res))
+	res = KArr.ArrayValues(flo32Slc, true)
+	assert.Greater(t, len(flo32Slc), len(res))
 
 	//将排除false
 	res = KArr.ArrayValues(booSlc, true)

@@ -71,6 +71,8 @@ var strSpeedLight = "299792458"
 var binAstronomicalUnit = "10001011010100101110100101101001000100" //intAstronomicalUnit的二进制
 var hexAstronomicalUnit = "22d4ba5a44"                             //intAstronomicalUnit的16进制
 var otcAstronomicalUnit = "2132456455104"                          //intAstronomicalUnit的8进制
+var similarStr1 = "We love China,how are you?"
+var similarStr2 = "Tom love you,he come from China."
 
 //当前时间
 var nowNanoInt = Kuptime.UnixNano()
@@ -102,6 +104,9 @@ var flo64Slc = []float64{flPi2, floAvogadro, floPlanck, floGravitional, floPermi
 
 //布尔切片
 var booSlc = []bool{true, true, false, true, false, true, true}
+
+//字节切片
+var bytSlcHello = []byte(strHello)
 
 //单字符切片
 var ssSingle = []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"}

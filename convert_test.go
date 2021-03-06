@@ -3,6 +3,8 @@ package kgo
 import (
 	"github.com/brianvoe/gofakeit/v6"
 	"github.com/stretchr/testify/assert"
+	"math"
+	"reflect"
 	"testing"
 )
 
@@ -748,22 +750,28 @@ func TestConver_ToStr(t *testing.T) {
 		{strHello, strHello},
 		{intSpeedLight, strSpeedLight},
 		{localIpInt, "2130706433"},
-		//{floSpeedLight, "2.99792458"},
-		{"", ""},
-		{"", ""},
-		{"", ""},
-		{"", ""},
-		{"", ""},
-		{"", ""},
-		{"", ""},
-		{"", ""},
-		{"", ""},
-		{"", ""},
+		{floSpeedLight, "2.99792458"},
+		{flPi2, "3.141592456"},
+		{fnCb1, "<nil>"},
+		{fnPtr1, ""},
+		{bytSlcHello, strHello},
+		{int64(INT64_MAX), "9223372036854775807"},
+		{uint64(UINT64_MAX), "18446744073709551615"},
+		{float32(math.Pi), "3.1415927"},
+		{float64(math.Pi), "3.141592653589793"},
+		{strMpEmp, "{}"},
+		{strMp2, `{"2":"cc","a":"0","b":"2","c":"4","g":"4","h":""}`},
 	}
 
 	for _, test := range tests {
 		actual := KConv.ToStr(test.input)
-		dumpPrint(actual)
-		assert.Equal(t, test.expected, actual)
+
+		if reflect.DeepEqual(test.input, floSpeedLight) { //32位浮点会损失精度
+			str := longestSameString("2.99792458", actual)
+			assert.Less(t, 5, len(str))
+		} else {
+			assert.Equal(t, test.expected, actual)
+		}
 	}
+
 }
