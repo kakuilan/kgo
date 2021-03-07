@@ -60,6 +60,7 @@ var bytPi5 = []byte{229, 10, 191, 57, 251, 33, 9, 64} //flPi2的字节切片
 var intSpeedLight int = 299792458            //光速
 var intAstronomicalUnit int64 = 149597870660 //天文单位
 var floSpeedLight float32 = 2.99792458
+var bytAstronomicalUnit = []byte{0, 0, 0, 34, 212, 186, 90, 68} //intAstronomicalUnit的字节切片
 
 var floAvogadro float64 = 6.02214129e23   // 阿伏伽德罗常数
 var floPlanck float64 = 6.62606957e-34    // 普朗克常数

@@ -48,7 +48,7 @@ func BenchmarkConvert_Struct2Map_NoTag(b *testing.B) {
 	}
 }
 
-func TestConver_Int2Str(t *testing.T) {
+func TestConvert_Int2Str(t *testing.T) {
 	var res string
 
 	res = KConv.Int2Str(0)
@@ -61,14 +61,14 @@ func TestConver_Int2Str(t *testing.T) {
 	assert.Equal(t, "7", res)
 }
 
-func BenchmarkConver_Int2Str(b *testing.B) {
+func BenchmarkConvert_Int2Str(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Int2Str(123456789)
 	}
 }
 
-func TestConver_Float2Str(t *testing.T) {
+func TestConvert_Float2Str(t *testing.T) {
 	var res string
 
 	//小数位为负数
@@ -88,14 +88,14 @@ func TestConver_Float2Str(t *testing.T) {
 	assert.Empty(t, res)
 }
 
-func BenchmarkConver_Float2Str(b *testing.B) {
+func BenchmarkConvert_Float2Str(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Float2Str(flPi2, 3)
 	}
 }
 
-func TestConver_Bool2Str(t *testing.T) {
+func TestConvert_Bool2Str(t *testing.T) {
 	var res string
 
 	res = KConv.Bool2Str(true)
@@ -105,14 +105,14 @@ func TestConver_Bool2Str(t *testing.T) {
 	assert.Equal(t, "false", res)
 }
 
-func BenchmarkConver_Bool2Str(b *testing.B) {
+func BenchmarkConvert_Bool2Str(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Bool2Str(true)
 	}
 }
 
-func TestConver_Bool2Int(t *testing.T) {
+func TestConvert_Bool2Int(t *testing.T) {
 	var res int
 
 	res = KConv.Bool2Int(true)
@@ -122,14 +122,14 @@ func TestConver_Bool2Int(t *testing.T) {
 	assert.Equal(t, 0, res)
 }
 
-func BenchmarkConver_Bool2Int(b *testing.B) {
+func BenchmarkConvert_Bool2Int(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Bool2Int(true)
 	}
 }
 
-func TestConver_Str2Int(t *testing.T) {
+func TestConvert_Str2Int(t *testing.T) {
 	var res int
 
 	res = KConv.Str2Int("123")
@@ -151,28 +151,28 @@ func TestConver_Str2Int(t *testing.T) {
 	assert.Equal(t, 123, res)
 }
 
-func BenchmarkConver_Str2Int_Bool(b *testing.B) {
+func BenchmarkConvert_Str2Int_Bool(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Int("TRUE")
 	}
 }
 
-func BenchmarkConver_Str2Int_Float(b *testing.B) {
+func BenchmarkConvert_Str2Int_Float(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Int("1234.567")
 	}
 }
 
-func BenchmarkConver_Str2Int_Int(b *testing.B) {
+func BenchmarkConvert_Str2Int_Int(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Int("1234567")
 	}
 }
 
-func TestConver_Str2Int8(t *testing.T) {
+func TestConvert_Str2Int8(t *testing.T) {
 	var res int8
 
 	res = KConv.Str2Int8("99")
@@ -182,14 +182,14 @@ func TestConver_Str2Int8(t *testing.T) {
 	assert.Equal(t, int8(127), res)
 }
 
-func BenchmarkConver_Str2Int8(b *testing.B) {
+func BenchmarkConvert_Str2Int8(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Int8("99")
 	}
 }
 
-func TestConver_Str2Int16(t *testing.T) {
+func TestConvert_Str2Int16(t *testing.T) {
 	var res int16
 
 	res = KConv.Str2Int16("99")
@@ -199,14 +199,14 @@ func TestConver_Str2Int16(t *testing.T) {
 	assert.Equal(t, int16(32767), res)
 }
 
-func BenchmarkConver_Str2Int16(b *testing.B) {
+func BenchmarkConvert_Str2Int16(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Int16("99")
 	}
 }
 
-func TestConver_Str2Int32(t *testing.T) {
+func TestConvert_Str2Int32(t *testing.T) {
 	var res int32
 
 	res = KConv.Str2Int32("99")
@@ -216,14 +216,14 @@ func TestConver_Str2Int32(t *testing.T) {
 	assert.Equal(t, int32(2147483647), res)
 }
 
-func BenchmarkConver_Str2Int32(b *testing.B) {
+func BenchmarkConvert_Str2Int32(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Int32("99")
 	}
 }
 
-func TestConver_Str2Int64(t *testing.T) {
+func TestConvert_Str2Int64(t *testing.T) {
 	var res int64
 
 	res = KConv.Str2Int64("99")
@@ -233,14 +233,14 @@ func TestConver_Str2Int64(t *testing.T) {
 	assert.Greater(t, res, int64(2147483648))
 }
 
-func BenchmarkConver_Str2Int64(b *testing.B) {
+func BenchmarkConvert_Str2Int64(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Int64("99")
 	}
 }
 
-func TestConver_Str2Uint(t *testing.T) {
+func TestConvert_Str2Uint(t *testing.T) {
 	var res uint
 
 	res = KConv.Str2Uint("TRUE")
@@ -269,28 +269,28 @@ func TestConver_Str2Uint(t *testing.T) {
 	assert.Equal(t, uint(0), res)
 }
 
-func BenchmarkConver_Str2Uint_Bool(b *testing.B) {
+func BenchmarkConvert_Str2Uint_Bool(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Uint("TRUE")
 	}
 }
 
-func BenchmarkConver_Str2Uint_Float(b *testing.B) {
+func BenchmarkConvert_Str2Uint_Float(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Uint("1234.567")
 	}
 }
 
-func BenchmarkConver_Str2Uint_Int(b *testing.B) {
+func BenchmarkConvert_Str2Uint_Int(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Uint("1234567")
 	}
 }
 
-func TestConver_Str2Uint8(t *testing.T) {
+func TestConvert_Str2Uint8(t *testing.T) {
 	var res uint8
 
 	res = KConv.Str2Uint8("99")
@@ -300,14 +300,14 @@ func TestConver_Str2Uint8(t *testing.T) {
 	assert.Equal(t, uint8(255), res)
 }
 
-func BenchmarkConver_Str2Uint8(b *testing.B) {
+func BenchmarkConvert_Str2Uint8(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Uint8("99")
 	}
 }
 
-func TestConver_Str2Uint16(t *testing.T) {
+func TestConvert_Str2Uint16(t *testing.T) {
 	var res uint16
 
 	res = KConv.Str2Uint16("99")
@@ -317,14 +317,14 @@ func TestConver_Str2Uint16(t *testing.T) {
 	assert.Equal(t, uint16(65535), res)
 }
 
-func BenchmarkConver_Str2Uint16(b *testing.B) {
+func BenchmarkConvert_Str2Uint16(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Uint16("99")
 	}
 }
 
-func TestConver_Str2Uint32(t *testing.T) {
+func TestConvert_Str2Uint32(t *testing.T) {
 	var res uint32
 
 	res = KConv.Str2Uint32("99")
@@ -334,14 +334,14 @@ func TestConver_Str2Uint32(t *testing.T) {
 	assert.Equal(t, uint32(4294967295), res)
 }
 
-func BenchmarkConver_Str2Uint32(b *testing.B) {
+func BenchmarkConvert_Str2Uint32(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Uint32("99")
 	}
 }
 
-func TestConver_Str2Uint64(t *testing.T) {
+func TestConvert_Str2Uint64(t *testing.T) {
 	var res uint64
 
 	res = KConv.Str2Uint64("99")
@@ -351,14 +351,14 @@ func TestConver_Str2Uint64(t *testing.T) {
 	assert.Greater(t, res, uint64(4294967295))
 }
 
-func BenchmarkConver_Str2Uint64(b *testing.B) {
+func BenchmarkConvert_Str2Uint64(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Uint64("99")
 	}
 }
 
-func TestConver_Str2Float32(t *testing.T) {
+func TestConvert_Str2Float32(t *testing.T) {
 	var res float32
 
 	res = KConv.Str2Float32("true")
@@ -371,14 +371,14 @@ func TestConver_Str2Float32(t *testing.T) {
 	assert.Equal(t, float32(123.556), res)
 }
 
-func BenchmarkConver_Str2Float32(b *testing.B) {
+func BenchmarkConvert_Str2Float32(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Float32("123.556")
 	}
 }
 
-func TestConver_Str2Float64(t *testing.T) {
+func TestConvert_Str2Float64(t *testing.T) {
 	var res float64
 
 	res = KConv.Str2Float64("true")
@@ -391,14 +391,14 @@ func TestConver_Str2Float64(t *testing.T) {
 	assert.Equal(t, float64(123.556), res)
 }
 
-func BenchmarkConver_Str2Float64(b *testing.B) {
+func BenchmarkConvert_Str2Float64(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Float64("123.556")
 	}
 }
 
-func TestConver_Str2Bool(t *testing.T) {
+func TestConvert_Str2Bool(t *testing.T) {
 	var res bool
 
 	//true
@@ -447,14 +447,14 @@ func TestConver_Str2Bool(t *testing.T) {
 	assert.False(t, res)
 }
 
-func BenchmarkConver_Str2Bool(b *testing.B) {
+func BenchmarkConvert_Str2Bool(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Bool(strHello)
 	}
 }
 
-func TestConver_Str2Bytes(t *testing.T) {
+func TestConvert_Str2Bytes(t *testing.T) {
 	var res []byte
 
 	res = KConv.Str2Bytes("")
@@ -464,14 +464,14 @@ func TestConver_Str2Bytes(t *testing.T) {
 	assert.Equal(t, len(strHello), len(res))
 }
 
-func BenchmarkConver_Str2Bytes(b *testing.B) {
+func BenchmarkConvert_Str2Bytes(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2Bytes(strHello)
 	}
 }
 
-func TestConver_Bytes2Str(t *testing.T) {
+func TestConvert_Bytes2Str(t *testing.T) {
 	var res string
 
 	res = KConv.Bytes2Str([]byte{})
@@ -481,7 +481,7 @@ func TestConver_Bytes2Str(t *testing.T) {
 	assert.NotEmpty(t, res)
 }
 
-func BenchmarkConver_Bytes2Str(b *testing.B) {
+func BenchmarkConvert_Bytes2Str(b *testing.B) {
 	var bs = []byte(strHello)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -489,7 +489,7 @@ func BenchmarkConver_Bytes2Str(b *testing.B) {
 	}
 }
 
-func TestConver_Str2BytesUnsafe(t *testing.T) {
+func TestConvert_Str2BytesUnsafe(t *testing.T) {
 	var res []byte
 
 	res = KConv.Str2BytesUnsafe("")
@@ -499,14 +499,14 @@ func TestConver_Str2BytesUnsafe(t *testing.T) {
 	assert.Equal(t, len(strHello), len(res))
 }
 
-func BenchmarkConver_Str2BytesUnsafe(b *testing.B) {
+func BenchmarkConvert_Str2BytesUnsafe(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Str2BytesUnsafe(strHello)
 	}
 }
 
-func TestConver_Bytes2StrUnsafe(t *testing.T) {
+func TestConvert_Bytes2StrUnsafe(t *testing.T) {
 	var res string
 
 	res = KConv.Bytes2StrUnsafe([]byte{})
@@ -516,7 +516,7 @@ func TestConver_Bytes2StrUnsafe(t *testing.T) {
 	assert.NotEmpty(t, res)
 }
 
-func BenchmarkConver_Bytes2StrUnsafe(b *testing.B) {
+func BenchmarkConvert_Bytes2StrUnsafe(b *testing.B) {
 	var bs = []byte(strHello)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -524,7 +524,7 @@ func BenchmarkConver_Bytes2StrUnsafe(b *testing.B) {
 	}
 }
 
-func TestConver_Dec2Bin(t *testing.T) {
+func TestConvert_Dec2Bin(t *testing.T) {
 	var res string
 
 	res = KConv.Dec2Bin(8)
@@ -536,14 +536,14 @@ func TestConver_Dec2Bin(t *testing.T) {
 	res = KConv.Dec2Bin(16)
 }
 
-func BenchmarkConver_Dec2Bin(b *testing.B) {
+func BenchmarkConvert_Dec2Bin(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Dec2Bin(16)
 	}
 }
 
-func TestConver_Bin2Dec(t *testing.T) {
+func TestConvert_Bin2Dec(t *testing.T) {
 	var res int64
 	var err error
 
@@ -558,14 +558,14 @@ func TestConver_Bin2Dec(t *testing.T) {
 	assert.NotNil(t, err)
 }
 
-func BenchmarkConver_Bin2Dec(b *testing.B) {
+func BenchmarkConvert_Bin2Dec(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _ = KConv.Bin2Dec("10000")
 	}
 }
 
-func TestConver_Hex2Bin(t *testing.T) {
+func TestConvert_Hex2Bin(t *testing.T) {
 	var res string
 	var dec int64
 	var err error
@@ -582,14 +582,14 @@ func TestConver_Hex2Bin(t *testing.T) {
 	assert.NotNil(t, err)
 }
 
-func BenchmarkConver_Hex2Bin(b *testing.B) {
+func BenchmarkConvert_Hex2Bin(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _ = KConv.Hex2Bin(hexAstronomicalUnit)
 	}
 }
 
-func TestConver_Bin2Hex(t *testing.T) {
+func TestConvert_Bin2Hex(t *testing.T) {
 	var res string
 	var err error
 
@@ -601,14 +601,14 @@ func TestConver_Bin2Hex(t *testing.T) {
 	assert.NotNil(t, err)
 }
 
-func BenchmarkConver_Bin2Hex(b *testing.B) {
+func BenchmarkConvert_Bin2Hex(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _ = KConv.Bin2Hex(binAstronomicalUnit)
 	}
 }
 
-func TestConver_Dec2Hex(t *testing.T) {
+func TestConvert_Dec2Hex(t *testing.T) {
 	var res string
 
 	res = KConv.Dec2Hex(intAstronomicalUnit)
@@ -618,14 +618,14 @@ func TestConver_Dec2Hex(t *testing.T) {
 	assert.Equal(t, "0", res)
 }
 
-func BenchmarkConver_Dec2Hex(b *testing.B) {
+func BenchmarkConvert_Dec2Hex(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Dec2Hex(intAstronomicalUnit)
 	}
 }
 
-func TestConver_Hex2Dec(t *testing.T) {
+func TestConvert_Hex2Dec(t *testing.T) {
 	var res int64
 	var err error
 
@@ -637,14 +637,14 @@ func TestConver_Hex2Dec(t *testing.T) {
 	assert.NotNil(t, err)
 }
 
-func BenchmarkConver_Hex2Dec(b *testing.B) {
+func BenchmarkConvert_Hex2Dec(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _ = KConv.Hex2Dec(hexAstronomicalUnit)
 	}
 }
 
-func TestConver_Dec2Oct(t *testing.T) {
+func TestConvert_Dec2Oct(t *testing.T) {
 	var res string
 
 	res = KConv.Dec2Oct(intAstronomicalUnit)
@@ -654,14 +654,14 @@ func TestConver_Dec2Oct(t *testing.T) {
 	assert.Equal(t, "0", res)
 }
 
-func BenchmarkConver_Dec2Oct(b *testing.B) {
+func BenchmarkConvert_Dec2Oct(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Dec2Oct(intAstronomicalUnit)
 	}
 }
 
-func TestConver_Oct2Dec(t *testing.T) {
+func TestConvert_Oct2Dec(t *testing.T) {
 	var res int64
 	var err error
 
@@ -673,14 +673,14 @@ func TestConver_Oct2Dec(t *testing.T) {
 	assert.NotNil(t, err)
 }
 
-func BenchmarkConver_Oct2Dec(b *testing.B) {
+func BenchmarkConvert_Oct2Dec(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _ = KConv.Oct2Dec(otcAstronomicalUnit)
 	}
 }
 
-func TestConver_BaseConvert(t *testing.T) {
+func TestConvert_BaseConvert(t *testing.T) {
 	var res string
 	var err error
 
@@ -692,7 +692,7 @@ func TestConver_BaseConvert(t *testing.T) {
 	assert.NotNil(t, err)
 }
 
-func BenchmarkConver_BaseConvert(b *testing.B) {
+func BenchmarkConvert_BaseConvert(b *testing.B) {
 	b.ResetTimer()
 	s := toStr(intAstronomicalUnit)
 	for i := 0; i < b.N; i++ {
@@ -700,7 +700,7 @@ func BenchmarkConver_BaseConvert(b *testing.B) {
 	}
 }
 
-func TestConver_Ip2Long(t *testing.T) {
+func TestConvert_Ip2Long(t *testing.T) {
 	var res uint32
 
 	res = KConv.Ip2Long(localIp)
@@ -713,14 +713,14 @@ func TestConver_Ip2Long(t *testing.T) {
 	assert.Equal(t, uint32(0), res)
 }
 
-func BenchmarkConver_Ip2Long(b *testing.B) {
+func BenchmarkConvert_Ip2Long(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Ip2Long(localIp)
 	}
 }
 
-func TestConver_Long2Ip(t *testing.T) {
+func TestConvert_Long2Ip(t *testing.T) {
 	var res string
 
 	res = KConv.Long2Ip(localIpInt)
@@ -733,14 +733,14 @@ func TestConver_Long2Ip(t *testing.T) {
 	assert.Equal(t, noneIp, res)
 }
 
-func BenchmarkConver_Long2Ip(b *testing.B) {
+func BenchmarkConvert_Long2Ip(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Long2Ip(localIpInt)
 	}
 }
 
-func TestConver_ToStr(t *testing.T) {
+func TestConvert_ToStr(t *testing.T) {
 	var tests = []struct {
 		input    interface{}
 		expected string
@@ -775,7 +775,7 @@ func TestConver_ToStr(t *testing.T) {
 	}
 }
 
-func TestConver_ToBool(t *testing.T) {
+func TestConvert_ToBool(t *testing.T) {
 	//并行测试
 	t.Parallel()
 
@@ -812,14 +812,14 @@ func TestConver_ToBool(t *testing.T) {
 	}
 }
 
-func BenchmarkConver_ToBool(b *testing.B) {
+func BenchmarkConvert_ToBool(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.ToBool(intSpeedLight)
 	}
 }
 
-func TestConver_ToInt(t *testing.T) {
+func TestConvert_ToInt(t *testing.T) {
 	//并行测试
 	t.Parallel()
 
@@ -856,14 +856,14 @@ func TestConver_ToInt(t *testing.T) {
 	}
 }
 
-func BenchmarkConver_ToInt(b *testing.B) {
+func BenchmarkConvert_ToInt(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.ToInt(intSpeedLight)
 	}
 }
 
-func TestConver_ToFloat(t *testing.T) {
+func TestConvert_ToFloat(t *testing.T) {
 	var tests = []struct {
 		input    interface{}
 		expected float64
@@ -897,27 +897,27 @@ func TestConver_ToFloat(t *testing.T) {
 	}
 }
 
-func BenchmarkConver_ToFloat(b *testing.B) {
+func BenchmarkConvert_ToFloat(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.ToFloat(intSpeedLight)
 	}
 }
 
-func TestConver_Float64ToByte(t *testing.T) {
+func TestConvert_Float64ToByte(t *testing.T) {
 	var res []byte
 	res = KConv.Float64ToByte(flPi2)
 	assert.NotEmpty(t, res)
 }
 
-func BenchmarkConver_Float64ToByte(b *testing.B) {
+func BenchmarkConvert_Float64ToByte(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Float64ToByte(flPi2)
 	}
 }
 
-func TestConver_Byte2Float64(t *testing.T) {
+func TestConvert_Byte2Float64(t *testing.T) {
 	defer func() {
 		r := recover()
 		assert.NotEmpty(t, r)
@@ -932,22 +932,42 @@ func TestConver_Byte2Float64(t *testing.T) {
 	KConv.Byte2Float64([]byte{0, 1, 2, 3})
 }
 
-func BenchmarkConver_Byte2Float64(b *testing.B) {
+func BenchmarkConvert_Byte2Float64(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Byte2Float64(bytPi5)
 	}
 }
 
-func TestConver_Int64ToByte(t *testing.T) {
+func TestConvert_Int64ToByte(t *testing.T) {
 	var res []byte
 	res = KConv.Int64ToByte(intAstronomicalUnit)
 	assert.NotEmpty(t, res)
 }
 
-func BenchmarkConver_Int64ToByte(b *testing.B) {
+func BenchmarkConvert_Int64ToByte(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Int64ToByte(intAstronomicalUnit)
+	}
+}
+
+func TestConvert_Byte2Int64(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.NotEmpty(t, r)
+	}()
+
+	var res int64
+	res = KConv.Byte2Int64(bytAstronomicalUnit)
+	assert.Equal(t, intAstronomicalUnit, res)
+
+	//不合法
+	KConv.Byte2Int64([]byte{0, 1, 2, 3})
+}
+
+func BenchmarkConvert_Byte2Int64(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		KConv.Byte2Int64(bytAstronomicalUnit)
 	}
 }
