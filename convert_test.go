@@ -903,3 +903,17 @@ func BenchmarkConver_ToFloat(b *testing.B) {
 		KConv.ToFloat(intSpeedLight)
 	}
 }
+
+func TestConver_Float64ToByte(t *testing.T) {
+	var res []byte
+
+	res = KConv.Float64ToByte(flPi2)
+	assert.NotEmpty(t, res)
+}
+
+func BenchmarkConver_Float64ToByte(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Float64ToByte(flPi2)
+	}
+}

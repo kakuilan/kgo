@@ -3,6 +3,7 @@ package kgo
 import (
 	"encoding/binary"
 	"fmt"
+	"math"
 	"net"
 	"reflect"
 	"strconv"
@@ -268,4 +269,13 @@ func (kc *LkkConvert) ToInt(val interface{}) int {
 // 指针、结构体类型为1.0,其他为0.
 func (kc *LkkConvert) ToFloat(val interface{}) (res float64) {
 	return toFloat(val)
+}
+
+// Float64ToByte 64位浮点数转字节切片.
+func (kc *LkkConvert) Float64ToByte(val float64) []byte {
+	bits := math.Float64bits(val)
+	res := make([]byte, 8)
+	binary.LittleEndian.PutUint64(res, bits)
+
+	return res
 }
