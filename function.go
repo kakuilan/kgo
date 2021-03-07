@@ -51,6 +51,11 @@ func lenArrayOrSlice(val interface{}, chkType uint8) int {
 	return res
 }
 
+// isBool 是否布尔值.
+func isBool(val interface{}) bool {
+	return val == true || val == false
+}
+
 // isMap 检查变量是否字典.
 func isMap(val interface{}) bool {
 	return reflect.ValueOf(val).Kind() == reflect.Map
@@ -59,6 +64,17 @@ func isMap(val interface{}) bool {
 // isStruct 检查变量是否结构体.
 func isStruct(val interface{}) bool {
 	return reflect.ValueOf(val).Kind() == reflect.Struct
+}
+
+// isInterface 变量是否接口.
+func isInterface(val interface{}) bool {
+	r := reflectPtr(reflect.ValueOf(val))
+	return r.Kind() == reflect.Invalid
+}
+
+// isByte 变量是否字节切片.
+func isByte(val interface{}) bool {
+	return GetVariateType(val) == "[]uint8"
 }
 
 // isInt 变量是否整型数值.
@@ -114,6 +130,48 @@ func isNumeric(val interface{}) bool {
 	}
 
 	return false
+}
+
+// isNil 检查变量是否空值.
+func isNil(val interface{}) bool {
+	if val == nil {
+		return true
+	}
+
+	rv := reflect.ValueOf(val)
+	switch rv.Kind() {
+	case reflect.Chan, reflect.Func, reflect.Map, reflect.Ptr, reflect.Slice, reflect.Interface:
+		if rv.IsNil() {
+			return true
+		}
+	}
+	return false
+}
+
+// isEmpty 检查变量是否为空.
+func isEmpty(val interface{}) bool {
+	if val == nil {
+		return true
+	}
+	v := reflect.ValueOf(val)
+	switch v.Kind() {
+	case reflect.String, reflect.Array:
+		return v.Len() == 0
+	case reflect.Map, reflect.Slice:
+		return v.Len() == 0 || v.IsNil()
+	case reflect.Bool:
+		return !v.Bool()
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return v.Int() == 0
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		return v.Uint() == 0
+	case reflect.Float32, reflect.Float64:
+		return v.Float() == 0
+	case reflect.Interface, reflect.Ptr:
+		return v.IsNil()
+	}
+
+	return reflect.DeepEqual(val, reflect.Zero(v.Type()).Interface())
 }
 
 // isLittleEndian 系统字节序类型是否小端存储.
