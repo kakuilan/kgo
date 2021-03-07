@@ -773,5 +773,48 @@ func TestConver_ToStr(t *testing.T) {
 			assert.Equal(t, test.expected, actual)
 		}
 	}
+}
 
+func TestConver_ToBool(t *testing.T) {
+	//并行测试
+	t.Parallel()
+
+	var tests = []struct {
+		input    interface{}
+		expected bool
+	}{
+		{int(-1), false},
+		{int8(0), false},
+		{int16(1), true},
+		{int32(2), true},
+		{int64(3), true},
+		{uint(0), false},
+		{uint8(0), false},
+		{uint16(0), false},
+		{uint32(0), false},
+		{uint64(0), false},
+		{float32(0), false},
+		{float64(0), false},
+		{[]byte{}, false},
+		{bytSlcHello, true},
+		{"1", true},
+		{"2.1", false},
+		{"TRUE", true},
+		{false, false},
+		{fnCb1, false},
+		{nil, false},
+		{personS1, true},
+	}
+
+	for _, test := range tests {
+		actual := KConv.ToBool(test.input)
+		assert.Equal(t, test.expected, actual)
+	}
+}
+
+func BenchmarkConver_ToBool(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.ToBool(intSpeedLight)
+	}
 }

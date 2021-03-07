@@ -868,6 +868,54 @@ func toFloat(val interface{}) (res float64) {
 	return
 }
 
+// toBool 强制将变量转换为布尔值.
+// 数值类型将检查值是否>0;
+// 字符串将使用str2Bool;
+// 数组、切片、字典、通道类型将检查它们的长度是否>0;
+// 指针、结构体类型为true,其他为false.
+func toBool(val interface{}) (res bool) {
+	switch val.(type) {
+	case int:
+		res = (val.(int) > 0)
+	case int8:
+		res = (val.(int8) > 0)
+	case int16:
+		res = (val.(int16) > 0)
+	case int32:
+		res = (val.(int32) > 0)
+	case int64:
+		res = (val.(int64) > 0)
+	case uint:
+		res = (val.(uint) > 0)
+	case uint8:
+		res = (val.(uint8) > 0)
+	case uint16:
+		res = (val.(uint16) > 0)
+	case uint32:
+		res = (val.(uint32) > 0)
+	case uint64:
+		res = (val.(uint64) > 0)
+	case float32:
+		res = (val.(float32) > 0)
+	case float64:
+		res = (val.(float64) > 0)
+	case string:
+		res = str2Bool(val.(string))
+	case bool:
+		res = val.(bool)
+	default:
+		v := reflect.ValueOf(val)
+		switch v.Kind() {
+		case reflect.Array, reflect.Slice, reflect.Map, reflect.Chan:
+			res = v.Len() > 0
+		case reflect.Ptr, reflect.Struct:
+			res = true
+		}
+	}
+
+	return
+}
+
 // struct2Map 结构体转为字典;tagName为要导出的标签名,可以为空,为空时将导出所有字段.
 func struct2Map(obj interface{}, tagName string) (map[string]interface{}, error) {
 	v, e := structVal(obj)

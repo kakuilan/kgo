@@ -240,3 +240,12 @@ func (kc *LkkConvert) Long2Ip(properAddress uint32) string {
 func (kc *LkkConvert) ToStr(val interface{}) string {
 	return toStr(val)
 }
+
+// ToBool 强制将变量转换为布尔值.
+// 数值类型将检查值是否>0;
+// 字符串将使用Str2Bool;
+// 数组、切片、字典、通道类型将检查它们的长度是否>0;
+// 指针、结构体类型为true,其他为false.
+func (kc *LkkConvert) ToBool(val interface{}) bool {
+	return toBool(val)
+}
