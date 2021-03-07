@@ -259,3 +259,13 @@ func (kc *LkkConvert) ToBool(val interface{}) bool {
 func (kc *LkkConvert) ToInt(val interface{}) int {
 	return toInt(val)
 }
+
+// ToFloat 强制将变量转换为浮点型.
+// 数值类型将转为浮点型;
+// 字符串将使用Str2Float64;
+// 布尔型的true为1.0,false为0;
+// 数组、切片、字典、通道类型将取它们的长度;
+// 指针、结构体类型为1.0,其他为0.
+func (kc *LkkConvert) ToFloat(val interface{}) (res float64) {
+	return toFloat(val)
+}

@@ -887,7 +887,12 @@ func toInt(val interface{}) (res int) {
 	return
 }
 
-// toFloat 强制将变量转换为浮点型;其中true或"true"为1.0 .
+// toFloat 强制将变量转换为浮点型.
+// 数值类型将转为浮点型;
+// 字符串将使用str2Float64;
+// 布尔型的true为1.0,false为0;
+// 数组、切片、字典、通道类型将取它们的长度;
+// 指针、结构体类型为1.0,其他为0.
 func toFloat(val interface{}) (res float64) {
 	switch val.(type) {
 	case int:
@@ -914,12 +919,18 @@ func toFloat(val interface{}) (res float64) {
 		res = float64(val.(float32))
 	case float64:
 		res = val.(float64)
-	case []uint8:
-		res = str2Float64(string(val.([]uint8)))
 	case string:
 		res = str2Float64(val.(string))
 	case bool:
 		if val.(bool) {
+			res = 1.0
+		}
+	default:
+		v := reflect.ValueOf(val)
+		switch v.Kind() {
+		case reflect.Array, reflect.Slice, reflect.Map, reflect.Chan:
+			res = float64(v.Len())
+		case reflect.Ptr, reflect.Struct:
 			res = 1.0
 		}
 	}

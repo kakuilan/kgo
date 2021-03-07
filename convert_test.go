@@ -862,3 +862,44 @@ func BenchmarkConver_ToInt(b *testing.B) {
 		KConv.ToInt(intSpeedLight)
 	}
 }
+
+func TestConver_ToFloat(t *testing.T) {
+	var tests = []struct {
+		input    interface{}
+		expected float64
+	}{
+		{int(-1), -1.0},
+		{int8(0), 0.0},
+		{int16(1), 1.0},
+		{int32(2), 2.0},
+		{int64(3), 3.0},
+		{uint(0), 0.0},
+		{uint8(0), 0.0},
+		{uint16(0), 0.0},
+		{uint32(0), 0.0},
+		{uint64(0), 0.0},
+		{float32(0), 0.0},
+		{float64(0), 0.0},
+		{[]byte{}, 0.0},
+		{"1", 1.0},
+		{"2.1", 2.1},
+		{"TRUE", 1.0},
+		{true, 1.0},
+		{false, 0},
+		{fnCb1, 0},
+		{nil, 0},
+		{personS1, 1.0},
+		{crowd, 5.0},
+	}
+	for _, test := range tests {
+		actual := KConv.ToFloat(test.input)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkConver_ToFloat(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.ToFloat(intSpeedLight)
+	}
+}
