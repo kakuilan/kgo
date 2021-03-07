@@ -790,84 +790,6 @@ func toStr(val interface{}) string {
 	return fmt.Sprintf("%v", val)
 }
 
-// toInt 强制将变量转换为整型;其中true或"true"为1.
-func toInt(val interface{}) int {
-	switch val.(type) {
-	case int:
-		return val.(int)
-	case int8:
-		return int(val.(int8))
-	case int16:
-		return int(val.(int16))
-	case int32:
-		return int(val.(int32))
-	case int64:
-		return int(val.(int64))
-	case uint:
-		return int(val.(uint))
-	case uint8:
-		return int(val.(uint8))
-	case uint16:
-		return int(val.(uint16))
-	case uint32:
-		return int(val.(uint32))
-	case uint64:
-		return int(val.(uint64))
-	case float32:
-		return int(val.(float32))
-	case float64:
-		return int(val.(float64))
-	case []uint8:
-		return str2Int(string(val.([]uint8)))
-	case string:
-		return str2Int(val.(string))
-	case bool:
-		return bool2Int(val.(bool))
-	default:
-		return 0
-	}
-}
-
-// toFloat 强制将变量转换为浮点型;其中true或"true"为1.0 .
-func toFloat(val interface{}) (res float64) {
-	switch val.(type) {
-	case int:
-		res = float64(val.(int))
-	case int8:
-		res = float64(val.(int8))
-	case int16:
-		res = float64(val.(int16))
-	case int32:
-		res = float64(val.(int32))
-	case int64:
-		res = float64(val.(int64))
-	case uint:
-		res = float64(val.(uint))
-	case uint8:
-		res = float64(val.(uint8))
-	case uint16:
-		res = float64(val.(uint16))
-	case uint32:
-		res = float64(val.(uint32))
-	case uint64:
-		res = float64(val.(uint64))
-	case float32:
-		res = float64(val.(float32))
-	case float64:
-		res = val.(float64)
-	case []uint8:
-		res = str2Float64(string(val.([]uint8)))
-	case string:
-		res = str2Float64(val.(string))
-	case bool:
-		if val.(bool) {
-			res = 1.0
-		}
-	}
-
-	return
-}
-
 // toBool 强制将变量转换为布尔值.
 // 数值类型将检查值是否>0;
 // 字符串将使用str2Bool;
@@ -910,6 +832,95 @@ func toBool(val interface{}) (res bool) {
 			res = v.Len() > 0
 		case reflect.Ptr, reflect.Struct:
 			res = true
+		}
+	}
+
+	return
+}
+
+// toInt 强制将变量转换为整型.
+// 数值类型将转为整型;
+// 字符串将使用str2Int;
+// 布尔型的true为1,false为0;
+// 数组、切片、字典、通道类型将取它们的长度;
+// 指针、结构体类型为1,其他为0.
+func toInt(val interface{}) (res int) {
+	switch val.(type) {
+	case int:
+		res = val.(int)
+	case int8:
+		res = int(val.(int8))
+	case int16:
+		res = int(val.(int16))
+	case int32:
+		res = int(val.(int32))
+	case int64:
+		res = int(val.(int64))
+	case uint:
+		res = int(val.(uint))
+	case uint8:
+		res = int(val.(uint8))
+	case uint16:
+		res = int(val.(uint16))
+	case uint32:
+		res = int(val.(uint32))
+	case uint64:
+		res = int(val.(uint64))
+	case float32:
+		res = int(val.(float32))
+	case float64:
+		res = int(val.(float64))
+	case string:
+		res = str2Int(val.(string))
+	case bool:
+		res = bool2Int(val.(bool))
+	default:
+		v := reflect.ValueOf(val)
+		switch v.Kind() {
+		case reflect.Array, reflect.Slice, reflect.Map, reflect.Chan:
+			res = v.Len()
+		case reflect.Ptr, reflect.Struct:
+			res = 1
+		}
+	}
+
+	return
+}
+
+// toFloat 强制将变量转换为浮点型;其中true或"true"为1.0 .
+func toFloat(val interface{}) (res float64) {
+	switch val.(type) {
+	case int:
+		res = float64(val.(int))
+	case int8:
+		res = float64(val.(int8))
+	case int16:
+		res = float64(val.(int16))
+	case int32:
+		res = float64(val.(int32))
+	case int64:
+		res = float64(val.(int64))
+	case uint:
+		res = float64(val.(uint))
+	case uint8:
+		res = float64(val.(uint8))
+	case uint16:
+		res = float64(val.(uint16))
+	case uint32:
+		res = float64(val.(uint32))
+	case uint64:
+		res = float64(val.(uint64))
+	case float32:
+		res = float64(val.(float32))
+	case float64:
+		res = val.(float64)
+	case []uint8:
+		res = str2Float64(string(val.([]uint8)))
+	case string:
+		res = str2Float64(val.(string))
+	case bool:
+		if val.(bool) {
+			res = 1.0
 		}
 	}
 

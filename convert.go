@@ -249,3 +249,13 @@ func (kc *LkkConvert) ToStr(val interface{}) string {
 func (kc *LkkConvert) ToBool(val interface{}) bool {
 	return toBool(val)
 }
+
+// ToInt 强制将变量转换为整型.
+// 数值类型将转为整型;
+// 字符串类型将使用Str2Int;
+// 布尔型的true为1,false为0;
+// 数组、切片、字典、通道类型将取它们的长度;
+// 指针、结构体类型为1,其他为0.
+func (kc *LkkConvert) ToInt(val interface{}) int {
+	return toInt(val)
+}

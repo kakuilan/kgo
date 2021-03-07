@@ -808,7 +808,7 @@ func TestConver_ToBool(t *testing.T) {
 
 	for _, test := range tests {
 		actual := KConv.ToBool(test.input)
-		assert.Equal(t, test.expected, actual)
+		assert.Equal(t, actual, test.expected)
 	}
 }
 
@@ -816,5 +816,49 @@ func BenchmarkConver_ToBool(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.ToBool(intSpeedLight)
+	}
+}
+
+func TestConver_ToInt(t *testing.T) {
+	//并行测试
+	t.Parallel()
+
+	var tests = []struct {
+		input    interface{}
+		expected int
+	}{
+		{int(-1), -1},
+		{int8(0), 0},
+		{int16(1), 1},
+		{int32(2), 2},
+		{int64(3), 3},
+		{uint(0), 0},
+		{uint8(0), 0},
+		{uint16(0), 0},
+		{uint32(0), 0},
+		{uint64(0), 0},
+		{float32(1.234), 1},
+		{float64(4.5678), 4},
+		{[]byte{}, 0},
+		{"1", 1},
+		{"2.1", 2},
+		{"TRUE", 1},
+		{true, 1},
+		{false, 0},
+		{fnCb1, 0},
+		{nil, 0},
+		{personS1, 1},
+		{crowd, 5},
+	}
+	for _, test := range tests {
+		actual := KConv.ToInt(test.input)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkConver_ToInt(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.ToInt(intSpeedLight)
 	}
 }

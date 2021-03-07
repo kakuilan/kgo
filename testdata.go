@@ -30,7 +30,7 @@ type sOrganization struct {
 var personS1, personS2, personS3, personS4, personS5 sPerson
 
 //结构体-人群
-var crowd = make(sPersons, 1)
+var crowd sPersons
 
 //结构体-组织
 var orgS1 = new(sOrganization)
@@ -64,6 +64,10 @@ var floAvogadro float64 = 6.02214129e23   // 阿伏伽德罗常数
 var floPlanck float64 = 6.62606957e-34    // 普朗克常数
 var floGravitional float64 = 6.673e-11    //重力常数
 var floPermittivity float64 = 8.85419e-12 //真空介电常数
+
+//复数
+var cmplNum1 = complex(1, 2)
+var cmplNum2 = complex(3, 4)
 
 //字符串
 var strHello = "Hello World! 你好！"
