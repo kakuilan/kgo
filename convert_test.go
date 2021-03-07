@@ -906,7 +906,6 @@ func BenchmarkConver_ToFloat(b *testing.B) {
 
 func TestConver_Float64ToByte(t *testing.T) {
 	var res []byte
-
 	res = KConv.Float64ToByte(flPi2)
 	assert.NotEmpty(t, res)
 }
@@ -937,5 +936,18 @@ func BenchmarkConver_Byte2Float64(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Byte2Float64(bytPi5)
+	}
+}
+
+func TestConver_Int64ToByte(t *testing.T) {
+	var res []byte
+	res = KConv.Int64ToByte(intAstronomicalUnit)
+	assert.NotEmpty(t, res)
+}
+
+func BenchmarkConver_Int64ToByte(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Int64ToByte(intAstronomicalUnit)
 	}
 }

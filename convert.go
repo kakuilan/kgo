@@ -286,3 +286,11 @@ func (kc *LkkConvert) Byte2Float64(bytes []byte) float64 {
 
 	return math.Float64frombits(bits)
 }
+
+// Int64ToByte 64位整型转字节切片.
+func (kc *LkkConvert) Int64ToByte(val int64) []byte {
+	res := make([]byte, 8)
+	binary.BigEndian.PutUint64(res, uint64(val))
+
+	return res
+}
