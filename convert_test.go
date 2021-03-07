@@ -917,3 +917,25 @@ func BenchmarkConver_Float64ToByte(b *testing.B) {
 		KConv.Float64ToByte(flPi2)
 	}
 }
+
+func TestConver_Byte2Float64(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.NotEmpty(t, r)
+	}()
+
+	var res float64
+
+	res = KConv.Byte2Float64(bytPi5)
+	assert.Equal(t, flPi2, res)
+
+	//不合法
+	KConv.Byte2Float64([]byte{0, 1, 2, 3})
+}
+
+func BenchmarkConver_Byte2Float64(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Byte2Float64(bytPi5)
+	}
+}
