@@ -318,3 +318,14 @@ func (kc *LkkConvert) Hex2Byte(str string) []byte {
 	h, _ := hex.DecodeString(str)
 	return h
 }
+
+// Hexs2Byte 16进制切片转byte切片.
+func (kc *LkkConvert) Hexs2Byte(val []byte) []byte {
+	dst := make([]byte, hex.DecodedLen(len(val)))
+	_, err := hex.Decode(dst, val)
+
+	if err != nil {
+		return nil
+	}
+	return dst
+}
