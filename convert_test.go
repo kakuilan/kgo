@@ -1254,3 +1254,25 @@ func BenchmarkConvert_IsHex(b *testing.B) {
 		KConv.IsHex(strHelloHex)
 	}
 }
+
+func TestConvert_IsByte(t *testing.T) {
+	var tests = []struct {
+		input    interface{}
+		expected bool
+	}{
+		{"", false},
+		{runesHello, false},
+		{btysHello, true},
+	}
+	for _, test := range tests {
+		actual := KConv.IsByte(test.input)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkConvert_IsByte(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsByte(btysHello)
+	}
+}

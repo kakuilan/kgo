@@ -380,3 +380,8 @@ func (kc *LkkConvert) IsBool(val interface{}) bool {
 func (kc *LkkConvert) IsHex(str string) bool {
 	return isHex(str)
 }
+
+// IsByte 变量是否字节切片.
+func (kc *LkkConvert) IsByte(val interface{}) bool {
+	return isByte(val)
+}
