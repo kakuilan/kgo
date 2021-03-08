@@ -73,6 +73,7 @@ var cmplNum2 = complex(3, 4)
 
 //字符串
 var strHello = "Hello World! 你好！"
+var strHelloHex = "48656c6c6f20576f726c642120e4bda0e5a5bdefbc81" //strHello的16进制
 var strSpeedLight = "299792458"
 var binAstronomicalUnit = "10001011010100101110100101101001000100" //intAstronomicalUnit的二进制
 var hexAstronomicalUnit = "22d4ba5a44"                             //intAstronomicalUnit的16进制

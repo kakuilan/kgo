@@ -967,7 +967,44 @@ func TestConvert_Byte2Int64(t *testing.T) {
 }
 
 func BenchmarkConvert_Byte2Int64(b *testing.B) {
+	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.Byte2Int64(bytAstronomicalUnit)
+	}
+}
+
+func TestConvert_Byte2Hex(t *testing.T) {
+	var res string
+
+	res = KConv.Byte2Hex([]byte(strHello))
+	assert.Equal(t, strHelloHex, res)
+
+	res = KConv.Byte2Hex([]byte(""))
+	assert.Empty(t, res)
+}
+
+func BenchmarkConvert_Byte2Hex(b *testing.B) {
+	b.ResetTimer()
+	bs := []byte(strHello)
+	for i := 0; i < b.N; i++ {
+		KConv.Byte2Hex(bs)
+	}
+}
+
+func TestConvert_Byte2Hexs(t *testing.T) {
+	var res []byte
+
+	res = KConv.Byte2Hexs([]byte(strHello))
+	assert.Equal(t, strHelloHex, string(res))
+
+	res = KConv.Byte2Hexs([]byte(""))
+	assert.Empty(t, res)
+}
+
+func BenchmarkConvert_Byte2Hexs(b *testing.B) {
+	b.ResetTimer()
+	bs := []byte(strHello)
+	for i := 0; i < b.N; i++ {
+		KConv.Byte2Hexs(bs)
 	}
 }
