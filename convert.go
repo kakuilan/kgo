@@ -385,3 +385,8 @@ func (kc *LkkConvert) IsHex(str string) bool {
 func (kc *LkkConvert) IsByte(val interface{}) bool {
 	return isByte(val)
 }
+
+// IsStruct 变量是否结构体.
+func (kc *LkkConvert) IsStruct(val interface{}) bool {
+	return isStruct(val)
+}

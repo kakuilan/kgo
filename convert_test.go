@@ -1276,3 +1276,30 @@ func BenchmarkConvert_IsByte(b *testing.B) {
 		KConv.IsByte(btysHello)
 	}
 }
+
+func TestConvert_IsStruct(t *testing.T) {
+	var tests = []struct {
+		input    interface{}
+		expected bool
+	}{
+		{strHello, false},
+		{runesHello, false},
+		{cmplNum1, false},
+		{colorMp, false},
+		{personS1, true},
+		{&personS1, true},
+		{orgS1, true},
+		{&orgS1, false},
+	}
+	for _, test := range tests {
+		actual := KConv.IsStruct(test.input)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkConvert_IsStruct(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsStruct(personS1)
+	}
+}

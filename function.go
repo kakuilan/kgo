@@ -63,7 +63,8 @@ func isMap(val interface{}) bool {
 
 // isStruct 检查变量是否结构体.
 func isStruct(val interface{}) bool {
-	return reflect.ValueOf(val).Kind() == reflect.Struct
+	r := reflectPtr(reflect.ValueOf(val))
+	return r.Kind() == reflect.Struct
 }
 
 // isInterface 变量是否接口.

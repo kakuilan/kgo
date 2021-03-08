@@ -33,7 +33,7 @@ var personS1, personS2, personS3, personS4, personS5 sPerson
 var crowd sPersons
 
 //结构体-组织
-var orgS1 = new(sOrganization)
+var orgS1 = new(sOrganization) //返回指针
 
 //字典-普通人员
 var personMp1 = map[string]interface{}{"age": 20, "name": "test1", "naction": "us", "tel": "13712345678"}
