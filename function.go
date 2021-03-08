@@ -663,6 +663,12 @@ func GetVariateType(v interface{}) string {
 	return fmt.Sprintf("%T", v)
 }
 
+// GetVariatePointerAddr 获取变量的指针地址.
+func GetVariatePointerAddr(val interface{}) int64 {
+	res, _ := hex2Dec(fmt.Sprintf("%p", &val))
+	return res
+}
+
 // VerifyFunc 验证是否函数,并且参数个数、类型是否正确.
 // 返回有效的函数、有效的参数.
 func VerifyFunc(f interface{}, args ...interface{}) (vf reflect.Value, vargs []reflect.Value, err error) {

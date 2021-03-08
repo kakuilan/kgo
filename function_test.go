@@ -42,3 +42,24 @@ func BenchmarkFun_GetVariateType(b *testing.B) {
 		GetVariateType(intAstronomicalUnit)
 	}
 }
+
+func TestFun_GetVariatePointerAddr(t *testing.T) {
+	var tests = []struct {
+		input    interface{}
+		expected float64
+	}{
+		{intSpeedLight, 0},
+		{strHello, 0},
+		{crowd, 0},
+	}
+	for _, test := range tests {
+		actual := GetVariatePointerAddr(test.input)
+		assert.Greater(t, actual, int64(test.expected))
+	}
+}
+
+func BenchmarkConvert_GetVariatePointerAddr(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		GetVariatePointerAddr(intSpeedLight)
+	}
+}
