@@ -211,6 +211,11 @@ func (kc *LkkConvert) Oct2Dec(str string) (int64, error) {
 	return oct2Dec(str)
 }
 
+// Runes2Bytes 将[]rune转为[]byte.
+func (kc *LkkConvert) Runes2Bytes(rs []rune) []byte {
+	return runes2Bytes(rs)
+}
+
 // BaseConvert 进制转换,在任意进制之间转换数字.
 // num为输入数值,frombase为原进制,tobase为结果进制.
 func (kc *LkkConvert) BaseConvert(num string, frombase, tobase int) (string, error) {

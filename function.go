@@ -818,6 +818,23 @@ func bytes2StrUnsafe(val []byte) string {
 	return *(*string)(unsafe.Pointer(&val))
 }
 
+// runes2Bytes 将[]rune转为[]byte.
+func runes2Bytes(rs []rune) []byte {
+	size := 0
+	for _, r := range rs {
+		size += utf8.RuneLen(r)
+	}
+
+	bs := make([]byte, size)
+
+	count := 0
+	for _, r := range rs {
+		count += utf8.EncodeRune(bs[count:], r)
+	}
+
+	return bs
+}
+
 // toStr 强制将变量转换为字符串.
 func toStr(val interface{}) string {
 	//先处理其他类型
