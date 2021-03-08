@@ -320,7 +320,7 @@ func (kc *LkkConvert) Byte2Hexs(val []byte) []byte {
 
 // Hex2Byte 16进制字符串转字节切片.
 func (kc *LkkConvert) Hex2Byte(str string) []byte {
-	h, _ := hex.DecodeString(str)
+	h, _ := hex2Byte(str)
 	return h
 }
 
@@ -374,4 +374,9 @@ func (kc *LkkConvert) IsNil(val interface{}) bool {
 // IsBool 是否布尔值.
 func (kc *LkkConvert) IsBool(val interface{}) bool {
 	return isBool(val)
+}
+
+// IsHex 是否十六进制字符串.
+func (kc *LkkConvert) IsHex(str string) bool {
+	return isHex(str)
 }

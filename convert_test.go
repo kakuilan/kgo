@@ -1227,3 +1227,30 @@ func BenchmarkConvert_IsBool(b *testing.B) {
 		KConv.IsBool(false)
 	}
 }
+
+func TestConvert_IsHex(t *testing.T) {
+	var str1 = KConv.Dec2Hex(intAstronomicalUnit)
+	var str2 = "0x" + str1
+
+	var tests = []struct {
+		input    string
+		expected bool
+	}{
+		{"", false},
+		{str1, true},
+		{str2, true},
+		{strHelloHex, true},
+		{strHello, false},
+	}
+	for _, test := range tests {
+		actual := KConv.IsHex(test.input)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkConvert_IsHex(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsHex(strHelloHex)
+	}
+}

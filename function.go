@@ -93,9 +93,13 @@ func isBinary(s string) bool {
 }
 
 // isHex 是否十六进制字符串.
-func isHex(str string) bool {
-	_, err := hex2Dec(str)
-	return err == nil
+func isHex(str string) (res bool) {
+	if len(str) > 0 {
+		_, err := hex2Byte(str)
+		res = (err == nil)
+	}
+
+	return
 }
 
 // isInt 变量是否整型数值.
@@ -1111,6 +1115,17 @@ func hex2Dec(str string) (int64, error) {
 
 	// bitSize 表示结果的位宽（包括符号位），0 表示最大位宽
 	return strconv.ParseInt(str[start:], 16, 0)
+}
+
+// hex2Byte 16进制字符串转字节切片.
+func hex2Byte(str string) ([]byte, error) {
+	start := 0
+	if len(str) > 2 && str[0:2] == "0x" {
+		start = 2
+	}
+
+	h, e := hex.DecodeString(str[start:])
+	return h, e
 }
 
 // dec2Oct 将十进制转换为八进制.
