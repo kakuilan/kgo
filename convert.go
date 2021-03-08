@@ -365,3 +365,8 @@ func (kc *LkkConvert) IsFloat(val interface{}) bool {
 func (kc *LkkConvert) IsEmpty(val interface{}) bool {
 	return isEmpty(val)
 }
+
+// IsNil 变量是否nil.
+func (kc *LkkConvert) IsNil(val interface{}) bool {
+	return isNil(val)
+}

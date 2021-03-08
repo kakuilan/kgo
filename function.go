@@ -153,7 +153,7 @@ func isNumeric(val interface{}) bool {
 	return false
 }
 
-// isNil 检查变量是否空值.
+// isNil 检查变量是否nil.
 func isNil(val interface{}) bool {
 	if val == nil {
 		return true
@@ -161,10 +161,10 @@ func isNil(val interface{}) bool {
 
 	rv := reflect.ValueOf(val)
 	switch rv.Kind() {
+	case reflect.Invalid:
+		return true
 	case reflect.Chan, reflect.Func, reflect.Map, reflect.Ptr, reflect.Slice, reflect.Interface:
-		if rv.IsNil() {
-			return true
-		}
+		return rv.IsNil()
 	}
 	return false
 }

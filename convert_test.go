@@ -1178,3 +1178,35 @@ func BenchmarkConvert_IsEmpty(b *testing.B) {
 		KConv.IsEmpty("")
 	}
 }
+
+func TestConvert_IsNil(t *testing.T) {
+	var org sOrganization
+	var itf interface{} = &strSlEmp
+	var s []int
+	var tests = []struct {
+		input    interface{}
+		expected bool
+	}{
+		{nil, true},
+		{"", false},
+		{strMpEmp, false},
+		{false, false},
+		{0, false},
+		{uint(0), false},
+		{0.0, false},
+		{org, false},
+		{itf, false},
+		{s, true},
+	}
+	for _, test := range tests {
+		actual := KConv.IsNil(test.input)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkConvert_IsNil(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsNil(nil)
+	}
+}
