@@ -370,3 +370,8 @@ func (kc *LkkConvert) IsEmpty(val interface{}) bool {
 func (kc *LkkConvert) IsNil(val interface{}) bool {
 	return isNil(val)
 }
+
+// IsBool 是否布尔值.
+func (kc *LkkConvert) IsBool(val interface{}) bool {
+	return isBool(val)
+}

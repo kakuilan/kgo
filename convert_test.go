@@ -1210,3 +1210,20 @@ func BenchmarkConvert_IsNil(b *testing.B) {
 		KConv.IsNil(nil)
 	}
 }
+
+func TestConvert_IsBool(t *testing.T) {
+	var res bool
+
+	res = KConv.IsBool(false)
+	assert.True(t, res)
+
+	res = KConv.IsBool("true")
+	assert.False(t, res)
+}
+
+func BenchmarkConvert_IsBool(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsBool(false)
+	}
+}
