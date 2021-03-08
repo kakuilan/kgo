@@ -312,3 +312,9 @@ func (kc *LkkConvert) Byte2Hexs(val []byte) []byte {
 	hex.Encode(dst, val)
 	return dst
 }
+
+// Hex2Byte 16进制字符串转字节切片.
+func (kc *LkkConvert) Hex2Byte(str string) []byte {
+	h, _ := hex.DecodeString(str)
+	return h
+}

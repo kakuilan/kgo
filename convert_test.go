@@ -1008,3 +1008,20 @@ func BenchmarkConvert_Byte2Hexs(b *testing.B) {
 		KConv.Byte2Hexs(bs)
 	}
 }
+
+func TestConvert_Hex2Byte(t *testing.T) {
+	var res []byte
+
+	res = KConv.Hex2Byte(strHelloHex)
+	assert.Equal(t, strHello, string(res))
+
+	res = KConv.Hex2Byte("")
+	assert.Empty(t, res)
+}
+
+func BenchmarkConvert_Hex2Byte(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.Hex2Byte(strHelloHex)
+	}
+}
