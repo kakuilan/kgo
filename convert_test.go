@@ -1303,3 +1303,25 @@ func BenchmarkConvert_IsStruct(b *testing.B) {
 		KConv.IsStruct(personS1)
 	}
 }
+
+func TestConvert_IsInterface(t *testing.T) {
+	var tests = []struct {
+		input    interface{}
+		expected bool
+	}{
+		{strHello, false},
+		{personS1, false},
+		{itfObj, true},
+	}
+	for _, test := range tests {
+		actual := KConv.IsInterface(test.input)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkConvert_IsInterface(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsInterface(itfObj)
+	}
+}

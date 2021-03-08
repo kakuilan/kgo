@@ -4,6 +4,11 @@ package kgo
 
 import "github.com/brianvoe/gofakeit/v6"
 
+//类型-接口
+type itfType interface {
+	sayHello(name string) string
+}
+
 //类型-人员
 type sPerson struct {
 	secret string `json:"secret"`
@@ -25,6 +30,9 @@ type sOrganization struct {
 	Substitute sPerson  //候补
 	Members    sPersons //成员
 }
+
+//接口对象
+var itfObj itfType
 
 //结构体-人员
 var personS1, personS2, personS3, personS4, personS5 sPerson

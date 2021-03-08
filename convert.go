@@ -390,3 +390,8 @@ func (kc *LkkConvert) IsByte(val interface{}) bool {
 func (kc *LkkConvert) IsStruct(val interface{}) bool {
 	return isStruct(val)
 }
+
+// IsInterface 变量是否接口.
+func (kc *LkkConvert) IsInterface(val interface{}) bool {
+	return isInterface(val)
+}
