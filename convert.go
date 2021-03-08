@@ -339,3 +339,14 @@ func (kc *LkkConvert) Hexs2Byte(val []byte) []byte {
 func (kc *LkkConvert) IsString(val interface{}) bool {
 	return isString(val)
 }
+
+// IsBinary 字符串是否二进制.
+func (kc *LkkConvert) IsBinary(s string) bool {
+	//TODO TEST
+	return isBinary(s)
+}
+
+// IsNumeric 变量是否数值(不包含复数和科学计数法).
+func (kc *LkkConvert) IsNumeric(val interface{}) bool {
+	return isNumeric(val)
+}

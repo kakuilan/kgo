@@ -1071,3 +1071,27 @@ func BenchmarkConvert_IsString(b *testing.B) {
 		KConv.IsString(strHello)
 	}
 }
+
+func TestConvert_IsNumeric(t *testing.T) {
+	var tests = []struct {
+		input    interface{}
+		expected bool
+	}{
+		{intSpeedLight, true},
+		{flPi1, true},
+		{strSpeedLight, true},
+		{strHello, false},
+		{crowd, false},
+	}
+	for _, test := range tests {
+		actual := KConv.IsNumeric(test.input)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkConvert_IsNumeric(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsNumeric(intSpeedLight)
+	}
+}
