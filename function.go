@@ -176,6 +176,8 @@ func isEmpty(val interface{}) bool {
 	}
 	v := reflect.ValueOf(val)
 	switch v.Kind() {
+	case reflect.Invalid:
+		return true
 	case reflect.String, reflect.Array:
 		return v.Len() == 0
 	case reflect.Map, reflect.Slice:

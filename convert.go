@@ -360,3 +360,8 @@ func (kc *LkkConvert) IsInt(val interface{}) bool {
 func (kc *LkkConvert) IsFloat(val interface{}) bool {
 	return isFloat(val)
 }
+
+// IsEmpty 变量是否为空.
+func (kc *LkkConvert) IsEmpty(val interface{}) bool {
+	return isEmpty(val)
+}

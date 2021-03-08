@@ -1148,3 +1148,33 @@ func BenchmarkConvert_IsFloat(b *testing.B) {
 		KConv.IsFloat(flPi1)
 	}
 }
+
+func TestConvert_IsEmpty(t *testing.T) {
+	var org sOrganization
+	var itf interface{} = &strSlEmp
+	var tests = []struct {
+		input    interface{}
+		expected bool
+	}{
+		{nil, true},
+		{"", true},
+		{strMpEmp, true},
+		{false, true},
+		{0, true},
+		{uint(0), true},
+		{0.0, true},
+		{org, true},
+		{itf, false},
+	}
+	for _, test := range tests {
+		actual := KConv.IsEmpty(test.input)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkConvert_IsEmpty(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsEmpty("")
+	}
+}
