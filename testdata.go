@@ -55,6 +55,7 @@ var flPi2 float64 = 3.141592456
 var flPi3 fPi32 = 3.141592456
 var flPi4 fPi64 = 3.141592456
 var bytPi5 = []byte{229, 10, 191, 57, 251, 33, 9, 64} //flPi2的字节切片
+var strPi6 = "3.141592456"
 
 //数值
 var intSpeedLight int = 299792458            //光速

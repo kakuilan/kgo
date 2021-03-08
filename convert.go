@@ -350,3 +350,8 @@ func (kc *LkkConvert) IsBinary(s string) bool {
 func (kc *LkkConvert) IsNumeric(val interface{}) bool {
 	return isNumeric(val)
 }
+
+// IsInt 变量是否整型数值.
+func (kc *LkkConvert) IsInt(val interface{}) bool {
+	return isInt(val)
+}
