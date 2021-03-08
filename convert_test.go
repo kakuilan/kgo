@@ -1054,3 +1054,20 @@ func BenchmarkConvert_Runes2Bytes(b *testing.B) {
 		KConv.Runes2Bytes(runesHello)
 	}
 }
+
+func TestConvert_IsString(t *testing.T) {
+	var res bool
+
+	res = KConv.IsString(intSpeedLight)
+	assert.False(t, res)
+
+	res = KConv.IsString(strHello)
+	assert.True(t, res)
+}
+
+func BenchmarkConvert_IsString(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsString(strHello)
+	}
+}

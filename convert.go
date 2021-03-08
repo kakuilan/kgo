@@ -334,3 +334,8 @@ func (kc *LkkConvert) Hexs2Byte(val []byte) []byte {
 	}
 	return dst
 }
+
+// IsString 变量是否字符串.
+func (kc *LkkConvert) IsString(val interface{}) bool {
+	return isString(val)
+}

@@ -72,9 +72,30 @@ func isInterface(val interface{}) bool {
 	return r.Kind() == reflect.Invalid
 }
 
+// isString 变量是否字符串.
+func isString(val interface{}) bool {
+	return GetVariateType(val) == "string"
+}
+
 // isByte 变量是否字节切片.
 func isByte(val interface{}) bool {
 	return GetVariateType(val) == "[]uint8"
+}
+
+// isBinary 字符串是否二进制.
+func isBinary(s string) bool {
+	for _, b := range s {
+		if 0 == b {
+			return true
+		}
+	}
+	return false
+}
+
+// isHex 是否十六进制字符串.
+func isHex(str string) bool {
+	_, err := hex2Dec(str)
+	return err == nil
 }
 
 // isInt 变量是否整型数值.
