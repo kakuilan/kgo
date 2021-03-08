@@ -1082,6 +1082,7 @@ func TestConvert_IsNumeric(t *testing.T) {
 		{strSpeedLight, true},
 		{strHello, false},
 		{crowd, false},
+		{"", false},
 	}
 	for _, test := range tests {
 		actual := KConv.IsNumeric(test.input)
@@ -1107,6 +1108,7 @@ func TestConvert_IsInt(t *testing.T) {
 		{strPi6, false},
 		{strHello, false},
 		{crowd, false},
+		{"", false},
 	}
 	for _, test := range tests {
 		actual := KConv.IsInt(test.input)
@@ -1118,5 +1120,31 @@ func BenchmarkConvert_IsInt(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KConv.IsInt(intSpeedLight)
+	}
+}
+
+func TestConvert_IsFloat(t *testing.T) {
+	var tests = []struct {
+		input    interface{}
+		expected bool
+	}{
+		{intSpeedLight, false},
+		{flPi1, true},
+		{strSpeedLight, false},
+		{strPi6, true},
+		{strHello, false},
+		{crowd, false},
+		{"", false},
+	}
+	for _, test := range tests {
+		actual := KConv.IsFloat(test.input)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkConvert_IsFloat(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.IsFloat(flPi1)
 	}
 }

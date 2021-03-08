@@ -355,3 +355,8 @@ func (kc *LkkConvert) IsNumeric(val interface{}) bool {
 func (kc *LkkConvert) IsInt(val interface{}) bool {
 	return isInt(val)
 }
+
+// IsFloat 变量是否浮点数值.
+func (kc *LkkConvert) IsFloat(val interface{}) bool {
+	return isFloat(val)
+}
