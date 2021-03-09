@@ -129,6 +129,7 @@ var booSlc = []bool{true, true, false, true, false, true, true}
 
 //字节切片
 var bytSlcHello = []byte(strHello)
+var bytSpeedLight = []byte(strSpeedLight)
 
 //单字符切片
 var ssSingle = []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"}
