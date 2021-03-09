@@ -45,3 +45,21 @@ func BenchmarkEncrypt_Base64Decode(b *testing.B) {
 		_, _ = KEncr.Base64Decode(bs)
 	}
 }
+
+func TestEncrypt_Base64UrlEncode(t *testing.T) {
+	var res []byte
+
+	res = KEncr.Base64UrlEncode([]byte(""))
+	assert.Nil(t, res)
+
+	res = KEncr.Base64UrlEncode([]byte(str2Code))
+	assert.Equal(t, b64UrlCode, string(res))
+}
+
+func BenchmarkEncrypt_Base64UrlEncode(b *testing.B) {
+	b.ResetTimer()
+	bs := []byte(str2Code)
+	for i := 0; i < b.N; i++ {
+		KEncr.Base64UrlEncode(bs)
+	}
+}

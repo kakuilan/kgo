@@ -93,6 +93,8 @@ var hexAstronomicalUnit = "22d4ba5a44"                             //intAstronom
 var otcAstronomicalUnit = "2132456455104"                          //intAstronomicalUnit的8进制
 var similarStr1 = "We love China,how are you?"
 var similarStr2 = "Tom love you,he come from China."
+var str2Code = "https://tool.google.com.net/encrypt?type=4Hello World! 你好！"
+var b64UrlCode = "aHR0cHM6Ly90b29sLmdvb2dsZS5jb20ubmV0L2VuY3J5cHQ_dHlwZT00SGVsbG8gV29ybGQhIOS9oOWlve-8gQ"
 
 //当前时间
 var nowNanoInt = Kuptime.UnixNano()
