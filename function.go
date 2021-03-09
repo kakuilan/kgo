@@ -487,6 +487,10 @@ func getTrimMask(masks []string) string {
 
 // methodExists 检查val结构体中是否存在methodName方法.
 func methodExists(val interface{}, methodName string) (bool, error) {
+	if methodName == "" {
+		return false, errors.New("[methodExists]`methodName can not be empty.")
+	}
+
 	valRef := reflect.ValueOf(val)
 
 	if valRef.Type().Kind() != reflect.Ptr {

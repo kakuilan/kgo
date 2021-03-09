@@ -112,3 +112,28 @@ func BenchmarkDebug_GetCallPackage(b *testing.B) {
 		KDbug.GetCallPackage()
 	}
 }
+
+func TestDebug_HasMethod(t *testing.T) {
+	var tests = []struct {
+		input    interface{}
+		method   string
+		expected bool
+	}{
+		{intSpeedLight, "", false},
+		{strHello, "toString", false},
+		{KArr, "InIntSlice", true},
+		{&KArr, "InInt64Slice", true},
+		{&KArr, strHello, false},
+	}
+	for _, test := range tests {
+		actual := KDbug.HasMethod(test.input, test.method)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkDebug_HasMethod(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KDbug.HasMethod(KArr, "SliceFill")
+	}
+}

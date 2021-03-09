@@ -82,3 +82,9 @@ func (kd *LkkDebug) GetCallPackage(callFile ...string) string {
 
 	return astFile.Name.Name
 }
+
+// HasMethod 检查对象t是否具有method方法.
+func (kd *LkkDebug) HasMethod(t interface{}, method string) bool {
+	_, err := methodExists(t, method)
+	return err == nil
+}
