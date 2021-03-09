@@ -160,3 +160,20 @@ func BenchmarkDebug_GetMethod(b *testing.B) {
 		KDbug.GetMethod(&KArr, "InIntSlice")
 	}
 }
+
+func TestDebug_CallMethod(t *testing.T) {
+	var res interface{}
+	var err error
+
+	//调用不存在的方法
+	res, err = KDbug.CallMethod(KArr, strHello)
+	assert.NotNil(t, err)
+
+	//有参数调用
+	res, err = KDbug.CallMethod(&KConv, "BaseConvert", "123456", 10, 16)
+	assert.Nil(t, err)
+	assert.NotEmpty(t, res)
+
+	//无参数调用
+	//TODO
+}

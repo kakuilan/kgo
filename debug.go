@@ -95,3 +95,15 @@ func (kd *LkkDebug) HasMethod(t interface{}, method string) bool {
 func (kd *LkkDebug) GetMethod(t interface{}, method string) interface{} {
 	return getMethod(t, method)
 }
+
+// CallMethod 调用对象的方法.
+// 若执行成功,则结果是该方法的返回结果;
+// 否则返回(nil, error).
+func (kd *LkkDebug) CallMethod(t interface{}, method string, args ...interface{}) ([]interface{}, error) {
+	m := kd.GetMethod(t, method)
+	if m == nil {
+		return nil, fmt.Errorf("[CallMethod] The %#v have no method: %s", t, method)
+	}
+
+	return CallFunc(m, args...)
+}

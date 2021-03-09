@@ -522,7 +522,7 @@ func getMethod(val interface{}, methodName string) interface{} {
 		return nil
 	}
 
-	return method
+	return method.Interface()
 }
 
 // camelCaseToLowerCase 驼峰转为小写.
