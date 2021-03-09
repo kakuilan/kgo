@@ -63,3 +63,27 @@ func BenchmarkEncrypt_Base64UrlEncode(b *testing.B) {
 		KEncr.Base64UrlEncode(bs)
 	}
 }
+
+func TestEncrypt_Base64UrlDecode(t *testing.T) {
+	var res []byte
+	var err error
+
+	res, err = KEncr.Base64UrlDecode([]byte(""))
+	assert.Nil(t, res)
+	assert.Nil(t, err)
+
+	res, err = KEncr.Base64UrlDecode([]byte(b64UrlCode))
+	assert.Equal(t, str2Code, string(res))
+
+	//不合法
+	_, err = KEncr.Base64UrlDecode([]byte("#iu3498r"))
+	assert.NotNil(t, err)
+}
+
+func BenchmarkEncrypt_Base64UrlDecode(b *testing.B) {
+	b.ResetTimer()
+	bs := []byte(b64UrlCode)
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.Base64UrlDecode(bs)
+	}
+}

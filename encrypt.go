@@ -46,3 +46,18 @@ func (ke *LkkEncrypt) Base64UrlEncode(str []byte) []byte {
 
 	return nil
 }
+
+// Base64UrlDecode url安全的Base64Decode.
+func (ke *LkkEncrypt) Base64UrlDecode(str []byte) ([]byte, error) {
+	l := len(str)
+	if l > 0 {
+		var missing = (4 - len(str)%4) % 4
+		str = append(str, bytes.Repeat([]byte("="), missing)...)
+
+		dbuf := make([]byte, base64.URLEncoding.DecodedLen(len(str)))
+		n, err := base64.URLEncoding.Decode(dbuf, str)
+		return dbuf[:n], err
+	}
+
+	return nil, nil
+}

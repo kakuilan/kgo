@@ -329,7 +329,8 @@ var (
 	RegSha512                = regexp.MustCompile(PATTERN_SHA512)
 	RegEmoji                 = regexp.MustCompile(PATTERN_EMOJI)
 	RegUsernameen            = regexp.MustCompile(PATTERN_USERNAMEEN)
-
 	//	RegAscii                 = regexp.MustCompile(PATTERN_ASCII)
+
+
 
 )
