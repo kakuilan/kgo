@@ -92,3 +92,23 @@ func BenchmarkDebug_GetCallDir(b *testing.B) {
 		KDbug.GetCallDir()
 	}
 }
+
+func TestDebug_GetCallPackage(t *testing.T) {
+	var res string
+
+	res = KDbug.GetCallPackage()
+	assert.Equal(t, "kgo", res)
+
+	res = KDbug.GetCallPackage(KDbug.GetCallFile())
+	assert.Equal(t, "kgo", res)
+
+	res = KDbug.GetCallPackage(strHello)
+	assert.Empty(t, res)
+}
+
+func BenchmarkDebug_GetCallPackage(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KDbug.GetCallPackage()
+	}
+}

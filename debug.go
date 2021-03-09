@@ -2,6 +2,8 @@ package kgo
 
 import (
 	"fmt"
+	"go/parser"
+	"go/token"
 	"path/filepath"
 	"reflect"
 	"runtime"
@@ -61,4 +63,22 @@ func (kd *LkkDebug) GetCallLine() int {
 	// Skip this function, and fetch the PC and file for its parent
 	_, _, line, _ := runtime.Caller(1)
 	return line
+}
+
+// GetCallPackage 获取调用方法或调用文件的包名.callFile为调用文件路径.
+func (kd *LkkDebug) GetCallPackage(callFile ...string) string {
+	var sourceFile string
+	if len(callFile) == 0 {
+		sourceFile = kd.GetCallFile()
+	} else {
+		sourceFile = callFile[0]
+	}
+
+	fset := token.NewFileSet()
+	astFile, err := parser.ParseFile(fset, sourceFile, nil, parser.PackageClauseOnly)
+	if err != nil || astFile.Name == nil {
+		return ""
+	}
+
+	return astFile.Name.Name
 }
