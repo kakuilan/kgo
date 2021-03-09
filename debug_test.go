@@ -56,3 +56,15 @@ func BenchmarkDebug_GetCallName(b *testing.B) {
 		KDbug.GetCallName(KArr.ArrayRand, false)
 	}
 }
+
+func TestDebug_GetCallLine(t *testing.T) {
+	res := KDbug.GetCallLine()
+	assert.Greater(t, res, 1)
+}
+
+func BenchmarkDebug_GetCallLine(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KDbug.GetCallLine()
+	}
+}
