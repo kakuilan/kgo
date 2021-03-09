@@ -137,3 +137,26 @@ func BenchmarkDebug_HasMethod(b *testing.B) {
 		KDbug.HasMethod(KArr, "SliceFill")
 	}
 }
+
+func TestDebug_GetMethod(t *testing.T) {
+	var res interface{}
+
+	res = KDbug.GetMethod(intSpeedLight, "")
+	assert.Nil(t, res)
+
+	res = KDbug.GetMethod(&KArr, "InIntSlice")
+	assert.NotNil(t, res)
+
+	res = KDbug.GetMethod(KArr, "InIntSlice")
+	assert.NotNil(t, res)
+
+	res = KDbug.GetMethod(KArr, strHello)
+	assert.Nil(t, res)
+}
+
+func BenchmarkDebug_GetMethod(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KDbug.GetMethod(&KArr, "InIntSlice")
+	}
+}

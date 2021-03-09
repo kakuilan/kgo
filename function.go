@@ -491,27 +491,38 @@ func methodExists(val interface{}, methodName string) (bool, error) {
 		return false, errors.New("[methodExists]`methodName can not be empty.")
 	}
 
-	valRef := reflect.ValueOf(val)
-
-	if valRef.Type().Kind() != reflect.Ptr {
-		valRef = reflect.New(reflect.TypeOf(val))
+	r := reflect.ValueOf(val)
+	if r.Type().Kind() != reflect.Ptr {
+		r = reflect.New(reflect.TypeOf(val))
 	}
 
-	method := valRef.MethodByName(methodName)
+	method := r.MethodByName(methodName)
 	if !method.IsValid() {
-		return false, fmt.Errorf("[methodExists] Method `%s` not exists in interface `%s`", methodName, valRef.Type())
+		return false, fmt.Errorf("[methodExists] Method `%s` not exists in interface `%s`", methodName, r.Type())
 	}
 
 	return true, nil
 }
 
 // getMethod 获取val结构体的methodName方法.
-func getMethod(val interface{}, methodName string) reflect.Value {
-	m, b := reflect.TypeOf(val).MethodByName(methodName)
-	if !b {
-		return reflect.ValueOf(nil)
+// 注意:返回的方法中的第一个参数是接收者.
+// 所以,调用返回的方法时,必须将接收者作为第一个参数传递.
+func getMethod(val interface{}, methodName string) interface{} {
+	if methodName == "" {
+		return nil
 	}
-	return m.Func
+
+	r := reflect.ValueOf(val)
+	if r.Type().Kind() != reflect.Ptr {
+		r = reflect.New(reflect.TypeOf(val))
+	}
+
+	method := r.MethodByName(methodName)
+	if !method.IsValid() {
+		return nil
+	}
+
+	return method
 }
 
 // camelCaseToLowerCase 驼峰转为小写.

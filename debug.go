@@ -88,3 +88,10 @@ func (kd *LkkDebug) HasMethod(t interface{}, method string) bool {
 	_, err := methodExists(t, method)
 	return err == nil
 }
+
+// GetMethod 获取对象t中的method方法.
+// 注意:返回的方法中的第一个参数是接收者.
+// 所以,调用返回的方法时,必须将接收者作为第一个参数传递.
+func (kd *LkkDebug) GetMethod(t interface{}, method string) interface{} {
+	return getMethod(t, method)
+}
