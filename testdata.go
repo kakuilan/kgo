@@ -83,6 +83,7 @@ var cmplNum2 = complex(3, 4)
 
 //字符串
 var strHello = "Hello World! 你好！"
+var b64Hello = "SGVsbG8gV29ybGQhIOS9oOWlve+8gQ=="
 var btysHello = []byte(strHello)
 var runesHello = []rune(strHello)
 var strHelloHex = "48656c6c6f20576f726c642120e4bda0e5a5bdefbc81" //strHello的16进制
