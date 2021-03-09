@@ -23,7 +23,7 @@ func TestDebug_DumpStacks(t *testing.T) {
 	//KDbug.DumpStacks()
 }
 
-func TestDebug_GetCallFuncName(t *testing.T) {
+func TestDebug_GetCallName(t *testing.T) {
 	defer func() {
 		r := recover()
 		assert.NotEmpty(t, r)
@@ -31,28 +31,28 @@ func TestDebug_GetCallFuncName(t *testing.T) {
 
 	var res string
 
-	res = KDbug.GetCallFuncName(nil, false)
-	assert.Contains(t, res, "TestDebug_GetCallFuncName")
+	res = KDbug.GetCallName(nil, false)
+	assert.Contains(t, res, "TestDebug_GetCallName")
 
-	res = KDbug.GetCallFuncName(nil, true)
-	assert.Equal(t, "TestDebug_GetCallFuncName", res)
+	res = KDbug.GetCallName(nil, true)
+	assert.Equal(t, "TestDebug_GetCallName", res)
 
-	res = KDbug.GetCallFuncName("", false)
+	res = KDbug.GetCallName("", false)
 	assert.Empty(t, res)
 
-	res = KDbug.GetCallFuncName(KArr.ArrayRand, false)
+	res = KDbug.GetCallName(KArr.ArrayRand, false)
 	assert.Contains(t, res, "ArrayRand")
 
-	res = KDbug.GetCallFuncName(KArr.ArrayRand, true)
+	res = KDbug.GetCallName(KArr.ArrayRand, true)
 	assert.Equal(t, "ArrayRand-fm", res)
 
 	//未实现的方法
-	KDbug.GetCallFuncName(itfObj.noRealize, false)
+	KDbug.GetCallName(itfObj.noRealize, false)
 }
 
-func BenchmarkDebug_GetCallFuncName(b *testing.B) {
+func BenchmarkDebug_GetCallName(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KDbug.GetCallFuncName(KArr.ArrayRand, false)
+		KDbug.GetCallName(KArr.ArrayRand, false)
 	}
 }

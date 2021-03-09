@@ -20,8 +20,8 @@ func (kd *LkkDebug) DumpStacks() {
 	fmt.Printf("=== BEGIN goroutine stack dump ===\n%s\n=== END goroutine stack dump ===\n\n", buf)
 }
 
-// GetCallFuncName 获取调用方法的名称;f为目标方法;onlyFun为true时仅返回方法,不包括包名.
-func (kd *LkkDebug) GetCallFuncName(f interface{}, onlyFun bool) string {
+// GetCallName 获取调用的方法名称;f为目标方法;onlyFun为true时仅返回方法,不包括包名.
+func (kd *LkkDebug) GetCallName(f interface{}, onlyFun bool) string {
 	var funcObj *runtime.Func
 	r := reflectPtr(reflect.ValueOf(f))
 	switch r.Kind() {
