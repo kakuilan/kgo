@@ -6,6 +6,7 @@ import "github.com/brianvoe/gofakeit/v6"
 
 //类型-接口
 type itfType interface {
+	noRealize() //该方法不实现
 	sayHello(name string) string
 }
 
