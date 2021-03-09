@@ -68,3 +68,15 @@ func BenchmarkDebug_GetCallLine(b *testing.B) {
 		KDbug.GetCallLine()
 	}
 }
+
+func TestDebug_GetCallFile(t *testing.T) {
+	res := KDbug.GetCallFile()
+	assert.NotEmpty(t, res)
+}
+
+func BenchmarkDebug_GetCallFile(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KDbug.GetCallFile()
+	}
+}

@@ -45,6 +45,12 @@ func (kd *LkkDebug) GetCallName(f interface{}, onlyFun bool) string {
 	return name
 }
 
+// GetCallFile 获取调用方法的文件路径.
+func (kd *LkkDebug) GetCallFile() string {
+	_, file, _, _ := runtime.Caller(1)
+	return file
+}
+
 // GetCallLine 获取调用方法的行号.
 func (kd *LkkDebug) GetCallLine() int {
 	// Skip this function, and fetch the PC and file for its parent
