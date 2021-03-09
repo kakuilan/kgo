@@ -84,8 +84,6 @@ var cmplNum2 = complex(3, 4)
 //字符串
 var strHello = "Hello World! 你好！"
 var b64Hello = "SGVsbG8gV29ybGQhIOS9oOWlve+8gQ=="
-var btysHello = []byte(strHello)
-var runesHello = []rune(strHello)
 var strHelloHex = "48656c6c6f20576f726c642120e4bda0e5a5bdefbc81" //strHello的16进制
 var strSpeedLight = "299792458"
 var binAstronomicalUnit = "10001011010100101110100101101001000100" //intAstronomicalUnit的二进制
@@ -128,8 +126,10 @@ var flo64Slc = []float64{flPi2, floAvogadro, floPlanck, floGravitional, floPermi
 var booSlc = []bool{true, true, false, true, false, true, true}
 
 //字节切片
-var bytSlcHello = []byte(strHello)
-var bytSpeedLight = []byte(strSpeedLight)
+var bytsHello = []byte(strHello)
+var runesHello = []rune(strHello)
+var bytSpeedLight = []byte(strHello)
+var bytsPasswd = []byte("$2a$10$j3WOP6rP2I7skNoxiFdNdOh6OhPxP0Sp3Wmeuekh90oeF3D1EQQBK")
 
 //单字符切片
 var ssSingle = []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"}

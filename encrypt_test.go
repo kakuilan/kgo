@@ -11,14 +11,14 @@ func TestEncrypt_Base64Encode(t *testing.T) {
 	res = KEncr.Base64Encode([]byte(""))
 	assert.Nil(t, res)
 
-	res = KEncr.Base64Encode(btysHello)
+	res = KEncr.Base64Encode(bytsHello)
 	assert.Contains(t, string(res), "=")
 }
 
 func BenchmarkEncrypt_Base64Encode(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KEncr.Base64Encode(btysHello)
+		KEncr.Base64Encode(bytsHello)
 	}
 }
 
@@ -92,14 +92,14 @@ func TestEncrypt_AuthCode(t *testing.T) {
 	var res, res2 []byte
 	var exp int64
 
-	res, exp = KEncr.AuthCode(bytSlcHello, bytSpeedLight, true, 0)
+	res, exp = KEncr.AuthCode(bytsHello, bytSpeedLight, true, 0)
 	assert.NotNil(t, res)
 
 	res2, exp = KEncr.AuthCode(res, bytSpeedLight, false, 0)
-	assert.Equal(t, string(bytSlcHello), string(res2))
+	assert.Equal(t, string(bytsHello), string(res2))
 
 	//过期
-	res, exp = KEncr.AuthCode(bytSlcHello, bytSpeedLight, true, -3600)
+	res, exp = KEncr.AuthCode(bytsHello, bytSpeedLight, true, -3600)
 	res2, exp = KEncr.AuthCode(res, bytSpeedLight, false, 0)
 	assert.Empty(t, res2)
 	assert.Greater(t, exp, int64(0))
@@ -109,7 +109,7 @@ func TestEncrypt_AuthCode(t *testing.T) {
 	assert.Empty(t, res)
 
 	//空密钥
-	res, exp = KEncr.AuthCode(bytSlcHello, []byte(""), true, 0)
+	res, exp = KEncr.AuthCode(bytsHello, []byte(""), true, 0)
 	assert.NotEmpty(t, res)
 
 	//不合法
@@ -122,7 +122,7 @@ func TestEncrypt_AuthCode(t *testing.T) {
 func BenchmarkEncrypt_AuthCode_Encode(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KEncr.AuthCode(bytSlcHello, bytSpeedLight, true, 0)
+		KEncr.AuthCode(bytsHello, bytSpeedLight, true, 0)
 	}
 }
 
@@ -131,5 +131,30 @@ func BenchmarkEncrypt_AuthCode_Decode(b *testing.B) {
 	bs := []byte("b0140641v309wJW2_-MvoovhaHKtHLBvZ2JFsvirqYQK5144m-wQJlez8XBfHkCohr3clxPR")
 	for i := 0; i < b.N; i++ {
 		KEncr.AuthCode(bs, bytSpeedLight, false, 0)
+	}
+}
+
+func TestEncrypt_PasswordHash(t *testing.T) {
+	var res []byte
+	var err error
+
+	//空密码
+	res, err = KEncr.PasswordHash([]byte(""))
+	assert.NotNil(t, res)
+	assert.Nil(t, err)
+
+	res, err = KEncr.PasswordHash(bytsHello)
+	assert.NotEmpty(t, res)
+
+	//慎用20以上,太耗时
+	_, _ = KEncr.PasswordHash(bytsHello, 1)
+	_, _ = KEncr.PasswordHash(bytsHello, 15)
+	_, _ = KEncr.PasswordHash(bytsHello, 33)
+}
+
+func BenchmarkEncrypt_PasswordHash(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.PasswordHash(bytsHello)
 	}
 }

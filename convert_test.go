@@ -477,14 +477,14 @@ func TestConvert_Bytes2Str(t *testing.T) {
 	res = KConv.Bytes2Str([]byte{})
 	assert.Equal(t, "", res)
 
-	res = KConv.Bytes2Str(btysHello)
+	res = KConv.Bytes2Str(bytsHello)
 	assert.NotEmpty(t, res)
 }
 
 func BenchmarkConvert_Bytes2Str(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KConv.Bytes2Str(btysHello)
+		KConv.Bytes2Str(bytsHello)
 	}
 }
 
@@ -511,14 +511,14 @@ func TestConvert_Bytes2StrUnsafe(t *testing.T) {
 	res = KConv.Bytes2StrUnsafe([]byte{})
 	assert.Equal(t, "", res)
 
-	res = KConv.Bytes2StrUnsafe(btysHello)
+	res = KConv.Bytes2StrUnsafe(bytsHello)
 	assert.NotEmpty(t, res)
 }
 
 func BenchmarkConvert_Bytes2StrUnsafe(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KConv.Bytes2StrUnsafe(btysHello)
+		KConv.Bytes2StrUnsafe(bytsHello)
 	}
 }
 
@@ -752,7 +752,7 @@ func TestConvert_ToStr(t *testing.T) {
 		{flPi2, "3.141592456"},
 		{fnCb1, "<nil>"},
 		{fnPtr1, ""},
-		{bytSlcHello, strHello},
+		{bytsHello, strHello},
 		{int64(INT64_MAX), "9223372036854775807"},
 		{uint64(UINT64_MAX), "18446744073709551615"},
 		{float32(math.Pi), "3.1415927"},
@@ -794,7 +794,7 @@ func TestConvert_ToBool(t *testing.T) {
 		{float32(0), false},
 		{float64(0), false},
 		{[]byte{}, false},
-		{bytSlcHello, true},
+		{bytsHello, true},
 		{"1", true},
 		{"2.1", false},
 		{"TRUE", true},
@@ -974,7 +974,7 @@ func BenchmarkConvert_Byte2Int64(b *testing.B) {
 func TestConvert_Byte2Hex(t *testing.T) {
 	var res string
 
-	res = KConv.Byte2Hex(btysHello)
+	res = KConv.Byte2Hex(bytsHello)
 	assert.Equal(t, strHelloHex, res)
 
 	res = KConv.Byte2Hex([]byte(""))
@@ -984,14 +984,14 @@ func TestConvert_Byte2Hex(t *testing.T) {
 func BenchmarkConvert_Byte2Hex(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KConv.Byte2Hex(btysHello)
+		KConv.Byte2Hex(bytsHello)
 	}
 }
 
 func TestConvert_Byte2Hexs(t *testing.T) {
 	var res []byte
 
-	res = KConv.Byte2Hexs(btysHello)
+	res = KConv.Byte2Hexs(bytsHello)
 	assert.Equal(t, strHelloHex, string(res))
 
 	res = KConv.Byte2Hexs([]byte(""))
@@ -1001,7 +1001,7 @@ func TestConvert_Byte2Hexs(t *testing.T) {
 func BenchmarkConvert_Byte2Hexs(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KConv.Byte2Hexs(btysHello)
+		KConv.Byte2Hexs(bytsHello)
 	}
 }
 
@@ -1025,7 +1025,7 @@ func BenchmarkConvert_Hex2Byte(b *testing.B) {
 func TestConvert_Hexs2Byte(t *testing.T) {
 	var res []byte
 
-	bs := KConv.Byte2Hexs(btysHello)
+	bs := KConv.Byte2Hexs(bytsHello)
 	res = KConv.Hexs2Byte(bs)
 	assert.Equal(t, strHello, string(res))
 
@@ -1035,7 +1035,7 @@ func TestConvert_Hexs2Byte(t *testing.T) {
 
 func BenchmarkConvert_Hexs2Byte(b *testing.B) {
 	b.ResetTimer()
-	bs := KConv.Byte2Hexs(btysHello)
+	bs := KConv.Byte2Hexs(bytsHello)
 	for i := 0; i < b.N; i++ {
 		KConv.Hexs2Byte(bs)
 	}
@@ -1045,7 +1045,7 @@ func TestConvert_Runes2Bytes(t *testing.T) {
 	var res []byte
 
 	res = KConv.Runes2Bytes(runesHello)
-	assert.Equal(t, btysHello, res)
+	assert.Equal(t, bytsHello, res)
 }
 
 func BenchmarkConvert_Runes2Bytes(b *testing.B) {
@@ -1262,7 +1262,7 @@ func TestConvert_IsByte(t *testing.T) {
 	}{
 		{"", false},
 		{runesHello, false},
-		{btysHello, true},
+		{bytsHello, true},
 	}
 	for _, test := range tests {
 		actual := KConv.IsByte(test.input)
@@ -1273,7 +1273,7 @@ func TestConvert_IsByte(t *testing.T) {
 func BenchmarkConvert_IsByte(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KConv.IsByte(btysHello)
+		KConv.IsByte(bytsHello)
 	}
 }
 
