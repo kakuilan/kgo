@@ -51,6 +51,11 @@ func (kd *LkkDebug) GetCallFile() string {
 	return file
 }
 
+// GetCallDir 获取调用方法的文件目录.
+func (kd *LkkDebug) GetCallDir() string {
+	return filepath.Dir(kd.GetCallFile())
+}
+
 // GetCallLine 获取调用方法的行号.
 func (kd *LkkDebug) GetCallLine() int {
 	// Skip this function, and fetch the PC and file for its parent
