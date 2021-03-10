@@ -128,7 +128,7 @@ var booSlc = []bool{true, true, false, true, false, true, true}
 //字节切片
 var bytsHello = []byte(strHello)
 var runesHello = []rune(strHello)
-var bytSpeedLight = []byte(strHello)
+var bytSpeedLight = []byte(strSpeedLight)
 var bytsPasswd = []byte("$2a$10$j3WOP6rP2I7skNoxiFdNdOh6OhPxP0Sp3Wmeuekh90oeF3D1EQQBK")
 
 //单字符切片

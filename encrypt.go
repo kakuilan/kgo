@@ -187,3 +187,9 @@ func (ke *LkkEncrypt) PasswordHash(password []byte, costs ...int) ([]byte, error
 	res, err := bcrypt.GenerateFromPassword(password, cost)
 	return res, err
 }
+
+// PasswordVerify 验证密码是否和散列值匹配.
+func (ke *LkkEncrypt) PasswordVerify(password, hash []byte) bool {
+	err := bcrypt.CompareHashAndPassword(hash, password)
+	return err == nil
+}

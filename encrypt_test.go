@@ -158,3 +158,20 @@ func BenchmarkEncrypt_PasswordHash(b *testing.B) {
 		_, _ = KEncr.PasswordHash(bytsHello)
 	}
 }
+
+func TestEncrypt_PasswordVerify(t *testing.T) {
+	var res bool
+
+	res = KEncr.PasswordVerify(bytsHello, bytsPasswd)
+	assert.True(t, res)
+
+	res = KEncr.PasswordVerify(bytSpeedLight, bytsPasswd)
+	assert.False(t, res)
+}
+
+func BenchmarkEncrypt_PasswordVerify(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KEncr.PasswordVerify(bytsHello, bytsPasswd)
+	}
+}
