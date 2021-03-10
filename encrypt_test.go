@@ -217,3 +217,31 @@ func BenchmarkEncrypt_EasyDecrypt(b *testing.B) {
 		KEncr.EasyDecrypt(bs, bytSpeedLight)
 	}
 }
+
+func TestEncrypt_HmacShaX(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.NotEmpty(t, r)
+	}()
+
+	var res []byte
+
+	res = KEncr.HmacShaX(bytsHello, bytSpeedLight, 1)
+	assert.NotEmpty(t, res)
+
+	res = KEncr.HmacShaX(bytsHello, bytSpeedLight, 256)
+	assert.NotEmpty(t, res)
+
+	res = KEncr.HmacShaX(bytsHello, bytSpeedLight, 512)
+	assert.NotEmpty(t, res)
+
+	//不合法
+	KEncr.HmacShaX(bytsHello, bytSpeedLight, 44)
+}
+
+func BenchmarkEncrypt_HmacShaX(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KEncr.HmacShaX(bytsHello, bytSpeedLight, 256)
+	}
+}
