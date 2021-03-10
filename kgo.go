@@ -331,6 +331,17 @@ var (
 	RegUsernameen            = regexp.MustCompile(PATTERN_USERNAMEEN)
 	//	RegAscii                 = regexp.MustCompile(PATTERN_ASCII)
 
-
-
+	//其他
+	// 空字节切片
+	bytEmp = []byte{}
+	// 斜杠字节切片
+	bytSlash = []byte("/")
+	// 下划线字节切片
+	bytUnderscore = []byte("_")
+	// 加号字节切片
+	bytPlus = []byte("+")
+	// 减号字节切片
+	bytMinus = []byte("-")
+	// 等于号字节切片
+	bytEqual = []byte("=")
 )

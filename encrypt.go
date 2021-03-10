@@ -2,15 +2,20 @@ package kgo
 
 import (
 	"bytes"
+	"crypto/aes"
+	"crypto/cipher"
 	"crypto/hmac"
+	"crypto/rand"
 	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha512"
 	"encoding/base64"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"hash"
+	"io"
 	"strconv"
 	"time"
 )
@@ -47,9 +52,9 @@ func (ke *LkkEncrypt) Base64UrlEncode(str []byte) []byte {
 		base64.StdEncoding.Encode(buf, str)
 
 		// Base64 Url Safe is the same as Base64 but does not contain '/' and '+' (replaced by '_' and '-') and trailing '=' are removed.
-		buf = bytes.Replace(buf, []byte("/"), []byte("_"), -1)
-		buf = bytes.Replace(buf, []byte("+"), []byte("-"), -1)
-		buf = bytes.Replace(buf, []byte("="), []byte(""), -1)
+		buf = bytes.Replace(buf, bytSlash, bytUnderscore, -1)
+		buf = bytes.Replace(buf, bytPlus, bytMinus, -1)
+		buf = bytes.Replace(buf, bytEqual, bytEmp, -1)
 
 		return buf
 	}
@@ -62,7 +67,7 @@ func (ke *LkkEncrypt) Base64UrlDecode(str []byte) ([]byte, error) {
 	l := len(str)
 	if l > 0 {
 		var missing = (4 - len(str)%4) % 4
-		str = append(str, bytes.Repeat([]byte("="), missing)...)
+		str = append(str, bytes.Repeat(bytEqual, missing)...)
 
 		dbuf := make([]byte, base64.URLEncoding.DecodedLen(len(str)))
 		n, err := base64.URLEncoding.Decode(dbuf, str)
@@ -294,4 +299,111 @@ func (ke *LkkEncrypt) HmacShaX(data, secret []byte, x uint16) []byte {
 	hex.Encode(dst, src)
 
 	return dst
+}
+
+// aesEncrypt AES加密.
+// clearText为明文;key为密钥,长度16/24/32;
+// mode为模式,枚举值(CBC,CFB,CTR,OFB);
+// paddingType为填充方式,枚举(PKCS_NONE,PKCS_ZERO,PKCS_SEVEN),默认PKCS_SEVEN.
+func (ke *LkkEncrypt) aesEncrypt(clearText, key []byte, mode string, paddingType ...LkkPKCSType) ([]byte, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+
+	pt := PKCS_SEVEN
+	blockSize := block.BlockSize()
+	if len(paddingType) > 0 {
+		pt = paddingType[0]
+	}
+
+	switch pt {
+	case PKCS_ZERO:
+		clearText = zeroPadding(clearText, blockSize)
+	case PKCS_SEVEN:
+		clearText = pkcs7Padding(clearText, blockSize, false)
+	}
+
+	cipherText := make([]byte, blockSize+len(clearText))
+	//初始化向量
+	iv := cipherText[:blockSize]
+	_, _ = io.ReadFull(rand.Reader, iv)
+
+	switch mode {
+	case "CBC":
+		cipher.NewCBCEncrypter(block, iv).CryptBlocks(cipherText[blockSize:], clearText)
+	case "CFB":
+		cipher.NewCFBEncrypter(block, iv).XORKeyStream(cipherText[blockSize:], clearText)
+	case "CTR":
+		cipher.NewCTR(block, iv).XORKeyStream(cipherText[blockSize:], clearText)
+	case "OFB":
+		cipher.NewOFB(block, iv).XORKeyStream(cipherText[blockSize:], clearText)
+	}
+
+	return cipherText, nil
+}
+
+// aesDecrypt AES解密.
+// cipherText为密文;key为密钥,长度16/24/32;
+// mode为模式,枚举值(CBC,CFB,CTR,OFB);
+// paddingType为填充方式,枚举(PKCS_NONE,PKCS_ZERO,PKCS_SEVEN),默认PKCS_SEVEN.
+func (ke *LkkEncrypt) aesDecrypt(cipherText, key []byte, mode string, paddingType ...LkkPKCSType) ([]byte, error) {
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+
+	pt := PKCS_SEVEN
+	if len(paddingType) > 0 {
+		pt = paddingType[0]
+	}
+
+	blockSize := block.BlockSize()
+	clen := len(cipherText)
+	if clen < blockSize {
+		return nil, errors.New("[aesDecrypt]`cipherText too short")
+	}
+
+	iv := cipherText[:blockSize]
+	cipherText = cipherText[blockSize:]
+
+	switch mode {
+	case "CBC":
+		cipher.NewCBCDecrypter(block, iv).CryptBlocks(cipherText, cipherText)
+	case "CFB":
+		cipher.NewCFBDecrypter(block, iv).XORKeyStream(cipherText, cipherText)
+	case "CTR":
+		cipher.NewCTR(block, iv).XORKeyStream(cipherText, cipherText)
+	case "OFB":
+		cipher.NewOFB(block, iv).XORKeyStream(cipherText, cipherText)
+	}
+
+	clen = len(cipherText)
+	if pt != PKCS_NONE && clen > 0 && int(cipherText[clen-1]) > clen {
+		return nil, errors.New(fmt.Sprintf("[aesDecrypt]aes [%s] decrypt failed", mode))
+	}
+
+	var plainText []byte
+	switch pt {
+	case PKCS_ZERO:
+		plainText = zeroUnPadding(cipherText)
+	case PKCS_SEVEN:
+		plainText = pkcs7UnPadding(cipherText, blockSize)
+	case PKCS_NONE:
+		plainText = cipherText
+	}
+
+	return plainText, nil
+}
+
+// AesCBCEncrypt AES-CBC密码分组链接(Cipher-block chaining)模式加密.加密无法并行,不适合对流数据加密.
+// clearText为明文;key为密钥,长16/24/32;paddingType为填充方式,枚举(PKCS_ZERO,PKCS_SEVEN),默认PKCS_SEVEN.
+func (ke *LkkEncrypt) AesCBCEncrypt(clearText, key []byte, paddingType ...LkkPKCSType) ([]byte, error) {
+	return ke.aesEncrypt(clearText, key, "CBC", paddingType...)
+}
+
+// AesCBCDecrypt AES-CBC密码分组链接(Cipher-block chaining)模式解密.
+// cipherText为密文;key为密钥,长16/24/32;paddingType为填充方式,枚举(PKCS_NONE,PKCS_ZERO,PKCS_SEVEN),默认PKCS_SEVEN.
+func (ke *LkkEncrypt) AesCBCDecrypt(cipherText, key []byte, paddingType ...LkkPKCSType) ([]byte, error) {
+	return ke.aesDecrypt(cipherText, key, "CBC", paddingType...)
 }

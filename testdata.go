@@ -131,6 +131,7 @@ var bytsHello = []byte(strHello)
 var runesHello = []rune(strHello)
 var bytSpeedLight = []byte(strSpeedLight)
 var bytsPasswd = []byte("$2a$10$j3WOP6rP2I7skNoxiFdNdOh6OhPxP0Sp3Wmeuekh90oeF3D1EQQBK")
+var bytCryptKey = []byte("1234567890123456")
 
 //单字符切片
 var ssSingle = []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"}
