@@ -148,7 +148,6 @@ func TestEncrypt_PasswordHash(t *testing.T) {
 
 	//慎用20以上,太耗时
 	_, _ = KEncr.PasswordHash(bytsHello, 1)
-	_, _ = KEncr.PasswordHash(bytsHello, 15)
 	_, _ = KEncr.PasswordHash(bytsHello, 33)
 }
 
@@ -173,5 +172,48 @@ func BenchmarkEncrypt_PasswordVerify(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KEncr.PasswordVerify(bytsHello, bytsPasswd)
+	}
+}
+
+func TestEncrypt_EasyEncryptDecrypt(t *testing.T) {
+	var enc, dec []byte
+
+	enc = KEncr.EasyEncrypt(bytsHello, bytSpeedLight)
+	assert.NotEmpty(t, enc)
+
+	dec = KEncr.EasyDecrypt(enc, bytSpeedLight)
+	assert.Equal(t, bytsHello, dec)
+
+	//空字符串
+	enc = KEncr.EasyEncrypt([]byte(""), bytSpeedLight)
+	assert.Empty(t, enc)
+
+	//空密钥
+	enc = KEncr.EasyEncrypt(bytsHello, []byte(""))
+	assert.NotEmpty(t, enc)
+
+	//密钥错误
+	dec = KEncr.EasyDecrypt(enc, bytSpeedLight)
+	assert.Empty(t, dec)
+
+	//密文错误
+	dec = KEncr.EasyDecrypt(bytsHello, bytSpeedLight)
+	assert.Empty(t, dec)
+	dec = KEncr.EasyDecrypt([]byte("1234#iu3498r"), bytSpeedLight)
+	assert.Empty(t, dec)
+}
+
+func BenchmarkEncrypt_EasyEncrypt(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KEncr.EasyEncrypt(bytsHello, bytSpeedLight)
+	}
+}
+
+func BenchmarkEncrypt_EasyDecrypt(b *testing.B) {
+	b.ResetTimer()
+	bs := []byte(esyenCode)
+	for i := 0; i < b.N; i++ {
+		KEncr.EasyDecrypt(bs, bytSpeedLight)
 	}
 }

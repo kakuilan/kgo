@@ -193,3 +193,71 @@ func (ke *LkkEncrypt) PasswordVerify(password, hash []byte) bool {
 	err := bcrypt.CompareHashAndPassword(hash, password)
 	return err == nil
 }
+
+// EasyEncrypt 简单加密.
+// data为要加密的原字符串,key为密钥.
+func (ke *LkkEncrypt) EasyEncrypt(data, key []byte) []byte {
+	dataLen := len(data)
+	if dataLen == 0 {
+		return nil
+	}
+
+	keyByte := md5Byte(key, 32)
+	keyLen := len(keyByte)
+
+	var i, x, c int
+	var res []byte
+	for i = 0; i < dataLen; i++ {
+		if x == keyLen {
+			x = 0
+		}
+
+		c = (int(data[i]) + int(keyByte[x])) % 256
+		res = append(res, byte(c))
+
+		x++
+	}
+
+	res = append(keyByte[:DYNAMIC_KEY_LEN], ke.Base64UrlEncode(res)...)
+	return res
+}
+
+// EasyDecrypt 简单解密.
+// val为待解密的字符串,key为密钥.
+func (ke *LkkEncrypt) EasyDecrypt(val, key []byte) []byte {
+	if len(val) <= DYNAMIC_KEY_LEN {
+		return nil
+	}
+
+	data, err := ke.Base64UrlDecode(val[DYNAMIC_KEY_LEN:])
+	if err != nil {
+		return nil
+	}
+
+	keyByte := md5Byte(key, 32)
+	if string(val[:DYNAMIC_KEY_LEN]) != string(keyByte[:DYNAMIC_KEY_LEN]) {
+		return nil
+	}
+
+	dataLen := len(data)
+	keyLen := len(keyByte)
+
+	var i, x, c int
+	var res []byte
+	for i = 0; i < dataLen; i++ {
+		if x == keyLen {
+			x = 0
+		}
+
+		if data[i] < keyByte[x] {
+			c = int(data[i]) + 256 - int(keyByte[x])
+		} else {
+			c = int(data[i]) - int(keyByte[x])
+		}
+		res = append(res, byte(c))
+
+		x++
+	}
+
+	return res
+}
