@@ -407,3 +407,15 @@ func (ke *LkkEncrypt) AesCBCEncrypt(clearText, key []byte, paddingType ...LkkPKC
 func (ke *LkkEncrypt) AesCBCDecrypt(cipherText, key []byte, paddingType ...LkkPKCSType) ([]byte, error) {
 	return ke.aesDecrypt(cipherText, key, "CBC", paddingType...)
 }
+
+// AesCFBEncrypt AES-CFB密文反馈(Cipher feedback)模式加密.适合对流数据加密.
+// clearText为明文;key为密钥,长16/24/32.
+func (ke *LkkEncrypt) AesCFBEncrypt(clearText, key []byte) ([]byte, error) {
+	return ke.aesEncrypt(clearText, key, "CFB", PKCS_NONE)
+}
+
+// AesCFBDecrypt AES-CFB密文反馈(Cipher feedback)模式解密.
+// cipherText为密文;key为密钥,长16/24/32.
+func (ke *LkkEncrypt) AesCFBDecrypt(cipherText, key []byte) ([]byte, error) {
+	return ke.aesDecrypt(cipherText, key, "CFB", PKCS_NONE)
+}
