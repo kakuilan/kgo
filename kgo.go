@@ -8,23 +8,32 @@ import (
 
 type (
 	// LkkFile is the receiver of file utilities
-	LkkFile byte
+	LkkFile struct {
+	}
 	// LkkString is the receiver of string utilities
-	LkkString byte
+	LkkString struct {
+	}
 	// LkkNumber is the receiver of number utilities
-	LkkNumber byte
+	LkkNumber struct {
+	}
 	// LkkArray is the receiver of array utilities
-	LkkArray byte
+	LkkArray struct {
+	}
 	// LkkTime is the receiver of time utilities
-	LkkTime byte
+	LkkTime struct {
+	}
 	// LkkConvert is the receiver of convert utilities
-	LkkConvert byte
+	LkkConvert struct {
+	}
 	// LkkOS is the receiver of OS utilities
-	LkkOS byte
+	LkkOS struct {
+	}
 	// LkkEncrypt is the receiver of encrypt utilities
-	LkkEncrypt byte
+	LkkEncrypt struct {
+	}
 	// LkkDebug is the receiver of debug utilities
-	LkkDebug byte
+	LkkDebug struct {
+	}
 
 	// LkkFileCover 枚举类型,文件是否覆盖
 	LkkFileCover int8
