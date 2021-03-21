@@ -708,7 +708,16 @@ func GetVariateType(v interface{}) string {
 
 // GetVariatePointerAddr 获取变量的指针地址.
 func GetVariatePointerAddr(val interface{}) int64 {
-	res, _ := hex2Dec(fmt.Sprintf("%p", &val))
+	var p string
+	v := reflect.ValueOf(val)
+	switch v.Kind() {
+	case reflect.Ptr: //变量是指针
+		p = fmt.Sprintf("%p", val)
+	default:
+		p = fmt.Sprintf("%p", &val)
+	}
+
+	res, _ := hex2Dec(p)
 	return res
 }
 
