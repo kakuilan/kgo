@@ -305,6 +305,7 @@ func (ke *LkkEncrypt) HmacShaX(data, secret []byte, x uint16) []byte {
 // clearText为明文;key为密钥,长度16/24/32;
 // mode为模式,枚举值(CBC,CFB,CTR,OFB);
 // paddingType为填充方式,枚举(PKCS_NONE,PKCS_ZERO,PKCS_SEVEN),默认PKCS_SEVEN.
+// 注意:返回的是一个字节切片指针.
 func (ke *LkkEncrypt) aesEncrypt(clearText, key []byte, mode string, paddingType ...LkkPKCSType) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -324,6 +325,7 @@ func (ke *LkkEncrypt) aesEncrypt(clearText, key []byte, mode string, paddingType
 		clearText = pkcs7Padding(clearText, blockSize, false)
 	}
 
+	//字节切片指针
 	cipherText := make([]byte, blockSize+len(clearText))
 	//初始化向量
 	iv := cipherText[:blockSize]
@@ -366,31 +368,32 @@ func (ke *LkkEncrypt) aesDecrypt(cipherText, key []byte, mode string, paddingTyp
 
 	iv := cipherText[:blockSize]
 	cipherText = cipherText[blockSize:]
-
+	originData := make([]byte, clen)
 	switch mode {
 	case "CBC":
-		cipher.NewCBCDecrypter(block, iv).CryptBlocks(cipherText, cipherText)
+		cipher.NewCBCDecrypter(block, iv).CryptBlocks(originData, cipherText)
 	case "CFB":
-		cipher.NewCFBDecrypter(block, iv).XORKeyStream(cipherText, cipherText)
+		cipher.NewCFBDecrypter(block, iv).XORKeyStream(originData, cipherText)
 	case "CTR":
-		cipher.NewCTR(block, iv).XORKeyStream(cipherText, cipherText)
+		cipher.NewCTR(block, iv).XORKeyStream(originData, cipherText)
 	case "OFB":
-		cipher.NewOFB(block, iv).XORKeyStream(cipherText, cipherText)
+		cipher.NewOFB(block, iv).XORKeyStream(originData, cipherText)
 	}
+	dumpPrint("=================", originData)
 
-	clen = len(cipherText)
-	if pt != PKCS_NONE && clen > 0 && int(cipherText[clen-1]) > clen {
-		return nil, errors.New(fmt.Sprintf("[aesDecrypt]aes [%s] decrypt failed", mode))
+	clen = len(originData)
+	if pt != PKCS_NONE && clen > 0 && int(originData[clen-1]) > clen {
+		return nil, errors.New(fmt.Sprintf("[aesDecrypt]`aes [%s] decrypt failed", mode))
 	}
 
 	var plainText []byte
 	switch pt {
 	case PKCS_ZERO:
-		plainText = zeroUnPadding(cipherText)
+		plainText = zeroUnPadding(originData)
 	case PKCS_SEVEN:
-		plainText = pkcs7UnPadding(cipherText, blockSize)
+		plainText = pkcs7UnPadding(originData, blockSize)
 	case PKCS_NONE:
-		plainText = cipherText
+		plainText = originData
 	}
 
 	return plainText, nil
