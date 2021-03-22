@@ -362,13 +362,13 @@ func (ke *LkkEncrypt) aesDecrypt(cipherText, key []byte, mode string, paddingTyp
 
 	blockSize := block.BlockSize()
 	clen := len(cipherText)
-	if clen < blockSize {
+	if clen == 0 || clen < blockSize {
 		return nil, errors.New("[aesDecrypt]`cipherText too short")
 	}
 
 	iv := cipherText[:blockSize]
 	cipherText = cipherText[blockSize:]
-	originData := make([]byte, clen)
+	originData := make([]byte, clen-blockSize)
 	switch mode {
 	case "CBC":
 		cipher.NewCBCDecrypter(block, iv).CryptBlocks(originData, cipherText)
@@ -379,7 +379,6 @@ func (ke *LkkEncrypt) aesDecrypt(cipherText, key []byte, mode string, paddingTyp
 	case "OFB":
 		cipher.NewOFB(block, iv).XORKeyStream(originData, cipherText)
 	}
-	dumpPrint("=================", originData)
 
 	clen = len(originData)
 	if pt != PKCS_NONE && clen > 0 && int(originData[clen-1]) > clen {
@@ -392,7 +391,7 @@ func (ke *LkkEncrypt) aesDecrypt(cipherText, key []byte, mode string, paddingTyp
 		plainText = zeroUnPadding(originData)
 	case PKCS_SEVEN:
 		plainText = pkcs7UnPadding(originData, blockSize)
-	case PKCS_NONE:
+	default: //case PKCS_NONE
 		plainText = originData
 	}
 

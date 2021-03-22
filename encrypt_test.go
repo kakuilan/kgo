@@ -248,17 +248,15 @@ func BenchmarkEncrypt_HmacShaX(b *testing.B) {
 
 func TestEncrypt_AesCBCEncryptDecrypt(t *testing.T) {
 	var err error
-	var enc, des []byte
+	var enc, des, des2 []byte
 
 	//加密
 	enc, err = KEncr.AesCBCEncrypt(bytsHello, bytCryptKey)
-	dumpPrint("-------000000000000------", enc, string(enc), err)
 	assert.Nil(t, err)
 	assert.NotEmpty(t, enc)
 
 	//解密
 	des, err = KEncr.AesCBCDecrypt(enc, bytCryptKey)
-	dumpPrint("-------111111111111------", des, string(des), err)
 	assert.Equal(t, bytsHello, des)
 
 	//密钥不合法
@@ -266,8 +264,8 @@ func TestEncrypt_AesCBCEncryptDecrypt(t *testing.T) {
 	assert.NotNil(t, err)
 
 	//错误的密钥
-	_, err = KEncr.AesCBCDecrypt(enc, []byte("1234561234567890"))
-	assert.NotNil(t, err)
+	des2, err = KEncr.AesCBCDecrypt(enc, []byte("1234561234567890"))
+	assert.Empty(t, des2)
 
 	//填充方式-PKCS_SEVEN
 	enc, _ = KEncr.AesCBCEncrypt(bytsHello, bytCryptKey, PKCS_SEVEN)
@@ -290,7 +288,7 @@ func TestEncrypt_AesCBCEncryptDecrypt(t *testing.T) {
 	//错误的加密串
 	enc = []byte{83, 28, 170, 254, 29, 174, 21, 129, 241, 233, 243, 84, 1, 250, 95, 122, 104, 101, 108, 108, 111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	des, err = KEncr.AesCBCDecrypt(enc, bytCryptKey, PKCS_ZERO)
-	assert.NotNil(t, err)
+	assert.NotEqual(t, bytsHello, des)
 }
 
 func BenchmarkEncrypt_AesCBCEncrypt_PKCS_SEVEN(b *testing.B) {
@@ -326,7 +324,6 @@ func BenchmarkEncrypt_AesCBCDecrypt_PKCS_ZERO(b *testing.B) {
 func TestEncrypt_AesCFBEncryptDecrypt(t *testing.T) {
 	var err error
 	var enc, des, des2 []byte
-	var chk bool
 
 	//加密
 	enc, err = KEncr.AesCFBEncrypt(bytsHello, bytCryptKey)
@@ -342,9 +339,8 @@ func TestEncrypt_AesCFBEncryptDecrypt(t *testing.T) {
 	assert.NotNil(t, err)
 
 	//错误的密钥
-	des2, _ = KEncr.AesCFBDecrypt(enc, []byte("1234561234567890"))
-	chk = string(des) == string(des2)
-	assert.False(t, !chk)
+	des2, err = KEncr.AesCFBDecrypt(enc, []byte("1234561234567890"))
+	assert.NotEqual(t, bytsHello, des2)
 
 	//空字符串
 	enc, err = KEncr.AesCFBEncrypt(bytEmp, bytCryptKey)
@@ -352,6 +348,8 @@ func TestEncrypt_AesCFBEncryptDecrypt(t *testing.T) {
 	assert.NotEmpty(t, enc)
 	assert.Empty(t, des)
 
-	//dumpPrint(enc, err, des)
-
+	//错误的加密串
+	enc = []byte{83, 28, 170, 254, 29, 174, 21, 129, 241, 233, 243, 84, 1, 250, 95, 122, 104, 101, 108, 108, 111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	des, err = KEncr.AesCFBDecrypt(enc, bytCryptKey)
+	assert.NotEqual(t, bytsHello, des)
 }
