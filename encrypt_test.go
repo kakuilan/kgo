@@ -353,3 +353,18 @@ func TestEncrypt_AesCFBEncryptDecrypt(t *testing.T) {
 	des, err = KEncr.AesCFBDecrypt(enc, bytCryptKey)
 	assert.NotEqual(t, bytsHello, des)
 }
+
+func BenchmarkEncrypt_AesCFBEncrypt(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.AesCFBEncrypt(bytsHello, bytCryptKey)
+	}
+}
+
+func BenchmarkEncrypt_AesCFBDecrypt(b *testing.B) {
+	b.ResetTimer()
+	bs, _ := KEncr.AesCFBEncrypt(bytsHello, bytCryptKey)
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.AesCFBDecrypt(bs, bytCryptKey)
+	}
+}
