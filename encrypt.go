@@ -421,3 +421,15 @@ func (ke *LkkEncrypt) AesCFBEncrypt(clearText, key []byte) ([]byte, error) {
 func (ke *LkkEncrypt) AesCFBDecrypt(cipherText, key []byte) ([]byte, error) {
 	return ke.aesDecrypt(cipherText, key, "CFB", PKCS_NONE)
 }
+
+// AesCTREncrypt AES-CTR计算器(Counter)模式加密.
+// clearText为明文;key为密钥,长16/24/32.
+func (ke *LkkEncrypt) AesCTREncrypt(clearText, key []byte) ([]byte, error) {
+	return ke.aesEncrypt(clearText, key, "CTR", PKCS_NONE)
+}
+
+// AesCTRDecrypt AES-CTR计算器(Counter)模式解密.
+// cipherText为密文;key为密钥,长16/24/32.
+func (ke *LkkEncrypt) AesCTRDecrypt(cipherText, key []byte) ([]byte, error) {
+	return ke.aesDecrypt(cipherText, key, "CTR", PKCS_NONE)
+}
