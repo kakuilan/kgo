@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"bytes"
+	"crypto"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/hmac"
@@ -19,6 +20,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"hash"
 	"io"
+	"math/big"
 	"strconv"
 	"time"
 )
@@ -517,4 +519,58 @@ func (ke *LkkEncrypt) RsaPrivateDecrypt(cipherText, privateKey []byte) ([]byte, 
 
 	// 解密
 	return rsa.DecryptPKCS1v15(rand.Reader, priv, cipherText)
+}
+
+// RsaPrivateEncrypt RSA私钥加密.比解密耗时.
+// clearText为明文,privateKey为私钥.
+func (ke *LkkEncrypt) RsaPrivateEncrypt(clearText, privateKey []byte) ([]byte, error) {
+	// 获取私钥
+	block, _ := pem.Decode(privateKey)
+	if block == nil {
+		return nil, errors.New("[RsaPrivateEncrypt]`private key error!")
+	}
+
+	// 解析PKCS1格式的私钥
+	priv, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+
+	return rsa.SignPKCS1v15(nil, priv, crypto.Hash(0), clearText)
+}
+
+// RsaPublicDecrypt RSA公钥解密.
+// cipherText为密文,publicKey为公钥.
+func (ke *LkkEncrypt) RsaPublicDecrypt(cipherText, publicKey []byte) ([]byte, error) {
+	// 解密pem格式的公钥
+	block, _ := pem.Decode(publicKey)
+	if block == nil {
+		return nil, errors.New("[RsaPublicDecrypt]`public key error")
+	}
+
+	// 解析公钥
+	pubInterface, err := x509.ParsePKIXPublicKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+
+	// 类型断言
+	pubKey := pubInterface.(*rsa.PublicKey)
+
+	c := new(big.Int)
+	m := new(big.Int)
+	m.SetBytes(cipherText)
+	e := big.NewInt(int64(pubKey.E))
+	c.Exp(m, e, pubKey.N)
+	out := c.Bytes()
+	olen := len(out)
+	skip := 0
+	for i := 2; i < olen; i++ {
+		if (i+1 < olen) && out[i] == 0xff && out[i+1] == 0 {
+			skip = i + 2
+			break
+		}
+	}
+
+	return out[skip:], nil
 }

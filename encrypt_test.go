@@ -542,3 +542,54 @@ func BenchmarkEncrypt_RsaPrivateDecrypt(b *testing.B) {
 		_, _ = KEncr.RsaPrivateDecrypt(enc, priFileBs)
 	}
 }
+
+func TestEncrypt_RsaPrivateEncryptPublicDecrypt(t *testing.T) {
+	var enc, des []byte
+	var err error
+
+	pubFileBs, _ := ioutil.ReadFile("testdata/rsa/public_key.pem")
+	priFileBs, _ := ioutil.ReadFile("testdata/rsa/private_key.pem")
+
+	//私钥加密
+	enc, err = KEncr.RsaPrivateEncrypt(bytsHello, priFileBs)
+	assert.NotEmpty(t, enc)
+	assert.Nil(t, err)
+
+	//公钥解密
+	des, err = KEncr.RsaPublicDecrypt(enc, pubFileBs)
+	assert.NotEmpty(t, des)
+	assert.Nil(t, err)
+	assert.Equal(t, bytsHello, des)
+
+	//错误的私钥
+	_, err = KEncr.RsaPrivateEncrypt(bytsHello, bytSpeedLight)
+	assert.NotNil(t, err)
+
+	_, err = KEncr.RsaPrivateEncrypt(bytsHello, []byte(rsaPrivateErrStr))
+	assert.NotNil(t, err)
+
+	//错误的公钥
+	_, err = KEncr.RsaPublicDecrypt(enc, bytSpeedLight)
+	assert.NotNil(t, err)
+
+	_, err = KEncr.RsaPublicDecrypt(enc, []byte(rsaPublicErrStr))
+	assert.NotNil(t, err)
+}
+
+func BenchmarkEncrypt_RsaPrivateEncrypt(b *testing.B) {
+	b.ResetTimer()
+	priFileBs, _ := ioutil.ReadFile("testdata/rsa/private_key.pem")
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.RsaPrivateEncrypt(bytsHello, priFileBs)
+	}
+}
+
+func BenchmarkEncrypt_RsaPublicDecrypt(b *testing.B) {
+	b.ResetTimer()
+	pubFileBs, _ := ioutil.ReadFile("testdata/rsa/public_key.pem")
+	priFileBs, _ := ioutil.ReadFile("testdata/rsa/private_key.pem")
+	enc, _ := KEncr.RsaPrivateEncrypt(bytsHello, priFileBs)
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.RsaPublicDecrypt(enc, pubFileBs)
+	}
+}
