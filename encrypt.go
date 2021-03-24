@@ -478,3 +478,43 @@ func (ke *LkkEncrypt) GenerateRsaKeys(bits int) (private []byte, public []byte, 
 
 	return
 }
+
+// RsaPublicEncrypt RSA公钥加密.
+// clearText为明文,publicKey为公钥.
+func (ke *LkkEncrypt) RsaPublicEncrypt(clearText, publicKey []byte) ([]byte, error) {
+	// 解密pem格式的公钥
+	block, _ := pem.Decode(publicKey)
+	if block == nil {
+		return nil, errors.New("[RsaPublicEncrypt]`public key error")
+	}
+
+	// 解析公钥
+	pubInterface, err := x509.ParsePKIXPublicKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+
+	// 类型断言
+	pubKey := pubInterface.(*rsa.PublicKey)
+	//加密
+	return rsa.EncryptPKCS1v15(rand.Reader, pubKey, clearText)
+}
+
+// RsaPrivateDecrypt RSA私钥解密.比加密耗时.
+// cipherText为密文,privateKey为私钥.
+func (ke *LkkEncrypt) RsaPrivateDecrypt(cipherText, privateKey []byte) ([]byte, error) {
+	// 获取私钥
+	block, _ := pem.Decode(privateKey)
+	if block == nil {
+		return nil, errors.New("[RsaPrivateDecrypt]`private key error!")
+	}
+
+	// 解析PKCS1格式的私钥
+	priv, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+
+	// 解密
+	return rsa.DecryptPKCS1v15(rand.Reader, priv, cipherText)
+}
