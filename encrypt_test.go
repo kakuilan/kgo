@@ -368,3 +368,51 @@ func BenchmarkEncrypt_AesCFBDecrypt(b *testing.B) {
 		_, _ = KEncr.AesCFBDecrypt(bs, bytCryptKey)
 	}
 }
+
+func TestEncrypt_AesCTREncryptDecrypt(t *testing.T) {
+	var err error
+	var enc, des, des2 []byte
+
+	//加密
+	enc, err = KEncr.AesCTREncrypt(bytsHello, bytCryptKey)
+	assert.Nil(t, err)
+	assert.NotEmpty(t, enc)
+
+	//解密
+	des, err = KEncr.AesCTRDecrypt(enc, bytCryptKey)
+	assert.Equal(t, bytsHello, des)
+
+	//密钥不合法
+	_, err = KEncr.AesCTREncrypt(bytsHello, bytSpeedLight)
+	assert.NotNil(t, err)
+
+	//错误的密钥
+	des2, err = KEncr.AesCTRDecrypt(enc, []byte("1234561234567890"))
+	assert.NotEqual(t, bytsHello, des2)
+
+	//空字符串
+	enc, err = KEncr.AesCTREncrypt(bytEmp, bytCryptKey)
+	des, err = KEncr.AesCTRDecrypt(enc, bytCryptKey)
+	assert.NotEmpty(t, enc)
+	assert.Empty(t, des)
+
+	//错误的加密串
+	enc = []byte{83, 28, 170, 254, 29, 174, 21, 129, 241, 233, 243, 84, 1, 250, 95, 122, 104, 101, 108, 108, 111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	des, err = KEncr.AesCTRDecrypt(enc, bytCryptKey)
+	assert.NotEqual(t, bytsHello, des)
+}
+
+func BenchmarkEncrypt_AesCTREncrypt(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.AesCTREncrypt(bytsHello, bytCryptKey)
+	}
+}
+
+func BenchmarkEncrypt_AesCTRDecrypt(b *testing.B) {
+	b.ResetTimer()
+	bs, _ := KEncr.AesCTREncrypt(bytsHello, bytCryptKey)
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.AesCTRDecrypt(bs, bytCryptKey)
+	}
+}
