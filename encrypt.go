@@ -433,3 +433,15 @@ func (ke *LkkEncrypt) AesCTREncrypt(clearText, key []byte) ([]byte, error) {
 func (ke *LkkEncrypt) AesCTRDecrypt(cipherText, key []byte) ([]byte, error) {
 	return ke.aesDecrypt(cipherText, key, "CTR", PKCS_NONE)
 }
+
+// AesOFBEncrypt AES-OFB输出反馈(Output feedback)模式加密.适合对流数据加密.
+// clearText为明文;key为密钥,长16/24/32.
+func (ke *LkkEncrypt) AesOFBEncrypt(clearText, key []byte) ([]byte, error) {
+	return ke.aesEncrypt(clearText, key, "OFB", PKCS_NONE)
+}
+
+// AesOFBDecrypt AES-OFB输出反馈(Output feedback)模式解密.
+// cipherText为密文;key为密钥,长16/24/32.
+func (ke *LkkEncrypt) AesOFBDecrypt(cipherText, key []byte) ([]byte, error) {
+	return ke.aesDecrypt(cipherText, key, "OFB", PKCS_NONE)
+}
