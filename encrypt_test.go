@@ -265,7 +265,7 @@ func TestEncrypt_AesCBCEncryptDecrypt(t *testing.T) {
 
 	//错误的密钥
 	des2, err = KEncr.AesCBCDecrypt(enc, []byte("1234561234567890"))
-	assert.Empty(t, des2)
+	assert.NotEqual(t, bytsHello, des2)
 
 	//填充方式-PKCS_SEVEN
 	enc, _ = KEncr.AesCBCEncrypt(bytsHello, bytCryptKey, PKCS_SEVEN)
@@ -462,5 +462,31 @@ func BenchmarkEncrypt_AesOFBDecrypt(b *testing.B) {
 	bs, _ := KEncr.AesOFBEncrypt(bytsHello, bytCryptKey)
 	for i := 0; i < b.N; i++ {
 		_, _ = KEncr.AesOFBDecrypt(bs, bytCryptKey)
+	}
+}
+
+func TestEncrypt_GenerateRsaKeys(t *testing.T) {
+	var private, public []byte
+	var err error
+
+	private, public, err = KEncr.GenerateRsaKeys(1024)
+	assert.NotEmpty(t, private)
+	assert.NotEmpty(t, public)
+	assert.Nil(t, err)
+
+	private, public, err = KEncr.GenerateRsaKeys(2048)
+	assert.NotEmpty(t, private)
+	assert.NotEmpty(t, public)
+	assert.Nil(t, err)
+
+	//错误的密钥位数
+	private, public, err = KEncr.GenerateRsaKeys(1)
+	assert.NotNil(t, err)
+}
+
+func BenchmarkEncrypt_GenerateRsaKeys(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _, _ = KEncr.GenerateRsaKeys(1024)
 	}
 }

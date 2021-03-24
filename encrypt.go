@@ -6,11 +6,14 @@ import (
 	"crypto/cipher"
 	"crypto/hmac"
 	"crypto/rand"
+	"crypto/rsa"
 	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha512"
+	"crypto/x509"
 	"encoding/base64"
 	"encoding/hex"
+	"encoding/pem"
 	"errors"
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
@@ -280,15 +283,12 @@ func (ke *LkkEncrypt) HmacShaX(data, secret []byte, x uint16) []byte {
 	switch x {
 	case 1:
 		h = hmac.New(sha1.New, secret)
-		break
 	case 256:
 		h = hmac.New(sha256.New, secret)
-		break
 	case 512:
 		h = hmac.New(sha512.New, secret)
-		break
 	default:
-		panic("[HmacShaX] x must be in [1, 256, 512]")
+		panic("[HmacShaX]`x must be in [1, 256, 512]")
 	}
 
 	// Write Data to it
@@ -382,7 +382,7 @@ func (ke *LkkEncrypt) aesDecrypt(cipherText, key []byte, mode string, paddingTyp
 
 	clen = len(originData)
 	if pt != PKCS_NONE && clen > 0 && int(originData[clen-1]) > clen {
-		return nil, errors.New(fmt.Sprintf("[aesDecrypt]`aes [%s] decrypt failed", mode))
+		return nil, errors.New(fmt.Sprintf("[aesDecrypt] [%s] decrypt failed", mode))
 	}
 
 	var plainText []byte
@@ -444,4 +444,37 @@ func (ke *LkkEncrypt) AesOFBEncrypt(clearText, key []byte) ([]byte, error) {
 // cipherText为密文;key为密钥,长16/24/32.
 func (ke *LkkEncrypt) AesOFBDecrypt(cipherText, key []byte) ([]byte, error) {
 	return ke.aesDecrypt(cipherText, key, "OFB", PKCS_NONE)
+}
+
+// GenerateRsaKeys 生成RSA密钥对.bits为密钥位数,通常为1024或2048.
+func (ke *LkkEncrypt) GenerateRsaKeys(bits int) (private []byte, public []byte, err error) {
+	// 生成私钥文件
+	var privateKey *rsa.PrivateKey
+	privateKey, err = rsa.GenerateKey(rand.Reader, bits)
+	if err != nil {
+		return
+	}
+	derStream := x509.MarshalPKCS1PrivateKey(privateKey)
+	block := &pem.Block{
+		Type:  "RSA PRIVATE KEY",
+		Bytes: derStream,
+	}
+	privateBuff := new(bytes.Buffer)
+	_ = pem.Encode(privateBuff, block)
+
+	// 生成公钥文件
+	var derPkix []byte
+	publicKey := &privateKey.PublicKey
+	derPkix, _ = x509.MarshalPKIXPublicKey(publicKey)
+	block = &pem.Block{
+		Type:  "RSA PUBLIC KEY",
+		Bytes: derPkix,
+	}
+	publicBuff := new(bytes.Buffer)
+	_ = pem.Encode(publicBuff, block)
+
+	private = privateBuff.Bytes()
+	public = publicBuff.Bytes()
+
+	return
 }
