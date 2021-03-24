@@ -164,6 +164,7 @@ MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDteXRcRyppm5sOVvteo37Dmaid
 bx6YrV6QWZ0L9mGfCmSW1a/Ad61kT6OoU0Z3DyId7vA9TtvULucEUpywPpSoP/r+
 820UHFihdyhcb1iy8Z3v6KUcarWzUOZpo0mc+o4hW2O1VnzNxLcXmhQOA9NdEOV/
 -----END RSA PUBLIC KEY`
+
 //错误的私钥
 var rsaPrivateErrStr = `-----BEGIN RSA PRIVATE KEY-----
 MIICXAIBAAKBgQDteXRcRyppm5sOVvteo37Dmaidbx6YrV6QWZ0L9mGfCmSW1a/A
@@ -179,6 +180,14 @@ DlDCo0fApx8F5UOQaJnvPd8HOme5HTIs/6IM9RIL879e4IrTMtdSAfad+QJBANAc
 Opmv0mBgAnPItT8cPsvvrGCfdwuO6x2xemTkPE9hikLZSctlaOUfVNeem6f/3SWi
 -----END RSA PRIVATE KEY-----`
 
+//文件
+var fileMd = "./README.md"
+var fileGo = "./file.go"
+var fileSongs = "./testdata/诗经.txt"
+var filePubPem = "./testdata/rsa/public_key.pem"
+var filePriPem = "./testdata/rsa/private_key.pem"
+var fileGitkee = "./testdata/.gitkeep"
+var fileNone = "./testdata/none"
 
 func init() {
 	gofakeit.Struct(&personS1)

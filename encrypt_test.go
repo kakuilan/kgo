@@ -496,8 +496,8 @@ func TestEncrypt_RsaPublicEncryptPrivateDecrypt(t *testing.T) {
 	var enc, des []byte
 	var err error
 
-	pubFileBs, _ := ioutil.ReadFile("testdata/rsa/public_key.pem")
-	priFileBs, _ := ioutil.ReadFile("testdata/rsa/private_key.pem")
+	pubFileBs, _ := ioutil.ReadFile(filePubPem)
+	priFileBs, _ := ioutil.ReadFile(filePriPem)
 
 	//公钥加密
 	enc, err = KEncr.RsaPublicEncrypt(bytsHello, pubFileBs)
@@ -527,7 +527,7 @@ func TestEncrypt_RsaPublicEncryptPrivateDecrypt(t *testing.T) {
 
 func BenchmarkEncrypt_RsaPublicEncrypt(b *testing.B) {
 	b.ResetTimer()
-	pubFileBs, _ := ioutil.ReadFile("testdata/rsa/public_key.pem")
+	pubFileBs, _ := ioutil.ReadFile(filePubPem)
 	for i := 0; i < b.N; i++ {
 		_, _ = KEncr.RsaPublicEncrypt(bytsHello, pubFileBs)
 	}
@@ -535,8 +535,8 @@ func BenchmarkEncrypt_RsaPublicEncrypt(b *testing.B) {
 
 func BenchmarkEncrypt_RsaPrivateDecrypt(b *testing.B) {
 	b.ResetTimer()
-	pubFileBs, _ := ioutil.ReadFile("testdata/rsa/public_key.pem")
-	priFileBs, _ := ioutil.ReadFile("testdata/rsa/private_key.pem")
+	pubFileBs, _ := ioutil.ReadFile(filePubPem)
+	priFileBs, _ := ioutil.ReadFile(filePriPem)
 	enc, _ := KEncr.RsaPublicEncrypt(bytsHello, pubFileBs)
 	for i := 0; i < b.N; i++ {
 		_, _ = KEncr.RsaPrivateDecrypt(enc, priFileBs)
@@ -547,8 +547,8 @@ func TestEncrypt_RsaPrivateEncryptPublicDecrypt(t *testing.T) {
 	var enc, des []byte
 	var err error
 
-	pubFileBs, _ := ioutil.ReadFile("testdata/rsa/public_key.pem")
-	priFileBs, _ := ioutil.ReadFile("testdata/rsa/private_key.pem")
+	pubFileBs, _ := ioutil.ReadFile(filePubPem)
+	priFileBs, _ := ioutil.ReadFile(filePriPem)
 
 	//私钥加密
 	enc, err = KEncr.RsaPrivateEncrypt(bytsHello, priFileBs)
@@ -578,7 +578,7 @@ func TestEncrypt_RsaPrivateEncryptPublicDecrypt(t *testing.T) {
 
 func BenchmarkEncrypt_RsaPrivateEncrypt(b *testing.B) {
 	b.ResetTimer()
-	priFileBs, _ := ioutil.ReadFile("testdata/rsa/private_key.pem")
+	priFileBs, _ := ioutil.ReadFile(filePriPem)
 	for i := 0; i < b.N; i++ {
 		_, _ = KEncr.RsaPrivateEncrypt(bytsHello, priFileBs)
 	}
@@ -586,8 +586,8 @@ func BenchmarkEncrypt_RsaPrivateEncrypt(b *testing.B) {
 
 func BenchmarkEncrypt_RsaPublicDecrypt(b *testing.B) {
 	b.ResetTimer()
-	pubFileBs, _ := ioutil.ReadFile("testdata/rsa/public_key.pem")
-	priFileBs, _ := ioutil.ReadFile("testdata/rsa/private_key.pem")
+	pubFileBs, _ := ioutil.ReadFile(filePubPem)
+	priFileBs, _ := ioutil.ReadFile(filePriPem)
 	enc, _ := KEncr.RsaPrivateEncrypt(bytsHello, priFileBs)
 	for i := 0; i < b.N; i++ {
 		_, _ = KEncr.RsaPublicDecrypt(enc, pubFileBs)
