@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"github.com/stretchr/testify/assert"
+	"io/ioutil"
 	"testing"
 )
 
@@ -488,5 +489,56 @@ func BenchmarkEncrypt_GenerateRsaKeys(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _, _ = KEncr.GenerateRsaKeys(1024)
+	}
+}
+
+func TestEncrypt_RsaPublicEncryptPrivateDecrypt(t *testing.T) {
+	var enc, des []byte
+	var err error
+
+	pubFileBs, _ := ioutil.ReadFile("testdata/rsa/public_key.pem")
+	priFileBs, _ := ioutil.ReadFile("testdata/rsa/private_key.pem")
+
+	//公钥加密
+	enc, err = KEncr.RsaPublicEncrypt(bytsHello, pubFileBs)
+	assert.NotEmpty(t, enc)
+	assert.Nil(t, err)
+
+	//私钥解密
+	des, err = KEncr.RsaPrivateDecrypt(enc, priFileBs)
+	assert.NotEmpty(t, des)
+	assert.Nil(t, err)
+	assert.Equal(t, bytsHello, des)
+
+	//错误的公钥
+	_, err = KEncr.RsaPublicEncrypt(bytsHello, bytSpeedLight)
+	assert.NotNil(t, err)
+
+	_, err = KEncr.RsaPublicEncrypt(bytsHello, []byte(rsaPublicErrStr))
+	assert.NotNil(t, err)
+
+	//错误的私钥
+	_, err = KEncr.RsaPrivateDecrypt(enc, bytSpeedLight)
+	assert.NotNil(t, err)
+
+	_, err = KEncr.RsaPrivateDecrypt(enc, []byte(rsaPrivateErrStr))
+	assert.NotNil(t, err)
+}
+
+func BenchmarkEncrypt_RsaPublicEncrypt(b *testing.B) {
+	b.ResetTimer()
+	pubFileBs, _ := ioutil.ReadFile("testdata/rsa/public_key.pem")
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.RsaPublicEncrypt(bytsHello, pubFileBs)
+	}
+}
+
+func BenchmarkEncrypt_RsaPrivateDecrypt(b *testing.B) {
+	b.ResetTimer()
+	pubFileBs, _ := ioutil.ReadFile("testdata/rsa/public_key.pem")
+	priFileBs, _ := ioutil.ReadFile("testdata/rsa/private_key.pem")
+	enc, _ := KEncr.RsaPublicEncrypt(bytsHello, pubFileBs)
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.RsaPrivateDecrypt(enc, priFileBs)
 	}
 }
