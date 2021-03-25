@@ -27,3 +27,23 @@ func BenchmarkFile_GetExt(b *testing.B) {
 		KFile.GetExt(fileMd)
 	}
 }
+
+func TestFile_ReadFile(t *testing.T) {
+	var bs []byte
+	var err error
+
+	bs, err = KFile.ReadFile(fileMd)
+	assert.NotEmpty(t, bs)
+	assert.Nil(t, err)
+
+	//不存在的文件
+	bs, err = KFile.ReadFile(fileNone)
+	assert.NotNil(t, err)
+}
+
+func BenchmarkFile_ReadFile(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.ReadFile(fileMd)
+	}
+}

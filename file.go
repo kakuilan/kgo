@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"os"
 	"path/filepath"
 	"strings"
 )
@@ -12,4 +13,10 @@ func (kf *LkkFile) GetExt(fpath string) string {
 		return strings.ToLower(suffix[1:])
 	}
 	return suffix
+}
+
+// ReadFile 读取文件内容.
+func (kf *LkkFile) ReadFile(fpath string) ([]byte, error) {
+	data, err := os.ReadFile(fpath)
+	return data, err
 }
