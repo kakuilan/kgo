@@ -193,6 +193,7 @@ var fileNone = "./testdata/none"
 var imgPng = "./testdata/diglett.png"
 var imgJpg = "./testdata/gopher10th-small.jpg"
 var imgSvg = "./testdata/jetbrains.svg"
+var changLog = "./docs/changelog.md"
 
 func init() {
 	gofakeit.Struct(&personS1)

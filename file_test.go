@@ -68,7 +68,7 @@ func BenchmarkFile_ReadInArray(b *testing.B) {
 }
 
 func TestFile_ReadFirstLine(t *testing.T) {
-	var res string
+	var res []byte
 
 	res = KFile.ReadFirstLine(fileDante)
 	assert.NotEmpty(t, res)
@@ -82,5 +82,23 @@ func BenchmarkFile_ReadFirstLine(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KFile.ReadFirstLine(fileMd)
+	}
+}
+
+func TestFile_ReadLastLine(t *testing.T) {
+	var res []byte
+
+	res = KFile.ReadLastLine(changLog)
+	assert.NotEmpty(t, res)
+
+	//不存在的文件
+	res = KFile.ReadLastLine(fileNone)
+	assert.Empty(t, res)
+}
+
+func BenchmarkFile_ReadLastLine(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.ReadLastLine(fileMd)
 	}
 }

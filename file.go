@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"bufio"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -33,18 +34,49 @@ func (kf *LkkFile) ReadInArray(fpath string) ([]string, error) {
 }
 
 // ReadFirstLine 读取文件首行.
-func (kf *LkkFile) ReadFirstLine(fpath string) string {
-	var res string
+func (kf *LkkFile) ReadFirstLine(fpath string) []byte {
+	var res []byte
 	fh, err := os.Open(fpath)
 	if err == nil {
 		scanner := bufio.NewScanner(fh)
 		for scanner.Scan() {
-			res = scanner.Text()
+			res = scanner.Bytes()
 			break
 		}
 	}
 	defer func() {
 		_ = fh.Close()
+	}()
+
+	return res
+}
+
+// ReadLastLine 读取文件末行.
+func (kf *LkkFile) ReadLastLine(fpath string) []byte {
+	var res []byte
+	file, err := os.Open(fpath)
+	if err == nil {
+		var lastLineSize int
+		reader := bufio.NewReader(file)
+
+		for {
+			bs, err := reader.ReadBytes('\n')
+			lastLineSize = len(bs)
+			if err == io.EOF {
+				break
+			}
+		}
+
+		fileInfo, _ := os.Stat(fpath)
+
+		// make a buffer size according to the lastLineSize
+		buffer := make([]byte, lastLineSize)
+		offset := fileInfo.Size() - int64(lastLineSize)
+		numRead, _ := file.ReadAt(buffer, offset)
+		res = buffer[:numRead]
+	}
+	defer func() {
+		_ = file.Close()
 	}()
 
 	return res
