@@ -3,6 +3,10 @@ package kgo
 import (
 	"bytes"
 	"github.com/json-iterator/go"
+	"golang.org/x/text/encoding/simplifiedchinese"
+	"golang.org/x/text/transform"
+	"io"
+	"unicode/utf8"
 )
 
 // Addslashes 使用反斜线引用字符串.
@@ -48,4 +52,54 @@ func (ks *LkkString) JsonEncode(val interface{}) ([]byte, error) {
 func (ks *LkkString) JsonDecode(str []byte, res interface{}) error {
 	var jsons = jsoniter.ConfigCompatibleWithStandardLibrary
 	return jsons.Unmarshal(str, res)
+}
+
+// Utf8ToGbk UTF-8转GBK编码.
+func (ks *LkkString) Utf8ToGbk(s []byte) ([]byte, error) {
+	reader := transform.NewReader(bytes.NewReader(s), simplifiedchinese.GBK.NewEncoder())
+	d, e := io.ReadAll(reader)
+	return d, e
+}
+
+// GbkToUtf8 GBK转UTF-8编码.
+func (ks *LkkString) GbkToUtf8(s []byte) ([]byte, error) {
+	reader := transform.NewReader(bytes.NewReader(s), simplifiedchinese.GBK.NewDecoder())
+	d, e := io.ReadAll(reader)
+	return d, e
+}
+
+// IsUtf8 字符串是否UTF-8编码.
+func (ks *LkkString) IsUtf8(str string) bool {
+	return str != "" && utf8.ValidString(str)
+}
+
+// IsGbk 字符串是否GBK编码.
+func (ks *LkkString) IsGbk(data []byte) (res bool) {
+	length := len(data)
+	var i, j int
+	for i < length {
+		j = i + 1
+		//大于127的使用双字节编码,且落在gbk编码范围内的字符
+		//GBK中每个汉字包含两个字节，第一个字节(首字节)的范围是0x81-0xFE(即129-254),第二个字节(尾字节)的范围是0x40-0xFE(即64-254)
+		if data[i] > 0x7f && j < length {
+			if data[i] >= 0x81 &&
+				data[i] <= 0xfe &&
+				data[j] >= 0x40 &&
+				data[j] <= 0xfe {
+				i += 2
+				res = true
+			} else {
+				res = false
+				break
+			}
+		} else {
+			i++
+		}
+	}
+
+	return
+}
+
+func (ks *LkkString) DetectEncoding() {
+	//TODO 检查字符编码
 }

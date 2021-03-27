@@ -94,6 +94,7 @@ var similarStr2 = "Tom love you,he come from China."
 var str2Code = "https://tool.google.com.net/encrypt?type=4Hello World! 你好！"
 var b64UrlCode = "aHR0cHM6Ly90b29sLmdvb2dsZS5jb20ubmV0L2VuY3J5cHQ_dHlwZT00SGVsbG8gV29ybGQhIOS9oOWlve-8gQ"
 var esyenCode = "23da39b4epjQzaJZuaPW0piFWEbvA0cJISjztw"
+var strNoGbk = "月日は百代の過客にして、行かふ年も又旅人也。안녕.ＡＢＣＤＥＦＧＨＩＪＫ"
 
 //当前时间
 var nowNanoInt = Kuptime.UnixNano()
@@ -184,10 +185,14 @@ Opmv0mBgAnPItT8cPsvvrGCfdwuO6x2xemTkPE9hikLZSctlaOUfVNeem6f/3SWi
 var fileMd = "./README.md"
 var fileGo = "./file.go"
 var fileSongs = "./testdata/诗经.txt"
+var fileDante = "./testdata/dante.txt"
 var filePubPem = "./testdata/rsa/public_key.pem"
 var filePriPem = "./testdata/rsa/private_key.pem"
 var fileGitkee = "./testdata/.gitkeep"
 var fileNone = "./testdata/none"
+var imgPng = "./testdata/diglett.png"
+var imgJpg = "./testdata/gopher10th-small.jpg"
+var imgSvg = "./testdata/jetbrains.svg"
 
 func init() {
 	gofakeit.Struct(&personS1)

@@ -270,3 +270,12 @@ https://www.liwenzhou.com/posts/Go/struct2map/
 https://www.cnblogs.com/liang1101/p/6741262.html
 https://www.cnblogs.com/Detector/p/9746284.html
 https://juejin.cn/post/6855129007193915400
+
+字符编码
+https://github.com/hydra13142/chardet
+https://github.com/fesiong/goproject
+https://github.com/djimenez/iconv-go
+https://pkg.go.dev/golang.org/x/net/html/charset
+https://github.com/timakin/gonvert
+https://github.com/spiegel-im-spiegel/text
+https://siongui.github.io/2018/10/27/auto-detect-and-convert-html-encoding-to-utf8-in-go/
