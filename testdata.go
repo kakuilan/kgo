@@ -182,6 +182,7 @@ Opmv0mBgAnPItT8cPsvvrGCfdwuO6x2xemTkPE9hikLZSctlaOUfVNeem6f/3SWi
 -----END RSA PRIVATE KEY-----`
 
 //文件
+var changLog = "./docs/changelog.md"
 var fileMd = "./README.md"
 var fileGo = "./file.go"
 var fileSongs = "./testdata/诗经.txt"
@@ -193,7 +194,8 @@ var fileNone = "./testdata/none"
 var imgPng = "./testdata/diglett.png"
 var imgJpg = "./testdata/gopher10th-small.jpg"
 var imgSvg = "./testdata/jetbrains.svg"
-var changLog = "./docs/changelog.md"
+var putfile = "./testdata/putfile"
+var rootFile1 = "/root/hello/world"
 
 func init() {
 	gofakeit.Struct(&personS1)

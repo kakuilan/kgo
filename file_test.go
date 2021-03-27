@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -100,5 +101,30 @@ func BenchmarkFile_ReadLastLine(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KFile.ReadLastLine(fileMd)
+	}
+}
+
+func TestFile_WriteFile(t *testing.T) {
+	var err error
+
+	err = KFile.WriteFile(putfile, bytsHello)
+	assert.Nil(t, err)
+
+	//设置权限
+	err = KFile.WriteFile(putfile, bytsHello, 0777)
+	assert.Nil(t, err)
+
+	//无权限写
+	err = KFile.WriteFile(rootFile1, bytsHello, 0777)
+	if KOS.IsLinux() || KOS.IsMac() {
+		assert.NotNil(t, err)
+	}
+}
+
+func BenchmarkFile_WriteFile(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		filename := fmt.Sprintf("./testdata/file/putfile_%d", i)
+		_ = KFile.WriteFile(filename, bytsHello)
 	}
 }
