@@ -66,3 +66,21 @@ func BenchmarkFile_ReadInArray(b *testing.B) {
 		_, _ = KFile.ReadInArray(fileMd)
 	}
 }
+
+func TestFile_ReadFirstLine(t *testing.T) {
+	var res string
+
+	res = KFile.ReadFirstLine(fileDante)
+	assert.NotEmpty(t, res)
+
+	//不存在的文件
+	res = KFile.ReadFirstLine(fileNone)
+	assert.Empty(t, res)
+}
+
+func BenchmarkFile_ReadFirstLine(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.ReadFirstLine(fileMd)
+	}
+}

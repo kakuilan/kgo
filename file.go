@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"bufio"
 	"os"
 	"path/filepath"
 	"strings"
@@ -29,4 +30,22 @@ func (kf *LkkFile) ReadInArray(fpath string) ([]string, error) {
 	}
 
 	return strings.Split(string(data), "\n"), nil
+}
+
+// ReadFirstLine 读取文件首行.
+func (kf *LkkFile) ReadFirstLine(fpath string) string {
+	var res string
+	fh, err := os.Open(fpath)
+	if err == nil {
+		scanner := bufio.NewScanner(fh)
+		for scanner.Scan() {
+			res = scanner.Text()
+			break
+		}
+	}
+	defer func() {
+		_ = fh.Close()
+	}()
+
+	return res
 }
