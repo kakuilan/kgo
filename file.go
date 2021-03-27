@@ -20,3 +20,13 @@ func (kf *LkkFile) ReadFile(fpath string) ([]byte, error) {
 	data, err := os.ReadFile(fpath)
 	return data, err
 }
+
+// ReadInArray 把整个文件读入一个数组中,每行作为一个元素.
+func (kf *LkkFile) ReadInArray(fpath string) ([]string, error) {
+	data, err := os.ReadFile(fpath)
+	if err != nil {
+		return nil, err
+	}
+
+	return strings.Split(string(data), "\n"), nil
+}

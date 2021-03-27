@@ -47,3 +47,22 @@ func BenchmarkFile_ReadFile(b *testing.B) {
 		_, _ = KFile.ReadFile(fileMd)
 	}
 }
+
+func TestFile_ReadInArray(t *testing.T) {
+	var sl []string
+	var err error
+
+	sl, err = KFile.ReadInArray(fileDante)
+	assert.Equal(t, 19568, len(sl))
+
+	//不存在的文件
+	sl, err = KFile.ReadInArray(fileNone)
+	assert.NotNil(t, err)
+}
+
+func BenchmarkFile_ReadInArray(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.ReadInArray(fileMd)
+	}
+}
