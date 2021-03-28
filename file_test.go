@@ -157,3 +157,33 @@ func BenchmarkFile_AppendFile(b *testing.B) {
 		_ = KFile.AppendFile(apndfile, bytsHello)
 	}
 }
+
+func TestFile_GetMime(t *testing.T) {
+	var res string
+
+	res = KFile.GetMime(imgPng, false)
+	assert.NotEmpty(t, res)
+
+	res = KFile.GetMime(fileDante, true)
+	if KOS.IsWindows() {
+		assert.NotEmpty(t, res)
+	}
+
+	//不存在的文件
+	res = KFile.GetMime(fileNone, true)
+	assert.Empty(t, res)
+}
+
+func BenchmarkFile_GetMime_Fast(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.GetMime(fileMd, true)
+	}
+}
+
+func BenchmarkFile_GetMime_NoFast(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.GetMime(fileMd, false)
+	}
+}
