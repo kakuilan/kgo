@@ -196,3 +196,9 @@ func (kf *LkkFile) IsExist(fpath string) bool {
 	_, err := os.Stat(fpath)
 	return err == nil || os.IsExist(err)
 }
+
+// IsExecutable 是否可执行文件.
+func (kf *LkkFile) IsExecutable(fpath string) bool {
+	info, err := os.Stat(fpath)
+	return err == nil && info.Mode().IsRegular() && (info.Mode()&0111) != 0
+}

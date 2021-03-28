@@ -276,3 +276,16 @@ func BenchmarkFile_IsReadable(b *testing.B) {
 		KFile.IsReadable(dirTdat)
 	}
 }
+
+func TestFile_IsExecutable(t *testing.T) {
+	var res bool
+
+	res = KFile.IsExecutable(fileMd)
+	assert.False(t, res)
+}
+
+func BenchmarkFile_IsExecutable(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		KFile.IsExecutable(fileMd)
+	}
+}
