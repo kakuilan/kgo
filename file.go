@@ -190,3 +190,9 @@ func (kf *LkkFile) DirSize(fpath string) int64 {
 	})
 	return size
 }
+
+// IsExist 路径(文件/目录)是否存在.
+func (kf *LkkFile) IsExist(fpath string) bool {
+	_, err := os.Stat(fpath)
+	return err == nil || os.IsExist(err)
+}

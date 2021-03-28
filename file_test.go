@@ -223,3 +223,20 @@ func BenchmarkFile_DirSize(b *testing.B) {
 		KFile.DirSize(dirTdat)
 	}
 }
+
+func TestFile_IsExist(t *testing.T) {
+	var res bool
+
+	res = KFile.IsExist(changLog)
+	assert.True(t, res)
+
+	res = KFile.IsExist(fileNone)
+	assert.False(t, res)
+}
+
+func BenchmarkFile_IsExist(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.IsExist(fileMd)
+	}
+}
