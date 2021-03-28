@@ -195,6 +195,7 @@ var imgPng = "./testdata/diglett.png"
 var imgJpg = "./testdata/gopher10th-small.jpg"
 var imgSvg = "./testdata/jetbrains.svg"
 var putfile = "./testdata/putfile"
+var apndfile = "./testdata/append"
 var rootFile1 = "/root/hello/world"
 
 func init() {

@@ -128,3 +128,32 @@ func BenchmarkFile_WriteFile(b *testing.B) {
 		_ = KFile.WriteFile(filename, bytsHello)
 	}
 }
+
+func TestFile_AppendFile(t *testing.T) {
+	var err error
+
+	//创建
+	err = KFile.AppendFile(apndfile, bytsHello)
+	assert.Nil(t, err)
+
+	//追加
+	err = KFile.AppendFile(apndfile, bytsHello)
+	assert.Nil(t, err)
+
+	//空路径
+	err = KFile.AppendFile("", bytsHello)
+	assert.NotNil(t, err)
+
+	//权限不足
+	err = KFile.AppendFile(rootFile1, bytsHello)
+	if KOS.IsLinux() || KOS.IsMac() {
+		assert.NotNil(t, err)
+	}
+}
+
+func BenchmarkFile_AppendFile(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = KFile.AppendFile(apndfile, bytsHello)
+	}
+}

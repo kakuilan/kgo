@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"bufio"
+	"errors"
 	"io"
 	"os"
 	"path"
@@ -55,10 +56,10 @@ func (kf *LkkFile) ReadFirstLine(fpath string) []byte {
 // ReadLastLine 读取文件末行.
 func (kf *LkkFile) ReadLastLine(fpath string) []byte {
 	var res []byte
-	file, err := os.Open(fpath)
+	fh, err := os.Open(fpath)
 	if err == nil {
 		var lastLineSize int
-		reader := bufio.NewReader(file)
+		reader := bufio.NewReader(fh)
 
 		for {
 			bs, err := reader.ReadBytes('\n')
@@ -73,11 +74,11 @@ func (kf *LkkFile) ReadLastLine(fpath string) []byte {
 		// make a buffer size according to the lastLineSize
 		buffer := make([]byte, lastLineSize)
 		offset := fileInfo.Size() - int64(lastLineSize)
-		numRead, _ := file.ReadAt(buffer, offset)
+		numRead, _ := fh.ReadAt(buffer, offset)
 		res = buffer[:numRead]
 	}
 	defer func() {
-		_ = file.Close()
+		_ = fh.Close()
 	}()
 
 	return res
@@ -98,4 +99,42 @@ func (kf *LkkFile) WriteFile(fpath string, data []byte, perm ...os.FileMode) err
 	}
 
 	return os.WriteFile(fpath, data, p)
+}
+
+// GetFileMode 获取路径的权限模式.
+func (kf *LkkFile) GetFileMode(fpath string) (os.FileMode, error) {
+	finfo, err := os.Lstat(fpath)
+	if err != nil {
+		return 0, err
+	}
+	return finfo.Mode(), nil
+}
+
+// AppendFile 插入文件内容.
+func (kf *LkkFile) AppendFile(fpath string, data []byte) error {
+	if fpath == "" {
+		return errors.New("[AppendFile] no path provided")
+	}
+
+	var file *os.File
+	filePerm, err := kf.GetFileMode(fpath)
+	if err != nil {
+		// create the file
+		file, err = os.Create(fpath)
+	} else {
+		// open for append
+		file, err = os.OpenFile(fpath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, filePerm)
+	}
+	if err != nil {
+		// failed to create or open-for-append the file
+		return err
+	}
+
+	defer func() {
+		_ = file.Close()
+	}()
+
+	_, err = file.Write(data)
+
+	return err
 }
