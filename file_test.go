@@ -187,3 +187,21 @@ func BenchmarkFile_GetMime_NoFast(b *testing.B) {
 		KFile.GetMime(fileMd, false)
 	}
 }
+
+func TestFile_FileSize(t *testing.T) {
+	var res int64
+
+	res = KFile.FileSize(changLog)
+	assert.Greater(t, res, int64(0))
+
+	//不存在的文件
+	res = KFile.FileSize(fileNone)
+	assert.Equal(t, int64(-1), res)
+}
+
+func BenchmarkFile_FileSize(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.FileSize(fileMd)
+	}
+}
