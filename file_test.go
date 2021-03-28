@@ -313,3 +313,25 @@ func BenchmarkFile_IsLink(b *testing.B) {
 		KFile.IsLink(fileLink)
 	}
 }
+
+func TestFile_IsFile(t *testing.T) {
+	tests := []struct {
+		f        string
+		t        LkkFileType
+		expected bool
+	}{
+		{"", FILE_TYPE_ANY, false},
+		{fileNone, FILE_TYPE_ANY, false},
+		{fileGo, FILE_TYPE_ANY, true},
+		{fileMd, FILE_TYPE_LINK, false},
+		{fileLink, FILE_TYPE_LINK, true},
+		{fileLink, FILE_TYPE_REGULAR, false},
+		{fileGitkee, FILE_TYPE_REGULAR, true},
+		{fileLink, FILE_TYPE_COMMON, true},
+		{imgJpg, FILE_TYPE_COMMON, true},
+	}
+	for _, test := range tests {
+		actual := KFile.IsFile(test.f, test.t)
+		assert.Equal(t, test.expected, actual)
+	}
+}
