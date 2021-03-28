@@ -258,3 +258,21 @@ func BenchmarkFile_IsWritable(b *testing.B) {
 		KFile.IsWritable(dirTdat)
 	}
 }
+
+func TestFile_IsReadable(t *testing.T) {
+	var res bool
+
+	res = KFile.IsReadable(dirTdat)
+	assert.True(t, res)
+
+	//不存在的目录
+	res = KFile.IsReadable(fileNone)
+	assert.False(t, res)
+}
+
+func BenchmarkFile_IsReadable(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.IsReadable(dirTdat)
+	}
+}
