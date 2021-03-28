@@ -37,3 +37,9 @@ func (kf *LkkFile) IsWritable(fpath string) (res bool) {
 	res = true
 	return
 }
+
+// IsExecutable 是否可执行文件.
+func (kf *LkkFile) IsExecutable(fpath string) bool {
+	info, err := os.Stat(fpath)
+	return err == nil && info.Mode().IsRegular() && (info.Mode()&0111) != 0
+}

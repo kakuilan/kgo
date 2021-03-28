@@ -196,8 +196,9 @@ var imgJpg = "./testdata/gopher10th-small.jpg"
 var imgSvg = "./testdata/jetbrains.svg"
 var putfile = "./testdata/putfile"
 var apndfile = "./testdata/append"
+var rootDir = "/root"
 var rootFile1 = "/root/hello/world"
-var admFile1 = `C:\Users\Administrator\AppData`
+var admDir = `C:\Users\Administrator`
 var dirCurr = "./"
 var dirTdat = "./testdata"
 
