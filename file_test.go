@@ -240,3 +240,21 @@ func BenchmarkFile_IsExist(b *testing.B) {
 		KFile.IsExist(fileMd)
 	}
 }
+
+func TestFile_IsWritable(t *testing.T) {
+	var res bool
+
+	res = KFile.IsWritable(dirTdat)
+	assert.True(t, res)
+
+	//不存在的目录
+	res = KFile.IsWritable(fileNone)
+	assert.False(t, res)
+}
+
+func BenchmarkFile_IsWritable(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.IsWritable(dirTdat)
+	}
+}
