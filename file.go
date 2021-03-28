@@ -244,3 +244,12 @@ func (kf *LkkFile) IsFile(fpath string, ftype ...LkkFileType) (res bool) {
 
 	return
 }
+
+// IsDir 是否目录(且存在).
+func (kf *LkkFile) IsDir(fpath string) bool {
+	f, err := os.Lstat(fpath)
+	if os.IsNotExist(err) || nil != err {
+		return false
+	}
+	return f.IsDir()
+}

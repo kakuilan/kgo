@@ -335,3 +335,30 @@ func TestFile_IsFile(t *testing.T) {
 		assert.Equal(t, test.expected, actual)
 	}
 }
+
+func BenchmarkFile_IsFile(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.IsFile(fileMd, FILE_TYPE_ANY)
+	}
+}
+
+func TestFile_IsDir(t *testing.T) {
+	var res bool
+
+	res = KFile.IsDir(fileMd)
+	assert.False(t, res)
+
+	res = KFile.IsDir(fileNone)
+	assert.False(t, res)
+
+	res = KFile.IsDir(dirTdat)
+	assert.True(t, res)
+}
+
+func BenchmarkFile_IsDir(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.IsDir(dirTdat)
+	}
+}
