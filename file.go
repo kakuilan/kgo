@@ -196,3 +196,51 @@ func (kf *LkkFile) IsExist(fpath string) bool {
 	_, err := os.Stat(fpath)
 	return err == nil || os.IsExist(err)
 }
+
+// IsLink 是否链接文件(软链接,且存在).
+func (kf *LkkFile) IsLink(fpath string) bool {
+	f, err := os.Lstat(fpath)
+	if err != nil {
+		return false
+	}
+
+	return f.Mode()&os.ModeSymlink == os.ModeSymlink
+}
+
+// IsFile 是否(某类型)文件,且存在.
+// ftype为枚举(FILE_TYPE_ANY、FILE_TYPE_LINK、FILE_TYPE_REGULAR、FILE_TYPE_COMMON),默认FILE_TYPE_ANY;
+func (kf *LkkFile) IsFile(fpath string, ftype ...LkkFileType) (res bool) {
+	var t LkkFileType = FILE_TYPE_ANY
+	if len(ftype) > 0 {
+		t = ftype[0]
+	}
+
+	var f os.FileInfo
+	var e error
+	var musLink, musRegular bool
+
+	if t == FILE_TYPE_LINK {
+		musLink = true
+	} else if t == FILE_TYPE_REGULAR {
+		musRegular = true
+	} else if t == FILE_TYPE_COMMON {
+		musLink = true
+		musRegular = true
+	}
+
+	if (!musLink && !musRegular) || musRegular {
+		f, e := os.Stat(fpath)
+		if musRegular {
+			res = (e == nil) && f.Mode().IsRegular()
+		} else {
+			res = (e == nil) && !f.IsDir()
+		}
+	}
+
+	if !res && musLink {
+		f, e = os.Lstat(fpath)
+		res = (e == nil) && (f.Mode()&os.ModeSymlink == os.ModeSymlink)
+	}
+
+	return
+}

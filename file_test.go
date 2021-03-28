@@ -3,6 +3,7 @@ package kgo
 import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
+	"os"
 	"testing"
 )
 
@@ -285,7 +286,30 @@ func TestFile_IsExecutable(t *testing.T) {
 }
 
 func BenchmarkFile_IsExecutable(b *testing.B) {
+	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KFile.IsExecutable(fileMd)
+	}
+}
+
+func TestFile_IsLink(t *testing.T) {
+	//创建链接文件
+	if !KFile.IsExist(fileLink) {
+		_ = os.Symlink(filePubPem, fileLink)
+	}
+
+	var res bool
+
+	res = KFile.IsLink(fileLink)
+	assert.True(t, res)
+
+	res = KFile.IsLink(changLog)
+	assert.False(t, res)
+}
+
+func BenchmarkFile_IsLink(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.IsLink(fileLink)
 	}
 }
