@@ -174,3 +174,19 @@ func (kf *LkkFile) FileSize(fpath string) int64 {
 	}
 	return f.Size()
 }
+
+// DirSize 获取目录大小(bytes字节).
+func (kf *LkkFile) DirSize(fpath string) int64 {
+	var size int64
+	//filepath.Walk压测很慢
+	_ = filepath.Walk(fpath, func(_ string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() {
+			size += info.Size()
+		}
+		return err
+	})
+	return size
+}

@@ -205,3 +205,21 @@ func BenchmarkFile_FileSize(b *testing.B) {
 		KFile.FileSize(fileMd)
 	}
 }
+
+func TestFile_DirSize(t *testing.T) {
+	var res int64
+
+	res = KFile.DirSize(dirCurr)
+	assert.Greater(t, res, int64(0))
+
+	//不存在的目录
+	res = KFile.DirSize(fileNone)
+	assert.Equal(t, int64(0), res)
+}
+
+func BenchmarkFile_DirSize(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.DirSize(dirTdat)
+	}
+}

@@ -197,6 +197,8 @@ var imgSvg = "./testdata/jetbrains.svg"
 var putfile = "./testdata/putfile"
 var apndfile = "./testdata/append"
 var rootFile1 = "/root/hello/world"
+var dirCurr = "./"
+var dirTdat = "./testdata"
 
 func init() {
 	gofakeit.Struct(&personS1)
