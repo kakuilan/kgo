@@ -253,3 +253,13 @@ func (kf *LkkFile) IsDir(fpath string) bool {
 	}
 	return f.IsDir()
 }
+
+// IsBinary 是否二进制文件(且存在).
+func (kf *LkkFile) IsBinary(fpath string) bool {
+	cont, err := kf.ReadFile(fpath)
+	if err != nil {
+		return false
+	}
+
+	return isBinary(string(cont))
+}

@@ -362,3 +362,18 @@ func BenchmarkFile_IsDir(b *testing.B) {
 		KFile.IsDir(dirTdat)
 	}
 }
+
+func TestFile_IsBinary(t *testing.T) {
+	var res bool
+	res = KFile.IsBinary(changLog)
+	assert.False(t, res)
+
+	//TODO true
+}
+
+func BenchmarkFile_IsBinary(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.IsBinary(changLog)
+	}
+}
