@@ -401,7 +401,7 @@ func BenchmarkFile_IsImg(b *testing.B) {
 func TestFile_Mkdir(t *testing.T) {
 	var err error
 
-	err = KFile.Mkdir(dirNew, 0655)
+	err = KFile.Mkdir(dirNew, 0777)
 	assert.Nil(t, err)
 }
 
@@ -409,6 +409,6 @@ func BenchmarkFile_Mkdir(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		dname := fmt.Sprintf(dirNew+"/tmp_%d", i)
-		_ = KFile.Mkdir(dname, 0655)
+		_ = KFile.Mkdir(dname, 0777)
 	}
 }
