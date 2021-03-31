@@ -202,6 +202,7 @@ var rootFile1 = "/root/hello/world"
 var admDir = `C:\Users\Administrator`
 var dirCurr = "./"
 var dirTdat = "./testdata"
+var dirNew = "./testdata/new/hello"
 
 func init() {
 	gofakeit.Struct(&personS1)

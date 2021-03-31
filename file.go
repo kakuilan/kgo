@@ -274,3 +274,8 @@ func (kf *LkkFile) IsImg(fpath string) bool {
 		return false
 	}
 }
+
+// Mkdir 新建目录,允许多级目录.
+func (kf *LkkFile) Mkdir(fpath string, mode os.FileMode) error {
+	return os.MkdirAll(fpath, mode)
+}
