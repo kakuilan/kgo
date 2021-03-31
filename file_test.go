@@ -377,3 +377,23 @@ func BenchmarkFile_IsBinary(b *testing.B) {
 		KFile.IsBinary(changLog)
 	}
 }
+
+func TestFile_IsImg(t *testing.T) {
+	var res bool
+
+	res = KFile.IsImg(fileMd)
+	assert.False(t, res)
+
+	res = KFile.IsImg(imgSvg)
+	assert.True(t, res)
+
+	res = KFile.IsImg(imgPng)
+	assert.True(t, res)
+}
+
+func BenchmarkFile_IsImg(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.IsImg(imgPng)
+	}
+}

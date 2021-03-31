@@ -263,3 +263,14 @@ func (kf *LkkFile) IsBinary(fpath string) bool {
 
 	return isBinary(string(cont))
 }
+
+// IsImg 是否图片文件(仅检查后缀).
+func (kf *LkkFile) IsImg(fpath string) bool {
+	ext := kf.GetExt(fpath)
+	switch ext {
+	case "jpg", "jpeg", "bmp", "gif", "png", "svg", "ico", "webp":
+		return true
+	default:
+		return false
+	}
+}
