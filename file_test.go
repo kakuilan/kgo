@@ -412,3 +412,20 @@ func BenchmarkFile_Mkdir(b *testing.B) {
 		_ = KFile.Mkdir(dname, 0777)
 	}
 }
+
+func TestFile_AbsPath(t *testing.T) {
+	var res string
+
+	res = KFile.AbsPath(changLog)
+	assert.NotEqual(t, '.', rune(res[0]))
+
+	res = KFile.AbsPath(fileNone)
+	assert.NotEmpty(t, res)
+}
+
+func BenchmarkFile_AbsPath(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.AbsPath(changLog)
+	}
+}
