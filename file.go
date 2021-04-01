@@ -3,6 +3,7 @@ package kgo
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"io"
 	"mime"
 	"net/http"
@@ -346,4 +347,83 @@ func (kf *LkkFile) Rename(oldname, newname string) error {
 // Unlink 删除文件.
 func (kf *LkkFile) Unlink(fpath string) error {
 	return os.Remove(fpath)
+}
+
+// CopyFile 拷贝源文件到目标文件,cover为枚举(FILE_COVER_ALLOW、FILE_COVER_IGNORE、FILE_COVER_DENY).
+func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int64, error) {
+	if source == dest {
+		return 0, nil
+	}
+
+	sourceStat, err := os.Stat(source)
+	if err != nil {
+		return 0, err
+	} else if !sourceStat.Mode().IsRegular() {
+		return 0, fmt.Errorf("[CopyFile]`source %s is not a regular file", source)
+	}
+
+	if cover != FILE_COVER_ALLOW {
+		if _, err := os.Stat(dest); err == nil {
+			if cover == FILE_COVER_IGNORE {
+				return 0, nil
+			} else if cover == FILE_COVER_DENY {
+				return 0, fmt.Errorf("[CopyFile]`dest File %s already exists", dest)
+			}
+		}
+	}
+
+	sourceFile, _ := os.Open(source)
+	defer func() {
+		_ = sourceFile.Close()
+	}()
+
+	//创建目录
+	destDir := filepath.Dir(dest)
+	if destDir != "" && !kf.IsDir(destDir) {
+		if err = os.MkdirAll(destDir, 0766); err != nil {
+			return 0, err
+		}
+	}
+
+	destFile, err := os.Create(dest)
+	if err != nil {
+		return 0, err
+	}
+	defer func() {
+		_ = destFile.Close()
+	}()
+
+	var nBytes int64
+	sourceSize := sourceStat.Size()
+	if sourceSize <= 1048576 { //1M以内小文件使用buffer拷贝
+		var total int
+		var bufferSize int = 102400
+		if sourceSize < 524288 {
+			bufferSize = 51200
+		}
+
+		buf := make([]byte, bufferSize)
+		for {
+			n, err := sourceFile.Read(buf)
+			if err != nil && err != io.EOF {
+				return int64(total), err
+			} else if n == 0 {
+				break
+			}
+
+			if _, err := destFile.Write(buf[:n]); err != nil || !kf.IsExist(dest) {
+				return int64(total), err
+			}
+
+			total += n
+		}
+		nBytes = int64(total)
+	} else {
+		nBytes, err = io.Copy(destFile, sourceFile)
+		if err == nil {
+			err = os.Chmod(dest, sourceStat.Mode())
+		}
+	}
+
+	return nBytes, err
 }

@@ -488,3 +488,46 @@ func BenchmarkFile_Unlink(b *testing.B) {
 		_ = KFile.Unlink(filename)
 	}
 }
+
+func TestFile_CopyFile(t *testing.T) {
+	var res int64
+	var err error
+
+	//忽略已存在的
+	res, err = KFile.CopyFile(imgPng, imgCopy, FILE_COVER_IGNORE)
+	assert.Nil(t, err)
+
+	//覆盖已存在的
+	res, err = KFile.CopyFile(imgPng, imgCopy, FILE_COVER_ALLOW)
+	assert.Greater(t, res, int64(0))
+
+	//禁止覆盖
+	res, err = KFile.CopyFile(imgPng, imgCopy, FILE_COVER_DENY)
+	assert.NotNil(t, err)
+
+	//源和目标文件相同
+	res, err = KFile.CopyFile(imgPng, imgPng, FILE_COVER_ALLOW)
+	assert.Equal(t, int64(0), res)
+	assert.Nil(t, err)
+
+	//拷贝大文件
+	KFile.Touch(touchfile, 2097152)
+	res, err = KFile.CopyFile(touchfile, copyfile, FILE_COVER_ALLOW)
+
+	//目标为空
+	res, err = KFile.CopyFile(imgPng, "", FILE_COVER_ALLOW)
+	assert.NotNil(t, err)
+
+	//源非正常文件
+	res, err = KFile.CopyFile(".", "", FILE_COVER_ALLOW)
+	assert.NotNil(t, err)
+}
+
+func BenchmarkFile_CopyFile(b *testing.B) {
+	b.ResetTimer()
+	var des string
+	for i := 0; i < b.N; i++ {
+		des = fmt.Sprintf(dirCopy+"/diglett_copy_%d.png", i)
+		_, _ = KFile.CopyFile(imgPng, des, FILE_COVER_ALLOW)
+	}
+}

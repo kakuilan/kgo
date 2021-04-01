@@ -182,6 +182,14 @@ Opmv0mBgAnPItT8cPsvvrGCfdwuO6x2xemTkPE9hikLZSctlaOUfVNeem6f/3SWi
 -----END RSA PRIVATE KEY-----`
 
 //文件
+var rootDir = "/root"
+var rootFile1 = "/root/hello/world"
+var admDir = `C:\Users\Administrator`
+var dirCurr = "./"
+var dirTdat = "./testdata"
+var dirNew = "./testdata/new/hello"
+var dirTouch = "./testdata/touch"
+var dirCopy = "./testdata/copy"
 var changLog = "./docs/changelog.md"
 var fileMd = "./README.md"
 var fileGo = "./file.go"
@@ -199,13 +207,9 @@ var putfile = "./testdata/putfile"
 var apndfile = "./testdata/appendfile"
 var touchfile = "./testdata/touchfile"
 var renamefile = "./testdata/renamefile"
-var rootDir = "/root"
-var rootFile1 = "/root/hello/world"
-var admDir = `C:\Users\Administrator`
-var dirCurr = "./"
-var dirTdat = "./testdata"
-var dirNew = "./testdata/new/hello"
-var dirTouch = "./testdata/touch"
+var copyfile = "./testdata/copyfile"
+var imgCopy = dirCopy + "/diglett_copy.png"
+
 
 func init() {
 	gofakeit.Struct(&personS1)
