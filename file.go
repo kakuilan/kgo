@@ -292,3 +292,22 @@ func (kf *LkkFile) AbsPath(fpath string) string {
 
 	return fullPath
 }
+
+// RealPath 返回规范化的真实绝对路径名.path必须存在,若路径不存在则返回空字符串.
+func (kf *LkkFile) RealPath(fpath string) string {
+	fullPath := fpath
+	if !filepath.IsAbs(fpath) {
+		wd, err := os.Getwd()
+		if err != nil {
+			return ""
+		}
+		fullPath = filepath.Clean(wd + `/` + fpath)
+	}
+
+	_, err := os.Stat(fullPath)
+	if err != nil {
+		return ""
+	}
+
+	return fullPath
+}

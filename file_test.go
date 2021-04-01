@@ -429,3 +429,20 @@ func BenchmarkFile_AbsPath(b *testing.B) {
 		KFile.AbsPath(changLog)
 	}
 }
+
+func TestFile_RealPath(t *testing.T) {
+	var res string
+
+	res = KFile.RealPath(fileMd)
+	assert.NotEmpty(t, res)
+
+	res = KFile.RealPath(fileNone)
+	assert.Empty(t, res)
+}
+
+func BenchmarkFile_RealPath(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.RealPath(fileMd)
+	}
+}
