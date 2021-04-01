@@ -446,3 +446,45 @@ func BenchmarkFile_RealPath(b *testing.B) {
 		KFile.RealPath(fileMd)
 	}
 }
+
+func TestFile_TouchRenameUnlink(t *testing.T) {
+	var res bool
+	var err error
+
+	res = KFile.Touch(touchfile, 2097152)
+	assert.True(t, res)
+
+	err = KFile.Rename(touchfile, renamefile)
+	assert.Nil(t, err)
+
+	err = KFile.Unlink(renamefile)
+	assert.Nil(t, err)
+}
+
+func BenchmarkFile_Touch(b *testing.B) {
+	b.ResetTimer()
+	var filename string
+	for i := 0; i < b.N; i++ {
+		filename = fmt.Sprintf(dirTouch+"/zero_%d", i)
+		KFile.Touch(filename, 0)
+	}
+}
+
+func BenchmarkFile_Rename(b *testing.B) {
+	b.ResetTimer()
+	var f1, f2 string
+	for i := 0; i < b.N; i++ {
+		f1 = fmt.Sprintf(dirTouch+"/zero_%d", i)
+		f2 = fmt.Sprintf(dirTouch+"/zero_re%d", i)
+		_ = KFile.Rename(f1, f2)
+	}
+}
+
+func BenchmarkFile_Unlink(b *testing.B) {
+	b.ResetTimer()
+	var filename string
+	for i := 0; i < b.N; i++ {
+		filename = fmt.Sprintf(dirTouch+"/zero_re%d", i)
+		_ = KFile.Unlink(filename)
+	}
+}

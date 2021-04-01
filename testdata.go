@@ -196,13 +196,16 @@ var imgPng = "./testdata/diglett.png"
 var imgJpg = "./testdata/gopher10th-small.jpg"
 var imgSvg = "./testdata/jetbrains.svg"
 var putfile = "./testdata/putfile"
-var apndfile = "./testdata/append"
+var apndfile = "./testdata/appendfile"
+var touchfile = "./testdata/touchfile"
+var renamefile = "./testdata/renamefile"
 var rootDir = "/root"
 var rootFile1 = "/root/hello/world"
 var admDir = `C:\Users\Administrator`
 var dirCurr = "./"
 var dirTdat = "./testdata"
 var dirNew = "./testdata/new/hello"
+var dirTouch = "./testdata/touch"
 
 func init() {
 	gofakeit.Struct(&personS1)
