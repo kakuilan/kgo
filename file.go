@@ -474,3 +474,30 @@ func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
 
 	return int64(nBytes), err
 }
+
+// CopyLink 拷贝链接.
+func (kf *LkkFile) CopyLink(source string, dest string) error {
+	if source == dest {
+		return nil
+	}
+
+	source, err := os.Readlink(source)
+	if err != nil {
+		return err
+	}
+
+	_, err = os.Lstat(dest)
+	if err == nil {
+		_ = os.Remove(dest)
+	}
+
+	//创建目录
+	destDir := filepath.Dir(dest)
+	if !kf.IsDir(destDir) {
+		if err := os.MkdirAll(destDir, 0777); err != nil {
+			return err
+		}
+	}
+
+	return os.Symlink(source, dest)
+}

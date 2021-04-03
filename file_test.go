@@ -542,6 +542,10 @@ func TestFile_FastCopy(t *testing.T) {
 	//源文件不存在
 	res, err = KFile.FastCopy(fileNone, fastcopyfile)
 	assert.NotNil(t, err)
+
+	//目标为空
+	res, err = KFile.FastCopy(imgJpg, "")
+	assert.NotNil(t, err)
 }
 
 func BenchmarkFile_FastCopy(b *testing.B) {
@@ -550,5 +554,33 @@ func BenchmarkFile_FastCopy(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		des = fmt.Sprintf(dirCopy+"/fast_copy_%d", i)
 		_, _ = KFile.FastCopy(imgJpg, des)
+	}
+}
+
+func TestFile_CopyLink(t *testing.T) {
+	var err error
+
+	//源和目标相同
+	err = KFile.CopyLink(fileLink, fileLink)
+	assert.Nil(t, err)
+
+	err = KFile.CopyLink(fileLink, copyLink)
+	assert.Nil(t, err)
+
+	//源文件不存在
+	err = KFile.CopyLink(fileNone, copyLink)
+	assert.NotNil(t, err)
+
+	//目标为空
+	err = KFile.CopyLink(fileLink, "")
+	assert.NotNil(t, err)
+}
+
+func BenchmarkFile_CopyLink(b *testing.B) {
+	b.ResetTimer()
+	var des string
+	for i := 0; i < b.N; i++ {
+		des = fmt.Sprintf(dirLink+"/lnk_%d.copy", i)
+		_ = KFile.CopyLink(fileLink, des)
 	}
 }
