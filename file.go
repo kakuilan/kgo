@@ -564,3 +564,18 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 
 	return total, err
 }
+
+// Img2Base64 读取图片文件,并转换为base64字符串.
+func (kf *LkkFile) Img2Base64(fpath string) (string, error) {
+	if !kf.IsImg(fpath) {
+		return "", fmt.Errorf("[Img2Base64]`fpath %s is not a image", fpath)
+	}
+
+	imgBuffer, err := os.ReadFile(fpath)
+	if err != nil {
+		return "", err
+	}
+
+	ext := kf.GetExt(fpath)
+	return img2Base64(imgBuffer, ext), nil
+}

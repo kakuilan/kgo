@@ -6,6 +6,7 @@ import (
 	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha512"
+	"encoding/base64"
 	"encoding/binary"
 	"encoding/hex"
 	"encoding/json"
@@ -1230,4 +1231,9 @@ func longestSameString(str1, str2 string) (res string) {
 	}
 
 	return
+}
+
+// img2Base64 将图片字节转换为base64字符串.imgType为图片扩展名.
+func img2Base64(content []byte, imgType string) string {
+	return fmt.Sprintf("data:image/%s;base64,%s", imgType, base64.StdEncoding.EncodeToString(content))
 }

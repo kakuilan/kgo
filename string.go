@@ -6,6 +6,7 @@ import (
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/transform"
 	"io"
+	"strings"
 	"unicode/utf8"
 )
 
@@ -102,4 +103,14 @@ func (ks *LkkString) IsGbk(data []byte) (res bool) {
 
 func (ks *LkkString) DetectEncoding() {
 	//TODO 检查字符编码
+}
+
+// Img2Base64 将图片字节转换为base64字符串.ext为图片扩展名,默认jpg.
+func (ks *LkkString) Img2Base64(content []byte, ext ...string) string {
+	var imgType string = "jpg"
+	if len(ext) > 0 {
+		imgType = strings.ToLower(ext[0])
+	}
+
+	return img2Base64(content, imgType)
 }

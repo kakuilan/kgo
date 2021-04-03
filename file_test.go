@@ -622,3 +622,33 @@ func BenchmarkFile_CopyDir(b *testing.B) {
 		_, _ = KFile.CopyDir(dirDoc, des, FILE_COVER_ALLOW)
 	}
 }
+
+func TestFile_Img2Base64(t *testing.T) {
+	var res string
+	var err error
+
+	//png
+	res, err = KFile.Img2Base64(imgPng)
+	assert.Nil(t, err)
+	assert.Contains(t, res, "png")
+
+	//jpg
+	res, err = KFile.Img2Base64(imgJpg)
+	assert.Nil(t, err)
+	assert.Contains(t, res, "jpg")
+
+	//非图片
+	res, err = KFile.Img2Base64(fileMd)
+	assert.NotNil(t, err)
+
+	//图片不存在
+	res, err = KFile.Img2Base64(fileNone)
+	assert.NotNil(t, err)
+}
+
+func BenchmarkFile_Img2Base64(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.Img2Base64(imgPng)
+	}
+}
