@@ -47,7 +47,7 @@ jobs:
           fetch-depth: 1
 
       - name: Test
-        run: go test -v -mod=mod -race -coverprofile=coverage.txt -covermode=atomic
+        run: go mod vendor && go test -v -mod=mod -race -coverprofile=coverage.txt -covermode=atomic
 
       - name: Upload coverage to Codecov
         run: bash <(curl -s https://codecov.io/bash)
@@ -72,7 +72,7 @@ jobs:
           fetch-depth: 1
 
       - name: Test
-        run: go test -v -mod=mod -race -coverprofile=coverageout -covermode=atomic
+        run: go mod vendor && go test -v -mod=mod -race -coverprofile=coverageout -covermode=atomic
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
