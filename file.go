@@ -565,21 +565,6 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 	return total, err
 }
 
-// Img2Base64 读取图片文件,并转换为base64字符串.
-func (kf *LkkFile) Img2Base64(fpath string) (string, error) {
-	if !kf.IsImg(fpath) {
-		return "", fmt.Errorf("[Img2Base64]`fpath %s is not a image", fpath)
-	}
-
-	imgBuffer, err := os.ReadFile(fpath)
-	if err != nil {
-		return "", err
-	}
-
-	ext := kf.GetExt(fpath)
-	return img2Base64(imgBuffer, ext), nil
-}
-
 // DelDir 删除目录.delete为true时连该目录一起删除;为false时只清空该目录.
 func (kf *LkkFile) DelDir(dir string, delete bool) error {
 	realPath := kf.AbsPath(dir)
@@ -603,4 +588,71 @@ func (kf *LkkFile) DelDir(dir string, delete bool) error {
 	}
 
 	return err
+}
+
+// Img2Base64 读取图片文件,并转换为base64字符串.
+func (kf *LkkFile) Img2Base64(fpath string) (string, error) {
+	if !kf.IsImg(fpath) {
+		return "", fmt.Errorf("[Img2Base64]`fpath %s is not a image", fpath)
+	}
+
+	imgBuffer, err := os.ReadFile(fpath)
+	if err != nil {
+		return "", err
+	}
+
+	ext := kf.GetExt(fpath)
+	return img2Base64(imgBuffer, ext), nil
+}
+
+// FileTree 获取目录的文件树列表.
+// ftype为枚举(FILE_TREE_ALL、FILE_TREE_DIR、FILE_TREE_FILE);
+// recursive为是否递归;
+// filters为一个或多个文件过滤器函数,FileFilter类型.
+func (kf *LkkFile) FileTree(fpath string, ftype LkkFileTree, recursive bool, filters ...FileFilter) []string {
+	var trees []string
+
+	if kf.IsFile(fpath, FILE_TYPE_ANY) {
+		if ftype != FILE_TREE_DIR {
+			trees = append(trees, fpath)
+		}
+		return trees
+	}
+
+	fpath = strings.TrimRight(fpath, "/")
+	files, err := filepath.Glob(filepath.Join(fpath, "*"))
+	if err != nil || len(files) == 0 {
+		return trees
+	}
+
+	for _, file := range files {
+		if kf.IsDir(file) {
+			if ftype != FILE_TREE_FILE {
+				trees = append(trees, file)
+			}
+
+			if recursive {
+				subs := kf.FileTree(file, ftype, recursive, filters...)
+				trees = append(trees, subs...)
+			}
+		} else if ftype != FILE_TREE_DIR {
+			//文件过滤
+			chk := true
+			if len(filters) > 0 {
+				for _, filter := range filters {
+					chk = filter(file)
+					if !chk {
+						break
+					}
+				}
+			}
+			if !chk {
+				continue
+			}
+
+			trees = append(trees, file)
+		}
+	}
+
+	return trees
 }

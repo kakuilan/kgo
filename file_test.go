@@ -678,3 +678,37 @@ func BenchmarkFile_Img2Base64(b *testing.B) {
 		_, _ = KFile.Img2Base64(imgPng)
 	}
 }
+
+func TestFile_FileTree(t *testing.T) {
+	var res []string
+
+	//显示全部
+	res = KFile.FileTree(dirVendor, FILE_TREE_ALL, true)
+	assert.NotEmpty(t, res)
+
+	//仅目录
+	res = KFile.FileTree(dirVendor, FILE_TREE_DIR, true)
+	assert.NotEmpty(t, res)
+
+	//仅文件
+	res = KFile.FileTree(dirVendor, FILE_TREE_FILE, true)
+	assert.NotEmpty(t, res)
+
+	//不递归
+	res = KFile.FileTree(dirCurr, FILE_TREE_DIR, false)
+	assert.GreaterOrEqual(t, len(res), 4)
+
+	//文件过滤
+	res = KFile.FileTree(dirCurr, FILE_TREE_FILE, true, func(s string) bool {
+		ext := KFile.GetExt(s)
+		return ext == "go"
+	})
+	assert.NotEmpty(t, res)
+}
+
+func BenchmarkFile_FileTree(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.FileTree(dirCurr, FILE_TREE_ALL, false)
+	}
+}
