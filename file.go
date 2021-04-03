@@ -91,13 +91,11 @@ func (kf *LkkFile) ReadLastLine(fpath string) []byte {
 // fpath为文件路径;data为内容;perm为权限,默认为0655.
 func (kf *LkkFile) WriteFile(fpath string, data []byte, perm ...os.FileMode) error {
 	dir := path.Dir(fpath)
-	if dir != "" && !kf.IsDir(dir) {
-		if err := os.MkdirAll(dir, os.ModePerm); err != nil {
-			return err
-		}
+	if err := os.MkdirAll(dir, os.ModePerm); err != nil {
+		return err
 	}
 
-	var p os.FileMode = 0777
+	var p os.FileMode = 0766
 	if len(perm) > 0 {
 		p = perm[0]
 	}
@@ -277,7 +275,7 @@ func (kf *LkkFile) IsImg(fpath string) bool {
 	}
 }
 
-// Mkdir 新建目录,允许多级目录.
+// Mkdir 创建目录,允许多级.
 func (kf *LkkFile) Mkdir(fpath string, mode os.FileMode) error {
 	return os.MkdirAll(fpath, mode)
 }
@@ -318,13 +316,11 @@ func (kf *LkkFile) RealPath(fpath string) string {
 func (kf *LkkFile) Touch(fpath string, size int64) bool {
 	//创建目录
 	destDir := filepath.Dir(fpath)
-	if destDir != "" && !kf.IsDir(destDir) {
-		if err := os.MkdirAll(destDir, 0777); err != nil {
-			return false
-		}
+	if err := os.MkdirAll(destDir, 0766); err != nil {
+		return false
 	}
 
-	fd, err := os.OpenFile(fpath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0777)
+	fd, err := os.OpenFile(fpath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0766)
 	if err != nil {
 		return false
 	}
@@ -380,10 +376,8 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 
 	//创建目录
 	destDir := filepath.Dir(dest)
-	if destDir != "" && !kf.IsDir(destDir) {
-		if err = os.MkdirAll(destDir, 0777); err != nil {
-			return 0, err
-		}
+	if err = os.MkdirAll(destDir, sourceStat.Mode()); err != nil {
+		return 0, err
 	}
 
 	destFile, err := os.Create(dest)
@@ -441,10 +435,8 @@ func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
 
 	//创建目录
 	destDir := filepath.Dir(dest)
-	if destDir != "" && !kf.IsDir(destDir) {
-		if err = os.MkdirAll(destDir, 0777); err != nil {
-			return 0, err
-		}
+	if err = os.MkdirAll(destDir, 0766); err != nil {
+		return 0, err
 	}
 
 	destFile, err := os.Create(dest)
@@ -487,6 +479,7 @@ func (kf *LkkFile) CopyLink(source string, dest string) error {
 		return err
 	}
 
+	//移除已存在的目标文件
 	_, err = os.Lstat(dest)
 	if err == nil {
 		_ = os.Remove(dest)
@@ -494,10 +487,8 @@ func (kf *LkkFile) CopyLink(source string, dest string) error {
 
 	//创建目录
 	destDir := filepath.Dir(dest)
-	if destDir != "" && !kf.IsDir(destDir) {
-		if err := os.MkdirAll(destDir, 0777); err != nil {
-			return err
-		}
+	if err := os.MkdirAll(destDir, 0766); err != nil {
+		return err
 	}
 
 	return os.Symlink(source, dest)
@@ -520,11 +511,8 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 	}
 
 	// create dest dir
-	if !kf.IsDir(dest) {
-		err = os.MkdirAll(dest, 0777)
-		if err != nil {
-			return 0, err
-		}
+	if err = os.MkdirAll(dest, sourceInfo.Mode()); err != nil {
+		return 0, err
 	}
 
 	directory, _ := os.Open(source)
