@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -719,9 +720,9 @@ func TestFile_FormatDir(t *testing.T) {
 	res = KFile.FormatDir(pathTes3)
 	assert.NotContains(t, res, "\\")
 
-	//win格式目录
+	//win格式
 	res = KFile.FormatDir(pathTes2)
-	assert.Contains(t, res, ":")
+	assert.Equal(t, 1, strings.Count(res, ":"))
 
 	//空目录
 	res = KFile.FormatDir("")
@@ -732,5 +733,36 @@ func BenchmarkFile_FormatDir(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KFile.FormatDir(pathTes3)
+	}
+}
+
+func TestFile_FormatPath(t *testing.T) {
+	var res string
+
+	res = KFile.FormatPath(pathTes1)
+	assert.NotContains(t, res, ":")
+
+	res = KFile.FormatPath(fileGmod)
+	assert.Equal(t, res, fileGmod)
+
+	res = KFile.FormatPath(fileGo)
+	assert.Equal(t, res, fileGo)
+
+	res = KFile.FormatPath(pathTes1)
+	assert.NotContains(t, res, "\\")
+
+	//win格式
+	res = KFile.FormatPath(pathTes2)
+	assert.Equal(t, 1, strings.Count(res, ":"))
+
+	//空路径
+	res = KFile.FormatPath("")
+	assert.Empty(t, res)
+}
+
+func BenchmarkFile_FormatPath(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.FormatPath(pathTes2)
 	}
 }

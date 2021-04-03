@@ -665,7 +665,7 @@ func (kf *LkkFile) FormatPath(fpath string) string {
 	fpath = formatPath(fpath)
 	dir := filepath.Dir(fpath)
 
-	if dir == `./` && !KStr.StartsWith(fpath, dir, false) {
+	if dir == `.` {
 		return fpath
 	}
 
