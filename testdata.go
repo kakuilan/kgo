@@ -208,8 +208,8 @@ var apndfile = "./testdata/appendfile"
 var touchfile = "./testdata/touchfile"
 var renamefile = "./testdata/renamefile"
 var copyfile = "./testdata/copyfile"
+var fastcopyfile = dirCopy + "/fast/fastcopyfile"
 var imgCopy = dirCopy + "/diglett_copy.png"
-
 
 func init() {
 	gofakeit.Struct(&personS1)

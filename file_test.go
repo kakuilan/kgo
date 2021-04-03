@@ -531,3 +531,24 @@ func BenchmarkFile_CopyFile(b *testing.B) {
 		_, _ = KFile.CopyFile(imgPng, des, FILE_COVER_ALLOW)
 	}
 }
+
+func TestFile_FastCopy(t *testing.T) {
+	var res int64
+	var err error
+
+	res, err = KFile.FastCopy(imgJpg, fastcopyfile)
+	assert.Greater(t, res, int64(0))
+
+	//源文件不存在
+	res, err = KFile.FastCopy(fileNone, fastcopyfile)
+	assert.NotNil(t, err)
+}
+
+func BenchmarkFile_FastCopy(b *testing.B) {
+	b.ResetTimer()
+	var des string
+	for i := 0; i < b.N; i++ {
+		des = fmt.Sprintf(dirCopy+"/fast_copy_%d", i)
+		_, _ = KFile.FastCopy(imgJpg, des)
+	}
+}
