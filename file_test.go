@@ -788,3 +788,36 @@ func BenchmarkFile_Md5(b *testing.B) {
 		_, _ = KFile.Md5(fileMd, 32)
 	}
 }
+
+func TestFile_ShaX(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.NotEmpty(t, r)
+	}()
+
+	var res string
+	var err error
+
+	res, err = KFile.ShaX(fileGmod, 1)
+	assert.NotEmpty(t, res)
+
+	res, err = KFile.ShaX(fileGmod, 256)
+	assert.NotEmpty(t, res)
+
+	res, err = KFile.ShaX(fileGmod, 512)
+	assert.NotEmpty(t, res)
+
+	//文件不存在
+	res, err = KFile.ShaX(fileNone, 512)
+	assert.NotNil(t, err)
+
+	//err x
+	res, err = KFile.ShaX(fileGmod, 32)
+}
+
+func BenchmarkFile_ShaX(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.ShaX(fileGmod, 256)
+	}
+}

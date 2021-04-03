@@ -685,3 +685,13 @@ func (kf *LkkFile) Md5(fpath string, length uint8) (string, error) {
 
 	return res, nil
 }
+
+// ShaX 计算文件的 shaX 散列值,x为1/256/512.
+func (kf *LkkFile) ShaX(fpath string, x uint16) (string, error) {
+	data, err := os.ReadFile(fpath)
+	if err != nil {
+		return "", err
+	}
+
+	return string(shaXByte(data, x)), nil
+}
