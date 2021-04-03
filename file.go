@@ -519,9 +519,11 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 	}
 
 	// create dest dir
-	err = os.MkdirAll(dest, sourceInfo.Mode())
-	if err != nil {
-		return 0, err
+	if !kf.IsDir(dest) {
+		err = os.MkdirAll(dest, sourceInfo.Mode())
+		if err != nil {
+			return 0, err
+		}
 	}
 
 	directory, _ := os.Open(source)
