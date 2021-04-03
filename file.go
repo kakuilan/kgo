@@ -95,7 +95,7 @@ func (kf *LkkFile) WriteFile(fpath string, data []byte, perm ...os.FileMode) err
 		return err
 	}
 
-	var p os.FileMode = 0766
+	var p os.FileMode = 0777
 	if len(perm) > 0 {
 		p = perm[0]
 	}
@@ -316,11 +316,11 @@ func (kf *LkkFile) RealPath(fpath string) string {
 func (kf *LkkFile) Touch(fpath string, size int64) bool {
 	//创建目录
 	destDir := filepath.Dir(fpath)
-	if err := os.MkdirAll(destDir, 0766); err != nil {
+	if err := os.MkdirAll(destDir, 0777); err != nil {
 		return false
 	}
 
-	fd, err := os.OpenFile(fpath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0766)
+	fd, err := os.OpenFile(fpath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0777)
 	if err != nil {
 		return false
 	}
@@ -435,7 +435,7 @@ func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
 
 	//创建目录
 	destDir := filepath.Dir(dest)
-	if err = os.MkdirAll(destDir, 0766); err != nil {
+	if err = os.MkdirAll(destDir, 0777); err != nil {
 		return 0, err
 	}
 
@@ -487,7 +487,7 @@ func (kf *LkkFile) CopyLink(source string, dest string) error {
 
 	//创建目录
 	destDir := filepath.Dir(dest)
-	if err := os.MkdirAll(destDir, 0766); err != nil {
+	if err := os.MkdirAll(destDir, 0777); err != nil {
 		return err
 	}
 
