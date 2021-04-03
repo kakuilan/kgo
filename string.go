@@ -114,3 +114,53 @@ func (ks *LkkString) Img2Base64(content []byte, ext ...string) string {
 
 	return img2Base64(content, imgType)
 }
+
+// Index 查找子串sub在字符串str中第一次出现的位置,不存在则返回-1;
+// ignoreCase为是否忽略大小写.
+func (ks *LkkString) Index(str, sub string, ignoreCase bool) int {
+	if str == "" || sub == "" {
+		return -1
+	}
+
+	if ignoreCase {
+		str = strings.ToLower(str)
+		sub = strings.ToLower(sub)
+	}
+
+	return strings.Index(str, sub)
+}
+
+// LastIndex 查找子串sub在字符串str中最后一次出现的位置,不存在则返回-1;
+// ignoreCase为是否忽略大小写.
+func (ks *LkkString) LastIndex(str, sub string, ignoreCase bool) int {
+	if str == "" || sub == "" {
+		return -1
+	}
+
+	if ignoreCase {
+		str = strings.ToLower(str)
+		sub = strings.ToLower(sub)
+	}
+
+	return strings.LastIndex(str, sub)
+}
+
+// StartsWith 字符串str是否以sub开头.
+func (ks *LkkString) StartsWith(str, sub string, ignoreCase bool) bool {
+	if str != "" && sub != "" {
+		i := ks.Index(str, sub, ignoreCase)
+		return i == 0
+	}
+
+	return false
+}
+
+// EndsWith 字符串str是否以sub结尾.
+func (ks *LkkString) EndsWith(str, sub string, ignoreCase bool) bool {
+	if str != "" && sub != "" {
+		i := ks.LastIndex(str, sub, ignoreCase)
+		return i != -1 && (len(str)-len(sub)) == i
+	}
+
+	return false
+}

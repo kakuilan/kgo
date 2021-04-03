@@ -196,6 +196,7 @@ var dirVendor = "./vendor"
 var changLog = "./docs/changelog.md"
 var fileMd = "./README.md"
 var fileGo = "./file.go"
+var fileGmod = "go.mod"
 var fileSongs = "./testdata/诗经.txt"
 var fileDante = "./testdata/dante.txt"
 var filePubPem = "./testdata/rsa/public_key.pem"
@@ -214,8 +215,9 @@ var renamefile = "./testdata/renamefile"
 var copyfile = "./testdata/copyfile"
 var fastcopyfile = dirCopy + "/fast/fastcopyfile"
 var imgCopy = dirCopy + "/diglett_copy.png"
-var pathTes1 = `/usr|///tmp:\\\123/\abc:d<|\hello>\/%world?\\how$\\are`
-var pathTes2 = `C:\Users\Administrator\AppData\:Local`
+var pathTes1 = `/usr|///tmp:\\\123/\abc:d<|\hello>\/%world?\\how$\\are@#test.png`
+var pathTes2 = `C:\Users\/Administrator/\AppData\:Local`
+var pathTes3 = `/usr\bin\\golang//fmt/\test\/hehe`
 
 func init() {
 	gofakeit.Struct(&personS1)

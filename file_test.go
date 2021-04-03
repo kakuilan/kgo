@@ -712,3 +712,25 @@ func BenchmarkFile_FileTree(b *testing.B) {
 		KFile.FileTree(dirCurr, FILE_TREE_ALL, false)
 	}
 }
+
+func TestFile_FormatDir(t *testing.T) {
+	var res string
+
+	res = KFile.FormatDir(pathTes3)
+	assert.NotContains(t, res, "\\")
+
+	//win格式目录
+	res = KFile.FormatDir(pathTes2)
+	assert.Contains(t, res, ":")
+
+	//空目录
+	res = KFile.FormatDir("")
+	assert.Empty(t, res)
+}
+
+func BenchmarkFile_FormatDir(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.FormatDir(pathTes3)
+	}
+}

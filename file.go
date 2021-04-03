@@ -374,9 +374,12 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 		_ = sourceFile.Close()
 	}()
 
+	//源目录
+	srcDirStat, _ := os.Stat(filepath.Dir(source))
+
 	//创建目录
 	destDir := filepath.Dir(dest)
-	if err = os.MkdirAll(destDir, 0777); err != nil {
+	if err = os.MkdirAll(destDir, srcDirStat.Mode()); err != nil {
 		return 0, err
 	}
 
@@ -646,4 +649,25 @@ func (kf *LkkFile) FileTree(fpath string, ftype LkkFileTree, recursive bool, fil
 	}
 
 	return trees
+}
+
+// FormatDir 格式化目录,将"\","//"替换为"/",且以"/"结尾.
+func (kf *LkkFile) FormatDir(fpath string) string {
+	return formatDir(fpath)
+}
+
+// FormatPath 格式化路径.
+func (kf *LkkFile) FormatPath(fpath string) string {
+	if fpath == "" {
+		return ""
+	}
+
+	fpath = formatPath(fpath)
+	dir := filepath.Dir(fpath)
+
+	if dir == `./` && !KStr.StartsWith(fpath, dir, false) {
+		return fpath
+	}
+
+	return strings.TrimRight(dir, "/") + "/" + filepath.Base(fpath)
 }
