@@ -584,3 +584,41 @@ func BenchmarkFile_CopyLink(b *testing.B) {
 		_ = KFile.CopyLink(fileLink, des)
 	}
 }
+
+func TestFile_CopyDir(t *testing.T) {
+	var res int64
+	var err error
+
+	//忽略已存在的
+	res, err = KFile.CopyDir(dirVendor, dirTdat, FILE_COVER_IGNORE)
+	assert.Nil(t, err)
+
+	//覆盖已存在的
+	res, err = KFile.CopyDir(dirVendor, dirTdat, FILE_COVER_ALLOW)
+	assert.Nil(t, err)
+
+	//禁止覆盖
+	res, err = KFile.CopyDir(dirVendor, dirTdat, FILE_COVER_DENY)
+	assert.Equal(t, int64(0), res)
+
+	//源和目标相同
+	res, err = KFile.CopyDir(dirVendor, dirVendor, FILE_COVER_ALLOW)
+	assert.Equal(t, int64(0), res)
+
+	//目标为空
+	res, err = KFile.CopyDir(dirVendor, "", FILE_COVER_ALLOW)
+	assert.NotNil(t, err)
+
+	//源不是目录
+	res, err = KFile.CopyDir(fileMd, dirTdat, FILE_COVER_ALLOW)
+	assert.NotNil(t, err)
+}
+
+func BenchmarkFile_CopyDir(b *testing.B) {
+	b.ResetTimer()
+	var des string
+	for i := 0; i < b.N; i++ {
+		des = fmt.Sprintf(dirCopy+"/copydir_%d", i)
+		_, _ = KFile.CopyDir(dirDoc, des, FILE_COVER_ALLOW)
+	}
+}
