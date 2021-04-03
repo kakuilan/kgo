@@ -579,3 +579,28 @@ func (kf *LkkFile) Img2Base64(fpath string) (string, error) {
 	ext := kf.GetExt(fpath)
 	return img2Base64(imgBuffer, ext), nil
 }
+
+// DelDir 删除目录.delete为true时连该目录一起删除;为false时只清空该目录.
+func (kf *LkkFile) DelDir(dir string, delete bool) error {
+	realPath := kf.AbsPath(dir)
+	if !kf.IsDir(realPath) {
+		return fmt.Errorf("[DelDir]`dir %s not exists", dir)
+	}
+
+	names, err := os.ReadDir(realPath)
+	if err != nil {
+		return err
+	}
+
+	for _, entery := range names {
+		file := path.Join([]string{realPath, entery.Name()}...)
+		err = os.RemoveAll(file)
+	}
+
+	//删除目录
+	if delete {
+		err = os.RemoveAll(realPath)
+	}
+
+	return err
+}

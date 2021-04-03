@@ -623,6 +623,32 @@ func BenchmarkFile_CopyDir(b *testing.B) {
 	}
 }
 
+func TestFile_DelDir(t *testing.T) {
+	var err error
+	var chk bool
+
+	//清空目录
+	err = KFile.DelDir(dirCopy, false)
+	chk = KFile.IsDir(dirCopy)
+	assert.Nil(t, err)
+	assert.True(t, chk)
+
+	//删除目录
+	err = KFile.DelDir(dirNew, true)
+	chk = KFile.IsDir(dirNew)
+	assert.Nil(t, err)
+	assert.False(t, chk)
+}
+
+func BenchmarkFile_DelDir(b *testing.B) {
+	b.ResetTimer()
+	var des string
+	for i := 0; i < b.N; i++ {
+		des = fmt.Sprintf(dirCopy+"/copydir_%d", i)
+		_ = KFile.DelDir(des, true)
+	}
+}
+
 func TestFile_Img2Base64(t *testing.T) {
 	var res string
 	var err error
