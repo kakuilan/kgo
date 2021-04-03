@@ -1237,3 +1237,37 @@ func longestSameString(str1, str2 string) (res string) {
 func img2Base64(content []byte, imgType string) string {
 	return fmt.Sprintf("data:image/%s;base64,%s", imgType, base64.StdEncoding.EncodeToString(content))
 }
+
+// formatPath 格式化路径.
+func formatPath(fpath string) string {
+	//替换特殊字符
+	fpath = strings.NewReplacer(`|`, "", `<`, "", `>`, "", `?`, "", `\`, "/").Replace(fpath)
+	//替换连续斜杠
+	fpath = RegFormatDir.ReplaceAllString(fpath, "/")
+
+	//处理windows路径(带":")
+	slashPos := strings.Index(fpath, "/")
+	colonPos := strings.Index(fpath, ":")
+	if colonPos >= 0 { //路径中存在":"
+		if slashPos == 0 { //路径以"/"开头
+			fpath = strings.ReplaceAll(fpath, ":", "")
+		} else {
+			front := fpath[0 : colonPos+1]
+			back := strings.ReplaceAll(fpath[colonPos:], ":", "")
+			fpath = front + back
+		}
+	}
+
+	return fpath
+}
+
+// formatDir 格式化目录,将"\","//"替换为"/",且以"/"结尾.
+func formatDir(fpath string) string {
+	if fpath == "" {
+		return ""
+	}
+
+	fpath = formatPath(fpath)
+
+	return strings.TrimRight(fpath, "/") + "/"
+}

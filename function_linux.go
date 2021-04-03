@@ -11,15 +11,6 @@ import (
 	"strings"
 )
 
-// formatPath 格式化路径
-func formatPath(fpath string) string {
-	//替换特殊字符
-	fpath = strings.NewReplacer(`|`, "", `:`, "", `<`, "", `>`, "", `?`, "", `\`, "/").Replace(fpath)
-	//替换连续斜杠
-	fpath = RegFormatDir.ReplaceAllString(fpath, "/")
-	return fpath
-}
-
 // getPidByInode 根据套接字的inode获取PID.须root权限.
 func getPidByInode(inode string, procDirs []string) (pid int) {
 	if len(procDirs) == 0 {

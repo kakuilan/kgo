@@ -90,13 +90,14 @@ func (kf *LkkFile) ReadLastLine(fpath string) []byte {
 // WriteFile 将内容写入文件.
 // fpath为文件路径;data为内容;perm为权限,默认为0655.
 func (kf *LkkFile) WriteFile(fpath string, data []byte, perm ...os.FileMode) error {
-	if dir := path.Dir(fpath); dir != "" {
+	dir := path.Dir(fpath)
+	if dir != "" && !kf.IsDir(dir) {
 		if err := os.MkdirAll(dir, os.ModePerm); err != nil {
 			return err
 		}
 	}
 
-	var p os.FileMode = 0655
+	var p os.FileMode = 0777
 	if len(perm) > 0 {
 		p = perm[0]
 	}
@@ -318,12 +319,12 @@ func (kf *LkkFile) Touch(fpath string, size int64) bool {
 	//创建目录
 	destDir := filepath.Dir(fpath)
 	if destDir != "" && !kf.IsDir(destDir) {
-		if err := os.MkdirAll(destDir, 0777); err != nil {
+		if err := os.MkdirAll(destDir, 0766); err != nil {
 			return false
 		}
 	}
 
-	fd, err := os.OpenFile(fpath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0777)
+	fd, err := os.OpenFile(fpath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0766)
 	if err != nil {
 		return false
 	}
@@ -440,7 +441,7 @@ func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
 
 	//创建目录
 	destDir := filepath.Dir(dest)
-	if !kf.IsDir(destDir) {
+	if destDir != "" && !kf.IsDir(destDir) {
 		if err = os.MkdirAll(destDir, 0766); err != nil {
 			return 0, err
 		}
@@ -493,8 +494,8 @@ func (kf *LkkFile) CopyLink(source string, dest string) error {
 
 	//创建目录
 	destDir := filepath.Dir(dest)
-	if !kf.IsDir(destDir) {
-		if err := os.MkdirAll(destDir, 0777); err != nil {
+	if destDir != "" && !kf.IsDir(destDir) {
+		if err := os.MkdirAll(destDir, 0766); err != nil {
 			return err
 		}
 	}
@@ -507,7 +508,7 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 	var total, nBytes int64
 	var err error
 
-	if source == dest {
+	if source == "" || source == dest {
 		return 0, nil
 	}
 
@@ -520,7 +521,7 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 
 	// create dest dir
 	if !kf.IsDir(dest) {
-		err = os.MkdirAll(dest, sourceInfo.Mode())
+		err = os.MkdirAll(dest, 0766)
 		if err != nil {
 			return 0, err
 		}

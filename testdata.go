@@ -214,6 +214,8 @@ var renamefile = "./testdata/renamefile"
 var copyfile = "./testdata/copyfile"
 var fastcopyfile = dirCopy + "/fast/fastcopyfile"
 var imgCopy = dirCopy + "/diglett_copy.png"
+var pathTes1 = `/usr|///tmp:\\\123/\abc:d<|\hello>\/%world?\\how$\\are`
+var pathTes2 = `C:\Users\Administrator\AppData\:Local`
 
 func init() {
 	gofakeit.Struct(&personS1)
