@@ -376,7 +376,7 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 
 	//创建目录
 	destDir := filepath.Dir(dest)
-	if err = os.MkdirAll(destDir, sourceStat.Mode()); err != nil {
+	if err = os.MkdirAll(destDir, 0777); err != nil {
 		return 0, err
 	}
 
