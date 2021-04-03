@@ -4,6 +4,8 @@ package kgo
 
 import (
 	"golang.org/x/sys/unix"
+	"path/filepath"
+	"strings"
 )
 
 // IsReadable 路径是否可读.
@@ -31,4 +33,20 @@ func (kf *LkkFile) IsExecutable(fpath string) bool {
 		return false
 	}
 	return true
+}
+
+// FormatPath 格式化路径.
+func (kf *LkkFile) FormatPath(fpath string) string {
+	if fpath == "" {
+		return ""
+	}
+
+	fpath = formatPath(fpath)
+	dir := filepath.Dir(fpath)
+
+	if dir == `.` {
+		return fpath
+	}
+
+	return strings.TrimRight(dir, "/") + "/" + filepath.Base(fpath)
 }

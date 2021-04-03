@@ -655,19 +655,3 @@ func (kf *LkkFile) FileTree(fpath string, ftype LkkFileTree, recursive bool, fil
 func (kf *LkkFile) FormatDir(fpath string) string {
 	return formatDir(fpath)
 }
-
-// FormatPath 格式化路径.
-func (kf *LkkFile) FormatPath(fpath string) string {
-	if fpath == "" {
-		return ""
-	}
-
-	fpath = formatPath(fpath)
-	dir := filepath.Dir(fpath)
-
-	if dir == `.` {
-		return fpath
-	}
-
-	return strings.TrimRight(dir, "/") + "/" + filepath.Base(fpath)
-}

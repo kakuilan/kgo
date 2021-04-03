@@ -748,7 +748,7 @@ func TestFile_FormatPath(t *testing.T) {
 	res = KFile.FormatPath(fileGo)
 	assert.Equal(t, res, fileGo)
 
-	res = KFile.FormatPath(pathTes1)
+	res = KFile.FormatPath(pathTes3)
 	assert.NotContains(t, res, "\\")
 
 	//win格式
