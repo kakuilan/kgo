@@ -766,3 +766,25 @@ func BenchmarkFile_FormatPath(b *testing.B) {
 		KFile.FormatPath(pathTes2)
 	}
 }
+
+func TestFile_Md5(t *testing.T) {
+	var res string
+	var err error
+
+	res, err = KFile.Md5(fileMd, 32)
+	assert.NotEmpty(t, res)
+
+	res, err = KFile.Md5(fileMd, 16)
+	assert.Nil(t, err)
+
+	//不存在的文件
+	res, err = KFile.Md5(fileNone, 32)
+	assert.NotNil(t, err)
+}
+
+func BenchmarkFile_Md5(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.Md5(fileMd, 32)
+	}
+}

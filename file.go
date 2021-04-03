@@ -2,6 +2,8 @@ package kgo
 
 import (
 	"bufio"
+	"crypto/md5"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"io"
@@ -654,4 +656,32 @@ func (kf *LkkFile) FileTree(fpath string, ftype LkkFileTree, recursive bool, fil
 // FormatDir 格式化目录,将"\","//"替换为"/",且以"/"结尾.
 func (kf *LkkFile) FormatDir(fpath string) string {
 	return formatDir(fpath)
+}
+
+// Md5 获取文件md5值,length指定结果长度32/16.
+func (kf *LkkFile) Md5(fpath string, length uint8) (string, error) {
+	var res string
+	f, err := os.Open(fpath)
+	if err != nil {
+		return res, err
+	}
+	defer func() {
+		_ = f.Close()
+	}()
+
+	hash := md5.New()
+	if _, err := io.Copy(hash, f); err != nil {
+		return res, err
+	}
+
+	hashInBytes := hash.Sum(nil)
+	if length > 0 && length < 32 {
+		dst := make([]byte, hex.EncodedLen(len(hashInBytes)))
+		hex.Encode(dst, hashInBytes)
+		res = string(dst[:length])
+	} else {
+		res = hex.EncodeToString(hashInBytes)
+	}
+
+	return res, nil
 }
