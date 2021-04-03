@@ -695,3 +695,44 @@ func (kf *LkkFile) ShaX(fpath string, x uint16) (string, error) {
 
 	return string(shaXByte(data, x)), nil
 }
+
+// Pathinfo 获取文件路径的信息.
+// option为要返回的信息,枚举值如下:
+// -1: all; 1: dirname; 2: basename; 4: extension; 8: filename;
+// 若要查看某几项,则为它们之间的和.
+func (kf *LkkFile) Pathinfo(fpath string, option int) map[string]string {
+	if option == -1 {
+		option = 1 | 2 | 4 | 8
+	}
+	res := make(map[string]string)
+	if (option & 1) == 1 {
+		res["dirname"] = filepath.Dir(fpath)
+	}
+	if (option & 2) == 2 {
+		res["basename"] = filepath.Base(fpath)
+	}
+	if ((option & 4) == 4) || ((option & 8) == 8) {
+		basename := ""
+		if (option & 2) == 2 {
+			basename, _ = res["basename"]
+		} else {
+			basename = filepath.Base(fpath)
+		}
+		p := strings.LastIndex(basename, ".")
+		filename, extension := "", ""
+		if p > 0 {
+			filename, extension = basename[:p], basename[p+1:]
+		} else if p == -1 {
+			filename = basename
+		} else if p == 0 {
+			extension = basename[p+1:]
+		}
+		if (option & 4) == 4 {
+			res["extension"] = extension
+		}
+		if (option & 8) == 8 {
+			res["filename"] = filename
+		}
+	}
+	return res
+}

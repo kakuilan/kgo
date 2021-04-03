@@ -821,3 +821,37 @@ func BenchmarkFile_ShaX(b *testing.B) {
 		_, _ = KFile.ShaX(fileGmod, 256)
 	}
 }
+
+func TestFile_Pathinfo(t *testing.T) {
+	var res map[string]string
+
+	//所有信息
+	res = KFile.Pathinfo(imgPng, -1)
+	assert.Equal(t, 4, len(res))
+
+	//仅目录
+	res = KFile.Pathinfo(imgPng, 1)
+
+	//仅基础名(文件+扩展)
+	res = KFile.Pathinfo(imgPng, 2)
+
+	//仅扩展名
+	res = KFile.Pathinfo(imgPng, 4)
+
+	//仅文件名
+	res = KFile.Pathinfo(imgPng, 8)
+
+	//目录+基础名
+	res = KFile.Pathinfo(imgPng, 3)
+
+	//特殊类型
+	res = KFile.Pathinfo(fileGitkee, -1)
+	assert.Empty(t, res["filename"])
+}
+
+func BenchmarkFile_Pathinfo(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.Pathinfo(imgPng, -1)
+	}
+}
