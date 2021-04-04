@@ -736,3 +736,13 @@ func (kf *LkkFile) Pathinfo(fpath string, option int) map[string]string {
 	}
 	return res
 }
+
+// Basename 返回路径中的文件名部分.
+func (kf *LkkFile) Basename(fpath string) string {
+	return filepath.Base(fpath)
+}
+
+// Dirname 返回路径中的目录部分,注意空路径或无目录的返回"." .
+func (kf *LkkFile) Dirname(fpath string) string {
+	return filepath.Dir(fpath)
+}
