@@ -855,3 +855,24 @@ func BenchmarkFile_Pathinfo(b *testing.B) {
 		KFile.Pathinfo(imgPng, -1)
 	}
 }
+
+func TestFile_Basename(t *testing.T) {
+	var res string
+
+	res = KFile.Basename(fileMd)
+	assert.Equal(t, "README.md", res)
+
+	res = KFile.Basename(fileNone)
+	assert.Equal(t, "none", res)
+
+	res = KFile.Basename("")
+	assert.NotEmpty(t, res)
+	assert.Equal(t, ".", res)
+}
+
+func BenchmarkFile_Basename(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.Basename(fileDante)
+	}
+}

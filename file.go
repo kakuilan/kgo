@@ -737,7 +737,7 @@ func (kf *LkkFile) Pathinfo(fpath string, option int) map[string]string {
 	return res
 }
 
-// Basename 返回路径中的文件名部分.
+// Basename 返回路径中的文件名部分(包括后缀),空路径时返回".".
 func (kf *LkkFile) Basename(fpath string) string {
 	return filepath.Base(fpath)
 }
