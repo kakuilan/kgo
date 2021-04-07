@@ -876,3 +876,21 @@ func BenchmarkFile_Basename(b *testing.B) {
 		KFile.Basename(fileDante)
 	}
 }
+
+func TestFile_Dirname(t *testing.T) {
+	var res string
+
+	res = KFile.Dirname(changLog)
+	assert.Equal(t, "docs", res)
+
+	res = KFile.Dirname("")
+	assert.NotEmpty(t, res)
+	assert.Equal(t, ".", res)
+}
+
+func BenchmarkFile_Dirname(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.Dirname(fileSongs)
+	}
+}
