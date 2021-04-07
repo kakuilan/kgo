@@ -742,7 +742,7 @@ func (kf *LkkFile) Basename(fpath string) string {
 	return filepath.Base(fpath)
 }
 
-// Dirname 返回路径中的目录部分,注意空路径或无目录的返回"." .
+// Dirname 返回路径中的目录部分,注意空路径或无目录的返回".".
 func (kf *LkkFile) Dirname(fpath string) string {
 	return filepath.Dir(fpath)
 }
@@ -754,4 +754,9 @@ func (kf *LkkFile) GetModTime(fpath string) (res int64) {
 		res = fileinfo.ModTime().Unix()
 	}
 	return
+}
+
+// Glob 寻找与模式匹配的文件路径.
+func (kf *LkkFile) Glob(pattern string) ([]string, error) {
+	return filepath.Glob(pattern)
 }

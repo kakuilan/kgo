@@ -916,3 +916,20 @@ func BenchmarkFile_GetModTime(b *testing.B) {
 		KFile.GetModTime(fileMd)
 	}
 }
+
+func TestFile_Glob(t *testing.T) {
+	var res []string
+	var err error
+
+	res, err = KFile.Glob("*test.go")
+	assert.NotEmpty(t, res)
+	assert.Nil(t, err)
+}
+
+func BenchmarkFile_Glob(b *testing.B) {
+	b.ResetTimer()
+	pattern := "*test.go"
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.Glob(pattern)
+	}
+}
