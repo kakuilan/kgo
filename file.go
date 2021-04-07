@@ -746,3 +746,12 @@ func (kf *LkkFile) Basename(fpath string) string {
 func (kf *LkkFile) Dirname(fpath string) string {
 	return filepath.Dir(fpath)
 }
+
+// GetModTime 获取文件的修改时间戳,秒.
+func (kf *LkkFile) GetModTime(fpath string) (res int64) {
+	fileinfo, err := os.Stat(fpath)
+	if err == nil {
+		res = fileinfo.ModTime().Unix()
+	}
+	return
+}

@@ -894,3 +894,25 @@ func BenchmarkFile_Dirname(b *testing.B) {
 		KFile.Dirname(fileSongs)
 	}
 }
+
+func TestFile_GetModTime(t *testing.T) {
+	var res int64
+
+	res = KFile.GetModTime(fileMd)
+	assert.Greater(t, res, int64(0))
+
+	//不存在的文件
+	res = KFile.GetModTime(fileNone)
+	assert.Equal(t, res, int64(0))
+
+	//空路径
+	res = KFile.GetModTime(fileNone)
+	assert.Equal(t, res, int64(0))
+}
+
+func BenchmarkFile_GetModTime(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.GetModTime(fileMd)
+	}
+}
