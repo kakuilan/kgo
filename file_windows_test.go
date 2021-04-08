@@ -30,12 +30,12 @@ func TestFileWins_TarGzUnTarGz(t *testing.T) {
 	var err1, err2 error
 
 	//打包无权限的目录
-	res1, err1 = KFile.TarGz(admAppDir, targzfile1)
+	res1, err1 = KFile.TarGz(admTesDir, targzfile1)
 	assert.False(t, res1)
 	assert.NotNil(t, err1)
 
 	//解压到无权限的目录
-	res2, err2 = KFile.UnTarGz(targzfile1, admAppDir)
+	res2, err2 = KFile.UnTarGz(targzfile1, admTesDir)
 	assert.False(t, res2)
 	assert.NotNil(t, err2)
 }

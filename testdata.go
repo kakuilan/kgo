@@ -185,7 +185,7 @@ Opmv0mBgAnPItT8cPsvvrGCfdwuO6x2xemTkPE9hikLZSctlaOUfVNeem6f/3SWi
 var rootDir = "/root"
 var rootFile1 = "/root/hello/world"
 var admDir = `C:\Users\Administrator`
-var admAppDir = `C:\Users\Administrator\AppData\test`
+var admTesDir = `C:\Users\Administrator\Test`
 var dirCurr = "./"
 var dirDoc = "./docs"
 var dirTdat = "./testdata"
