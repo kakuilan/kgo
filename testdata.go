@@ -185,6 +185,7 @@ Opmv0mBgAnPItT8cPsvvrGCfdwuO6x2xemTkPE9hikLZSctlaOUfVNeem6f/3SWi
 var rootDir = "/root"
 var rootFile1 = "/root/hello/world"
 var admDir = `C:\Users\Administrator`
+var admAppDir = `C:\Users\Administrator\AppData\test`
 var dirCurr = "./"
 var dirDoc = "./docs"
 var dirTdat = "./testdata"
@@ -221,6 +222,8 @@ var pathTes3 = `/usr\bin\\golang//fmt/\test\/hehe`
 var pathTes4 = `123456789     '_-?ASDF@£$%£%^é.html`
 var pathTes5 = `file:///c:/test.go`
 var pathTes6 = `../../../Hello World!.txt`
+var targzfile1 = "./testdata/targz/test1.tar.gz"
+var untarpath1 = "./testdata/targz/un1"
 
 func init() {
 	gofakeit.Struct(&personS1)

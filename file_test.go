@@ -956,3 +956,53 @@ func BenchmarkFile_SafeFileName(b *testing.B) {
 		KFile.SafeFileName(pathTes4)
 	}
 }
+
+func TestFile_TarGzUnTarGz(t *testing.T) {
+	var res1, res2 bool
+	var err1, err2 error
+	var patterns []string
+
+	//打包
+	patterns = []string{".*.md", ".*.yml", ".*_test.go"}
+	res1, err1 = KFile.TarGz("./", targzfile1, patterns...)
+	assert.True(t, res1)
+	assert.Nil(t, err1)
+
+	//解压
+	res2, err2 = KFile.UnTarGz(targzfile1, untarpath1)
+	assert.True(t, res2)
+	assert.Nil(t, err2)
+
+	//打包不存在的目录
+	res1, err1 = KFile.TarGz(fileNone, targzfile1)
+	assert.False(t, res1)
+	assert.NotNil(t, err1)
+
+	//解压非tar格式的文件
+	res2, err2 = KFile.UnTarGz(fileDante, untarpath1)
+	assert.False(t, res2)
+	assert.NotNil(t, err2)
+
+	//解压不存在的文件
+	res2, err2 = KFile.UnTarGz(fileNone, untarpath1)
+	assert.False(t, res2)
+	assert.NotNil(t, err2)
+}
+
+func BenchmarkFile_TarGz(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		dst := fmt.Sprintf(dirTdat+"/targz/test_%d.tar.gz", i)
+		_, _ = KFile.TarGz(dirDoc, dst)
+	}
+}
+
+func BenchmarkFile_UnTarGz(b *testing.B) {
+	b.ResetTimer()
+	var src, dst string
+	for i := 0; i < b.N; i++ {
+		src = fmt.Sprintf(dirTdat+"/targz/test_%d.tar.gz", i)
+		dst = fmt.Sprintf(dirTdat+"/targz/test_%d", i)
+		_, _ = KFile.UnTarGz(src, dst)
+	}
+}
