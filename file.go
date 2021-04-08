@@ -12,6 +12,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"regexp"
 	"strings"
 )
 
@@ -759,4 +760,22 @@ func (kf *LkkFile) GetModTime(fpath string) (res int64) {
 // Glob 寻找与模式匹配的文件路径.
 func (kf *LkkFile) Glob(pattern string) ([]string, error) {
 	return filepath.Glob(pattern)
+}
+
+// SafeFileName 将文件名转换为安全可用的字符串.
+func (kf *LkkFile) SafeFileName(str string) string {
+	name := path.Clean(path.Base(str))
+	name = strings.Trim(name, " ")
+	separators, err := regexp.Compile(`[ &_=+:]`)
+	if err == nil {
+		name = separators.ReplaceAllString(name, "-")
+	}
+	legal, err := regexp.Compile(`[^[:alnum:]-.]`)
+	if err == nil {
+		name = legal.ReplaceAllString(name, "")
+	}
+	for strings.Contains(name, "--") {
+		name = strings.Replace(name, "--", "-", -1)
+	}
+	return name
 }

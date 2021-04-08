@@ -218,6 +218,9 @@ var imgCopy = dirCopy + "/diglett_copy.png"
 var pathTes1 = `/usr|///tmp:\\\123/\abc:d<|\hello>\/%world?\\how$\\are@#test.png`
 var pathTes2 = `C:\Users\/Administrator/\AppData\:Local`
 var pathTes3 = `/usr\bin\\golang//fmt/\test\/hehe`
+var pathTes4 = `123456789     '_-?ASDF@£$%£%^é.html`
+var pathTes5 = `file:///c:/test.go`
+var pathTes6 = `../../../Hello World!.txt`
 
 func init() {
 	gofakeit.Struct(&personS1)

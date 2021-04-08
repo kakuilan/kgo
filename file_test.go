@@ -933,3 +933,26 @@ func BenchmarkFile_Glob(b *testing.B) {
 		_, _ = KFile.Glob(pattern)
 	}
 }
+
+func TestFile_SafeFileName(t *testing.T) {
+	var res string
+
+	res = KFile.SafeFileName(pathTes4)
+	assert.Equal(t, `123456789-ASDF.html`, res)
+
+	res = KFile.SafeFileName(pathTes5)
+	assert.Equal(t, `test.go`, res)
+
+	res = KFile.SafeFileName(pathTes6)
+	assert.Equal(t, `Hello-World.txt`, res)
+
+	res = KFile.SafeFileName("")
+	assert.Equal(t, ".", res)
+}
+
+func BenchmarkFile_SafeFileName(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.SafeFileName(pathTes4)
+	}
+}
