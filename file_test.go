@@ -1006,3 +1006,27 @@ func BenchmarkFile_UnTarGz(b *testing.B) {
 		_, _ = KFile.UnTarGz(src, dst)
 	}
 }
+
+func TestFile_ChmodBatch(t *testing.T) {
+	var res bool
+	var tmp string
+
+	for i := 0; i < 10; i++ {
+		tmp = fmt.Sprintf(dirChmod+"/tmp_%d", i)
+		KFile.Touch(tmp, 0)
+	}
+
+	res = KFile.ChmodBatch(dirChmod, 0766, 0755)
+	assert.True(t, res)
+
+	//不存在的路径
+	res = KFile.ChmodBatch(fileNone, 0777, 0766)
+	assert.False(t, res)
+}
+
+func BenchmarkFile_ChmodBatch(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.ChmodBatch(dirDoc, 0777, 0766)
+	}
+}

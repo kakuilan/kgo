@@ -39,3 +39,11 @@ func TestFileUnix_TarGzUnTarGz(t *testing.T) {
 	assert.False(t, res2)
 	assert.NotNil(t, err2)
 }
+
+func TestFileUnix_ChmodBatch(t *testing.T) {
+	var res bool
+
+	//无权限的目录
+	res = KFile.ChmodBatch(rootDir, 0777, 0777)
+	assert.False(t, res)
+}
