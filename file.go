@@ -940,8 +940,11 @@ func (kf *LkkFile) UnTarGz(srcTar, dstDir string) (bool, error) {
 		// Create diretory before create file
 		newPath := dstDir + "/" + strings.TrimLeft(hdr.Name, "/\\")
 		parentDir := path.Dir(newPath)
-		if !kf.IsExist(parentDir) {
-			_ = os.MkdirAll(parentDir, os.ModePerm)
+		if !kf.IsDir(parentDir) {
+			err := os.MkdirAll(parentDir, os.ModePerm)
+			if err != nil {
+				return false, err
+			}
 		}
 
 		if hdr.Typeflag != tar.TypeDir {
@@ -961,4 +964,29 @@ func (kf *LkkFile) UnTarGz(srcTar, dstDir string) (bool, error) {
 	}
 
 	return true, nil
+}
+
+// ChmodBatch 批量改变路径权限模式(包括子目录和所属文件).
+// filemode为文件权限模式,dirmode为目录权限模式.
+func (kf *LkkFile) ChmodBatch(fpath string, filemode, dirmode os.FileMode) (res bool) {
+	var err error
+	err = filepath.Walk(fpath, func(fpath string, f os.FileInfo, err error) error {
+		if f == nil {
+			return err
+		}
+
+		if f.IsDir() {
+			err = os.Chmod(fpath, dirmode)
+		} else {
+			err = os.Chmod(fpath, filemode)
+		}
+
+		return err
+	})
+
+	if err == nil {
+		res = true
+	}
+
+	return
 }
