@@ -3,6 +3,7 @@ package kgo
 import (
 	"archive/tar"
 	"bufio"
+	"bytes"
 	"compress/gzip"
 	"crypto/md5"
 	"encoding/hex"
@@ -989,4 +990,36 @@ func (kf *LkkFile) ChmodBatch(fpath string, filemode, dirmode os.FileMode) (res 
 	}
 
 	return
+}
+
+// CountLines 统计文件行数.buffLength为缓冲长度,kb.
+func (kf *LkkFile) CountLines(fpath string, buffLength int) (int, error) {
+	fh, err := os.Open(fpath)
+	if err != nil {
+		return -1, err
+	}
+	defer func() {
+		_ = fh.Close()
+	}()
+
+	count := 0
+	lineSep := []byte{'\n'}
+
+	if buffLength <= 0 {
+		buffLength = 32
+	}
+
+	r := bufio.NewReader(fh)
+	buf := make([]byte, buffLength*1024)
+	for {
+		c, err := r.Read(buf)
+		count += bytes.Count(buf[:c], lineSep)
+
+		switch {
+		case err == io.EOF:
+			return count, nil
+		case err != nil:
+			return count, err
+		}
+	}
 }

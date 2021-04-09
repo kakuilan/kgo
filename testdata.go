@@ -224,6 +224,7 @@ var pathTes4 = `123456789     '_-?ASDF@£$%£%^é.html`
 var pathTes5 = `file:///c:/test.go`
 var pathTes6 = `../../../Hello World!.txt`
 var targzfile1 = "./testdata/targz/test1.tar.gz"
+var targzfile2 = "./testdata/targz/test2.tar.gz"
 var untarpath1 = "./testdata/targz/un1"
 
 func init() {

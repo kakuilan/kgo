@@ -974,7 +974,7 @@ func TestFile_TarGzUnTarGz(t *testing.T) {
 	assert.Nil(t, err2)
 
 	//打包不存在的目录
-	res1, err1 = KFile.TarGz(fileNone, targzfile1)
+	res1, err1 = KFile.TarGz(fileNone, targzfile2)
 	assert.False(t, res1)
 	assert.NotNil(t, err1)
 
@@ -1028,5 +1028,31 @@ func BenchmarkFile_ChmodBatch(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KFile.ChmodBatch(dirDoc, 0777, 0766)
+	}
+}
+
+func TestFile_CountLines(t *testing.T) {
+	var res int
+	var err error
+
+	res, err = KFile.CountLines(fileDante, 0)
+	assert.Equal(t, 19567, res)
+	assert.Nil(t, err)
+
+	//非文本文件
+	res, err = KFile.CountLines(imgJpg, 8)
+	assert.Greater(t, res, 0)
+	assert.Nil(t, err)
+
+	//不存在的文件
+	res, err = KFile.CountLines(fileNone, 0)
+	assert.Equal(t, -1, res)
+	assert.NotNil(t, err)
+}
+
+func BenchmarkFile_CountLines(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.CountLines(fileMd, 0)
 	}
 }
