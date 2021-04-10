@@ -353,4 +353,7 @@ var (
 	bytMinus = []byte("-")
 	// 等于号字节切片
 	bytEqual = []byte("=")
+
+	//空白字符
+	blankChars = " \t\n\r\v\f\x00　"
 )

@@ -479,7 +479,7 @@ func compareConditionMap(condition map[string]interface{}, arr interface{}) (res
 func getTrimMask(masks []string) string {
 	var str string
 	if len(masks) == 0 {
-		str = " \t\n\r\v\f\x00　"
+		str = blankChars
 	} else {
 		str = strings.Join(masks, "")
 	}

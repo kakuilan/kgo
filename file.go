@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"archive/tar"
+	"archive/zip"
 	"bufio"
 	"bytes"
 	"compress/gzip"
@@ -1022,4 +1023,143 @@ func (kf *LkkFile) CountLines(fpath string, buffLength int) (int, error) {
 			return count, err
 		}
 	}
+}
+
+// Zip 将文件或目录进行zip打包.fpaths为源文件或目录的路径.
+func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
+	dst = kf.AbsPath(dst)
+	dstDir := kf.Dirname(dst)
+	if !kf.IsDir(dstDir) {
+		err := os.MkdirAll(dstDir, os.ModePerm)
+		if err != nil {
+			return false, err
+		}
+	}
+
+	fzip, err := os.Create(dst)
+	if err != nil {
+		return false, err
+	}
+	defer func() {
+		_ = fzip.Close()
+	}()
+
+	if len(fpaths) == 0 {
+		return false, errors.New("[Zip] no input files.")
+	}
+
+	var allfiles, files []string
+	var fpath string
+	for _, fpath = range fpaths {
+		if kf.IsDir(fpath) {
+			files = kf.FileTree(fpath, FILE_TREE_FILE, true)
+			if len(files) != 0 {
+				allfiles = append(allfiles, files...)
+			}
+		} else if fpath != "" {
+			allfiles = append(allfiles, fpath)
+		}
+	}
+
+	if len(allfiles) == 0 {
+		return false, errors.New("[Zip] no exist files.")
+	}
+
+	zipw := zip.NewWriter(fzip)
+	defer func() {
+		_ = zipw.Close()
+	}()
+
+	keys := make(map[string]bool)
+	for _, fpath = range allfiles {
+		if _, ok := keys[fpath]; ok || kf.AbsPath(fpath) == dst {
+			continue
+		}
+
+		fileToZip, err := os.Open(fpath)
+		if err != nil {
+			return false, fmt.Errorf("[Zip] failed to open %s: %s", fpath, err)
+		}
+		defer func() {
+			_ = fileToZip.Close()
+		}()
+
+		wr, _ := zipw.Create(fpath)
+		keys[fpath] = true
+		if _, err := io.Copy(wr, fileToZip); err != nil {
+			return false, fmt.Errorf("[Zip] failed to write %s to zip: %s", fpath, err)
+		}
+	}
+
+	return true, nil
+}
+
+// UnZip 解压zip文件.srcZip为zip文件路径,dstDir为解压目录.
+func (kf *LkkFile) UnZip(srcZip, dstDir string) (bool, error) {
+	reader, err := zip.OpenReader(srcZip)
+	if err != nil {
+		return false, err
+	}
+	defer func() {
+		_ = reader.Close()
+	}()
+
+	dstDir = strings.TrimRight(kf.AbsPath(dstDir), "/\\")
+	if !kf.IsExist(dstDir) {
+		err := os.MkdirAll(dstDir, os.ModePerm)
+		if err != nil {
+			return false, err
+		}
+	}
+
+	// 迭代压缩文件中的文件
+	for _, f := range reader.File {
+		// Create diretory before create file
+		newPath := dstDir + "/" + strings.TrimLeft(f.Name, "/\\")
+		parentDir := path.Dir(newPath)
+		if !kf.IsExist(parentDir) {
+			err := os.MkdirAll(parentDir, os.ModePerm)
+			if err != nil {
+				return false, err
+			}
+		}
+
+		if !f.FileInfo().IsDir() {
+			if fcreate, err := os.Create(newPath); err == nil {
+				if rc, err := f.Open(); err == nil {
+					_, _ = io.Copy(fcreate, rc)
+					_ = rc.Close() //不要用defer来关闭，如果文件太多的话，会报too many open files 的错误
+					_ = fcreate.Close()
+				} else {
+					_ = fcreate.Close()
+					return false, err
+				}
+			} else {
+				return false, err
+			}
+		}
+	}
+
+	return true, nil
+}
+
+// IsZip 是否zip文件.
+func (kf *LkkFile) IsZip(fpath string) bool {
+	ext := kf.GetExt(fpath)
+	if ext != "zip" {
+		return false
+	}
+
+	f, err := os.Open(fpath)
+	if err != nil {
+		return false
+	}
+	defer func() {
+		_ = f.Close()
+	}()
+
+	buf := make([]byte, 4)
+	n, err := f.Read(buf)
+
+	return err == nil && n == 4 && bytes.Equal(buf, []byte("PK\x03\x04"))
 }

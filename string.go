@@ -164,3 +164,9 @@ func (ks *LkkString) EndsWith(str, sub string, ignoreCase bool) bool {
 
 	return false
 }
+
+// Trim 去除字符串首尾处的空白字符（或者其他字符）.
+func (ks *LkkString) Trim(str string, characterMask ...string) string {
+	mask := getTrimMask(characterMask)
+	return strings.Trim(str, mask)
+}
