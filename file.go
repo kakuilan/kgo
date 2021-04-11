@@ -620,13 +620,14 @@ func (kf *LkkFile) FileTree(fpath string, ftype LkkFileTree, recursive bool, fil
 		return trees
 	}
 
-	fpath = strings.TrimRight(fpath, "/")
+	fpath = strings.TrimRight(fpath, "/\\")
 	files, err := filepath.Glob(filepath.Join(fpath, "*"))
 	if err != nil || len(files) == 0 {
 		return trees
 	}
 
 	for _, file := range files {
+		file = strings.ReplaceAll(file, "\\", "/")
 		if kf.IsDir(file) {
 			if ftype != FILE_TREE_FILE {
 				trees = append(trees, file)
@@ -1115,6 +1116,7 @@ func (kf *LkkFile) UnZip(srcZip, dstDir string) (bool, error) {
 	// 迭代压缩文件中的文件
 	for _, f := range reader.File {
 		// Create diretory before create file
+		//newPath := dstDir + string(os.PathSeparator) + strings.TrimLeft(f.Name, string(os.PathSeparator))
 		newPath := dstDir + "/" + strings.TrimLeft(f.Name, "/\\")
 		parentDir := path.Dir(newPath)
 		if !kf.IsDir(parentDir) {

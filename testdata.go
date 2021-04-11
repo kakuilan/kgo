@@ -226,6 +226,9 @@ var pathTes6 = `../../../Hello World!.txt`
 var targzfile1 = "./testdata/targz/test1.tar.gz"
 var targzfile2 = "./testdata/targz/test2.tar.gz"
 var untarpath1 = "./testdata/targz/un1"
+var zipfile1 = "./testdata/zip/test1.zip"
+var zipfile2 = "./testdata/zip/test2.zip"
+var unzippath1 = "./testdata/zip/un1"
 
 func init() {
 	gofakeit.Struct(&personS1)

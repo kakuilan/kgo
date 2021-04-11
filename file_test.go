@@ -1056,3 +1056,36 @@ func BenchmarkFile_CountLines(b *testing.B) {
 		_, _ = KFile.CountLines(fileMd, 0)
 	}
 }
+
+func TestFile_ZipIszipUnzip(t *testing.T) {
+	var res bool
+	var err error
+
+	//空输入
+	res, err = KFile.Zip(zipfile1)
+	assert.False(t, res)
+	assert.NotNil(t, err)
+
+	//源文件不存在
+	res, err = KFile.Zip(zipfile1, fileNone)
+	assert.False(t, res)
+	assert.NotNil(t, err)
+
+	res, err = KFile.Zip(zipfile1, fileMd, fileGo, fileDante, dirDoc)
+	assert.True(t, res)
+	assert.Nil(t, err)
+
+	//判断
+	res = KFile.IsZip(zipfile1)
+	assert.True(t, res)
+
+	res = KFile.IsZip(fileNone)
+	assert.False(t, res)
+
+	//解压
+	res,err = KFile.UnZip(zipfile1, unzippath1)
+	assert.True(t, res)
+	assert.Nil(t, err)
+
+	dumpPrint(res, err)
+}
