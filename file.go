@@ -1105,7 +1105,7 @@ func (kf *LkkFile) UnZip(srcZip, dstDir string) (bool, error) {
 	}()
 
 	dstDir = strings.TrimRight(kf.AbsPath(dstDir), "/\\")
-	if !kf.IsExist(dstDir) {
+	if !kf.IsDir(dstDir) {
 		err := os.MkdirAll(dstDir, os.ModePerm)
 		if err != nil {
 			return false, err
@@ -1117,7 +1117,7 @@ func (kf *LkkFile) UnZip(srcZip, dstDir string) (bool, error) {
 		// Create diretory before create file
 		newPath := dstDir + "/" + strings.TrimLeft(f.Name, "/\\")
 		parentDir := path.Dir(newPath)
-		if !kf.IsExist(parentDir) {
+		if !kf.IsDir(parentDir) {
 			err := os.MkdirAll(parentDir, os.ModePerm)
 			if err != nil {
 				return false, err
