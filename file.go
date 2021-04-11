@@ -851,6 +851,7 @@ func (kf *LkkFile) TarGz(src string, dstTar string, ignorePatterns ...string) (b
 			continue
 		}
 		newName := strings.Replace(file, parentDir, "", -1)
+		newName = strings.ReplaceAll(newName, ":", "") //防止wins下 tmp/D: 创建失败
 
 		// Create tar header
 		hdr := new(tar.Header)

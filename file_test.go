@@ -964,7 +964,7 @@ func TestFile_TarGzUnTarGz(t *testing.T) {
 
 	//打包
 	patterns = []string{".*.md", ".*.yml", ".*_test.go"}
-	res1, err1 = KFile.TarGz("./", targzfile1, patterns...)
+	res1, err1 = KFile.TarGz(dirVendor, targzfile1, patterns...)
 	assert.True(t, res1)
 	assert.Nil(t, err1)
 
@@ -1083,9 +1083,43 @@ func TestFile_ZipIszipUnzip(t *testing.T) {
 	assert.False(t, res)
 
 	//解压
-	res,err = KFile.UnZip(zipfile1, unzippath1)
+	res, err = KFile.UnZip(zipfile1, unzippath1)
 	assert.True(t, res)
 	assert.Nil(t, err)
 
-	dumpPrint(res, err)
+	//解压非zip文件
+	res, err = KFile.UnZip(imgJpg, unzippath1)
+	assert.False(t, res)
+	assert.NotNil(t, err)
+
+	//解压不存在文件
+	res, err = KFile.UnZip(fileNone, unzippath1)
+	assert.False(t, res)
+	assert.NotNil(t, err)
+}
+
+func BenchmarkFile_Zip(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		dst := fmt.Sprintf(dirTdat+"/zip/test_%d.zip", i)
+		_, _ = KFile.Zip(dst, dirDoc)
+	}
+}
+
+func BenchmarkFile_IsZip(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		dst := fmt.Sprintf(dirTdat+"/zip/test_%d.zip", i)
+		KFile.IsZip(dst)
+	}
+}
+
+func BenchmarkFile_UnZip(b *testing.B) {
+	b.ResetTimer()
+	var src, dst string
+	for i := 0; i < b.N; i++ {
+		src = fmt.Sprintf(dirTdat+"/zip/test_%d.zip", i)
+		dst = fmt.Sprintf(dirTdat+"/zip/unzip/test_%d", i)
+		_, _ = KFile.UnZip(src, dst)
+	}
 }
