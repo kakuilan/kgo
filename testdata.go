@@ -76,6 +76,8 @@ var floAvogadro float64 = 6.02214129e23   // 阿伏伽德罗常数
 var floPlanck float64 = 6.62606957e-34    // 普朗克常数
 var floGravitional float64 = 6.673e-11    //重力常数
 var floPermittivity float64 = 8.85419e-12 //真空介电常数
+var floNum1 = 123456789.1234567890
+var floNum2 = -123.4567890
 
 //复数
 var cmplNum1 = complex(1, 2)
