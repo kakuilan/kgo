@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 )
 
@@ -47,4 +48,29 @@ func (kn *LkkNumber) NumberFormat(number float64, decimal uint8, point, thousand
 	}
 
 	return s
+}
+
+// AbsFloat 浮点型取绝对值.
+func (kn *LkkNumber) AbsFloat(number float64) float64 {
+	return math.Abs(number)
+}
+
+// AbsInt 整型取绝对值.
+func (kn *LkkNumber) AbsInt(number int64) int64 {
+	r := number >> 63
+	return (number ^ r) - r
+}
+
+// Range 根据范围创建数组,包含指定的元素.
+// start为起始元素值,end为末尾元素值.若start<end,返回升序的数组;若start>end,返回降序的数组.
+func (kn *LkkNumber) Range(start, end int) []int {
+	res := make([]int, kn.AbsInt(int64(end-start))+1)
+	for i := range res {
+		if end > start {
+			res[i] = start + i
+		} else {
+			res[i] = start - i
+		}
+	}
+	return res
 }
