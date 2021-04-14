@@ -54,3 +54,17 @@ func BenchmarkNumber_Range(b *testing.B) {
 		KNum.Range(0, 9)
 	}
 }
+
+func TestNumber_AbsFloat(t *testing.T) {
+	var res float64
+
+	res = KNum.AbsFloat(floNum2)
+	assert.Greater(t, res, 0.0)
+}
+
+func BenchmarkNumber_AbsFloat(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.AbsFloat(floNum2)
+	}
+}
