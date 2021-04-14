@@ -68,3 +68,17 @@ func BenchmarkNumber_AbsFloat(b *testing.B) {
 		KNum.AbsFloat(floNum2)
 	}
 }
+
+func TestNumber_AbsInt(t *testing.T) {
+	var res int64
+
+	res = KNum.AbsInt(-123)
+	assert.Greater(t, res, int64(0))
+}
+
+func BenchmarkNumber_AbsInt(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.AbsInt(-123)
+	}
+}
