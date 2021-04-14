@@ -2,20 +2,24 @@ package kgo
 
 import (
 	"github.com/stretchr/testify/assert"
+	"math"
 	"testing"
 )
 
 func TestNumber_NumberFormat(t *testing.T) {
 	var res string
 
-	res = KNum.NumberFormat(floNum1, 3, ".", "")
-	assert.Equal(t, "123456789.123", res)
+	res = KNum.NumberFormat(floNum1, 10, ".", "")
+	assert.Equal(t, "12345.1234567890", res)
 
-	res = KNum.NumberFormat(floNum1, 6, ".", ",")
-	assert.Equal(t, "123,456,789.123457", res)
+	res = KNum.NumberFormat(floNum2, 6, ".", ",")
+	assert.Equal(t, "12,345,678.123457", res)
 
-	res = KNum.NumberFormat(floNum2, 0, ".", "")
+	res = KNum.NumberFormat(floNum3, 0, ".", "")
 	assert.Equal(t, "-123", res)
+
+	res = KNum.NumberFormat(math.Pi, 15, ".", "")
+	assert.Equal(t, "3.141592653589793", res)
 }
 
 func BenchmarkNumber_NumberFormat(b *testing.B) {
@@ -58,14 +62,14 @@ func BenchmarkNumber_Range(b *testing.B) {
 func TestNumber_AbsFloat(t *testing.T) {
 	var res float64
 
-	res = KNum.AbsFloat(floNum2)
+	res = KNum.AbsFloat(floNum3)
 	assert.Greater(t, res, 0.0)
 }
 
 func BenchmarkNumber_AbsFloat(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KNum.AbsFloat(floNum2)
+		KNum.AbsFloat(floNum3)
 	}
 }
 
@@ -82,3 +86,14 @@ func BenchmarkNumber_AbsInt(b *testing.B) {
 		KNum.AbsInt(-123)
 	}
 }
+
+//func TestNumber_FloatEqual(t *testing.T) {
+//	var res bool
+//
+//	//默认小数位
+//	res = KNum.FloatEqual(floNum3, floNum4)
+//	assert.True(t, res)
+//
+//	res = KNum.FloatEqual(floNum3, floNum4, 9)
+//	res = KNum.FloatEqual(floNum3, floNum4, 13)
+//}

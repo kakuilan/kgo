@@ -8,6 +8,7 @@ import (
 
 // NumberFormat 以千位分隔符方式格式化一个数字.
 // decimal为要保留的小数位数,point为小数点显示的字符,thousand为千位分隔符显示的字符.
+// 有效数值是长度(包括小数点)为17位之内的数值,最后一位会四舍五入.
 func (kn *LkkNumber) NumberFormat(number float64, decimal uint8, point, thousand string) string {
 	neg := false
 	if number < 0 {
@@ -73,4 +74,21 @@ func (kn *LkkNumber) Range(start, end int) []int {
 		}
 	}
 	return res
+}
+
+// FloatEqual 比较两个浮点数是否相等.decimal为小数精确位数,默认为FLOAT_DECIMAL.
+func (kn *LkkNumber) FloatEqual(f1 float64, f2 float64, decimal ...uint8) (res bool) {
+	var dec uint8
+	if len(decimal) == 0 {
+		dec = uint8(FLOAT_DECIMAL)
+	} else {
+		dec = decimal[0]
+	}
+
+	s1 := kn.NumberFormat(f1, dec, ".", "")
+	s2 := kn.NumberFormat(f2, dec, ".", "")
+	res = s1 == s2
+	dumpPrint("-------------", dec, s1, s2, res)
+
+	return
 }

@@ -146,7 +146,7 @@ const (
 	COMPARE_BOTH_KEYVALUE LkkArrCompareType = 2
 
 	//默认浮点数精确小数位数
-	FLOAT_DECIMAL = 10
+	FLOAT_DECIMAL uint8 = 8
 
 	//AuthCode 动态密钥长度,须<32
 	DYNAMIC_KEY_LEN = 8
