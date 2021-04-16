@@ -123,26 +123,6 @@ func TestNumber_RandInt64(t *testing.T) {
 	assert.Equal(t, res, max)
 }
 
-func TestNumber_RandInt64_PanicMin(t *testing.T) {
-	defer func() {
-		r := recover()
-		assert.NotEmpty(t, r)
-	}()
-
-	var min, max int64
-	min, max = 9, -9
-	KNum.RandInt64(min, max)
-}
-
-func TestNumber_RandInt64_PanicOverflow(t *testing.T) {
-	defer func() {
-		r := recover()
-		assert.NotEmpty(t, r)
-	}()
-
-	KNum.RandInt64(INT64_MIN, INT64_MAX)
-}
-
 func BenchmarkNumber_RandInt64(b *testing.B) {
 	b.ResetTimer()
 	var min, max int64

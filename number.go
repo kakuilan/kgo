@@ -107,10 +107,8 @@ func (kn *LkkNumber) FloatEqual(f1 float64, f2 float64, decimal ...uint8) (res b
 // RandInt64 生成一个min~max范围内的随机int64整数.
 func (kn *LkkNumber) RandInt64(min, max int64) int64 {
 	if min > max {
-		panic("[RandInt64]`min cannot be greater than max")
-	}
-
-	if min == max {
+		min, max = max, min
+	} else if min == max {
 		return min
 	}
 
@@ -118,9 +116,8 @@ func (kn *LkkNumber) RandInt64(min, max int64) int64 {
 	mMax := int64(math.MaxInt32)
 	mMin := int64(math.MinInt32)
 	inrang := (mMin <= min && max <= mMax) || (INT64_MIN <= min && max <= 0) || (0 <= min && max <= INT64_MAX)
-
 	if !inrang {
-		panic("[RandInt64]`min and max exceed capacity,the result should be overflows int64.")
+		min, max = mMin, mMax
 	}
 
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
