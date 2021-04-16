@@ -3,7 +3,9 @@ package kgo
 import (
 	"fmt"
 	"math"
+	"math/rand"
 	"strconv"
+	"time"
 )
 
 // AbsFloat 浮点型取绝对值.
@@ -100,4 +102,18 @@ func (kn *LkkNumber) FloatEqual(f1 float64, f2 float64, decimal ...uint8) (res b
 	res = diff <= threshold
 
 	return
+}
+
+// RandInt 生成一个min~max范围内的随机整数.
+func (kn *LkkNumber) RandInt(min, max int) int {
+	if min > max {
+		panic("[RandInt]`min cannot be greater than max")
+	}
+
+	if min == max {
+		return min
+	}
+
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	return r.Intn(max-min) + min
 }

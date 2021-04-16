@@ -110,3 +110,25 @@ func BenchmarkNumber_FloatEqual(b *testing.B) {
 		KNum.FloatEqual(floNum1, floNum4)
 	}
 }
+
+func TestNumber_RandInt(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.NotEmpty(t, r)
+	}()
+
+	var res int
+	min, max := -9, 9
+	res = KNum.RandInt(min, max)
+	assert.GreaterOrEqual(t, res, min)
+	assert.LessOrEqual(t, res, max)
+
+	KNum.RandInt(9, 1)
+}
+
+func BenchmarkNumber_RandInt(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.RandInt(-9, 9)
+	}
+}
