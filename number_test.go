@@ -87,13 +87,26 @@ func BenchmarkNumber_AbsInt(b *testing.B) {
 	}
 }
 
-//func TestNumber_FloatEqual(t *testing.T) {
-//	var res bool
-//
-//	//默认小数位
-//	res = KNum.FloatEqual(floNum3, floNum4)
-//	assert.True(t, res)
-//
-//	res = KNum.FloatEqual(floNum3, floNum4, 9)
-//	res = KNum.FloatEqual(floNum3, floNum4, 13)
-//}
+func TestNumber_FloatEqual(t *testing.T) {
+	var res bool
+
+	//默认小数位
+	res = KNum.FloatEqual(floNum1, floNum4)
+	assert.True(t, res)
+
+	res = KNum.FloatEqual(floNum1, floNum4, 0)
+	assert.True(t, res)
+
+	res = KNum.FloatEqual(floNum1, floNum4, 11)
+	assert.True(t, res)
+
+	res = KNum.FloatEqual(floNum1, floNum4, 12)
+	assert.False(t, res)
+}
+
+func BenchmarkNumber_FloatEqual(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.FloatEqual(floNum1, floNum4)
+	}
+}

@@ -79,11 +79,8 @@ var floPermittivity float64 = 8.85419e-12 //真空介电常数
 var floNum1 = 12345.12345678901231
 var floNum2 = 12345678.12345678901231
 var floNum3 = -123.4567890
-//var floNum3 float64 = 1234567890.12345678901231
-//var floNum4 float64 = 1234567890.12345678901252
+var floNum4 float64 = 12345.12345678901252
 
-//var floNum4 = 1.2345678
-//var floNum5 = 1.2345679
 
 //复数
 var cmplNum1 = complex(1, 2)

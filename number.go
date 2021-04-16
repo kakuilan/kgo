@@ -6,6 +6,31 @@ import (
 	"strconv"
 )
 
+// AbsFloat 浮点型取绝对值.
+func (kn *LkkNumber) AbsFloat(number float64) float64 {
+	return math.Abs(number)
+}
+
+// AbsInt 整型取绝对值.
+func (kn *LkkNumber) AbsInt(number int64) int64 {
+	r := number >> 63
+	return (number ^ r) - r
+}
+
+// Range 根据范围创建数组,包含指定的元素.
+// start为起始元素值,end为末尾元素值.若start<end,返回升序的数组;若start>end,返回降序的数组.
+func (kn *LkkNumber) Range(start, end int) []int {
+	res := make([]int, kn.AbsInt(int64(end-start))+1)
+	for i := range res {
+		if end > start {
+			res[i] = start + i
+		} else {
+			res[i] = start - i
+		}
+	}
+	return res
+}
+
 // NumberFormat 以千位分隔符方式格式化一个数字.
 // decimal为要保留的小数位数,point为小数点显示的字符,thousand为千位分隔符显示的字符.
 // 有效数值是长度(包括小数点)为17位之内的数值,最后一位会四舍五入.
@@ -51,44 +76,28 @@ func (kn *LkkNumber) NumberFormat(number float64, decimal uint8, point, thousand
 	return s
 }
 
-// AbsFloat 浮点型取绝对值.
-func (kn *LkkNumber) AbsFloat(number float64) float64 {
-	return math.Abs(number)
-}
-
-// AbsInt 整型取绝对值.
-func (kn *LkkNumber) AbsInt(number int64) int64 {
-	r := number >> 63
-	return (number ^ r) - r
-}
-
-// Range 根据范围创建数组,包含指定的元素.
-// start为起始元素值,end为末尾元素值.若start<end,返回升序的数组;若start>end,返回降序的数组.
-func (kn *LkkNumber) Range(start, end int) []int {
-	res := make([]int, kn.AbsInt(int64(end-start))+1)
-	for i := range res {
-		if end > start {
-			res[i] = start + i
-		} else {
-			res[i] = start - i
-		}
-	}
-	return res
-}
-
-// FloatEqual 比较两个浮点数是否相等.decimal为小数精确位数,默认为FLOAT_DECIMAL.
+// FloatEqual 比较两个浮点数是否相等.decimal为小数精确位数,默认为 FLOAT_DECIMAL .
+// 有效数值是长度(包括小数点)为17位之内的数值,最后一位会四舍五入.
 func (kn *LkkNumber) FloatEqual(f1 float64, f2 float64, decimal ...uint8) (res bool) {
+	var threshold float64
 	var dec uint8
 	if len(decimal) == 0 {
-		dec = uint8(FLOAT_DECIMAL)
+		dec = FLOAT_DECIMAL
 	} else {
 		dec = decimal[0]
 	}
 
-	s1 := kn.NumberFormat(f1, dec, ".", "")
-	s2 := kn.NumberFormat(f2, dec, ".", "")
-	res = s1 == s2
-	dumpPrint("-------------", dec, s1, s2, res)
+	//比较精度
+	threshold = math.Pow10(-int(dec))
+	var diff float64
+	if f1 > f2 {
+		diff = f1 - f2
+	} else {
+		diff = f2 - f1
+	}
+
+	//diff := math.Abs(f1 - f2)
+	res = diff <= threshold
 
 	return
 }
