@@ -119,8 +119,16 @@ func TestNumber_RandInt64(t *testing.T) {
 	assert.GreaterOrEqual(t, res, min)
 	assert.LessOrEqual(t, res, max)
 
+	//最小最大值调换
+	min, max = 9, -9
+	res = KNum.RandInt64(min, max)
+	assert.GreaterOrEqual(t, res, max)
+	assert.LessOrEqual(t, res, min)
+
 	res = KNum.RandInt64(max, max)
 	assert.Equal(t, res, max)
+
+	KNum.RandInt64(INT64_MIN, INT64_MAX)
 }
 
 func BenchmarkNumber_RandInt64(b *testing.B) {
@@ -183,8 +191,7 @@ func TestNumber_RandFloat64(t *testing.T) {
 	assert.GreaterOrEqual(t, res, min)
 	assert.LessOrEqual(t, res, max)
 
-	res = KNum.RandFloat64(max, max)
-	assert.False(t, KNum.FloatEqual(max, res))
+	KNum.RandFloat64(max, max)
 }
 
 func TestNumber_RandFloat64_PanicMin(t *testing.T) {
