@@ -169,3 +169,8 @@ func (kn *LkkNumber) RandFloat64(min, max float64) float64 {
 	res := min + num*(max-min)
 	return res
 }
+
+// Round 对浮点数(的整数)进行四舍五入.
+func (kn *LkkNumber) Round(value float64) float64 {
+	return math.Floor(value + 0.5)
+}

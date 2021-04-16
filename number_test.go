@@ -209,3 +209,27 @@ func BenchmarkNumber_RandFloat64(b *testing.B) {
 		KNum.RandFloat64(min, max)
 	}
 }
+
+func TestNumber_Round(t *testing.T) {
+	var tests = []struct {
+		num      float64
+		expected int
+	}{
+		{0.3, 0},
+		{0.6, 1},
+		{1.55, 2},
+		{-2.4, -2},
+		{-3.6, -4},
+	}
+	for _, test := range tests {
+		actual := KNum.Round(test.num)
+		assert.Equal(t, test.expected, int(actual))
+	}
+}
+
+func BenchmarkNumber_Round(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.Round(floNum3)
+	}
+}
