@@ -123,6 +123,9 @@ func TestNumber_RandInt(t *testing.T) {
 	assert.GreaterOrEqual(t, res, min)
 	assert.LessOrEqual(t, res, max)
 
+	res = KNum.RandInt(max, max)
+	assert.Equal(t, res, max)
+
 	KNum.RandInt(9, 1)
 }
 
@@ -130,5 +133,46 @@ func BenchmarkNumber_RandInt(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KNum.RandInt(-9, 9)
+	}
+}
+
+func TestNumber_RandInt64(t *testing.T) {
+	var min, max, res int64
+
+	min, max = -9, 9
+	res = KNum.RandInt64(min, max)
+	assert.GreaterOrEqual(t, res, min)
+	assert.LessOrEqual(t, res, max)
+
+	res = KNum.RandInt64(max, max)
+	assert.Equal(t, res, max)
+}
+
+func TestNumber_RandInt64_PanicMin(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.NotEmpty(t, r)
+	}()
+
+	var min, max int64
+	min, max = 9, -9
+	KNum.RandInt64(min, max)
+}
+
+func TestNumber_RandInt64_PanicOverflow(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.NotEmpty(t, r)
+	}()
+
+	KNum.RandInt64(INT64_MIN, INT64_MAX)
+}
+
+func BenchmarkNumber_RandInt64(b *testing.B) {
+	b.ResetTimer()
+	var min, max int64
+	min, max = 9, -9
+	for i := 0; i < b.N; i++ {
+		KNum.RandInt64(min, max)
 	}
 }
