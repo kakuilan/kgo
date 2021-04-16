@@ -186,31 +186,19 @@ func BenchmarkNumber_Rand(b *testing.B) {
 
 func TestNumber_RandFloat64(t *testing.T) {
 	var res float64
-	min, max := floNum3, floNum1
 
+	min, max := floNum3, floNum1
 	res = KNum.RandFloat64(min, max)
 	assert.GreaterOrEqual(t, res, min)
 	assert.LessOrEqual(t, res, max)
 
+	//最小最大值调换
+	min, max = floNum1, floNum3
+	res = KNum.RandFloat64(min, max)
+	assert.GreaterOrEqual(t, res, max)
+	assert.LessOrEqual(t, res, min)
+
 	KNum.RandFloat64(max, max)
-}
-
-func TestNumber_RandFloat64_PanicMin(t *testing.T) {
-	defer func() {
-		r := recover()
-		assert.NotEmpty(t, r)
-	}()
-
-	min, max := floNum1, floNum3
-	KNum.RandFloat64(min, max)
-}
-
-func TestNumber_RandFloat64_PanicOverflow(t *testing.T) {
-	defer func() {
-		r := recover()
-		assert.NotEmpty(t, r)
-	}()
-
 	KNum.RandFloat64(-math.MaxFloat64, math.MaxFloat64)
 }
 

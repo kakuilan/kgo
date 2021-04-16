@@ -152,7 +152,7 @@ func (kn *LkkNumber) Rand(min, max int) int {
 // RandFloat64 生成一个min~max范围内的随机float64浮点数.
 func (kn *LkkNumber) RandFloat64(min, max float64) float64 {
 	if min > max {
-		panic("[RandFloat64]` min cannot be greater than max")
+		min, max = max, min
 	}
 
 	//范围是否在边界内
@@ -160,7 +160,7 @@ func (kn *LkkNumber) RandFloat64(min, max float64) float64 {
 	mMin := -mMax
 	inrang := (mMin <= min && max <= mMax) || (-math.MaxFloat64 <= min && max <= 0) || (0 <= min && max <= math.MaxFloat64)
 	if !inrang {
-		panic("[RandFloat64]` min and max exceed capacity,the result should be overflows float64.")
+		min, max = mMin, mMax
 	}
 
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
