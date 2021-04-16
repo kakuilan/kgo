@@ -127,11 +127,17 @@ func (kn *LkkNumber) RandInt64(min, max int64) int64 {
 // RandInt 生成一个min~max范围内的随机int整数.
 func (kn *LkkNumber) RandInt(min, max int) int {
 	if min > max {
-		panic("[RandInt]`min cannot be greater than max")
+		min, max = max, min
+	} else if min == max {
+		return min
 	}
 
-	if min == max {
-		return min
+	//范围是否在边界内
+	mMax := int(math.MaxInt32)
+	mMin := int(math.MinInt32)
+	inrang := (mMin <= min && max <= mMax) || (INT_MIN <= min && max <= 0) || (0 <= min && max <= INT_MAX)
+	if !inrang {
+		min, max = mMin, mMax
 	}
 
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))

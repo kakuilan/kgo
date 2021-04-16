@@ -141,21 +141,22 @@ func BenchmarkNumber_RandInt64(b *testing.B) {
 }
 
 func TestNumber_RandInt(t *testing.T) {
-	defer func() {
-		r := recover()
-		assert.NotEmpty(t, r)
-	}()
-
 	var res int
 	min, max := -9, 9
 	res = KNum.RandInt(min, max)
 	assert.GreaterOrEqual(t, res, min)
 	assert.LessOrEqual(t, res, max)
 
+	//最小最大值调换
+	min, max = 9, -9
+	res = KNum.RandInt(min, max)
+	assert.GreaterOrEqual(t, res, max)
+	assert.LessOrEqual(t, res, min)
+
 	res = KNum.RandInt(max, max)
 	assert.Equal(t, res, max)
 
-	KNum.RandInt(9, 1)
+	KNum.RandInt(INT_MIN, INT_MAX)
 }
 
 func BenchmarkNumber_RandInt(b *testing.B) {
