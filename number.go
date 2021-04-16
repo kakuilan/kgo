@@ -104,20 +104,6 @@ func (kn *LkkNumber) FloatEqual(f1 float64, f2 float64, decimal ...uint8) (res b
 	return
 }
 
-// RandInt 生成一个min~max范围内的随机int整数.
-func (kn *LkkNumber) RandInt(min, max int) int {
-	if min > max {
-		panic("[RandInt]`min cannot be greater than max")
-	}
-
-	if min == max {
-		return min
-	}
-
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	return r.Intn(max-min) + min
-}
-
 // RandInt64 生成一个min~max范围内的随机int64整数.
 func (kn *LkkNumber) RandInt64(min, max int64) int64 {
 	if min > max {
@@ -139,4 +125,23 @@ func (kn *LkkNumber) RandInt64(min, max int64) int64 {
 
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	return r.Int63n(max-min) + min
+}
+
+// RandInt 生成一个min~max范围内的随机int整数.
+func (kn *LkkNumber) RandInt(min, max int) int {
+	if min > max {
+		panic("[RandInt]`min cannot be greater than max")
+	}
+
+	if min == max {
+		return min
+	}
+
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	return r.Intn(max-min) + min
+}
+
+// Rand RandInt的别名.
+func (kn *LkkNumber) Rand(min, max int) int {
+	return kn.RandInt(min, max)
 }
