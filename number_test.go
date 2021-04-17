@@ -337,3 +337,29 @@ func BenchmarkNumber_MaxFloat64(b *testing.B) {
 		KNum.MaxFloat64(flo64Slc...)
 	}
 }
+
+func TestNumber_Max(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.NotEmpty(t, r)
+	}()
+
+	var res float64
+
+	res = KNum.Max(slItf...)
+	assert.Equal(t, res, floAvogadro)
+
+	//非数值输入
+	res = KNum.Max(strHello, admTesDir)
+	assert.Equal(t, res, 0.0)
+
+	//无输入
+	KNum.Max()
+}
+
+func BenchmarkNumber_Max(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.Max(slItf...)
+	}
+}

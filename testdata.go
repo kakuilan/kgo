@@ -81,7 +81,6 @@ var floNum2 = 12345678.12345678901231
 var floNum3 = -123.4567890
 var floNum4 float64 = 12345.12345678901252
 
-
 //复数
 var cmplNum1 = complex(1, 2)
 var cmplNum2 = complex(3, 4)
@@ -157,7 +156,7 @@ var strSl2 = []string{"bb", "cc", "ff", "gg", "ee", "", "gg"}
 var strSlEmp = []string{}
 
 //接口切片
-var slItf = []interface{}{99, 0, 1, 2, 0.0, 3, false, 3.14, 6.67428, true, 'a', "", 'b', nil, 'c', intSpeedLight, "hello", nowNanoInt, strSlEmp, "你好"}
+var slItf = []interface{}{99, 0, 1, 2, 0.0, 3, false, 3.14, 6.67428, true, 'a', "", 'b', nil, 'c', intSpeedLight, "hello", nowNanoInt, floAvogadro, strSlEmp, "你好"}
 
 //回调函数
 var fnCb1 CallBack
