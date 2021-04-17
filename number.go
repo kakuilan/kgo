@@ -181,3 +181,8 @@ func (kn *LkkNumber) RoundPlus(value float64, precision uint8) float64 {
 	shift := math.Pow(10, float64(precision))
 	return kn.Round(value*shift) / shift
 }
+
+// Floor 向下取整.
+func (kn *LkkNumber) Floor(value float64) float64 {
+	return math.Floor(value)
+}

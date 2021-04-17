@@ -253,3 +253,23 @@ func BenchmarkNumber_RoundPlus(b *testing.B) {
 		KNum.RoundPlus(floNum1, 2)
 	}
 }
+
+func TestNumber_Floor(t *testing.T) {
+	var res float64
+
+	res = KNum.Floor(flPi2)
+	assert.Equal(t, int(res), 3)
+
+	res = KNum.Floor(float64(floSpeedLight))
+	assert.Equal(t, int(res), 2)
+
+	res = KNum.Floor(floNum3)
+	assert.Equal(t, int(res), -124)
+}
+
+func BenchmarkNumber_Floor(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.Floor(flPi2)
+	}
+}
