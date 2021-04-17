@@ -186,3 +186,8 @@ func (kn *LkkNumber) RoundPlus(value float64, precision uint8) float64 {
 func (kn *LkkNumber) Floor(value float64) float64 {
 	return math.Floor(value)
 }
+
+// Ceil 向上取整.
+func (kn *LkkNumber) Ceil(value float64) float64 {
+	return math.Ceil(value)
+}

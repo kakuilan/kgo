@@ -273,3 +273,23 @@ func BenchmarkNumber_Floor(b *testing.B) {
 		KNum.Floor(flPi2)
 	}
 }
+
+func TestNumber_Ceil(t *testing.T) {
+	var res float64
+
+	res = KNum.Ceil(flPi2)
+	assert.Equal(t, int(res), 4)
+
+	res = KNum.Ceil(float64(floSpeedLight))
+	assert.Equal(t, int(res), 3)
+
+	res = KNum.Ceil(floNum3)
+	assert.Equal(t, int(res), -123)
+}
+
+func BenchmarkNumber_Ceil(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.Ceil(flPi2)
+	}
+}
