@@ -293,3 +293,25 @@ func BenchmarkNumber_Ceil(b *testing.B) {
 		KNum.Ceil(flPi2)
 	}
 }
+
+func TestNumber_MaxInt(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.NotEmpty(t, r)
+	}()
+
+	var res int
+
+	res = KNum.MaxInt(intSlc...)
+	assert.Equal(t, res, 15)
+
+	//无输入
+	KNum.MaxInt()
+}
+
+func BenchmarkNumber_MaxInt(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.MaxInt(intSlc...)
+	}
+}

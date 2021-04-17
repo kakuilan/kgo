@@ -191,3 +191,19 @@ func (kn *LkkNumber) Floor(value float64) float64 {
 func (kn *LkkNumber) Ceil(value float64) float64 {
 	return math.Ceil(value)
 }
+
+// MaxInt 整数序列求最大值.
+func (kn *LkkNumber) MaxInt(nums ...int) (res int) {
+	if len(nums) < 1 {
+		panic("[MaxInt]` nums length is less than 1")
+	}
+
+	res = nums[0]
+	for _, v := range nums {
+		if v > res {
+			res = v
+		}
+	}
+
+	return
+}
