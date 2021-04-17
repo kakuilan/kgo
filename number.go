@@ -207,3 +207,17 @@ func (kn *LkkNumber) MaxInt(nums ...int) (res int) {
 
 	return
 }
+
+// MaxFloat64 64位浮点数序列求最大值.
+func (kn *LkkNumber) MaxFloat64(nums ...float64) (res float64) {
+	if len(nums) < 1 {
+		panic("[MaxFloat64]` nums length is less than 1")
+	}
+
+	res = nums[0]
+	for _, v := range nums {
+		res = math.Max(res, v)
+	}
+
+	return
+}
