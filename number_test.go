@@ -559,3 +559,22 @@ func BenchmarkNumber_IsEven(b *testing.B) {
 		KNum.IsEven(2)
 	}
 }
+
+func TestNumber_NumSign(t *testing.T) {
+	var tests = []struct {
+		num      float64
+		expected int8
+	}{
+		{0, 0},
+		{-1, -1},
+		{10, 1},
+		{3.14, 1},
+		{-96, -1},
+		{-10e-12, -1},
+	}
+	var actual int8
+	for _, test := range tests {
+		actual = KNum.NumSign(test.num)
+		assert.Equal(t, actual, test.expected)
+	}
+}
