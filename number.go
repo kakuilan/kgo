@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
+	"reflect"
 	"strconv"
 	"time"
 )
@@ -397,4 +398,33 @@ func (kn *LkkNumber) InRangeFloat64(value, left, right float64) bool {
 		left, right = right, left
 	}
 	return value >= left && value <= right
+}
+
+// InRangeFloat32 数值是否在2个32位浮点数范围内.
+func (kn *LkkNumber) InRangeFloat32(value, left, right float32) bool {
+	if left > right {
+		left, right = right, left
+	}
+	return value >= left && value <= right
+}
+
+// InRange 数值是否在某个范围内,将自动转换类型再比较.
+func (kn *LkkNumber) InRange(value interface{}, left interface{}, right interface{}) bool {
+	reflectValue := reflect.TypeOf(value).Kind()
+	reflectLeft := reflect.TypeOf(left).Kind()
+	reflectRight := reflect.TypeOf(right).Kind()
+
+	if reflectValue == reflect.Int && reflectLeft == reflect.Int && reflectRight == reflect.Int {
+		return kn.InRangeInt(value.(int), left.(int), right.(int))
+	} else if reflectValue == reflect.Float32 && reflectLeft == reflect.Float32 && reflectRight == reflect.Float32 {
+		return kn.InRangeFloat32(value.(float32), left.(float32), right.(float32))
+	} else if reflectValue == reflect.Float64 && reflectLeft == reflect.Float64 && reflectRight == reflect.Float64 {
+		return kn.InRangeFloat64(value.(float64), left.(float64), right.(float64))
+	} else if KConv.IsInt(value) && KConv.IsInt(left) && KConv.IsInt(right) {
+		return kn.InRangeInt(KConv.ToInt(value), KConv.ToInt(left), KConv.ToInt(right))
+	} else if KConv.IsNumeric(value) && KConv.IsNumeric(left) && KConv.IsNumeric(right) {
+		return kn.InRangeFloat64(KConv.ToFloat(value), KConv.ToFloat(left), KConv.ToFloat(right))
+	}
+
+	return false
 }

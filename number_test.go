@@ -790,3 +790,34 @@ func BenchmarkNumber_InRangeFloat64(b *testing.B) {
 		KNum.InRangeFloat64(5, 1, 9)
 	}
 }
+
+func TestNumber_InRangeFloat32(t *testing.T) {
+	var testAsInts = []struct {
+		num      float32
+		left     float32
+		right    float32
+		expected bool
+	}{
+		{0, 0, 0, true},
+		{1, 0, 0, false},
+		{-1, 0, 0, false},
+		{0, -1, 1, true},
+		{0, 0, 1, true},
+		{0, -1, 0, true},
+		{0, 0, -1, true},
+		{0, 10, 5, false},
+		{1, 0, 5, true},
+	}
+	var actual bool
+	for _, test := range testAsInts {
+		actual = KNum.InRangeFloat32(test.num, test.left, test.right)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkNumber_InRangeFloat32(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.InRangeFloat32(5, 1, 9)
+	}
+}
