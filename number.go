@@ -268,3 +268,22 @@ func (kn *LkkNumber) MinFloat64(nums ...float64) (res float64) {
 
 	return
 }
+
+// Min 取出任意类型中数值类型的最小值,无数值类型则为0.
+func (kn *LkkNumber) Min(nums ...interface{}) (res float64) {
+	if len(nums) < 1 {
+		panic("[Min]` nums length is less than 1")
+	}
+
+	var err error
+	var val float64
+	res, _ = numeric2Float(nums[0])
+	for _, v := range nums {
+		val, err = numeric2Float(v)
+		if err == nil {
+			res = math.Min(res, val)
+		}
+	}
+
+	return
+}

@@ -407,3 +407,29 @@ func BenchmarkNumber_MinFloat64(b *testing.B) {
 		KNum.MinFloat64(flo64Slc...)
 	}
 }
+
+func TestNumber_Min(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.NotEmpty(t, r)
+	}()
+
+	var res float64
+
+	res = KNum.Min(slItf...)
+	assert.Equal(t, res, floNum3)
+
+	//非数值输入
+	res = KNum.Min(strHello, admTesDir)
+	assert.Equal(t, res, 0.0)
+
+	//无输入
+	KNum.Min()
+}
+
+func BenchmarkNumber_Min(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.Min(slItf...)
+	}
+}

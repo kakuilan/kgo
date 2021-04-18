@@ -156,7 +156,7 @@ var strSl2 = []string{"bb", "cc", "ff", "gg", "ee", "", "gg"}
 var strSlEmp = []string{}
 
 //接口切片
-var slItf = []interface{}{99, 0, 1, 2, 0.0, 3, false, 3.14, 6.67428, true, 'a', "", 'b', nil, 'c', intSpeedLight, "hello", nowNanoInt, floAvogadro, strSlEmp, "你好"}
+var slItf = []interface{}{99, 0, 1, 2, 0.0, 3, false, 3.14, 6.67428, true, 'a', "", 'b', nil, 'c', intSpeedLight, "hello", nowNanoInt, floAvogadro, strSlEmp, "你好", floNum3}
 
 //回调函数
 var fnCb1 CallBack
