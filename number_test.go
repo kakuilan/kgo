@@ -461,3 +461,17 @@ func BenchmarkNumber_Expm1(b *testing.B) {
 		KNum.Expm1(1.1)
 	}
 }
+
+func TestNumber_Pow(t *testing.T) {
+	var res float64
+
+	res = KNum.Pow(10, 2)
+	assert.Equal(t, res, 100.0)
+}
+
+func BenchmarkNumber_Equal(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.Pow(10, 2)
+	}
+}

@@ -297,3 +297,8 @@ func (kn *LkkNumber) Exp(x float64) float64 {
 func (kn *LkkNumber) Expm1(x float64) float64 {
 	return math.Exp(x) - 1
 }
+
+// Pow 指数表达式,求x的y次方.
+func (kn *LkkNumber) Pow(x, y float64) float64 {
+	return math.Pow(x, y)
+}
