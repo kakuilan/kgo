@@ -821,3 +821,102 @@ func BenchmarkNumber_InRangeFloat32(b *testing.B) {
 		KNum.InRangeFloat32(5, 1, 9)
 	}
 }
+
+func TestNumber_InRange(t *testing.T) {
+	var actual bool
+
+	//int
+	var testsInt = []struct {
+		num      int
+		left     int
+		right    int
+		expected bool
+	}{
+		{0, 0, 0, true},
+		{1, 0, 0, false},
+		{-1, 0, 0, false},
+		{0, -1, 1, true},
+		{0, 0, 1, true},
+		{0, -1, 0, true},
+		{0, 0, -1, true},
+		{0, 10, 5, false},
+	}
+	for _, test := range testsInt {
+		actual = KNum.InRange(test.num, test.left, test.right)
+		assert.Equal(t, actual, test.expected)
+	}
+
+	//float32
+	var testsFloat32 = []struct {
+		num      float32
+		left     float32
+		right    float32
+		expected bool
+	}{
+		{0, 0, 0, true},
+		{1, 0, 0, false},
+		{-1, 0, 0, false},
+		{0, -1, 1, true},
+		{0, 0, 1, true},
+		{0, -1, 0, true},
+		{0, 0, -1, true},
+		{0, 10, 5, false},
+	}
+	for _, test := range testsFloat32 {
+		actual = KNum.InRange(test.num, test.left, test.right)
+		assert.Equal(t, actual, test.expected)
+	}
+
+	//float64
+	var testsFloat64 = []struct {
+		num      float64
+		left     float64
+		right    float64
+		expected bool
+	}{
+		{0, 0, 0, true},
+		{1, 0, 0, false},
+		{-1, 0, 0, false},
+		{0, -1, 1, true},
+		{0, 0, 1, true},
+		{0, -1, 0, true},
+		{0, 0, -1, true},
+		{0, 10, 5, false},
+	}
+	for _, test := range testsFloat64 {
+		actual = KNum.InRange(test.num, test.left, test.right)
+		assert.Equal(t, actual, test.expected)
+	}
+
+	//mix
+	var testsTypeMix = []struct {
+		num      int
+		left     float64
+		right    float64
+		expected bool
+	}{
+		{0, 0, 0, true},
+		{1, 0, 0, false},
+		{-1, 0, 0, false},
+		{0, -1, 1, true},
+		{0, 0, 1, true},
+		{0, -1, 0, true},
+		{0, 0, -1, true},
+		{0, 10, 5, false},
+	}
+	for _, test := range testsTypeMix {
+		actual = KNum.InRange(test.num, test.left, test.right)
+		assert.Equal(t, actual, test.expected)
+	}
+
+	//other
+	KNum.InRange("1", 0, 3)
+	KNum.InRange("hello", []byte{}, 3)
+}
+
+func BenchmarkNumber_InRange(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.InRange(89, -1.2, 999.123)
+	}
+}
