@@ -489,3 +489,23 @@ func BenchmarkNumber_Log(b *testing.B) {
 		KNum.Log(100, 10)
 	}
 }
+
+func TestNumber_ByteFormat(t *testing.T) {
+	var res string
+
+	res = KNum.ByteFormat(0, 0, "")
+	assert.Equal(t, res, "0B")
+
+	res = KNum.ByteFormat(floNum5, 4, " ")
+	assert.NotEmpty(t, res)
+
+	res = KNum.ByteFormat(floNum6, 4, "")
+	assert.Contains(t, res, Unknown)
+}
+
+func BenchmarkNumber_ByteFormat(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.ByteFormat(floNum6, 4, "")
+	}
+}

@@ -63,6 +63,8 @@ const (
 	// Version 版本号
 	Version = "0.1.4"
 
+	Unknown = "Unknown"
+
 	//UINT_MAX 无符号整型uint最大值
 	UINT_MAX = ^uint(0)
 	//UINT_MIN 无符号整型uint最小值
