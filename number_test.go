@@ -475,3 +475,17 @@ func BenchmarkNumber_Equal(b *testing.B) {
 		KNum.Pow(10, 2)
 	}
 }
+
+func TestNumber_Log(t *testing.T) {
+	var res float64
+
+	res = KNum.Log(100, 10)
+	assert.Equal(t, res, 2.0)
+}
+
+func BenchmarkNumber_Log(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.Log(100, 10)
+	}
+}
