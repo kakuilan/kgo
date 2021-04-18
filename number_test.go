@@ -385,3 +385,25 @@ func BenchmarkNumber_MinInt(b *testing.B) {
 		KNum.MinInt(intSlc...)
 	}
 }
+
+func TestNumber_MinFloat64(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.NotEmpty(t, r)
+	}()
+
+	var res float64
+
+	res = KNum.MinFloat64(flo64Slc...)
+	assert.Equal(t, res, floPlanck)
+
+	//无输入
+	KNum.MinFloat64()
+}
+
+func BenchmarkNumber_MinFloat64(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.MinFloat64(flo64Slc...)
+	}
+}
