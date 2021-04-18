@@ -240,3 +240,18 @@ func (kn *LkkNumber) Max(nums ...interface{}) (res float64) {
 
 	return
 }
+
+// MinInt 整数序列求最小值.
+func (kn *LkkNumber) MinInt(nums ...int) (res int) {
+	if len(nums) < 1 {
+		panic("[MinInt]` nums length is less than 1")
+	}
+	res = nums[0]
+	for _, v := range nums {
+		if v < res {
+			res = v
+		}
+	}
+
+	return
+}

@@ -363,3 +363,25 @@ func BenchmarkNumber_Max(b *testing.B) {
 		KNum.Max(slItf...)
 	}
 }
+
+func TestNumber_MinInt(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.NotEmpty(t, r)
+	}()
+
+	var res int
+
+	res = KNum.MinInt(intSlc...)
+	assert.Equal(t, res, 0)
+
+	//无输入
+	KNum.MinInt()
+}
+
+func BenchmarkNumber_MinInt(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.MinInt(intSlc...)
+	}
+}
