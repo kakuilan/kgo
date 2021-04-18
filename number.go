@@ -287,3 +287,13 @@ func (kn *LkkNumber) Min(nums ...interface{}) (res float64) {
 
 	return
 }
+
+// Exp 计算 e 的指数.
+func (kn *LkkNumber) Exp(x float64) float64 {
+	return math.Exp(x)
+}
+
+// Expm1 返回 exp(x) - 1.
+func (kn *LkkNumber) Expm1(x float64) float64 {
+	return math.Exp(x) - 1
+}

@@ -433,3 +433,31 @@ func BenchmarkNumber_Min(b *testing.B) {
 		KNum.Min(slItf...)
 	}
 }
+
+func TestNumber_Exp(t *testing.T) {
+	var res float64
+
+	res = KNum.Exp(1.1)
+	assert.Greater(t, res, 1.0)
+}
+
+func BenchmarkNumber_Exp(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.Exp(1.1)
+	}
+}
+
+func TestNumber_Expm1(t *testing.T) {
+	var res float64
+
+	res = KNum.Expm1(1.1)
+	assert.Greater(t, res, 0.0)
+}
+
+func BenchmarkNumber_Expm1(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.Expm1(1.1)
+	}
+}
