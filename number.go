@@ -382,3 +382,11 @@ func (kn *LkkNumber) IsWhole(value float64) bool {
 func (kn *LkkNumber) IsNatural(value float64) bool {
 	return kn.IsNonNegative(value) && kn.IsWhole(value)
 }
+
+// InRangeInt 数值是否在2个整数范围内.
+func (kn *LkkNumber) InRangeInt(value, left, right int) bool {
+	if left > right {
+		left, right = right, left
+	}
+	return value >= left && value <= right
+}
