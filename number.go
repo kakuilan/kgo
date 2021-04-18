@@ -357,3 +357,8 @@ func (kn *LkkNumber) NumSign(value float64) (res int8) {
 func (kn *LkkNumber) IsNegative(value float64) bool {
 	return value < 0
 }
+
+// IsPositive 数值是否为正数.
+func (kn *LkkNumber) IsPositive(value float64) bool {
+	return value > 0
+}
