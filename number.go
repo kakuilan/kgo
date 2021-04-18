@@ -329,3 +329,8 @@ func (kn *LkkNumber) ByteFormat(size float64, decimal uint8, delimiter string) s
 
 	return fmt.Sprintf("%."+strconv.Itoa(int(decimal))+"f%s%s", j, delimiter, arr[pos])
 }
+
+// IsOdd 变量是否奇数.
+func (kn *LkkNumber) IsOdd(val int) bool {
+	return val%2 != 0
+}

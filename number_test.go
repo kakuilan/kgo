@@ -509,3 +509,28 @@ func BenchmarkNumber_ByteFormat(b *testing.B) {
 		KNum.ByteFormat(floNum6, 4, "")
 	}
 }
+
+func TestNumber_IsOdd(t *testing.T) {
+	var tests = []struct {
+		num      int
+		expected bool
+	}{
+		{-4, false},
+		{-1, true},
+		{0, false},
+		{3, true},
+	}
+
+	var actual bool
+	for _, test := range tests {
+		actual = KNum.IsOdd(test.num)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkNumber_IsOdd(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.IsOdd(1)
+	}
+}
