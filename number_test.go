@@ -566,15 +566,39 @@ func TestNumber_NumSign(t *testing.T) {
 		expected int8
 	}{
 		{0, 0},
-		{-1, -1},
-		{10, 1},
-		{3.14, 1},
-		{-96, -1},
-		{-10e-12, -1},
+		{floNum1, 1},
+		{math.Pi, 1},
+		{floNum3, -1},
+		{floNum7, -1},
 	}
 	var actual int8
 	for _, test := range tests {
 		actual = KNum.NumSign(test.num)
 		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func TestNumber_IsNegative(t *testing.T) {
+	var tests = []struct {
+		num      float64
+		expected bool
+	}{
+		{0, false},
+		{floNum1, false},
+		{math.Pi, false},
+		{floNum3, true},
+		{floNum7, true},
+	}
+	var actual bool
+	for _, test := range tests {
+		actual = KNum.IsNegative(test.num)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkNumber_IsNegative(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.IsNegative(floNum1)
 	}
 }

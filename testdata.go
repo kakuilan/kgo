@@ -69,6 +69,7 @@ var strPi6 = "3.141592456"
 //数值
 var intSpeedLight int = 299792458            //光速
 var intAstronomicalUnit int64 = 149597870660 //天文单位
+var intTen = 10
 var floSpeedLight float32 = 2.99792458
 var bytAstronomicalUnit = []byte{0, 0, 0, 34, 212, 186, 90, 68} //intAstronomicalUnit的字节切片
 
@@ -82,6 +83,7 @@ var floNum3 = -123.4567890
 var floNum4 float64 = 12345.12345678901252
 var floNum5 = 1024000000000.0
 var floNum6 = 1024000000000000000000000000000000000.0
+var floNum7 = -10e-12
 
 //复数
 var cmplNum1 = complex(1, 2)
@@ -120,7 +122,7 @@ var publicIp1 = "199.232.96.133"
 var publicIp2 = "140.82.114.3"
 
 //自然数数组
-var naturalArr = [...]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+var naturalArr = [...]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, intTen}
 
 //整数切片
 var intSlc = []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 11, 12, 13, 14, 15}
