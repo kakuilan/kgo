@@ -377,3 +377,8 @@ func (kn *LkkNumber) IsNonPositive(value float64) bool {
 func (kn *LkkNumber) IsWhole(value float64) bool {
 	return math.Remainder(value, 1) == 0
 }
+
+// IsNatural 数值是否为自然数(包括0).
+func (kn *LkkNumber) IsNatural(value float64) bool {
+	return kn.IsNonNegative(value) && kn.IsWhole(value)
+}

@@ -702,3 +702,29 @@ func BenchmarkNumber_IsWhole(b *testing.B) {
 		KNum.IsWhole(floNum5)
 	}
 }
+
+func TestNumber_IsNatural(t *testing.T) {
+	var tests = []struct {
+		num      float64
+		expected bool
+	}{
+		{0, true},
+		{10, true},
+		{-1, false},
+		{math.Pi, false},
+		{floNum3, false},
+		{floNum7, false},
+	}
+	var actual bool
+	for _, test := range tests {
+		actual = KNum.IsNatural(test.num)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkNumber_IsNatural(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.IsNatural(9)
+	}
+}
