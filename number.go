@@ -372,3 +372,8 @@ func (kn *LkkNumber) IsNonNegative(value float64) bool {
 func (kn *LkkNumber) IsNonPositive(value float64) bool {
 	return value <= 0
 }
+
+// IsWhole 数值是否为整数.
+func (kn *LkkNumber) IsWhole(value float64) bool {
+	return math.Remainder(value, 1) == 0
+}

@@ -677,3 +677,28 @@ func BenchmarkNumber_IsNonPositive(b *testing.B) {
 		KNum.IsNonPositive(floNum1)
 	}
 }
+
+func TestNumber_IsWhole(t *testing.T) {
+	var tests = []struct {
+		num      float64
+		expected bool
+	}{
+		{0, true},
+		{10, true},
+		{math.Pi, false},
+		{floNum3, false},
+		{floNum7, false},
+	}
+	var actual bool
+	for _, test := range tests {
+		actual = KNum.IsWhole(test.num)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkNumber_IsWhole(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.IsWhole(floNum5)
+	}
+}
