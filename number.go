@@ -390,3 +390,11 @@ func (kn *LkkNumber) InRangeInt(value, left, right int) bool {
 	}
 	return value >= left && value <= right
 }
+
+// InRangeFloat64 数值是否在2个64位浮点数范围内.
+func (kn *LkkNumber) InRangeFloat64(value, left, right float64) bool {
+	if left > right {
+		left, right = right, left
+	}
+	return value >= left && value <= right
+}
