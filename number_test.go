@@ -608,7 +608,7 @@ func TestNumber_IsPositive(t *testing.T) {
 		num      float64
 		expected bool
 	}{
-		{0, true},
+		{0, false},
 		{floNum1, true},
 		{math.Pi, true},
 		{floNum3, false},
@@ -625,5 +625,55 @@ func BenchmarkNumber_IsPositive(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KNum.IsPositive(floNum1)
+	}
+}
+
+func TestNumber_IsNonNegative(t *testing.T) {
+	var tests = []struct {
+		num      float64
+		expected bool
+	}{
+		{0, true},
+		{floNum1, true},
+		{math.Pi, true},
+		{floNum3, false},
+		{floNum7, false},
+	}
+	var actual bool
+	for _, test := range tests {
+		actual = KNum.IsNonNegative(test.num)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkNumber_IsNonNegative(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.IsNonNegative(floNum1)
+	}
+}
+
+func TestNumber_IsNonPositive(t *testing.T) {
+	var tests = []struct {
+		num      float64
+		expected bool
+	}{
+		{0, true},
+		{floNum1, false},
+		{math.Pi, false},
+		{floNum3, true},
+		{floNum7, true},
+	}
+	var actual bool
+	for _, test := range tests {
+		actual = KNum.IsNonPositive(test.num)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkNumber_IsNonPositive(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.IsNonPositive(floNum1)
 	}
 }

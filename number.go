@@ -362,3 +362,13 @@ func (kn *LkkNumber) IsNegative(value float64) bool {
 func (kn *LkkNumber) IsPositive(value float64) bool {
 	return value > 0
 }
+
+// IsNonNegative 数值是否为非负数.
+func (kn *LkkNumber) IsNonNegative(value float64) bool {
+	return value >= 0
+}
+
+// IsNonPositive 数值是否为非正数.
+func (kn *LkkNumber) IsNonPositive(value float64) bool {
+	return value <= 0
+}
