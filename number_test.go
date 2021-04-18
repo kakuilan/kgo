@@ -534,3 +534,28 @@ func BenchmarkNumber_IsOdd(b *testing.B) {
 		KNum.IsOdd(1)
 	}
 }
+
+func TestNumber_IsEven(t *testing.T) {
+	var tests = []struct {
+		num      int
+		expected bool
+	}{
+		{-4, true},
+		{-1, false},
+		{0, true},
+		{3, false},
+	}
+
+	var actual bool
+	for _, test := range tests {
+		actual = KNum.IsEven(test.num)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkNumber_IsEven(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.IsEven(2)
+	}
+}
