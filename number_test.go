@@ -1098,3 +1098,40 @@ func BenchmarkNumber_IsNan(b *testing.B) {
 		KNum.IsNan(cmplNum2)
 	}
 }
+
+func TestNumber_IsNaturalRange(t *testing.T) {
+	var res bool
+	var nums []int
+
+	res = KNum.IsNaturalRange(nums, false)
+	assert.False(t, res)
+
+	nums = []int{1, 2, 3}
+	res = KNum.IsNaturalRange(nums, false)
+	assert.False(t, res)
+
+	nums = []int{0, 1, 2, 3}
+	res = KNum.IsNaturalRange(nums, false)
+	assert.True(t, res)
+	res = KNum.IsNaturalRange(nums, true)
+	assert.True(t, res)
+
+	nums = []int{0, 3, 1, 2}
+	res = KNum.IsNaturalRange(nums, false)
+	assert.True(t, res)
+	res = KNum.IsNaturalRange(nums, true)
+	assert.False(t, res)
+
+	nums = []int{0, 1, 3, 4}
+	res = KNum.IsNaturalRange(nums, false)
+	assert.False(t, res)
+	res = KNum.IsNaturalRange(nums, true)
+	assert.False(t, res)
+}
+
+func BenchmarkNumber_IsNaturalRange(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.IsNaturalRange(intSlc, false)
+	}
+}

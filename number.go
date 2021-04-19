@@ -536,3 +536,24 @@ func (kn *LkkNumber) IsNan(val interface{}) bool {
 
 	return !isNumeric(val)
 }
+
+// IsNaturalRange 是否连续的自然数数组/切片,如[0,1,2,3...],其中不能有间断.
+// strict为是否严格检查元素的顺序.
+func (kn *LkkNumber) IsNaturalRange(arr []int, strict bool) (res bool) {
+	n := len(arr)
+	if n == 0 {
+		return
+	}
+
+	orig := kn.Range(0, n-1)
+	ctyp := COMPARE_ONLY_VALUE
+
+	if strict {
+		ctyp = COMPARE_BOTH_KEYVALUE
+	}
+
+	diff := KArr.ArrayDiff(orig, arr, ctyp)
+
+	res = len(diff) == 0
+	return
+}
