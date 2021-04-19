@@ -428,3 +428,12 @@ func (kn *LkkNumber) InRange(value interface{}, left interface{}, right interfac
 
 	return false
 }
+
+// SumInt 整数求和.
+func (kn *LkkNumber) SumInt(nums ...int) int {
+	var sum int
+	for _, v := range nums {
+		sum += v
+	}
+	return sum
+}

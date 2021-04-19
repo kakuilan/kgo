@@ -920,3 +920,17 @@ func BenchmarkNumber_InRange(b *testing.B) {
 		KNum.InRange(89, -1.2, 999.123)
 	}
 }
+
+func TestNumber_SumInt(t *testing.T) {
+	var res int
+
+	res = KNum.SumInt(naturalArr[:]...)
+	assert.Equal(t, res, 55)
+}
+
+func BenchmarkNumber_SumInt(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.SumInt(intSlc...)
+	}
+}
