@@ -460,3 +460,18 @@ func (kn *LkkNumber) Sum(nums ...interface{}) (res float64) {
 
 	return
 }
+
+// AverageInt 对整数序列求平均值.
+func (kn *LkkNumber) AverageInt(nums ...int) (res float64) {
+	length := len(nums)
+	if length == 0 {
+		return
+	} else if length == 1 {
+		res = float64(nums[0])
+	} else {
+		total := kn.SumInt(nums...)
+		res = float64(total) / float64(length)
+	}
+
+	return
+}

@@ -969,3 +969,23 @@ func BenchmarkNumber_Sum(b *testing.B) {
 		KNum.Sum(nums...)
 	}
 }
+
+func TestNumber_AverageInt(t *testing.T) {
+	var res float64
+
+	res = KNum.AverageInt()
+	assert.Equal(t, 0.0, res)
+
+	res = KNum.AverageInt(intTen)
+	assert.Equal(t, float64(intTen), res)
+
+	res = KNum.AverageInt(naturalArr[:]...)
+	assert.Equal(t, 5.0, res)
+}
+
+func BenchmarkNumber_AverageInt(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.AverageInt(intSlc...)
+	}
+}
