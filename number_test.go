@@ -960,6 +960,10 @@ func TestNumber_Sum(t *testing.T) {
 	nums = KArr.ArrayShuffle(flo64Slc2)
 	res = KNum.Sum(nums...)
 	assert.Equal(t, "12370248.06", KNum.NumberFormat(res, 2, ".", ""))
+
+	//any
+	res = KNum.Sum(slItf2...)
+	assert.Equal(t, "3.20", KNum.NumberFormat(res, 2, ".", ""))
 }
 
 func BenchmarkNumber_Sum(b *testing.B) {
@@ -1007,5 +1011,35 @@ func BenchmarkNumber_AverageFloat64(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KNum.AverageFloat64(flo64Slc2...)
+	}
+}
+
+func TestNumber_Average(t *testing.T) {
+	var res float64
+	var nums []interface{}
+
+	res = KNum.Average()
+	assert.Equal(t, 0.0, res)
+
+	res = KNum.Average(floTen)
+	assert.Equal(t, floTen, res)
+
+	nums = KArr.ArrayShuffle(naturalArr)
+	res = KNum.Average(nums...)
+	assert.Equal(t, 5.0, res)
+
+	nums = KArr.ArrayShuffle(flo64Slc2)
+	res = KNum.Average(nums...)
+	assert.Equal(t, "2474049.61", KNum.NumberFormat(res, 2, ".", ""))
+
+	//any
+	res = KNum.Average(slItf2...)
+	assert.Equal(t, "0.46", KNum.NumberFormat(res, 2, ".", ""))
+}
+
+func BenchmarkNumber_Average(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.Average(slItf2...)
 	}
 }
