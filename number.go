@@ -515,3 +515,15 @@ func (kn *LkkNumber) Average(nums ...interface{}) (res float64) {
 
 	return
 }
+
+// Percent 返回百分比((val/total) *100).
+func (kn *LkkNumber) Percent(val, total interface{}) float64 {
+	t := toFloat(total)
+	if t == 0 {
+		return float64(0)
+	}
+
+	v := toFloat(val)
+
+	return (v / t) * 100
+}

@@ -1043,3 +1043,23 @@ func BenchmarkNumber_Average(b *testing.B) {
 		KNum.Average(slItf2...)
 	}
 }
+
+func TestNumber_Percent(t *testing.T) {
+	var actual float64
+	tests := []struct {
+		val      interface{}
+		total    interface{}
+		expected float64
+	}{
+		{0, "", 0.0},
+		{0, 0, 0.0},
+		{"1", "20", 5.0},
+		{2.5, 10, 25.0},
+		{3.46, 12.24, 28.2679},
+	}
+
+	for _, test := range tests {
+		actual = KNum.Percent(test.val, test.total)
+		assert.True(t, KNum.FloatEqual(actual, test.expected, 4))
+	}
+}
