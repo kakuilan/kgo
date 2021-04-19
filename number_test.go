@@ -934,3 +934,19 @@ func BenchmarkNumber_SumInt(b *testing.B) {
 		KNum.SumInt(intSlc...)
 	}
 }
+
+func TestNumber_SumFloat64(t *testing.T) {
+	var res float64
+
+	res = KNum.SumFloat64(flo64Slc2...)
+
+	str := KNum.NumberFormat(res, 2, ".", "")
+	assert.Equal(t, "12370248.06", str)
+}
+
+func BenchmarkNumber_SumFloat64(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.SumFloat64(flo64Slc2...)
+	}
+}

@@ -131,6 +131,7 @@ var int64Slc = []int64{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 11, 1
 //浮点切片
 var flo32Slc = []float32{1.23, 0.0, flPi1, floSpeedLight, 6.6260755, 1.60217733}
 var flo64Slc = []float64{flPi2, floAvogadro, floPlanck, floGravitional, floPermittivity}
+var flo64Slc2 = []float64{flPi2, floNum1, floNum2, floNum3, floNum4}
 
 //布尔切片
 var booSlc = []bool{true, true, false, true, false, true, true}
