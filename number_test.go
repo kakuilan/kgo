@@ -1063,3 +1063,38 @@ func TestNumber_Percent(t *testing.T) {
 		assert.True(t, KNum.FloatEqual(actual, test.expected, 4))
 	}
 }
+
+func BenchmarkNumber_Percent(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.Percent(1, 2.0)
+	}
+}
+
+func TestNumber_IsNan(t *testing.T) {
+	var actual bool
+
+	var tests = []struct {
+		val      interface{}
+		expected bool
+	}{
+		{math.Acos(1.01), true},
+		{floNum1, false},
+		{0, false},
+		{strPi6, false},
+		{strHello, true},
+		{nil, true},
+		{cmplNum2, true},
+	}
+	for _, test := range tests {
+		actual = KNum.IsNan(test.val)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkNumber_IsNan(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.IsNan(cmplNum2)
+	}
+}

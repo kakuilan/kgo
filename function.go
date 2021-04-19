@@ -140,7 +140,7 @@ func isFloat(val interface{}) bool {
 	return false
 }
 
-// isNumeric 变量是否数值(不包含复数和科学计数法).
+// isNumeric 变量是否数值(不包含复数).
 func isNumeric(val interface{}) bool {
 	switch val.(type) {
 	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
