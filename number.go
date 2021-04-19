@@ -446,3 +446,17 @@ func (kn *LkkNumber) SumFloat64(nums ...float64) float64 {
 	}
 	return sum
 }
+
+// Sum 对任意类型序列中的数值类型求和,忽略非数值的.
+func (kn *LkkNumber) Sum(nums ...interface{}) (res float64) {
+	var err error
+	var val float64
+	for _, v := range nums {
+		val, err = numeric2Float(v)
+		if err == nil {
+			res += val
+		}
+	}
+
+	return
+}

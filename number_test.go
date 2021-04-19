@@ -939,14 +939,33 @@ func TestNumber_SumFloat64(t *testing.T) {
 	var res float64
 
 	res = KNum.SumFloat64(flo64Slc2...)
-
-	str := KNum.NumberFormat(res, 2, ".", "")
-	assert.Equal(t, "12370248.06", str)
+	assert.Equal(t, "12370248.06", KNum.NumberFormat(res, 2, ".", ""))
 }
 
 func BenchmarkNumber_SumFloat64(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KNum.SumFloat64(flo64Slc2...)
+	}
+}
+
+func TestNumber_Sum(t *testing.T) {
+	var res float64
+	var nums []interface{}
+
+	nums = KArr.ArrayShuffle(naturalArr)
+	res = KNum.Sum(nums...)
+	assert.Equal(t, res, 55.0)
+
+	nums = KArr.ArrayShuffle(flo64Slc2)
+	res = KNum.Sum(nums...)
+	assert.Equal(t, "12370248.06", KNum.NumberFormat(res, 2, ".", ""))
+}
+
+func BenchmarkNumber_Sum(b *testing.B) {
+	b.ResetTimer()
+	nums := KArr.ArrayShuffle(naturalArr)
+	for i := 0; i < b.N; i++ {
+		KNum.Sum(nums...)
 	}
 }
