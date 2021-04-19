@@ -1135,3 +1135,29 @@ func BenchmarkNumber_IsNaturalRange(b *testing.B) {
 		KNum.IsNaturalRange(intSlc, false)
 	}
 }
+
+func TestNumber_GeoDistance(t *testing.T) {
+	var res1, res2 float64
+	var lat1, lng1, lat2, lng2 float64
+
+	lat1, lng1 = 30.0, 45.0
+	lat2, lng2 = 40.0, 90.0
+	res1 = KNum.GeoDistance(lng1, lat1, lng2, lat2)
+	assert.Greater(t, res1, 0.0)
+
+	lat1, lng1 = 390.0, 405.0
+	lat2, lng2 = -320.0, 90.0
+	res2 = KNum.GeoDistance(lng1, lat1, lng2, lat2)
+	assert.Greater(t, res2, 0.0)
+
+	assert.Equal(t, res1, res2)
+}
+
+func BenchmarkNumber_GeoDistance(b *testing.B) {
+	b.ResetTimer()
+	lat1, lng1 := 30.0, 45.0
+	lat2, lng2 := 40.0, 90.0
+	for i := 0; i < b.N; i++ {
+		KNum.GeoDistance(lng1, lat1, lng2, lat2)
+	}
+}
