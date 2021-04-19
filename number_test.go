@@ -989,3 +989,23 @@ func BenchmarkNumber_AverageInt(b *testing.B) {
 		KNum.AverageInt(intSlc...)
 	}
 }
+
+func TestNumber_AverageFloat64(t *testing.T) {
+	var res float64
+
+	res = KNum.AverageFloat64()
+	assert.Equal(t, 0.0, res)
+
+	res = KNum.AverageFloat64(floTen)
+	assert.Equal(t, floTen, res)
+
+	res = KNum.AverageFloat64(flo64Slc2...)
+	assert.Equal(t, "2474049.61", KNum.NumberFormat(res, 2, ".", ""))
+}
+
+func BenchmarkNumber_AverageFloat64(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.AverageFloat64(flo64Slc2...)
+	}
+}
