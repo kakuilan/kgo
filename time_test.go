@@ -32,3 +32,17 @@ func BenchmarkTime_MilliTime(b *testing.B) {
 		KTime.MilliTime()
 	}
 }
+
+func TestTime_MicroTime(t *testing.T) {
+	var res int64
+
+	res = KTime.MicroTime()
+	assert.Equal(t, 16, len(toStr(res)))
+}
+
+func BenchmarkTime_MicroTime(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.MicroTime()
+	}
+}
