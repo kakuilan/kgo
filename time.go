@@ -47,3 +47,8 @@ var datePatterns = []string{
 func (kt *LkkTime) UnixTime() int64 {
 	return time.Now().Unix()
 }
+
+// MilliTime 获取当前Unix时间戳(毫秒).
+func (kt *LkkTime) MilliTime() int64 {
+	return time.Now().UnixNano() / int64(time.Millisecond)
+}

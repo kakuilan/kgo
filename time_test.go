@@ -18,3 +18,17 @@ func BenchmarkTime_UnixTime(b *testing.B) {
 		KTime.UnixTime()
 	}
 }
+
+func TestTime_MilliTime(t *testing.T) {
+	var res int64
+
+	res = KTime.MilliTime()
+	assert.Equal(t, 13, len(toStr(res)))
+}
+
+func BenchmarkTime_MilliTime(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.MilliTime()
+	}
+}
