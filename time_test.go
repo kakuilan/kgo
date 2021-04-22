@@ -88,3 +88,32 @@ func BenchmarkTime_Str2Timestamp(b *testing.B) {
 		_, _ = KTime.Str2Timestamp(strTime3, "01/02/2006 15:04:05")
 	}
 }
+
+func TestTime_Date(t *testing.T) {
+	var res string
+
+	res = KTime.Date("Y-m-d H:i:s")
+	assert.NotEmpty(t, res)
+
+	res = KTime.Date("Y-m-d H:i:s", intTime1)
+	assert.NotEmpty(t, res)
+
+	res = KTime.Date("y-n-j H:i:s", int64(intTime1))
+	assert.NotEmpty(t, res)
+
+	res = KTime.Date("m/d/y h-i-s", Kuptime)
+	assert.NotEmpty(t, res)
+
+	res = KTime.Date("Y-m-d H:i:s")
+	assert.NotEmpty(t, res)
+
+	res = KTime.Date("Y-m-d H:i:s", strHello)
+	assert.Empty(t, res)
+}
+
+func BenchmarkTime_Date(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.Date("Y-m-d H:i:s")
+	}
+}

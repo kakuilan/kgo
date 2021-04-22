@@ -91,3 +91,29 @@ func (kt *LkkTime) Str2Timestamp(str string, format ...string) (int64, error) {
 
 	return tim.Unix(), nil
 }
+
+// Date 格式化时间.
+// format 格式,如"Y-m-d H:i:s".
+// ts为int/int64类型时间戳或time.Time类型.
+func (kt *LkkTime) Date(format string, ts ...interface{}) string {
+	replacer := strings.NewReplacer(datePatterns...)
+	format = replacer.Replace(format)
+
+	var t time.Time
+	if len(ts) > 0 {
+		val := ts[0]
+		if v, ok := val.(time.Time); ok {
+			t = v
+		} else if v, ok := val.(int); ok {
+			t = time.Unix(int64(v), 0)
+		} else if v, ok := val.(int64); ok {
+			t = time.Unix(int64(v), 0)
+		} else {
+			return ""
+		}
+	} else {
+		t = time.Now()
+	}
+
+	return t.Format(format)
+}
