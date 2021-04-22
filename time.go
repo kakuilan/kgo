@@ -79,3 +79,15 @@ func (kt *LkkTime) Str2Timestruct(str string, format ...string) (time.Time, erro
 
 	return time.ParseInLocation(f, str, Kuptime.Location())
 }
+
+// Str2Timestamp 将字符串转换为时间戳,秒.
+// str 为要转换的字符串;
+// format 为该字符串的格式,默认为"2006-01-02 15:04:05" .
+func (kt *LkkTime) Str2Timestamp(str string, format ...string) (int64, error) {
+	tim, err := kt.Str2Timestruct(str, format...)
+	if err != nil {
+		return 0, err
+	}
+
+	return tim.Unix(), nil
+}

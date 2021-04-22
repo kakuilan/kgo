@@ -105,6 +105,8 @@ var b64UrlCode = "aHR0cHM6Ly90b29sLmdvb2dsZS5jb20ubmV0L2VuY3J5cHQ_dHlwZT00SGVsbG
 var esyenCode = "23da39b4epjQzaJZuaPW0piFWEbvA0cJISjztw"
 var strNoGbk = "月日は百代の過客にして、行かふ年も又旅人也。안녕.ＡＢＣＤＥＦＧＨＩＪＫ"
 var strTime1 = "2019-07-11 10:11:23"
+var strTime2 = "2020-02-01 13:39:36"
+var strTime3 = "02/01/2016 15:04:05"
 
 //当前时间
 var nowNanoInt = Kuptime.UnixNano()

@@ -40,7 +40,6 @@ func TestTime_MicroTime(t *testing.T) {
 	res = KTime.MicroTime()
 	assert.Equal(t, 16, len(toStr(res)))
 }
-
 func BenchmarkTime_MicroTime(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -63,5 +62,29 @@ func BenchmarkTime_Str2Timestruct(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _ = KTime.Str2Timestruct(strTime1)
+	}
+}
+
+func TestTime_Str2Timestamp(t *testing.T) {
+	var res int64
+	var err error
+
+	res, err = KTime.Str2Timestamp(strTime1)
+	assert.Nil(t, err)
+	assert.Greater(t, res, int64(1))
+
+	res, err = KTime.Str2Timestamp(strTime3, "01/02/2006 15:04:05")
+	assert.Nil(t, err)
+	assert.Greater(t, res, int64(1))
+
+	//时间格式错误
+	res, err = KTime.Str2Timestamp(strTime2, "2006-01-02")
+	assert.NotNil(t, err)
+}
+
+func BenchmarkTime_Str2Timestamp(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KTime.Str2Timestamp(strTime3, "01/02/2006 15:04:05")
 	}
 }
