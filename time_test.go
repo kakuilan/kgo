@@ -259,3 +259,40 @@ func BenchmarkTime_Day(b *testing.B) {
 		KTime.Year(Kuptime)
 	}
 }
+
+func TestTime_HourMinuteSecond(t *testing.T) {
+	var h1, m1, s1, h2, m2, s2 int
+
+	h1 = KTime.Hour()
+	m1 = KTime.Minute()
+	s1 = KTime.Second()
+
+	h2 = KTime.Hour(Kuptime)
+	m2 = KTime.Minute(Kuptime)
+	s2 = KTime.Second(Kuptime)
+	assert.Equal(t, h1, h2)
+	assert.Equal(t, m1, m2)
+	assert.Greater(t, s1, 0)
+	assert.Greater(t, s2, 0)
+}
+
+func BenchmarkTime_Hour(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.Hour(Kuptime)
+	}
+}
+
+func BenchmarkTime_Minute(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.Minute(Kuptime)
+	}
+}
+
+func BenchmarkTime_Second(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.Second(Kuptime)
+	}
+}

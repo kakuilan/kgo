@@ -224,3 +224,36 @@ func (kt *LkkTime) Day(t ...time.Time) int {
 	}
 	return tm.Day()
 }
+
+// Hour 获取小时.
+func (kt *LkkTime) Hour(t ...time.Time) int {
+	var tm time.Time
+	if len(t) > 0 {
+		tm = t[0]
+	} else {
+		tm = time.Now()
+	}
+	return tm.Hour()
+}
+
+// Minute 获取分钟.
+func (kt *LkkTime) Minute(t ...time.Time) int {
+	var tm time.Time
+	if len(t) > 0 {
+		tm = t[0]
+	} else {
+		tm = time.Now()
+	}
+	return tm.Minute()
+}
+
+// Second 获取秒数.
+func (kt *LkkTime) Second(t ...time.Time) int {
+	var tm time.Time
+	if len(t) > 0 {
+		tm = t[0]
+	} else {
+		tm = time.Now()
+	}
+	return tm.Second()
+}
