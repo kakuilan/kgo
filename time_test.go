@@ -407,3 +407,22 @@ func BenchmarkTime_StartOfWeek(b *testing.B) {
 		KTime.StartOfWeek(myDate1)
 	}
 }
+
+func TestTime_EndOfWeek(t *testing.T) {
+	var res time.Time
+
+	res = KTime.EndOfWeek(myDate1)
+	str := KTime.Date("Y-m-d H:i:s", res)
+	assert.Equal(t, str, "2020-03-15 23:59:59")
+
+	res = KTime.EndOfWeek(myDate2, time.Tuesday)
+	str = KTime.Date("Y-m-d H:i:s", res)
+	assert.Equal(t, str, "2020-03-09 23:59:59")
+}
+
+func BenchmarkTime_EndOfWeek(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.EndOfWeek(myDate1)
+	}
+}

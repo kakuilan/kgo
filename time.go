@@ -310,3 +310,9 @@ func (kt *LkkTime) StartOfWeek(date time.Time, weekStartDay ...time.Weekday) tim
 
 	return time.Date(date.Year(), date.Month(), date.Day()-weekday, 0, 0, 0, 0, date.Location())
 }
+
+// EndOfWeek 获取日期中当周的结束时间;
+// weekStartDay 周几作为周的第一天,本库默认周一.
+func (kt *LkkTime) EndOfWeek(date time.Time, weekStartDay ...time.Weekday) time.Time {
+	return kt.StartOfWeek(date, weekStartDay...).AddDate(0, 0, 7).Add(-time.Nanosecond)
+}
