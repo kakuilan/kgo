@@ -356,3 +356,18 @@ func BenchmarkTime_EndOfMonth(b *testing.B) {
 		KTime.EndOfMonth(myDate1)
 	}
 }
+
+func TestTime_StartOfYear(t *testing.T) {
+	var res time.Time
+
+	res = KTime.StartOfYear(myDate1)
+	str := KTime.Date("Y-m-d H:i:s", res)
+	assert.Equal(t, str, "2020-01-01 00:00:00")
+}
+
+func BenchmarkTime_StartOfYear(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.StartOfYear(myDate1)
+	}
+}
