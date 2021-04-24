@@ -267,3 +267,8 @@ func (kt *LkkTime) StartOfDay(date time.Time) time.Time {
 func (kt *LkkTime) EndOfDay(date time.Time) time.Time {
 	return time.Date(date.Year(), date.Month(), date.Day(), 23, 59, 59, int(time.Second-time.Nanosecond), date.Location())
 }
+
+// StartOfMonth 获取日期中当月的开始时间.
+func (kt *LkkTime) StartOfMonth(date time.Time) time.Time {
+	return time.Date(date.Year(), date.Month(), 1, 0, 0, 0, 0, date.Location())
+}
