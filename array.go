@@ -1175,3 +1175,7 @@ func (ka *LkkArray) CutSlice(arr interface{}, offset, size int) []interface{} {
 		panic("[CutSlice]`arr type must be array|slice")
 	}
 }
+
+func (ka *LkkArray) EmptyStrMap(mp map[string]interface{}) {
+
+}
