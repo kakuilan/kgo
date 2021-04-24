@@ -2,7 +2,10 @@
 
 package kgo
 
-import "github.com/brianvoe/gofakeit/v6"
+import (
+	"github.com/brianvoe/gofakeit/v6"
+	"time"
+)
 
 //类型-接口
 type itfType interface {
@@ -107,7 +110,9 @@ var strNoGbk = "月日は百代の過客にして、行かふ年も又旅人也�
 var strTime1 = "2019-07-11 10:11:23"
 var strTime2 = "2020-02-01 13:39:36"
 var strTime3 = "02/01/2016 15:04:05"
+var strTime4 = "2020-03-10 23:04:35"
 var intTime1 = 1562811851
+var myDate1, _ = time.ParseInLocation("2006-01-02 15:04:05", strTime4, time.Local)
 
 //当前时间
 var nowNanoInt = Kuptime.UnixNano()

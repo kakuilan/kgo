@@ -257,3 +257,8 @@ func (kt *LkkTime) Second(t ...time.Time) int {
 	}
 	return tm.Second()
 }
+
+// StartOfDay 获取日期中当天的开始时间.
+func (kt *LkkTime) StartOfDay(date time.Time) time.Time {
+	return time.Date(date.Year(), date.Month(), date.Day(), 0, 0, 0, 0, date.Location())
+}

@@ -296,3 +296,18 @@ func BenchmarkTime_Second(b *testing.B) {
 		KTime.Second(Kuptime)
 	}
 }
+
+func TestTime_StartOfDay(t *testing.T) {
+	var res time.Time
+
+	res = KTime.StartOfDay(myDate1)
+	str := KTime.Date("Y-m-d H:i:s", res)
+	assert.Equal(t, str, "2020-03-10 00:00:00")
+}
+
+func BenchmarkTime_StartOfDay(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.StartOfDay(myDate1)
+	}
+}
