@@ -161,3 +161,33 @@ func (kt *LkkTime) ServiceStartime() int64 {
 func (kt *LkkTime) ServiceUptime() time.Duration {
 	return time.Since(Kuptime)
 }
+
+// GetMonthDays 获取指定月份的天数.year年份,可选,默认当前年份.
+func (kt *LkkTime) GetMonthDays(month int, year ...int) (days int) {
+	if month < 1 || month > 12 {
+		return
+	}
+
+	var yr int
+	if len(year) == 0 {
+		yr = time.Now().Year()
+	} else {
+		yr = year[0]
+	}
+
+	if month != 2 {
+		if month == 4 || month == 6 || month == 9 || month == 11 {
+			days = 30
+		} else {
+			days = 31
+		}
+	} else {
+		if ((yr%4) == 0 && (yr%100) != 0) || (yr%400) == 0 {
+			days = 29
+		} else {
+			days = 28
+		}
+	}
+
+	return
+}
