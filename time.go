@@ -151,3 +151,8 @@ func (kt *LkkTime) Sleep(t int64) {
 func (kt *LkkTime) Usleep(t int64) {
 	time.Sleep(time.Duration(t) * time.Microsecond)
 }
+
+// ServiceStartime 获取当前服务启动时间戳,秒.
+func (kt *LkkTime) ServiceStartime() int64 {
+	return Kuptime.Unix()
+}

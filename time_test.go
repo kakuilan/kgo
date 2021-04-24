@@ -163,3 +163,16 @@ func TestTime_Usleep(t *testing.T) {
 	res = t2 - t1
 	assert.GreaterOrEqual(t, res, t0)
 }
+
+func TestTime_ServiceStartime(t *testing.T) {
+	var res int64
+	res = KTime.ServiceStartime()
+	assert.Greater(t, res, int64(1))
+}
+
+func BenchmarkTime_ServiceStartime(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.ServiceStartime()
+	}
+}
