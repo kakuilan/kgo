@@ -262,3 +262,8 @@ func (kt *LkkTime) Second(t ...time.Time) int {
 func (kt *LkkTime) StartOfDay(date time.Time) time.Time {
 	return time.Date(date.Year(), date.Month(), date.Day(), 0, 0, 0, 0, date.Location())
 }
+
+// EndOfDay 获取日期中当天的结束时间.
+func (kt *LkkTime) EndOfDay(date time.Time) time.Time {
+	return time.Date(date.Year(), date.Month(), date.Day(), 23, 59, 59, int(time.Second-time.Nanosecond), date.Location())
+}

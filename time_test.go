@@ -311,3 +311,18 @@ func BenchmarkTime_StartOfDay(b *testing.B) {
 		KTime.StartOfDay(myDate1)
 	}
 }
+
+func TestTime_EndOfDay(t *testing.T) {
+	var res time.Time
+
+	res = KTime.EndOfDay(myDate1)
+	str := KTime.Date("Y-m-d H:i:s", res)
+	assert.Equal(t, str, "2020-03-10 23:59:59")
+}
+
+func BenchmarkTime_EndOfDay(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.EndOfDay(myDate1)
+	}
+}
