@@ -191,3 +191,36 @@ func (kt *LkkTime) GetMonthDays(month int, year ...int) (days int) {
 
 	return
 }
+
+// Year 获取年份.
+func (kt *LkkTime) Year(t ...time.Time) int {
+	var tm time.Time
+	if len(t) > 0 {
+		tm = t[0]
+	} else {
+		tm = time.Now()
+	}
+	return tm.Year()
+}
+
+// Month 获取月份.
+func (kt *LkkTime) Month(t ...time.Time) int {
+	var tm time.Time
+	if len(t) > 0 {
+		tm = t[0]
+	} else {
+		tm = time.Now()
+	}
+	return int(tm.Month())
+}
+
+// Day 获取日份.
+func (kt *LkkTime) Day(t ...time.Time) int {
+	var tm time.Time
+	if len(t) > 0 {
+		tm = t[0]
+	} else {
+		tm = time.Now()
+	}
+	return tm.Day()
+}

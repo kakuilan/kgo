@@ -222,3 +222,40 @@ func BenchmarkTime_GetMonthDays(b *testing.B) {
 		KTime.GetMonthDays(3, 1970)
 	}
 }
+
+func TestTime_YearMonthDay(t *testing.T) {
+	var y1, m1, d1, y2, m2, d2 int
+
+	y1 = KTime.Year()
+	m1 = KTime.Month()
+	d1 = KTime.Day()
+
+	y2 = KTime.Year(Kuptime)
+	m2 = KTime.Month(Kuptime)
+	d2 = KTime.Day(Kuptime)
+
+	assert.Equal(t, y1, y2)
+	assert.Equal(t, m1, m2)
+	assert.Equal(t, d1, d2)
+}
+
+func BenchmarkTime_Year(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.Year(Kuptime)
+	}
+}
+
+func BenchmarkTime_Month(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.Month(Kuptime)
+	}
+}
+
+func BenchmarkTime_Day(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.Year(Kuptime)
+	}
+}
