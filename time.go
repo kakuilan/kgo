@@ -147,3 +147,7 @@ func (kt *LkkTime) Sleep(t int64) {
 	time.Sleep(time.Duration(t) * time.Second)
 }
 
+// Usleep 以指定的微秒数延迟执行.
+func (kt *LkkTime) Usleep(t int64) {
+	time.Sleep(time.Duration(t) * time.Microsecond)
+}
