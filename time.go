@@ -272,3 +272,8 @@ func (kt *LkkTime) EndOfDay(date time.Time) time.Time {
 func (kt *LkkTime) StartOfMonth(date time.Time) time.Time {
 	return time.Date(date.Year(), date.Month(), 1, 0, 0, 0, 0, date.Location())
 }
+
+// EndOfMonth 获取日期中当月的结束时间.
+func (kt *LkkTime) EndOfMonth(date time.Time) time.Time {
+	return kt.StartOfMonth(date).AddDate(0, 1, 0).Add(-time.Nanosecond)
+}
