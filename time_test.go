@@ -371,3 +371,18 @@ func BenchmarkTime_StartOfYear(b *testing.B) {
 		KTime.StartOfYear(myDate1)
 	}
 }
+
+func TestTime_EndOfYear(t *testing.T) {
+	var res time.Time
+
+	res = KTime.EndOfYear(myDate1)
+	str := KTime.Date("Y-m-d H:i:s", res)
+	assert.Equal(t, str, "2020-12-31 23:59:59")
+}
+
+func BenchmarkTime_EndOfYear(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.EndOfYear(myDate1)
+	}
+}

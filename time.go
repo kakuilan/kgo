@@ -282,3 +282,8 @@ func (kt *LkkTime) EndOfMonth(date time.Time) time.Time {
 func (kt *LkkTime) StartOfYear(date time.Time) time.Time {
 	return time.Date(date.Year(), 1, 1, 0, 0, 0, 0, date.Location())
 }
+
+// EndOfYear 获取日期中当年的结束时间.
+func (kt *LkkTime) EndOfYear(date time.Time) time.Time {
+	return kt.StartOfYear(date).AddDate(1, 0, 0).Add(-time.Nanosecond)
+}
