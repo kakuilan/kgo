@@ -176,3 +176,17 @@ func BenchmarkTime_ServiceStartime(b *testing.B) {
 		KTime.ServiceStartime()
 	}
 }
+
+func TestTime_ServiceUptime(t *testing.T) {
+	var res time.Duration
+
+	res = KTime.ServiceUptime()
+	assert.Greater(t, int64(res), int64(1))
+}
+
+func BenchmarkTime_ServiceUptime(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.ServiceUptime()
+	}
+}

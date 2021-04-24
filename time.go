@@ -156,3 +156,8 @@ func (kt *LkkTime) Usleep(t int64) {
 func (kt *LkkTime) ServiceStartime() int64 {
 	return Kuptime.Unix()
 }
+
+// ServiceUptime 获取当前服务运行时间,纳秒int64.
+func (kt *LkkTime) ServiceUptime() time.Duration {
+	return time.Since(Kuptime)
+}
