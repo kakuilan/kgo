@@ -266,14 +266,16 @@ func TestTime_HourMinuteSecond(t *testing.T) {
 	h1 = KTime.Hour()
 	m1 = KTime.Minute()
 	s1 = KTime.Second()
-
-	h2 = KTime.Hour(Kuptime)
-	m2 = KTime.Minute(Kuptime)
-	s2 = KTime.Second(Kuptime)
-	assert.Equal(t, h1, h2)
-	assert.Equal(t, m1, m2)
+	assert.Greater(t, h1, 0)
+	assert.Greater(t, m1, 0)
 	assert.Greater(t, s1, 0)
-	assert.Greater(t, s2, 0)
+
+	h2 = KTime.Hour(myDate1)
+	m2 = KTime.Minute(myDate1)
+	s2 = KTime.Second(myDate1)
+	assert.Equal(t, h2, 23)
+	assert.Equal(t, m2, 4)
+	assert.Equal(t, s2, 35)
 }
 
 func BenchmarkTime_Hour(b *testing.B) {
@@ -384,5 +386,24 @@ func BenchmarkTime_EndOfYear(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KTime.EndOfYear(myDate1)
+	}
+}
+
+func TestTime_StartOfWeek(t *testing.T) {
+	var res time.Time
+
+	res = KTime.StartOfWeek(myDate1)
+	str := KTime.Date("Y-m-d H:i:s", res)
+	assert.Equal(t, str, "2020-03-09 00:00:00")
+
+	res = KTime.StartOfWeek(myDate2, time.Tuesday)
+	str = KTime.Date("Y-m-d H:i:s", res)
+	assert.Equal(t, str, "2020-03-03 00:00:00")
+}
+
+func BenchmarkTime_StartOfWeek(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.StartOfWeek(myDate1)
 	}
 }
