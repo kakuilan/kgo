@@ -117,3 +117,29 @@ func BenchmarkTime_Date(b *testing.B) {
 		KTime.Date("Y-m-d H:i:s")
 	}
 }
+
+func TestTime_CheckDate(t *testing.T) {
+	var res bool
+
+	res = KTime.CheckDate(2019, 7, 31)
+	assert.True(t, res)
+
+	res = KTime.CheckDate(2019, 2, 31)
+	assert.False(t, res)
+
+	res = KTime.CheckDate(2019, 0, 31)
+	assert.False(t, res)
+
+	res = KTime.CheckDate(2019, 4, 31)
+	assert.False(t, res)
+
+	res = KTime.CheckDate(2008, 2, 30)
+	assert.False(t, res)
+}
+
+func BenchmarkTime_CheckDate(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.CheckDate(2019, 7, 31)
+	}
+}
