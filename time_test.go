@@ -109,6 +109,10 @@ func TestTime_Date(t *testing.T) {
 
 	res = KTime.Date("Y-m-d H:i:s", strHello)
 	assert.Empty(t, res)
+
+	//时间戳为0的时间点
+	res = KTime.Date("Y-m-d H:i:s", 0)
+	assert.Equal(t, res, "1970-01-01 08:00:00")
 }
 
 func BenchmarkTime_Date(b *testing.B) {
@@ -439,5 +443,47 @@ func BenchmarkTime_DaysBetween(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KTime.DaysBetween(myDate1, myDate3)
+	}
+}
+
+func TestTime_IsDate2time(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{"hello", false},
+		{"0000", true},
+		{"1970", true},
+		{"1970-01-01", true},
+		{"1970-01-01 00:00:01", true},
+		{"1971-01-01 00:00:01", true},
+		{"1990-01", true},
+		{"1990/01", true},
+		{"1990-01-02", true},
+		{"1990/01/02", true},
+		{"1990-01-02 03", true},
+		{"1990/01/02 03", true},
+		{"1990-01-02 03:14", true},
+		{"1990/01/02 03:14", true},
+		{"1990-01-02 03:14:59", true},
+		{"1990/01/02 03:14:59", true},
+		{"2990-00-00 03:14:59", false},
+	}
+	for _, test := range tests {
+		actual, tim := KTime.IsDate2time(test.param)
+		assert.Equal(t, actual, test.expected)
+		if actual {
+			if toInt(test.param) > 1970 {
+				assert.Greater(t, tim, int64(0))
+			}
+		}
+	}
+}
+
+func BenchmarkTime_IsDate2time(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KTime.IsDate2time(strTime7)
 	}
 }

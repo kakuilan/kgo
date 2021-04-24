@@ -113,6 +113,7 @@ var strTime3 = "02/01/2016 15:04:05"
 var strTime4 = "2020-03-10 23:04:35"
 var strTime5 = "2020-03-08 23:04:35"
 var strTime6 = "2020-06-25 23:59:59"
+var strTime7 = "1990-01-02 03:14:59"
 var intTime1 = 1562811851
 var myDate1, _ = time.ParseInLocation("2006-01-02 15:04:05", strTime4, time.Local)
 var myDate2, _ = time.ParseInLocation("2006-01-02 15:04:05", strTime5, time.Local)
