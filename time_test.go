@@ -426,3 +426,18 @@ func BenchmarkTime_EndOfWeek(b *testing.B) {
 		KTime.EndOfWeek(myDate1)
 	}
 }
+
+func TestTime_DaysBetween(t *testing.T) {
+	days := KTime.DaysBetween(myDate1, myDate3)
+	assert.Equal(t, days, 107)
+
+	days = KTime.DaysBetween(myDate3, myDate1)
+	assert.Equal(t, days, -107)
+}
+
+func BenchmarkTime_DaysBetween(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KTime.DaysBetween(myDate1, myDate3)
+	}
+}

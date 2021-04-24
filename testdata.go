@@ -112,9 +112,11 @@ var strTime2 = "2020-02-01 13:39:36"
 var strTime3 = "02/01/2016 15:04:05"
 var strTime4 = "2020-03-10 23:04:35"
 var strTime5 = "2020-03-08 23:04:35"
+var strTime6 = "2020-06-25 23:59:59"
 var intTime1 = 1562811851
 var myDate1, _ = time.ParseInLocation("2006-01-02 15:04:05", strTime4, time.Local)
 var myDate2, _ = time.ParseInLocation("2006-01-02 15:04:05", strTime5, time.Local)
+var myDate3, _ = time.ParseInLocation("2006-01-02 15:04:05", strTime6, time.Local)
 
 //当前时间
 var nowNanoInt = Kuptime.UnixNano()

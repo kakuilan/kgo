@@ -316,3 +316,9 @@ func (kt *LkkTime) StartOfWeek(date time.Time, weekStartDay ...time.Weekday) tim
 func (kt *LkkTime) EndOfWeek(date time.Time, weekStartDay ...time.Weekday) time.Time {
 	return kt.StartOfWeek(date, weekStartDay...).AddDate(0, 0, 7).Add(-time.Nanosecond)
 }
+
+// DaysBetween 获取两个日期的间隔天数.
+// fromDate 为开始时间,toDate 为终点时间.
+func (kt *LkkTime) DaysBetween(fromDate, toDate time.Time) int {
+	return int(toDate.Sub(fromDate) / (24 * time.Hour))
+}
