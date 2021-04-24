@@ -143,3 +143,13 @@ func BenchmarkTime_CheckDate(b *testing.B) {
 		KTime.CheckDate(2019, 7, 31)
 	}
 }
+
+func TestTime_Sleep(t *testing.T) {
+	var t1, t2, res int64
+
+	t1 = KTime.MicroTime()
+	KTime.Sleep(1)
+	t2 = KTime.MicroTime()
+	res = t2 - t1
+	assert.Greater(t, res, int64(100))
+}

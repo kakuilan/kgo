@@ -141,3 +141,9 @@ func (kt *LkkTime) CheckDate(year, month, day int) bool {
 
 	return true
 }
+
+// Sleep 延缓执行,秒.
+func (kt *LkkTime) Sleep(t int64) {
+	time.Sleep(time.Duration(t) * time.Second)
+}
+
