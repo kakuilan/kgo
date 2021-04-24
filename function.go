@@ -1271,3 +1271,72 @@ func formatDir(fpath string) string {
 
 	return strings.TrimRight(fpath, "/") + "/"
 }
+
+// buildQueryMap 创建URL Query参数字典.
+// result 为结果字典;keys 为键数组;value为键值.
+func buildQueryMap(result map[string]interface{}, keys []string, value interface{}) error {
+	length := len(keys)
+	// trim ',"
+	key := strings.Trim(keys[0], "',\"")
+	if length == 1 {
+		result[key] = value
+		return nil
+	}
+
+	// The end is slice. like f[], f[a][]
+	if keys[1] == "" && length == 2 {
+		if key == "" {
+			return nil
+		}
+		val, ok := result[key]
+		if !ok {
+			result[key] = []interface{}{value}
+			return nil
+		}
+		children, ok := val.([]interface{})
+		if !ok {
+			return fmt.Errorf("[buildQueryMap] expected type '[]interface{}' for key '%s', but got '%T'", key, val)
+		}
+		result[key] = append(children, value)
+		return nil
+	}
+
+	// The end is slice + map. like f[][a]
+	if keys[1] == "" && length > 2 && keys[2] != "" {
+		val, ok := result[key]
+		if !ok {
+			result[key] = []interface{}{}
+			val = result[key]
+		}
+		children, ok := val.([]interface{})
+		if !ok {
+			return fmt.Errorf("[buildQueryMap] expected type '[]interface{}' for key '%s', but got '%T'", key, val)
+		}
+		if l := len(children); l > 0 {
+			if child, ok := children[l-1].(map[string]interface{}); ok {
+				if _, ok := child[keys[2]]; !ok {
+					_ = buildQueryMap(child, keys[2:], value)
+					return nil
+				}
+			}
+		}
+		child := map[string]interface{}{}
+		_ = buildQueryMap(child, keys[2:], value)
+		result[key] = append(children, child)
+
+		return nil
+	}
+
+	// map. like f[a], f[a][b]
+	val, ok := result[key]
+	if !ok {
+		result[key] = map[string]interface{}{}
+		val = result[key]
+	}
+	children, ok := val.(map[string]interface{})
+	if !ok {
+		return fmt.Errorf("[buildQueryMap] expected type 'map[string]interface{}' for key '%s', but got '%T'", key, val)
+	}
+
+	return buildQueryMap(children, keys[1:], value)
+}

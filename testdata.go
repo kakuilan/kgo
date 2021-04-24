@@ -255,6 +255,19 @@ var zipfile1 = "./testdata/zip/test1.zip"
 var zipfile2 = "./testdata/zip/test2.zip"
 var unzippath1 = "./testdata/zip/un1"
 
+//url
+var tesUri1 = `?first=value&arr[]=foo+bar&arr[]=baz`
+var tesUri2 = `f1=m&f2=n`
+var tesUri3 = `f[a]=m&f[b]=n`
+var tesUri4 = `f[a][a]=m&f[a][b]=n`
+var tesUri5 = `f[]=m&f[]=n`
+var tesUri6 = `f[a][]=m&f[a][]=n`
+var tesUri7 = `f[][]=m&f[][]=n`
+var tesUri8 = `f=m&f[a]=n`
+var tesUri9 = `a .[[b=c`
+var tesUri10 = `f=n&f[a]=m&`
+var tesUri11 = `f=n&f[][a]=m&`
+
 func init() {
 	gofakeit.Struct(&personS1)
 	gofakeit.Struct(&personS2)
