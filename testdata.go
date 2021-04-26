@@ -112,7 +112,6 @@ var tesStr2 = "one%20%26%20two"
 var tesStr3 = "'foo @+%/'你好"
 var tesStr4 = `%27foo%20%40%2B%25%2F%27%E4%BD%A0%E5%A5%BD`
 
-
 //时间
 var strTime1 = "2019-07-11 10:11:23"
 var strTime2 = "2020-02-01 13:39:36"
@@ -262,7 +261,7 @@ var zipfile1 = "./testdata/zip/test1.zip"
 var zipfile2 = "./testdata/zip/test2.zip"
 var unzippath1 = "./testdata/zip/un1"
 
-//url
+//uri
 var tesUri1 = `?first=value&arr[]=foo+bar&arr[]=baz`
 var tesUri2 = `f1=m&f2=n`
 var tesUri3 = `f[a]=m&f[b]=n`
@@ -291,8 +290,14 @@ var tesUri25 = `he&[=4`
 var tesUri26 = `he&]=5`
 var tesUri27 = `he&a=1`
 var tesUri28 = `he&e=%&b=4`
+
+//url
 var tesUrl01 = `https://www.google.com/search?source=hp&ei=tDUwXejNGs6DoATYkqCYCA&q=golang&oq=golang&gs_l=psy-ab.3..35i39l2j0i67l8.1729.2695..2888...1.0..0.126.771.2j5......0....1..gws-wiz.....10..0.fFQmXkC_LcQ&ved=0ahUKEwjo9-H7jb7jAhXOAYgKHVgJCIMQ4dUDCAU&uact=5`
 var tesUrl02 = `sg>g://asdf43123412341234`
+var tesUrl03 = "abc.com"
+var tesUrl04 = "abc.com/hello?a=1"
+var tesUrl05 = `http://login.localhost:3000\/ab//cd/ef///hi\\12/33\`
+
 
 func init() {
 	gofakeit.Struct(&personS1)

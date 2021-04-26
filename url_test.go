@@ -262,3 +262,26 @@ func BenchmarkUrl_HttpBuildQuery(b *testing.B) {
 		KStr.HttpBuildQuery(params)
 	}
 }
+
+func TestUrl_FormatUrl(t *testing.T) {
+	var res string
+
+	res = KStr.FormatUrl("")
+	assert.Empty(t, res)
+
+	res = KStr.FormatUrl(tesUrl03)
+	assert.Contains(t, res, "://")
+
+	res = KStr.FormatUrl(tesUrl04)
+	assert.Contains(t, res, "://")
+
+	res = KStr.FormatUrl(tesUrl05)
+	assert.NotContains(t, res, '\\')
+}
+
+func BenchmarkUrl_FormatUrl(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.FormatUrl(tesUrl05)
+	}
+}

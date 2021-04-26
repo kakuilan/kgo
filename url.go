@@ -142,3 +142,20 @@ func (ks *LkkString) RawUrlDecode(str string) (string, error) {
 func (ks *LkkString) HttpBuildQuery(queryData url.Values) string {
 	return queryData.Encode()
 }
+
+// FormatUrl 格式化URL.
+func (ks *LkkString) FormatUrl(str string) string {
+	if str != "" {
+		if ks.Strpos(str, "://", 0) == -1 {
+			str = "http://" + str
+		}
+
+		// 将"\"替换为"/"
+		str = strings.ReplaceAll(str, "\\", "/")
+
+		// 将连续的"//"或"\\"或"\/",替换为"/"
+		str = RegUrlBackslashDuplicate.ReplaceAllString(str, "$1/")
+	}
+
+	return str
+}
