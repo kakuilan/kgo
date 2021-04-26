@@ -1229,3 +1229,18 @@ func BenchmarkArray_CutSlice(b *testing.B) {
 		KArr.CutSlice(naturalArr, 1, 5)
 	}
 }
+
+func TestArray_NewStrMap(t *testing.T) {
+	var res map[string]interface{}
+
+	res = KArr.NewStrMap()
+	assert.NotNil(t, res)
+	assert.Empty(t, res)
+}
+
+func BenchmarkArray_NewStrMap(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.NewStrMap()
+	}
+}
