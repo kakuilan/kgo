@@ -117,3 +117,13 @@ func (ks *LkkString) ParseUrl(str string, component int16) (map[string]string, e
 	}
 	return res, nil
 }
+
+// UrlEncode 编码 URL 字符串.
+func (ks *LkkString) UrlEncode(str string) string {
+	return url.QueryEscape(str)
+}
+
+// UrlDecode 解码已编码的 URL 字符串.
+func (ks *LkkString) UrlDecode(str string) (string, error) {
+	return url.QueryUnescape(str)
+}
