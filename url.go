@@ -82,7 +82,7 @@ func (ks *LkkString) ParseStr(encodedString string, result map[string]interface{
 // ParseUrl 解析URL,返回其组成部分.
 // component为需要返回的组成;
 // -1: all; 1: scheme; 2: host; 4: port; 8: user; 16: pass; 32: path; 64: query; 128: fragment .
-func (ks *LkkString) ParseUrl(str string, component int) (map[string]string, error) {
+func (ks *LkkString) ParseUrl(str string, component int16) (map[string]string, error) {
 	u, err := url.Parse(str)
 	if err != nil {
 		return nil, err

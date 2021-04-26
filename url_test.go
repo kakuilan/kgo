@@ -137,6 +137,57 @@ func BenchmarkUrl_ParseStr(b *testing.B) {
 }
 
 func TestUrl_ParseUrl(t *testing.T) {
+	var res map[string]string
+	var err error
+	var chk bool
 
+	res, err = KStr.ParseUrl(tesUrl01, -1)
+	assert.Nil(t, err)
 
+	res, err = KStr.ParseUrl(strHello, -1)
+	assert.Nil(t, err)
+
+	//错误的URL
+	res, err = KStr.ParseUrl(tesUrl02, -1)
+	assert.NotNil(t, err)
+	assert.Empty(t, res)
+
+	res, err = KStr.ParseUrl(tesUrl01, 1)
+	_, chk = res["scheme"]
+	assert.True(t, chk)
+
+	res, err = KStr.ParseUrl(tesUrl01, 2)
+	_, chk = res["host"]
+	assert.True(t, chk)
+
+	res, err = KStr.ParseUrl(tesUrl01, 4)
+	_, chk = res["port"]
+	assert.True(t, chk)
+
+	res, err = KStr.ParseUrl(tesUrl01, 8)
+	_, chk = res["user"]
+	assert.True(t, chk)
+
+	res, err = KStr.ParseUrl(tesUrl01, 16)
+	_, chk = res["pass"]
+	assert.True(t, chk)
+
+	res, err = KStr.ParseUrl(tesUrl01, 32)
+	_, chk = res["path"]
+	assert.True(t, chk)
+
+	res, err = KStr.ParseUrl(tesUrl01, 64)
+	_, chk = res["query"]
+	assert.True(t, chk)
+
+	res, err = KStr.ParseUrl(tesUrl01, 128)
+	_, chk = res["fragment"]
+	assert.True(t, chk)
+}
+
+func BenchmarkUrl_ParseUrl(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.ParseUrl(tesUrl01, -1)
+	}
 }
