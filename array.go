@@ -1176,7 +1176,12 @@ func (ka *LkkArray) CutSlice(arr interface{}, offset, size int) []interface{} {
 	}
 }
 
-// NewStrMapItf 新建字符串字典.
+// NewStrMapItf 新建[字符-接口]字典.
 func (ka *LkkArray) NewStrMapItf() map[string]interface{} {
 	return make(map[string]interface{})
+}
+
+// NewStrMapStr 新建[字符-字符]字典.
+func (ka *LkkArray) NewStrMapStr() map[string]string {
+	return make(map[string]string)
 }

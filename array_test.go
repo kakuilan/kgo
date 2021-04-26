@@ -1244,3 +1244,18 @@ func BenchmarkArray_NewStrMapItf(b *testing.B) {
 		KArr.NewStrMapItf()
 	}
 }
+
+func TestArray_NewStrMapStr(t *testing.T) {
+	var res map[string]string
+
+	res = KArr.NewStrMapStr()
+	assert.NotNil(t, res)
+	assert.Empty(t, res)
+}
+
+func BenchmarkArray_NewStrMapStr(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.NewStrMapStr()
+	}
+}
