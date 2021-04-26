@@ -314,3 +314,26 @@ func BenchmarkUrl_GetDomain(b *testing.B) {
 		KStr.GetDomain(tesUrl10)
 	}
 }
+
+func TestUrl_ClearUrlPrefix(t *testing.T) {
+	var tests = []struct {
+		url      string
+		prefix   string
+		expected string
+	}{
+		{"", "", ""},
+		{tesUrl10, "https://", "github.com/abc"},
+		{tesUrl11, "/", "google.com/test?name=hello"},
+	}
+	for _, test := range tests {
+		actual := KStr.ClearUrlPrefix(test.url, test.prefix)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkUrl_ClearUrlPrefix(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.ClearUrlPrefix(tesUrl10)
+	}
+}
