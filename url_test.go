@@ -197,9 +197,8 @@ func TestUrl_UrlEncodeUrlDecode(t *testing.T) {
 	var err error
 
 	res1 = KStr.UrlEncode(tesStr1)
-
 	res2, err = KStr.UrlDecode(res1)
-	assert.Empty(t, res2, tesStr1)
+	assert.Equal(t, res2, tesStr1)
 	assert.Nil(t, err)
 }
 
@@ -214,5 +213,29 @@ func BenchmarkUrl_UrlDecode(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _ = KStr.UrlDecode(tesStr2)
+	}
+}
+
+func TestUrl_RawUrlEncodeRawUrlDecode(t *testing.T) {
+	var res1, res2 string
+	var err error
+
+	res1 = KStr.RawUrlEncode(tesStr3)
+	res2, err = KStr.RawUrlDecode(res1)
+	assert.Equal(t, res2, tesStr3)
+	assert.Nil(t, err)
+}
+
+func BenchmarkUrl_RawUrlEncode(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.RawUrlEncode(tesStr3)
+	}
+}
+
+func BenchmarkUrl_RawUrlDecode(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.RawUrlDecode(tesStr4)
 	}
 }
