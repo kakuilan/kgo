@@ -191,7 +191,22 @@ func (ks *LkkString) ClearUrlPrefix(str string, prefix ...string) string {
 	}
 
 	for p != "" && strings.HasPrefix(str, p) {
-		str = str[len(p):len(str)]
+		str = str[len(p):]
+	}
+
+	return str
+}
+
+// ClearUrlSuffix 清除URL的后缀;
+// str为URL字符串,suffix为后缀,默认"/".
+func (ks *LkkString) ClearUrlSuffix(str string, suffix ...string) string {
+	var s string = "/"
+	if len(suffix) > 0 {
+		s = suffix[0]
+	}
+
+	for s != "" && strings.HasSuffix(str, s) {
+		str = str[0 : len(str)-len(s)]
 	}
 
 	return str

@@ -337,3 +337,26 @@ func BenchmarkUrl_ClearUrlPrefix(b *testing.B) {
 		KStr.ClearUrlPrefix(tesUrl10)
 	}
 }
+
+func TestUrl_ClearUrlSuffix(t *testing.T) {
+	var tests = []struct {
+		url      string
+		prefix   string
+		expected string
+	}{
+		{"", "", ""},
+		{tesUrl10, "/kgo", "https://github.com/kakuilan"},
+		{tesUrl12, "/", "google.com/test?name=hello"},
+	}
+	for _, test := range tests {
+		actual := KStr.ClearUrlSuffix(test.url, test.prefix)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkUrl_ClearUrlSuffix(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.ClearUrlSuffix(tesUrl12)
+	}
+}

@@ -303,6 +303,7 @@ var tesUrl08 = "http://foobar.中文网/"
 var tesUrl09 = "foobar.com/abc/efg/h=1"
 var tesUrl10 = "https://github.com/kakuilan/kgo"
 var tesUrl11 = "////google.com/test?name=hello"
+var tesUrl12 = "google.com/test?name=hello////"
 
 
 
