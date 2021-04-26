@@ -272,9 +272,9 @@ func TestTime_HourMinuteSecond(t *testing.T) {
 	h1 = KTime.Hour()
 	m1 = KTime.Minute()
 	s1 = KTime.Second()
-	assert.Greater(t, h1, 0)
-	assert.Greater(t, m1, 0)
-	assert.Greater(t, s1, 0)
+	assert.GreaterOrEqual(t, h1, 0)
+	assert.GreaterOrEqual(t, m1, 0)
+	assert.GreaterOrEqual(t, s1, 0)
 
 	h2 = KTime.Hour(myDate1)
 	m2 = KTime.Minute(myDate1)

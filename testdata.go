@@ -263,10 +263,29 @@ var tesUri4 = `f[a][a]=m&f[a][b]=n`
 var tesUri5 = `f[]=m&f[]=n`
 var tesUri6 = `f[a][]=m&f[a][]=n`
 var tesUri7 = `f[][]=m&f[][]=n`
-var tesUri8 = `f=m&f[a]=n`
-var tesUri9 = `a .[[b=c`
+var tesUri8 = `a .[[b=c`
+var tesUri9 = `f=m&f[a]=n`
 var tesUri10 = `f=n&f[a]=m&`
 var tesUri11 = `f=n&f[][a]=m&`
+var tesUri12 = `f[][a]=&f[][b]=`
+var tesUri13 = `f[][a]=m&f[][b]=h`
+var tesUri14 = `f=n&f[a][]=m&`
+var tesUri15 = `f=n&f[a][]b=m&`
+var tesUri16 = `f[][b]=&f[][a]=12&f[][a]=1.2&f[][a]=abc`
+var tesUri17 = `f[a].=m&f=n&`
+var tesUri18 = `f[a][]=1&f[a][]=c&f[a][]=&f[b][]=bb&f[]=3&f[]=4`
+var tesUri19 = `f[a][]=12&f[a][]=1.2&f[a][]=abc`
+var tesUri20 = `?first=value&arr[]=foo+bar&arr[]=baz&arr[][a]=aaa`
+var tesUri21 = `%=%gg&b=4`
+var tesUri22 = `he& =2`
+var tesUri23 = `he& g=2`
+var tesUri24 = `he&=3`
+var tesUri25 = `he&[=4`
+var tesUri26 = `he&]=5`
+var tesUri27 = `he&a=1`
+var tesUri28 = `he&e=%&b=4`
+var tesUrl01 = `https://www.google.com/search?source=hp&ei=tDUwXejNGs6DoATYkqCYCA&q=golang&oq=golang&gs_l=psy-ab.3..35i39l2j0i67l8.1729.2695..2888...1.0..0.126.771.2j5......0....1..gws-wiz.....10..0.fFQmXkC_LcQ&ved=0ahUKEwjo9-H7jb7jAhXOAYgKHVgJCIMQ4dUDCAU&uact=5`
+var tesUrl02 = `sg>g://asdf43123412341234`
 
 func init() {
 	gofakeit.Struct(&personS1)
