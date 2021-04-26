@@ -157,7 +157,7 @@ func TestTime_Sleep(t *testing.T) {
 	KTime.Sleep(t0)
 	t2 = KTime.UnixTime()
 	res = t2 - t1
-	assert.Equal(t, res, t0)
+	assert.GreaterOrEqual(t, res, t0)
 }
 
 func TestTime_Usleep(t *testing.T) {

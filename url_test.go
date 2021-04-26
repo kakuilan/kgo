@@ -322,7 +322,7 @@ func TestUrl_ClearUrlPrefix(t *testing.T) {
 		expected string
 	}{
 		{"", "", ""},
-		{tesUrl10, "https://", "github.com/abc"},
+		{tesUrl10, "https://", "github.com/kakuilan/kgo"},
 		{tesUrl11, "/", "google.com/test?name=hello"},
 	}
 	for _, test := range tests {
