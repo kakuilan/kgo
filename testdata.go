@@ -297,6 +297,12 @@ var tesUrl02 = `sg>g://asdf43123412341234`
 var tesUrl03 = "abc.com"
 var tesUrl04 = "abc.com/hello?a=1"
 var tesUrl05 = `http://login.localhost:3000\/ab//cd/ef///hi\\12/33\`
+var tesUrl06 = "https://play.golang.com:3000/p/3R1TPyk8qck"
+var tesUrl07 = "https://www.siongui.github.io/pali-chanting/zh/archives.html"
+var tesUrl08 = "http://foobar.中文网/"
+var tesUrl09 = "foobar.com/abc/efg/h=1"
+var tesUrl10 = "https://github.com/kakuilan/kgo"
+
 
 
 func init() {

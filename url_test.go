@@ -285,3 +285,32 @@ func BenchmarkUrl_FormatUrl(b *testing.B) {
 		KStr.FormatUrl(tesUrl05)
 	}
 }
+
+func TestUrl_GetDomain(t *testing.T) {
+	var tests = []struct {
+		param    string
+		isMain   bool
+		expected string
+	}{
+		{"", false, ""},
+		{strHello, false, ""},
+		{strSpeedLight, false, ""},
+		{tesUrl05, false, "login.localhost"},
+		{tesUrl06, false, "play.golang.com"},
+		{tesUrl07, true, "github.io"},
+		{tesUrl08, false, "foobar.中文网"},
+		{tesUrl09, false, "foobar.com"},
+		{localIp, false, "127.0.0.1"},
+	}
+	for _, test := range tests {
+		actual := KStr.GetDomain(test.param, test.isMain)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkUrl_GetDomain(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.GetDomain(tesUrl10)
+	}
+}

@@ -159,3 +159,25 @@ func (ks *LkkString) FormatUrl(str string) string {
 
 	return str
 }
+
+// GetDomain 从URL字符串中获取域名.
+// 可选参数isMain,默认为false,取完整域名;为true时,取主域名(如abc.test.com取test.com).
+func (ks *LkkString) GetDomain(str string, isMain ...bool) string {
+	str = ks.FormatUrl(str)
+	u, err := url.Parse(str)
+	main := false
+	if len(isMain) > 0 {
+		main = isMain[0]
+	}
+
+	if err != nil || !strings.Contains(str, ".") {
+		return ""
+	} else if !main {
+		return u.Hostname()
+	}
+
+	parts := strings.Split(u.Hostname(), ".")
+	domain := parts[len(parts)-2] + "." + parts[len(parts)-1]
+
+	return domain
+}
