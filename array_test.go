@@ -1230,17 +1230,17 @@ func BenchmarkArray_CutSlice(b *testing.B) {
 	}
 }
 
-func TestArray_NewStrMap(t *testing.T) {
+func TestArray_NewStrMapItf(t *testing.T) {
 	var res map[string]interface{}
 
-	res = KArr.NewStrMap()
+	res = KArr.NewStrMapItf()
 	assert.NotNil(t, res)
 	assert.Empty(t, res)
 }
 
-func BenchmarkArray_NewStrMap(b *testing.B) {
+func BenchmarkArray_NewStrMapItf(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KArr.NewStrMap()
+		KArr.NewStrMapItf()
 	}
 }
