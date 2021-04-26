@@ -137,3 +137,8 @@ func (ks *LkkString) RawUrlEncode(str string) string {
 func (ks *LkkString) RawUrlDecode(str string) (string, error) {
 	return url.QueryUnescape(strings.Replace(str, "%20", "+", -1))
 }
+
+// HttpBuildQuery 根据参数生成 URL-encode 之后的请求字符串.
+func (ks *LkkString) HttpBuildQuery(queryData url.Values) string {
+	return queryData.Encode()
+}

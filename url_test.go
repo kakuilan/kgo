@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"github.com/stretchr/testify/assert"
+	"net/url"
 	"testing"
 )
 
@@ -237,5 +238,27 @@ func BenchmarkUrl_RawUrlDecode(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _ = KStr.RawUrlDecode(tesStr4)
+	}
+}
+
+func TestUrl_HttpBuildQuery(t *testing.T) {
+	var res string
+	params := url.Values{}
+	params.Add("a", "abc")
+	params.Add("b", "123")
+	params.Add("c", "你好")
+
+	res = KStr.HttpBuildQuery(params)
+	assert.Contains(t, res, "&")
+}
+
+func BenchmarkUrl_HttpBuildQuery(b *testing.B) {
+	b.ResetTimer()
+	params := url.Values{}
+	params.Add("a", "abc")
+	params.Add("b", "123")
+	params.Add("c", "你好")
+	for i := 0; i < b.N; i++ {
+		KStr.HttpBuildQuery(params)
 	}
 }
