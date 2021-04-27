@@ -107,6 +107,7 @@ var str2Code = "https://tool.google.com.net/encrypt?type=4Hello World! 你好！
 var b64UrlCode = "aHR0cHM6Ly90b29sLmdvb2dsZS5jb20ubmV0L2VuY3J5cHQ_dHlwZT00SGVsbG8gV29ybGQhIOS9oOWlve-8gQ"
 var esyenCode = "23da39b4epjQzaJZuaPW0piFWEbvA0cJISjztw"
 var strNoGbk = "月日は百代の過客にして、行かふ年も又旅人也。안녕.ＡＢＣＤＥＦＧＨＩＪＫ"
+var utf8Hello = "你好，世界！"
 var tesStr1 = "'test-bla-bla-4>2-y-3<6'"
 var tesStr2 = "one%20%26%20two"
 var tesStr3 = "'foo @+%/'你好"
@@ -165,6 +166,8 @@ var runesHello = []rune(strHello)
 var bytSpeedLight = []byte(strSpeedLight)
 var bytsPasswd = []byte("$2a$10$j3WOP6rP2I7skNoxiFdNdOh6OhPxP0Sp3Wmeuekh90oeF3D1EQQBK")
 var bytCryptKey = []byte("1234567890123456")
+var bytsUtf8Hello = []byte(utf8Hello)
+var bytsGbkHello = []byte{0xC4, 0xE3, 0xBA, 0xC3, 0xA3, 0xAC, 0xCA, 0xC0, 0xBD, 0xE7, 0xA3, 0xA1}
 
 //单字符切片
 var ssSingle = []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"}

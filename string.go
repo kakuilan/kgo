@@ -70,23 +70,23 @@ func (ks *LkkString) GbkToUtf8(s []byte) ([]byte, error) {
 }
 
 // IsUtf8 字符串是否UTF-8编码.
-func (ks *LkkString) IsUtf8(str string) bool {
-	return str != "" && utf8.ValidString(str)
+func (ks *LkkString) IsUtf8(s []byte) bool {
+	return utf8.Valid(s)
 }
 
 // IsGbk 字符串是否GBK编码.
-func (ks *LkkString) IsGbk(data []byte) (res bool) {
-	length := len(data)
+func (ks *LkkString) IsGbk(s []byte) (res bool) {
+	length := len(s)
 	var i, j int
 	for i < length {
 		j = i + 1
 		//大于127的使用双字节编码,且落在gbk编码范围内的字符
 		//GBK中每个汉字包含两个字节，第一个字节(首字节)的范围是0x81-0xFE(即129-254),第二个字节(尾字节)的范围是0x40-0xFE(即64-254)
-		if data[i] > 0x7f && j < length {
-			if data[i] >= 0x81 &&
-				data[i] <= 0xfe &&
-				data[j] >= 0x40 &&
-				data[j] <= 0xfe {
+		if s[i] > 0x7f && j < length {
+			if s[i] >= 0x81 &&
+				s[i] <= 0xfe &&
+				s[j] >= 0x40 &&
+				s[j] <= 0xfe {
 				i += 2
 				res = true
 			} else {
