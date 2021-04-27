@@ -169,9 +169,6 @@ var bytCryptKey = []byte("1234567890123456")
 //单字符切片
 var ssSingle = []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"}
 
-//persons JSON串
-var personsJson = `{"person1":{"name":"zhang3","age":23,"sex":1},"person2":{"name":"li4","age":30,"sex":1},"person3":{"name":"wang5","age":25,"sex":0},"person4":{"name":"zhao6","age":50,"sex":0}}`
-
 //字符串map
 var strMp1 = map[string]string{"a": "1", "b": "2", "c": "3", "d": "4", "e": "", "2": "cc", "3": "no"}
 var strMp2 = map[string]string{"a": "0", "b": "2", "c": "4", "g": "4", "h": "", "2": "cc"}
@@ -186,6 +183,10 @@ var strSlEmp = []string{}
 //接口切片
 var slItf = []interface{}{99, 0, 1, 2, 0.0, 3, false, 3.14, 6.67428, true, 'a', "", 'b', nil, 'c', intSpeedLight, "hello", nowNanoInt, floAvogadro, strSlEmp, "你好", floNum3}
 var slItf2 = []interface{}{1, 0, 1.2, -3, false, nil, "4"}
+
+//persons JSON串
+var personsMapJson = `{"person1":{"name":"zhang3","age":23,"sex":1},"person2":{"name":"li4","age":30,"sex":1},"person3":{"name":"wang5","age":25,"sex":0},"person4":{"name":"zhao6","age":50,"sex":0}}`
+var personsArrJson = `[{"age":20,"naction":"us","name":"test1","tel":"13712345678"},{"age":21,"naction":"cn","name":"test2","tel":"13712345679"},{"age":22,"naction":"en","name":"test3","tel":"13712345670"},{"age":23,"naction":"fr","name":"test4","tel":"13712345671"},{"age":21,"naction":"cn","name":"test5","tel":"13712345672"}]`
 
 //回调函数
 var fnCb1 CallBack

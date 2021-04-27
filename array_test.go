@@ -150,7 +150,7 @@ func TestArray_ArrayColumn_Map(t *testing.T) {
 	var arr map[string]interface{}
 	var res []interface{}
 
-	_ = KStr.JsonDecode([]byte(personsJson), &arr)
+	_ = KStr.JsonDecode([]byte(personsMapJson), &arr)
 
 	res = KArr.ArrayColumn(arr, "Name")
 	assert.Empty(t, res)
@@ -262,7 +262,7 @@ func TestArray_ArrayKeyExists(t *testing.T) {
 	assert.False(t, chk4)
 
 	var persons map[string]interface{}
-	_ = KStr.JsonDecode([]byte(personsJson), &persons)
+	_ = KStr.JsonDecode([]byte(personsMapJson), &persons)
 	chk5 := KArr.ArrayKeyExists("person1", persons)
 	chk6 := KArr.ArrayKeyExists("Age", persons)
 	assert.True(t, chk5)
@@ -291,7 +291,7 @@ func BenchmarkArray_ArrayKeyExists_Struct(b *testing.B) {
 
 func BenchmarkArray_ArrayKeyExists_Map(b *testing.B) {
 	var persons map[string]interface{}
-	_ = KStr.JsonDecode([]byte(personsJson), &persons)
+	_ = KStr.JsonDecode([]byte(personsMapJson), &persons)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KArr.ArrayKeyExists("person1", persons)
