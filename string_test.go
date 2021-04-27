@@ -5,29 +5,30 @@ import (
 	"testing"
 )
 
-func TestString_Addslashes(t *testing.T) {
-	str := "Is your name O'reilly?"
-	res1 := KStr.Addslashes(str)
+func TestString_AddslashesStripslashes(t *testing.T) {
+	var res1, res2 string
+
+	res1 = KStr.Addslashes(tesStr5)
 	assert.Contains(t, res1, "\\")
 
-	res2 := KStr.Stripslashes(res1)
+	res2 = KStr.Stripslashes(res1)
+	assert.Equal(t, res2, tesStr5)
 	assert.NotContains(t, res2, "\\")
 
-	KStr.Stripslashes(`Is \ your \\name O\'reilly?`)
+	res2 = KStr.Stripslashes(tesStr6)
+	assert.NotContains(t, res2, '\\')
 }
 
 func BenchmarkString_Addslashes(b *testing.B) {
-	str := "Is your name O'reilly?"
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KStr.Addslashes(str)
+		KStr.Addslashes(tesStr5)
 	}
 }
 
 func BenchmarkString_Stripslashes(b *testing.B) {
 	b.ResetTimer()
-	str := `Is your name O\'reilly?`
 	for i := 0; i < b.N; i++ {
-		KStr.Stripslashes(str)
+		KStr.Stripslashes(tesStr6)
 	}
 }

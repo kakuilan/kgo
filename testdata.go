@@ -111,6 +111,8 @@ var tesStr1 = "'test-bla-bla-4>2-y-3<6'"
 var tesStr2 = "one%20%26%20two"
 var tesStr3 = "'foo @+%/'你好"
 var tesStr4 = `%27foo%20%40%2B%25%2F%27%E4%BD%A0%E5%A5%BD`
+var tesStr5 = "Is your name O'reilly?"
+var tesStr6 = `Is \ your \\name O\'reilly?`
 
 //时间
 var strTime1 = "2019-07-11 10:11:23"
@@ -304,8 +306,6 @@ var tesUrl09 = "foobar.com/abc/efg/h=1"
 var tesUrl10 = "https://github.com/kakuilan/kgo"
 var tesUrl11 = "////google.com/test?name=hello"
 var tesUrl12 = "google.com/test?name=hello////"
-
-
 
 func init() {
 	gofakeit.Struct(&personS1)
