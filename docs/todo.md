@@ -278,4 +278,5 @@ https://github.com/djimenez/iconv-go
 https://pkg.go.dev/golang.org/x/net/html/charset
 https://github.com/timakin/gonvert
 https://github.com/spiegel-im-spiegel/text
+https://github.com/saintfish/chardet
 https://siongui.github.io/2018/10/27/auto-detect-and-convert-html-encoding-to-utf8-in-go/
