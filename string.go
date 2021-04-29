@@ -3,6 +3,7 @@ package kgo
 import (
 	"bytes"
 	"github.com/json-iterator/go"
+	xhtml "golang.org/x/net/html"
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/transform"
 	"io"
@@ -191,6 +192,41 @@ func (ks *LkkString) Strpos(haystack, needle string, offset int) int {
 	return pos + offset
 }
 
+// Stripos  查找字符串首次出现的位置（不区分大小写）,找不到时返回-1.
+// haystack在该字符串中进行查找,needle要查找的字符串;
+// offset起始位置,为负数时时,搜索会从字符串结尾指定字符数开始.
+func (ks *LkkString) Stripos(haystack, needle string, offset int) int {
+	length := len(haystack)
+	if length == 0 || offset > length || -offset > length {
+		return -1
+	}
+
+	if offset < 0 {
+		offset += length
+	}
+	pos := ks.Index(haystack[offset:], needle, true)
+	if pos == -1 {
+		return -1
+	}
+	return pos + offset
+}
+
+// Dstrpos 检查字符串str是否包含数组arr的元素之一,返回检查结果和匹配的字符串.
+// chkCase为是否检查大小写.
+func (ks *LkkString) Dstrpos(str string, arr []string, chkCase bool) (bool, string) {
+	if len(str) == 0 || len(arr) == 0 {
+		return false, ""
+	}
+
+	for _, v := range arr {
+		if (chkCase && ks.Strpos(str, v, 0) != -1) || (!chkCase && ks.Stripos(str, v, 0) != -1) {
+			return true, v
+		}
+	}
+
+	return false, ""
+}
+
 // Nl2br 将换行符转换为br标签.
 func (ks *LkkString) Nl2br(str string) string {
 	return strings.Replace(str, "\n", "<br />", -1)
@@ -262,4 +298,29 @@ func (ks *LkkString) RemoveSpace(str string, all bool) string {
 // StripTags 过滤html标签.
 func (ks *LkkString) StripTags(str string) string {
 	return RegHtmlTag.ReplaceAllString(str, "")
+}
+
+// Html2Text 将html转换为纯文本.
+func (ks *LkkString) Html2Text(str string) string {
+	domDoc := xhtml.NewTokenizer(strings.NewReader(str))
+	previousStartToken := domDoc.Token()
+	var text string
+loopDom:
+	for {
+		nx := domDoc.Next()
+		switch {
+		case nx == xhtml.ErrorToken:
+			break loopDom // End of the document
+		case nx == xhtml.StartTagToken:
+			previousStartToken = domDoc.Token()
+		case nx == xhtml.TextToken:
+			if chk, _ := ks.Dstrpos(previousStartToken.Data, TextHtmlExcludeTags, false); chk {
+				continue
+			}
+
+			text += " " + strings.TrimSpace(xhtml.UnescapeString(string(domDoc.Text())))
+		}
+	}
+
+	return ks.RemoveSpace(text, false)
 }

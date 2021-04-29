@@ -132,6 +132,91 @@ var tesStr10 = `
 <script>alert('你好！')</scripty>
 `
 
+//html
+var tesHtmlDoc = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>This is page title</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link href="/assets/css/frontend.min.css?v=0.0.1" rel="stylesheet">
+    <link href="/assets/css/all.css?v=0.0.1" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        a{
+            color: red;
+        }
+        span{
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <img src="/assets/img/nf.jpg" alt="this is image" class="fleft">
+        <div class="fleft">最新公告</div>
+        <div class="fright">
+            <a href="logout" class="logoutBtn" style="display: none">退出</a>
+            <a href="javascript:;" class="loginPwdBtn">登录</a>
+            <a href="javascript:;" class="regisBtn">注册</a>
+        </div>
+        <h1>This is H1 title.</h1>
+        <div>
+            <p>
+                Hello world!
+                <span>TEXT <b>I</b> WANT</span>
+            </p>
+            <ul>
+                <li><a href="foo">Foo</a><li>
+                <a href="/bar/baz">BarBaz</a>
+            </ul>
+
+            <form name="query" action="http://www.example.net" method="post">
+                <input type="text" value="123" />
+                <textarea type="text" name="nameiknow">The text I want</textarea>
+                <select>
+                    <option value="111">111</option>
+                    <option value="222">222</option>
+                </select>
+                <canvas>hello</canvas>
+                <div id="button">
+                    <input type="submit" value="Submit" />
+                    <button>提交按钮</button>
+                </div>
+            </form>
+        </div>
+        <div>
+            <iframe src="http://google.com"></iframe>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var require = {
+            config: {
+                "modulename": "index",
+                "controllername": "index",
+                "actionname": "index",
+                "jsname": "index",
+                "moduleurl": "demo",
+                "language": "zh-cn",
+                "__PUBLIC__": "/",
+                "__ROOT__": "/",
+                "__CDN__": ""
+            }
+        };
+        /* <![CDATA[ */
+        var post_notif_widget_ajax_obj = {"ajax_url":"http:\/\/site.com\/wp-admin\/admin-ajax.php","nonce":"9b8270e2ef","processing_msg":"Processing..."};
+        /* ]]> */
+    </script>
+    <script src="/assets/js/require.min.js" data-main="/assets/js/require-frontend.min.js?v=0.0.1"></script>
+</body>
+</html>
+`
 
 //时间
 var strTime1 = "2019-07-11 10:11:23"

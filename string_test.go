@@ -158,3 +158,33 @@ func BenchmarkString_RemoveSpace(b *testing.B) {
 		KStr.RemoveSpace(tesStr9, true)
 	}
 }
+
+func TestString_StripTags(t *testing.T) {
+	var res string
+
+	res = KStr.StripTags(tesStr10)
+	assert.NotContains(t, res, "script>")
+}
+
+func BenchmarkString_StripTags(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.StripTags(tesStr10)
+	}
+}
+
+func TestString_Html2Text(t *testing.T) {
+	var res string
+
+	res = KStr.Html2Text(tesHtmlDoc)
+	assert.NotEmpty(t, res)
+	assert.NotContains(t, res, "<")
+	assert.NotContains(t, res, ">")
+}
+
+func BenchmarkString_Html2Text(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Html2Text(tesHtmlDoc)
+	}
+}
