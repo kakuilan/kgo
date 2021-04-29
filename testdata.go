@@ -126,6 +126,7 @@ hello world<BR/>
 你好，世界<BR />
 the end.
 `
+var tesStr9 = "hello World. Hello  \t \n world!   Text   \f\n\t\v\r\fMore \014\012\011\013\015here      \t\n\t Hello,\tWorld\n!\n\t"
 
 
 //时间

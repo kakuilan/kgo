@@ -139,3 +139,22 @@ func BenchmarkString_Br2nl(b *testing.B) {
 		KStr.Br2nl(tesStr8)
 	}
 }
+
+func TestString_RemoveSpace(t *testing.T) {
+	var res string
+
+	//移除所有空格
+	res = KStr.RemoveSpace(tesStr9, true)
+	assert.NotContains(t, res, " ")
+
+	//移除连续空格
+	res = KStr.RemoveSpace(tesStr9, false)
+	assert.NotContains(t, res, "  ")
+}
+
+func BenchmarkString_RemoveSpace(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.RemoveSpace(tesStr9, true)
+	}
+}
