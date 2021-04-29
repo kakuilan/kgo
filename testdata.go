@@ -127,6 +127,10 @@ hello world<BR/>
 the end.
 `
 var tesStr9 = "hello World. Hello  \t \n world!   Text   \f\n\t\v\r\fMore \014\012\011\013\015here      \t\n\t Hello,\tWorld\n!\n\t"
+var tesStr10 = `
+<h1>Hello world!</h1>
+<script>alert('你好！')</scripty>
+`
 
 
 //时间

@@ -1259,3 +1259,17 @@ func BenchmarkArray_NewStrMapStr(b *testing.B) {
 		KArr.NewStrMapStr()
 	}
 }
+
+func TestString_StripTags(t *testing.T) {
+	var res string
+
+	res = KStr.StripTags(tesStr10)
+	assert.NotContains(t, res, "script>")
+}
+
+func BenchmarkString_StripTags(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.StripTags(tesStr10)
+	}
+}

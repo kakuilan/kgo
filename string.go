@@ -258,3 +258,8 @@ func (ks *LkkString) RemoveSpace(str string, all bool) string {
 
 	return strings.TrimSpace(str)
 }
+
+// StripTags 过滤html标签.
+func (ks *LkkString) StripTags(str string) string {
+	return RegHtmlTag.ReplaceAllString(str, "")
+}
