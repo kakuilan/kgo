@@ -5,6 +5,34 @@ import (
 	"testing"
 )
 
+func TestString_Md5Byte_Md5_IsMd5(t *testing.T) {
+	var res1, res2 []byte
+	var res3, res4 string
+	var chk bool
+
+	res1 = KStr.Md5Byte(bytsHello, 16)
+	assert.Equal(t, len(res1), 16)
+
+	res1 = KStr.Md5Byte(bytsHello, 0)
+	res2 = KStr.Md5Byte(bytsHello, 32)
+	assert.Equal(t, res1, res2)
+
+	res3 = KStr.Md5(strHello, 0)
+	res4 = KStr.Md5(strHello, 32)
+	assert.Equal(t, res3, res4)
+
+	res2 = KStr.Md5Byte(bytsHello)
+	res4 = KStr.Md5(strHello)
+	assert.Equal(t, string(res2), res4)
+
+	res3 = KStr.Md5(strHello, 16)
+	chk = KStr.IsMd5(res3)
+	assert.False(t, chk)
+
+	chk = KStr.IsMd5(res4)
+	assert.True(t, chk)
+}
+
 func TestString_AddslashesStripslashes(t *testing.T) {
 	var res1, res2 string
 

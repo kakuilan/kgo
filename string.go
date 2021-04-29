@@ -11,6 +11,48 @@ import (
 	"unicode/utf8"
 )
 
+// Md5 获取字节切片md5值.
+// length指定结果长度,默认32.
+func (ks *LkkString) Md5Byte(str []byte, length ...uint8) []byte {
+	var l uint8 = 32
+	if len(length) > 0 {
+		l = length[0]
+	}
+
+	return md5Byte(str, l)
+}
+
+// Md5 获取字符串md5值.
+// length指定结果长度,默认32.
+func (ks *LkkString) Md5(str string, length ...uint8) string {
+	var l uint8 = 32
+	if len(length) > 0 {
+		l = length[0]
+	}
+
+	return string(md5Byte([]byte(str), l))
+}
+
+// IsMd5 是否md5值.
+func (ks *LkkString) IsMd5(str string) bool {
+	return str != "" && RegMd5.MatchString(str)
+}
+
+// IsSha1 是否Sha1值.
+func (ks *LkkString) IsSha1(str string) bool {
+	return str != "" && RegSha1.MatchString(str)
+}
+
+// IsSha256 是否Sha256值.
+func (ks *LkkString) IsSha256(str string) bool {
+	return str != "" && RegSha256.MatchString(str)
+}
+
+// IsSha512 是否Sha512值.
+func (ks *LkkString) IsSha512(str string) bool {
+	return str != "" && RegSha512.MatchString(str)
+}
+
 // Addslashes 使用反斜线引用字符串.
 func (ks *LkkString) Addslashes(str string) string {
 	var buf bytes.Buffer
