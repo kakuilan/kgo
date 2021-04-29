@@ -98,7 +98,7 @@ res, err := KEncr.PasswordHash([]byte("123456"))
 - *KDbug* 为调试操作,如
 
 ```go
-KDbug.DumpStacks()
+KDbug.DumpPrint(1.2)
 ```
 
 具体函数请查看[godoc](https://pkg.go.dev/github.com/kakuilan/kgo),更多示例请参考*_test.go文件.

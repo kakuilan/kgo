@@ -114,6 +114,19 @@ var tesStr3 = "'foo @+%/'你好"
 var tesStr4 = `%27foo%20%40%2B%25%2F%27%E4%BD%A0%E5%A5%BD`
 var tesStr5 = "Is your name O'reilly?"
 var tesStr6 = `Is \ your \\name O\'reilly?`
+var tesStr7 = `hello
+world!
+你好！`
+var tesStr8 = `
+hello world<br>
+hello world<br/>
+你好，世界<br />
+hello world<BR>
+hello world<BR/>
+你好，世界<BR />
+the end.
+`
+
 
 //时间
 var strTime1 = "2019-07-11 10:11:23"

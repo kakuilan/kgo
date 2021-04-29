@@ -111,3 +111,31 @@ func BenchmarkString_IsGbk(b *testing.B) {
 		KStr.IsGbk(bytsGbkHello)
 	}
 }
+
+func TestString_Nl2br_Br2nl(t *testing.T) {
+	var res1, res2 string
+
+	res1 = KStr.Nl2br(tesStr7)
+	assert.Contains(t, res1, "<br />")
+
+	res2 = KStr.Br2nl(res1)
+	assert.Equal(t, res2, tesStr7)
+
+	res2 = KStr.Br2nl(tesStr8)
+	assert.NotContains(t, res2, "br")
+	assert.NotContains(t, res2, "BR")
+}
+
+func BenchmarkString_Nl2br(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Nl2br(tesStr7)
+	}
+}
+
+func BenchmarkString_Br2nl(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Br2nl(tesStr8)
+	}
+}
