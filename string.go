@@ -38,6 +38,16 @@ func (ks *LkkString) IsMd5(str string) bool {
 	return str != "" && RegMd5.MatchString(str)
 }
 
+// ShaXByte 计算字节切片的 shaX 散列值,x为1/256/512 .
+func (ks *LkkString) ShaXByte(str []byte, x uint16) []byte {
+	return shaXByte(str, x)
+}
+
+// ShaX 计算字符串的 shaX 散列值,x为1/256/512 .
+func (ks *LkkString) ShaX(str string, x uint16) string {
+	return string(shaXByte([]byte(str), x))
+}
+
 // IsSha1 是否Sha1值.
 func (ks *LkkString) IsSha1(str string) bool {
 	return str != "" && RegSha1.MatchString(str)

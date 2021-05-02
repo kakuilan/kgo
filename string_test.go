@@ -33,6 +33,27 @@ func TestString_Md5Byte_Md5_IsMd5(t *testing.T) {
 	assert.True(t, chk)
 }
 
+func BenchmarkString_Md5Byte(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Md5Byte(bytsHello)
+	}
+}
+
+func BenchmarkString_Md5(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Md5(strHello)
+	}
+}
+
+func BenchmarkString_IsMd5(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsMd5(strHello)
+	}
+}
+
 func TestString_AddslashesStripslashes(t *testing.T) {
 	var res1, res2 string
 
