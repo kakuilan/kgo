@@ -54,6 +54,112 @@ func BenchmarkString_IsMd5(b *testing.B) {
 	}
 }
 
+func TestString_ShaXByte_ShaX_IsSha1_IsSha256_IsSha512(t *testing.T) {
+	var res1, res2 []byte
+	var res3, res4 string
+	var chk bool
+
+	res1 = KStr.ShaXByte(bytsHello, 1)
+	res3 = KStr.ShaX(strHello, 1)
+	dumpPrint("1:", res3)
+	chk = KStr.IsSha1(res3)
+	assert.Equal(t, res3, string(res1))
+	assert.True(t, chk)
+
+	res2 = KStr.ShaXByte(bytsHello, 256)
+	res4 = KStr.ShaX(strHello, 256)
+	dumpPrint("256:", res4)
+	chk = KStr.IsSha256(res4)
+	assert.Equal(t, res4, string(res2))
+	assert.True(t, chk)
+
+	res1 = KStr.ShaXByte(bytsHello, 512)
+	res3 = KStr.ShaX(strHello, 512)
+	dumpPrint("512:", res3)
+	chk = KStr.IsSha512(res3)
+	assert.Equal(t, res3, string(res1))
+	assert.True(t, chk)
+}
+
+func TestString_ShaXByte_Panic(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.NotEmpty(t, r)
+	}()
+	KStr.ShaXByte(bytsHello, 32)
+}
+
+func TestString_ShaX_Panic(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.NotEmpty(t, r)
+	}()
+	KStr.ShaX(strHello, 64)
+}
+
+func BenchmarkString_ShaXByte1(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.ShaXByte(bytsHello, 1)
+	}
+}
+
+func BenchmarkString_ShaXByte256(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.ShaXByte(bytsHello, 256)
+	}
+}
+
+func BenchmarkString_ShaXByte512(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.ShaXByte(bytsHello, 512)
+	}
+}
+
+func BenchmarkString_ShaX1(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.ShaX(strHello, 1)
+	}
+}
+
+func BenchmarkString_ShaX256(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.ShaX(strHello, 256)
+	}
+}
+
+func BenchmarkString_ShaX512(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.ShaX(strHello, 512)
+	}
+}
+
+func BenchmarkString_IsSha1(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsSha1(strSha1)
+	}
+}
+
+func BenchmarkString_strSha256(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsSha256(strSha256)
+	}
+}
+
+func BenchmarkString_strSha512(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsSha512(strSha512)
+	}
+}
+
 func TestString_AddslashesStripslashes(t *testing.T) {
 	var res1, res2 string
 
