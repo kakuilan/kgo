@@ -134,6 +134,7 @@ var tesStr10 = `
 <h1>Hello world!</h1>
 <script>alert('你好！')</scripty>
 `
+var tesStr11 = "Hello 你好, World 世界！"
 
 //html
 var tesHtmlDoc = `

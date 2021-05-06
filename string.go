@@ -7,7 +7,9 @@ import (
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/transform"
 	"io"
+	"math/rand"
 	"strings"
+	"time"
 	"unicode/utf8"
 )
 
@@ -61,6 +63,36 @@ func (ks *LkkString) IsSha256(str string) bool {
 // IsSha512 是否Sha512值.
 func (ks *LkkString) IsSha512(str string) bool {
 	return str != "" && RegSha512.MatchString(str)
+}
+
+// Index 查找子串sub在字符串str中第一次出现的位置,不存在则返回-1;
+// ignoreCase为是否忽略大小写.
+func (ks *LkkString) Index(str, sub string, ignoreCase bool) int {
+	if str == "" || sub == "" {
+		return -1
+	}
+
+	if ignoreCase {
+		str = strings.ToLower(str)
+		sub = strings.ToLower(sub)
+	}
+
+	return strings.Index(str, sub)
+}
+
+// LastIndex 查找子串sub在字符串str中最后一次出现的位置,不存在则返回-1;
+// ignoreCase为是否忽略大小写.
+func (ks *LkkString) LastIndex(str, sub string, ignoreCase bool) int {
+	if str == "" || sub == "" {
+		return -1
+	}
+
+	if ignoreCase {
+		str = strings.ToLower(str)
+		sub = strings.ToLower(sub)
+	}
+
+	return strings.LastIndex(str, sub)
 }
 
 // Addslashes 使用反斜线引用字符串.
@@ -167,36 +199,6 @@ func (ks *LkkString) Img2Base64(content []byte, ext ...string) string {
 	}
 
 	return img2Base64(content, imgType)
-}
-
-// Index 查找子串sub在字符串str中第一次出现的位置,不存在则返回-1;
-// ignoreCase为是否忽略大小写.
-func (ks *LkkString) Index(str, sub string, ignoreCase bool) int {
-	if str == "" || sub == "" {
-		return -1
-	}
-
-	if ignoreCase {
-		str = strings.ToLower(str)
-		sub = strings.ToLower(sub)
-	}
-
-	return strings.Index(str, sub)
-}
-
-// LastIndex 查找子串sub在字符串str中最后一次出现的位置,不存在则返回-1;
-// ignoreCase为是否忽略大小写.
-func (ks *LkkString) LastIndex(str, sub string, ignoreCase bool) int {
-	if str == "" || sub == "" {
-		return -1
-	}
-
-	if ignoreCase {
-		str = strings.ToLower(str)
-		sub = strings.ToLower(sub)
-	}
-
-	return strings.LastIndex(str, sub)
 }
 
 // StartsWith 字符串str是否以sub开头.
@@ -375,4 +377,47 @@ loopDom:
 	}
 
 	return ks.RemoveSpace(text, false)
+}
+
+// Random 生成随机字符串.
+// length为长度,rtype为枚举:
+// RAND_STRING_ALPHA 字母;
+// RAND_STRING_NUMERIC 数值;
+// RAND_STRING_ALPHANUM 字母+数值;
+// RAND_STRING_SPECIAL 字母+数值+特殊字符;
+// RAND_STRING_CHINESE 仅中文.
+// TODO test
+func (ks *LkkString) Random(length uint8, rtype LkkRandString) string {
+	if length == 0 {
+		return ""
+	}
+
+	var letter []rune
+	alphas := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	numbers := "0123456789"
+	specials := "~!@#$%^&*()_+{}:|<>?`-=;,."
+
+	rand.Seed(time.Now().UTC().UnixNano())
+
+	switch rtype {
+	case RAND_STRING_ALPHA:
+		letter = []rune(alphas)
+	case RAND_STRING_NUMERIC:
+		letter = []rune(numbers)
+	case RAND_STRING_ALPHANUM:
+		letter = []rune(alphas + numbers)
+	case RAND_STRING_SPECIAL:
+		letter = []rune(alphas + numbers + specials)
+	case RAND_STRING_CHINESE:
+		letter = CommonChinese
+	default:
+		letter = []rune(alphas)
+	}
+
+	res := make([]rune, length)
+	for i := range res {
+		res[i] = letter[rand.Intn(len(letter))]
+	}
+
+	return string(res)
 }
