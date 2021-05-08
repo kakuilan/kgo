@@ -736,3 +736,23 @@ func BenchmarkString_IsLetters(b *testing.B) {
 		KStr.IsLetters(tesStr11)
 	}
 }
+
+func TestString_IsUpper(t *testing.T) {
+	var res bool
+
+	res = KStr.IsUpper(tesStr13)
+	assert.True(t, res)
+
+	res = KStr.IsUpper(strHello)
+	assert.False(t, res)
+
+	res = KStr.IsUpper("")
+	assert.False(t, res)
+}
+
+func BenchmarkString_IsUpper(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsUpper(tesStr13)
+	}
+}

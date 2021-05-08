@@ -136,6 +136,8 @@ var tesStr10 = `
 `
 var tesStr11 = "HelloWorld"
 var tesStr12 = "Hello 你好, World 世界！"
+var tesStr13 = "HELLO"
+var tesStr14 = "world"
 
 //html
 var tesHtmlDoc = `

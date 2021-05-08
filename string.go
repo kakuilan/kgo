@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"strings"
 	"time"
+	"unicode"
 	"unicode/utf8"
 )
 
@@ -236,6 +237,16 @@ func (ks *LkkString) IsEmpty(str string) bool {
 func (ks *LkkString) IsLetters(str string) bool {
 	for _, r := range str {
 		if (r < 'a' || r > 'z') && (r < 'A' || r > 'Z') {
+			return false
+		}
+	}
+	return str != ""
+}
+
+// IsUpper 字符串是否全部大写.
+func (ks *LkkString) IsUpper(str string) bool {
+	for _, r := range str {
+		if !unicode.IsUpper(r) && unicode.IsLetter(r) {
 			return false
 		}
 	}
