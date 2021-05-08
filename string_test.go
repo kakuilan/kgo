@@ -1005,3 +1005,36 @@ func BenchmarkString_IsChinese(b *testing.B) {
 		KStr.IsChinese(helloCn)
 	}
 }
+
+func TestString_IsChineseName(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{strPi6, false},
+		{strKor, false},
+		{helloEngICase, false},
+		{utf8Hello, false},
+		{helloCn, true},
+		{tesChineseName1, true},
+		{tesChineseName2, false},
+		{tesChineseName2, true},
+		{tesChineseName3, true},
+		{tesChineseName4, true},
+		{tesChineseName5, true},
+		{tesChineseName6, true},
+		{tesChineseName7, true},
+	}
+	for _, test := range tests {
+		actual := KStr.IsChineseName(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsChineseName(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsChineseName(tesChineseName3)
+	}
+}

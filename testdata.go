@@ -158,6 +158,15 @@ var tesEmail5 = "email@x-unkown-domain.com"
 var tesEmail6 = "copyright@github.com"
 var tesEmail7 = "abc@abc123.com"
 
+//中文名
+var tesChineseName1 = "李四"
+var tesChineseName2 = "张三a"
+var tesChineseName3 = "赵武灵王"
+var tesChineseName4 = "南宫先生"
+var tesChineseName5 = "吉乃•阿衣·依扎嫫"
+var tesChineseName6 = "古丽莎•卡迪尔"
+var tesChineseName7 = "迪丽热巴.迪力木拉提"
+
 //标点符号、特殊字符
 var strPunctuation1 = "<>@;.-="
 var strPunctuation2 = "!\"#$%&()<>/+=-_? ~^|.,@`{}[]"
