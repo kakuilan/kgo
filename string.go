@@ -356,6 +356,11 @@ func (ks *LkkString) IsNumeric(str string) bool {
 	return err == nil
 }
 
+// IsAlphaNumeric 是否字母或数字.
+func (ks *LkkString) IsAlphaNumeric(str string) bool {
+	return str != "" && RegAlphaNumeric.MatchString(str)
+}
+
 // HasSpecialChar 字符串是否含有特殊字符.
 func (ks *LkkString) HasSpecialChar(str string) bool {
 	for _, r := range str {

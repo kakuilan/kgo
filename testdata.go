@@ -156,6 +156,7 @@ var tesStr23 = "8point"
 var tesStr24 = "hello_Kitty2"
 var tesStr25 = "hello-Kitty2"
 var tesStr26 = "Hello ៉៊់៌៍！"
+var tesStr27 = "pi314159"
 
 //中文名
 var tesChineseName1 = "李四"

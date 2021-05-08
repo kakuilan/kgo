@@ -1179,3 +1179,29 @@ func BenchmarkString_IsNumeric(b *testing.B) {
 		KStr.IsNumeric(strPi6)
 	}
 }
+
+func TestString_IsAlphaNumeric(t *testing.T) {
+	var tests = []struct {
+		str      string
+		expected bool
+	}{
+		{"", false},
+		{strHello, false},
+		{helloCn, false},
+		{strPi6, false},
+		{helloEngICase, true},
+		{strSpeedLight, true},
+		{tesStr27, true},
+	}
+	for _, test := range tests {
+		actual := KStr.IsAlphaNumeric(test.str)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsAlphaNumeric(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsAlphaNumeric(tesStr27)
+	}
+}
