@@ -793,3 +793,31 @@ func BenchmarkString_HasLetter(b *testing.B) {
 		KStr.HasLetter(strHello)
 	}
 }
+
+func TestString_IsASCII(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{tesStr15, false},
+		{tesStr16, false},
+		{tesStr17, false},
+		{utf8Hello, false},
+		{tesStr18, true},
+		{otcAstronomicalUnit, true},
+		{tesEmail1, true},
+		{strHelloHex, true},
+	}
+	for _, test := range tests {
+		actual := KStr.IsASCII(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsASCII(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsASCII(tesStr11)
+	}
+}

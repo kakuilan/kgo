@@ -138,6 +138,19 @@ var tesStr11 = "HelloWorld"
 var tesStr12 = "Hello 你好, World 世界！"
 var tesStr13 = "HELLO"
 var tesStr14 = "world"
+var tesStr15 = "ｆｏｏbar"
+var tesStr16 = "ｘｙｚ０９８"
+var tesStr17 = "１２３456"
+var tesStr18 = "foobar"
+
+//email
+var tesEmail1 = "test@example.com"
+var tesEmail2 = "a@b.c"
+var tesEmail3 = "hello-world@c"
+var tesEmail4 = "ç$€§/az@gmail.com"
+var tesEmail5 = "email@x-unkown-domain.com"
+var tesEmail6 = "copyright@github.com"
+var tesEmail7 = "abc@abc123.com"
 
 //html
 var tesHtmlDoc = `
