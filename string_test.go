@@ -756,3 +756,23 @@ func BenchmarkString_IsUpper(b *testing.B) {
 		KStr.IsUpper(tesStr13)
 	}
 }
+
+func TestString_IsLower(t *testing.T) {
+	var res bool
+
+	res = KStr.IsLower(tesStr14)
+	assert.True(t, res)
+
+	res = KStr.IsLower(strHello)
+	assert.False(t, res)
+
+	res = KStr.IsLower("")
+	assert.False(t, res)
+}
+
+func BenchmarkString_IsLower(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsLower(tesStr14)
+	}
+}
