@@ -11,6 +11,7 @@ import (
 	"io"
 	"math/rand"
 	"net/url"
+	"strconv"
 	"strings"
 	"time"
 	"unicode"
@@ -344,6 +345,15 @@ func (ks *LkkString) IsChineseName(str string) bool {
 // IsWord 是否词语(不以下划线开头的中文、英文、数字、下划线).
 func (ks *LkkString) IsWord(str string) bool {
 	return str != "" && RegWord.MatchString(str)
+}
+
+// IsNumeric 字符串是否数值(不包含复数和科学计数法).
+func (ks *LkkString) IsNumeric(str string) bool {
+	if str == "" {
+		return false
+	}
+	_, err := strconv.ParseFloat(str, 64)
+	return err == nil
 }
 
 // HasSpecialChar 字符串是否含有特殊字符.

@@ -1155,3 +1155,27 @@ func BenchmarkString_Jsonp2Json(b *testing.B) {
 		_, _ = KStr.Jsonp2Json(strJson4)
 	}
 }
+
+func TestString_IsNumeric(t *testing.T) {
+	var tests = []struct {
+		str      string
+		expected bool
+	}{
+		{"", false},
+		{helloCn, false},
+		{helloEngICase, false},
+		{strSpeedLight, true},
+		{strPi6, true},
+	}
+	for _, test := range tests {
+		actual := KStr.IsNumeric(test.str)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsNumeric(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsNumeric(strPi6)
+	}
+}
