@@ -1019,7 +1019,6 @@ func TestString_IsChineseName(t *testing.T) {
 		{helloCn, true},
 		{tesChineseName1, true},
 		{tesChineseName2, false},
-		{tesChineseName2, true},
 		{tesChineseName3, true},
 		{tesChineseName4, true},
 		{tesChineseName5, true},
@@ -1036,5 +1035,35 @@ func BenchmarkString_IsChineseName(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KStr.IsChineseName(tesChineseName3)
+	}
+}
+
+func TestString_IsWord(t *testing.T) {
+	var tests = []struct {
+		str      string
+		expected bool
+	}{
+		{"", false},
+		{tesStr19, false},
+		{tesStr20, false},
+		{tesStr21, false},
+		{tesStr12, false},
+		{helloCn, true},
+		{tesStr13, true},
+		{tesStr22, true},
+		{tesStr23, true},
+		{tesStr24, true},
+		{tesStr25, false},
+	}
+	for _, test := range tests {
+		actual := KStr.IsWord(test.str)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsWord(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsWord(helloCn)
 	}
 }

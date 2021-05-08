@@ -148,6 +148,13 @@ var tesStr15 = "ｆｏｏbar"
 var tesStr16 = "ｘｙｚ０９８"
 var tesStr17 = "１２３456"
 var tesStr18 = "foobar"
+var tesStr19 = "_Football"
+var tesStr20 = "-Football"
+var tesStr21 = " 3.124"
+var tesStr22 = "作品T"
+var tesStr23 = "8point"
+var tesStr24 = "hello_Kitty2"
+var tesStr25 = "hello-Kitty2"
 
 //email
 var tesEmail1 = "test@example.com"
