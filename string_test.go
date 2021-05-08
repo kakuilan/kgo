@@ -955,3 +955,28 @@ func TestString_HasEnglish(t *testing.T) {
 		assert.Equal(t, actual, test.expected)
 	}
 }
+
+func TestString_HasChinese(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{strPi6, false},
+		{helloEngICase, false},
+		{strKor, false},
+		{utf8Hello, true},
+		{strHello, true},
+	}
+	for _, test := range tests {
+		actual := KStr.HasChinese(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_HasChinese(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.HasChinese(strHello)
+	}
+}
