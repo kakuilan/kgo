@@ -716,3 +716,23 @@ func BenchmarkString_IsEmpty(b *testing.B) {
 		KStr.IsEmpty(strHello)
 	}
 }
+
+func TestString_IsLetters(t *testing.T) {
+	var res bool
+
+	res = KStr.IsLetters(tesStr11)
+	assert.True(t, res)
+
+	res = KStr.IsLetters(tesStr12)
+	assert.False(t, res)
+
+	res = KStr.IsLetters("")
+	assert.False(t, res)
+}
+
+func BenchmarkString_IsLetters(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsLetters(tesStr11)
+	}
+}
