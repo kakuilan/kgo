@@ -155,6 +155,7 @@ var tesStr22 = "作品T"
 var tesStr23 = "8point"
 var tesStr24 = "hello_Kitty2"
 var tesStr25 = "hello-Kitty2"
+var tesStr26 = "Hello ៉៊់៌៍！"
 
 //email
 var tesEmail1 = "test@example.com"
@@ -177,6 +178,7 @@ var tesChineseName7 = "迪丽热巴.迪力木拉提"
 //标点符号、特殊字符
 var strPunctuation1 = "<>@;.-="
 var strPunctuation2 = "!\"#$%&()<>/+=-_? ~^|.,@`{}[]"
+var strPunctuation3 = "`~!@#$%^&*()_+-=:'|<>?,./\""
 
 //html
 var tesHtmlDoc = `

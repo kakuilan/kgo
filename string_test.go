@@ -1067,3 +1067,33 @@ func BenchmarkString_IsWord(b *testing.B) {
 		KStr.IsWord(helloCn)
 	}
 }
+
+func TestString_HasSpecialChar(t *testing.T) {
+	var tests = []struct {
+		str      string
+		expected bool
+	}{
+		{"", false},
+		{helloCn, false},
+		{helloEngICase, false},
+		{tesStr15, false},
+		{tesStr16, false},
+		{strHello, true},
+		{tesStr12, true},
+		{tesStr19, true},
+		{tesStr20, true},
+		{tesStr26, true},
+		{strPunctuation3, true},
+	}
+	for _, test := range tests {
+		actual := KStr.HasSpecialChar(test.str)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_HasSpecialChar(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.HasSpecialChar(strPunctuation3)
+	}
+}
