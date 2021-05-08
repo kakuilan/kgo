@@ -872,3 +872,69 @@ func TestString_HasFullWidth(t *testing.T) {
 		assert.Equal(t, actual, test.expected)
 	}
 }
+
+func BenchmarkString_HasFullWidth(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.HasFullWidth(strHello)
+	}
+}
+
+func TestString_HasHalfWidth(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{tesStr11, true},
+		{strSpeedLight, true},
+		{tesStr5, true},
+		{strPunctuation2, true},
+		{strJap, false},
+		{strKor, false},
+		{strHello, true},
+		{tesStr15, true},
+		{tesStr16, false},
+	}
+	for _, test := range tests {
+		actual := KStr.HasHalfWidth(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_HasHalfWidth(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.HasHalfWidth(strHello)
+	}
+}
+
+func TestString_IsEnglish(t *testing.T) {
+	var tests = []struct {
+		str      string
+		cas      LkkCaseSwitch
+		expected bool
+	}{
+		{"", CASE_NONE, false},
+		{strPi6, CASE_NONE, false},
+		{strHello, CASE_NONE, false},
+		{b64Hello, CASE_NONE, false},
+		{helloEngICase, CASE_NONE, true},
+		{helloEngICase, 9, true},
+		{helloEngICase, CASE_LOWER, false},
+		{helloEngICase, CASE_UPPER, false},
+		{helloEngLower, CASE_LOWER, true},
+		{helloEngUpper, CASE_UPPER, true},
+	}
+	for _, test := range tests {
+		actual := KStr.IsEnglish(test.str, test.cas)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsEnglish(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsEnglish(helloEngICase, CASE_NONE)
+	}
+}

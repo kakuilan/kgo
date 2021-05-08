@@ -97,6 +97,10 @@ var cmplNum2 = complex(3, 4)
 var strHello = "Hello World! 你好！"
 var b64Hello = "SGVsbG8gV29ybGQhIOS9oOWlve+8gQ=="
 var strHelloHex = "48656c6c6f20576f726c642120e4bda0e5a5bdefbc81" //strHello的16进制
+var utf8Hello = "你好，世界！"
+var helloEngICase = "HelloWorld"
+var helloEngUpper = "HELLOWORLD"
+var helloEngLower = "helloworld"
 var strSpeedLight = "299792458"
 var binAstronomicalUnit = "10001011010100101110100101101001000100" //intAstronomicalUnit的二进制
 var hexAstronomicalUnit = "22d4ba5a44"                             //intAstronomicalUnit的16进制
@@ -109,7 +113,6 @@ var esyenCode = "23da39b4epjQzaJZuaPW0piFWEbvA0cJISjztw"
 var strNoGbk = "月日は百代の過客にして、行かふ年も又旅人也。안녕.ＡＢＣＤＥＦＧＨＩＪＫ"
 var strJap = "ひらがな・カタカナ、．漢字"
 var strKor = "안녕하세요"
-var utf8Hello = "你好，世界！"
 var strSha1 = "82c9c0b34622756f6ef9731fbd8fbcef168a907f"
 var strSha256 = "dcad188403ba3a4931288076f8398283abed9a90d1955364b3b5beeb551f0062"
 var strSha512 = "057e65f970c85399b3953059b059c58c5b4eeeb572c741adb13af2fe2696f1ca3edc3757005aa801ea2bedc29529ba0c638e945fd95341d4dfbb6b693c3f6dfb"
@@ -136,7 +139,7 @@ var tesStr10 = `
 <h1>Hello world!</h1>
 <script>alert('你好！')</scripty>
 `
-var tesStr11 = "HelloWorld"
+var tesStr11 = "LeBronJames"
 var tesStr12 = "Hello 你好, World 世界！"
 var tesStr13 = "HELLO"
 var tesStr14 = "world"

@@ -296,6 +296,23 @@ func (ks *LkkString) HasFullWidth(str string) bool {
 	return str != "" && RegFullWidth.MatchString(str)
 }
 
+// HasHalfWidth 是否含有半角字符.
+func (ks *LkkString) HasHalfWidth(str string) bool {
+	return str != "" && RegHalfWidth.MatchString(str)
+}
+
+// IsEnglish 字符串是否纯英文.letterCase是否检查大小写,枚举值(CASE_NONE,CASE_LOWER,CASE_UPPER).
+func (ks *LkkString) IsEnglish(str string, letterCase LkkCaseSwitch) bool {
+	switch letterCase {
+	case CASE_LOWER:
+		return str != "" && RegAlphaLower.MatchString(str)
+	case CASE_UPPER:
+		return str != "" && RegAlphaUpper.MatchString(str)
+	default: //CASE_NONE
+		return ks.IsLetters(str)
+	}
+}
+
 // Strpos 查找字符串首次出现的位置,找不到时返回-1.
 // haystack在该字符串中进行查找,needle要查找的字符串;
 // offset起始位置,为负数时时,搜索会从字符串结尾指定字符数开始.
