@@ -821,3 +821,32 @@ func BenchmarkString_IsASCII(b *testing.B) {
 		KStr.IsASCII(tesStr11)
 	}
 }
+
+func TestString_IsMultibyte(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{tesStr11, false},
+		{strSpeedLight, false},
+		{strPunctuation1, false},
+		{tesEmail1, false},
+		{strKor, true},
+		{strNoGbk, true},
+		{strJap, true},
+		{strHello, true},
+		{tesStr16, true},
+	}
+	for _, test := range tests {
+		actual := KStr.IsMultibyte(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsMultibyte(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsMultibyte(strNoGbk)
+	}
+}

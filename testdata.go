@@ -107,6 +107,8 @@ var str2Code = "https://tool.google.com.net/encrypt?type=4Hello World! 你好！
 var b64UrlCode = "aHR0cHM6Ly90b29sLmdvb2dsZS5jb20ubmV0L2VuY3J5cHQ_dHlwZT00SGVsbG8gV29ybGQhIOS9oOWlve-8gQ"
 var esyenCode = "23da39b4epjQzaJZuaPW0piFWEbvA0cJISjztw"
 var strNoGbk = "月日は百代の過客にして、行かふ年も又旅人也。안녕.ＡＢＣＤＥＦＧＨＩＪＫ"
+var strJap = "ひらがな・カタカナ、．漢字"
+var strKor = "안녕하세요"
 var utf8Hello = "你好，世界！"
 var strSha1 = "82c9c0b34622756f6ef9731fbd8fbcef168a907f"
 var strSha256 = "dcad188403ba3a4931288076f8398283abed9a90d1955364b3b5beeb551f0062"
@@ -151,6 +153,9 @@ var tesEmail4 = "ç$€§/az@gmail.com"
 var tesEmail5 = "email@x-unkown-domain.com"
 var tesEmail6 = "copyright@github.com"
 var tesEmail7 = "abc@abc123.com"
+
+//标点符号
+var strPunctuation1 = "<>@;.-="
 
 //html
 var tesHtmlDoc = `
