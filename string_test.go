@@ -776,3 +776,20 @@ func BenchmarkString_IsLower(b *testing.B) {
 		KStr.IsLower(tesStr14)
 	}
 }
+
+func TestString_HasLetter(t *testing.T) {
+	var res bool
+
+	res = KStr.HasLetter(strHello)
+	assert.True(t, res)
+
+	res = KStr.HasLetter(strSpeedLight)
+	assert.False(t, res)
+}
+
+func BenchmarkString_HasLetter(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.HasLetter(strHello)
+	}
+}
