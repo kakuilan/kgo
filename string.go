@@ -291,6 +291,11 @@ func (ks *LkkString) IsMultibyte(str string) bool {
 	return str != "" && RegMultiByte.MatchString(str)
 }
 
+// HasFullWidth 是否含有全角字符.
+func (ks *LkkString) HasFullWidth(str string) bool {
+	return str != "" && RegFullWidth.MatchString(str)
+}
+
 // Strpos 查找字符串首次出现的位置,找不到时返回-1.
 // haystack在该字符串中进行查找,needle要查找的字符串;
 // offset起始位置,为负数时时,搜索会从字符串结尾指定字符数开始.

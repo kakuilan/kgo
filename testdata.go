@@ -154,8 +154,9 @@ var tesEmail5 = "email@x-unkown-domain.com"
 var tesEmail6 = "copyright@github.com"
 var tesEmail7 = "abc@abc123.com"
 
-//标点符号
+//标点符号、特殊字符
 var strPunctuation1 = "<>@;.-="
+var strPunctuation2 = "!\"#$%&()<>/+=-_? ~^|.,@`{}[]"
 
 //html
 var tesHtmlDoc = `

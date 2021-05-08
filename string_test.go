@@ -850,3 +850,25 @@ func BenchmarkString_IsMultibyte(b *testing.B) {
 		KStr.IsMultibyte(strNoGbk)
 	}
 }
+
+func TestString_HasFullWidth(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{tesStr11, false},
+		{strSpeedLight, false},
+		{tesStr5, false},
+		{strPunctuation2, false},
+		{strJap, true},
+		{strKor, true},
+		{strHello, true},
+		{tesStr15, true},
+		{tesStr16, true},
+	}
+	for _, test := range tests {
+		actual := KStr.HasFullWidth(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
