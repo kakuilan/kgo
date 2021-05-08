@@ -313,6 +313,11 @@ func (ks *LkkString) IsEnglish(str string, letterCase LkkCaseSwitch) bool {
 	}
 }
 
+// HasEnglish 是否含有英文字符,HasLetter的别名.
+func (ks *LkkString) HasEnglish(str string) bool {
+	return ks.HasLetter(str)
+}
+
 // Strpos 查找字符串首次出现的位置,找不到时返回-1.
 // haystack在该字符串中进行查找,needle要查找的字符串;
 // offset起始位置,为负数时时,搜索会从字符串结尾指定字符数开始.

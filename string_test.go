@@ -938,3 +938,20 @@ func BenchmarkString_IsEnglish(b *testing.B) {
 		KStr.IsEnglish(helloEngICase, CASE_NONE)
 	}
 }
+
+func TestString_HasEnglish(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{strPi6, false},
+		{utf8Hello, false},
+		{strHello, true},
+		{helloEngICase, true},
+	}
+	for _, test := range tests {
+		actual := KStr.HasEnglish(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
