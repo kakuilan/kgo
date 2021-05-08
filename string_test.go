@@ -1097,3 +1097,61 @@ func BenchmarkString_HasSpecialChar(b *testing.B) {
 		KStr.HasSpecialChar(strPunctuation3)
 	}
 }
+
+func TestString_IsJSON_Jsonp2Json(t *testing.T) {
+	var res string
+	var chk bool
+	var err error
+
+	chk = KStr.IsJSON("")
+	assert.False(t, chk)
+
+	chk = KStr.IsJSON(strHello)
+	assert.False(t, chk)
+
+	chk = KStr.IsJSON(strJson5)
+	assert.True(t, chk)
+
+	chk = KStr.IsJSON(strJson6)
+	assert.True(t, chk)
+
+	res, err = KStr.Jsonp2Json(strJson1)
+	chk = KStr.IsJSON(res)
+	assert.True(t, chk)
+	assert.Nil(t, err)
+
+	res, err = KStr.Jsonp2Json(strJson2)
+	chk = KStr.IsJSON(res)
+	assert.True(t, chk)
+	assert.Nil(t, err)
+
+	//错误格式
+	res, err = KStr.Jsonp2Json("")
+	chk = KStr.IsJSON(res)
+	assert.False(t, chk)
+	assert.NotNil(t, err)
+
+	res, err = KStr.Jsonp2Json(strHello)
+	chk = KStr.IsJSON(res)
+	assert.False(t, chk)
+	assert.NotNil(t, err)
+
+	res, err = KStr.Jsonp2Json(strJson3)
+	chk = KStr.IsJSON(res)
+	assert.False(t, chk)
+	assert.NotNil(t, err)
+}
+
+func BenchmarkString_IsJSON(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsJSON(strJson6)
+	}
+}
+
+func BenchmarkString_Jsonp2Json(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.Jsonp2Json(strJson4)
+	}
+}

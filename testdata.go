@@ -157,15 +157,6 @@ var tesStr24 = "hello_Kitty2"
 var tesStr25 = "hello-Kitty2"
 var tesStr26 = "Hello ៉៊់៌៍！"
 
-//email
-var tesEmail1 = "test@example.com"
-var tesEmail2 = "a@b.c"
-var tesEmail3 = "hello-world@c"
-var tesEmail4 = "ç$€§/az@gmail.com"
-var tesEmail5 = "email@x-unkown-domain.com"
-var tesEmail6 = "copyright@github.com"
-var tesEmail7 = "abc@abc123.com"
-
 //中文名
 var tesChineseName1 = "李四"
 var tesChineseName2 = "张三a"
@@ -179,6 +170,23 @@ var tesChineseName7 = "迪丽热巴.迪力木拉提"
 var strPunctuation1 = "<>@;.-="
 var strPunctuation2 = "!\"#$%&()<>/+=-_? ~^|.,@`{}[]"
 var strPunctuation3 = "`~!@#$%^&*()_+-=:'|<>?,./\""
+
+//json
+var strJson1 = `JsonpCallbackFn_abc123etc({"meta":{"Status":200,"Content-Type":"application/json","Content-Length":"19","etc":"etc"},"data":{"name":"yummy"}})`
+var strJson2 = `myFunc([{"Name":"Bob","Age":32,"Company":"IBM","Engineer":true},{"Name":"John","Age":20,"Company":"Oracle","Engineer":false},{"Name":"Henry","Age":45,"Company":"Microsoft","Engineer":false}]);`
+var strJson3 = "call)hello world(done"
+var strJson4 = `JsonpCallbackFn_abc123etc({"meta":{"Status":200,"Content-Type":"application/json","Content-Length":"19","etc":"etc"},"data":{"name":"yummy"}})`
+var strJson5 = `{"id":"1"}`
+var strJson6 = `[{"key1":"value1"},{"key2":"value2"}]`
+
+//email
+var tesEmail1 = "test@example.com"
+var tesEmail2 = "a@b.c"
+var tesEmail3 = "hello-world@c"
+var tesEmail4 = "ç$€§/az@gmail.com"
+var tesEmail5 = "email@x-unkown-domain.com"
+var tesEmail6 = "copyright@github.com"
+var tesEmail7 = "abc@abc123.com"
 
 //html
 var tesHtmlDoc = `

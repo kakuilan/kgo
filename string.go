@@ -2,6 +2,8 @@ package kgo
 
 import (
 	"bytes"
+	"encoding/json"
+	"errors"
 	"github.com/json-iterator/go"
 	xhtml "golang.org/x/net/html"
 	"golang.org/x/text/encoding/simplifiedchinese"
@@ -356,6 +358,39 @@ func (ks *LkkString) HasSpecialChar(str string) bool {
 	}
 
 	return false
+}
+
+// IsJSON 字符串是否合法的json格式.
+func (ks *LkkString) IsJSON(str string) bool {
+	length := len(str)
+	if length == 0 {
+		return false
+	} else if (str[0] != '{' || str[length-1] != '}') && (str[0] != '[' || str[length-1] != ']') {
+		return false
+	}
+
+	var js json.RawMessage
+	return json.Unmarshal([]byte(str), &js) == nil
+}
+
+// Jsonp2Json 将jsonp转为json串.
+// Example: forbar({a:"1",b:2}) to {"a":"1","b":2}
+func (ks *LkkString) Jsonp2Json(str string) (string, error) {
+	start := strings.Index(str, "(")
+	end := strings.LastIndex(str, ")")
+
+	if start == -1 || end == -1 {
+		return "", errors.New("[Jsonp2Json] invalid jsonp.")
+	}
+
+	start += 1
+	if start >= end {
+		return "", errors.New("[Jsonp2Json] invalid jsonp.")
+	}
+
+	res := str[start:end]
+
+	return res, nil
 }
 
 // Strpos 查找字符串首次出现的位置,找不到时返回-1.
