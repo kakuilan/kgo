@@ -696,3 +696,23 @@ func BenchmarkString_ClearUrlSuffix(b *testing.B) {
 		KStr.ClearUrlSuffix(tesUrl12)
 	}
 }
+
+func TestString_IsEmpty(t *testing.T) {
+	var res bool
+
+	res = KStr.IsEmpty("")
+	assert.True(t, res)
+
+	res = KStr.IsEmpty("  ")
+	assert.True(t, res)
+
+	res = KStr.IsEmpty(strHello)
+	assert.False(t, res)
+}
+
+func BenchmarkString_IsEmpty(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsEmpty(strHello)
+	}
+}

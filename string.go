@@ -187,11 +187,6 @@ func (ks *LkkString) IsGbk(s []byte) (res bool) {
 	return
 }
 
-// DetectEncoding 匹配字符编码,TODO.
-func (ks *LkkString) DetectEncoding() {
-	//TODO 检查字符编码
-}
-
 // Img2Base64 将图片字节转换为base64字符串.ext为图片扩展名,默认jpg.
 func (ks *LkkString) Img2Base64(content []byte, ext ...string) string {
 	var imgType string = "jpg"
@@ -226,6 +221,15 @@ func (ks *LkkString) EndsWith(str, sub string, ignoreCase bool) bool {
 func (ks *LkkString) Trim(str string, characterMask ...string) string {
 	mask := getTrimMask(characterMask)
 	return strings.Trim(str, mask)
+}
+
+// IsEmpty 字符串是否为空(包括空格).
+func (ks *LkkString) IsEmpty(str string) bool {
+	if str == "" || len(ks.Trim(str)) == 0 {
+		return true
+	}
+
+	return false
 }
 
 // Strpos 查找字符串首次出现的位置,找不到时返回-1.
@@ -378,49 +382,6 @@ loopDom:
 	}
 
 	return ks.RemoveSpace(text, false)
-}
-
-// Random 生成随机字符串.
-// length为长度,rtype为枚举:
-// RAND_STRING_ALPHA 字母;
-// RAND_STRING_NUMERIC 数值;
-// RAND_STRING_ALPHANUM 字母+数值;
-// RAND_STRING_SPECIAL 字母+数值+特殊字符;
-// RAND_STRING_CHINESE 仅中文.
-// TODO test
-func (ks *LkkString) Random(length uint8, rtype LkkRandString) string {
-	if length == 0 {
-		return ""
-	}
-
-	var letter []rune
-	alphas := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	numbers := "0123456789"
-	specials := "~!@#$%^&*()_+{}:|<>?`-=;,."
-
-	rand.Seed(time.Now().UTC().UnixNano())
-
-	switch rtype {
-	case RAND_STRING_ALPHA:
-		letter = []rune(alphas)
-	case RAND_STRING_NUMERIC:
-		letter = []rune(numbers)
-	case RAND_STRING_ALPHANUM:
-		letter = []rune(alphas + numbers)
-	case RAND_STRING_SPECIAL:
-		letter = []rune(alphas + numbers + specials)
-	case RAND_STRING_CHINESE:
-		letter = CommonChinese
-	default:
-		letter = []rune(alphas)
-	}
-
-	res := make([]rune, length)
-	for i := range res {
-		res[i] = letter[rand.Intn(len(letter))]
-	}
-
-	return string(res)
 }
 
 // ParseStr 将URI查询字符串转换为字典.
@@ -628,4 +589,52 @@ func (ks *LkkString) ClearUrlSuffix(str string, suffix ...string) string {
 	}
 
 	return str
+}
+
+// Random 生成随机字符串.
+// length为长度,rtype为枚举:
+// RAND_STRING_ALPHA 字母;
+// RAND_STRING_NUMERIC 数值;
+// RAND_STRING_ALPHANUM 字母+数值;
+// RAND_STRING_SPECIAL 字母+数值+特殊字符;
+// RAND_STRING_CHINESE 仅中文.
+// TODO test
+func (ks *LkkString) Random(length uint8, rtype LkkRandString) string {
+	if length == 0 {
+		return ""
+	}
+
+	var letter []rune
+	alphas := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	numbers := "0123456789"
+	specials := "~!@#$%^&*()_+{}:|<>?`-=;,."
+
+	rand.Seed(time.Now().UTC().UnixNano())
+
+	switch rtype {
+	case RAND_STRING_ALPHA:
+		letter = []rune(alphas)
+	case RAND_STRING_NUMERIC:
+		letter = []rune(numbers)
+	case RAND_STRING_ALPHANUM:
+		letter = []rune(alphas + numbers)
+	case RAND_STRING_SPECIAL:
+		letter = []rune(alphas + numbers + specials)
+	case RAND_STRING_CHINESE:
+		letter = CommonChinese
+	default:
+		letter = []rune(alphas)
+	}
+
+	res := make([]rune, length)
+	for i := range res {
+		res[i] = letter[rand.Intn(len(letter))]
+	}
+
+	return string(res)
+}
+
+// DetectEncoding 匹配字符编码,TODO.
+func (ks *LkkString) DetectEncoding() {
+	//TODO 检查字符编码
 }
