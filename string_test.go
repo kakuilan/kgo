@@ -1437,3 +1437,42 @@ func BenchmarkString_IsHost(b *testing.B) {
 		KStr.IsHost(localHost)
 	}
 }
+
+func TestString_IsEmail(t *testing.T) {
+	var res bool
+	var err error
+
+	//长度验证
+	res, _ = KStr.IsEmail(tesEmail2, false)
+	assert.False(t, res)
+	res, _ = KStr.IsEmail(tesEmail3, false)
+	assert.False(t, res)
+
+	//无效的格式
+	res, _ = KStr.IsEmail(tesEmail4, false)
+	assert.False(t, res)
+
+	//不验证主机
+	res, _ = KStr.IsEmail(tesEmail1, false)
+	assert.True(t, res)
+	res, _ = KStr.IsEmail(tesEmail7, false)
+	assert.True(t, res)
+
+	//无效的域名
+	res, err = KStr.IsEmail(tesEmail5, true)
+	assert.False(t, res)
+	assert.NotNil(t, err)
+
+	//有效的账号
+	res, _ = KStr.IsEmail(tesEmail6, true)
+	assert.True(t, res)
+	res, _ = KStr.IsEmail(tesEmail8, true)
+	assert.True(t, res)
+}
+
+func BenchmarkString_IsEmail(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.IsEmail(tesEmail1, false)
+	}
+}

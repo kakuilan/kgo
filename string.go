@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/json-iterator/go"
 	xhtml "golang.org/x/net/html"
 	"golang.org/x/text/encoding/simplifiedchinese"
@@ -439,6 +440,36 @@ func (ks *LkkString) IsDialAddr(str string) bool {
 func (ks *LkkString) IsMACAddr(str string) bool {
 	_, err := net.ParseMAC(str)
 	return err == nil
+}
+
+// IsEmail 检查字符串是否邮箱.参数validateTrue,是否验证邮箱主机的真实性.
+func (ks *LkkString) IsEmail(email string, validateHost bool) (bool, error) {
+	//长度检查
+	length := len(email)
+	at := strings.LastIndexByte(email, '@')
+	if (length < 6 || length > 254) || (at <= 0 || at > length-3) {
+		return false, fmt.Errorf("[IsEmail] invalid email length")
+	}
+
+	//验证邮箱格式
+	chkFormat := RegEmail.MatchString(email)
+	if !chkFormat {
+		return false, fmt.Errorf("[IsEmail] invalid email format")
+	}
+
+	//验证主机
+	if validateHost {
+		host := email[at+1:]
+		if _, err := net.LookupMX(host); err != nil {
+			//因无法确定mx主机的smtp端口,所以去掉Hello/Mail/Rcpt检查邮箱是否存在
+			//仅检查主机是否有效
+			if _, err := net.LookupIP(host); err != nil {
+				return false, err
+			}
+		}
+	}
+
+	return true, nil
 }
 
 // Jsonp2Json 将jsonp转为json串.
