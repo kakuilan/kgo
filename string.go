@@ -394,6 +394,17 @@ func (ks *LkkString) IsIP(str string) bool {
 	return str != "" && net.ParseIP(str) != nil
 }
 
+// IsIPv4 检查字符串是否IPv4地址.
+func (ks *LkkString) IsIPv4(str string) bool {
+	ipAddr := net.ParseIP(str)
+	// 不是合法的IP地址
+	if ipAddr == nil {
+		return false
+	}
+
+	return ipAddr.To4() != nil && strings.ContainsRune(str, '.')
+}
+
 // Jsonp2Json 将jsonp转为json串.
 // Example: forbar({a:"1",b:2}) to {"a":"1","b":2}
 func (ks *LkkString) Jsonp2Json(str string) (string, error) {

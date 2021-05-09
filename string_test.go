@@ -1235,3 +1235,34 @@ func BenchmarkString_IsIP(b *testing.B) {
 		KStr.IsIP(lanIp)
 	}
 }
+
+func TestString_IsIPv4(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{localIp, true},
+		{noneIp, true},
+		{lanIp, true},
+		{baiduIpv4, true},
+		{googleIpv4, true},
+		{googleIpv6, false},
+		{tesIp2, false},
+		{tesIp4, false},
+		{tesIp5, false},
+		{tesIp6, false},
+		{tesIp7, false},
+	}
+	for _, test := range tests {
+		actual := KStr.IsIPv4(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsIPv4(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsIPv4(googleIpv4)
+	}
+}

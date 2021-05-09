@@ -308,6 +308,9 @@ var tesIp1 = "255.255.255.255"
 var tesIp2 = "::1"
 var tesIp3 = "2001:db8:0000:1:1:1:1:1"
 var tesIp4 = "300.0.0.0"
+var tesIp5 = "192.168.0.1:80"
+var tesIp6 = "::FFFF:C0A8:1"
+var tesIp7 = "fe80::2c04:f7ff:feaa:33b7"
 
 //自然数数组
 var naturalArr = [...]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, intTen}
