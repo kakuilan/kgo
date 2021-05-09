@@ -1205,3 +1205,33 @@ func BenchmarkString_IsAlphaNumeric(b *testing.B) {
 		KStr.IsAlphaNumeric(tesStr27)
 	}
 }
+
+func TestString_IsIP(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{localIp, true},
+		{noneIp, true},
+		{lanIp, true},
+		{dockerIp, true},
+		{publicIp1, true},
+		{publicIp2, true},
+		{tesIp1, true},
+		{tesIp2, true},
+		{tesIp3, true},
+		{tesIp4, false},
+	}
+	for _, test := range tests {
+		actual := KStr.IsIP(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsIP(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsIP(lanIp)
+	}
+}

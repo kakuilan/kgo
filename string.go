@@ -10,6 +10,7 @@ import (
 	"golang.org/x/text/transform"
 	"io"
 	"math/rand"
+	"net"
 	"net/url"
 	"strconv"
 	"strings"
@@ -386,6 +387,11 @@ func (ks *LkkString) IsJSON(str string) bool {
 
 	var js json.RawMessage
 	return json.Unmarshal([]byte(str), &js) == nil
+}
+
+// IsIP 检查字符串是否IP地址.
+func (ks *LkkString) IsIP(str string) bool {
+	return str != "" && net.ParseIP(str) != nil
 }
 
 // Jsonp2Json 将jsonp转为json串.

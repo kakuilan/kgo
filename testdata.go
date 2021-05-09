@@ -304,6 +304,10 @@ var googleIpv4 = "172.217.26.142"
 var googleIpv6 = "2404:6800:4005:80f::200e"
 var publicIp1 = "199.232.96.133"
 var publicIp2 = "140.82.114.3"
+var tesIp1 = "255.255.255.255"
+var tesIp2 = "::1"
+var tesIp3 = "2001:db8:0000:1:1:1:1:1"
+var tesIp4 = "300.0.0.0"
 
 //自然数数组
 var naturalArr = [...]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, intTen}
