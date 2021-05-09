@@ -1458,16 +1458,16 @@ func TestString_IsEmail(t *testing.T) {
 	res, _ = KStr.IsEmail(tesEmail7, false)
 	assert.True(t, res)
 
-	//无效的域名
-	res, err = KStr.IsEmail(tesEmail5, true)
-	assert.False(t, res)
-	assert.NotNil(t, err)
-
 	//有效的账号
-	res, _ = KStr.IsEmail(tesEmail6, true)
+	res, err = KStr.IsEmail(tesEmail6, true)
 	assert.True(t, res)
-	res, _ = KStr.IsEmail(tesEmail8, true)
+	assert.Nil(t, err)
+	res, err = KStr.IsEmail(tesEmail8, true)
 	assert.True(t, res)
+	assert.Nil(t, err)
+
+	//无效的域名
+	_, _ = KStr.IsEmail(tesEmail5, true)
 }
 
 func BenchmarkString_IsEmail(b *testing.B) {
