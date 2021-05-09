@@ -430,6 +430,12 @@ func (ks *LkkString) IsDialAddr(str string) bool {
 	return false
 }
 
+// IsMACAddr 是否MAC物理网卡地址.
+func (ks *LkkString) IsMACAddr(str string) bool {
+	_, err := net.ParseMAC(str)
+	return err == nil
+}
+
 // Jsonp2Json 将jsonp转为json串.
 // Example: forbar({a:"1",b:2}) to {"a":"1","b":2}
 func (ks *LkkString) Jsonp2Json(str string) (string, error) {

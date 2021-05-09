@@ -1370,3 +1370,39 @@ func BenchmarkString_IsDialAddr(b *testing.B) {
 		KStr.IsDialAddr(tesDomain23)
 	}
 }
+
+func TestString_IsMACAddr(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{strHello, false},
+		{helloEngICase, false},
+		{tesMac01, false},
+		{tesMac02, false},
+		{tesMac03, true},
+		{tesMac04, true},
+		{tesMac05, true},
+		{tesMac06, true},
+		{tesMac07, true},
+		{tesMac08, true},
+		{tesMac09, true},
+		{tesMac10, true},
+		{tesMac11, true},
+		{tesMac12, true},
+		{tesMac13, true},
+		{tesMac14, true},
+	}
+	for _, test := range tests {
+		actual := KStr.IsMACAddr(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsMACAddr(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsMACAddr(tesMac14)
+	}
+}

@@ -344,6 +344,22 @@ var tesDomain27 = "localhost.loc:100000"
 var tesDomain28 = "漢字汉字:2"
 var tesDomain29 = tesDomain21 + ":2000"
 
+//mac地址
+var tesMac01 = "3D-F2-C9-A6-B3:4F"       //false
+var tesMac02 = "fe80::5054:ff:fe4d:77d3" //false
+var tesMac03 = "01:23:45:67:89:ab"
+var tesMac04 = "01:23:45:67:89:ab:cd:ef"
+var tesMac05 = "01-23-45-67-89-ab"
+var tesMac06 = "01-23-45-67-89-ab-cd-ef"
+var tesMac07 = "0123.4567.89ab"
+var tesMac08 = "0123.4567.89ab.cdef"
+var tesMac09 = "3D:F2:C9:A6:B3:4F"
+var tesMac10 = "08:00:27:88:0f:fd"
+var tesMac11 = "00:e0:66:07:5c:97:00:00"
+var tesMac12 = "08:00:27:00:d8:94:00:00"
+var tesMac13 = "02:42:b5:38:df:5a"
+var tesMac14 = "0A-00-27-00-00-0E"
+
 //自然数数组
 var naturalArr = [...]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, intTen}
 
