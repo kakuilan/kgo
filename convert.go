@@ -395,3 +395,15 @@ func (kc *LkkConvert) IsStruct(val interface{}) bool {
 func (kc *LkkConvert) IsInterface(val interface{}) bool {
 	return isInterface(val)
 }
+
+// IsPort 变量值是否端口号(1~65535).
+func (kc *LkkConvert) IsPort(val interface{}) bool {
+	if isInt(val) {
+		port := toInt(val)
+		if port > 0 && port < 65536 {
+			return true
+		}
+	}
+
+	return false
+}
