@@ -1406,3 +1406,34 @@ func BenchmarkString_IsMACAddr(b *testing.B) {
 		KStr.IsMACAddr(tesMac14)
 	}
 }
+
+func TestString_IsHost(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{strHello, false},
+		{localIp, true},
+		{localHost, true},
+		{tesDomain06, true},
+		{tesIp3, true},
+		{tesIp2, true},
+		{tesDomain22, true},
+		{tesDomain08, false},
+		{tesDomain13, false},
+		{tesDomain20, false},
+		{tesDomain28, false},
+	}
+	for _, test := range tests {
+		actual := KStr.IsHost(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsHost(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsHost(localHost)
+	}
+}

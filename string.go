@@ -420,6 +420,11 @@ func (ks *LkkString) IsDNSName(str string) bool {
 	return !ks.IsIP(str) && RegDNSname.MatchString(str)
 }
 
+// IsHost 字符串是否主机名(IP或DNS名称).
+func (ks *LkkString) IsHost(str string) bool {
+	return ks.IsIP(str) || ks.IsDNSName(str)
+}
+
 // IsDialAddr 是否网络拨号地址(形如127.0.0.1:80),用于net.Dial()检查.
 func (ks *LkkString) IsDialAddr(str string) bool {
 	h, p, err := net.SplitHostPort(str)
