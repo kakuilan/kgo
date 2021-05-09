@@ -312,6 +312,31 @@ var tesIp5 = "192.168.0.1:80"
 var tesIp6 = "::FFFF:C0A8:1"
 var tesIp7 = "fe80::2c04:f7ff:feaa:33b7"
 
+//domain
+var localHost = "localhost"
+var tesDomain01 = "lÖcalhost"
+var tesDomain02 = "localhost/"
+var tesDomain03 = "a.bc"
+var tesDomain04 = "a.b."
+var tesDomain05 = "a.b.."
+var tesDomain06 = "localhost.local"
+var tesDomain07 = "localhost.localdomain.intern"
+var tesDomain08 = "localhost.localdomain.intern:65535"
+var tesDomain09 = "l.local.intern"
+var tesDomain10 = "ru.link.n.svpncloud.com"
+var tesDomain11 = "-localhost"
+var tesDomain12 = "_localhost"
+var tesDomain13 = "localhost.-localdomain"
+var tesDomain14 = "localhost._localdomain"
+var tesDomain15 = "localhost.localdomain.-int"
+var tesDomain16 = "localhost.localdomain._int"
+var tesDomain17 = "localhost.lÖcaldomain"
+var tesDomain18 = "localhost.localdomain.üntern"
+var tesDomain19 = "__"
+var tesDomain20 = "[::1]"
+var tesDomain21 = "www.jubfvq1v3p38i51622y0dvmdk1mymowjyeu26gbtw9andgynj1gg8z3msb1kl5z6906k846pj3sulm4kiyk82ln5teqj9nsht59opr0cs5ssltx78lfyvml19lfq1wp4usbl0o36cmiykch1vywbttcus1p9yu0669h8fj4ll7a6bmop505908s1m83q2ec2qr9nbvql2589adma3xsq2o38os2z3dmfh2tth4is4ixyfasasasefqwe4t2ub2fz1rme.de"
+var tesDomain22 = "www.google.com"
+
 //自然数数组
 var naturalArr = [...]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, intTen}
 

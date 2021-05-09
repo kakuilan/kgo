@@ -411,6 +411,15 @@ func (ks *LkkString) IsIPv6(str string) bool {
 	return ipAddr != nil && strings.ContainsRune(str, ':')
 }
 
+// IsDNSName 是否DNS名称.
+func (ks *LkkString) IsDNSName(str string) bool {
+	if str == "" || len(strings.Replace(str, ".", "", -1)) > 255 {
+		// constraints already violated
+		return false
+	}
+	return !ks.IsIP(str) && RegDNSname.MatchString(str)
+}
+
 // Jsonp2Json 将jsonp转为json串.
 // Example: forbar({a:"1",b:2}) to {"a":"1","b":2}
 func (ks *LkkString) Jsonp2Json(str string) (string, error) {

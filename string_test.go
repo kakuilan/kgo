@@ -1297,3 +1297,48 @@ func BenchmarkString_IsIPv6(b *testing.B) {
 		KStr.IsIPv6(googleIpv6)
 	}
 }
+
+func TestString_IsDNSName(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{strHello, false},
+		{localIp, false},
+		{localHost, true},
+		{tesDomain01, false},
+		{tesDomain02, false},
+		{tesDomain03, true},
+		{tesDomain04, true},
+		{tesDomain05, false},
+		{tesDomain06, true},
+		{tesDomain07, true},
+		{tesDomain08, false},
+		{tesDomain09, true},
+		{tesDomain10, true},
+		{tesDomain11, false},
+		{tesDomain12, true},
+		{tesDomain13, false},
+		{tesDomain14, true},
+		{tesDomain15, false},
+		{tesDomain16, true},
+		{tesDomain17, false},
+		{tesDomain18, false},
+		{tesDomain19, true},
+		{tesDomain20, false},
+		{tesDomain21, false},
+		{tesDomain22, true},
+	}
+
+	for _, test := range tests {
+		actual := KStr.IsDNSName(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsDNSName(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsDNSName(tesDomain22)
+	}
+}
