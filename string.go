@@ -420,6 +420,16 @@ func (ks *LkkString) IsDNSName(str string) bool {
 	return !ks.IsIP(str) && RegDNSname.MatchString(str)
 }
 
+// IsDialAddr 是否网络拨号地址(形如127.0.0.1:80),用于net.Dial()检查.
+func (ks *LkkString) IsDialAddr(str string) bool {
+	h, p, err := net.SplitHostPort(str)
+	if err == nil && h != "" && p != "" && (ks.IsDNSName(h) || ks.IsIP(h)) && isPort(p) {
+		return true
+	}
+
+	return false
+}
+
 // Jsonp2Json 将jsonp转为json串.
 // Example: forbar({a:"1",b:2}) to {"a":"1","b":2}
 func (ks *LkkString) Jsonp2Json(str string) (string, error) {

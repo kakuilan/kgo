@@ -1342,3 +1342,31 @@ func BenchmarkString_IsDNSName(b *testing.B) {
 		KStr.IsDNSName(tesDomain22)
 	}
 }
+
+func TestString_IsDialAddr(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{localHost, false},
+		{tesDomain23, true},
+		{tesDomain24, true},
+		{tesDomain25, true},
+		{tesDomain26, false},
+		{tesDomain27, false},
+		{tesDomain28, false},
+		{tesDomain29, false},
+	}
+
+	for _, test := range tests {
+		actual := KStr.IsDialAddr(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsDialAddr(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsDialAddr(tesDomain23)
+	}
+}
