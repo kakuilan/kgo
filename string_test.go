@@ -1477,10 +1477,14 @@ func BenchmarkString_IsEmail(b *testing.B) {
 	}
 }
 
-func TestString_Random_Alpha(t *testing.T) {
+func TestString_Random(t *testing.T) {
 	var res string
 	var chk bool
 
+	res = KStr.Random(0, RAND_STRING_ALPHA)
+	assert.Empty(t, res)
+
+	//字母
 	res = KStr.Random(6, RAND_STRING_ALPHA)
 	chk = KStr.IsLetters(res)
 	assert.True(t, chk)
@@ -1489,13 +1493,61 @@ func TestString_Random_Alpha(t *testing.T) {
 	chk = KStr.IsLetters(res)
 	assert.True(t, chk)
 
-	res = KStr.Random(0, RAND_STRING_ALPHA)
-	assert.Empty(t, res)
+	//数字
+	res = KStr.Random(6, RAND_STRING_NUMERIC)
+	chk = KStr.IsNumeric(res)
+	assert.True(t, chk)
+
+	//字母数字
+	res = KStr.Random(6, RAND_STRING_ALPHANUM)
+	chk = KStr.IsAlphaNumeric(res)
+	assert.True(t, chk)
+
+	//有特殊字符
+	res = KStr.Random(32, RAND_STRING_SPECIAL)
+	chk = KStr.IsAlphaNumeric(res)
+	if !chk {
+		chk = KStr.HasSpecialChar(res)
+		assert.True(t, chk)
+	}
+
+	//中文
+	res = KStr.Random(6, RAND_STRING_CHINESE)
+	chk = KStr.IsChinese(res)
+	assert.True(t, chk)
 }
 
 func BenchmarkString_Random_Alpha(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KStr.Random(6, RAND_STRING_ALPHA)
+	}
+}
+
+func BenchmarkString_Random_Numeric(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Random(6, RAND_STRING_NUMERIC)
+	}
+}
+
+func BenchmarkString_Random_Alphanum(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Random(6, RAND_STRING_ALPHANUM)
+	}
+}
+
+func BenchmarkString_Random_Special(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Random(6, RAND_STRING_SPECIAL)
+	}
+}
+
+func BenchmarkString_Random_Chinese(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Random(6, RAND_STRING_CHINESE)
 	}
 }

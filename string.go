@@ -858,7 +858,6 @@ func (ks *LkkString) ClearUrlSuffix(str string, suffix ...string) string {
 // RAND_STRING_ALPHANUM 字母+数值;
 // RAND_STRING_SPECIAL 字母+数值+特殊字符;
 // RAND_STRING_CHINESE 仅中文.
-// TODO test
 func (ks *LkkString) Random(length uint8, rtype LkkRandString) string {
 	if length == 0 {
 		return ""
