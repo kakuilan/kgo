@@ -472,6 +472,11 @@ func (ks *LkkString) IsEmail(email string, validateHost bool) (bool, error) {
 	return true, nil
 }
 
+// IsMobilecn 检查字符串是否中国大陆手机号.
+func (ks *LkkString) IsMobilecn(str string) bool {
+	return str != "" && RegMobilecn.MatchString(str)
+}
+
 // Jsonp2Json 将jsonp转为json串.
 // Example: forbar({a:"1",b:2}) to {"a":"1","b":2}
 func (ks *LkkString) Jsonp2Json(str string) (string, error) {

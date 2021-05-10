@@ -190,6 +190,13 @@ var tesEmail6 = "copyright@github.com"
 var tesEmail7 = "abc@abc123.com"
 var tesEmail8 = "test@163.com"
 
+//手机号
+var tesMobilecn1 = "13712345678"
+var tesMobilecn2 = "17796325759"
+var tesMobilecn3 = "15204810099"
+var tesMobilecn4 = "18088664423"
+var tesMobilecn5 = "12345678901"
+
 //html
 var tesHtmlDoc = `
 <!DOCTYPE html>

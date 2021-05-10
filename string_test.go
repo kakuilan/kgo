@@ -1551,3 +1551,29 @@ func BenchmarkString_Random_Chinese(b *testing.B) {
 		KStr.Random(6, RAND_STRING_CHINESE)
 	}
 }
+
+func TestString_IsMobilecn(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{strHello, false},
+		{tesMobilecn1, true},
+		{tesMobilecn2, true},
+		{tesMobilecn3, true},
+		{tesMobilecn4, true},
+		{tesMobilecn5, false},
+	}
+	for _, test := range tests {
+		actual := KStr.IsMobilecn(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsMobilecn(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsMobilecn(tesMobilecn1)
+	}
+}
