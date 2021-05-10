@@ -1476,3 +1476,26 @@ func BenchmarkString_IsEmail(b *testing.B) {
 		_, _ = KStr.IsEmail(tesEmail1, false)
 	}
 }
+
+func TestString_Random_Alpha(t *testing.T) {
+	var res string
+	var chk bool
+
+	res = KStr.Random(6, RAND_STRING_ALPHA)
+	chk = KStr.IsLetters(res)
+	assert.True(t, chk)
+
+	res = KStr.Random(6, 90)
+	chk = KStr.IsLetters(res)
+	assert.True(t, chk)
+
+	res = KStr.Random(0, RAND_STRING_ALPHA)
+	assert.Empty(t, res)
+}
+
+func BenchmarkString_Random_Alpha(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Random(6, RAND_STRING_ALPHA)
+	}
+}
