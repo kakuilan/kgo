@@ -1638,3 +1638,40 @@ func BenchmarkString_IsPhone(b *testing.B) {
 		KStr.IsPhone(tesTel02)
 	}
 }
+
+func TestString_IsCreditNo(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{strHello, false},
+		{tesCredno01, false},
+		{tesCredno02, true},
+		{tesCredno03, true},
+		{tesCredno04, true},
+		{tesCredno05, false},
+		{tesCredno06, true},
+		{tesCredno07, false},
+		{tesCredno08, true},
+		{tesCredno09, true},
+		{tesCredno10, true},
+		{tesCredno11, true},
+		{tesCredno12, false},
+		{tesCredno13, false},
+		{tesCredno14, false},
+		{tesCredno15, true},
+		{tesCredno16, true},
+	}
+	for _, test := range tests {
+		chk, _ := KStr.IsCreditNo(test.param)
+		assert.Equal(t, chk, test.expected)
+	}
+}
+
+func BenchmarkString_IsCreditNo(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsCreditNo(tesCredno02)
+	}
+}

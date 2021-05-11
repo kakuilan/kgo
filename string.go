@@ -487,6 +487,54 @@ func (ks *LkkString) IsPhone(str string) bool {
 	return str != "" && RegPhone.MatchString(str)
 }
 
+// IsCreditNo 检查是否(15或18位)身份证号码,并返回经校验的号码.
+func (ks *LkkString) IsCreditNo(str string) (bool, string) {
+	chk := str != "" && RegCreditno.MatchString(str)
+	if !chk {
+		return false, ""
+	}
+
+	// 检查省份代码
+	if _, chk = CreditArea[str[0:2]]; !chk {
+		return false, ""
+	}
+
+	// 将15位身份证升级到18位
+	leng := len(str)
+	if leng == 15 {
+		// 先转为17位,如果身份证顺序码是996 997 998 999,这些是为百岁以上老人的特殊编码
+		if chk, _ = ks.Dstrpos(str[12:], []string{"996", "997", "998", "999"}, false); chk {
+			str = str[0:6] + "18" + str[6:]
+		} else {
+			str = str[0:6] + "19" + str[6:]
+		}
+
+		// 再加上校验码
+		code := append([]byte{}, creditChecksum(str))
+		str += string(code)
+	}
+
+	// 检查生日
+	birthday := str[6:10] + "-" + str[10:12] + "-" + str[12:14]
+	chk, tim := KTime.IsDate2time(birthday)
+	now := KTime.UnixTime()
+	if !chk {
+		return false, ""
+	} else if tim >= now {
+		return false, ""
+	}
+
+	// 18位身份证需要验证最后一位校验位
+	if leng == 18 {
+		str = strings.ToUpper(str)
+		if str[17] != creditChecksum(str) {
+			return false, ""
+		}
+	}
+
+	return true, str
+}
+
 // Jsonp2Json 将jsonp转为json串.
 // Example: forbar({a:"1",b:2}) to {"a":"1","b":2}
 func (ks *LkkString) Jsonp2Json(str string) (string, error) {

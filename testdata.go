@@ -215,6 +215,24 @@ var tesTel14 = "8004-321"
 var tesTel15 = "8004321999"
 var tesTel16 = "8008676014"
 
+//身份证
+var tesCredno01 = "123123123"
+var tesCredno02 = "510723198006202551"
+var tesCredno03 = "34052419800101001x"
+var tesCredno04 = "511028199507215915"
+var tesCredno05 = "511028199502315915"
+var tesCredno06 = "53010219200508011X"
+var tesCredno07 = "99010219200508011X"
+var tesCredno08 = "130503670401001"
+var tesCredno09 = "370986890623212"
+var tesCredno10 = "370725881105149"
+var tesCredno11 = "370725881105996"
+var tesCredno12 = "35051419930513051X"
+var tesCredno13 = "44141419900430157X"
+var tesCredno14 = "110106209901012141"
+var tesCredno15 = "513436200011013606"
+var tesCredno16 = "51343620180101646X"
+
 //html
 var tesHtmlDoc = `
 <!DOCTYPE html>
