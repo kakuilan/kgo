@@ -242,6 +242,13 @@ var tesColor05 = "fff"
 var tesColor06 = "#f00"
 var tesColor07 = "#FAFAFA"
 var tesColor08 = "#83C129"
+var tesColor09 = "rgb(0,31,255)"
+var tesColor10 = "rgb(0,  31, 255)"
+var tesColor11 = "rgb(131, 193, 41)"
+var tesColor12 = "rgb(1,349,275)"
+var tesColor13 = "rgb(01,31,255)"
+var tesColor14 = "rgb(0.6,31,255)"
+var tesColor15 = "rgba(0,31,255)"
 
 //html
 var tesHtmlDoc = `

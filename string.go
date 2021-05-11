@@ -544,6 +544,11 @@ func (ks *LkkString) IsHexcolor(str string) (bool, string) {
 	return chk, str
 }
 
+// IsRGBcolor 检查字符串是否RGB颜色格式.
+func (ks *LkkString) IsRGBcolor(str string) bool {
+	return str != "" && RegRgbcolor.MatchString(str)
+}
+
 // Jsonp2Json 将jsonp转为json串.
 // Example: forbar({a:"1",b:2}) to {"a":"1","b":2}
 func (ks *LkkString) Jsonp2Json(str string) (string, error) {

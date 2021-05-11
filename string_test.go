@@ -1704,3 +1704,31 @@ func BenchmarkString_IsHexcolor(b *testing.B) {
 		_, _ = KStr.IsHexcolor(tesColor08)
 	}
 }
+
+func TestString_IsRGBcolor(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{strHello, false},
+		{tesColor09, true},
+		{tesColor10, true},
+		{tesColor11, true},
+		{tesColor12, false},
+		{tesColor13, false},
+		{tesColor14, false},
+		{tesColor15, false},
+	}
+	for _, test := range tests {
+		actual := KStr.IsRGBcolor(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsRGBcolor(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsRGBcolor(tesColor11)
+	}
+}
