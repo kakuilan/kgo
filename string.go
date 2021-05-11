@@ -535,6 +535,15 @@ func (ks *LkkString) IsCreditNo(str string) (bool, string) {
 	return true, str
 }
 
+// IsHexcolor 检查是否十六进制颜色,并返回带"#"的修正值.
+func (ks *LkkString) IsHexcolor(str string) (bool, string) {
+	chk := str != "" && RegHexcolor.MatchString(str)
+	if chk && !strings.ContainsRune(str, '#') {
+		str = "#" + strings.ToUpper(str)
+	}
+	return chk, str
+}
+
 // Jsonp2Json 将jsonp转为json串.
 // Example: forbar({a:"1",b:2}) to {"a":"1","b":2}
 func (ks *LkkString) Jsonp2Json(str string) (string, error) {

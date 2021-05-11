@@ -233,6 +233,16 @@ var tesCredno14 = "110106209901012141"
 var tesCredno15 = "513436200011013606"
 var tesCredno16 = "51343620180101646X"
 
+//颜色值
+var tesColor01 = "#ff"
+var tesColor02 = "fff0"
+var tesColor03 = "#ff12FG"
+var tesColor04 = "CCccCC"
+var tesColor05 = "fff"
+var tesColor06 = "#f00"
+var tesColor07 = "#FAFAFA"
+var tesColor08 = "#83C129"
+
 //html
 var tesHtmlDoc = `
 <!DOCTYPE html>
