@@ -1961,8 +1961,7 @@ func TestString_IsUrlExists(t *testing.T) {
 		{"", false},
 		{strHello, false},
 		{tesUrl05, false},
-		{tesUrl10, true},
-		{tesUrl39, false},
+		{tesUrl39, true},
 	}
 	for _, test := range tests {
 		actual := KStr.IsUrlExists(test.param)
