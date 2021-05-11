@@ -477,6 +477,11 @@ func (ks *LkkString) IsMobilecn(str string) bool {
 	return str != "" && RegMobilecn.MatchString(str)
 }
 
+// IsTel 是否固定电话或400/800电话.
+func (ks *LkkString) IsTel(str string) bool {
+	return str != "" && RegTelephone.MatchString(str)
+}
+
 // Jsonp2Json 将jsonp转为json串.
 // Example: forbar({a:"1",b:2}) to {"a":"1","b":2}
 func (ks *LkkString) Jsonp2Json(str string) (string, error) {

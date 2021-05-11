@@ -197,6 +197,24 @@ var tesMobilecn3 = "15204810099"
 var tesMobilecn4 = "18088664423"
 var tesMobilecn5 = "12345678901"
 
+//电话
+var tesTel01 = "10086"
+var tesTel02 = "010-88888888"
+var tesTel03 = "021-87888822"
+var tesTel04 = "0511-4405222"
+var tesTel05 = "021-44055520-555"
+var tesTel06 = "020-89571800-125"
+var tesTel07 = "400-020-9800"
+var tesTel08 = "400-999-0000"
+var tesTel09 = "4006-589-589"
+var tesTel10 = "4007005606"
+var tesTel11 = "4000631300"
+var tesTel12 = "400-6911195"
+var tesTel13 = "800-4321"
+var tesTel14 = "8004-321"
+var tesTel15 = "8004321999"
+var tesTel16 = "8008676014"
+
 //html
 var tesHtmlDoc = `
 <!DOCTYPE html>

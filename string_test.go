@@ -1577,3 +1577,40 @@ func BenchmarkString_IsMobilecn(b *testing.B) {
 		KStr.IsMobilecn(tesMobilecn1)
 	}
 }
+
+func TestString_IsTel(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{strHello, false},
+		{tesTel01, false},
+		{tesTel02, true},
+		{tesTel03, true},
+		{tesTel04, true},
+		{tesTel05, true},
+		{tesTel06, true},
+		{tesTel07, true},
+		{tesTel08, true},
+		{tesTel09, true},
+		{tesTel10, true},
+		{tesTel11, true},
+		{tesTel12, true},
+		{tesTel13, false},
+		{tesTel14, false},
+		{tesTel15, true},
+		{tesTel16, true},
+	}
+	for _, test := range tests {
+		actual := KStr.IsTel(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsTel(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsTel(tesTel02)
+	}
+}
