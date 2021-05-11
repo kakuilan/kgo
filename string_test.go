@@ -1975,3 +1975,29 @@ func BenchmarkString_IsUrlExists(b *testing.B) {
 		KStr.IsUrlExists(tesUrl10)
 	}
 }
+
+func TestString_Strrpos(t *testing.T) {
+	var tests = []struct {
+		str      string
+		needle   string
+		offset   int
+		expected int
+	}{
+		{"", "world", 0, -1},
+		{helloEng, "world", 0, 6},
+		{helloEng, "world", 1, 6},
+		{helloEng, "world", -1, 6},
+		{helloEng, "World", 0, -1},
+	}
+	for _, test := range tests {
+		actual := KStr.Strrpos(test.str, test.needle, test.offset)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_Strrpos(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Strrpos(helloEng, "world", 0)
+	}
+}

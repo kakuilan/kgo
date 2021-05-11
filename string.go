@@ -722,6 +722,25 @@ func (ks *LkkString) Stripos(haystack, needle string, offset int) int {
 	return pos + offset
 }
 
+// Strrpos 查找指定字符串在目标字符串中最后一次出现的位置.
+func (ks *LkkString) Strrpos(haystack, needle string, offset int) int {
+	pos, length := 0, len(haystack)
+	if length == 0 || offset > length || -offset > length {
+		return -1
+	}
+
+	if offset < 0 {
+		haystack = haystack[:offset+length+1]
+	} else {
+		haystack = haystack[offset:]
+	}
+	pos = strings.LastIndex(haystack, needle)
+	if offset > 0 && pos != -1 {
+		pos += offset
+	}
+	return pos
+}
+
 // Dstrpos 检查字符串str是否包含数组arr的元素之一,返回检查结果和匹配的字符串.
 // chkCase为是否检查大小写.
 func (ks *LkkString) Dstrpos(str string, arr []string, chkCase bool) (bool, string) {
