@@ -535,6 +535,7 @@ UmRd11MrWCvj59lWzt1/eIMN+ekjH8aXeLOOl54CL+kWp48C+V9BchyKCShZB7uc
 imFvjHTtuxziXZQRO7HlcsBOa0WwvDJnRnskdyoD31s4F4jpKEYBJNWTo63v6lUv
 bQIDAQAB
 -----END PUBLIC KEY-----`
+
 //错误的
 var tesRsaPubKey03 = `-----BEGIN PRIVATE KEY-----
 MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAKn4X6phG2ZsKjof
@@ -666,6 +667,32 @@ var tesUrl09 = "foobar.com/abc/efg/h=1"
 var tesUrl10 = "https://github.com/kakuilan/kgo"
 var tesUrl11 = "////google.com/test?name=hello"
 var tesUrl12 = "google.com/test?name=hello////"
+var tesUrl13 = ".com"
+var tesUrl14 = "ftp://foobar.ru/"
+var tesUrl15 = "http://127.0.0.1/"
+var tesUrl16 = "http://duckduckgo.com/?q=%2F"
+var tesUrl17 = "http://foo.bar/#com"
+var tesUrl18 = "http://foobar.coffee/"
+var tesUrl19 = "http://foobar.com"
+var tesUrl20 = "http://foobar.com/#baz=qux"
+var tesUrl21 = "http://foobar.com/?foo=bar#baz=qux"
+var tesUrl22 = "http://foobar.com/t$-_.+!*\\'(),"
+var tesUrl23 = "http://foobar.com?foo=bar"
+var tesUrl24 = "http://foobar.org:8080/"
+var tesUrl25 = "http://localhost:3000/"
+var tesUrl26 = "http://user:pass@www.foobar.com/"
+var tesUrl27 = "http://www.-foobar.com/"
+var tesUrl28 = "http://www.foo---bar.com/"
+var tesUrl29 = "http://www.foo_bar.com/"
+var tesUrl30 = "http://www.foobar.com/~foobar"
+var tesUrl31 = "http://www.xn--froschgrn-x9a.net/"
+var tesUrl32 = "https://foobar.com"
+var tesUrl33 = "https://foobar.org/"
+var tesUrl34 = "invalid."
+var tesUrl35 = "irc://irc.server.org/channel"
+var tesUrl36 = "mailto:someone@example.com"
+var tesUrl37 = "rtmp://foobar.com"
+var tesUrl38 = "xyz://foobar.com"
 
 func init() {
 	gofakeit.Struct(&personS1)

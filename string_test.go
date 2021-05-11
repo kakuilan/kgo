@@ -1893,3 +1893,62 @@ func BenchmarkString_IsRsaPublicKey(b *testing.B) {
 		KStr.IsRsaPublicKey(tesRsaPubKey01, 2048)
 	}
 }
+
+func TestString_IsUrl(t *testing.T) {
+	//并行测试
+	t.Parallel()
+
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{strHello, false},
+		{tesUrl01, true},
+		{tesUrl02, false},
+		{tesUrl04, false},
+		{tesUrl05, false},
+		{tesUrl06, true},
+		{tesUrl07, true},
+		{tesUrl08, true},
+		{tesUrl10, true},
+		{tesUrl11, false},
+		{tesUrl13, false},
+		{tesUrl14, true},
+		{tesUrl15, true},
+		{tesUrl16, true},
+		{tesUrl17, true},
+		{tesUrl18, true},
+		{tesUrl19, true},
+		{tesUrl20, true},
+		{tesUrl21, true},
+		{tesUrl22, true},
+		{tesUrl23, true},
+		{tesUrl24, true},
+		{tesUrl25, true},
+		{tesUrl26, true},
+		{tesUrl27, true},
+		{tesUrl28, true},
+		{tesUrl29, true},
+		{tesUrl30, true},
+		{tesUrl31, true},
+		{tesUrl32, true},
+		{tesUrl33, true},
+		{tesUrl34, false},
+		{tesUrl35, true},
+		{tesUrl36, true},
+		{tesUrl37, true},
+		{tesUrl38, true},
+	}
+	for _, test := range tests {
+		actual := KStr.IsUrl(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsUrl(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsUrl(tesUrl01)
+	}
+}
