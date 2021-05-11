@@ -575,6 +575,11 @@ func (ks *LkkString) HasWhitespace(str string) bool {
 	return str != "" && RegWhitespaceHas.MatchString(str)
 }
 
+// IsBase64 是否base64字符串.
+func (ks *LkkString) IsBase64(str string) bool {
+	return str != "" && RegBase64.MatchString(str)
+}
+
 // Jsonp2Json 将jsonp转为json串.
 // Example: forbar({a:"1",b:2}) to {"a":"1","b":2}
 func (ks *LkkString) Jsonp2Json(str string) (string, error) {

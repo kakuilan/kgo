@@ -1812,3 +1812,29 @@ func BenchmarkString_HasWhitespace(b *testing.B) {
 		KStr.HasWhitespace(strHello)
 	}
 }
+
+func TestString_IsBase64(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{strHello, false},
+		{tesBase64_01, false},
+		{tesBase64_02, true},
+		{tesBase64_03, true},
+		{tesBase64_04, true},
+		{tesBase64_05, true},
+	}
+	for _, test := range tests {
+		actual := KStr.IsBase64(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsBase64(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsBase64(tesBase64_02)
+	}
+}
