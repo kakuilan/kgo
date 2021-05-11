@@ -580,6 +580,16 @@ func (ks *LkkString) IsBase64(str string) bool {
 	return str != "" && RegBase64.MatchString(str)
 }
 
+// IsBase64Image 是否base64编码的图片.
+func (ks *LkkString) IsBase64Image(str string) bool {
+	if str == "" || !strings.ContainsRune(str, ',') {
+		return false
+	}
+
+	dataURI := strings.Split(str, ",")
+	return RegBase64Image.MatchString(dataURI[0]) && RegBase64.MatchString(dataURI[1])
+}
+
 // Jsonp2Json 将jsonp转为json串.
 // Example: forbar({a:"1",b:2}) to {"a":"1","b":2}
 func (ks *LkkString) Jsonp2Json(str string) (string, error) {

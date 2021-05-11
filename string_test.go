@@ -1838,3 +1838,31 @@ func BenchmarkString_IsBase64(b *testing.B) {
 		KStr.IsBase64(tesBase64_02)
 	}
 }
+
+func TestString_IsBase64Image(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{strHello, false},
+		{tesBase64_06, false},
+		{tesBase64_07, false},
+		{tesBase64_08, false},
+		{tesBase64_09, true},
+		{tesBase64_10, false},
+		{tesBase64_11, true},
+		{tesBase64_12, false},
+	}
+	for _, test := range tests {
+		actual := KStr.IsBase64Image(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsBase64Image(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsBase64Image(tesBase64_11)
+	}
+}
