@@ -1732,3 +1732,26 @@ func BenchmarkString_IsRGBcolor(b *testing.B) {
 		KStr.IsRGBcolor(tesColor11)
 	}
 }
+
+func TestString_IsBlank(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", true},
+		{blankChars, true},
+		{"0", false},
+		{strHello, false},
+	}
+	for _, test := range tests {
+		actual := KStr.IsBlank(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsBlank(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsBlank(blankChars)
+	}
+}
