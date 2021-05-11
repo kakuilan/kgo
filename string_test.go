@@ -1783,3 +1783,32 @@ func BenchmarkString_IsWhitespaces(b *testing.B) {
 		KStr.IsWhitespaces(tesStr30)
 	}
 }
+
+func TestString_HasWhitespace(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{strHello, true},
+		{helloEngICase, false},
+		{"", false},
+		{tesStr28, true},
+		{tesStr29, true},
+		{tesStr30, true},
+		{tesStr31, true},
+		{tesStr32, true},
+		{tesStr33, true},
+		{tesStr34, true},
+	}
+	for _, test := range tests {
+		actual := KStr.HasWhitespace(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_HasWhitespace(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.HasWhitespace(strHello)
+	}
+}
