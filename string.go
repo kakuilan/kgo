@@ -1136,3 +1136,12 @@ func (ks *LkkString) Ucfirst(str string) string {
 	}
 	return ""
 }
+
+// Lcfirst 将字符串的第一个字符转换为小写.
+func (ks *LkkString) Lcfirst(str string) string {
+	for _, v := range str {
+		u := string(unicode.ToLower(v))
+		return u + str[len(u):]
+	}
+	return ""
+}

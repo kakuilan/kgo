@@ -2036,12 +2036,29 @@ func TestString_Ucfirst(t *testing.T) {
 	assert.Empty(t, res)
 
 	res = KStr.Ucfirst(helloEng)
-	assert.Equal(t, res[0], "H")
+	assert.Equal(t, string(res[0]), "H")
 }
 
 func BenchmarkString_Ucfirst(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KStr.Ucfirst(helloEng)
+	}
+}
+
+func TestString_Lcfirst(t *testing.T) {
+	var res string
+
+	res = KStr.Lcfirst("")
+	assert.Empty(t, res)
+
+	res = KStr.Lcfirst(helloEngUpper)
+	assert.Equal(t, string(res[0]), "h")
+}
+
+func BenchmarkString_Lcfirst(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Lcfirst(helloEngUpper)
 	}
 }
