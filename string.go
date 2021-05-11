@@ -1127,3 +1127,12 @@ func (ks *LkkString) Random(length uint8, rtype LkkRandString) string {
 func (ks *LkkString) DetectEncoding() {
 	//TODO 检查字符编码
 }
+
+// Ucfirst 将字符串的第一个字符转换为大写.
+func (ks *LkkString) Ucfirst(str string) string {
+	for _, v := range str {
+		u := string(unicode.ToUpper(v))
+		return u + str[len(u):]
+	}
+	return ""
+}

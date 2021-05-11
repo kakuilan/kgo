@@ -2028,3 +2028,20 @@ func BenchmarkString_Strripos(b *testing.B) {
 		KStr.Strripos(helloEng, "World", 0)
 	}
 }
+
+func TestString_Ucfirst(t *testing.T) {
+	var res string
+
+	res = KStr.Ucfirst("")
+	assert.Empty(t, res)
+
+	res = KStr.Ucfirst(helloEng)
+	assert.Equal(t, res[0], "H")
+}
+
+func BenchmarkString_Ucfirst(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Ucfirst(helloEng)
+	}
+}
