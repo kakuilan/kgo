@@ -1952,3 +1952,27 @@ func BenchmarkString_IsUrl(b *testing.B) {
 		KStr.IsUrl(tesUrl01)
 	}
 }
+
+func TestString_IsUrlExists(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{strHello, false},
+		{tesUrl05, false},
+		{tesUrl10, true},
+		{tesUrl39, false},
+	}
+	for _, test := range tests {
+		actual := KStr.IsUrlExists(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsUrlExists(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsUrlExists(tesUrl10)
+	}
+}

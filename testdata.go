@@ -693,6 +693,7 @@ var tesUrl35 = "irc://irc.server.org/channel"
 var tesUrl36 = "mailto:someone@example.com"
 var tesUrl37 = "rtmp://foobar.com"
 var tesUrl38 = "xyz://foobar.com"
+var tesUrl39 = "https://www.baidu.com/"
 
 func init() {
 	gofakeit.Struct(&personS1)

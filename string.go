@@ -17,6 +17,7 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"net"
+	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
@@ -641,6 +642,23 @@ func (ks *LkkString) IsUrl(str string) bool {
 	}
 	if len(res.Scheme) == 0 {
 		return false //No Scheme found
+	}
+
+	return true
+}
+
+// IsUrlExists 检查URL是否存在.
+func (ks *LkkString) IsUrlExists(str string) bool {
+	if !ks.IsUrl(str) {
+		return false
+	}
+
+	client := &http.Client{}
+	resp, err := client.Head(str)
+	if err != nil {
+		return false
+	} else if resp.StatusCode == 404 {
+		return false
 	}
 
 	return true
