@@ -157,6 +157,13 @@ var tesStr24 = "hello_Kitty2"
 var tesStr25 = "hello-Kitty2"
 var tesStr26 = "Hello ៉៊់៌៍！"
 var tesStr27 = "pi314159"
+var tesStr28 = "    "
+var tesStr29 = "  \n  "
+var tesStr30 = "\014\012\011\013\015"
+var tesStr31 = "\014\012\011\013 abc  \015"
+var tesStr32 = "\f\n\t\v\r\f"
+var tesStr33 = "x\n\t\t\t\t"
+var tesStr34 = "\f\n\t  \n\n\n   \v\r\f"
 
 //中文名
 var tesChineseName1 = "李四"

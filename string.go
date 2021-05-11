@@ -565,6 +565,11 @@ func (ks *LkkString) IsBlank(str string) bool {
 	return true
 }
 
+// IsWhitespaces 是否全部空白字符,不包括空字符串.
+func (ks *LkkString) IsWhitespaces(str string) bool {
+	return str != "" && RegWhitespaceAll.MatchString(str)
+}
+
 // Jsonp2Json 将jsonp转为json串.
 // Example: forbar({a:"1",b:2}) to {"a":"1","b":2}
 func (ks *LkkString) Jsonp2Json(str string) (string, error) {
