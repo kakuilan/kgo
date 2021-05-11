@@ -1866,3 +1866,30 @@ func BenchmarkString_IsBase64Image(b *testing.B) {
 		KStr.IsBase64Image(tesBase64_11)
 	}
 }
+
+func TestString_IsRsaPublicKey(t *testing.T) {
+	var tests = []struct {
+		rsastr   string
+		keylen   uint16
+		expected bool
+	}{
+		{strHello, 2048, false},
+		{tesRsaPubKey01, 2048, true},
+		{tesRsaPubKey01, 1024, false},
+		{tesRsaPubKey02, 4096, false},
+		{tesRsaPubKey03, 1024, false},
+		{tesRsaPubKey04, 2048, false},
+		{tesRsaPubKey05, 2048, false},
+	}
+	for _, test := range tests {
+		actual := KStr.IsRsaPublicKey(test.rsastr, test.keylen)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsRsaPublicKey(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsRsaPublicKey(tesRsaPubKey01, 2048)
+	}
+}
