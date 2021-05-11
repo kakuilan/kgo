@@ -1614,3 +1614,27 @@ func BenchmarkString_IsTel(b *testing.B) {
 		KStr.IsTel(tesTel02)
 	}
 }
+
+func TestString_IsPhone(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected bool
+	}{
+		{"", false},
+		{strHello, false},
+		{tesTel01, false},
+		{tesTel02, true},
+		{tesMobilecn1, true},
+	}
+	for _, test := range tests {
+		actual := KStr.IsPhone(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_IsPhone(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.IsPhone(tesTel02)
+	}
+}
