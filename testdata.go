@@ -165,6 +165,7 @@ var tesStr31 = "\014\012\011\013 abc  \015"
 var tesStr32 = "\f\n\t\v\r\f"
 var tesStr33 = "x\n\t\t\t\t"
 var tesStr34 = "\f\n\t  \n\n\n   \v\r\f"
+var tesStr35 = "Hello world. 你好，世界。I`m use golang, python, and so on."
 
 //中文名
 var tesChineseName1 = "李四"

@@ -1145,3 +1145,32 @@ func (ks *LkkString) Lcfirst(str string) string {
 	}
 	return ""
 }
+
+// Ucwords 将字符串中每个词的首字母转换为大写.
+func (ks *LkkString) Ucwords(str string) string {
+	return strings.Title(str)
+}
+
+// Lcwords 将字符串中每个词的首字母转换为小写.
+func (ks *LkkString) Lcwords(str string) string {
+	buf := &bytes.Buffer{}
+	lastIsSpace := true
+	for _, r := range str {
+		if unicode.IsLetter(r) {
+			if lastIsSpace {
+				r = unicode.ToLower(r)
+			}
+
+			lastIsSpace = false
+		} else {
+			lastIsSpace = false
+			if unicode.IsSpace(r) || unicode.IsPunct(r) || unicode.IsSymbol(r) || unicode.IsMark(r) {
+				lastIsSpace = true
+			}
+		}
+
+		buf.WriteRune(r)
+	}
+
+	return buf.String()
+}

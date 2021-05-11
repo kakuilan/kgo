@@ -2062,3 +2062,27 @@ func BenchmarkString_Lcfirst(b *testing.B) {
 		KStr.Lcfirst(helloEngUpper)
 	}
 }
+
+func TestString_Ucwords_Lcwords(t *testing.T) {
+	var res1, res2 string
+
+	res1 = KStr.Ucwords(tesStr35)
+	res2 = KStr.Lcwords(tesStr35)
+
+	assert.Equal(t, string(res1[0]), "H")
+	assert.Equal(t, string(res2[0]), "h")
+}
+
+func BenchmarkString_Ucwords(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Ucwords(tesStr35)
+	}
+}
+
+func BenchmarkString_Lcwords(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Lcwords(tesStr35)
+	}
+}
