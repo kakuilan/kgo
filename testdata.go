@@ -103,6 +103,7 @@ var helloEng = "hello world!"
 var helloEngICase = "HelloWorld"
 var helloEngUpper = "HELLOWORLD"
 var helloEngLower = "helloworld"
+var helloOther = "Hello world. 你好，世界。I`m use golang, python, and so on."
 var strSpeedLight = "299792458"
 var binAstronomicalUnit = "10001011010100101110100101101001000100" //intAstronomicalUnit的二进制
 var hexAstronomicalUnit = "22d4ba5a44"                             //intAstronomicalUnit的16进制
@@ -165,7 +166,6 @@ var tesStr31 = "\014\012\011\013 abc  \015"
 var tesStr32 = "\f\n\t\v\r\f"
 var tesStr33 = "x\n\t\t\t\t"
 var tesStr34 = "\f\n\t  \n\n\n   \v\r\f"
-var tesStr35 = "Hello world. 你好，世界。I`m use golang, python, and so on."
 
 //中文名
 var tesChineseName1 = "李四"

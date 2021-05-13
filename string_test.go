@@ -2066,8 +2066,8 @@ func BenchmarkString_Lcfirst(b *testing.B) {
 func TestString_Ucwords_Lcwords(t *testing.T) {
 	var res1, res2 string
 
-	res1 = KStr.Ucwords(tesStr35)
-	res2 = KStr.Lcwords(tesStr35)
+	res1 = KStr.Ucwords(helloOther)
+	res2 = KStr.Lcwords(helloOther)
 
 	assert.Equal(t, string(res1[0]), "H")
 	assert.Equal(t, string(res2[0]), "h")
@@ -2076,13 +2076,47 @@ func TestString_Ucwords_Lcwords(t *testing.T) {
 func BenchmarkString_Ucwords(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KStr.Ucwords(tesStr35)
+		KStr.Ucwords(helloOther)
 	}
 }
 
 func BenchmarkString_Lcwords(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KStr.Lcwords(tesStr35)
+		KStr.Lcwords(helloOther)
+	}
+}
+
+func TestString_Substr(t *testing.T) {
+	var res string
+
+	res = KStr.Substr("", 0)
+	assert.Empty(t, res)
+
+	res = KStr.Substr(helloEng, 0)
+	assert.Equal(t, res, helloEng)
+
+	var tests = []struct {
+		param    string
+		start    int
+		length   int
+		expected string
+	}{
+		{helloEngICase, 0, 4, "Hell"},
+		{helloEngICase, -2, 4, "ld"},
+		{helloEngICase, 0, -2, "HelloWor"},
+		{helloEngICase, -11, 8, ""},
+		{helloEngICase, 5, 16, "World"},
+	}
+	for _, test := range tests {
+		actual := KStr.Substr(test.param, test.start, test.length)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_Substr(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Substr(helloEngICase, 5, 10)
 	}
 }
