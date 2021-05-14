@@ -1216,3 +1216,47 @@ func (ks *LkkString) Substr(str string, start int, length ...int) string {
 
 	return str[start:end]
 }
+
+// MbSubstr 返回(宽字符)字符串str的子串.
+// start 为起始位置.若值是负数,返回的结果将从 str 结尾处向前数第 abs(start) 个字符开始.
+// length 为截取的长度.若值时负数, str 末尾处的 abs(length) 个字符将会被省略.
+// start/length的绝对值必须<=原字符串长度.
+func (ks *LkkString) MbSubstr(str string, start int, length ...int) string {
+	if len(str) == 0 {
+		return ""
+	}
+
+	runes := []rune(str)
+	total := len(runes)
+
+	var sublen, end int
+	max := total //最大的结束位置
+
+	if len(length) == 0 {
+		sublen = total
+	} else {
+		sublen = length[0]
+	}
+
+	if start < 0 {
+		start = total + start
+	}
+
+	if sublen < 0 {
+		sublen = total + sublen
+		if sublen > 0 {
+			max = sublen
+		}
+	}
+
+	if start < 0 || sublen <= 0 || start >= max {
+		return ""
+	}
+
+	end = start + sublen
+	if end > max {
+		end = max
+	}
+
+	return string(runes[start:end])
+}

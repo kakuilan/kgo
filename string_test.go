@@ -2120,3 +2120,37 @@ func BenchmarkString_Substr(b *testing.B) {
 		KStr.Substr(helloEngICase, 5, 10)
 	}
 }
+
+func TestString_MbSubstr(t *testing.T) {
+	var res string
+
+	res = KStr.MbSubstr("", 0)
+	assert.Empty(t, res)
+
+	res = KStr.MbSubstr(helloOther, 0)
+	assert.Equal(t, res, helloOther)
+
+	var tests = []struct {
+		param    string
+		start    int
+		length   int
+		expected string
+	}{
+		{helloOther, 0, 15, "Hello world. 你好"},
+		{helloOther, -3, 4, "on."},
+		{helloOther, 0, -37, "Hello world. 你好，"},
+		{helloOther, -40, 9, "你好，世界。I`m"},
+		{helloOther, 6, 16, "world. 你好，世界。I`m"},
+	}
+	for _, test := range tests {
+		actual := KStr.MbSubstr(test.param, test.start, test.length)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_MbSubstr(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.MbSubstr(helloOther, 6, 16)
+	}
+}
