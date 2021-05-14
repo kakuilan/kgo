@@ -2154,3 +2154,43 @@ func BenchmarkString_MbSubstr(b *testing.B) {
 		KStr.MbSubstr(helloOther, 6, 16)
 	}
 }
+
+func TestString_SubstrCount(t *testing.T) {
+	var res int
+
+	res = KStr.SubstrCount(tesStr9, "world")
+	assert.Equal(t, res, 1)
+
+	res = KStr.SubstrCount(tesStr9, "World")
+	assert.Equal(t, res, 2)
+
+	res = KStr.SubstrCount(tesStr9, "ello")
+	assert.Equal(t, res, 3)
+}
+
+func BenchmarkString_SubstrCount(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.SubstrCount(tesStr9, "ello")
+	}
+}
+
+func TestString_SubstriCount(t *testing.T) {
+	var res int
+
+	res = KStr.SubstriCount(tesStr9, "world")
+	assert.Equal(t, res, 3)
+
+	res = KStr.SubstriCount(tesStr9, "World")
+	assert.Equal(t, res, 3)
+
+	res = KStr.SubstriCount(tesStr9, "or")
+	assert.Equal(t, res, 4)
+}
+
+func BenchmarkString_SubstriCount(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.SubstriCount(tesStr9, "or")
+	}
+}

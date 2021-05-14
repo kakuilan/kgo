@@ -1260,3 +1260,13 @@ func (ks *LkkString) MbSubstr(str string, start int, length ...int) string {
 
 	return string(runes[start:end])
 }
+
+// SubstrCount 计算子串substr在字符串str中出现的次数,区分大小写.
+func (ks *LkkString) SubstrCount(str, substr string) int {
+	return strings.Count(str, substr)
+}
+
+// SubstriCount 计算子串substr在字符串str中出现的次数,忽略大小写.
+func (ks *LkkString) SubstriCount(str, substr string) int {
+	return strings.Count(strings.ToLower(str), strings.ToLower(substr))
+}
