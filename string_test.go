@@ -2194,3 +2194,20 @@ func BenchmarkString_SubstriCount(b *testing.B) {
 		KStr.SubstriCount(tesStr9, "or")
 	}
 }
+
+func TestString_Reverse(t *testing.T) {
+	var res string
+
+	res = KStr.Reverse("")
+	assert.Empty(t, res)
+
+	res = KStr.Reverse(strHello)
+	assert.Equal(t, res, "！好你 !dlroW olleH")
+}
+
+func BenchmarkString_Reverse(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Reverse(strHello)
+	}
+}

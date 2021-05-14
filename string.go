@@ -1270,3 +1270,14 @@ func (ks *LkkString) SubstrCount(str, substr string) int {
 func (ks *LkkString) SubstriCount(str, substr string) int {
 	return strings.Count(strings.ToLower(str), strings.ToLower(substr))
 }
+
+// Reverse 反转字符串.
+func (ks *LkkString) Reverse(str string) string {
+	n := len(str)
+	runes := make([]rune, n)
+	for _, r := range str {
+		n--
+		runes[n] = r
+	}
+	return string(runes[n:])
+}
