@@ -2211,3 +2211,20 @@ func BenchmarkString_Reverse(b *testing.B) {
 		KStr.Reverse(strHello)
 	}
 }
+
+func TestString_ChunkSplit(t *testing.T) {
+	var res string
+
+	res = KStr.ChunkSplit(helloOther, 4, "")
+	assert.Equal(t, res, helloOther)
+
+	res = KStr.ChunkSplit(helloOther, 4, "\r\n")
+	assert.Greater(t, len(res), len(helloOther))
+}
+
+func BenchmarkString_ChunkSplit(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.ChunkSplit(helloOther, 4, "\r\n")
+	}
+}
