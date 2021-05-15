@@ -2445,3 +2445,58 @@ func BenchmarkString_Chr(b *testing.B) {
 		KStr.Chr(72)
 	}
 }
+
+func TestString_Serialize_UnSerialize(t *testing.T) {
+	var res []byte
+	var obj interface{}
+	var err error
+	var objStr string
+	var objInt int
+	var objPs sPersons
+
+	//序列化字符串
+	res, err = KStr.Serialize(strHello)
+	assert.Nil(t, err)
+	//反序列化字符串
+	obj, err = KStr.UnSerialize(res)
+	assert.Nil(t, err)
+	assert.Equal(t, strHello, toStr(obj))
+	obj, err = KStr.UnSerialize(res, objStr)
+	assert.Nil(t, err)
+	assert.Equal(t, strHello, toStr(obj))
+
+	//序列化整型
+	res, err = KStr.Serialize(intSpeedLight)
+	assert.Nil(t, err)
+	//反序列化整型
+	obj, err = KStr.UnSerialize(res)
+	assert.Nil(t, err)
+	assert.Equal(t, intSpeedLight, toInt(obj))
+	obj, err = KStr.UnSerialize(res, objInt)
+	assert.Nil(t, err)
+	assert.Equal(t, intSpeedLight, toInt(obj))
+
+	//序列化对象
+	res, err = KStr.Serialize(crowd)
+	assert.Nil(t, err)
+	//反序列化对象
+	obj, err = KStr.UnSerialize(res)
+	assert.Equal(t, toStr(crowd), toStr(obj))
+	obj, err = KStr.UnSerialize(res, objPs)
+	assert.Equal(t, toStr(crowd), toStr(obj))
+}
+
+func BenchmarkString_Serialize(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.Serialize(crowd)
+	}
+}
+
+func BenchmarkString_UnSerialize(b *testing.B) {
+	b.ResetTimer()
+	str, _ := KStr.Serialize(crowd)
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.UnSerialize(str)
+	}
+}
