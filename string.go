@@ -1355,3 +1355,15 @@ func (ks *LkkString) Shuffle(str string) string {
 
 	return string(runes)
 }
+
+// Ord 将首字符转换为rune(ASCII值).
+// 注意:当字符串为空时返回65533.
+func (ks *LkkString) Ord(char string) rune {
+	r, _ := utf8.DecodeRune([]byte(char))
+	return r
+}
+
+// Chr 返回相对应于 ASCII 所指定的单个字符.
+func (ks *LkkString) Chr(chr uint) string {
+	return string(rune(chr))
+}

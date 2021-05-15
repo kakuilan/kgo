@@ -2413,3 +2413,35 @@ func BenchmarkString_TrimBOM(b *testing.B) {
 		KStr.TrimBOM(cont)
 	}
 }
+
+func TestString_Ord_Chr(t *testing.T) {
+	var res1 rune
+	var res2 string
+
+	res1 = KStr.Ord("")
+	assert.Equal(t, int(res1), 65533)
+
+	res1 = KStr.Ord("a")
+	assert.Equal(t, int(res1), 97)
+	res2 = KStr.Chr(97)
+	assert.Equal(t, res2, "a")
+
+	res1 = KStr.Ord(strHello)
+	assert.Equal(t, int(res1), 72)
+	res2 = KStr.Chr(72)
+	assert.Equal(t, string(strHello[0]), res2)
+}
+
+func BenchmarkString_Ord(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Ord(strHello)
+	}
+}
+
+func BenchmarkString_Chr(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Chr(72)
+	}
+}
