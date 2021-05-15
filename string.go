@@ -1310,3 +1310,8 @@ func (ks *LkkString) ChunkSplit(str string, chunklen uint, end string) string {
 func (ks *LkkString) Strlen(str string) int {
 	return len(str)
 }
+
+// MbStrlen 获取宽字符串的长度,多字节的字符被计为 1.
+func (ks *LkkString) MbStrlen(str string) int {
+	return utf8.RuneCountInString(str)
+}
