@@ -2387,3 +2387,29 @@ func BenchmarkString_Rtrim(b *testing.B) {
 		KStr.Rtrim(tesStr31)
 	}
 }
+
+func TestString_TrimBOM(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected string
+	}{
+		{"", ""},
+		{strHello, strHello},
+		{bomChars, ""},
+		{tesBom1, ""},
+		{tesBom2, "hello"},
+		{tesBom3, "world"},
+	}
+	for _, test := range tests {
+		actual := KStr.TrimBOM([]byte(test.param))
+		assert.Equal(t, string(actual), test.expected)
+	}
+}
+
+func BenchmarkString_TrimBOM(b *testing.B) {
+	b.ResetTimer()
+	cont := []byte(tesBom2)
+	for i := 0; i < b.N; i++ {
+		KStr.TrimBOM(cont)
+	}
+}

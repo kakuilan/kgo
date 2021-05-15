@@ -360,4 +360,6 @@ var (
 
 	//空白字符
 	blankChars = " \t\n\r\v\f\x00　"
+	//BOM头字符
+	bomChars = "\xef\xbb\xbf"
 )

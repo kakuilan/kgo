@@ -449,6 +449,11 @@ var tesMac12 = "08:00:27:00:d8:94:00:00"
 var tesMac13 = "02:42:b5:38:df:5a"
 var tesMac14 = "0A-00-27-00-00-0E"
 
+//bom字符
+var tesBom1 = "\xEF\xBB\xBF"
+var tesBom2 = bomChars + "hello"
+var tesBom3 = tesBom1 + "world"
+
 //自然数数组
 var naturalArr = [...]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, intTen}
 

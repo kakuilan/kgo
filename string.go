@@ -250,6 +250,11 @@ func (ks *LkkString) Rtrim(str string, characterMask ...string) string {
 	return strings.TrimRight(str, mask)
 }
 
+// TrimBOM 移除字符串中的BOM
+func (ks *LkkString) TrimBOM(str []byte) []byte {
+	return bytes.Trim(str, bomChars)
+}
+
 // IsEmpty 字符串是否为空(包括空格).
 func (ks *LkkString) IsEmpty(str string) bool {
 	if str == "" || len(ks.Trim(str)) == 0 {
