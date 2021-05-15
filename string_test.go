@@ -2239,8 +2239,8 @@ func TestString_Strlen(t *testing.T) {
 		{utf8Hello, 18},
 		{helloEng, 12},
 		{helloOther, 65},
-		{strNoGbk, 65},
-		{strJap, 106},
+		{strNoGbk, 106},
+		{strJap, 39},
 		{strKor, 15},
 	}
 	for _, test := range tests {
@@ -2262,13 +2262,13 @@ func TestString_MbStrlen(t *testing.T) {
 		expected int
 	}{
 		{"", 0},
-		{strHello, 22},
-		{utf8Hello, 18},
+		{strHello, 16},
+		{utf8Hello, 6},
 		{helloEng, 12},
-		{helloOther, 65},
-		{strNoGbk, 65},
-		{strJap, 106},
-		{strKor, 15},
+		{helloOther, 53},
+		{strNoGbk, 36},
+		{strJap, 13},
+		{strKor, 5},
 	}
 	for _, test := range tests {
 		actual := KStr.MbStrlen(test.param)
@@ -2280,5 +2280,23 @@ func BenchmarkString_MbStrlen(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KStr.MbStrlen(strHello)
+	}
+}
+
+func TestString_Shuffle(t *testing.T) {
+	var res string
+
+	res = KStr.Shuffle("")
+	assert.Empty(t, res)
+
+	res = KStr.Shuffle(strHello)
+	assert.Equal(t, len(strHello), len(res))
+	assert.NotEqual(t, res, strHello)
+}
+
+func BenchmarkString_Shuffle(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Shuffle(strHello)
 	}
 }
