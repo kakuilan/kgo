@@ -2329,3 +2329,32 @@ func BenchmarkString_Trim(b *testing.B) {
 		KStr.Trim(tesStr31)
 	}
 }
+
+func TestString_Ltrim(t *testing.T) {
+	var res string
+
+	res = KStr.Ltrim(tesStr28)
+	assert.Empty(t, res)
+
+	res = KStr.Ltrim(tesStr29)
+	assert.Empty(t, res)
+
+	res = KStr.Ltrim(tesStr30)
+	assert.Empty(t, res)
+
+	res = KStr.Ltrim(tesStr32)
+	assert.Empty(t, res)
+
+	res = KStr.Ltrim(tesStr34)
+	assert.Empty(t, res)
+
+	res = KStr.Ltrim(tesStr31)
+	assert.Equal(t, string(res[0]), "a")
+}
+
+func BenchmarkString_Ltrim(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Ltrim(tesStr31)
+	}
+}
