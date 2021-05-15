@@ -2300,3 +2300,32 @@ func BenchmarkString_Shuffle(b *testing.B) {
 		KStr.Shuffle(strHello)
 	}
 }
+
+func TestString_Trim(t *testing.T) {
+	var res string
+
+	res = KStr.Trim(tesStr28)
+	assert.Empty(t, res)
+
+	res = KStr.Trim(tesStr29)
+	assert.Empty(t, res)
+
+	res = KStr.Trim(tesStr30)
+	assert.Empty(t, res)
+
+	res = KStr.Trim(tesStr32)
+	assert.Empty(t, res)
+
+	res = KStr.Trim(tesStr34)
+	assert.Empty(t, res)
+
+	res = KStr.Trim(tesStr31)
+	assert.Equal(t, res, "abc")
+}
+
+func BenchmarkString_Trim(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Trim(tesStr31)
+	}
+}

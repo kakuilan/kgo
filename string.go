@@ -230,9 +230,24 @@ func (ks *LkkString) EndsWith(str, sub string, ignoreCase bool) bool {
 }
 
 // Trim 去除字符串首尾处的空白字符（或者其他字符）.
+// characterMask为要修剪的字符.
 func (ks *LkkString) Trim(str string, characterMask ...string) string {
 	mask := getTrimMask(characterMask)
 	return strings.Trim(str, mask)
+}
+
+// Ltrim 删除字符串开头的空白字符（或其他字符）.
+// characterMask为要修剪的字符.
+func (ks *LkkString) Ltrim(str string, characterMask ...string) string {
+	mask := getTrimMask(characterMask)
+	return strings.TrimLeft(str, mask)
+}
+
+// Rtrim 删除字符串末端的空白字符（或者其他字符）.
+// characterMask为要修剪的字符.
+func (ks *LkkString) Rtrim(str string, characterMask ...string) string {
+	mask := getTrimMask(characterMask)
+	return strings.TrimRight(str, mask)
 }
 
 // IsEmpty 字符串是否为空(包括空格).
