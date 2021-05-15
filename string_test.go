@@ -2228,3 +2228,35 @@ func BenchmarkString_ChunkSplit(b *testing.B) {
 		KStr.ChunkSplit(helloOther, 4, "\r\n")
 	}
 }
+
+func TestString_Strlen(t *testing.T) {
+	var res int
+
+	res = KStr.Strlen("")
+	assert.Equal(t, res, 0)
+
+	res = KStr.Strlen(strHello)
+	assert.Equal(t, res, 22)
+
+	var tests = []struct {
+		param    string
+		expected int
+	}{
+		{"", 0},
+		{strHello, 22},
+		{utf8Hello, 18},
+		{helloEng, 12},
+		{helloOther, 65},
+	}
+	for _, test := range tests {
+		actual := KStr.Strlen(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_Strlen(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Strlen(strHello)
+	}
+}

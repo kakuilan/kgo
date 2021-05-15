@@ -1305,3 +1305,8 @@ func (ks *LkkString) ChunkSplit(str string, chunklen uint, end string) string {
 	}
 	return string(ns)
 }
+
+// Strlen 获取字符串长度.
+func (ks *LkkString) Strlen(str string) int {
+	return len(str)
+}
