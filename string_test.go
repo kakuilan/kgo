@@ -2639,3 +2639,52 @@ func BenchmarkString_UuidV4(b *testing.B) {
 		_, _ = KStr.UuidV4()
 	}
 }
+
+func TestString_VersionCompare(t *testing.T) {
+	var err error
+
+	//错误的比较符
+	_, err = KStr.VersionCompare("1.0", "1.2", "dd")
+	assert.NotNil(t, err)
+
+	var tests = []struct {
+		v1       string
+		v2       string
+		op       string
+		expected bool
+	}{
+		{"", "", "=", true},
+		{"", "0", "<", true},
+		{"0", "", ">", true},
+		{"9", "10", "<", true},
+		{"09", "10", "<", true},
+		{"10", "#10", "<", true},
+		{"#9", "#10", "<", true},
+		{"#09", "#10", "<", true},
+		{"tes09", "tes10", "<", true},
+		{"0.9", "1.0", "=", false},
+		{"0.9", "1.0", "<=", true},
+		{"dev11.0", "dev2.0", ">=", true},
+		{"dev-1.0", "21.0", ">", true},
+		{"dev-1.0", "1.0", "!=", true},
+		{"dev-21.0.summer", "1.0", "<", false},
+		{"beta-11.0", "dev-12.0", ">", true},
+		{"1.2.3-alpha", "1.2.3alph.123", ">", true},
+		{"1.2.3-alpha", "1.2.3alph.num", ">", true},
+		{"1.2.3alph.123", "1.2.3-alpha", "<", true},
+		{"1.2.3alph.sum", "1.2.3-alpha", "<", true},
+		{"1.2.3alph.sum", "1.2.3-alpha.", "<", true},
+	}
+	for _, test := range tests {
+		actual, _ := KStr.VersionCompare(test.v1, test.v2, test.op)
+		assert.Equal(t, actual, test.expected)
+	}
+
+}
+
+func BenchmarkString_VersionCompare(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.VersionCompare("1.2.3alph.sum", "1.2.3-alpha.", "<")
+	}
+}
