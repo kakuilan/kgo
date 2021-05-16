@@ -2546,11 +2546,38 @@ func TestString_Crc32(t *testing.T) {
 	var res uint32
 
 	res = KStr.Crc32(tesStr38)
-	assert.Greater(t, res, 0)
+	assert.Greater(t, int(res), 0)
 }
 
 func BenchmarkString_Crc32(b *testing.B) {
+	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KStr.Crc32(tesStr38)
+	}
+}
+
+func TestString_SimilarText(t *testing.T) {
+	var percent float64
+	var res int
+
+	res, percent = KStr.SimilarText(similarStr1, similarStr2)
+	assert.Greater(t, res, 0)
+	assert.Greater(t, percent, 0.0)
+
+	res, percent = KStr.SimilarText(utf8Hello, helloCn)
+	assert.Greater(t, percent, 50.0)
+
+	res, percent = KStr.SimilarText("", strKor)
+	assert.Equal(t, res, 0)
+	assert.Equal(t, percent, 0.0)
+
+	res, percent = KStr.SimilarText(helloOther, helloOther)
+	assert.Equal(t, percent, 100.0)
+}
+
+func BenchmarkString_SimilarText(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.SimilarText(utf8Hello, helloCn)
 	}
 }

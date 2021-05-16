@@ -1426,3 +1426,16 @@ func (ks *LkkString) HtmlentityDecode(str string) string {
 func (ks *LkkString) Crc32(str string) uint32 {
 	return crc32.ChecksumIEEE([]byte(str))
 }
+
+// SimilarText 计算两个字符串的相似度;返回在两个字符串中匹配字符的数目,以及相似程度百分数.
+func (ks *LkkString) SimilarText(first, second string) (res int, percent float64) {
+	l1, l2 := len(first), len(second)
+	if l1+l2 == 0 {
+		return 0, 0.0
+	}
+
+	res = similarText(first, second, l1, l2)
+	percent = float64(res*200) / float64(l1+l2)
+
+	return res, percent
+}
