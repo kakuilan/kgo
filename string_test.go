@@ -2866,3 +2866,26 @@ func BenchmarkString_SBC2DBC(b *testing.B) {
 		KStr.SBC2DBC(helloWidth)
 	}
 }
+
+func TestString_Levenshtein(t *testing.T) {
+	var res int
+
+	res = KStr.Levenshtein(helloEng, strHello)
+	assert.Greater(t, res, 0)
+
+	res = KStr.Levenshtein(helloEng, helloEngICase)
+	assert.Greater(t, res, 0)
+
+	res = KStr.Levenshtein(strHello, strHello)
+	assert.Equal(t, res, 0)
+
+	res = KStr.Levenshtein(strHello, tesHtmlDoc)
+	assert.Equal(t, res, -1)
+}
+
+func BenchmarkString_Levenshtein(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Levenshtein(helloEng, helloEngICase)
+	}
+}
