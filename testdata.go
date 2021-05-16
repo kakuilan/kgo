@@ -104,6 +104,7 @@ var helloEngICase = "HelloWorld"
 var helloEngUpper = "HELLOWORLD"
 var helloEngLower = "helloworld"
 var helloOther = "Hello world. 你好，世界。I`m use golang, python, and so on."
+var helloOther2 = "Hello 你好, World 世界！"
 var strSpeedLight = "299792458"
 var binAstronomicalUnit = "10001011010100101110100101101001000100" //intAstronomicalUnit的二进制
 var hexAstronomicalUnit = "22d4ba5a44"                             //intAstronomicalUnit的16进制

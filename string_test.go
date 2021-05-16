@@ -2706,7 +2706,6 @@ func TestString_ToCamelCase(t *testing.T) {
 		{"DOYouOK", "DoYouOk"},
 		{"AReYouOK", "AreYouOk"},
 	}
-
 	for _, test := range tests {
 		actual := KStr.ToCamelCase(test.param)
 		assert.Equal(t, actual, test.expected)
@@ -2736,7 +2735,6 @@ func TestString_ToSnakeCase(t *testing.T) {
 		{"http2xx", "http_2xx"},
 		{"HTTP20xOK", "http_20x_ok"},
 	}
-
 	for _, test := range tests {
 		actual := KStr.ToSnakeCase(test.param)
 		assert.Equal(t, actual, test.expected)
@@ -2770,7 +2768,6 @@ func TestString_ToKebabCase(t *testing.T) {
 		{"http2xx", "http-2xx"},
 		{"HTTP20xOK", "http-20x-ok"},
 	}
-
 	for _, test := range tests {
 		actual := KStr.ToKebabCase(test.param)
 		assert.Equal(t, actual, test.expected)
@@ -2781,5 +2778,35 @@ func BenchmarkString_ToKebabCase(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KStr.ToKebabCase(helloOther)
+	}
+}
+
+func TestString_RemoveBefore(t *testing.T) {
+	var tests = []struct {
+		str        string
+		sub        string
+		include    bool
+		ignoreCase bool
+		expected   string
+	}{
+		{"", "", false, false, ""},
+		{helloEng, "", false, false, helloEng},
+		{helloOther2, "world", false, false, helloOther2},
+		{helloOther2, "World", false, false, "World 世界！"},
+		{helloOther2, "World", true, false, " 世界！"},
+		{helloOther2, "world", false, true, "World 世界！"},
+		{helloOther2, "world 世", false, true, "World 世界！"},
+		{helloOther2, "world 世", true, true, "界！"},
+	}
+	for _, test := range tests {
+		actual := KStr.RemoveBefore(test.str, test.sub, test.include, test.ignoreCase)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_RemoveBefore(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.RemoveBefore(helloOther2, "world", false, false)
 	}
 }
