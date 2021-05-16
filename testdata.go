@@ -167,6 +167,8 @@ var tesStr32 = "\f\n\t\v\r\f"
 var tesStr33 = "x\n\t\t\t\t"
 var tesStr34 = "\f\n\t  \n\n\n   \v\r\f"
 var tesStr35 = "Hi jac. $a=3*5, (can you hear me?)"
+var tesStr36 = "A 'quote' is <b>bold</b>"
+var tesStr37 = "A &#39;quote&#39; is &lt;b&gt;bold&lt;/b&gt;"
 
 //中文名
 var tesChineseName1 = "李四"

@@ -14,6 +14,7 @@ import (
 	xhtml "golang.org/x/net/html"
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/transform"
+	"html"
 	"io"
 	"io/ioutil"
 	"math/rand"
@@ -1408,4 +1409,14 @@ func (ks *LkkString) Quotemeta(str string) string {
 		buf.WriteRune(char)
 	}
 	return buf.String()
+}
+
+// Htmlentities 将字符转换为 HTML 转义字符.
+func (ks *LkkString) Htmlentities(str string) string {
+	return html.EscapeString(str)
+}
+
+// HtmlentityDecode 将HTML实体转换为它们对应的字符.
+func (ks *LkkString) HtmlentityDecode(str string) string {
+	return html.UnescapeString(str)
 }

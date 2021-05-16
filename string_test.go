@@ -2508,12 +2508,36 @@ func TestString_Quotemeta(t *testing.T) {
 	assert.Empty(t, res)
 
 	res = KStr.Quotemeta(tesStr35)
-	assert.Contains(t, res, '\\')
+	assert.Contains(t, res, "\\")
 }
 
 func BenchmarkString_Quotemeta(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KStr.Quotemeta(tesStr35)
+	}
+}
+
+func TestString_Htmlentities_HtmlentityDecode(t *testing.T) {
+	var res string
+
+	res = KStr.Htmlentities(tesStr36)
+	assert.Contains(t, res, "&")
+
+	res = KStr.HtmlentityDecode(res)
+	assert.Equal(t, res, tesStr36)
+}
+
+func BenchmarkString_Htmlentities(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Htmlentities(tesStr36)
+	}
+}
+
+func BenchmarkString_HtmlentityDecode(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.HtmlentityDecode(tesStr37)
 	}
 }
