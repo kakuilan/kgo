@@ -2581,3 +2581,28 @@ func BenchmarkString_SimilarText(b *testing.B) {
 		_, _ = KStr.SimilarText(utf8Hello, helloCn)
 	}
 }
+
+func TestString_Explode(t *testing.T) {
+	var res []string
+
+	res = KStr.Explode("")
+	assert.Empty(t, res)
+
+	//没有提供分隔符
+	res = KStr.Explode(helloOther)
+	assert.Equal(t, len(res), 1)
+
+	//多个分隔符
+	res = KStr.Explode(helloOther, ",", " ")
+	assert.Greater(t, len(res), 1)
+
+	res = KStr.Explode(helloOther, []string{",", " ", "."}...)
+	assert.Greater(t, len(res), 1)
+}
+
+func BenchmarkString_Explode(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Explode(helloOther, ",", " ")
+	}
+}

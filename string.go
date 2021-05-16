@@ -1439,3 +1439,29 @@ func (ks *LkkString) SimilarText(first, second string) (res int, percent float64
 
 	return res, percent
 }
+
+// Explode 字符串分割.delimiters为分隔符,可选,支持多个.
+func (ks *LkkString) Explode(str string, delimiters ...string) (res []string) {
+	if str == "" {
+		return
+	}
+
+	dLen := len(delimiters)
+	dumpPrint("----------dLen", dLen)
+	if dLen == 0 {
+		res = append(res, str)
+	} else if dLen > 1 {
+		var sl []string
+		for _, v := range delimiters {
+			if v != "" {
+				sl = append(sl, v, KDelimiter)
+			}
+		}
+		str = strings.NewReplacer(sl...).Replace(str)
+		res = strings.Split(str, KDelimiter)
+	} else {
+		res = strings.Split(str, delimiters[0])
+	}
+
+	return
+}
