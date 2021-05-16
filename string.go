@@ -1447,7 +1447,6 @@ func (ks *LkkString) Explode(str string, delimiters ...string) (res []string) {
 	}
 
 	dLen := len(delimiters)
-	dumpPrint("----------dLen", dLen)
 	if dLen == 0 {
 		res = append(res, str)
 	} else if dLen > 1 {
@@ -1464,4 +1463,11 @@ func (ks *LkkString) Explode(str string, delimiters ...string) (res []string) {
 	}
 
 	return
+}
+
+// Uniqid 获取一个带前缀、基于当前时间微秒数的唯一ID.
+// prefix 为前缀字符串.
+func (ks *LkkString) Uniqid(prefix string) string {
+	now := time.Now()
+	return fmt.Sprintf("%s%08x%05x", prefix, now.Unix(), now.UnixNano()%0x100000)
 }

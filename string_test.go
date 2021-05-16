@@ -2606,3 +2606,20 @@ func BenchmarkString_Explode(b *testing.B) {
 		KStr.Explode(helloOther, ",", " ")
 	}
 }
+
+func TestString_Uniqid(t *testing.T) {
+	var res1, res2 string
+
+	res1 = KStr.Uniqid(helloEngICase)
+	assert.True(t, KStr.StartsWith(res1, helloEngICase, false))
+
+	res2 = KStr.Uniqid(helloEngICase)
+	assert.NotEqual(t, res1, res2)
+}
+
+func BenchmarkString_Uniqid(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Uniqid(helloEngICase)
+	}
+}
