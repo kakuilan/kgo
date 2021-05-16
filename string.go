@@ -1659,3 +1659,65 @@ func (ks *LkkString) VersionCompare(version1, version2, operator string) (bool, 
 		return false, errors.New("[VersionCompare]`operator: invalid")
 	}
 }
+
+// ToCamelCase 转为驼峰写法.
+// 去掉包括下划线"_"和横杠"-".
+func (ks *LkkString) ToCamelCase(str string) string {
+	if len(str) == 0 {
+		return ""
+	}
+
+	buf := &bytes.Buffer{}
+	var r0, r1 rune
+	var size int
+
+	// leading connector will appear in output.
+	for len(str) > 0 {
+		r0, size = utf8.DecodeRuneInString(str)
+		str = str[size:]
+
+		if !isCaseConnector(r0) {
+			r0 = unicode.ToUpper(r0)
+			break
+		}
+
+		buf.WriteRune(r0)
+	}
+
+	for len(str) > 0 {
+		r1 = r0
+		r0, size = utf8.DecodeRuneInString(str)
+		str = str[size:]
+
+		if isCaseConnector(r0) && isCaseConnector(r1) {
+			buf.WriteRune(r1)
+			continue
+		}
+
+		if isCaseConnector(r1) {
+			r0 = unicode.ToUpper(r0)
+		} else if unicode.IsLower(r1) && unicode.IsUpper(r0) {
+			buf.WriteRune(r1)
+		} else if unicode.IsUpper(r1) && unicode.IsLower(r0) {
+			buf.WriteRune(r1)
+		} else {
+			r0 = unicode.ToLower(r0)
+			buf.WriteRune(r1)
+		}
+	}
+
+	buf.WriteRune(r0)
+	return buf.String()
+}
+
+// ToSnakeCase 转为蛇形写法.
+// 使用下划线"_"连接.
+func (ks *LkkString) ToSnakeCase(str string) string {
+	return camelCaseToLowerCase(str, '_')
+}
+
+// ToSnakeCase 转为串形写法.
+// 使用横杠"-"连接.
+func (ks *LkkString) ToKebabCase(str string) string {
+	return camelCaseToLowerCase(str, '-')
+}

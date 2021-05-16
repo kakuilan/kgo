@@ -2688,3 +2688,34 @@ func BenchmarkString_VersionCompare(b *testing.B) {
 		_, _ = KStr.VersionCompare("1.2.3alph.sum", "1.2.3-alpha.", "<")
 	}
 }
+
+func TestString_ToCamelCase(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected string
+	}{
+		{"", ""},
+		{"some_words", "SomeWords"},
+		{"http_server", "HttpServer"},
+		{"no_https", "NoHttps"},
+		{"_complex__case_", "_Complex_Case_"},
+		{"some words", "SomeWords"},
+		{"sayHello", "SayHello"},
+		{"SayHello", "SayHello"},
+		{"SayHelloWorld", "SayHelloWorld"},
+		{"DOYouOK", "DoYouOk"},
+		{"AReYouOK", "AreYouOk"},
+	}
+
+	for _, test := range tests {
+		actual := KStr.ToCamelCase(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_ToCamelCase(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.ToCamelCase(helloOther)
+	}
+}
