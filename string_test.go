@@ -2840,3 +2840,16 @@ func BenchmarkString_RemoveAfter(b *testing.B) {
 		KStr.RemoveAfter(helloOther2, "world 世", true, true)
 	}
 }
+
+func TestString_DBC2SBC(t *testing.T) {
+	var res string
+	res = KStr.DBC2SBC(helloEng)
+	assert.Greater(t, len(res), len(helloEng))
+}
+
+func BenchmarkString_DBC2SBC(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.DBC2SBC(helloEng)
+	}
+}

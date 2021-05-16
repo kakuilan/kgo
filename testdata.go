@@ -100,6 +100,7 @@ var strHelloHex = "48656c6c6f20576f726c642120e4bda0e5a5bdefbc81" //strHello的16
 var utf8Hello = "你好，世界！"
 var helloCn = "你好世界"
 var helloEng = "hello world!"
+var helloWidth = "ｈｅｌｌｏ　ｗｏｒｌｄ！"
 var helloEngICase = "HelloWorld"
 var helloEngUpper = "HELLOWORLD"
 var helloEngLower = "helloworld"
