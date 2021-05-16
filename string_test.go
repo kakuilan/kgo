@@ -2500,3 +2500,20 @@ func BenchmarkString_UnSerialize(b *testing.B) {
 		_, _ = KStr.UnSerialize(str)
 	}
 }
+
+func TestString_Quotemeta(t *testing.T) {
+	var res string
+
+	res = KStr.Quotemeta("")
+	assert.Empty(t, res)
+
+	res = KStr.Quotemeta(tesStr35)
+	assert.Contains(t, res, '\\')
+}
+
+func BenchmarkString_Quotemeta(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Quotemeta(tesStr35)
+	}
+}

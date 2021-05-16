@@ -1396,3 +1396,16 @@ func (ks *LkkString) UnSerialize(data []byte, register ...interface{}) (val inte
 	err = dec.Decode(&val)
 	return
 }
+
+// Quotemeta 转义元字符集,包括 . \ + * ? [ ^ ] ( $ )等.
+func (ks *LkkString) Quotemeta(str string) string {
+	var buf bytes.Buffer
+	for _, char := range str {
+		switch char {
+		case '.', '+', '\\', '(', '$', ')', '[', '^', ']', '*', '?':
+			buf.WriteRune('\\')
+		}
+		buf.WriteRune(char)
+	}
+	return buf.String()
+}

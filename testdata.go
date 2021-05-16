@@ -166,6 +166,7 @@ var tesStr31 = "\014\012\011\013 abc  \015"
 var tesStr32 = "\f\n\t\v\r\f"
 var tesStr33 = "x\n\t\t\t\t"
 var tesStr34 = "\f\n\t  \n\n\n   \v\r\f"
+var tesStr35 = "Hi jac. $a=3*5, (can you hear me?)"
 
 //中文名
 var tesChineseName1 = "李四"
