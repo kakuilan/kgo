@@ -1736,3 +1736,18 @@ func (ks *LkkString) RemoveBefore(str, before string, include, ignoreCase bool) 
 	}
 	return str
 }
+
+// RemoveAfter 移除after之后的字符串;
+// include为是否移除包括after本身;
+// ignoreCase为是否忽略大小写.
+func (ks *LkkString) RemoveAfter(str, after string, include, ignoreCase bool) string {
+	i := ks.Index(str, after, ignoreCase)
+	if i > 0 {
+		if include {
+			str = str[0:i]
+		} else {
+			str = str[0 : i+len(after)]
+		}
+	}
+	return str
+}

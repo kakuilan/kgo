@@ -2810,3 +2810,33 @@ func BenchmarkString_RemoveBefore(b *testing.B) {
 		KStr.RemoveBefore(helloOther2, "world", false, false)
 	}
 }
+
+func TestString_RemoveAfter(t *testing.T) {
+	var tests = []struct {
+		str        string
+		sub        string
+		include    bool
+		ignoreCase bool
+		expected   string
+	}{
+		{"", "", false, false, ""},
+		{helloEng, "", false, false, helloEng},
+		{helloOther2, "world", false, false, helloOther2},
+		{helloOther2, "World", false, false, "Hello 你好, World"},
+		{helloOther2, "World", true, false, "Hello 你好, "},
+		{helloOther2, "world", false, true, "Hello 你好, World"},
+		{helloOther2, "world 世", false, true, "Hello 你好, World 世"},
+		{helloOther2, "world 世", true, true, "Hello 你好, "},
+	}
+	for _, test := range tests {
+		actual := KStr.RemoveAfter(test.str, test.sub, test.include, test.ignoreCase)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_RemoveAfter(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.RemoveAfter(helloOther2, "world 世", true, true)
+	}
+}
