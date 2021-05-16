@@ -2719,3 +2719,33 @@ func BenchmarkString_ToCamelCase(b *testing.B) {
 		KStr.ToCamelCase(helloOther)
 	}
 }
+
+func TestString_ToSnakeCase(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected string
+	}{
+		{"", ""},
+		{"FirstName", "first_name"},
+		{"HTTPServer", "http_server"},
+		{"NoHTTPS", "no_https"},
+		{"GO_PATH", "go_path"},
+		{"GO PATH", "go_path"},
+		{"GO-PATH", "go_path"},
+		{"HTTP2XX", "http_2xx"},
+		{"http2xx", "http_2xx"},
+		{"HTTP20xOK", "http_20x_ok"},
+	}
+
+	for _, test := range tests {
+		actual := KStr.ToSnakeCase(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_ToSnakeCase(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.ToSnakeCase(helloOther)
+	}
+}
