@@ -2623,3 +2623,19 @@ func BenchmarkString_Uniqid(b *testing.B) {
 		KStr.Uniqid(helloEngICase)
 	}
 }
+
+func TestString_UuidV4(t *testing.T) {
+	var res string
+	var err error
+
+	res, err = KStr.UuidV4()
+	assert.Nil(t, err)
+	assert.Equal(t, len(res), 36)
+}
+
+func BenchmarkString_UuidV4(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.UuidV4()
+	}
+}

@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"bytes"
+	crand "crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/base64"
@@ -1470,4 +1471,17 @@ func (ks *LkkString) Explode(str string, delimiters ...string) (res []string) {
 func (ks *LkkString) Uniqid(prefix string) string {
 	now := time.Now()
 	return fmt.Sprintf("%s%08x%05x", prefix, now.Unix(), now.UnixNano()%0x100000)
+}
+
+// UuidV4 获取UUID(Version4).
+func (ks *LkkString) UuidV4() (string, error) {
+	buf := make([]byte, 16)
+	_, err := crand.Read(buf)
+
+	return fmt.Sprintf("%08x-%04x-%04x-%04x-%12x",
+		buf[0:4],
+		buf[4:6],
+		buf[6:8],
+		buf[8:10],
+		buf[10:16]), err
 }
