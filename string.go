@@ -14,6 +14,7 @@ import (
 	xhtml "golang.org/x/net/html"
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/transform"
+	"hash/crc32"
 	"html"
 	"io"
 	"io/ioutil"
@@ -1419,4 +1420,9 @@ func (ks *LkkString) Htmlentities(str string) string {
 // HtmlentityDecode 将HTML实体转换为它们对应的字符.
 func (ks *LkkString) HtmlentityDecode(str string) string {
 	return html.UnescapeString(str)
+}
+
+// Crc32 计算一个字符串的 crc32 多项式.
+func (ks *LkkString) Crc32(str string) uint32 {
+	return crc32.ChecksumIEEE([]byte(str))
 }

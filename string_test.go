@@ -2541,3 +2541,16 @@ func BenchmarkString_HtmlentityDecode(b *testing.B) {
 		KStr.HtmlentityDecode(tesStr37)
 	}
 }
+
+func TestString_Crc32(t *testing.T) {
+	var res uint32
+
+	res = KStr.Crc32(tesStr38)
+	assert.Greater(t, res, 0)
+}
+
+func BenchmarkString_Crc32(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		KStr.Crc32(tesStr38)
+	}
+}
