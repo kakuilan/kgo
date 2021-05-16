@@ -2749,3 +2749,37 @@ func BenchmarkString_ToSnakeCase(b *testing.B) {
 		KStr.ToSnakeCase(helloOther)
 	}
 }
+
+func TestString_ToKebabCase(t *testing.T) {
+	var tests = []struct {
+		param    string
+		expected string
+	}{
+		{"", ""},
+		{"�helloWorld", "hello-world"},
+		{"A", "a"},
+		{"HellOW�orld", "hell-oworld"},
+		{"-FirstName", "-first-name"},
+		{"FirstName", "first-name"},
+		{"HTTPServer", "http-server"},
+		{"NoHTTPS", "no-https"},
+		{"GO_PATH", "go-path"},
+		{"GO PATH", "go-path"},
+		{"GO-PATH", "go-path"},
+		{"HTTP2XX", "http-2xx"},
+		{"http2xx", "http-2xx"},
+		{"HTTP20xOK", "http-20x-ok"},
+	}
+
+	for _, test := range tests {
+		actual := KStr.ToKebabCase(test.param)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_ToKebabCase(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.ToKebabCase(helloOther)
+	}
+}
