@@ -2853,3 +2853,16 @@ func BenchmarkString_DBC2SBC(b *testing.B) {
 		KStr.DBC2SBC(helloEng)
 	}
 }
+
+func TestString_SBC2DBC(t *testing.T) {
+	var res string
+	res = KStr.SBC2DBC(helloWidth)
+	assert.Less(t, len(res), len(helloWidth))
+}
+
+func BenchmarkString_SBC2DBC(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.SBC2DBC(helloWidth)
+	}
+}
