@@ -2889,3 +2889,16 @@ func BenchmarkString_Levenshtein(b *testing.B) {
 		KStr.Levenshtein(helloEng, helloEngICase)
 	}
 }
+
+func TestString_ClosestWord(t *testing.T) {
+	res, dis := KStr.ClosestWord("hello,golang", strSl3)
+	assert.Equal(t, res, "Hello,go language")
+	assert.Greater(t, dis, 0)
+}
+
+func BenchmarkString_ClosestWord(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.ClosestWord("hello,golang", strSl3)
+	}
+}

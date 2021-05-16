@@ -499,6 +499,7 @@ var colorMp = map[string]string{"a": "green", "0": "red", "b": "green", "1": "bl
 //字符串切片
 var strSl1 = []string{"aa", "bb", "cc", "dd", "ee", "", "hh", "ii"}
 var strSl2 = []string{"bb", "cc", "ff", "gg", "ee", "", "gg"}
+var strSl3 = []string{"hehe,php lang", "Hello,go language", "HeLlo,python!", "haha,java", "I`m going."}
 var strSlEmp = []string{}
 
 //接口切片
