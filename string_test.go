@@ -2885,6 +2885,12 @@ func TestString_Levenshtein(t *testing.T) {
 
 	res = KStr.Levenshtein(strHello, tesHtmlDoc)
 	assert.Equal(t, res, -1)
+
+	res = KStr.Levenshtein(tesStr39, tesStr40)
+	assert.Greater(t, res, 1)
+
+	res = KStr.Levenshtein(tesStr40, tesStr41)
+	assert.Greater(t, res, 1)
 }
 
 func BenchmarkString_Levenshtein(b *testing.B) {
