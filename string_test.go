@@ -3080,3 +3080,44 @@ func BenchmarkString_CountBase64Byte(b *testing.B) {
 		KStr.CountBase64Byte(str)
 	}
 }
+
+func TestString_StrpadLeft_StrpadRight_StrpadBoth(t *testing.T) {
+	var res string
+
+	//指定长度小于实际长度
+	res = KStr.Strpad(helloEng, "-", 1, PAD_BOTH)
+	assert.Equal(t, res, helloEng)
+
+	res = KStr.Strpad(helloEng, "-", 17, PAD_BOTH)
+	assert.NotEqual(t, res, helloEng)
+
+	res = KStr.StrpadLeft(strHello, "-", 45)
+	assert.Equal(t, KStr.MbStrlen(res), 45)
+
+	res = KStr.StrpadRight(strHello, "。", 50)
+	assert.Equal(t, KStr.MbStrlen(res), 50)
+
+	res = KStr.StrpadBoth(strHello, "-。", 50)
+	assert.Equal(t, KStr.MbStrlen(res), 50)
+}
+
+func BenchmarkString_StrpadLeft(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.StrpadLeft(strHello, "-", 45)
+	}
+}
+
+func BenchmarkString_StrpadRight(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.StrpadRight(strHello, "。", 50)
+	}
+}
+
+func BenchmarkString_StrpadBoth(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.StrpadBoth(strHello, "-。", 50)
+	}
+}

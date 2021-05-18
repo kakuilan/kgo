@@ -22,6 +22,7 @@ import (
 	"html"
 	"io"
 	"io/ioutil"
+	"math"
 	"math/rand"
 	"net"
 	"net/http"
@@ -1998,4 +1999,77 @@ func (ks *LkkString) CountBase64Byte(str string) (res int) {
 	}
 
 	return
+}
+
+// Strpad 使用fill填充str字符串到指定长度max.
+// ptype为填充类型,枚举值(PAD_LEFT,PAD_RIGHT,PAD_BOTH).
+func (ks *LkkString) Strpad(str string, fill string, max int, ptype LkkPadType) string {
+	runeStr := []rune(str)
+	runeStrLen := len(runeStr)
+	if runeStrLen >= max || max < 1 || len(fill) == 0 {
+		return str
+	}
+
+	var leftsize int
+	var rightsize int
+
+	switch ptype {
+	case PAD_BOTH:
+		rlsize := float64(max-runeStrLen) / 2
+		leftsize = int(rlsize)
+		rightsize = int(rlsize + math.Copysign(0.5, rlsize))
+	case PAD_LEFT:
+		leftsize = max - runeStrLen
+	case PAD_RIGHT:
+		rightsize = max - runeStrLen
+	}
+
+	buf := make([]rune, 0, max)
+
+	if ptype == PAD_LEFT || ptype == PAD_BOTH {
+		for i := 0; i < leftsize; {
+			for _, v := range []rune(fill) {
+				buf = append(buf, v)
+				if i >= leftsize-1 {
+					i = leftsize
+					break
+				} else {
+					i++
+				}
+			}
+		}
+	}
+
+	buf = append(buf, runeStr...)
+
+	if ptype == PAD_RIGHT || ptype == PAD_BOTH {
+		for i := 0; i < rightsize; {
+			for _, v := range []rune(fill) {
+				buf = append(buf, v)
+				if i >= rightsize-1 {
+					i = rightsize
+					break
+				} else {
+					i++
+				}
+			}
+		}
+	}
+
+	return string(buf)
+}
+
+// StrpadLeft 字符串左侧填充,请参考Strpad.
+func (ks *LkkString) StrpadLeft(str string, fill string, max int) string {
+	return ks.Strpad(str, fill, max, PAD_LEFT)
+}
+
+// StrpadRight 字符串右侧填充,请参考Strpad.
+func (ks *LkkString) StrpadRight(str string, fill string, max int) string {
+	return ks.Strpad(str, fill, max, PAD_RIGHT)
+}
+
+// StrpadBoth 字符串两侧填充,请参考Strpad.
+func (ks *LkkString) StrpadBoth(str string, fill string, max int) string {
+	return ks.Strpad(str, fill, max, PAD_BOTH)
 }

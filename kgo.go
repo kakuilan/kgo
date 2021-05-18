@@ -3,7 +3,6 @@ package kgo
 import (
 	"net"
 	"regexp"
-	"sync"
 	"time"
 )
 
@@ -374,6 +373,4 @@ var (
 	//BOM头字符
 	bomChars = "\xef\xbb\xbf"
 
-	//时间互斥锁
-	timeMu sync.Mutex
 )
