@@ -3121,3 +3121,22 @@ func BenchmarkString_StrpadBoth(b *testing.B) {
 		KStr.StrpadBoth(strHello, "-。", 50)
 	}
 }
+
+func TestString_CountWords(t *testing.T) {
+	var total, words int
+	var res map[string]int
+	var cont []byte
+
+	cont, _ = KFile.ReadFile(fileDante)
+	total, res = KStr.CountWords(toStr(cont))
+	words = len(res)
+	assert.Greater(t, words, 0)
+	assert.Greater(t, total, words)
+}
+
+func BenchmarkString_CountWords(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.CountWords(helloOther)
+	}
+}
