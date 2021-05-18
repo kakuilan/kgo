@@ -3003,3 +3003,26 @@ func BenchmarkString_HideCard(b *testing.B) {
 		KStr.HideCard(tesCredno02)
 	}
 }
+
+func TestString_HideMobile(t *testing.T) {
+	var res string
+
+	res = KStr.HideMobile("")
+	assert.NotEmpty(t, res)
+
+	res = KStr.HideMobile(tesTel01)
+	assert.Greater(t, len(res), len(tesTel01))
+
+	res = KStr.HideMobile(tesCredno01)
+	assert.Contains(t, res, "123")
+
+	res = KStr.HideMobile(tesCredno02)
+	assert.Contains(t, res, "551")
+}
+
+func BenchmarkString_HideMobile(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.HideMobile(tesCredno02)
+	}
+}

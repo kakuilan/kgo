@@ -1955,3 +1955,14 @@ func (ks *LkkString) HideCard(card string) string {
 
 	return res
 }
+
+// HideMobile 隐藏手机号.
+func (ks *LkkString) HideMobile(mobile string) string {
+	res := "***"
+	leng := len(mobile)
+	if leng > 7 {
+		res = mobile[0:3] + "****" + mobile[leng-3:leng]
+	}
+
+	return res
+}
