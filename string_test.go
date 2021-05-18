@@ -2906,3 +2906,30 @@ func BenchmarkString_ClosestWord(b *testing.B) {
 		_, _ = KStr.ClosestWord("hello,golang", strSl3)
 	}
 }
+
+func TestString_Utf8ToBig5_Big5ToUtf8(t *testing.T) {
+	var res []byte
+	var err error
+
+	res, err = KStr.Utf8ToBig5(bytsUtf8Hello)
+	assert.Nil(t, err)
+
+	res, err = KStr.Big5ToUtf8(res)
+	assert.Nil(t, err)
+	assert.Equal(t, string(res), utf8Hello)
+}
+
+func BenchmarkString_Utf8ToBig5(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.Utf8ToBig5(bytsUtf8Hello)
+	}
+}
+
+func BenchmarkString_Big5ToUtf8(b *testing.B) {
+	b.ResetTimer()
+	bs, _ := KStr.Utf8ToBig5(bytsUtf8Hello)
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.Big5ToUtf8(bs)
+	}
+}

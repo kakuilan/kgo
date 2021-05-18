@@ -14,6 +14,7 @@ import (
 	"github.com/json-iterator/go"
 	xhtml "golang.org/x/net/html"
 	"golang.org/x/text/encoding/simplifiedchinese"
+	"golang.org/x/text/encoding/traditionalchinese"
 	"golang.org/x/text/transform"
 	"golang.org/x/text/width"
 	"hash/crc32"
@@ -1829,4 +1830,18 @@ func (ks *LkkString) ClosestWord(word string, searchs []string) (string, int) {
 	}
 
 	return res, distance
+}
+
+// Utf8ToBig5 UTF-8转BIG5编码.
+func (ks *LkkString) Utf8ToBig5(s []byte) ([]byte, error) {
+	reader := transform.NewReader(bytes.NewReader(s), traditionalchinese.Big5.NewEncoder())
+	d, e := ioutil.ReadAll(reader)
+	return d, e
+}
+
+// Big5ToUtf8 BIG5转UTF-8编码.
+func (ks *LkkString) Big5ToUtf8(s []byte) ([]byte, error) {
+	reader := transform.NewReader(bytes.NewReader(s), traditionalchinese.Big5.NewDecoder())
+	d, e := ioutil.ReadAll(reader)
+	return d, e
 }
