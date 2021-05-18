@@ -2933,3 +2933,73 @@ func BenchmarkString_Big5ToUtf8(b *testing.B) {
 		_, _ = KStr.Big5ToUtf8(bs)
 	}
 }
+
+func TestString_FirstLetter(t *testing.T) {
+	var tests = []struct {
+		str        string
+		expected   string
+	}{
+		{helloEng, "h"},
+		{helloOther2, "H"},
+		{utf8Hello, "N"},
+		{"啊哈，world", "A"},
+		{"布料", "B"},
+		{"从来", "C"},
+		{"到达", "D"},
+		{"饿了", "E"},
+		{"发展", "F"},
+		{"改革", "G"},
+		{"好啊", "H"},
+		{"将来", "J"},
+		{"开心", "K"},
+		{"里面", "L"},
+		{"名字", "M"},
+		{"哪里", "N"},
+		{"欧洲", "O"},
+		{"品尝", "P"},
+		{"前进", "Q"},
+		{"人类", "R"},
+		{"是的", "S"},
+		{"天天", "T"},
+		{"问题", "W"},
+		{"西安", "X"},
+		{"用途", "Y"},
+		{"这里", "Z"},
+		{"", ""},
+		{"~！@", ""},
+	}
+	for _, test := range tests {
+		actual := KStr.FirstLetter(test.str)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_FirstLetter(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.FirstLetter(helloOther)
+	}
+}
+
+func TestString_HideCard(t *testing.T) {
+	var res string
+
+	res = KStr.HideCard("")
+	assert.NotEmpty(t, res)
+
+	res = KStr.HideCard(tesTel01)
+	assert.Greater(t, len(res), len(tesTel01))
+
+	res = KStr.HideCard(tesCredno01)
+	assert.Contains(t, res, "1231")
+
+	res = KStr.HideCard(tesCredno02)
+	assert.Contains(t, res, "2551")
+}
+
+func BenchmarkString_HideCard(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.HideCard(tesCredno02)
+	}
+}
