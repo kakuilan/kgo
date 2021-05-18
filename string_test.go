@@ -2942,8 +2942,8 @@ func BenchmarkString_Big5ToUtf8(b *testing.B) {
 
 func TestString_FirstLetter(t *testing.T) {
 	var tests = []struct {
-		str        string
-		expected   string
+		str      string
+		expected string
 	}{
 		{helloEng, "h"},
 		{helloOther2, "H"},
@@ -3059,5 +3059,24 @@ func BenchmarkString_HideTrueName(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KStr.HideTrueName(strNoGbk)
+	}
+}
+
+func TestString_CountBase64Byte(t *testing.T) {
+	var res int
+
+	str, _ := KFile.Img2Base64(imgPng)
+	res = KStr.CountBase64Byte(str)
+	assert.Greater(t, res, 100)
+
+	res = KStr.CountBase64Byte(helloEng)
+	assert.Equal(t, res, 0)
+}
+
+func BenchmarkString_CountBase64Byte(b *testing.B) {
+	b.ResetTimer()
+	str, _ := KFile.Img2Base64(imgPng)
+	for i := 0; i < b.N; i++ {
+		KStr.CountBase64Byte(str)
 	}
 }
