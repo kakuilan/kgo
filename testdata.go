@@ -185,6 +185,11 @@ var tesChineseName5 = "吉乃•阿衣·依扎嫫"
 var tesChineseName6 = "古丽莎•卡迪尔"
 var tesChineseName7 = "迪丽热巴.迪力木拉提"
 
+//公司名
+var tesCompName1 = "北京搜狗科技公司"
+var tesCompName2 = "北京搜狗科技发展有限公司"
+var tesCompName3 = "工商发展银行深圳南山科苑梅龙路支行"
+
 //标点符号、特殊字符
 var strPunctuation1 = "<>@;.-="
 var strPunctuation2 = "!\"#$%&()<>/+=-_? ~^|.,@`{}[]"

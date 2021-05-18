@@ -3011,7 +3011,7 @@ func TestString_HideMobile(t *testing.T) {
 	assert.NotEmpty(t, res)
 
 	res = KStr.HideMobile(tesTel01)
-	assert.Greater(t, len(res), len(tesTel01))
+	assert.Less(t, len(res), len(tesTel01))
 
 	res = KStr.HideMobile(tesCredno01)
 	assert.Contains(t, res, "123")
@@ -3024,5 +3024,34 @@ func BenchmarkString_HideMobile(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KStr.HideMobile(tesCredno02)
+	}
+}
+
+func TestString_HideTrueName(t *testing.T) {
+	var tests = []struct {
+		param string
+	}{
+		{""},
+		{helloEngICase},
+		{tesChineseName1},
+		{tesChineseName2},
+		{tesChineseName3},
+		{tesChineseName5},
+		{tesCompName1},
+		{tesCompName2},
+		{tesCompName3},
+		{strNoGbk},
+	}
+	for _, test := range tests {
+		actual := KStr.HideTrueName(test.param)
+		assert.NotEmpty(t, actual)
+		assert.Contains(t, actual, "*")
+	}
+}
+
+func BenchmarkString_HideTrueName(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.HideTrueName(strNoGbk)
 	}
 }
