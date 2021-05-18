@@ -2625,12 +2625,16 @@ func BenchmarkString_Uniqid(b *testing.B) {
 }
 
 func TestString_UuidV4(t *testing.T) {
-	var res string
+	var res1, res2 string
 	var err error
 
-	res, err = KStr.UuidV4()
+	res1, err = KStr.UuidV4()
 	assert.Nil(t, err)
-	assert.Equal(t, len(res), 36)
+	assert.Equal(t, len(res1), 36)
+
+	res2, err = KStr.UuidV4()
+	assert.Nil(t, err)
+	assert.NotEqual(t, res1, res2)
 }
 
 func BenchmarkString_UuidV4(b *testing.B) {

@@ -1467,14 +1467,19 @@ func (ks *LkkString) Explode(str string, delimiters ...string) (res []string) {
 	return
 }
 
-// Uniqid 获取一个带前缀、基于当前时间微秒数的唯一ID.
+// Uniqid 获取一个带前缀的唯一ID(24位).
 // prefix 为前缀字符串.
 func (ks *LkkString) Uniqid(prefix string) string {
-	now := time.Now()
-	return fmt.Sprintf("%s%08x%05x", prefix, now.Unix(), now.UnixNano()%0x100000)
+	buf := make([]byte, 12)
+	_, _ = crand.Read(buf)
+
+	return fmt.Sprintf("%s%08x%16x",
+		prefix,
+		buf[0:4],
+		buf[4:12])
 }
 
-// UuidV4 获取UUID(Version4).
+// UuidV4 获取36位UUID(Version4).
 func (ks *LkkString) UuidV4() (string, error) {
 	buf := make([]byte, 16)
 	_, err := crand.Read(buf)

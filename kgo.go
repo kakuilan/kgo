@@ -3,6 +3,7 @@ package kgo
 import (
 	"net"
 	"regexp"
+	"sync"
 	"time"
 )
 
@@ -67,21 +68,31 @@ const (
 
 	//UINT_MAX 无符号整型uint最大值
 	UINT_MAX = ^uint(0)
-	//UINT_MIN 无符号整型uint最小值
-	UINT_MIN uint = 0
+
+	//UINT8_MAX 无符号整型uint8最大值, 255
+	UINT8_MAX = ^uint8(0)
+
+	//UINT16_MAX 无符号整型uint16最大值, 65535
+	UINT16_MAX = ^uint16(0)
+
+	//UINT32_MAX 无符号整型uint32最大值, 4294967295
+	UINT32_MAX = ^uint32(0)
 
 	//UINT64_MAX 无符号整型uint64最大值, 18446744073709551615
 	UINT64_MAX = ^uint64(0)
-	//UINT64_MIN 无符号整型uint64最小值
-	UINT64_MIN uint64 = 0
 
 	//INT_MAX 有符号整型int最大值
 	INT_MAX = int(^uint(0) >> 1)
 	//INT_MIN 有符号整型int最小值
 	INT_MIN = ^INT_MAX
 
+	//INT32_MAX 有符号整型int32最大值, 2147483647
+	INT32_MAX = int32(^uint32(0) >> 1)
+	//INT32_MIN 有符号整型int32最小值, -2147483648
+	INT32_MIN = ^INT32_MAX
+
 	//INT64_MAX 有符号整型int64最大值, 9223372036854775807
-	INT64_MAX = int64(^uint(0) >> 1)
+	INT64_MAX = int64(^uint64(0) >> 1)
 	//INT64_MIN 有符号整型int64最小值, -9223372036854775808
 	INT64_MIN = ^INT64_MAX
 
@@ -362,4 +373,7 @@ var (
 	blankChars = " \t\n\r\v\f\x00　"
 	//BOM头字符
 	bomChars = "\xef\xbb\xbf"
+
+	//时间互斥锁
+	timeMu sync.Mutex
 )
