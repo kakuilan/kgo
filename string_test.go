@@ -3169,3 +3169,32 @@ func BenchmarkString_StartsWith(b *testing.B) {
 		KStr.StartsWith(helloOther2, "hello", true)
 	}
 }
+
+func TestString_StartsWiths(t *testing.T) {
+	var tests = []struct {
+		str        string
+		subs       []string
+		ignoreCase bool
+		expected   bool
+	}{
+		{"", []string{"", "a"}, false, false},
+		{helloOther2, []string{""}, false, false},
+		{helloOther2, []string{helloCn, "hello"}, false, false},
+		{helloOther2, []string{helloCn, "Hello"}, false, true},
+		{helloOther2, []string{helloCn, "hello"}, true, true},
+		{helloOther2, []string{helloCn, "Hello 你好"}, false, true},
+		{helloOther2, []string{helloCn, "hello 你好"}, true, true},
+		{helloOther2, []string{helloCn, "world 世"}, true, false},
+	}
+	for _, test := range tests {
+		actual := KStr.StartsWiths(test.str, test.subs, test.ignoreCase)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_StartsWiths(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.StartsWiths(helloOther2, []string{helloCn, "hello 你好"}, true)
+	}
+}
