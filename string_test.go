@@ -3198,3 +3198,30 @@ func BenchmarkString_StartsWiths(b *testing.B) {
 		KStr.StartsWiths(helloOther2, []string{helloCn, "hello 你好"}, true)
 	}
 }
+
+func TestString_EndsWith(t *testing.T) {
+	var tests = []struct {
+		str        string
+		sub        string
+		ignoreCase bool
+		expected   bool
+	}{
+		{"", "", false, false},
+		{helloEng, "", false, false},
+		{helloOther2, "World", false, false},
+		{helloOther2, "World", true, false},
+		{helloOther2, "World 世界！", false, true},
+		{helloOther2, "world 世界！", true, true},
+	}
+	for _, test := range tests {
+		actual := KStr.EndsWith(test.str, test.sub, test.ignoreCase)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_EndsWith(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.EndsWith(helloOther2, "World 世界！", false)
+	}
+}
