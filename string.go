@@ -227,6 +227,17 @@ func (ks *LkkString) StartsWith(str, sub string, ignoreCase bool) bool {
 	return false
 }
 
+// StartsWiths 字符串str是否以subs其中之一为开头.
+func (ks *LkkString) StartsWiths(str string, subs []string, ignoreCase bool) (res bool) {
+	for _, sub := range subs {
+		res = ks.StartsWith(str, sub, ignoreCase)
+		if res {
+			break
+		}
+	}
+	return
+}
+
 // EndsWith 字符串str是否以sub结尾.
 func (ks *LkkString) EndsWith(str, sub string, ignoreCase bool) bool {
 	if str != "" && sub != "" {
@@ -235,6 +246,17 @@ func (ks *LkkString) EndsWith(str, sub string, ignoreCase bool) bool {
 	}
 
 	return false
+}
+
+// EndsWiths 字符串str是否以subs其中之一为结尾.
+func (ks *LkkString) EndsWiths(str string, subs []string, ignoreCase bool) (res bool) {
+	for _, sub := range subs {
+		res = ks.EndsWith(str, sub, ignoreCase)
+		if res {
+			break
+		}
+	}
+	return
 }
 
 // Trim 去除字符串首尾处的空白字符（或者其他字符）.

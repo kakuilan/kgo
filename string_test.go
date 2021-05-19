@@ -3140,3 +3140,32 @@ func BenchmarkString_CountWords(b *testing.B) {
 		_, _ = KStr.CountWords(helloOther)
 	}
 }
+
+func TestString_StartsWith(t *testing.T) {
+	var tests = []struct {
+		str        string
+		sub        string
+		ignoreCase bool
+		expected   bool
+	}{
+		{"", "", false, false},
+		{helloEng, "", false, false},
+		{helloOther2, "hello", false, false},
+		{helloOther2, "Hello", false, true},
+		{helloOther2, "hello", true, true},
+		{helloOther2, "Hello 你好", false, true},
+		{helloOther2, "hello 你好", true, true},
+		{helloOther2, "world 世", true, false},
+	}
+	for _, test := range tests {
+		actual := KStr.StartsWith(test.str, test.sub, test.ignoreCase)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_StartsWith(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.StartsWith(helloOther2, "hello", true)
+	}
+}
