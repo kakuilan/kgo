@@ -3225,3 +3225,30 @@ func BenchmarkString_EndsWith(b *testing.B) {
 		KStr.EndsWith(helloOther2, "World 世界！", false)
 	}
 }
+
+func TestString_EndsWiths(t *testing.T) {
+	var tests = []struct {
+		str        string
+		subs       []string
+		ignoreCase bool
+		expected   bool
+	}{
+		{"", []string{""}, false, false},
+		{helloEng, []string{""}, false, false},
+		{helloOther2, []string{"", "World"}, false, false},
+		{helloOther2, []string{"", "World"}, true, false},
+		{helloOther2, []string{"", "World 世界！"}, false, true},
+		{helloOther2, []string{"", "world 世界！"}, true, true},
+	}
+	for _, test := range tests {
+		actual := KStr.EndsWiths(test.str, test.subs, test.ignoreCase)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_EndsWiths(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.EndsWiths(helloOther2, []string{"", "World 世界！"}, false)
+	}
+}
