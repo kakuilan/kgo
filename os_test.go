@@ -11,6 +11,7 @@ func TestOS_Pwd(t *testing.T) {
 }
 
 func BenchmarkOS_Pwd(b *testing.B) {
+	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KOS.Pwd()
 	}
