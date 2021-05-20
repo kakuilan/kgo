@@ -2139,3 +2139,52 @@ func (ks *LkkString) Gravatar(email string, size uint16) string {
 	_, _ = io.WriteString(h, email)
 	return fmt.Sprintf("https://www.gravatar.com/avatar/%x?s=%d", h.Sum(nil), size)
 }
+
+// AtWho 查找被@的用户名.minLen为用户名最小长度,默认5.
+func (ks *LkkString) AtWho(text string, minLen ...int) []string {
+	var result = []string{}
+	var username string
+	var min int = 5
+	if len(minLen) > 0 && minLen[0] > 0 {
+		min = minLen[0]
+	}
+
+	for _, line := range strings.Split(text, "\n") {
+		if len(line) == 0 {
+			continue
+		}
+		for {
+			index := strings.Index(line, "@")
+			if index == -1 {
+				break
+			} else if index > 0 {
+				r := rune(line[index-1])
+				if unicode.IsUpper(r) || unicode.IsLower(r) {
+					line = line[index+1:]
+				} else {
+					line = line[index:]
+				}
+			} else if index == 0 {
+				// the "@" is first characters
+				endIndex := strings.Index(line, " ")
+				if endIndex == -1 {
+					username = line[1:]
+				} else {
+					username = line[1:endIndex]
+				}
+
+				if len(username) >= min && RegUsernameen.MatchString(username) && !KArr.InStringSlice(username, result) {
+					result = append(result, username)
+				}
+
+				if endIndex == -1 {
+					break
+				}
+
+				line = line[endIndex:]
+			}
+		}
+	}
+
+	return result
+}

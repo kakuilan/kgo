@@ -3298,3 +3298,34 @@ func BenchmarkString_Gravatar(b *testing.B) {
 		KStr.Gravatar(tesEmail1, 150)
 	}
 }
+
+func TestString_AtWho(t *testing.T) {
+	var tests = []struct {
+		name     string
+		leng     int
+		expected []string
+	}{
+		{"", 0, []string{}},
+		{"@hellowor", 3, []string{"hellowor"}},
+		{"@hellowor", 5, []string{"hellowor"}},
+		{" @hellowor", 5, []string{"hellowor"}},
+		{"Hi, @hellowor", 5, []string{"hellowor"}},
+		{"Hi,@hellowor", 5, []string{"hellowor"}},
+		{"Hi, @hellowor, @tom", 3, []string{"tom"}},
+		{"Hi, @hellowor and @tom and @hellowor again", 3, []string{"hellowor", "tom"}},
+		{"@hellowor\nanother line @john", 3, []string{"hellowor", "john"}},
+		{"hellowor@gmail.com", 0, []string{}},
+		{"hellowor@gmail.com @test", 3, []string{"test"}},
+	}
+	for _, test := range tests {
+		actual := KStr.AtWho(test.name, test.leng)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_AtWho(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.AtWho("Hi, @hellowor", 6)
+	}
+}
