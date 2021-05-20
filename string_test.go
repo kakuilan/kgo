@@ -3252,3 +3252,32 @@ func BenchmarkString_EndsWiths(b *testing.B) {
 		KStr.EndsWiths(helloOther2, []string{"", "World 世界！"}, false)
 	}
 }
+
+func TestString_HasEmoji_RemoveEmoji(t *testing.T) {
+	var res string
+	var chk bool
+
+	chk = KStr.HasEmoji(strHello)
+	assert.False(t, chk)
+
+	chk = KStr.HasEmoji(tesEmoji1)
+	assert.True(t, chk)
+
+	res = KStr.RemoveEmoji(tesEmoji1)
+	chk = KStr.HasEmoji(res)
+	assert.False(t, chk)
+}
+
+func BenchmarkString_HasEmoji(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.HasEmoji(strHello)
+	}
+}
+
+func BenchmarkString_RemoveEmoji(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.RemoveEmoji(tesEmoji1)
+	}
+}

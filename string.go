@@ -2120,3 +2120,13 @@ func (ks *LkkString) CountWords(str string) (int, map[string]int) {
 
 	return total, mp
 }
+
+// HasEmoji 字符串是否含有表情符.
+func (ks *LkkString) HasEmoji(str string) bool {
+	return str != "" && RegEmoji.MatchString(str)
+}
+
+// RemoveEmoji 移除字符串中的表情符(使用正则,效率较低).
+func (ks *LkkString) RemoveEmoji(str string) string {
+	return RegEmoji.ReplaceAllString(str, "")
+}
