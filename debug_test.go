@@ -177,3 +177,30 @@ func TestDebug_CallMethod(t *testing.T) {
 	//无参数调用
 	//TODO
 }
+
+func TestDebug_GetFunctions(t *testing.T) {
+	var res []string
+
+	//空字符串
+	res = KDbug.GetFuncNames("")
+	assert.Empty(t, res)
+
+	//空变量
+	res = KDbug.GetFuncNames(nil)
+	assert.Empty(t, res)
+
+	//非指针变量
+	res = KDbug.GetFuncNames(KStr)
+	assert.NotEmpty(t, res)
+
+	//指针变量
+	res = KDbug.GetFuncNames(&KConv)
+	assert.NotEmpty(t, res)
+}
+
+func BenchmarkDebug_GetFuncNames(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KDbug.GetFuncNames(&KConv)
+	}
+}

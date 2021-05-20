@@ -509,7 +509,7 @@ func methodExists(val interface{}, methodName string) (bool, error) {
 // 注意:返回的方法中的第一个参数是接收者.
 // 所以,调用返回的方法时,必须将接收者作为第一个参数传递.
 func getMethod(val interface{}, methodName string) interface{} {
-	if methodName == "" {
+	if val == nil || methodName == "" {
 		return nil
 	}
 
@@ -524,6 +524,24 @@ func getMethod(val interface{}, methodName string) interface{} {
 	}
 
 	return method.Interface()
+}
+
+// getFuncNames 获取变量的所有函数名.
+func getFuncNames(val interface{}) (res []string) {
+	if val == nil {
+		return
+	}
+
+	r := reflect.ValueOf(val)
+	if r.Type().Kind() != reflect.Ptr {
+		r = reflect.New(reflect.TypeOf(val))
+	}
+
+	typ := r.Type()
+	for i := 0; i < r.NumMethod(); i++ {
+		res = append(res, typ.Method(i).Name)
+	}
+	return
 }
 
 // camelCaseToLowerCase 驼峰转为小写.

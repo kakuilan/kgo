@@ -107,3 +107,8 @@ func (kd *LkkDebug) CallMethod(t interface{}, method string, args ...interface{}
 
 	return CallFunc(m, args...)
 }
+
+// GetFuncNames 获取变量的所有(公开的)函数名.
+func (kd *LkkDebug) GetFuncNames(obj interface{}) (res []string) {
+	return getFuncNames(obj)
+}
