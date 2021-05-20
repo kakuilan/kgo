@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"bytes"
+	"crypto/md5"
 	crand "crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
@@ -2129,4 +2130,12 @@ func (ks *LkkString) HasEmoji(str string) bool {
 // RemoveEmoji 移除字符串中的表情符(使用正则,效率较低).
 func (ks *LkkString) RemoveEmoji(str string) string {
 	return RegEmoji.ReplaceAllString(str, "")
+}
+
+// Gravatar 获取Gravatar头像地址.
+// email为邮箱;size为头像尺寸像素.
+func (ks *LkkString) Gravatar(email string, size uint16) string {
+	h := md5.New()
+	_, _ = io.WriteString(h, email)
+	return fmt.Sprintf("https://www.gravatar.com/avatar/%x?s=%d", h.Sum(nil), size)
 }

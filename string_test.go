@@ -3278,6 +3278,23 @@ func BenchmarkString_HasEmoji(b *testing.B) {
 func BenchmarkString_RemoveEmoji(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KStr.RemoveEmoji(tesEmoji1)
+		KStr.RemoveEmoji(tesEmoji2)
+	}
+}
+
+func TestString_Gravatar(t *testing.T) {
+	var res string
+
+	res = KStr.Gravatar("", 100)
+	assert.NotEmpty(t, res)
+
+	res = KStr.Gravatar(tesEmail1, 150)
+	assert.NotEmpty(t, res)
+}
+
+func BenchmarkString_Gravatar(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.Gravatar(tesEmail1, 150)
 	}
 }
