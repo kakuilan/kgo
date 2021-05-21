@@ -35,3 +35,14 @@ func (ko *LkkOS) Pwd() string {
 
 	return dir
 }
+
+// Getcwd 取得当前工作目录(程序可能在任务中进行多次目录切换).
+func (ko *LkkOS) Getcwd() (string, error) {
+	dir, err := os.Getwd()
+	return dir, err
+}
+
+// Chdir 改变/进入新的工作目录.
+func (ko *LkkOS) Chdir(dir string) error {
+	return os.Chdir(dir)
+}

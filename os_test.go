@@ -16,3 +16,39 @@ func BenchmarkOS_Pwd(b *testing.B) {
 		KOS.Pwd()
 	}
 }
+
+func TestOS_Getcwd_Chdir(t *testing.T) {
+	var ori, res string
+	var err error
+
+	ori, err = KOS.Getcwd()
+	assert.Nil(t, err)
+	assert.NotEmpty(t, ori)
+
+	//切换目录
+	err = KOS.Chdir(dirTdat)
+	assert.Nil(t, err)
+
+	res, err = KOS.Getcwd()
+	assert.Nil(t, err)
+
+	//返回原来目录
+	err = KOS.Chdir(ori)
+	assert.Nil(t, err)
+	assert.Equal(t, KFile.AbsPath(res), KFile.AbsPath(dirTdat))
+}
+
+func BenchmarkOS_Getcwd(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KOS.Getcwd()
+	}
+}
+
+func BenchmarkOS_Chdir(b *testing.B) {
+	b.ResetTimer()
+	dir := KOS.Pwd()
+	for i := 0; i < b.N; i++ {
+		_ = KOS.Chdir(dir)
+	}
+}
