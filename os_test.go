@@ -65,3 +65,16 @@ func BenchmarkOS_LocalIP(b *testing.B) {
 		_, _ = KOS.LocalIP()
 	}
 }
+
+func TestOS_OutboundIP(t *testing.T) {
+	res, err := KOS.OutboundIP()
+	assert.Nil(t, err)
+	assert.NotEmpty(t, res)
+}
+
+func BenchmarkOS_OutboundIP(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KOS.OutboundIP()
+	}
+}

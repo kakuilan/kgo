@@ -65,3 +65,16 @@ func (ko *LkkOS) LocalIP() (string, error) {
 
 	return res, err
 }
+
+// OutboundIP 获取本机的出口IP.
+func (ko *LkkOS) OutboundIP() (string, error) {
+	res := ""
+	conn, err := net.Dial("udp", "8.8.8.8:80")
+	if conn != nil {
+		addr := conn.LocalAddr().(*net.UDPAddr)
+		res = addr.IP.String()
+		_ = conn.Close()
+	}
+
+	return res, err
+}
