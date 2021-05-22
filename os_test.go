@@ -52,3 +52,16 @@ func BenchmarkOS_Chdir(b *testing.B) {
 		_ = KOS.Chdir(dir)
 	}
 }
+
+func TestOS_LocalIP(t *testing.T) {
+	res, err := KOS.LocalIP()
+	assert.Nil(t, err)
+	assert.NotEmpty(t, res)
+}
+
+func BenchmarkOS_LocalIP(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KOS.LocalIP()
+	}
+}

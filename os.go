@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"net"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -45,4 +46,22 @@ func (ko *LkkOS) Getcwd() (string, error) {
 // Chdir 改变/进入新的工作目录.
 func (ko *LkkOS) Chdir(dir string) error {
 	return os.Chdir(dir)
+}
+
+// LocalIP 获取本机第一个NIC's IP.
+func (ko *LkkOS) LocalIP() (string, error) {
+	res := ""
+	addrs, err := net.InterfaceAddrs()
+	if len(addrs) > 0 {
+		for _, addr := range addrs {
+			if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+				if nil != ipnet.IP.To4() {
+					res = ipnet.IP.String()
+					break
+				}
+			}
+		}
+	}
+
+	return res, err
 }
