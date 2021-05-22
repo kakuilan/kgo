@@ -11,3 +11,16 @@ func TestOS_NotWindows(t *testing.T) {
 	res := KOS.IsWindows()
 	assert.False(t, res)
 }
+
+func TestOS_HomeDir(t *testing.T) {
+	res, err := KOS.HomeDir()
+	assert.Nil(t, err)
+	assert.NotEmpty(t, res)
+}
+
+func BenchmarkOS_HomeDir(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KOS.HomeDir()
+	}
+}
