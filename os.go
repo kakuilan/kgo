@@ -451,3 +451,10 @@ func (ko *LkkOS) ForceGC() {
 	runtime.GC()
 	debug.FreeOSMemory()
 }
+
+// TriggerGC 触发GC(非阻塞).
+func (ko *LkkOS) TriggerGC() {
+	go func() {
+		ko.ForceGC()
+	}()
+}

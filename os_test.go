@@ -459,3 +459,14 @@ func BenchmarkOS_ForceGC(b *testing.B) {
 		KOS.ForceGC()
 	}
 }
+
+func TestOS_TriggerGC(t *testing.T) {
+	KOS.TriggerGC()
+}
+
+func BenchmarkOS_TriggerGC(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.TriggerGC()
+	}
+}
