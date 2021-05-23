@@ -294,3 +294,15 @@ func BenchmarkOS_Chown(b *testing.B) {
 		KOS.Chown(dirDoc, uid, guid)
 	}
 }
+
+func TestOS_GetTempDir(t *testing.T) {
+	res := KOS.GetTempDir()
+	assert.NotEmpty(t, res)
+}
+
+func BenchmarkOS_GetTempDir(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetTempDir()
+	}
+}
