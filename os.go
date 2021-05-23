@@ -98,3 +98,20 @@ func (ko *LkkOS) IsPublicIPv4(ip net.IP) bool {
 	}
 	return false
 }
+
+// GetIPs 获取本机的IP列表.
+func (ko *LkkOS) GetIPs() (ips []string) {
+	interfaceAddrs, _ := net.InterfaceAddrs()
+	if len(interfaceAddrs) > 0 {
+		for _, addr := range interfaceAddrs {
+			ipNet, isValidIpNet := addr.(*net.IPNet)
+			if isValidIpNet && !ipNet.IP.IsLoopback() {
+				if ipNet.IP.To4() != nil {
+					ips = append(ips, ipNet.IP.String())
+				}
+			}
+		}
+	}
+
+	return
+}

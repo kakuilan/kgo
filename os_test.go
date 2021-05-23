@@ -103,3 +103,15 @@ func BenchmarkOS_IsPublicIPv4(b *testing.B) {
 		KOS.IsPublicIPv4(ip)
 	}
 }
+
+func TestOS_GetIPs(t *testing.T) {
+	res := KOS.GetIPs()
+	assert.NotEmpty(t, res)
+}
+
+func BenchmarkOS_GetIPs(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetIPs()
+	}
+}
