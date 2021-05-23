@@ -49,3 +49,21 @@ func BenchmarkOS_Exec_Windows(b *testing.B) {
 		_, _, _ = KOS.Exec(tesCommand03)
 	}
 }
+
+func TestOS_System_Windows(t *testing.T) {
+	var ret int
+	var res []byte
+	var err []byte
+
+	ret, res, err = KOS.System(tesCommand03)
+	assert.Equal(t, ret, 0)
+	assert.NotEmpty(t, res)
+	assert.Empty(t, err)
+}
+
+func BenchmarkOS_System_Windows(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _, _ = KOS.System(tesCommand03)
+	}
+}
