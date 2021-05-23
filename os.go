@@ -131,3 +131,8 @@ func (ko *LkkOS) GetMacAddrs() (macAddrs []string) {
 
 	return
 }
+
+// Hostname 获取主机名.
+func (ko *LkkOS) Hostname() (string, error) {
+	return os.Hostname()
+}

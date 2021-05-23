@@ -127,3 +127,16 @@ func BenchmarkOS_GetMacAddrs(b *testing.B) {
 		KOS.GetMacAddrs()
 	}
 }
+
+func TestOS_Hostname(t *testing.T) {
+	res, err := KOS.Hostname()
+	assert.Nil(t, err)
+	assert.NotEmpty(t, res)
+}
+
+func BenchmarkOS_Hostname(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KOS.Hostname()
+	}
+}
