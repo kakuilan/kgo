@@ -242,8 +242,6 @@ func BenchmarkOS_Unsetenv(b *testing.B) {
 
 func TestOS_GetEndian_IsLittleEndian(t *testing.T) {
 	res := KOS.GetEndian()
-	assert.NotEmpty(t, res)
-
 	chk := KOS.IsLittleEndian()
 	if chk {
 		assert.Equal(t, res, binary.LittleEndian)
