@@ -448,3 +448,14 @@ func BenchmarkOS_IsPortOpen(b *testing.B) {
 		KOS.IsPortOpen(localIp, 80, "tcp")
 	}
 }
+
+func TestOS_ForceGC(t *testing.T) {
+	KOS.ForceGC()
+}
+
+func BenchmarkOS_ForceGC(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.ForceGC()
+	}
+}

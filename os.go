@@ -12,6 +12,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"runtime/debug"
 	"strings"
 	"unicode"
 )
@@ -443,4 +444,10 @@ func (ko *LkkOS) IsPortOpen(host string, port interface{}, protocols ...string) 
 	}
 
 	return false
+}
+
+// ForceGC 强制手动GC垃圾回收(阻塞).
+func (ko *LkkOS) ForceGC() {
+	runtime.GC()
+	debug.FreeOSMemory()
 }
