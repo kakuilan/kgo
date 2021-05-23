@@ -426,14 +426,25 @@ func TestOS_IsPortOpen(t *testing.T) {
 		expected bool
 	}{
 		{"", 23, "", false},
-		{"localhost", 0, "", false},
-		{"127.0.0.1", 23, "", false},
-		{"golang.google.cn", 80, "udp", true},
-		{"golang.google.cn", 80, "tcp", true},
-		{"www.baidu.com", "443", "tcp", true},
+		{localHost, 0, "", false},
+		{localIp, 23, "", false},
+		{tesDomain31, 80, "udp", true},
+		{tesDomain31, 80, "tcp", true},
+		{tesDomain32, "443", "tcp", true},
 	}
 	for _, test := range tests {
 		actual := KOS.IsPortOpen(test.host, test.port, test.protocol)
 		assert.Equal(t, actual, test.expected)
+	}
+
+	//默认协议
+	chk := KOS.IsPortOpen(lanIp, 80)
+	assert.False(t, chk)
+}
+
+func BenchmarkOS_IsPortOpen(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.IsPortOpen(localIp, 80, "tcp")
 	}
 }
