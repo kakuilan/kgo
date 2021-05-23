@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"github.com/stretchr/testify/assert"
 	"net"
+	"os/user"
 	"testing"
 )
 
@@ -261,5 +262,35 @@ func BenchmarkOS_IsLittleEndian(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KOS.IsLittleEndian()
+	}
+}
+
+func TestOS_Chmod_Chown(t *testing.T) {
+	var res bool
+
+	res = KOS.Chmod(dirDoc, 0777)
+	assert.True(t, res)
+
+	usr, _ := user.Current()
+	uid := toInt(usr.Uid)
+	guid := toInt(usr.Gid)
+	res = KOS.Chown(dirDoc, uid, guid)
+	assert.True(t, res)
+}
+
+func BenchmarkOS_Chmod(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.Chmod(dirDoc, 0777)
+	}
+}
+
+func BenchmarkOS_Chown(b *testing.B) {
+	b.ResetTimer()
+	usr, _ := user.Current()
+	uid := toInt(usr.Uid)
+	guid := toInt(usr.Gid)
+	for i := 0; i < b.N; i++ {
+		KOS.Chown(dirDoc, uid, guid)
 	}
 }
