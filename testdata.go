@@ -721,6 +721,7 @@ var tesUrl39 = "https://www.baidu.com/"
 //命令
 var tesCommand01 = " ls -a -h"
 var tesCommand02 = " ls -a\"\" -h 'hehe'"
+var tesCommand03 = "cmd /C dir /p/s"
 
 //表情符
 var tesEmoji1 = `Lorem ipsum 🥊dolor 🤒sit amet, consectetur adipiscing 🍂 elit. 🍁🍃🍂🌰🍁🌿🌾🌼🌻سلام تست شد hell中文

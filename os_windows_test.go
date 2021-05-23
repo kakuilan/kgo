@@ -31,3 +31,21 @@ func BenchmarkOS_HomeDir(b *testing.B) {
 		_, _ = KOS.HomeDir()
 	}
 }
+
+func TestOS_Exec_Windows(t *testing.T) {
+	var ret int
+	var res []byte
+	var err []byte
+
+	ret, res, err = KOS.Exec(tesCommand03)
+	assert.Equal(t, ret, 0)
+	assert.NotEmpty(t, res)
+	assert.Empty(t, err)
+}
+
+func BenchmarkOS_Exec_Windows(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _, _ = KOS.Exec(tesCommand03)
+	}
+}
