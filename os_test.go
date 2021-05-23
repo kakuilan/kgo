@@ -3,7 +3,6 @@ package kgo
 import (
 	"encoding/binary"
 	"github.com/stretchr/testify/assert"
-	"net"
 	"os/user"
 	"testing"
 )
@@ -108,25 +107,33 @@ func BenchmarkOS_IsPrivateIp(b *testing.B) {
 
 func TestOS_IsPublicIP(t *testing.T) {
 	var res bool
+	var err error
 
-	res = KOS.IsPublicIP(net.ParseIP(localIp))
+	res, err = KOS.IsPublicIP(localIp)
+	assert.Nil(t, err)
 	assert.False(t, res)
 
-	res = KOS.IsPublicIP(net.ParseIP(lanIp))
+	res, err = KOS.IsPublicIP(lanIp)
+	assert.Nil(t, err)
 	assert.False(t, res)
 
-	res = KOS.IsPublicIP(net.ParseIP(googleIpv4))
+	res, err = KOS.IsPublicIP(googleIpv4)
+	assert.Nil(t, err)
 	assert.True(t, res)
 
-	res = KOS.IsPublicIP(net.ParseIP(googleIpv6))
-	assert.False(t, res)
+	res, err = KOS.IsPublicIP(googleIpv6)
+	assert.Nil(t, err)
+	assert.True(t, res)
+
+	//非IP
+	res, err = KOS.IsPublicIP(strHello)
+	assert.NotNil(t, err)
 }
 
 func BenchmarkOS_IsPublicIP(b *testing.B) {
 	b.ResetTimer()
-	ip := net.ParseIP(publicIp1)
 	for i := 0; i < b.N; i++ {
-		KOS.IsPublicIP(ip)
+		_, _ = KOS.IsPublicIP(publicIp1)
 	}
 }
 

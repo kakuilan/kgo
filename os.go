@@ -129,23 +129,27 @@ func (ko *LkkOS) IsPrivateIp(str string) (bool, error) {
 }
 
 // IsPublicIP 是否公网IPv4.
-func (ko *LkkOS) IsPublicIP(ip net.IP) bool {
+func (ko *LkkOS) IsPublicIP(str string) (bool, error) {
+	ip := net.ParseIP(str)
+	if ip == nil {
+		return false, errors.New("[IsPublicIP]`str is not valid ip")
+	}
+
 	if ip.IsLoopback() || ip.IsLinkLocalMulticast() || ip.IsLinkLocalUnicast() {
-		return false
+		return false, nil
 	}
 	if ip4 := ip.To4(); ip4 != nil {
 		switch true {
 		case ip4[0] == 10:
-			return false
+			return false, nil
 		case ip4[0] == 172 && ip4[1] >= 16 && ip4[1] <= 31:
-			return false
+			return false, nil
 		case ip4[0] == 192 && ip4[1] == 168:
-			return false
-		default:
-			return true
+			return false, nil
 		}
 	}
-	return false
+
+	return true, nil
 }
 
 // GetIPs 获取本机的IP列表.
