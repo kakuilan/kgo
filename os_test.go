@@ -139,6 +139,12 @@ func TestOS_Hostname_GetIpByHostname(t *testing.T) {
 	res, err = KOS.GetIpByHostname(res)
 	assert.Nil(t, err)
 	assert.NotEmpty(t, res)
+
+	res, err = KOS.GetIpByHostname(tesIp2)
+	assert.Empty(t, res)
+
+	res, err = KOS.GetIpByHostname(strHello)
+	assert.NotNil(t, err)
 }
 
 func BenchmarkOS_Hostname(b *testing.B) {
