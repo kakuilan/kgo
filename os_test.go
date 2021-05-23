@@ -200,3 +200,41 @@ func BenchmarkOS_GetHostByIp(b *testing.B) {
 		_, _ = KOS.GetHostByIp(localIp)
 	}
 }
+
+func TestOS_Setenv_Getenv_Unsetenv(t *testing.T) {
+	var res string
+	var err error
+
+	err = KOS.Setenv(helloEngICase, helloOther)
+	assert.Nil(t, err)
+
+	res = KOS.Getenv(helloEngICase)
+	assert.Equal(t, res, helloOther)
+
+	err = KOS.Unsetenv(helloEngICase)
+	assert.Nil(t, err)
+
+	res = KOS.Getenv(helloEngICase, helloOther2)
+	assert.Equal(t, res, helloOther2)
+}
+
+func BenchmarkOS_Setenv(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = KOS.Setenv(helloEngICase, helloOther)
+	}
+}
+
+func BenchmarkOS_Getenv(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.Getenv(helloEngICase)
+	}
+}
+
+func BenchmarkOS_Unsetenv(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = KOS.Unsetenv(helloEngICase)
+	}
+}

@@ -175,3 +175,23 @@ func (ko *LkkOS) GetHostByIp(ipAddress string) (string, error) {
 	}
 	return "", err
 }
+
+// Setenv 设置一个环境变量的值.
+func (ko *LkkOS) Setenv(varname, data string) error {
+	return os.Setenv(varname, data)
+}
+
+// Getenv 获取一个环境变量的值.defvalue为默认值.
+func (ko *LkkOS) Getenv(varname string, defvalue ...string) string {
+	val := os.Getenv(varname)
+	if val == "" && len(defvalue) > 0 {
+		val = defvalue[0]
+	}
+
+	return val
+}
+
+// Unsetenv 删除一个环境变量.
+func (ko *LkkOS) Unsetenv(varname string) error {
+	return os.Unsetenv(varname)
+}
