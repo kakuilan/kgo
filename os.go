@@ -1,12 +1,15 @@
 package kgo
 
 import (
+	"bytes"
 	"encoding/binary"
 	"net"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
+	"unicode"
 )
 
 // IsWindows 当前操作系统是否Windows.
@@ -205,4 +208,52 @@ func (ko *LkkOS) GetEndian() binary.ByteOrder {
 // IsLittleEndian 系统字节序类型是否小端存储.
 func (ko *LkkOS) IsLittleEndian() bool {
 	return isLittleEndian()
+}
+
+// Exec 执行一个外部命令.
+// retInt为1时失败,为0时成功;outStr为执行命令的输出;errStr为错误输出.
+// 命令如
+// "ls -a"
+// "/bin/bash -c \"ls -a\""
+func (ko *LkkOS) Exec(command string) (retInt int, outStr, errStr []byte) {
+	// split command
+	q := rune(0)
+	parts := strings.FieldsFunc(command, func(r rune) bool {
+		switch {
+		case r == q:
+			q = rune(0)
+			return false
+		case q != rune(0):
+			return false
+		case unicode.In(r, unicode.Quotation_Mark):
+			q = r
+			return false
+		default:
+			return unicode.IsSpace(r)
+		}
+	})
+
+	// remove the " and ' on both sides
+	for i, v := range parts {
+		f, l := v[0], len(v)
+		if l >= 2 && (f == '"' || f == '\'') {
+			parts[i] = v[1 : l-1]
+		}
+	}
+
+	var stdout, stderr bytes.Buffer
+	cmd := exec.Command(parts[0], parts[1:]...)
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+	err := cmd.Run()
+	if err != nil {
+		retInt = 1 //失败
+		stderr.WriteString(err.Error())
+		errStr = stderr.Bytes()
+	} else {
+		retInt = 0 //成功
+		outStr, errStr = stdout.Bytes(), stderr.Bytes()
+	}
+
+	return
 }
