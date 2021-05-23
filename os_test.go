@@ -3,7 +3,10 @@ package kgo
 import (
 	"encoding/binary"
 	"github.com/stretchr/testify/assert"
+	"net"
+	"net/http"
 	"os/user"
+	"strings"
 	"testing"
 )
 
@@ -335,5 +338,82 @@ func BenchmarkOS_GetTempDir(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KOS.GetTempDir()
+	}
+}
+
+func TestOS_ClientIp(t *testing.T) {
+	// Create type and function for testing
+	type testIP struct {
+		name     string
+		request  *http.Request
+		expected string
+	}
+
+	newRequest := func(remoteAddr, xRealIP string, xForwardedFor ...string) *http.Request {
+		h := http.Header{}
+		h.Set("X-Real-IP", xRealIP)
+		for _, address := range xForwardedFor {
+			h.Set("X-Forwarded-For", address)
+		}
+
+		return &http.Request{
+			RemoteAddr: remoteAddr,
+			Header:     h,
+		}
+	}
+
+	// Create test data
+	testData := []testIP{
+		{
+			name:     "No header,no port",
+			request:  newRequest(publicIp1, ""),
+			expected: publicIp1,
+		}, {
+			name:     "No header,has port",
+			request:  newRequest(tesIp8, ""),
+			expected: tesIp8,
+		}, {
+			name:     "Has X-Forwarded-For",
+			request:  newRequest("", "", publicIp1),
+			expected: publicIp1,
+		}, {
+			name:     "Has multiple X-Forwarded-For",
+			request:  newRequest("", "", localIp, publicIp1, publicIp2),
+			expected: publicIp2,
+		}, {
+			name:     "Has X-Real-IP",
+			request:  newRequest("", publicIp1),
+			expected: publicIp1,
+		}, {
+			name:     "Local ip",
+			request:  newRequest("", tesIp2),
+			expected: tesIp2,
+		},
+	}
+
+	// Run test
+	var actual string
+	for _, v := range testData {
+		actual = KOS.ClientIp(v.request)
+		if v.expected == "::1" {
+			assert.Equal(t, actual, localIp)
+		} else {
+			if strings.Contains(v.expected, ":") {
+				ip, _, _ := net.SplitHostPort(v.expected)
+				assert.Equal(t, actual, ip)
+			} else {
+				assert.Equal(t, actual, v.expected)
+			}
+		}
+	}
+}
+
+func BenchmarkOS_ClientIp(b *testing.B) {
+	b.ResetTimer()
+	req := &http.Request{
+		RemoteAddr: baiduIpv4,
+	}
+	for i := 0; i < b.N; i++ {
+		KOS.ClientIp(req)
 	}
 }

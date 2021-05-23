@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"net/http"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -383,4 +384,43 @@ func (ko *LkkOS) Chown(filename string, uid, gid int) bool {
 // GetTempDir 返回用于临时文件的目录.
 func (ko *LkkOS) GetTempDir() string {
 	return os.TempDir()
+}
+
+// ClientIp 获取客户端真实IP,req为http请求.
+func (ko *LkkOS) ClientIp(req *http.Request) string {
+	// 获取头部信息,有可能是代理
+	xRealIP := req.Header.Get("X-Real-Ip")
+	xForwardedFor := req.Header.Get("X-Forwarded-For")
+
+	// If both empty, return IP from remote address
+	if xRealIP == "" && xForwardedFor == "" {
+		var remoteIP string
+
+		// If there are colon in remote address, remove the port number
+		// otherwise, return remote address as is
+		if strings.ContainsRune(req.RemoteAddr, ':') {
+			remoteIP, _, _ = net.SplitHostPort(req.RemoteAddr)
+		} else {
+			remoteIP = req.RemoteAddr
+		}
+
+		return remoteIP
+	}
+
+	// Check list of IP in X-Forwarded-For and return the first global address
+	// X-Forwarded-For是逗号分隔的IP地址列表,如"10.0.0.1, 10.0.0.2, 10.0.0.3"
+	for _, address := range strings.Split(xForwardedFor, ",") {
+		address = strings.TrimSpace(address)
+		isPrivate, err := ko.IsPrivateIp(address)
+		if !isPrivate && err == nil {
+			return address
+		}
+	}
+
+	if xRealIP == "::1" {
+		xRealIP = "127.0.0.1"
+	}
+
+	// If nothing succeed, return X-Real-IP
+	return xRealIP
 }

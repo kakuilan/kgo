@@ -414,6 +414,7 @@ var tesIp4 = "300.0.0.0"
 var tesIp5 = "192.168.0.1:80"
 var tesIp6 = "::FFFF:C0A8:1"
 var tesIp7 = "fe80::2c04:f7ff:feaa:33b7"
+var tesIp8 = "8.8.8.8:8080"
 
 //domain
 var localHost = "localhost"
