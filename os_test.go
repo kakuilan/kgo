@@ -302,14 +302,19 @@ func BenchmarkOS_IsLittleEndian(b *testing.B) {
 func TestOS_Chmod_Chown(t *testing.T) {
 	var res bool
 
-	res = KOS.Chmod(dirDoc, 0777)
+	KFile.Touch(chownfile, 128)
+	res = KOS.Chmod(chownfile, 0777)
 	assert.True(t, res)
 
 	usr, _ := user.Current()
 	uid := toInt(usr.Uid)
 	guid := toInt(usr.Gid)
-	res = KOS.Chown(dirDoc, uid, guid)
-	assert.True(t, res)
+	res = KOS.Chown(chownfile, uid, guid)
+	if KOS.IsWindows() {
+		assert.False(t, res)
+	} else {
+		assert.True(t, res)
+	}
 }
 
 func BenchmarkOS_Chmod(b *testing.B) {

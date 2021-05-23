@@ -635,6 +635,7 @@ var apndfile = "./testdata/appendfile"
 var touchfile = "./testdata/touchfile"
 var renamefile = "./testdata/renamefile"
 var copyfile = "./testdata/copyfile"
+var chownfile = "./testdata/chownfile"
 var fastcopyfile = dirCopy + "/fast/fastcopyfile"
 var imgCopy = dirCopy + "/diglett_copy.png"
 var pathTes1 = `/usr|///tmp:\\\123/\abc:d<|\hello>\/%world?\\how$\\are@#test.png`
