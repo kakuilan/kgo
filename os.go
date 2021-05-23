@@ -115,3 +115,19 @@ func (ko *LkkOS) GetIPs() (ips []string) {
 
 	return
 }
+
+// GetMacAddrs 获取本机的Mac网卡地址列表.
+func (ko *LkkOS) GetMacAddrs() (macAddrs []string) {
+	netInterfaces, _ := net.Interfaces()
+	if len(netInterfaces) > 0 {
+		for _, netInterface := range netInterfaces {
+			macAddr := netInterface.HardwareAddr.String()
+			if len(macAddr) == 0 {
+				continue
+			}
+			macAddrs = append(macAddrs, macAddr)
+		}
+	}
+
+	return
+}

@@ -115,3 +115,15 @@ func BenchmarkOS_GetIPs(b *testing.B) {
 		KOS.GetIPs()
 	}
 }
+
+func TestOS_GetMacAddrs(t *testing.T) {
+	res := KOS.GetMacAddrs()
+	assert.NotEmpty(t, res)
+}
+
+func BenchmarkOS_GetMacAddrs(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetMacAddrs()
+	}
+}
