@@ -3,6 +3,7 @@ package kgo
 import (
 	"bytes"
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"io"
 	"net"
@@ -86,8 +87,49 @@ func (ko *LkkOS) OutboundIP() (string, error) {
 	return res, err
 }
 
+// PrivateCIDR 获取私有网段的CIDR(无类别域间路由).
+func (ko *LkkOS) PrivateCIDR() []*net.IPNet {
+	maxCidrBlocks := []string{
+		"127.0.0.1/8",    // localhost
+		"10.0.0.0/8",     // 24-bit block
+		"172.16.0.0/12",  // 20-bit block
+		"192.168.0.0/16", // 16-bit block
+		"169.254.0.0/16", // link local address
+		"::1/128",        // localhost IPv6
+		"fc00::/7",       // unique local address IPv6
+		"fe80::/10",      // link local address IPv6
+	}
+
+	res := make([]*net.IPNet, len(maxCidrBlocks))
+	for i, maxCidrBlock := range maxCidrBlocks {
+		_, cidr, _ := net.ParseCIDR(maxCidrBlock)
+		res[i] = cidr
+	}
+
+	return res
+}
+
+// IsPrivateIp 是否私有IP地址(ipv4/ipv6).
+func (ko *LkkOS) IsPrivateIp(str string) (bool, error) {
+	ip := net.ParseIP(str)
+	if ip == nil {
+		return false, errors.New("[IsPrivateIp]`str is not valid ip")
+	}
+
+	if KPrivCidrs == nil {
+		KPrivCidrs = ko.PrivateCIDR()
+	}
+	for i := range KPrivCidrs {
+		if KPrivCidrs[i].Contains(ip) {
+			return true, nil
+		}
+	}
+
+	return false, nil
+}
+
 // IsPublicIP 是否公网IPv4.
-func (ko *LkkOS) IsPublicIPv4(ip net.IP) bool {
+func (ko *LkkOS) IsPublicIP(ip net.IP) bool {
 	if ip.IsLoopback() || ip.IsLinkLocalMulticast() || ip.IsLinkLocalUnicast() {
 		return false
 	}

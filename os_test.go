@@ -82,27 +82,51 @@ func BenchmarkOS_OutboundIP(b *testing.B) {
 	}
 }
 
-func TestOS_IsPublicIPv4(t *testing.T) {
+func TestOS_IsPrivateIp(t *testing.T) {
 	var res bool
+	var err error
 
-	res = KOS.IsPublicIPv4(net.ParseIP(localIp))
-	assert.False(t, res)
-
-	res = KOS.IsPublicIPv4(net.ParseIP(lanIp))
-	assert.False(t, res)
-
-	res = KOS.IsPublicIPv4(net.ParseIP(googleIpv4))
+	res, err = KOS.IsPrivateIp(lanIp)
+	assert.Nil(t, err)
 	assert.True(t, res)
 
-	res = KOS.IsPublicIPv4(net.ParseIP(googleIpv6))
+	res, err = KOS.IsPrivateIp(publicIp2)
+	assert.Nil(t, err)
+	assert.False(t, res)
+
+	//非IP
+	res, err = KOS.IsPrivateIp(strHello)
+	assert.NotNil(t, err)
+}
+
+func BenchmarkOS_IsPrivateIp(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KOS.IsPrivateIp(lanIp)
+	}
+}
+
+func TestOS_IsPublicIP(t *testing.T) {
+	var res bool
+
+	res = KOS.IsPublicIP(net.ParseIP(localIp))
+	assert.False(t, res)
+
+	res = KOS.IsPublicIP(net.ParseIP(lanIp))
+	assert.False(t, res)
+
+	res = KOS.IsPublicIP(net.ParseIP(googleIpv4))
+	assert.True(t, res)
+
+	res = KOS.IsPublicIP(net.ParseIP(googleIpv6))
 	assert.False(t, res)
 }
 
-func BenchmarkOS_IsPublicIPv4(b *testing.B) {
+func BenchmarkOS_IsPublicIP(b *testing.B) {
 	b.ResetTimer()
 	ip := net.ParseIP(publicIp1)
 	for i := 0; i < b.N; i++ {
-		KOS.IsPublicIPv4(ip)
+		KOS.IsPublicIP(ip)
 	}
 }
 
