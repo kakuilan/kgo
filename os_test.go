@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"encoding/binary"
 	"github.com/stretchr/testify/assert"
 	"net"
 	"testing"
@@ -236,5 +237,31 @@ func BenchmarkOS_Unsetenv(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = KOS.Unsetenv(helloEngICase)
+	}
+}
+
+func TestOS_GetEndian_IsLittleEndian(t *testing.T) {
+	res := KOS.GetEndian()
+	assert.NotEmpty(t, res)
+
+	chk := KOS.IsLittleEndian()
+	if chk {
+		assert.Equal(t, res, binary.LittleEndian)
+	} else {
+		assert.Equal(t, res, binary.BigEndian)
+	}
+}
+
+func BenchmarkOS_GetEndian(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetEndian()
+	}
+}
+
+func BenchmarkOS_IsLittleEndian(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.IsLittleEndian()
 	}
 }
