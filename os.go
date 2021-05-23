@@ -424,3 +424,23 @@ func (ko *LkkOS) ClientIp(req *http.Request) string {
 	// If nothing succeed, return X-Real-IP
 	return xRealIP
 }
+
+// IsPortOpen 检查主机端口是否开放.
+// host为主机名;port为(整型/字符串)端口号;protocols为协议名称,可选,默认tcp.
+func (ko *LkkOS) IsPortOpen(host string, port interface{}, protocols ...string) bool {
+	if KStr.IsHost(host) && isPort(port) {
+		// 默认tcp协议
+		protocol := "tcp"
+		if len(protocols) > 0 && len(protocols[0]) > 0 {
+			protocol = strings.ToLower(protocols[0])
+		}
+
+		conn, _ := net.DialTimeout(protocol, net.JoinHostPort(host, KConv.ToStr(port)), CHECK_CONNECT_TIMEOUT)
+		if conn != nil {
+			_ = conn.Close()
+			return true
+		}
+	}
+
+	return false
+}

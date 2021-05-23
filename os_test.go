@@ -417,3 +417,23 @@ func BenchmarkOS_ClientIp(b *testing.B) {
 		KOS.ClientIp(req)
 	}
 }
+
+func TestOS_IsPortOpen(t *testing.T) {
+	var tests = []struct {
+		host     string
+		port     interface{}
+		protocol string
+		expected bool
+	}{
+		{"", 23, "", false},
+		{"localhost", 0, "", false},
+		{"127.0.0.1", 23, "", false},
+		{"golang.google.cn", 80, "udp", true},
+		{"golang.google.cn", 80, "tcp", true},
+		{"www.baidu.com", "443", "tcp", true},
+	}
+	for _, test := range tests {
+		actual := KOS.IsPortOpen(test.host, test.port, test.protocol)
+		assert.Equal(t, actual, test.expected)
+	}
+}
