@@ -446,6 +446,7 @@ var tesDomain26 = "[1200::AB00:1234::2552:7777:1313]:22"
 var tesDomain27 = "localhost.loc:100000"
 var tesDomain28 = "漢字汉字:2"
 var tesDomain29 = tesDomain21 + ":2000"
+var tesDomain30 = "baidu.com"
 
 //mac地址
 var tesMac01 = "3D-F2-C9-A6-B3:4F"       //false

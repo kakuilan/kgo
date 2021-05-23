@@ -161,3 +161,22 @@ func BenchmarkOS_GetIpByHostname(b *testing.B) {
 		_, _ = KOS.GetIpByHostname(host)
 	}
 }
+
+func TestOS_GetIpsByDomain(t *testing.T) {
+	var res []string
+	var err error
+
+	res, err = KOS.GetIpsByDomain(tesDomain30)
+	assert.Nil(t, err)
+	assert.NotEmpty(t, res)
+
+	res, err = KOS.GetIpsByDomain(strHello)
+	assert.NotNil(t, err)
+}
+
+func BenchmarkOS_GetIpsByDomain(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KOS.GetIpsByDomain(tesDomain30)
+	}
+}
