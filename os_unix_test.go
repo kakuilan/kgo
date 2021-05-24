@@ -51,16 +51,15 @@ func BenchmarkOS_Exec_Unix(b *testing.B) {
 
 func TestOS_System_Unix(t *testing.T) {
 	var ret int
-	var res []byte
+	//var res []byte
 	var err []byte
 
-	ret, res, err = KOS.System(tesCommand01)
+	ret, _, err = KOS.System(tesCommand01)
 	assert.Equal(t, ret, 0)
 	assert.Empty(t, err)
-	assert.NotEmpty(t, res)
 
 	//错误的命令
-	ret, res, err = KOS.System(tesCommand02)
+	ret, _, err = KOS.System(tesCommand02)
 	assert.Equal(t, ret, 1)
 	assert.NotEmpty(t, err)
 }

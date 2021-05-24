@@ -397,7 +397,7 @@ func (ko *LkkOS) System(command string) (retInt int, outStr, errStr []byte) {
 	}
 
 	var stdout, stderr bytes.Buffer
-	var err, err2, err3 error
+	var err error
 
 	cmd := exec.Command(parts[0], parts[1:]...)
 	stdoutIn, _ := cmd.StdoutPipe()
@@ -414,24 +414,16 @@ func (ko *LkkOS) System(command string) (retInt int, outStr, errStr []byte) {
 	}
 
 	go func() {
-		_, err2 = io.Copy(outWr, stdoutIn)
+		_, _ = io.Copy(outWr, stdoutIn)
+		dumpPrint("--------------", len(stdout.Bytes()))
 	}()
 	go func() {
-		_, err3 = io.Copy(errWr, stderrIn)
+		_, _ = io.Copy(errWr, stderrIn)
 	}()
 
 	err = cmd.Wait()
-	if err2 != nil || err3 != nil || err != nil {
-		if err2 != nil {
-			stderr.WriteString(err2.Error())
-		}
-		if err3 != nil {
-			stderr.WriteString(err3.Error())
-		}
-		if err != nil {
-			stderr.WriteString(err.Error())
-		}
-
+	if err != nil {
+		stderr.WriteString(err.Error())
 		fmt.Println(stderr.Bytes())
 		retInt = 1 //失败
 	} else {
