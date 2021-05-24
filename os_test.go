@@ -475,3 +475,15 @@ func BenchmarkOS_TriggerGC(b *testing.B) {
 		KOS.TriggerGC()
 	}
 }
+
+func TestOS_GoMemory(t *testing.T) {
+	res := KOS.GoMemory()
+	assert.Greater(t, int(res), 1)
+}
+
+func BenchmarkOS_GoMemory(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GoMemory()
+	}
+}

@@ -11,10 +11,71 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"runtime/debug"
 	"strings"
 	"unicode"
+)
+
+// SystemInfo 系统信息
+type SystemInfo struct {
+	ServerName   string  `json:"server_name"`    //服务器名称
+	SystemOs     string  `json:"system_os"`      //操作系统名称
+	Runtime      int64   `json:"run_time"`       //服务运行时间,纳秒
+	GoroutineNum int     `json:"goroutine_num"`  //goroutine数量
+	CpuNum       int     `json:"cpu_num"`        //cpu核数
+	CpuUser      float64 `json:"cpu_user"`       //cpu用户态比率
+	CpuFree      float64 `json:"cpu_free"`       //cpu空闲比率
+	DiskUsed     uint64  `json:"disk_used"`      //已用磁盘空间,字节数
+	DiskFree     uint64  `json:"disk_free"`      //可用磁盘空间,字节数
+	DiskTotal    uint64  `json:"disk_total"`     //总磁盘空间,字节数
+	MemUsed      uint64  `json:"mem_used"`       //已用内存,字节数
+	MemSys       uint64  `json:"mem_sys"`        //系统内存占用量,字节数
+	MemFree      uint64  `json:"mem_free"`       //剩余内存,字节数
+	MemTotal     uint64  `json:"mem_total"`      //总内存,字节数
+	AllocGolang  uint64  `json:"alloc_golang"`   //golang内存使用量,字节数
+	AllocTotal   uint64  `json:"alloc_total"`    //总分配的内存,字节数
+	Lookups      uint64  `json:"lookups"`        //指针查找次数
+	Mallocs      uint64  `json:"mallocs"`        //内存分配次数
+	Frees        uint64  `json:"frees"`          //内存释放次数
+	LastGCTime   uint64  `json:"last_gc_time"`   //上次GC时间,纳秒
+	NextGC       uint64  `json:"next_gc"`        //下次GC内存回收量,字节数
+	PauseTotalNs uint64  `json:"pause_total_ns"` //GC暂停时间总量,纳秒
+	PauseNs      uint64  `json:"pause_ns"`       //上次GC暂停时间,纳秒
+}
+
+// BiosInfo BIOS信息
+type BiosInfo struct {
+	Vendor  string `json:"vendor"`
+	Version string `json:"version"`
+	Date    string `json:"date"`
+}
+
+// BoardInfo Board信息
+type BoardInfo struct {
+	Name     string `json:"name"`
+	Vendor   string `json:"vendor"`
+	Version  string `json:"version"`
+	Serial   string `json:"serial"`
+	AssetTag string `json:"assettag"`
+}
+
+// CpuInfo CPU信息
+type CpuInfo struct {
+	Vendor  string `json:"vendor"`
+	Model   string `json:"model"`
+	Speed   string `json:"speed"`   // CPU clock rate in MHz
+	Cache   uint   `json:"cache"`   // CPU cache size in KB
+	Cpus    uint   `json:"cpus"`    // number of physical CPUs
+	Cores   uint   `json:"cores"`   // number of physical CPU cores
+	Threads uint   `json:"threads"` // number of logical (HT) CPU cores
+}
+
+var (
+	cpuRegTwoColumns = regexp.MustCompile("\t+: ")
+	cpuRegExtraSpace = regexp.MustCompile(" +")
+	cpuRegCacheSize  = regexp.MustCompile(`^(\d+) KB$`)
 )
 
 // IsWindows 当前操作系统是否Windows.
@@ -457,4 +518,11 @@ func (ko *LkkOS) TriggerGC() {
 	go func() {
 		ko.ForceGC()
 	}()
+}
+
+// MemoryGetUsage 获取当前go程序的内存使用,返回字节数.
+func (ko *LkkOS) GoMemory() uint64 {
+	stat := new(runtime.MemStats)
+	runtime.ReadMemStats(stat)
+	return stat.Alloc
 }
