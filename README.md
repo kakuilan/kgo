@@ -111,7 +111,7 @@ go mod tidy
 go mod vendor
 
 #单元测试
-go test
+go test -race
 
 #压测
 time go test -bench=. -run=none

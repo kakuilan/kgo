@@ -29,7 +29,7 @@ func (ko *LkkOS) MemoryUsage(virtual bool) (used, free, total uint64) {
 	_, out, _ := ko.Exec(vm_stat)
 	lines := strings.Split(string(out), "\n")
 	pagesize := uint64(unix.Getpagesize())
-	var vm_free, vm_inactive uint64
+	var inactive uint64
 	for _, line := range lines {
 		fields := strings.Split(line, ":")
 		if len(fields) < 2 {
@@ -39,17 +39,17 @@ func (ko *LkkOS) MemoryUsage(virtual bool) (used, free, total uint64) {
 		value := strings.Trim(fields[1], " .")
 		switch key {
 		case "Pages free":
-			free, e := strconv.ParseUint(value, 10, 64)
+			f, e := strconv.ParseUint(value, 10, 64)
 			if e != nil {
 				err = e
 			}
-			vm_free = free * pagesize
+			free = f * pagesize
 		case "Pages inactive":
-			inactive, e := strconv.ParseUint(value, 10, 64)
+			ina, e := strconv.ParseUint(value, 10, 64)
 			if e != nil {
 				err = e
 			}
-			vm_inactive = inactive * pagesize
+			inactive = ina * pagesize
 		}
 	}
 
@@ -57,6 +57,6 @@ func (ko *LkkOS) MemoryUsage(virtual bool) (used, free, total uint64) {
 	// removes the last byte of the result if it's 0 :/
 	totalStr += "\x00"
 	total = uint64(binary.LittleEndian.Uint64([]byte(totalStr)))
-	used = total - (vm_free + vm_inactive)
+	used = total - (free + inactive)
 	return
 }
