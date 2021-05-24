@@ -9,8 +9,8 @@ import (
 	"syscall"
 )
 
-// MemoryUsage 获取内存使用率(仅支持linux),单位字节.
-// 参数 virtual,是否取虚拟内存.
+// MemoryUsage 获取内存使用率,单位字节.
+// 参数 virtual(仅支持linux),是否取虚拟内存.
 // used为已用,
 // free为空闲,
 // total为总数.
@@ -41,8 +41,8 @@ func (ko *LkkOS) MemoryUsage(virtual bool) (used, free, total uint64) {
 		sysi := &syscall.Sysinfo_t{}
 		err := syscall.Sysinfo(sysi)
 		if err == nil {
-			total = sysi.Totalram * uint64(syscall.Getpagesize()/1024)
-			free = sysi.Freeram * uint64(syscall.Getpagesize()/1024)
+			total = sysi.Totalram * uint64(sysi.Unit)
+			free = sysi.Freeram * uint64(sysi.Unit)
 			used = total - free
 		}
 	}
