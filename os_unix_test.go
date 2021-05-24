@@ -56,13 +56,12 @@ func TestOS_System_Unix(t *testing.T) {
 
 	ret, res, err = KOS.System(tesCommand01)
 	assert.Equal(t, ret, 0)
-	assert.NotEmpty(t, res)
 	assert.Empty(t, err)
+	assert.NotEmpty(t, res)
 
 	//错误的命令
 	ret, res, err = KOS.System(tesCommand02)
 	assert.Equal(t, ret, 1)
-	assert.Empty(t, res)
 	assert.NotEmpty(t, err)
 }
 
