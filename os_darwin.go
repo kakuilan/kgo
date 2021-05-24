@@ -5,6 +5,8 @@ package kgo
 import (
 	"golang.org/x/sys/unix"
 	"os/exec"
+	"strconv"
+	"strings"
 )
 
 // MemoryUsage 获取内存使用率,单位字节.
@@ -52,8 +54,8 @@ func (ko *LkkOS) MemoryUsage(virtual bool) (used, free, total uint64) {
 
 	// unix.sysctl() helpfully assumes the result is a null-terminated string and
 	// removes the last byte of the result if it's 0 :/
-	totalString += "\x00"
-	total = uint64(binary.LittleEndian.Uint64([]byte(totalString)))
+	totalStr += "\x00"
+	total = uint64(binary.LittleEndian.Uint64([]byte(totalStr)))
 	used = total - (vm_free + vm_inactive)
 	return
 }
