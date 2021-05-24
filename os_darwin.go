@@ -26,7 +26,7 @@ func (ko *LkkOS) MemoryUsage(virtual bool) (used, free, total uint64) {
 		return
 	}
 
-	ret, out, _ := ko.Exec(vm_stat)
+	_, out, _ := ko.Exec(vm_stat)
 	lines := strings.Split(string(out), "\n")
 	pagesize := uint64(unix.Getpagesize())
 	var vm_free, vm_inactive uint64
