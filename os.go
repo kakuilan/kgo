@@ -16,6 +16,7 @@ import (
 	"runtime/debug"
 	"strings"
 	"unicode"
+	"sync"
 )
 
 // SystemInfo 系统信息
@@ -398,6 +399,7 @@ func (ko *LkkOS) System(command string) (retInt int, outStr, errStr []byte) {
 
 	var stdout, stderr bytes.Buffer
 	var err error
+	var mutex sync.Mutex
 
 	cmd := exec.Command(parts[0], parts[1:]...)
 	stdoutIn, _ := cmd.StdoutPipe()
@@ -414,11 +416,15 @@ func (ko *LkkOS) System(command string) (retInt int, outStr, errStr []byte) {
 	}
 
 	go func() {
+		mutex.Lock()
 		_, _ = io.Copy(outWr, stdoutIn)
+		mutex.Unlock()
 		dumpPrint("--------------", len(stdout.Bytes()))
 	}()
 	go func() {
+		mutex.Lock()
 		_, _ = io.Copy(errWr, stderrIn)
+		mutex.Unlock()
 	}()
 
 	err = cmd.Wait()
