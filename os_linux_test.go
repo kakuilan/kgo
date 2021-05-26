@@ -7,12 +7,12 @@ import (
 	"testing"
 )
 
-func TestOS_IsLinux(t *testing.T) {
+func TestOS_Linux_IsLinux(t *testing.T) {
 	res := KOS.IsLinux()
 	assert.True(t, res)
 }
 
-func BenchmarkOS_IsLinux(b *testing.B) {
+func BenchmarkOS_Linux_IsLinux(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KOS.IsLinux()

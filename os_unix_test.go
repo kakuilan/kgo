@@ -7,25 +7,25 @@ import (
 	"testing"
 )
 
-func TestOS_NotWindows(t *testing.T) {
+func TestOS_Unix_NotWindows(t *testing.T) {
 	res := KOS.IsWindows()
 	assert.False(t, res)
 }
 
-func TestOS_HomeDir(t *testing.T) {
+func TestOS_Unix_HomeDir(t *testing.T) {
 	res, err := KOS.HomeDir()
 	assert.Nil(t, err)
 	assert.NotEmpty(t, res)
 }
 
-func BenchmarkOS_HomeDir(b *testing.B) {
+func BenchmarkOS_Unix_HomeDir(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _ = KOS.HomeDir()
 	}
 }
 
-func TestOS_Exec_Unix(t *testing.T) {
+func TestOS_Unix_Exec(t *testing.T) {
 	var ret int
 	var res []byte
 	var err []byte
@@ -42,14 +42,14 @@ func TestOS_Exec_Unix(t *testing.T) {
 	assert.NotEmpty(t, err)
 }
 
-func BenchmarkOS_Exec_Unix(b *testing.B) {
+func BenchmarkOS_Unix_Exec(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _, _ = KOS.Exec(tesCommand01)
 	}
 }
 
-func TestOS_System_Unix(t *testing.T) {
+func TestOS_Unix_System(t *testing.T) {
 	var ret int
 	var res []byte
 	var err []byte
@@ -66,7 +66,7 @@ func TestOS_System_Unix(t *testing.T) {
 	assert.Empty(t, res)
 }
 
-func BenchmarkOS_System_Unix(b *testing.B) {
+func BenchmarkOS_Unix_System(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _, _ = KOS.System(tesCommand01)

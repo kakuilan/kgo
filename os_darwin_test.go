@@ -7,12 +7,12 @@ import (
 	"testing"
 )
 
-func TestOS_IsMac(t *testing.T) {
+func TestOS_Darwin_IsMac(t *testing.T) {
 	res := KOS.IsMac()
 	assert.True(t, res)
 }
 
-func BenchmarkOS_IsMac(b *testing.B) {
+func BenchmarkOS_Darwin_IsMac(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KOS.IsMac()
@@ -22,9 +22,7 @@ func BenchmarkOS_IsMac(b *testing.B) {
 func TestOS_Darwin_MemoryUsage(t *testing.T) {
 	var used, free, total uint64
 
-	// 虚拟内存
 	used, free, total = KOS.MemoryUsage(true)
-	dumpPrint("------MemoryUsage:", used, free, total)
 	assert.Greater(t, int(used), 1)
 	assert.Greater(t, int(free), 1)
 	assert.Greater(t, int(total), 1)
