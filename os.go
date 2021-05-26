@@ -15,7 +15,6 @@ import (
 	"runtime"
 	"runtime/debug"
 	"strings"
-	"sync"
 	"unicode"
 )
 
@@ -399,7 +398,6 @@ func (ko *LkkOS) System(command string) (retInt int, outStr, errStr []byte) {
 
 	var stdout, stderr bytes.Buffer
 	var err error
-	var mux sync.Mutex
 
 	cmd := exec.Command(parts[0], parts[1:]...)
 	stdoutIn, _ := cmd.StdoutPipe()
@@ -415,17 +413,8 @@ func (ko *LkkOS) System(command string) (retInt int, outStr, errStr []byte) {
 		return
 	}
 
-	go func() {
-		mux.Lock()
-		_, _ = io.Copy(outWr, stdoutIn)
-		mux.Unlock()
-	}()
-	go func() {
-		mux.Lock()
-		_, _ = io.Copy(errWr, stderrIn)
-		mux.Unlock()
-	}()
-
+	_, _ = io.Copy(outWr, stdoutIn)
+	_, _ = io.Copy(errWr, stderrIn)
 	err = cmd.Wait()
 	if err != nil {
 		stderr.WriteString(err.Error())
