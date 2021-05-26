@@ -48,3 +48,18 @@ func BenchmarkOS_Linux_MemoryUsage_Physic(b *testing.B) {
 		KOS.MemoryUsage(false)
 	}
 }
+
+func TestOS_Linux_CpuUsage(t *testing.T) {
+	var user, idle, total uint64
+	user, idle, total = KOS.CpuUsage()
+	assert.Greater(t, int(user), 1)
+	assert.Greater(t, int(idle), 1)
+	assert.Greater(t, int(total), 1)
+}
+
+func BenchmarkOS_Linux_CpuUsage(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _, _ = KOS.CpuUsage()
+	}
+}
