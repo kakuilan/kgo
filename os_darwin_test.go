@@ -38,6 +38,7 @@ func BenchmarkOS_Darwin_MemoryUsage(b *testing.B) {
 func TestOS_Darwin_CpuUsage(t *testing.T) {
 	var user, idle, total uint64
 	user, idle, total = KOS.CpuUsage()
+	dumpPrint("----------------TestOS_Darwin_CpuUsage:", user, idle, total)
 	assert.GreaterOrEqual(t, int(user), 0)
 	assert.GreaterOrEqual(t, int(idle), 0)
 	assert.GreaterOrEqual(t, int(total), 0)
