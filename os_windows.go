@@ -22,10 +22,16 @@ type memoryStatusEx struct {
 	ullAvailExtendedVirtual uint64
 }
 
+type FILETIME struct {
+	DwLowDateTime  uint32
+	DwHighDateTime uint32
+}
+
 var (
 	kernel32 = windows.NewLazySystemDLL("kernel32.dll")
 
 	procGlobalMemoryStatusEx = kernel32.NewProc("GlobalMemoryStatusEx")
+	procGetSystemTimes       = kernel32.NewProc("GetSystemTimes")
 )
 
 // HomeDir 获取当前用户的主目录.
@@ -66,6 +72,36 @@ func (ko *LkkOS) MemoryUsage(virtual bool) (used, free, total uint64) {
 	total = memInfo.ullTotalPhys
 	free = memInfo.ullAvailPhys
 	used = memInfo.ullTotalPhys - memInfo.ullAvailPhys
+
+	return
+}
+
+// CpuUsage 获取CPU使用率(darwin系统必须使用cgo),单位jiffies(节拍数).
+// user为用户态(用户进程)的运行时间,
+// idle为空闲时间,
+// total为累计时间.
+func (ko *LkkOS) CpuUsage() (user, idle, total uint64) {
+	var lpIdleTime FILETIME
+	var lpKernelTime FILETIME
+	var lpUserTime FILETIME
+	r, _, _ := procGetSystemTimes.Call(
+		uintptr(unsafe.Pointer(&lpIdleTime)),
+		uintptr(unsafe.Pointer(&lpKernelTime)),
+		uintptr(unsafe.Pointer(&lpUserTime)))
+	if r == 0 {
+		return
+	}
+
+	LOT := float64(0.0000001)
+	HIT := (LOT * 4294967296.0)
+	tmpIdle := ((HIT * float64(lpIdleTime.DwHighDateTime)) + (LOT * float64(lpIdleTime.DwLowDateTime)))
+	tmpUser := ((HIT * float64(lpUserTime.DwHighDateTime)) + (LOT * float64(lpUserTime.DwLowDateTime)))
+	tmpKernel := ((HIT * float64(lpKernelTime.DwHighDateTime)) + (LOT * float64(lpKernelTime.DwLowDateTime)))
+	//tmpSystem := (tmpKernel - tmpIdle)
+
+	user = uint64(tmpUser)
+	idle = uint64(tmpIdle)
+	total = user + idle + uint64(tmpKernel)
 
 	return
 }

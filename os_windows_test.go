@@ -83,3 +83,18 @@ func BenchmarkOS_Windows_MemoryUsage(b *testing.B) {
 		KOS.MemoryUsage(true)
 	}
 }
+
+func TestOS_Windows_CpuUsage(t *testing.T) {
+	var user, idle, total uint64
+	user, idle, total = KOS.CpuUsage()
+	assert.Greater(t, int(user), 1)
+	assert.Greater(t, int(idle), 1)
+	assert.Greater(t, int(total), 1)
+}
+
+func BenchmarkOS_Windows_CpuUsage(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _, _ = KOS.CpuUsage()
+	}
+}
