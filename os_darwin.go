@@ -60,3 +60,4 @@ func (ko *LkkOS) MemoryUsage(virtual bool) (used, free, total uint64) {
 	used = total - (free + inactive)
 	return
 }
+
