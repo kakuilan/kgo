@@ -113,3 +113,16 @@ func BenchmarkOS_Windows_DiskUsage(b *testing.B) {
 		_, _, _ = KOS.DiskUsage("C:")
 	}
 }
+
+func TestOS_Windows_Uptime(t *testing.T) {
+	res, err := KOS.Uptime()
+	assert.Greater(t, int(res), 1)
+	assert.Nil(t, err)
+}
+
+func BenchmarkOS_Windows_Uptime(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KOS.Uptime()
+	}
+}

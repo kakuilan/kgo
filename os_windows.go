@@ -6,6 +6,8 @@ import (
 	"errors"
 	"golang.org/x/sys/windows"
 	"os"
+	"syscall"
+	"time"
 	"unsafe"
 )
 
@@ -33,6 +35,8 @@ var (
 	procGlobalMemoryStatusEx = kernel32.NewProc("GlobalMemoryStatusEx")
 	procGetSystemTimes       = kernel32.NewProc("GetSystemTimes")
 	procGetDiskFreeSpaceExW  = kernel32.NewProc("GetDiskFreeSpaceExW")
+	procGetTickCount64       = kernel32.NewProc("GetTickCount64")
+	procGetTickCount32       = kernel32.NewProc("GetTickCount")
 )
 
 // HomeDir 获取当前用户的主目录.
@@ -128,4 +132,19 @@ func (ko *LkkOS) DiskUsage(path string) (used, free, total uint64) {
 	used = uint64(lpTotalNumberOfBytes - lpTotalNumberOfFreeBytes)
 
 	return
+}
+
+// Uptime 获取系统运行时间,秒.
+func (ko *LkkOS) Uptime() (uint64, error) {
+	procGetTickCount := procGetTickCount64
+	err := procGetTickCount64.Find()
+	if err != nil {
+		// handle WinXP, but keep in mind that "the time will wrap around to zero if the system is run continuously for 49.7 days." from MSDN
+		procGetTickCount = procGetTickCount32
+	}
+	r1, _, lastErr := syscall.Syscall(procGetTickCount.Addr(), 0, 0, 0, 0)
+	if lastErr != 0 {
+		return 0, lastErr
+	}
+	return uint64((time.Duration(r1) * time.Millisecond).Seconds()), nil
 }
