@@ -98,3 +98,18 @@ func BenchmarkOS_Windows_CpuUsage(b *testing.B) {
 		_, _, _ = KOS.CpuUsage()
 	}
 }
+
+func TestOS_Windows_DiskUsage(t *testing.T) {
+	var used, free, total uint64
+	used, free, total = KOS.DiskUsage("C:")
+	assert.Greater(t, int(used), 1)
+	assert.Greater(t, int(free), 1)
+	assert.Greater(t, int(total), 1)
+}
+
+func BenchmarkOS_Windows_DiskUsage(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _, _ = KOS.DiskUsage("C:")
+	}
+}

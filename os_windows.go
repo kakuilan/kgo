@@ -22,7 +22,7 @@ type memoryStatusEx struct {
 	ullAvailExtendedVirtual uint64
 }
 
-type FILETIME struct {
+type fileTime struct {
 	DwLowDateTime  uint32
 	DwHighDateTime uint32
 }
@@ -32,6 +32,7 @@ var (
 
 	procGlobalMemoryStatusEx = kernel32.NewProc("GlobalMemoryStatusEx")
 	procGetSystemTimes       = kernel32.NewProc("GetSystemTimes")
+	procGetDiskFreeSpaceExW  = kernel32.NewProc("GetDiskFreeSpaceExW")
 )
 
 // HomeDir 获取当前用户的主目录.
@@ -81,9 +82,9 @@ func (ko *LkkOS) MemoryUsage(virtual bool) (used, free, total uint64) {
 // idle为空闲时间,
 // total为累计时间.
 func (ko *LkkOS) CpuUsage() (user, idle, total uint64) {
-	var lpIdleTime FILETIME
-	var lpKernelTime FILETIME
-	var lpUserTime FILETIME
+	var lpIdleTime fileTime
+	var lpKernelTime fileTime
+	var lpUserTime fileTime
 	r, _, _ := procGetSystemTimes.Call(
 		uintptr(unsafe.Pointer(&lpIdleTime)),
 		uintptr(unsafe.Pointer(&lpKernelTime)),
@@ -102,6 +103,29 @@ func (ko *LkkOS) CpuUsage() (user, idle, total uint64) {
 	user = uint64(tmpUser)
 	idle = uint64(tmpIdle)
 	total = user + idle + uint64(tmpKernel)
+
+	return
+}
+
+// DiskUsage 获取磁盘(目录)使用情况,单位字节.参数path为路径.
+// used为已用,
+// free为空闲,
+// total为总数.
+func (ko *LkkOS) DiskUsage(path string) (used, free, total uint64) {
+	lpFreeBytesAvailable := int64(0)
+	lpTotalNumberOfBytes := int64(0)
+	lpTotalNumberOfFreeBytes := int64(0)
+	diskret, _, _ := procGetDiskFreeSpaceExW.Call(
+		uintptr(unsafe.Pointer(windows.StringToUTF16Ptr(path))),
+		uintptr(unsafe.Pointer(&lpFreeBytesAvailable)),
+		uintptr(unsafe.Pointer(&lpTotalNumberOfBytes)),
+		uintptr(unsafe.Pointer(&lpTotalNumberOfFreeBytes)))
+	if diskret == 0 {
+		return
+	}
+	total = uint64(lpTotalNumberOfBytes)
+	free = uint64(lpTotalNumberOfFreeBytes)
+	used = uint64(lpTotalNumberOfBytes - lpTotalNumberOfFreeBytes)
 
 	return
 }
