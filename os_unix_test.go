@@ -72,16 +72,3 @@ func BenchmarkOS_Unix_System(b *testing.B) {
 		_, _, _ = KOS.System(tesCommand01)
 	}
 }
-
-func TestOS_Unix_Uptime(t *testing.T) {
-	res, err := KOS.Uptime()
-	assert.Greater(t, int(res), 1)
-	assert.Nil(t, err)
-}
-
-func BenchmarkOS_Unix_Uptime(b *testing.B) {
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		_, _ = KOS.Uptime()
-	}
-}

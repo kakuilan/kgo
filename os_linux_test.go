@@ -78,3 +78,16 @@ func BenchmarkOS_Linux_DiskUsage(b *testing.B) {
 		_, _, _ = KOS.DiskUsage("/")
 	}
 }
+
+func TestOS_Linux_Uptime(t *testing.T) {
+	res, err := KOS.Uptime()
+	assert.Greater(t, int(res), 1)
+	assert.Nil(t, err)
+}
+
+func BenchmarkOS_Linux_Uptime(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KOS.Uptime()
+	}
+}

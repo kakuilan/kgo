@@ -3,6 +3,7 @@
 package kgo
 
 import (
+	"golang.org/x/sys/unix"
 	"io/ioutil"
 	"strconv"
 	"strings"
@@ -96,4 +97,13 @@ func (ko *LkkOS) DiskUsage(path string) (used, free, total uint64) {
 	}
 
 	return
+}
+
+// Uptime 获取系统运行时间,秒.
+func (ko *LkkOS) Uptime() (uint64, error) {
+	sysinfo := &unix.Sysinfo_t{}
+	if err := unix.Sysinfo(sysinfo); err != nil {
+		return 0, err
+	}
+	return uint64(sysinfo.Uptime), nil
 }

@@ -22,8 +22,8 @@ import (
 type SystemInfo struct {
 	ServerName   string  `json:"server_name"`    //服务器名称
 	SystemOs     string  `json:"system_os"`      //操作系统名称
-	Runtime      int64   `json:"run_time"`       //服务运行时间,纳秒
-	Uptime       int64   `json:"up_time"`        //操作系统运行时间,秒
+	Runtime      uint64  `json:"run_time"`       //服务运行时间,纳秒
+	Uptime       uint64  `json:"up_time"`        //操作系统运行时间,秒
 	GoroutineNum int     `json:"goroutine_num"`  //goroutine数量
 	CpuNum       int     `json:"cpu_num"`        //cpu核数
 	CpuUser      float64 `json:"cpu_user"`       //cpu用户态比率
@@ -552,8 +552,8 @@ func (ko *LkkOS) GetSystemInfo() *SystemInfo {
 	return &SystemInfo{
 		ServerName:   serverName,
 		SystemOs:     runtime.GOOS,
-		Runtime:      int64(KTime.ServiceUptime()),
-		Uptime:       int64(uptime),
+		Runtime:      uint64(KTime.ServiceUptime()),
+		Uptime:       uptime,
 		GoroutineNum: runtime.NumGoroutine(),
 		CpuNum:       runtime.NumCPU(),
 		CpuUser:      cpuUserRate,
