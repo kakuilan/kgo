@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 	"sync/atomic"
+	"time"
 )
 
 // cachedBootTime must be accessed via atomic.Load/StoreUint64
