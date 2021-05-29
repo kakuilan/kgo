@@ -91,3 +91,15 @@ func BenchmarkOS_Linux_Uptime(b *testing.B) {
 		_, _ = KOS.Uptime()
 	}
 }
+
+func TestOS_Linux_GetBiosInfo(t *testing.T) {
+	res := KOS.GetBiosInfo()
+	assert.NotNil(t, res)
+}
+
+func BenchmarkOS_Linux_GetBiosInfo(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetBiosInfo()
+	}
+}

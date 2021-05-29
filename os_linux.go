@@ -107,3 +107,12 @@ func (ko *LkkOS) Uptime() (uint64, error) {
 	}
 	return uint64(sysinfo.Uptime), nil
 }
+
+// GetBiosInfo 获取BIOS信息.
+func (ko *LkkOS) GetBiosInfo() *BiosInfo {
+	return &BiosInfo{
+		Vendor:  strings.TrimSpace(string(KFile.ReadFirstLine("/sys/class/dmi/id/bios_vendor"))),
+		Version: strings.TrimSpace(string(KFile.ReadFirstLine("/sys/class/dmi/id/bios_version"))),
+		Date:    strings.TrimSpace(string(KFile.ReadFirstLine("/sys/class/dmi/id/bios_date"))),
+	}
+}
