@@ -67,7 +67,6 @@ func BenchmarkOS_Linux_CpuUsage(b *testing.B) {
 func TestOS_Linux_DiskUsage(t *testing.T) {
 	var used, free, total uint64
 	used, free, total = KOS.DiskUsage("/")
-	//dumpPrint("-----------TestOS_Linux_DiskUsage:", used, free, total)
 	assert.Greater(t, int(used), 1)
 	assert.Greater(t, int(free), 1)
 	assert.Greater(t, int(total), 1)

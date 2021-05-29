@@ -61,3 +61,19 @@ func (ko *LkkOS) MemoryUsage(virtual bool) (used, free, total uint64) {
 	return
 }
 
+// DiskUsage 获取磁盘(目录)使用情况,单位字节.参数path为路径.
+// used为已用,
+// free为空闲,
+// total为总数.
+func (ko *LkkOS) DiskUsage(path string) (used, free, total uint64) {
+	stat := unix.Statfs_t{}
+	err := unix.Statfs(path, &stat)
+	if err != nil {
+		return
+	}
+
+	total = uint64(stat.Blocks) * uint64(stat.Bsize)
+	free = uint64(stat.Bavail) * uint64(stat.Bsize)
+	used = (uint64(stat.Blocks) - uint64(stat.Bfree)) * uint64(stat.Bsize)
+	return
+}
