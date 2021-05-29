@@ -81,3 +81,19 @@ func (ko *LkkOS) CpuUsage() (user, idle, total uint64) {
 
 	return
 }
+
+// DiskUsage 获取磁盘(目录)使用情况,单位字节.参数path为路径.
+// used为已用,
+// free为空闲,
+// total为总数.
+func (ko *LkkOS) DiskUsage(path string) (used, free, total uint64) {
+	fs := &syscall.Statfs_t{}
+	err := syscall.Statfs(path, fs)
+	if err == nil {
+		total = fs.Blocks * uint64(fs.Bsize)
+		free = fs.Bfree * uint64(fs.Bsize)
+		used = total - free
+	}
+
+	return
+}

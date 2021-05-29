@@ -63,3 +63,19 @@ func BenchmarkOS_Linux_CpuUsage(b *testing.B) {
 		_, _, _ = KOS.CpuUsage()
 	}
 }
+
+func TestOS_Linux_DiskUsage(t *testing.T) {
+	var used, free, total uint64
+	used, free, total = KOS.DiskUsage("/")
+	//dumpPrint("-----------TestOS_Linux_DiskUsage:", used, free, total)
+	assert.Greater(t, int(used), 1)
+	assert.Greater(t, int(free), 1)
+	assert.Greater(t, int(total), 1)
+}
+
+func BenchmarkOS_Linux_DiskUsage(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _, _ = KOS.DiskUsage("/")
+	}
+}
