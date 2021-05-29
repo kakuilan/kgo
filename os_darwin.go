@@ -8,7 +8,11 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+	"sync/atomic"
 )
+
+// cachedBootTime must be accessed via atomic.Load/StoreUint64
+var cachedBootTime uint64
 
 // MemoryUsage 获取内存使用率,单位字节.
 // 参数 virtual(仅支持linux),是否取虚拟内存.
@@ -76,4 +80,31 @@ func (ko *LkkOS) DiskUsage(path string) (used, free, total uint64) {
 	free = uint64(stat.Bavail) * uint64(stat.Bsize)
 	used = (uint64(stat.Blocks) - uint64(stat.Bfree)) * uint64(stat.Bsize)
 	return
+}
+
+// bootTime 获取系统启动时间,秒.
+func bootTime() (uint64, error) {
+	t := atomic.LoadUint64(&cachedBootTime)
+	if t != 0 {
+		return t, nil
+	}
+	tv, err := unix.SysctlTimeval("kern.boottime")
+	if err != nil {
+		return 0, err
+	}
+
+	atomic.StoreUint64(&cachedBootTime, uint64(tv.Sec))
+
+	return uint64(tv.Sec), nil
+}
+
+// Uptime 获取系统运行时间,秒.
+func (ko *LkkOS) Uptime() (uint64, error) {
+	boot, err := bootTime()
+	if err != nil {
+		return 0, err
+	}
+
+	res := uint64(time.Now().Unix()) - boot
+	return res, nil
 }

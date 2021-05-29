@@ -53,7 +53,6 @@ func BenchmarkOS_Darwin_CpuUsage(b *testing.B) {
 func TestOS_Darwin_DiskUsage(t *testing.T) {
 	var used, free, total uint64
 	used, free, total = KOS.DiskUsage("/")
-	dumpPrint("-----------TestOS_Darwin_DiskUsage:", used, free, total)
 	assert.Greater(t, int(used), 1)
 	assert.Greater(t, int(free), 1)
 	assert.Greater(t, int(total), 1)
@@ -63,5 +62,18 @@ func BenchmarkOS_Darwin_DiskUsage(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _, _ = KOS.DiskUsage("/")
+	}
+}
+
+func TestOS_Darwin_Uptime(t *testing.T) {
+	res, err := KOS.Uptime()
+	assert.Greater(t, int(res), 1)
+	assert.Nil(t, err)
+}
+
+func BenchmarkOS_Darwin_Uptime(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KOS.Uptime()
 	}
 }
