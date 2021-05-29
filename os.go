@@ -23,6 +23,7 @@ type SystemInfo struct {
 	ServerName   string  `json:"server_name"`    //服务器名称
 	SystemOs     string  `json:"system_os"`      //操作系统名称
 	Runtime      int64   `json:"run_time"`       //服务运行时间,纳秒
+	Uptime       int64   `json:"up_time"`        //操作系统运行时间,秒
 	GoroutineNum int     `json:"goroutine_num"`  //goroutine数量
 	CpuNum       int     `json:"cpu_num"`        //cpu核数
 	CpuUser      float64 `json:"cpu_user"`       //cpu用户态比率
@@ -520,4 +521,58 @@ func (ko *LkkOS) GoMemory() uint64 {
 	stat := new(runtime.MemStats)
 	runtime.ReadMemStats(stat)
 	return stat.Alloc
+}
+
+// GetSystemInfo 获取系统运行信息.
+func (ko *LkkOS) GetSystemInfo() *SystemInfo {
+	//运行时信息
+	mstat := &runtime.MemStats{}
+	runtime.ReadMemStats(mstat)
+
+	//CPU信息
+	cpuUser, cpuIdel, cpuTotal := ko.CpuUsage()
+	cpuUserRate := float64(cpuUser) / float64(cpuTotal)
+	cpuFreeRate := float64(cpuIdel) / float64(cpuTotal)
+
+	//磁盘空间信息
+	var diskUsed, diskFree, diskTotal uint64
+	if runtime.GOOS == "windows" {
+		//TODO 待修改
+		diskUsed, diskFree, diskTotal = ko.DiskUsage("C:")
+	} else {
+		diskUsed, diskFree, diskTotal = ko.DiskUsage("/")
+	}
+
+	//内存使用信息
+	memUsed, memFree, memTotal := ko.MemoryUsage(true)
+
+	serverName, _ := os.Hostname()
+	uptime, _ := ko.Uptime()
+
+	return &SystemInfo{
+		ServerName:   serverName,
+		SystemOs:     runtime.GOOS,
+		Runtime:      int64(KTime.ServiceUptime()),
+		Uptime:       int64(uptime),
+		GoroutineNum: runtime.NumGoroutine(),
+		CpuNum:       runtime.NumCPU(),
+		CpuUser:      cpuUserRate,
+		CpuFree:      cpuFreeRate,
+		DiskUsed:     diskUsed,
+		DiskFree:     diskFree,
+		DiskTotal:    diskTotal,
+		MemUsed:      memUsed,
+		MemSys:       mstat.Sys,
+		MemFree:      memFree,
+		MemTotal:     memTotal,
+		AllocGolang:  mstat.Alloc,
+		AllocTotal:   mstat.TotalAlloc,
+		Lookups:      mstat.Lookups,
+		Mallocs:      mstat.Mallocs,
+		Frees:        mstat.Frees,
+		LastGCTime:   mstat.LastGC,
+		NextGC:       mstat.NextGC,
+		PauseTotalNs: mstat.PauseTotalNs,
+		PauseNs:      mstat.PauseNs[(mstat.NumGC+255)%256],
+	}
 }

@@ -487,3 +487,15 @@ func BenchmarkOS_GoMemory(b *testing.B) {
 		KOS.GoMemory()
 	}
 }
+
+func TestOS_GetSystemInfo(t *testing.T) {
+	res := KOS.GetSystemInfo()
+	assert.NotNil(t, res)
+}
+
+func BenchmarkOS_GetSystemInfo(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetSystemInfo()
+	}
+}
