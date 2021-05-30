@@ -138,3 +138,15 @@ func BenchmarkOS_Windows_GetBiosInfo(b *testing.B) {
 		KOS.GetBiosInfo()
 	}
 }
+
+func TestOS_Windows_GetBoardInfo(t *testing.T) {
+	res := KOS.GetBoardInfo()
+	assert.NotNil(t, res)
+}
+
+func BenchmarkOS_Windows_GetBoardInfo(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetBoardInfo()
+	}
+}

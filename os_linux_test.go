@@ -106,7 +106,6 @@ func BenchmarkOS_Linux_GetBiosInfo(b *testing.B) {
 
 func TestOS_Linux_GetBoardInfo(t *testing.T) {
 	res := KOS.GetBoardInfo()
-	//dumpPrint("------------GetBoardInfo", res)
 	assert.NotNil(t, res)
 }
 

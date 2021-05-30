@@ -36,6 +36,14 @@ type win32BIOS struct {
 	Version      *string
 }
 
+type win32Baseboard struct {
+	Manufacturer *string
+	SerialNumber *string
+	Tag          *string
+	Version      *string
+	Product      *string
+}
+
 var (
 	kernel32 = windows.NewLazySystemDLL("kernel32.dll")
 
@@ -174,6 +182,32 @@ func (ko *LkkOS) GetBiosInfo() *BiosInfo {
 		res.Vendor = *win32BIOSDescriptions[0].Manufacturer
 		res.Version = *win32BIOSDescriptions[0].Version
 		res.Date = *win32BIOSDescriptions[0].InstallDate
+	}
+
+	return res
+}
+
+// GetBoardInfo 获取Board信息.
+func (ko *LkkOS) GetBoardInfo() *BoardInfo {
+	res := &BoardInfo{
+		Name:     "",
+		Vendor:   "",
+		Version:  "",
+		Serial:   "",
+		AssetTag: "",
+	}
+
+	// Getting data from WMI
+	var win32BaseboardDescriptions []win32Baseboard
+	if err := wmi.Query("SELECT Manufacturer, SerialNumber, Tag, Version, Product FROM Win32_BaseBoard", &win32BaseboardDescriptions); err != nil {
+		return res
+	}
+	if len(win32BaseboardDescriptions) > 0 {
+		res.Name = *win32BaseboardDescriptions[0].Product
+		res.Vendor = *win32BaseboardDescriptions[0].Manufacturer
+		res.Version = *win32BaseboardDescriptions[0].Version
+		res.Serial = *win32BaseboardDescriptions[0].SerialNumber
+		res.AssetTag = *win32BaseboardDescriptions[0].Tag
 	}
 
 	return res
