@@ -157,6 +157,7 @@ func (ko *LkkOS) Uptime() (uint64, error) {
 }
 
 // GetBiosInfo 获取BIOS信息.
+// 注意:Mac机器没有BIOS信息,它使用EFI.
 func (ko *LkkOS) GetBiosInfo() *BiosInfo {
 	res := &BiosInfo{
 		Vendor:  "",
