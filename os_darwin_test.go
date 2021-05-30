@@ -77,3 +77,18 @@ func BenchmarkOS_Darwin_Uptime(b *testing.B) {
 		_, _ = KOS.Uptime()
 	}
 }
+
+func TestOS_Darwin_GetBiosInfo(t *testing.T) {
+	res := KOS.GetBiosInfo()
+	assert.NotNil(t, res)
+	assert.Empty(t, res.Vendor)
+	assert.Empty(t, res.Version)
+	assert.Empty(t, res.Date)
+}
+
+func BenchmarkOS_Darwin_GetBiosInfo(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetBiosInfo()
+	}
+}
