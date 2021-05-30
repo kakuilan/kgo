@@ -4,6 +4,7 @@ package kgo
 
 import (
 	"errors"
+	"github.com/StackExchange/wmi"
 	"golang.org/x/sys/windows"
 	"os"
 	"syscall"
@@ -27,6 +28,12 @@ type memoryStatusEx struct {
 type fileTime struct {
 	DwLowDateTime  uint32
 	DwHighDateTime uint32
+}
+
+type win32BIOS struct {
+	InstallDate  *string
+	Manufacturer *string
+	Version      *string
 }
 
 var (
@@ -147,4 +154,26 @@ func (ko *LkkOS) Uptime() (uint64, error) {
 		return 0, lastErr
 	}
 	return uint64((time.Duration(r1) * time.Millisecond).Seconds()), nil
+}
+
+// GetBiosInfo 获取BIOS信息.
+func (ko *LkkOS) GetBiosInfo() *BiosInfo {
+	res := &BiosInfo{
+		Vendor:  "",
+		Version: "",
+		Date:    "",
+	}
+
+	// Getting data from WMI
+	var win32BIOSDescriptions []win32BIOS
+	if err := wmi.Query("SELECT InstallDate, Manufacturer, Version FROM CIM_BIOSElement", &win32BIOSDescriptions); err != nil {
+		return res
+	}
+	if len(win32BIOSDescriptions) > 0 {
+		res.Vendor = *win32BIOSDescriptions[0].Manufacturer
+		res.Version = *win32BIOSDescriptions[0].Version
+		res.Date = *win32BIOSDescriptions[0].InstallDate
+	}
+
+	return res
 }

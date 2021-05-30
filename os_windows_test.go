@@ -126,3 +126,15 @@ func BenchmarkOS_Windows_Uptime(b *testing.B) {
 		_, _ = KOS.Uptime()
 	}
 }
+
+func TestOS_Windows_GetBiosInfo(t *testing.T) {
+	res := KOS.GetBiosInfo()
+	assert.NotNil(t, res)
+}
+
+func BenchmarkOS_Windows_GetBiosInfo(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetBiosInfo()
+	}
+}

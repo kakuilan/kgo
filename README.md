@@ -40,6 +40,7 @@ import "github.com/kakuilan/kgo"
 ### 依赖的第三方库
 
 - github.com/json-iterator/go
+- github.com/StackExchange/wmi
 
 ### 函数接收器
 
