@@ -117,3 +117,14 @@ func (ko *LkkOS) GetBiosInfo() *BiosInfo {
 		Date:    strings.TrimSpace(string(KFile.ReadFirstLine("/sys/class/dmi/id/bios_date"))),
 	}
 }
+
+// GetBoardInfo 获取Board信息.
+func (ko *LkkOS) GetBoardInfo() *BoardInfo {
+	return &BoardInfo{
+		Name:     strings.TrimSpace(string(KFile.ReadFirstLine("/sys/class/dmi/id/board_name"))),
+		Vendor:   strings.TrimSpace(string(KFile.ReadFirstLine("/sys/class/dmi/id/board_vendor"))),
+		Version:  strings.TrimSpace(string(KFile.ReadFirstLine("/sys/class/dmi/id/board_version"))),
+		Serial:   strings.TrimSpace(string(KFile.ReadFirstLine("/sys/class/dmi/id/board_serial"))),
+		AssetTag: strings.TrimSpace(string(KFile.ReadFirstLine("/sys/class/dmi/id/board_asset_tag"))),
+	}
+}
