@@ -29,3 +29,16 @@ func (ko *LkkOS) CpuUsage() (user, idle, total uint64) {
 
 	return
 }
+
+// GetBoardInfo 获取Board信息.
+func (ko *LkkOS) GetBoardInfo() *BoardInfo {
+	res := &BoardInfo{
+		Name:     "",
+		Vendor:   "",
+		Version:  "",
+		Serial:   "",
+		AssetTag: "",
+	}
+
+	return res
+}
