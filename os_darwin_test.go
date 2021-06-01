@@ -92,3 +92,22 @@ func BenchmarkOS_Darwin_GetBiosInfo(b *testing.B) {
 		KOS.GetBiosInfo()
 	}
 }
+
+func TestOS_Darwin_GetBoardInfo(t *testing.T) {
+	var ret int
+	var res []byte
+	var err []byte
+
+	ret, res, err = KOS.System("ioreg -l")
+	dumpPrint("-----------------TestOS_Darwin_GetBoardInfo:")
+	dumpPrint("--------------", ret, string(res), err)
+	ret, res, err = KOS.System("ioreg -l |grep -i board-id")
+	dumpPrint("--------------", ret, string(res), err)
+}
+
+func BenchmarkOS_Darwin_GetBoardInfo(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetBoardInfo()
+	}
+}
