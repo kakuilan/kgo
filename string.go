@@ -28,6 +28,7 @@ import (
 	"net"
 	"net/http"
 	"net/url"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -2192,5 +2193,17 @@ func (ks *LkkString) AtWho(text string, minLen ...int) []string {
 // MatchEquations 匹配字符串中所有的等式.
 func (ks *LkkString) MatchEquations(str string) (res []string) {
 	res = RegEquation.FindAllString(equationStr03, -1)
+	return
+}
+
+// GetEquationValue 获取等式str中变量name的值.
+func (ks *LkkString) GetEquationValue(str, name string) (res string) {
+	pattern := `['"]?` + name + `['"]?[\s]*=[\s]*['"]?(.*)['"]?`
+	reg := regexp.MustCompile(pattern)
+	mat := reg.FindStringSubmatch(str)
+	if len(mat) == 2 {
+		res = mat[1]
+	}
+
 	return
 }

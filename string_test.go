@@ -3342,3 +3342,23 @@ func BenchmarkString_MatchEquations(b *testing.B) {
 		KStr.MatchEquations(equationStr03)
 	}
 }
+
+func TestSring_GetEquationValue(t *testing.T) {
+	var res string
+
+	res = KStr.GetEquationValue(equationStr01, "hello")
+	assert.Empty(t, res)
+
+	res = KStr.GetEquationValue(equationStr01, "utm_source")
+	assert.NotEmpty(t, res)
+
+	res = KStr.GetEquationValue(equationStr02, "str")
+	assert.NotEmpty(t, res)
+}
+
+func BenchmarkString_GetEquationValue(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.GetEquationValue(equationStr01, "utm_source")
+	}
+}
