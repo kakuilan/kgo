@@ -15,6 +15,19 @@ import (
 // cachedBootTime must be accessed via atomic.Load/StoreUint64
 var cachedBootTime uint64
 
+//系统IO信息
+var cacheIOInfos []byte
+
+// getIOInfos 获取系统IO信息
+func (ko *LkkOS) getIOInfos() []byte {
+	if len(cacheIOInfos) == 0 {
+		dumpPrint("-----------getIOInfos start")
+		_, cacheIOInfos, _ = ko.System("ioreg -l")
+		dumpPrint(string(cacheIOInfos), "-----------getIOInfos end")
+	}
+	return cacheIOInfos
+}
+
 // MemoryUsage 获取内存使用率,单位字节.
 // 参数 virtual(仅支持linux),是否取虚拟内存.
 // used为已用,
@@ -113,9 +126,39 @@ func (ko *LkkOS) Uptime() (uint64, error) {
 // GetBiosInfo 获取BIOS信息.
 // 注意:Mac机器没有BIOS信息,它使用EFI.
 func (ko *LkkOS) GetBiosInfo() *BiosInfo {
-	return &BiosInfo{
+	res := &BiosInfo{
 		Vendor:  "",
 		Version: "",
 		Date:    "",
 	}
+
+	infos := ko.getIOInfos()
+	if len(infos) > 0 {
+		infoStr := string(infos)
+		res.Version = KStr.Trim(KStr.GetEquationValue(infoStr, "SMBIOS-EPS"), "<", "\"")
+	}
+
+	return res
+}
+
+// GetBoardInfo 获取Board信息.
+func (ko *LkkOS) GetBoardInfo() *BoardInfo {
+	res := &BoardInfo{
+		Name:     "",
+		Vendor:   "",
+		Version:  "",
+		Serial:   "",
+		AssetTag: "",
+	}
+
+	infos := ko.getIOInfos()
+	if len(infos) > 0 {
+		infoStr := string(infos)
+		res.Name = KStr.Trim(KStr.GetEquationValue(infoStr, "product-name"), "<", "\"")
+		res.Version = KStr.Trim(KStr.GetEquationValue(infoStr, "board-id"), "<", "\"")
+		res.Serial = KStr.Trim(KStr.GetEquationValue(infoStr, "serial-number"), "<", "\"")
+		res.AssetTag = KStr.Trim(KStr.GetEquationValue(infoStr, "IOPlatformUUID"), "<", "\"")
+	}
+
+	return res
 }

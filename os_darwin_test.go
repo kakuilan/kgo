@@ -80,10 +80,9 @@ func BenchmarkOS_Darwin_Uptime(b *testing.B) {
 
 func TestOS_Darwin_GetBiosInfo(t *testing.T) {
 	res := KOS.GetBiosInfo()
+	dumpPrint("------------GetBiosInfo:", res)
 	assert.NotNil(t, res)
-	assert.Empty(t, res.Vendor)
-	assert.Empty(t, res.Version)
-	assert.Empty(t, res.Date)
+	assert.NotEmpty(t, res.Version)
 }
 
 func BenchmarkOS_Darwin_GetBiosInfo(b *testing.B) {
@@ -94,15 +93,13 @@ func BenchmarkOS_Darwin_GetBiosInfo(b *testing.B) {
 }
 
 func TestOS_Darwin_GetBoardInfo(t *testing.T) {
-	var ret int
-	var res []byte
-	var err []byte
-
-	ret, res, err = KOS.System("ioreg -l")
-	dumpPrint("-----------------TestOS_Darwin_GetBoardInfo:")
-	dumpPrint("--------------", ret, string(res), err)
-	ret, res, err = KOS.System("ioreg -l |grep -i board-id")
-	dumpPrint("--------------", ret, string(res), err)
+	res := KOS.GetBoardInfo()
+	dumpPrint("------------GetBoardInfo:", res)
+	assert.NotNil(t, res)
+	assert.NotEmpty(t, res.Name)
+	assert.NotEmpty(t, res.Version)
+	assert.NotEmpty(t, res.Serial)
+	assert.NotEmpty(t, res.AssetTag)
 }
 
 func BenchmarkOS_Darwin_GetBoardInfo(b *testing.B) {
