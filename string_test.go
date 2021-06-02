@@ -3329,3 +3329,16 @@ func BenchmarkString_AtWho(b *testing.B) {
 		KStr.AtWho("Hi, @hellowor", 6)
 	}
 }
+
+func TestString_MatchEquations(t *testing.T) {
+	res := KStr.MatchEquations(equationStr03)
+	assert.NotEmpty(t, res)
+	assert.Greater(t, len(res), 10)
+}
+
+func BenchmarkString_MatchEquations(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.MatchEquations(equationStr03)
+	}
+}

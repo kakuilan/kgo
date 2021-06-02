@@ -727,6 +727,52 @@ var tesCommand01 = " ls -a -h"
 var tesCommand02 = " ls -a\"\" -h 'hehe'"
 var tesCommand03 = "cmd /C dir "
 
+//等式
+var equationStr01 = "190000017056834?utm_source=tag-newest "
+var equationStr02 = `String str = "AB==2LSKF=5!@!=$%^()==AD=";`
+var equationStr03 = `    | | |   {
+    | | |     "IOUserClientCreator" = "pid 195, loginwindow"
+    | | |   }
+    
+  +-o VMware7,1  <class IOPlatformExpertDevice, id 0x100000112, registered, matched, active, busy 0 (33207 ms), retain 27>
+    | {
+    |   "compatible" = <"VMware7,1">
+    |   "version" = <"None">
+    |   "board-id" = <"440BX Desktop Reference Platform">
+    |   "IOInterruptSpecifiers" = (<0900000007000000>)
+    |   "IOPolledInterface" = "SMCPolledInterface is not serializable"
+    |   "serial-number" = <764f445a000000000000000000564d54464d475a71764f445a000000000000000000000000000000000000>
+    |   "IOInterruptControllers" = ("io-apic-0")
+    |   "IOPlatformUUID" = "4203018E-580F-C1B5-9525-B745CECA79EB"
+    |   "target-type" = <"Mac">
+    |   "clock-frequency" = <00e1f505>
+    |   "manufacturer" = <"VMware, Inc.">
+    |   "IOPlatformSerialNumber" = "VMTFMGZqvODZ"
+    |   "product-name" = <"VMware7,1">
+    |   "IOBusyInterest" = "IOCommand is not serializable"
+    |   "model" = <"VMware7,1">
+    |   "name" = <"/">
+    | }
+    | 
+    +-o AppleACPIPlatformExpert  <class AppleACPIPlatformExpert, id 0x100000113, registered, matched, active, busy 0 (33168 ms), retain 30>
+    | | {
+    | |   "IOClass" = "AppleACPIPlatformExpert"
+    | |   "CFBundleIdentifier" = "com.apple.driver.AppleACPIPlatform"
+    | |   "IOProviderClass" = "IOPlatformExpertDevice"
+    | |   "IOProbeScore" = 10000
+    | |   "IONameMatch" = "ACPI"
+    | |   "acpi-mmcfg-seg0" = 3758096384
+    | |   "IOMatchCategory" = "IODefaultMatchCategory"
+    | |   "IOPolledInterface" = "AppleACPIEventPoller is not serializable"
+    | |   "IOPlatformMaxBusDelay" = (18446744073709551615,0)
+    | |   "IONameMatched" = "ACPI"
+    | |   "Platform Memory Ranges" = (0,4294967295)
+    | |   "IOPlatformMaxInterruptDelay" = (18446744073709551615,0)
+    | |   "CFBundleIdentifierKernel" = "com.apple.driver.AppleACPIPlatform"
+    | |   "ACPI Statistics" = {"MethodCount"=412,"SciCount"=0,"GpeCount"=0,"FixedEventCount"=0}
+    | | }
+    | |     `
+
 //表情符
 var tesEmoji1 = `Lorem ipsum 🥊dolor 🤒sit amet, consectetur adipiscing 🍂 elit. 🍁🍃🍂🌰🍁🌿🌾🌼🌻سلام تست شد hell中文
 😀😁😂😃😄😅😆😉😊😋😎😍😘😗😙😚☺😇😐😑😶😏😣😥😮😯😪😫😴😌😛😜😝😒😓😔😕😲😷😖😞😟😤😢😭😦😧😨😬😰😱😳😵😡😠
