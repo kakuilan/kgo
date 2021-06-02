@@ -135,7 +135,7 @@ func (ko *LkkOS) GetBiosInfo() *BiosInfo {
 	infos := ko.getIOInfos()
 	if len(infos) > 0 {
 		infoStr := string(infos)
-		res.Version = KStr.Trim(KStr.GetEquationValue(infoStr, "SMBIOS-EPS"), "<", "\"")
+		res.Version = KStr.Trim(KStr.GetEquationValue(infoStr, "SMBIOS-EPS"), "<", ">", `"`, `'`)
 	}
 
 	return res
@@ -154,10 +154,10 @@ func (ko *LkkOS) GetBoardInfo() *BoardInfo {
 	infos := ko.getIOInfos()
 	if len(infos) > 0 {
 		infoStr := string(infos)
-		res.Name = KStr.Trim(KStr.GetEquationValue(infoStr, "product-name"), "<", "\"")
-		res.Version = KStr.Trim(KStr.GetEquationValue(infoStr, "board-id"), "<", "\"")
-		res.Serial = KStr.Trim(KStr.GetEquationValue(infoStr, "serial-number"), "<", "\"")
-		res.AssetTag = KStr.Trim(KStr.GetEquationValue(infoStr, "IOPlatformUUID"), "<", "\"")
+		res.Name = KStr.Trim(KStr.GetEquationValue(infoStr, "product-name"), "<", ">", `"`, `'`)
+		res.Version = KStr.Trim(KStr.GetEquationValue(infoStr, "board-id"), "<", ">", `"`, `'`)
+		res.Serial = KStr.Trim(KStr.GetEquationValue(infoStr, "serial-number"), "<", ">", `"`, `'`)
+		res.AssetTag = KStr.Trim(KStr.GetEquationValue(infoStr, "IOPlatformUUID"), "<", ">", `"`, `'`)
 	}
 
 	return res
