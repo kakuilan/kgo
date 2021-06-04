@@ -15,6 +15,7 @@ import (
 	"runtime"
 	"runtime/debug"
 	"strings"
+	"syscall"
 	"unicode"
 )
 
@@ -575,4 +576,16 @@ func (ko *LkkOS) GetSystemInfo() *SystemInfo {
 		PauseTotalNs: mstat.PauseTotalNs,
 		PauseNs:      mstat.PauseNs[(mstat.NumGC+255)%256],
 	}
+}
+
+// IsProcessExists 进程是否存在.
+func (ko *LkkOS) IsProcessExists(pid int) (res bool) {
+	process, err := os.FindProcess(pid)
+	if err == nil {
+		if err = process.Signal(os.Signal(syscall.Signal(0))); err == nil {
+			res = true
+		}
+	}
+
+	return
 }
