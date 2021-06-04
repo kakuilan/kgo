@@ -150,3 +150,17 @@ func BenchmarkOS_Windows_GetBoardInfo(b *testing.B) {
 		KOS.GetBoardInfo()
 	}
 }
+
+func TestOS_Windows_GetCpuInfo(t *testing.T) {
+	res := KOS.GetCpuInfo()
+	assert.NotNil(t, res)
+	assert.NotEmpty(t, res.Vendor)
+	assert.NotEmpty(t, res.Model)
+}
+
+func BenchmarkOS_Windows_GetCpuInfo(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetCpuInfo()
+	}
+}

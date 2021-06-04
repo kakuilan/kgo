@@ -7,6 +7,7 @@ import (
 	"github.com/StackExchange/wmi"
 	"golang.org/x/sys/windows"
 	"os"
+	"runtime"
 	"syscall"
 	"time"
 	"unsafe"
@@ -42,6 +43,16 @@ type win32Baseboard struct {
 	Tag          *string
 	Version      *string
 	Product      *string
+}
+
+type win32Processor struct {
+	Manufacturer              *string
+	Name                      *string
+	NumberOfLogicalProcessors uint32
+	NumberOfCores             uint32
+	MaxClockSpeed             uint32
+	L2CacheSize               uint32
+	L3CacheSize               uint32
 }
 
 var (
@@ -209,6 +220,52 @@ func (ko *LkkOS) GetBoardInfo() *BoardInfo {
 		res.Serial = *win32BaseboardDescriptions[0].SerialNumber
 		res.AssetTag = *win32BaseboardDescriptions[0].Tag
 	}
+
+	return res
+}
+
+// GetCpuInfo 获取CPU信息.
+func (ko *LkkOS) GetCpuInfo() *CpuInfo {
+	var res = &CpuInfo{
+		Vendor:  "",
+		Model:   "",
+		Speed:   "",
+		Cache:   0,
+		Cpus:    0,
+		Cores:   0,
+		Threads: 0,
+	}
+
+	res.Threads = uint(runtime.NumCPU())
+
+	// Getting info from WMI
+	var win32descriptions []win32Processor
+	if err := wmi.Query("SELECT Manufacturer, Name, NumberOfLogicalProcessors, NumberOfCores, MaxClockSpeed, L2CacheSize, L3CacheSize FROM Win32_Processor", &win32descriptions); err != nil {
+		return res
+	}
+
+	var cores, threads uint
+	for _, description := range win32descriptions {
+		if res.Vendor == "" {
+			res.Vendor = *description.Manufacturer
+		}
+		if res.Model == "" {
+			res.Model = *description.Name
+		}
+		if res.Speed == "" {
+			res.Speed = toStr(description.MaxClockSpeed)
+		}
+		if res.Cache == 0 {
+			res.Cache = uint(description.L2CacheSize + description.L3CacheSize)
+		}
+
+		cores += uint(description.NumberOfCores)
+		threads += uint(description.NumberOfLogicalProcessors)
+	}
+
+	res.Cpus = uint(len(win32descriptions))
+	res.Cores = cores
+	res.Threads = threads
 
 	return res
 }
