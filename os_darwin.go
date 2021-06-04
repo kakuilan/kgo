@@ -161,3 +161,19 @@ func (ko *LkkOS) GetBoardInfo() *BoardInfo {
 
 	return res
 }
+
+// GetCpuInfo 获取CPU信息.
+func (ko *LkkOS) GetCpuInfo() *CpuInfo {
+	var res = &CpuInfo{
+		Vendor:  "",
+		Model:   "",
+		Speed:   "",
+		Cache:   0,
+		Cpus:    0,
+		Cores:   0,
+		Threads: 0,
+	}
+
+
+	return res
+}

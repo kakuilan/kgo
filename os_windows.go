@@ -7,7 +7,6 @@ import (
 	"github.com/StackExchange/wmi"
 	"golang.org/x/sys/windows"
 	"os"
-	"runtime"
 	"syscall"
 	"time"
 	"unsafe"
@@ -235,8 +234,6 @@ func (ko *LkkOS) GetCpuInfo() *CpuInfo {
 		Cores:   0,
 		Threads: 0,
 	}
-
-	res.Threads = uint(runtime.NumCPU())
 
 	// Getting info from WMI
 	var win32descriptions []win32Processor
