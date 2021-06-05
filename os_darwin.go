@@ -176,9 +176,9 @@ func (ko *LkkOS) GetCpuInfo() *CpuInfo {
 	res.Vendor, _ = unix.Sysctl("machdep.cpu.vendor")
 
 	cacheSize, _ := unix.SysctlUint32("machdep.cpu.cache.size")
-	cpus, _ := unix.SysctlUint32("machdep.physicalcpu")
+	cpus, _ := unix.SysctlUint32("hw.physicalcpu")
 	cores, _ := unix.SysctlUint32("machdep.cpu.core_count")
-	threads, _ := unix.SysctlUint32("machdep.thread_count")
+	threads, _ := unix.SysctlUint32("machdep.cpu.thread_count")
 	res.Cache = uint(cacheSize)
 	res.Cpus = uint(cpus)
 	res.Cores = uint(cores)
