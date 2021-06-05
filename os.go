@@ -582,7 +582,9 @@ func (ko *LkkOS) GetSystemInfo() *SystemInfo {
 func (ko *LkkOS) IsProcessExists(pid int) (res bool) {
 	process, err := os.FindProcess(pid)
 	if err == nil {
-		if err = process.Signal(os.Signal(syscall.Signal(0))); err == nil {
+		if ko.IsWindows() {
+			res = true
+		} else if err = process.Signal(os.Signal(syscall.Signal(0))); err == nil {
 			res = true
 		}
 	}
