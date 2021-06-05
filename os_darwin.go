@@ -21,9 +21,7 @@ var cacheIOInfos []byte
 // getIOInfos 获取系统IO信息
 func (ko *LkkOS) getIOInfos() []byte {
 	if len(cacheIOInfos) == 0 {
-		dumpPrint("-----------getIOInfos start")
 		_, cacheIOInfos, _ = ko.System("ioreg -l")
-		dumpPrint(string(cacheIOInfos), "-----------getIOInfos end")
 	}
 	return cacheIOInfos
 }
@@ -174,6 +172,25 @@ func (ko *LkkOS) GetCpuInfo() *CpuInfo {
 		Threads: 0,
 	}
 
+	res.Model, _ = unix.Sysctl("machdep.cpu.brand_string")
+	res.Vendor, _ = unix.Sysctl("machdep.cpu.vendor")
+
+	cacheSize, _ := unix.SysctlUint32("machdep.cpu.cache.size")
+	cpus, _ := unix.SysctlUint32("machdep.physicalcpu")
+	cores, _ := unix.SysctlUint32("machdep.cpu.core_count")
+	threads, _ := unix.SysctlUint32("machdep.thread_count")
+	res.Cache = uint(cacheSize)
+	res.Cpus = uint(cpus)
+	res.Cores = uint(cores)
+	res.Threads = uint(threads)
+
+	// Use the rated frequency of the CPU. This is a static value and does not
+	// account for low power or Turbo Boost modes.
+	cpuFrequency, err := unix.SysctlUint64("hw.cpufrequency")
+	if err == nil {
+		speed := float64(cpuFrequency) / 1000000.0
+		res.Speed = KNum.NumberFormat(speed, 2, ".", "")
+	}
 
 	return res
 }

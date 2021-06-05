@@ -137,6 +137,11 @@ https://github.com/henrylee2cn/goutil/blob/master/pid_file.go
 https://github.com/facebookarchive/pidfile/blob/master/pidfile.go
 https://github.com/struCoder/pidusage/blob/master/pidusage.go
 https://blog.csdn.net/qq_27870421/article/details/103290155
+https://blog.csdn.net/ycf8788/article/details/99074801
+https://stackoverflow.com/questions/15204162/check-if-a-process-exists-in-go-way
+https://github.com/golang/go/issues/33814
+https://www.cnblogs.com/diyunpeng/p/4323345.html
+
 
 ping
 https://github.com/bocajim/helpers/blob/master/ping.go

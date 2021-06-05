@@ -105,3 +105,18 @@ func BenchmarkOS_Darwin_GetBoardInfo(b *testing.B) {
 		KOS.GetBoardInfo()
 	}
 }
+
+func TestOS_Darwin_GetCpuInfo(t *testing.T) {
+	res := KOS.GetCpuInfo()
+	dumpPrint("------------TestOS_Darwin_GetCpuInfo:", res)
+	assert.NotNil(t, res)
+	assert.NotEmpty(t, res.Vendor)
+	assert.NotEmpty(t, res.Model)
+}
+
+func BenchmarkOS_Darwin_GetCpuInfo(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetCpuInfo()
+	}
+}
