@@ -127,6 +127,11 @@ func getProcessPathByPid(pid int) (res string) {
 	return
 }
 
+// getPidByPort 根据端口号获取监听的进程PID.
+func getPidByPort(port int) (pid int) {
+	return
+}
+
 // HomeDir 获取当前用户的主目录.
 func (ko *LkkOS) HomeDir() (string, error) {
 	// First prefer the HOME environmental variable
@@ -363,5 +368,13 @@ func (ko *LkkOS) IsProcessExists(pid int) (res bool) {
 		res = exitCode == still_active
 	}
 
+	return
+}
+
+// GetPidByPort 根据端口号获取监听的进程PID.
+// linux要求root权限;
+// darwin依赖lsof;
+// windows依赖netstat.
+func (ko *LkkOS) GetPidByPort(port int) (pid int) {
 	return
 }

@@ -136,11 +136,6 @@ https://github.com/bitnami/gonit/blob/master/utils/process.go
 https://github.com/henrylee2cn/goutil/blob/master/pid_file.go
 https://github.com/facebookarchive/pidfile/blob/master/pidfile.go
 https://github.com/struCoder/pidusage/blob/master/pidusage.go
-https://blog.csdn.net/qq_27870421/article/details/103290155
-https://blog.csdn.net/ycf8788/article/details/99074801
-https://stackoverflow.com/questions/15204162/check-if-a-process-exists-in-go-way
-https://github.com/golang/go/issues/33814
-https://www.cnblogs.com/diyunpeng/p/4323345.html
 
 
 ping
@@ -269,6 +264,18 @@ https://blog.csdn.net/yue7603835/article/details/71196181
 golang 根据PID获取进程的执行路径
 https://www.systutorials.com/how-to-get-the-running-process-pid-in-go/
 https://blog.csdn.net/weixin_42324368/article/details/107872138
+https://blog.csdn.net/qq_27870421/article/details/103290155
+https://blog.csdn.net/ycf8788/article/details/99074801
+https://stackoverflow.com/questions/15204162/check-if-a-process-exists-in-go-way
+https://github.com/golang/go/issues/33814
+https://www.cnblogs.com/diyunpeng/p/4323345.html
+https://www.btaz.com/mac-os-x/find-the-process-listening-to-port-on-mac-os-x/
+https://blog.jayway.com/2012/09/08/finding-the-pid-listening-on-a-specific-port-on-mac-os-x/
+https://stackoverflow.com/questions/3855127/find-and-kill-process-locking-port-3000-on-mac
+https://blog.csdn.net/fareast_mzh/article/details/81463839
+https://www.cnblogs.com/youcoding/p/12941246.html
+
+
 
 结构体转MAP
 https://github.com/fatih/structs

@@ -226,3 +226,48 @@ func (ko *LkkOS) GetCpuInfo() *CpuInfo {
 
 	return res
 }
+
+// GetPidByPort 根据端口号获取监听的进程PID.
+// linux可能要求root权限;
+// darwin依赖lsof;
+// windows依赖netstat.
+func (ko *LkkOS) GetPidByPort(port int) (pid int) {
+	files := []string{
+		"/proc/net/tcp",
+		"/proc/net/udp",
+		"/proc/net/tcp6",
+		"/proc/net/udp6",
+	}
+
+	procDirs, _ := filepath.Glob("/proc/[0-9]*/fd/[0-9]*")
+	for _, fpath := range files {
+		lines, _ := KFile.ReadInArray(fpath)
+		for _, line := range lines[1:] {
+			fields := strings.Fields(line)
+			if len(fields) < 10 {
+				continue
+			}
+
+			//非 LISTEN 监听状态
+			if fields[3] != "0A" {
+				continue
+			}
+
+			//本地ip和端口
+			ipport := strings.Split(fields[1], ":")
+			locPort, _ := KConv.Hex2Dec(ipport[1])
+
+			// 非该端口
+			if int(locPort) != port {
+				continue
+			}
+
+			pid = getPidByInode(fields[9], procDirs)
+			if pid > 0 {
+				return
+			}
+		}
+	}
+
+	return
+}

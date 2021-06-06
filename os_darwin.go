@@ -8,7 +8,6 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
-	"sync/atomic"
 	"time"
 )
 
@@ -17,6 +16,27 @@ var cachedBootTime uint64
 
 //系统IO信息
 var cacheIOInfos []byte
+
+// bootTime 获取系统启动时间,秒.
+func bootTime() (uint64, error) {
+	t := atomic.LoadUint64(&cachedBootTime)
+	if t != 0 {
+		return t, nil
+	}
+	tv, err := unix.SysctlTimeval("kern.boottime")
+	if err != nil {
+		return 0, err
+	}
+
+	atomic.StoreUint64(&cachedBootTime, uint64(tv.Sec))
+
+	return uint64(tv.Sec), nil
+}
+
+// getPidByPort 根据端口号获取监听的进程PID.
+func getPidByPort(port int) (pid int) {
+	return
+}
 
 // getIOInfos 获取系统IO信息
 func (ko *LkkOS) getIOInfos() []byte {
@@ -92,22 +112,6 @@ func (ko *LkkOS) DiskUsage(path string) (used, free, total uint64) {
 	free = uint64(stat.Bavail) * uint64(stat.Bsize)
 	used = (uint64(stat.Blocks) - uint64(stat.Bfree)) * uint64(stat.Bsize)
 	return
-}
-
-// bootTime 获取系统启动时间,秒.
-func bootTime() (uint64, error) {
-	t := atomic.LoadUint64(&cachedBootTime)
-	if t != 0 {
-		return t, nil
-	}
-	tv, err := unix.SysctlTimeval("kern.boottime")
-	if err != nil {
-		return 0, err
-	}
-
-	atomic.StoreUint64(&cachedBootTime, uint64(tv.Sec))
-
-	return uint64(tv.Sec), nil
 }
 
 // Uptime 获取系统运行时间,秒.
@@ -193,4 +197,12 @@ func (ko *LkkOS) GetCpuInfo() *CpuInfo {
 	}
 
 	return res
+}
+
+// GetPidByPort 根据端口号获取监听的进程PID.
+// linux要求root权限;
+// darwin依赖lsof;
+// windows依赖netstat.
+func (ko *LkkOS) GetPidByPort(port int) (pid int) {
+	return
 }
