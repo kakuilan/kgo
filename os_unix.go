@@ -10,6 +10,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"syscall"
 )
 
 // HomeDir 获取当前用户的主目录.
@@ -71,4 +72,16 @@ func (ko *LkkOS) HomeDir() (string, error) {
 	}
 
 	return result, nil
+}
+
+// IsProcessExists 进程是否存在.
+func (ko *LkkOS) IsProcessExists(pid int) (res bool) {
+	process, err := os.FindProcess(pid)
+	if err == nil {
+		if err = process.Signal(os.Signal(syscall.Signal(0))); err == nil {
+			res = true
+		}
+	}
+
+	return
 }

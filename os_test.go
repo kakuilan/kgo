@@ -501,25 +501,6 @@ func BenchmarkOS_GetSystemInfo(b *testing.B) {
 	}
 }
 
-func TestOS_IsProcessExists(t *testing.T) {
-	var res bool
-
-	pid := os.Getpid()
-	res = KOS.IsProcessExists(pid)
-	assert.True(t, res)
-
-	res = KOS.IsProcessExists(-1)
-	assert.False(t, res)
-}
-
-func BenchmarkOS_IsProcessExists(b *testing.B) {
-	b.ResetTimer()
-	pid := os.Getpid()
-	for i := 0; i < b.N; i++ {
-		KOS.IsProcessExists(pid)
-	}
-}
-
 func TestOS_GetProcessExecPath(t *testing.T) {
 	var res string
 

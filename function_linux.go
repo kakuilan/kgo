@@ -3,6 +3,7 @@
 package kgo
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"regexp"
