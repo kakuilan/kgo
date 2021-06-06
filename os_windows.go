@@ -4,6 +4,7 @@ package kgo
 
 import (
 	"errors"
+	"fmt"
 	"github.com/StackExchange/wmi"
 	"golang.org/x/sys/windows"
 	"os"
@@ -304,4 +305,55 @@ func (ko *LkkOS) GetCpuInfo() *CpuInfo {
 	res.Threads = threads
 
 	return res
+}
+
+// getProcessByPid 根据pid获取进程列表.
+func getProcessByPid(pid int) (res []Win32_Process) {
+	var dst []Win32_Process
+	query := fmt.Sprintf("WHERE ProcessId = %d", pid)
+	q := wmi.CreateQuery(&dst, query)
+	err := wmi.Query(q, &dst)
+	if err == nil && len(dst) > 0 {
+		res = dst
+	}
+
+	dumpPrint("------------getProcessByPid:", res)
+
+	return
+}
+
+// IsProcessExists 进程是否存在.
+func (ko *LkkOS) IsProcessExists(pid int) (res bool) {
+	if pid <= 0 {
+		return
+	} else if pid%4 != 0 {
+		// OpenProcess will succeed even on non-existing pid here https://devblogs.microsoft.com/oldnewthing/20080606-00/?p=22043
+		// so we list every pid just to be sure and be future-proof
+		p := getProcessByPid(pid)
+		if len(p) > 0 && p[0].ProcessId > 0 {
+			res = true
+			return
+		}
+	} else {
+		var still_active uint32 = 259 // https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getexitcodeprocess
+		h, err := windows.OpenProcess(windows.PROCESS_QUERY_LIMITED_INFORMATION, false, uint32(pid))
+		if err == windows.ERROR_ACCESS_DENIED {
+			return true
+		}
+		if err == windows.ERROR_INVALID_PARAMETER {
+			return false
+		}
+		if err != nil {
+			return false
+		}
+
+		defer func() {
+			_ = syscall.CloseHandle(syscall.Handle(h))
+		}()
+		var exitCode uint32
+		_ = windows.GetExitCodeProcess(h, &exitCode)
+		res = exitCode == still_active
+	}
+
+	return
 }
