@@ -3,13 +3,14 @@
 
 package kgo
 
-import (
-	"unsafe"
-)
-
+// #include <stdlib.h>
+// #include <libproc.h>
 // #include <mach/mach_host.h>
 // #include <mach/host_info.h>
 import "C"
+import (
+	"unsafe"
+)
 
 // 获取CPU使用率(darwin系统必须使用cgo),单位jiffies(节拍数).
 // user为用户态(用户进程)的运行时间,
@@ -28,4 +29,23 @@ func (ko *LkkOS) CpuUsage() (user, idle, total uint64) {
 	total = user + idle + uint64(cpuLoad.cpu_ticks[C.CPU_STATE_SYSTEM]) + uint64(cpuLoad.cpu_ticks[C.CPU_STATE_NICE])
 
 	return
+}
+
+// getProcessPathByPid 根据PID获取进程的执行路径.
+func getProcessPathByPid(pid int) (res string) {
+	dumpPrint("-------------getProcessPathByPid-cgo:", pid)
+	var c C.char // need a var for unsafe.Sizeof need a var
+	const bufsize = C.PROC_PIDPATHINFO_MAXSIZE * unsafe.Sizeof(c)
+	buffer := (*C.char)(C.malloc(C.size_t(bufsize)))
+	defer C.free(unsafe.Pointer(buffer))
+
+	ret, err := C.proc_pidpath(C.int(pid), unsafe.Pointer(buffer), C.uint32_t(bufsize))
+	if err != nil {
+		return
+	}
+	if ret <= 0 {
+		return
+	}
+
+	return C.GoString(buffer)
 }

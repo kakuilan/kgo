@@ -108,7 +108,6 @@ func BenchmarkOS_Darwin_GetBoardInfo(b *testing.B) {
 
 func TestOS_Darwin_GetCpuInfo(t *testing.T) {
 	res := KOS.GetCpuInfo()
-	dumpPrint("------------TestOS_Darwin_GetCpuInfo:", res)
 	assert.NotNil(t, res)
 	assert.NotEmpty(t, res.Vendor)
 	assert.NotEmpty(t, res.Model)
@@ -118,5 +117,22 @@ func BenchmarkOS_Darwin_GetCpuInfo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KOS.GetCpuInfo()
+	}
+}
+
+func TestOS_Darwin_GetProcessExecPath(t *testing.T) {
+	var res string
+
+	pid := os.Getpid()
+	res = KOS.GetProcessExecPath(pid)
+	dumpPrint("-------------TestOS_Darwin_GetProcessExecPath res:", pid, res)
+	assert.NotEmpty(t, res)
+}
+
+func BenchmarkOS_Darwin_GetProcessExecPath(b *testing.B) {
+	b.ResetTimer()
+	pid := os.Getpid()
+	for i := 0; i < b.N; i++ {
+		KOS.GetProcessExecPath(pid)
 	}
 }

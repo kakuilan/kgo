@@ -226,8 +226,3 @@ func (ko *LkkOS) GetCpuInfo() *CpuInfo {
 
 	return res
 }
-
-// GetProcessExecPath 根据PID获取进程的执行路径.
-func (ko *LkkOS) GetProcessExecPath(pid int) string {
-	return getProcessPathByPid(pid)
-}

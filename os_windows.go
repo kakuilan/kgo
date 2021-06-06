@@ -114,8 +114,6 @@ func getProcessByPid(pid int) (res []Win32_Process) {
 		res = dst
 	}
 
-	dumpPrint("------------getProcessByPid:", res)
-
 	return
 }
 
@@ -366,9 +364,4 @@ func (ko *LkkOS) IsProcessExists(pid int) (res bool) {
 	}
 
 	return
-}
-
-// GetProcessExecPath 根据PID获取进程的执行路径.
-func (ko *LkkOS) GetProcessExecPath(pid int) string {
-	return getProcessPathByPid(pid)
 }
