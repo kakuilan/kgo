@@ -3,7 +3,6 @@
 package kgo
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -31,8 +30,9 @@ func getPidByInode(inode string, procDirs []string) (pid int) {
 }
 
 // getProcessPathByPid 根据PID获取进程的执行路径.
-func getProcessPathByPid(pid int) string {
+func getProcessPathByPid(pid int) (res string) {
 	exe := fmt.Sprintf("/proc/%d/exe", pid)
-	path, _ := os.Readlink(exe)
-	return path
+	res, _ = os.Readlink(exe)
+
+	return
 }

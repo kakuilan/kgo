@@ -525,6 +525,6 @@ func TestOS_GetProcessExecPath(t *testing.T) {
 
 	pid := os.Getpid()
 	res = KOS.GetProcessExecPath(pid)
-	dumpPrint("----------TestOS_GetProcessExecPath", res)
+	dumpPrint("----------TestOS_GetProcessExecPath res:", pid, res)
 	assert.NotEmpty(t, res)
 }
