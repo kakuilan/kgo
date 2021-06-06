@@ -3,9 +3,13 @@
 package kgo
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
+	"io/ioutil"
+	"net"
 	"os"
 	"testing"
+	"time"
 )
 
 func TestOS_Windows_IsWindows(t *testing.T) {
@@ -201,5 +205,61 @@ func BenchmarkOS_Windows_GetProcessExecPath(b *testing.B) {
 	pid := os.Getpid()
 	for i := 0; i < b.N; i++ {
 		KOS.GetProcessExecPath(pid)
+	}
+}
+
+func TestOS_Windows_GetPidByPort(t *testing.T) {
+	time.AfterFunc(time.Millisecond*250, func() {
+		res := KOS.GetPidByPort(8899)
+		dumpPrint("----------TestOS_Windows_GetPidByPort res:", res)
+		assert.Greater(t, res, 1)
+
+		KOS.GetPidByPort(80)
+	})
+
+	//发送消息
+	time.AfterFunc(time.Millisecond*500, func() {
+		conn, err := net.Dial("tcp", ":8899")
+		assert.Nil(t, err)
+
+		defer func() {
+			_ = conn.Close()
+		}()
+
+		_, err = fmt.Fprintf(conn, helloEng)
+		assert.Nil(t, err)
+	})
+
+	//开启监听端口
+	l, err := net.Listen("tcp", ":8899")
+	dumpPrint("================ listen err:", err)
+	assert.Nil(t, err)
+	defer func() {
+		_ = l.Close()
+	}()
+
+	for {
+		conn, err := l.Accept()
+		if err != nil {
+			return
+		}
+		defer func() {
+			_ = conn.Close()
+		}()
+
+		//接收
+		buf, err := ioutil.ReadAll(conn)
+		assert.Nil(t, err)
+
+		msg := string(buf[:])
+		assert.Equal(t, msg, helloEng)
+		return
+	}
+}
+
+func BenchmarkOS_Windows_GetPidByPort(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KOS.GetPidByPort(8899)
 	}
 }

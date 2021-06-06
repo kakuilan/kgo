@@ -8,6 +8,7 @@ import (
 	"github.com/StackExchange/wmi"
 	"golang.org/x/sys/windows"
 	"os"
+	"strings"
 	"syscall"
 	"time"
 	"unsafe"
@@ -376,5 +377,21 @@ func (ko *LkkOS) IsProcessExists(pid int) (res bool) {
 // darwin依赖lsof;
 // windows依赖netstat.
 func (ko *LkkOS) GetPidByPort(port int) (pid int) {
+	command := fmt.Sprintf("cmd /C netstat -ano | findstr %d", port)
+	dumpPrint("----------------command:", command)
+	_, out, _ := ko.System(command)
+	dumpPrint("--------------win GetPidByPort:", string(out))
+	lines := strings.Split(string(out), "\r\n")
+	for _, line := range lines {
+		fields := strings.Fields(line)
+		dumpPrint("======================= fields:", len(fields), fields)
+		if len(fields) == 5 {
+			p := toInt(fields[4])
+			if p > 0 {
+				pid = p
+			}
+		}
+	}
+
 	return
 }
