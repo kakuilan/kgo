@@ -33,7 +33,6 @@ func (ko *LkkOS) CpuUsage() (user, idle, total uint64) {
 
 // getProcessPathByPid 根据PID获取进程的执行路径.
 func getProcessPathByPid(pid int) (res string) {
-	dumpPrint("-------------getProcessPathByPid-cgo:", pid)
 	var c C.char // need a var for unsafe.Sizeof need a var
 	const bufsize = C.PROC_PIDPATHINFO_MAXSIZE * unsafe.Sizeof(c)
 	buffer := (*C.char)(C.malloc(C.size_t(bufsize)))

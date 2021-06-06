@@ -29,7 +29,6 @@ func TestOS_Darwin_Cgo_GetProcessExecPath(t *testing.T) {
 
 	pid := os.Getpid()
 	res = KOS.GetProcessExecPath(pid)
-	dumpPrint("-------------TestOS_Darwin_Cgo_GetProcessExecPath res:", pid, res)
 	assert.NotEmpty(t, res)
 }
 

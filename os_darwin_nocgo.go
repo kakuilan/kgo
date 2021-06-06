@@ -20,7 +20,6 @@ func (ko *LkkOS) CpuUsage() (user, idle, total uint64) {
 
 // getProcessPathByPid 根据PID获取进程的执行路径.
 func getProcessPathByPid(pid int) (res string) {
-	dumpPrint("-------------getProcessPathByPid-nocgo:", pid)
 	lsof, err := exec.LookPath("lsof")
 	if err != nil {
 		return
