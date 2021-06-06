@@ -35,21 +35,6 @@ func BenchmarkOS_Darwin_MemoryUsage(b *testing.B) {
 	}
 }
 
-func TestOS_Darwin_CpuUsage(t *testing.T) {
-	var user, idle, total uint64
-	user, idle, total = KOS.CpuUsage()
-	assert.GreaterOrEqual(t, int(user), 0)
-	assert.GreaterOrEqual(t, int(idle), 0)
-	assert.GreaterOrEqual(t, int(total), 0)
-}
-
-func BenchmarkOS_Darwin_CpuUsage(b *testing.B) {
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		_, _, _ = KOS.CpuUsage()
-	}
-}
-
 func TestOS_Darwin_DiskUsage(t *testing.T) {
 	var used, free, total uint64
 	used, free, total = KOS.DiskUsage("/")
@@ -117,22 +102,5 @@ func BenchmarkOS_Darwin_GetCpuInfo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KOS.GetCpuInfo()
-	}
-}
-
-func TestOS_Darwin_GetProcessExecPath(t *testing.T) {
-	var res string
-
-	pid := os.Getpid()
-	res = KOS.GetProcessExecPath(pid)
-	dumpPrint("-------------TestOS_Darwin_GetProcessExecPath res:", pid, res)
-	assert.NotEmpty(t, res)
-}
-
-func BenchmarkOS_Darwin_GetProcessExecPath(b *testing.B) {
-	b.ResetTimer()
-	pid := os.Getpid()
-	for i := 0; i < b.N; i++ {
-		KOS.GetProcessExecPath(pid)
 	}
 }
