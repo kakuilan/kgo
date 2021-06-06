@@ -211,7 +211,6 @@ func BenchmarkOS_Windows_GetProcessExecPath(b *testing.B) {
 func TestOS_Windows_GetPidByPort(t *testing.T) {
 	time.AfterFunc(time.Millisecond*250, func() {
 		res := KOS.GetPidByPort(8899)
-		dumpPrint("----------TestOS_Windows_GetPidByPort res:", res)
 		assert.Greater(t, res, 1)
 
 		KOS.GetPidByPort(80)
@@ -232,7 +231,6 @@ func TestOS_Windows_GetPidByPort(t *testing.T) {
 
 	//开启监听端口
 	l, err := net.Listen("tcp", ":8899")
-	dumpPrint("================ listen err:", err)
 	assert.Nil(t, err)
 	defer func() {
 		_ = l.Close()
