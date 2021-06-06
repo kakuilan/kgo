@@ -187,3 +187,19 @@ func BenchmarkOS_Windows_IsProcessExists(b *testing.B) {
 		KOS.IsProcessExists(pid)
 	}
 }
+
+func TestOS_Windows_GetProcessExecPath(t *testing.T) {
+	var res string
+
+	pid := os.Getpid()
+	res = KOS.GetProcessExecPath(pid)
+	assert.NotEmpty(t, res)
+}
+
+func BenchmarkOS_Windows_GetProcessExecPath(b *testing.B) {
+	b.ResetTimer()
+	pid := os.Getpid()
+	for i := 0; i < b.N; i++ {
+		KOS.GetProcessExecPath(pid)
+	}
+}

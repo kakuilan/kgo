@@ -104,6 +104,31 @@ var (
 	procGetTickCount32       = kernel32.NewProc("GetTickCount")
 )
 
+// getProcessByPid 根据pid获取进程列表.
+func getProcessByPid(pid int) (res []Win32_Process) {
+	var dst []Win32_Process
+	query := fmt.Sprintf("WHERE ProcessId = %d", pid)
+	q := wmi.CreateQuery(&dst, query)
+	err := wmi.Query(q, &dst)
+	if err == nil && len(dst) > 0 {
+		res = dst
+	}
+
+	dumpPrint("------------getProcessByPid:", res)
+
+	return
+}
+
+// getProcessPathByPid 根据PID获取进程的执行路径.
+func getProcessPathByPid(pid int) (res string) {
+	ps := getProcessByPid(pid)
+	if len(ps) > 0 {
+		res = *ps[0].ExecutablePath
+	}
+
+	return
+}
+
 // HomeDir 获取当前用户的主目录.
 func (ko *LkkOS) HomeDir() (string, error) {
 	// First prefer the HOME environmental variable
@@ -307,21 +332,6 @@ func (ko *LkkOS) GetCpuInfo() *CpuInfo {
 	return res
 }
 
-// getProcessByPid 根据pid获取进程列表.
-func getProcessByPid(pid int) (res []Win32_Process) {
-	var dst []Win32_Process
-	query := fmt.Sprintf("WHERE ProcessId = %d", pid)
-	q := wmi.CreateQuery(&dst, query)
-	err := wmi.Query(q, &dst)
-	if err == nil && len(dst) > 0 {
-		res = dst
-	}
-
-	dumpPrint("------------getProcessByPid:", res)
-
-	return
-}
-
 // IsProcessExists 进程是否存在.
 func (ko *LkkOS) IsProcessExists(pid int) (res bool) {
 	if pid <= 0 {
@@ -329,8 +339,8 @@ func (ko *LkkOS) IsProcessExists(pid int) (res bool) {
 	} else if pid%4 != 0 {
 		// OpenProcess will succeed even on non-existing pid here https://devblogs.microsoft.com/oldnewthing/20080606-00/?p=22043
 		// so we list every pid just to be sure and be future-proof
-		p := getProcessByPid(pid)
-		if len(p) > 0 && p[0].ProcessId > 0 {
+		ps := getProcessByPid(pid)
+		if len(ps) > 0 && ps[0].ProcessId > 0 {
 			res = true
 			return
 		}
@@ -356,4 +366,9 @@ func (ko *LkkOS) IsProcessExists(pid int) (res bool) {
 	}
 
 	return
+}
+
+// GetProcessExecPath 根据PID获取进程的执行路径.
+func (ko *LkkOS) GetProcessExecPath(pid int) string {
+	return getProcessPathByPid(pid)
 }
