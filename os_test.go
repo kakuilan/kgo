@@ -5,7 +5,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"net"
 	"net/http"
-	"os"
 	"os/user"
 	"strings"
 	"testing"
@@ -499,13 +498,4 @@ func BenchmarkOS_GetSystemInfo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		KOS.GetSystemInfo()
 	}
-}
-
-func TestOS_GetProcessExecPath(t *testing.T) {
-	var res string
-
-	pid := os.Getpid()
-	res = KOS.GetProcessExecPath(pid)
-	dumpPrint("----------TestOS_GetProcessExecPath res:", pid, res)
-	assert.NotEmpty(t, res)
 }

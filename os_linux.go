@@ -8,11 +8,40 @@ import (
 	"golang.org/x/sys/unix"
 	"io/ioutil"
 	"os"
+	"path/filepath"
+	"regexp"
 	"runtime"
 	"strconv"
 	"strings"
 	"syscall"
 )
+
+// getPidByInode 根据套接字的inode获取PID.须root权限.
+func getPidByInode(inode string, procDirs []string) (pid int) {
+	if len(procDirs) == 0 {
+		procDirs, _ = filepath.Glob("/proc/[0-9]*/fd/[0-9]*")
+	}
+
+	re := regexp.MustCompile(inode)
+	for _, item := range procDirs {
+		path, _ := os.Readlink(item)
+		out := re.FindString(path)
+		if len(out) != 0 {
+			pid, _ = strconv.Atoi(strings.Split(item, "/")[2])
+			break
+		}
+	}
+
+	return pid
+}
+
+// getProcessPathByPid 根据PID获取进程的执行路径.
+func getProcessPathByPid(pid int) (res string) {
+	exe := fmt.Sprintf("/proc/%d/exe", pid)
+	res, _ = os.Readlink(exe)
+
+	return
+}
 
 // MemoryUsage 获取内存使用率,单位字节.
 // 参数 virtual(仅支持linux),是否取虚拟内存.
@@ -196,4 +225,9 @@ func (ko *LkkOS) GetCpuInfo() *CpuInfo {
 	}()
 
 	return res
+}
+
+// GetProcessExecPath 根据PID获取进程的执行路径.
+func (ko *LkkOS) GetProcessExecPath(pid int) string {
+	return getProcessPathByPid(pid)
 }

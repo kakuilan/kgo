@@ -4,6 +4,7 @@ package kgo
 
 import (
 	"github.com/stretchr/testify/assert"
+	"os"
 	"testing"
 )
 
@@ -127,5 +128,21 @@ func BenchmarkOS_Linux_GetCpuInfo(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KOS.GetCpuInfo()
+	}
+}
+
+func TestOS_Linux_GetProcessExecPath(t *testing.T) {
+	var res string
+
+	pid := os.Getpid()
+	res = KOS.GetProcessExecPath(pid)
+	assert.NotEmpty(t, res)
+}
+
+func BenchmarkOS_Linux_GetProcessExecPath(b *testing.B) {
+	b.ResetTimer()
+	pid := os.Getpid()
+	for i := 0; i < b.N; i++ {
+		KOS.GetProcessExecPath(pid)
 	}
 }
