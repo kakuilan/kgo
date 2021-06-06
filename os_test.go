@@ -519,3 +519,12 @@ func BenchmarkOS_IsProcessExists(b *testing.B) {
 		KOS.IsProcessExists(pid)
 	}
 }
+
+func TestOS_GetProcessExecPath(t *testing.T) {
+	var res string
+
+	pid := os.Getpid()
+	res = KOS.GetProcessExecPath(pid)
+	dumpPrint("----------TestOS_GetProcessExecPath", res)
+	assert.NotEmpty(t, res)
+}

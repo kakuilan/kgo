@@ -54,6 +54,45 @@ type win32Processor struct {
 	L3CacheSize               uint32
 }
 
+type Win32_Process struct {
+	Name                  string
+	ExecutablePath        *string
+	CommandLine           *string
+	Priority              uint32
+	CreationDate          *time.Time
+	ProcessId             uint32
+	ThreadCount           uint32
+	Status                *string
+	ReadOperationCount    uint64
+	ReadTransferCount     uint64
+	WriteOperationCount   uint64
+	WriteTransferCount    uint64
+	CSCreationClassName   string
+	CSName                string
+	Caption               *string
+	CreationClassName     string
+	Description           *string
+	ExecutionState        *uint16
+	HandleCount           uint32
+	KernelModeTime        uint64
+	MaximumWorkingSetSize *uint32
+	MinimumWorkingSetSize *uint32
+	OSCreationClassName   string
+	OSName                string
+	OtherOperationCount   uint64
+	OtherTransferCount    uint64
+	PageFaults            uint32
+	PageFileUsage         uint32
+	ParentProcessID       uint32
+	PeakPageFileUsage     uint32
+	PeakVirtualSize       uint64
+	PeakWorkingSetSize    uint32
+	PrivatePageCount      uint64
+	TerminationDate       *time.Time
+	UserModeTime          uint64
+	WorkingSetSize        uint64
+}
+
 var (
 	kernel32 = windows.NewLazySystemDLL("kernel32.dll")
 
