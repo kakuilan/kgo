@@ -201,7 +201,7 @@ func (ko *LkkOS) GetCpuInfo() *CpuInfo {
 }
 
 // GetPidByPort 根据端口号获取监听的进程PID.
-// linux要求root权限;
+// linux可能要求root权限;
 // darwin依赖lsof;
 // windows依赖netstat.
 func (ko *LkkOS) GetPidByPort(port int) (pid int) {

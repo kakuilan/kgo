@@ -268,13 +268,8 @@ https://blog.csdn.net/qq_27870421/article/details/103290155
 https://blog.csdn.net/ycf8788/article/details/99074801
 https://stackoverflow.com/questions/15204162/check-if-a-process-exists-in-go-way
 https://github.com/golang/go/issues/33814
-https://www.cnblogs.com/diyunpeng/p/4323345.html
 https://www.btaz.com/mac-os-x/find-the-process-listening-to-port-on-mac-os-x/
 https://blog.jayway.com/2012/09/08/finding-the-pid-listening-on-a-specific-port-on-mac-os-x/
-https://stackoverflow.com/questions/3855127/find-and-kill-process-locking-port-3000-on-mac
-https://blog.csdn.net/fareast_mzh/article/details/81463839
-https://www.cnblogs.com/youcoding/p/12941246.html
-
 
 
 结构体转MAP
