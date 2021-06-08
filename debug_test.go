@@ -20,7 +20,7 @@ func TestDebug_DumpStacks(t *testing.T) {
 		assert.Empty(t, r)
 	}()
 
-	//KDbug.DumpStacks()
+	KDbug.DumpStacks()
 }
 
 func TestDebug_GetCallName(t *testing.T) {
@@ -57,18 +57,6 @@ func BenchmarkDebug_GetCallName(b *testing.B) {
 	}
 }
 
-func TestDebug_GetCallLine(t *testing.T) {
-	res := KDbug.GetCallLine()
-	assert.Greater(t, res, 1)
-}
-
-func BenchmarkDebug_GetCallLine(b *testing.B) {
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		KDbug.GetCallLine()
-	}
-}
-
 func TestDebug_GetCallFile(t *testing.T) {
 	res := KDbug.GetCallFile()
 	assert.NotEmpty(t, res)
@@ -90,6 +78,18 @@ func BenchmarkDebug_GetCallDir(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KDbug.GetCallDir()
+	}
+}
+
+func TestDebug_GetCallLine(t *testing.T) {
+	res := KDbug.GetCallLine()
+	assert.Greater(t, res, 1)
+}
+
+func BenchmarkDebug_GetCallLine(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KDbug.GetCallLine()
 	}
 }
 
@@ -178,7 +178,7 @@ func TestDebug_CallMethod(t *testing.T) {
 	//TODO
 }
 
-func TestDebug_GetFunctions(t *testing.T) {
+func TestDebug_GetFuncNames(t *testing.T) {
 	var res []string
 
 	//空字符串
@@ -196,6 +196,18 @@ func TestDebug_GetFunctions(t *testing.T) {
 	//指针变量
 	res = KDbug.GetFuncNames(&KConv)
 	assert.NotEmpty(t, res)
+
+	n1 := KDbug.GetFuncNames(KFile)
+	n2 := KDbug.GetFuncNames(KStr)
+	n3 := KDbug.GetFuncNames(KNum)
+	n4 := KDbug.GetFuncNames(KArr)
+	n5 := KDbug.GetFuncNames(KTime)
+	n6 := KDbug.GetFuncNames(KConv)
+	n7 := KDbug.GetFuncNames(KOS)
+	n8 := KDbug.GetFuncNames(KEncr)
+	n9 := KDbug.GetFuncNames(KDbug)
+	funTotal := len(n1) + len(n2) + len(n3) + len(n4) + len(n5) + len(n6) + len(n7) + len(n8) + len(n9)
+	dumpPrint("the package function total:", funTotal)
 }
 
 func BenchmarkDebug_GetFuncNames(b *testing.B) {
