@@ -605,7 +605,7 @@ xVZ+SCC8Wd6nIK4FyZbYaa3Jz7GkqHdMelsl
 var rootDir = "/root"
 var rootFile1 = "/root/hello/world"
 var admDir = `C:\Users\Administrator`
-var admTesDir = `C:\Users\Administrator\Test`
+var admTesDir = admDir + `\Test`
 var dirCurr = "./"
 var dirDoc = "./docs"
 var dirTdat = "./testdata"

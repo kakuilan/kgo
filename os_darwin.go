@@ -209,7 +209,6 @@ func (ko *LkkOS) GetPidByPort(port int) (pid int) {
 	command := fmt.Sprintf("lsof -i tcp:%d", port)
 	_, out, _ := ko.System(command)
 	lines := strings.Split(string(out), "\n")
-	dumpPrint("-------------GetPidByPort res:", command, string(out))
 	for _, line := range lines {
 		fields := strings.Fields(line)
 		if len(fields) >= 9 && isNumeric(fields[1]) {
