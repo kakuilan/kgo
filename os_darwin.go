@@ -4,6 +4,7 @@ package kgo
 
 import (
 	"encoding/binary"
+	"fmt"
 	"golang.org/x/sys/unix"
 	"os/exec"
 	"strconv"
