@@ -205,5 +205,20 @@ func (ko *LkkOS) GetCpuInfo() *CpuInfo {
 // darwin依赖lsof;
 // windows依赖netstat.
 func (ko *LkkOS) GetPidByPort(port int) (pid int) {
+	command := fmt.Sprintf("lsof -nP -iTCP -sTCP:LISTEN | grep %d", port)
+	_, out, _ := ko.System(command)
+	lines := strings.Split(string(out), "\n")
+	dumpPrint("-------------GetPidByPort res:", command, string(out))
+	for _, line := range lines {
+		fields := strings.Fields(line)
+		if len(fields) >= 2 {
+			p := toInt(fields[1])
+			if p > 0 {
+				pid = p
+				break
+			}
+		}
+	}
+
 	return
 }
