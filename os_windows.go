@@ -382,7 +382,7 @@ func (ko *LkkOS) GetPidByPort(port int) (pid int) {
 	lines := strings.Split(string(out), "\r\n")
 	for _, line := range lines {
 		fields := strings.Fields(line)
-		if len(fields) == 5 {
+		if len(fields) == 5 && isNumeric(fields[4]) {
 			p := toInt(fields[4])
 			if p > 0 {
 				pid = p
