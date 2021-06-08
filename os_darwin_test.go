@@ -3,8 +3,12 @@
 package kgo
 
 import (
+	"fmt"
 	"github.com/stretchr/testify/assert"
+	"io/ioutil"
+	"net"
 	"testing"
+	"time"
 )
 
 func TestOS_Darwin_IsMac(t *testing.T) {
