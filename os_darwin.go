@@ -212,7 +212,7 @@ func (ko *LkkOS) GetPidByPort(port int) (pid int) {
 	dumpPrint("-------------GetPidByPort res:", command, string(out))
 	for _, line := range lines {
 		fields := strings.Fields(line)
-		if len(fields) == 9 && isNumeric(fields[1]) {
+		if len(fields) >= 9 && isNumeric(fields[1]) {
 			p := toInt(fields[1])
 			if p > 0 {
 				pid = p

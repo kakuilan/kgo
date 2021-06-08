@@ -270,6 +270,7 @@ https://stackoverflow.com/questions/15204162/check-if-a-process-exists-in-go-way
 https://github.com/golang/go/issues/33814
 https://www.btaz.com/mac-os-x/find-the-process-listening-to-port-on-mac-os-x/
 https://blog.jayway.com/2012/09/08/finding-the-pid-listening-on-a-specific-port-on-mac-os-x/
+https://stackoverflow.com/questions/3855127/find-and-kill-process-locking-port-3000-on-mac
 
 
 结构体转MAP
