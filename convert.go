@@ -342,7 +342,6 @@ func (kc *LkkConvert) IsString(val interface{}) bool {
 
 // IsBinary 字符串是否二进制.
 func (kc *LkkConvert) IsBinary(s string) bool {
-	//TODO TEST
 	return isBinary(s)
 }
 

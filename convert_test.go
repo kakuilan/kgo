@@ -1072,6 +1072,27 @@ func BenchmarkConvert_IsString(b *testing.B) {
 	}
 }
 
+func TestConvert_IsBinary(t *testing.T) {
+	var res bool
+	var cont []byte
+
+	cont, _ = KFile.ReadFile(imgPng)
+	res = KConv.IsBinary(string(cont))
+	assert.True(t, res)
+
+	cont, _ = KFile.ReadFile(fileDante)
+	res = KConv.IsBinary(string(cont))
+	assert.False(t, res)
+}
+
+func BenchmarkConvert_IsBinary(b *testing.B) {
+	b.ResetTimer()
+	cont, _ := KFile.ReadFile(imgPng)
+	for i := 0; i < b.N; i++ {
+		KConv.IsBinary(string(cont))
+	}
+}
+
 func TestConvert_IsNumeric(t *testing.T) {
 	var tests = []struct {
 		input    interface{}
