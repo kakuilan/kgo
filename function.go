@@ -383,7 +383,7 @@ func reflect2Itf(r reflect.Value) (res interface{}) {
 	return
 }
 
-// structVal 获取结构体的反射值
+// structVal 获取结构体的反射值.
 func structVal(obj interface{}) (reflect.Value, error) {
 	v := reflect.ValueOf(obj)
 
@@ -418,6 +418,29 @@ func structFields(obj interface{}, all bool) ([]reflect.StructField, error) {
 	}
 
 	return fs, nil
+}
+
+// struct2Map 结构体转为字典;tagName为要导出的标签名,可以为空,为空时将导出所有字段.
+func struct2Map(obj interface{}, tagName string) (map[string]interface{}, error) {
+	v, e := structVal(obj)
+	if e != nil {
+		return nil, e
+	}
+
+	t := v.Type()
+	var res = make(map[string]interface{})
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		if tagName != "" {
+			if tagValue := field.Tag.Get(tagName); tagValue != "" {
+				res[tagValue] = reflect2Itf(v.Field(i))
+			}
+		} else {
+			res[field.Name] = reflect2Itf(v.Field(i))
+		}
+	}
+
+	return res, nil
 }
 
 // creditChecksum 计算身份证校验码,其中id为身份证号码.
@@ -718,66 +741,6 @@ func GetFieldValue(arr interface{}, fieldName string) (res interface{}, err erro
 		err = errors.New("[GetFieldValue]`arr type must be map|struct; but : " + val.Kind().String())
 	}
 
-	return
-}
-
-// GetVariateType 获取变量类型.
-func GetVariateType(v interface{}) string {
-	return fmt.Sprintf("%T", v)
-}
-
-// GetVariatePointerAddr 获取变量的指针地址.
-func GetVariatePointerAddr(val interface{}) int64 {
-	var p string
-	v := reflect.ValueOf(val)
-	switch v.Kind() {
-	case reflect.Ptr: //变量是指针
-		p = fmt.Sprintf("%p", val)
-	default:
-		p = fmt.Sprintf("%p", &val)
-	}
-
-	res, _ := hex2Dec(p)
-	return res
-}
-
-// VerifyFunc 验证是否函数,并且参数个数、类型是否正确.
-// 返回有效的函数、有效的参数.
-func VerifyFunc(f interface{}, args ...interface{}) (vf reflect.Value, vargs []reflect.Value, err error) {
-	vf = reflect.ValueOf(f)
-	if vf.Kind() != reflect.Func {
-		return reflect.ValueOf(nil), nil, fmt.Errorf("[VerifyFunc] %v is not the function", f)
-	}
-
-	tf := vf.Type()
-	_len := len(args)
-	if tf.NumIn() != _len {
-		return reflect.ValueOf(nil), nil, fmt.Errorf("[VerifyFunc] %d number of the argument is incorrect", _len)
-	}
-
-	vargs = make([]reflect.Value, _len)
-	for i := 0; i < _len; i++ {
-		typ := tf.In(i).Kind()
-		if (typ != reflect.Interface) && (typ != reflect.TypeOf(args[i]).Kind()) {
-			return reflect.ValueOf(nil), nil, fmt.Errorf("[VerifyFunc] %d-td argument`s type is incorrect", i+1)
-		}
-		vargs[i] = reflect.ValueOf(args[i])
-	}
-	return vf, vargs, nil
-}
-
-// CallFunc 动态调用函数.
-func CallFunc(f interface{}, args ...interface{}) (results []interface{}, err error) {
-	vf, vargs, _err := VerifyFunc(f, args...)
-	if _err != nil {
-		return nil, _err
-	}
-	ret := vf.Call(vargs)
-	_len := len(ret)
-	results = make([]interface{}, _len)
-	for i := 0; i < _len; i++ {
-		results[i] = ret[i].Interface()
-	}
 	return
 }
 
@@ -1091,29 +1054,6 @@ func toFloat(val interface{}) (res float64) {
 	return
 }
 
-// struct2Map 结构体转为字典;tagName为要导出的标签名,可以为空,为空时将导出所有字段.
-func struct2Map(obj interface{}, tagName string) (map[string]interface{}, error) {
-	v, e := structVal(obj)
-	if e != nil {
-		return nil, e
-	}
-
-	t := v.Type()
-	var res = make(map[string]interface{})
-	for i := 0; i < t.NumField(); i++ {
-		field := t.Field(i)
-		if tagName != "" {
-			if tagValue := field.Tag.Get(tagName); tagValue != "" {
-				res[tagValue] = reflect2Itf(v.Field(i))
-			}
-		} else {
-			res[field.Name] = reflect2Itf(v.Field(i))
-		}
-	}
-
-	return res, nil
-}
-
 // dec2Bin 将十进制转换为二进制字符串.
 func dec2Bin(num int64) string {
 	return strconv.FormatInt(num, 2)
@@ -1401,4 +1341,64 @@ func similarText(str1, str2 string, len1, len2 int) int {
 	}
 
 	return sum
+}
+
+// GetVariateType 获取变量类型.
+func GetVariateType(v interface{}) string {
+	return fmt.Sprintf("%T", v)
+}
+
+// GetVariatePointerAddr 获取变量的指针地址.
+func GetVariatePointerAddr(val interface{}) int64 {
+	var p string
+	v := reflect.ValueOf(val)
+	switch v.Kind() {
+	case reflect.Ptr: //变量是指针
+		p = fmt.Sprintf("%p", val)
+	default:
+		p = fmt.Sprintf("%p", &val)
+	}
+
+	res, _ := hex2Dec(p)
+	return res
+}
+
+// VerifyFunc 验证是否函数,并且参数个数、类型是否正确.
+// 返回有效的函数、有效的参数.
+func VerifyFunc(f interface{}, args ...interface{}) (vf reflect.Value, vargs []reflect.Value, err error) {
+	vf = reflect.ValueOf(f)
+	if vf.Kind() != reflect.Func {
+		return reflect.ValueOf(nil), nil, fmt.Errorf("[VerifyFunc] %v is not the function", f)
+	}
+
+	tf := vf.Type()
+	_len := len(args)
+	if tf.NumIn() != _len {
+		return reflect.ValueOf(nil), nil, fmt.Errorf("[VerifyFunc] %d number of the argument is incorrect", _len)
+	}
+
+	vargs = make([]reflect.Value, _len)
+	for i := 0; i < _len; i++ {
+		typ := tf.In(i).Kind()
+		if (typ != reflect.Interface) && (typ != reflect.TypeOf(args[i]).Kind()) {
+			return reflect.ValueOf(nil), nil, fmt.Errorf("[VerifyFunc] %d-td argument`s type is incorrect", i+1)
+		}
+		vargs[i] = reflect.ValueOf(args[i])
+	}
+	return vf, vargs, nil
+}
+
+// CallFunc 动态调用函数.
+func CallFunc(f interface{}, args ...interface{}) (results []interface{}, err error) {
+	vf, vargs, _err := VerifyFunc(f, args...)
+	if _err != nil {
+		return nil, _err
+	}
+	ret := vf.Call(vargs)
+	_len := len(ret)
+	results = make([]interface{}, _len)
+	for i := 0; i < _len; i++ {
+		results[i] = ret[i].Interface()
+	}
+	return
 }
