@@ -175,7 +175,16 @@ func TestDebug_CallMethod(t *testing.T) {
 	assert.NotEmpty(t, res)
 
 	//无参数调用
-	//TODO
+	res, err = KDbug.CallMethod(&KOS, "Getcwd")
+	assert.Nil(t, err)
+	assert.NotEmpty(t, res)
+}
+
+func BenchmarkDebug_CallMethod(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KDbug.CallMethod(&KOS, "Getcwd")
+	}
 }
 
 func TestDebug_GetFuncNames(t *testing.T) {
