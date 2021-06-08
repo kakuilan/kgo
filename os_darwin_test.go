@@ -112,6 +112,7 @@ func BenchmarkOS_Darwin_GetCpuInfo(b *testing.B) {
 func TestOS_Darwin_GetPidByPort(t *testing.T) {
 	time.AfterFunc(time.Millisecond*250, func() {
 		res := KOS.GetPidByPort(8899)
+		dumpPrint("-----------TestOS_Darwin_GetPidByPort res:", res)
 		assert.Greater(t, res, 1)
 
 		KOS.GetPidByPort(80)
