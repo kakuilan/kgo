@@ -1176,8 +1176,9 @@ func (ks *LkkString) Random(length uint8, rtype LkkRandString) string {
 }
 
 // DetectEncoding 匹配字符编码,TODO.
-func (ks *LkkString) DetectEncoding() {
+func (ks *LkkString) DetectEncoding(str string) (res string) {
 	//TODO 检查字符编码
+	return
 }
 
 // Ucfirst 将字符串的第一个字符转换为大写.
