@@ -28,6 +28,7 @@ import (
 	"net"
 	"net/http"
 	"net/url"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -35,124 +36,36 @@ import (
 	"unicode/utf8"
 )
 
-// Nl2br 将换行符转换为br标签.
-func (ks *LkkString) Nl2br(html string) string {
-	if html == "" {
-		return ""
-	}
-	return strings.Replace(html, "\n", "<br />", -1)
-}
-
-// Br2nl 将br标签转换为换行符.
-func (ks *LkkString) Br2nl(str string) string {
-	// <br> , <br /> , <br/>
-	// <BR> , <BR /> , <BR/>
-	nlchar := []byte("\n")
-
-	l := len(str)
-	buf := make([]byte, 0, l) //prealloca
-
-	for i := 0; i < l; i++ {
-		switch str[i] {
-		case 60: //<
-			if l >= i+3 {
-				/*
-					b = 98
-					B = 66
-					r = 82
-					R = 114
-					SPACE = 32
-					/ = 47
-					> = 62
-				*/
-
-				if l >= i+3 && ((str[i+1] == 98 || str[i+1] == 66) && (str[i+2] == 82 || str[i+2] == 114) && str[i+3] == 62) { // <br> || <BR>
-					buf = append(buf, nlchar...)
-					i += 3
-					continue
-				}
-
-				if l >= i+4 && ((str[i+1] == 98 || str[i+1] == 66) && (str[i+2] == 82 || str[i+2] == 114) && str[i+3] == 47 && str[i+4] == 62) { // <br/> || <BR/>
-					buf = append(buf, nlchar...)
-					i += 4
-					continue
-				}
-
-				if l >= i+5 && ((str[i+1] == 98 || str[i+1] == 66) && (str[i+2] == 82 || str[i+2] == 114) && str[i+3] == 32 && str[i+4] == 47 && str[i+5] == 62) { // <br /> || <BR />
-					buf = append(buf, nlchar...)
-					i += 5
-					continue
-				}
-			}
-		default:
-			buf = append(buf, str[i])
-		}
+// Md5 获取字节切片md5值.
+// length指定结果长度,默认32.
+func (ks *LkkString) Md5Byte(str []byte, length ...uint8) []byte {
+	var l uint8 = 32
+	if len(length) > 0 {
+		l = length[0]
 	}
 
-	return string(buf)
+	return md5Byte(str, l)
 }
 
-// RemoveSpace 移除字符串中的空白字符.
-// all为true时移除全部空白,为false时只替换连续的空白字符为一个空格.
-func (ks *LkkString) RemoveSpace(str string, all bool) string {
-	if all && str != "" {
-		return strings.Join(strings.Fields(str), "")
-	} else if str != "" {
-		//先将2个以上的连续空白符转为空格
-		str = RegWhitespaceDuplicate.ReplaceAllString(str, " ")
-		//再将[\t\n\f\r]等转为空格
-		str = RegWhitespace.ReplaceAllString(str, " ")
+// Md5 获取字符串md5值.
+// length指定结果长度,默认32.
+func (ks *LkkString) Md5(str string, length ...uint8) string {
+	var l uint8 = 32
+	if len(length) > 0 {
+		l = length[0]
 	}
 
-	return strings.TrimSpace(str)
+	return string(md5Byte([]byte(str), l))
 }
 
-// StripTags 过滤html和php标签.
-func (ks *LkkString) StripTags(str string) string {
-	if str == "" {
-		return ""
-	}
-
-	return RegHtmlTag.ReplaceAllString(str, "")
+// IsMd5 是否md5值.
+func (ks *LkkString) IsMd5(str string) bool {
+	return str != "" && RegMd5.MatchString(str)
 }
 
-// Html2Text 将html转换为纯文本.
-func (ks *LkkString) Html2Text(str string) string {
-	if str == "" {
-		return ""
-	}
-
-	domDoc := xhtml.NewTokenizer(strings.NewReader(str))
-	previousStartToken := domDoc.Token()
-	var text string
-loopDom:
-	for {
-		nx := domDoc.Next()
-		switch {
-		case nx == xhtml.ErrorToken:
-			break loopDom // End of the document
-		case nx == xhtml.StartTagToken:
-			previousStartToken = domDoc.Token()
-		case nx == xhtml.TextToken:
-			if chk, _ := ks.Dstrpos(previousStartToken.Data, TextHtmlExcludeTags, false); chk {
-				continue
-			}
-
-			text += " " + strings.TrimSpace(xhtml.UnescapeString(string(domDoc.Text())))
-		}
-	}
-
-	return ks.RemoveSpace(text, false)
-}
-
-// Md5 获取字符串md5值,length指定结果长度32/16 .
-func (ks *LkkString) Md5(str string, length uint8) string {
-	return string(md5Byte([]byte(str), length))
-}
-
-// Md5 获取字节切片md5值,length指定结果长度32/16 .
-func (ks *LkkString) Md5Byte(str []byte, length uint8) []byte {
-	return md5Byte(str, length)
+// ShaXByte 计算字节切片的 shaX 散列值,x为1/256/512 .
+func (ks *LkkString) ShaXByte(str []byte, x uint16) []byte {
+	return shaXByte(str, x)
 }
 
 // ShaX 计算字符串的 shaX 散列值,x为1/256/512 .
@@ -160,52 +73,19 @@ func (ks *LkkString) ShaX(str string, x uint16) string {
 	return string(shaXByte([]byte(str), x))
 }
 
-// ShaX 计算字节切片的 shaX 散列值,x为1/256/512 .
-func (ks *LkkString) ShaXByte(str []byte, x uint16) []byte {
-	return shaXByte(str, x)
+// IsSha1 是否Sha1值.
+func (ks *LkkString) IsSha1(str string) bool {
+	return str != "" && RegSha1.MatchString(str)
 }
 
-// Random 生成随机字符串.
-// length为长度,rtype为枚举:
-// RAND_STRING_ALPHA 字母;
-// RAND_STRING_NUMERIC 数值;
-// RAND_STRING_ALPHANUM 字母+数值;
-// RAND_STRING_SPECIAL 字母+数值+特殊字符;
-// RAND_STRING_CHINESE 仅中文.
-func (ks *LkkString) Random(length uint8, rtype LkkRandString) string {
-	if length == 0 {
-		return ""
-	}
+// IsSha256 是否Sha256值.
+func (ks *LkkString) IsSha256(str string) bool {
+	return str != "" && RegSha256.MatchString(str)
+}
 
-	var letter []rune
-	alphas := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	numbers := "0123456789"
-	specials := "~!@#$%^&*()_+{}:|<>?`-=;,."
-
-	rand.Seed(time.Now().UTC().UnixNano())
-
-	switch rtype {
-	case RAND_STRING_ALPHA:
-		letter = []rune(alphas)
-	case RAND_STRING_NUMERIC:
-		letter = []rune(numbers)
-	case RAND_STRING_ALPHANUM:
-		letter = []rune(alphas + numbers)
-	case RAND_STRING_SPECIAL:
-		letter = []rune(alphas + numbers + specials)
-	case RAND_STRING_CHINESE:
-		chineses := "们以我到他会作时要动国产的一是工就年阶义发成部民可出能方进在了不和有大这主中人上为来分生对于学下级地个用同行面说种过命度革而多子后自社加小机也经力线本电高量长党得实家定深法表着水理化争现所二起政三好十战无农使性前等反体合斗路图把结第里正新开论之物从当两些还天资事队批点育重其思与间内去因件日利相由压员气业代全组数果期导平各基或月毛然如应形想制心样干都向变关问比展那它最及外没看治提五解系林者米群头意只明四道马认次文通但条较克又公孔领军流入接席位情运器并飞原油放立题质指建区验活众很教决特此常石强极土少已根共直团统式转别造切九你取西持总料连任志观调七么山程百报更见必真保热委手改管处己将修支识病象几先老光专什六型具示复安带每东增则完风回南广劳轮科北打积车计给节做务被整联步类集号列温装即毫知轴研单色坚据速防史拉世设达尔场织历花受求传口断况采精金界品判参层止边清至万确究书术状厂须离再目海交权且儿青才证低越际八试规斯近注办布门铁需走议县兵固除般引齿千胜细影济白格效置推空配刀叶率述今选养德话查差半敌始片施响收华觉备名红续均药标记难存测士身紧液派准斤角降维板许破述技消底床田势端感往神便贺村构照容非搞亚磨族火段算适讲按值美态黄易彪服早班麦削信排台声该击素张密害侯草何树肥继右属市严径螺检左页抗苏显苦英快称坏移约巴材省黑武培著河帝仅针怎植京助升王眼她抓含苗副杂普谈围食射源例致酸旧却充足短划剂宣环落首尺波承粉践府鱼随考刻靠够满夫失包住促枝局菌杆周护岩师举曲春元超负砂封换太模贫减阳扬江析亩木言球朝医校古呢稻宋听唯输滑站另卫字鼓刚写刘微略范供阿块某功套友限项余倒卷创律雨让骨远帮初皮播优占死毒圈伟季训控激找叫云互跟裂粮粒母练塞钢顶策双留误础吸阻故寸盾晚丝女散焊功株亲院冷彻弹错散商视艺灭版烈零室轻血倍缺厘泵察绝富城冲喷壤简否柱李望盘磁雄似困巩益洲脱投送奴侧润盖挥距触星松送获兴独官混纪依未突架宽冬章湿偏纹吃执阀矿寨责熟稳夺硬价努翻奇甲预职评读背协损棉侵灰虽矛厚罗泥辟告卵箱掌氧恩爱停曾溶营终纲孟钱待尽俄缩沙退陈讨奋械载胞幼哪剥迫旋征槽倒握担仍呀鲜吧卡粗介钻逐弱脚怕盐末阴丰雾冠丙街莱贝辐肠付吉渗瑞惊顿挤秒悬姆烂森糖圣凹陶词迟蚕亿矩康遵牧遭幅园腔订香肉弟屋敏恢忘编印蜂急拿扩伤飞露核缘游振操央伍域甚迅辉异序免纸夜乡久隶缸夹念兰映沟乙吗儒杀汽磷艰晶插埃燃欢铁补咱芽永瓦倾阵碳演威附牙芽永瓦斜灌欧献顺猪洋腐请透司危括脉宜笑若尾束壮暴企菜穗楚汉愈绿拖牛份染既秋遍锻玉夏疗尖殖井费州访吹荣铜沿替滚客召旱悟刺脑措贯藏敢令隙炉壳硫煤迎铸粘探临薄旬善福纵择礼愿伏残雷延烟句纯渐耕跑泽慢栽鲁赤繁境潮横掉锥希池败船假亮谓托伙哲怀割摆贡呈劲财仪沉炼麻罪祖息车穿货销齐鼠抽画饲龙库守筑房歌寒喜哥洗蚀废纳腹乎录镜妇恶脂庄擦险赞钟摇典柄辩竹谷卖乱虚桥奥伯赶垂途额壁网截野遗静谋弄挂课镇妄盛耐援扎虑键归符庆聚绕摩忙舞遇索顾胶羊湖钉仁音迹碎伸灯避泛亡答勇频皇柳哈揭甘诺概宪浓岛袭谁洪谢炮浇斑讯懂灵蛋闭孩释乳巨徒私银伊景坦累匀霉杜乐勒隔弯绩招绍胡呼痛峰零柴簧午跳居尚丁秦稍追梁折耗碱殊岗挖氏刃剧堆赫荷胸衡勤膜篇登驻案刊秧缓凸役剪川雪链渔啦脸户洛孢勃盟买杨宗焦赛旗滤硅炭股坐蒸凝竟陷枪黎救冒暗洞犯筒您宋弧爆谬涂味津臂障褐陆啊健尊豆拔莫抵桑坡缝警挑污冰柬嘴啥饭塑寄赵喊垫丹渡耳刨虎笔稀昆浪萨茶滴浅拥穴覆伦娘吨浸袖珠雌妈紫戏塔锤震岁貌洁剖牢锋疑霸闪埔猛诉刷狠忽灾闹乔唐漏闻沈熔氯荒茎男凡抢像浆旁玻亦忠唱蒙予纷捕锁尤乘乌智淡允叛畜俘摸锈扫毕璃宝芯爷鉴秘净蒋钙肩腾枯抛轨堂拌爸循诱祝励肯酒绳穷塘燥泡袋朗喂铝软渠颗惯贸粪综墙趋彼届墨碍启逆卸航衣孙龄岭骗休借"
-		letter = []rune(chineses)
-	default:
-		letter = []rune(alphas)
-	}
-
-	b := make([]rune, length)
-	for i := range b {
-		b[i] = letter[rand.Intn(len(letter))]
-	}
-
-	return string(b)
+// IsSha512 是否Sha512值.
+func (ks *LkkString) IsSha512(str string) bool {
+	return str != "" && RegSha512.MatchString(str)
 }
 
 // Index 查找子串sub在字符串str中第一次出现的位置,不存在则返回-1;
@@ -236,6 +116,624 @@ func (ks *LkkString) LastIndex(str, sub string, ignoreCase bool) int {
 	}
 
 	return strings.LastIndex(str, sub)
+}
+
+// Addslashes 使用反斜线引用字符串.
+func (ks *LkkString) Addslashes(str string) string {
+	var buf bytes.Buffer
+	for _, char := range str {
+		switch char {
+		case '\'', '"', '\\':
+			buf.WriteRune('\\')
+		}
+		buf.WriteRune(char)
+	}
+	return buf.String()
+}
+
+// Stripslashes 反引用一个引用字符串.
+func (ks *LkkString) Stripslashes(str string) string {
+	var buf bytes.Buffer
+	l, skip := len(str), false
+	for i, char := range str {
+		if skip {
+			skip = false
+		} else if char == '\\' {
+			if i+1 < l && str[i+1] == '\\' {
+				skip = true
+			}
+			continue
+		}
+		buf.WriteRune(char)
+	}
+	return buf.String()
+}
+
+// JsonEncode 对val变量进行 JSON 编码.
+// 依赖库github.com/json-iterator/go.
+func (ks *LkkString) JsonEncode(val interface{}) ([]byte, error) {
+	var jsons = jsoniter.ConfigCompatibleWithStandardLibrary
+	return jsons.Marshal(val)
+}
+
+// JsonDecode 对 JSON 格式的str字符串进行解码,注意res使用指针.
+// 依赖库github.com/json-iterator/go.
+func (ks *LkkString) JsonDecode(str []byte, res interface{}) error {
+	var jsons = jsoniter.ConfigCompatibleWithStandardLibrary
+	return jsons.Unmarshal(str, res)
+}
+
+// Utf8ToGbk UTF-8转GBK编码.
+func (ks *LkkString) Utf8ToGbk(s []byte) ([]byte, error) {
+	reader := transform.NewReader(bytes.NewReader(s), simplifiedchinese.GBK.NewEncoder())
+	d, e := io.ReadAll(reader)
+	return d, e
+}
+
+// GbkToUtf8 GBK转UTF-8编码.
+func (ks *LkkString) GbkToUtf8(s []byte) ([]byte, error) {
+	reader := transform.NewReader(bytes.NewReader(s), simplifiedchinese.GBK.NewDecoder())
+	d, e := io.ReadAll(reader)
+	return d, e
+}
+
+// IsUtf8 字符串是否UTF-8编码.
+func (ks *LkkString) IsUtf8(s []byte) bool {
+	return utf8.Valid(s)
+}
+
+// IsGbk 字符串是否GBK编码.
+func (ks *LkkString) IsGbk(s []byte) (res bool) {
+	length := len(s)
+	var i, j int
+	for i < length {
+		j = i + 1
+		//大于127的使用双字节编码,且落在gbk编码范围内的字符
+		//GBK中每个汉字包含两个字节，第一个字节(首字节)的范围是0x81-0xFE(即129-254),第二个字节(尾字节)的范围是0x40-0xFE(即64-254)
+		if s[i] > 0x7f && j < length {
+			if s[i] >= 0x81 &&
+				s[i] <= 0xfe &&
+				s[j] >= 0x40 &&
+				s[j] <= 0xfe {
+				i += 2
+				res = true
+			} else {
+				res = false
+				break
+			}
+		} else {
+			i++
+		}
+	}
+
+	return
+}
+
+// Img2Base64 将图片字节转换为base64字符串.ext为图片扩展名,默认jpg.
+func (ks *LkkString) Img2Base64(content []byte, ext ...string) string {
+	var imgType string = "jpg"
+	if len(ext) > 0 {
+		imgType = strings.ToLower(ext[0])
+	}
+
+	return img2Base64(content, imgType)
+}
+
+// StartsWith 字符串str是否以sub开头.
+func (ks *LkkString) StartsWith(str, sub string, ignoreCase bool) bool {
+	if str != "" && sub != "" {
+		i := ks.Index(str, sub, ignoreCase)
+		return i == 0
+	}
+
+	return false
+}
+
+// StartsWiths 字符串str是否以subs其中之一为开头.
+func (ks *LkkString) StartsWiths(str string, subs []string, ignoreCase bool) (res bool) {
+	for _, sub := range subs {
+		res = ks.StartsWith(str, sub, ignoreCase)
+		if res {
+			break
+		}
+	}
+	return
+}
+
+// EndsWith 字符串str是否以sub结尾.
+func (ks *LkkString) EndsWith(str, sub string, ignoreCase bool) bool {
+	if str != "" && sub != "" {
+		i := ks.LastIndex(str, sub, ignoreCase)
+		return i != -1 && (len(str)-len(sub)) == i
+	}
+
+	return false
+}
+
+// EndsWiths 字符串str是否以subs其中之一为结尾.
+func (ks *LkkString) EndsWiths(str string, subs []string, ignoreCase bool) (res bool) {
+	for _, sub := range subs {
+		res = ks.EndsWith(str, sub, ignoreCase)
+		if res {
+			break
+		}
+	}
+	return
+}
+
+// Trim 去除字符串首尾处的空白字符（或者其他字符）.
+// characterMask为要修剪的字符.
+func (ks *LkkString) Trim(str string, characterMask ...string) string {
+	mask := getTrimMask(characterMask)
+	return strings.Trim(str, mask)
+}
+
+// Ltrim 删除字符串开头的空白字符（或其他字符）.
+// characterMask为要修剪的字符.
+func (ks *LkkString) Ltrim(str string, characterMask ...string) string {
+	mask := getTrimMask(characterMask)
+	return strings.TrimLeft(str, mask)
+}
+
+// Rtrim 删除字符串末端的空白字符（或者其他字符）.
+// characterMask为要修剪的字符.
+func (ks *LkkString) Rtrim(str string, characterMask ...string) string {
+	mask := getTrimMask(characterMask)
+	return strings.TrimRight(str, mask)
+}
+
+// TrimBOM 移除字符串中的BOM
+func (ks *LkkString) TrimBOM(str []byte) []byte {
+	return bytes.Trim(str, bomChars)
+}
+
+// IsEmpty 字符串是否为空(包括空格).
+func (ks *LkkString) IsEmpty(str string) bool {
+	if str == "" || len(ks.Trim(str)) == 0 {
+		return true
+	}
+
+	return false
+}
+
+// IsLetters 字符串是否全(英文)字母组成.
+func (ks *LkkString) IsLetters(str string) bool {
+	for _, r := range str {
+		if (r < 'a' || r > 'z') && (r < 'A' || r > 'Z') {
+			return false
+		}
+	}
+	return str != ""
+}
+
+// IsUpper 字符串是否全部大写.
+func (ks *LkkString) IsUpper(str string) bool {
+	for _, r := range str {
+		if !unicode.IsUpper(r) && unicode.IsLetter(r) {
+			return false
+		}
+	}
+	return str != ""
+}
+
+// IsLower 字符串是否全部小写.
+func (ks *LkkString) IsLower(str string) bool {
+	for _, r := range str {
+		if !unicode.IsLower(r) && unicode.IsLetter(r) {
+			return false
+		}
+	}
+	return str != ""
+}
+
+// HasLetter 字符串是否含有(英文)字母.
+func (ks *LkkString) HasLetter(str string) bool {
+	for _, r := range str {
+		if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') {
+			return true
+		}
+	}
+	return false
+}
+
+// IsASCII 是否ASCII字符串.
+func (ks *LkkString) IsASCII(str string) bool {
+	//return str != "" && RegAscii.MatchString(str)
+	n := len(str)
+	for i := 0; i < n; i++ {
+		if str[i] > 127 {
+			return false
+		}
+	}
+
+	return str != ""
+}
+
+// IsMultibyte 字符串是否含有多字节字符.
+func (ks *LkkString) IsMultibyte(str string) bool {
+	return str != "" && RegMultiByte.MatchString(str)
+}
+
+// HasFullWidth 是否含有全角字符.
+func (ks *LkkString) HasFullWidth(str string) bool {
+	return str != "" && RegFullWidth.MatchString(str)
+}
+
+// HasHalfWidth 是否含有半角字符.
+func (ks *LkkString) HasHalfWidth(str string) bool {
+	return str != "" && RegHalfWidth.MatchString(str)
+}
+
+// IsEnglish 字符串是否纯英文.letterCase是否检查大小写,枚举值(CASE_NONE,CASE_LOWER,CASE_UPPER).
+func (ks *LkkString) IsEnglish(str string, letterCase LkkCaseSwitch) bool {
+	switch letterCase {
+	case CASE_LOWER:
+		return str != "" && RegAlphaLower.MatchString(str)
+	case CASE_UPPER:
+		return str != "" && RegAlphaUpper.MatchString(str)
+	default: //CASE_NONE
+		return ks.IsLetters(str)
+	}
+}
+
+// HasEnglish 是否含有英文字符,HasLetter的别名.
+func (ks *LkkString) HasEnglish(str string) bool {
+	return ks.HasLetter(str)
+}
+
+// HasChinese 字符串是否含有中文.
+func (ks *LkkString) HasChinese(str string) bool {
+	for _, r := range str {
+		if unicode.Is(unicode.Scripts["Han"], r) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// IsChinese 字符串是否全部中文.
+func (ks *LkkString) IsChinese(str string) bool {
+	return str != "" && RegChineseAll.MatchString(str)
+}
+
+// IsChineseName 字符串是否中文名称.
+func (ks *LkkString) IsChineseName(str string) bool {
+	return str != "" && RegChineseName.MatchString(str)
+}
+
+// IsWord 是否词语(不以下划线开头的中文、英文、数字、下划线).
+func (ks *LkkString) IsWord(str string) bool {
+	return str != "" && RegWord.MatchString(str)
+}
+
+// IsNumeric 字符串是否数值(不包含复数和科学计数法).
+func (ks *LkkString) IsNumeric(str string) bool {
+	if str == "" {
+		return false
+	}
+	_, err := strconv.ParseFloat(str, 64)
+	return err == nil
+}
+
+// IsAlphaNumeric 是否字母或数字.
+func (ks *LkkString) IsAlphaNumeric(str string) bool {
+	return str != "" && RegAlphaNumeric.MatchString(str)
+}
+
+// HasSpecialChar 字符串是否含有特殊字符.
+func (ks *LkkString) HasSpecialChar(str string) bool {
+	for _, r := range str {
+		// IsPunct 判断 r 是否为一个标点字符 (类别 P)
+		// IsSymbol 判断 r 是否为一个符号字符
+		// IsMark 判断 r 是否为一个 mark 字符 (类别 M)
+		if unicode.IsPunct(r) || unicode.IsSymbol(r) || unicode.IsMark(r) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// IsJSON 字符串是否合法的json格式.
+func (ks *LkkString) IsJSON(str string) bool {
+	length := len(str)
+	if length == 0 {
+		return false
+	} else if (str[0] != '{' || str[length-1] != '}') && (str[0] != '[' || str[length-1] != ']') {
+		return false
+	}
+
+	var js json.RawMessage
+	return json.Unmarshal([]byte(str), &js) == nil
+}
+
+// IsIP 检查字符串是否IP地址.
+func (ks *LkkString) IsIP(str string) bool {
+	return str != "" && net.ParseIP(str) != nil
+}
+
+// IsIPv4 检查字符串是否IPv4地址.
+func (ks *LkkString) IsIPv4(str string) bool {
+	ipAddr := net.ParseIP(str)
+	// 不是合法的IP地址
+	if ipAddr == nil {
+		return false
+	}
+
+	return ipAddr.To4() != nil && strings.ContainsRune(str, '.')
+}
+
+// IsIPv6 检查字符串是否IPv6地址.
+func (ks *LkkString) IsIPv6(str string) bool {
+	ipAddr := net.ParseIP(str)
+	return ipAddr != nil && strings.ContainsRune(str, ':')
+}
+
+// IsDNSName 是否DNS名称.
+func (ks *LkkString) IsDNSName(str string) bool {
+	if str == "" || len(strings.Replace(str, ".", "", -1)) > 255 {
+		// constraints already violated
+		return false
+	}
+	return !ks.IsIP(str) && RegDNSname.MatchString(str)
+}
+
+// IsHost 字符串是否主机名(IP或DNS名称).
+func (ks *LkkString) IsHost(str string) bool {
+	return ks.IsIP(str) || ks.IsDNSName(str)
+}
+
+// IsDialAddr 是否网络拨号地址(形如127.0.0.1:80),用于net.Dial()检查.
+func (ks *LkkString) IsDialAddr(str string) bool {
+	h, p, err := net.SplitHostPort(str)
+	if err == nil && h != "" && p != "" && (ks.IsDNSName(h) || ks.IsIP(h)) && isPort(p) {
+		return true
+	}
+
+	return false
+}
+
+// IsMACAddr 是否MAC物理网卡地址.
+func (ks *LkkString) IsMACAddr(str string) bool {
+	_, err := net.ParseMAC(str)
+	return err == nil
+}
+
+// IsEmail 检查字符串是否邮箱.参数validateTrue,是否验证邮箱主机的真实性.
+func (ks *LkkString) IsEmail(email string, validateHost bool) (bool, error) {
+	//长度检查
+	length := len(email)
+	at := strings.LastIndexByte(email, '@')
+	if (length < 6 || length > 254) || (at <= 0 || at > length-3) {
+		return false, fmt.Errorf("[IsEmail] invalid email length")
+	}
+
+	//验证邮箱格式
+	chkFormat := RegEmail.MatchString(email)
+	if !chkFormat {
+		return false, fmt.Errorf("[IsEmail] invalid email format")
+	}
+
+	//验证主机
+	if validateHost {
+		host := email[at+1:]
+		if _, err := net.LookupMX(host); err != nil {
+			//因无法确定mx主机的smtp端口,所以去掉Hello/Mail/Rcpt检查邮箱是否存在
+			//仅检查主机是否有效
+			if _, err := net.LookupIP(host); err != nil {
+				return false, err
+			}
+		}
+	}
+
+	return true, nil
+}
+
+// IsMobilecn 检查字符串是否中国大陆手机号.
+func (ks *LkkString) IsMobilecn(str string) bool {
+	return str != "" && RegMobilecn.MatchString(str)
+}
+
+// IsTel 是否固定电话或400/800电话.
+func (ks *LkkString) IsTel(str string) bool {
+	return str != "" && RegTelephone.MatchString(str)
+}
+
+// IsPhone 是否电话号码(手机或固话).
+func (ks *LkkString) IsPhone(str string) bool {
+	return str != "" && RegPhone.MatchString(str)
+}
+
+// IsCreditNo 检查是否(15或18位)身份证号码,并返回经校验的号码.
+func (ks *LkkString) IsCreditNo(str string) (bool, string) {
+	chk := str != "" && RegCreditno.MatchString(str)
+	if !chk {
+		return false, ""
+	}
+
+	// 检查省份代码
+	if _, chk = CreditArea[str[0:2]]; !chk {
+		return false, ""
+	}
+
+	// 将15位身份证升级到18位
+	leng := len(str)
+	if leng == 15 {
+		// 先转为17位,如果身份证顺序码是996 997 998 999,这些是为百岁以上老人的特殊编码
+		if chk, _ = ks.Dstrpos(str[12:], []string{"996", "997", "998", "999"}, false); chk {
+			str = str[0:6] + "18" + str[6:]
+		} else {
+			str = str[0:6] + "19" + str[6:]
+		}
+
+		// 再加上校验码
+		code := append([]byte{}, creditChecksum(str))
+		str += string(code)
+	}
+
+	// 检查生日
+	birthday := str[6:10] + "-" + str[10:12] + "-" + str[12:14]
+	chk, tim := KTime.IsDate2time(birthday)
+	now := KTime.UnixTime()
+	if !chk {
+		return false, ""
+	} else if tim >= now {
+		return false, ""
+	}
+
+	// 18位身份证需要验证最后一位校验位
+	if leng == 18 {
+		str = strings.ToUpper(str)
+		if str[17] != creditChecksum(str) {
+			return false, ""
+		}
+	}
+
+	return true, str
+}
+
+// IsHexcolor 检查是否十六进制颜色,并返回带"#"的修正值.
+func (ks *LkkString) IsHexcolor(str string) (bool, string) {
+	chk := str != "" && RegHexcolor.MatchString(str)
+	if chk && !strings.ContainsRune(str, '#') {
+		str = "#" + strings.ToUpper(str)
+	}
+	return chk, str
+}
+
+// IsRGBcolor 检查字符串是否RGB颜色格式.
+func (ks *LkkString) IsRGBcolor(str string) bool {
+	return str != "" && RegRgbcolor.MatchString(str)
+}
+
+// IsBlank 是否空(空白)字符串.
+func (ks *LkkString) IsBlank(str string) bool {
+	// Check length
+	if len(str) > 0 {
+		// Iterate string
+		for i := range str {
+			// Check about char different from whitespace
+			// 227为全角空格
+			if str[i] > 32 && str[i] != 227 {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+// IsWhitespaces 是否全部空白字符,不包括空字符串.
+func (ks *LkkString) IsWhitespaces(str string) bool {
+	return str != "" && RegWhitespaceAll.MatchString(str)
+}
+
+// HasWhitespace 是否带有空白字符.
+func (ks *LkkString) HasWhitespace(str string) bool {
+	return str != "" && RegWhitespaceHas.MatchString(str)
+}
+
+// IsBase64 是否base64字符串.
+func (ks *LkkString) IsBase64(str string) bool {
+	return str != "" && RegBase64.MatchString(str)
+}
+
+// IsBase64Image 是否base64编码的图片.
+func (ks *LkkString) IsBase64Image(str string) bool {
+	if str == "" || !strings.ContainsRune(str, ',') {
+		return false
+	}
+
+	dataURI := strings.Split(str, ",")
+	return RegBase64Image.MatchString(dataURI[0]) && RegBase64.MatchString(dataURI[1])
+}
+
+// IsRsaPublicKey 检查字符串是否RSA的公钥,keylen为密钥长度.
+func (ks *LkkString) IsRsaPublicKey(str string, keylen uint16) bool {
+	bb := bytes.NewBufferString(str)
+	pemBytes, _ := ioutil.ReadAll(bb)
+
+	// 获取公钥
+	block, _ := pem.Decode(pemBytes)
+	if block != nil && block.Type != "PUBLIC KEY" {
+		return false
+	}
+	var der []byte
+	var err error
+
+	if block != nil {
+		der = block.Bytes
+	} else {
+		der, err = base64.StdEncoding.DecodeString(str)
+		if err != nil {
+			return false
+		}
+	}
+
+	key, err := x509.ParsePKIXPublicKey(der)
+	if err != nil {
+		return false
+	}
+	pubkey, ok := key.(*rsa.PublicKey)
+	if !ok {
+		return false
+	}
+	bitlen := len(pubkey.N.Bytes()) * 8
+	return bitlen == int(keylen)
+}
+
+// IsUrl 检查字符串是否URL.
+func (ks *LkkString) IsUrl(str string) bool {
+	if str == "" || len(str) <= 3 || utf8.RuneCountInString(str) >= 2083 || strings.HasPrefix(str, ".") {
+		return false
+	}
+
+	res, err := url.ParseRequestURI(str)
+	if err != nil {
+		return false //Couldn't even parse the url
+	}
+	if len(res.Scheme) == 0 {
+		return false //No Scheme found
+	}
+
+	return true
+}
+
+// IsUrlExists 检查URL是否存在.
+func (ks *LkkString) IsUrlExists(str string) bool {
+	if !ks.IsUrl(str) {
+		return false
+	}
+
+	client := &http.Client{}
+	resp, err := client.Head(str)
+	if err != nil {
+		return false
+	} else if resp.StatusCode == 404 {
+		return false
+	}
+
+	return true
+}
+
+// Jsonp2Json 将jsonp转为json串.
+// Example: forbar({a:"1",b:2}) to {"a":"1","b":2}
+func (ks *LkkString) Jsonp2Json(str string) (string, error) {
+	start := strings.Index(str, "(")
+	end := strings.LastIndex(str, ")")
+
+	if start == -1 || end == -1 {
+		return "", errors.New("[Jsonp2Json] invalid jsonp.")
+	}
+
+	start += 1
+	if start >= end {
+		return "", errors.New("[Jsonp2Json] invalid jsonp.")
+	}
+
+	res := str[start:end]
+
+	return res, nil
 }
 
 // Strpos 查找字符串首次出现的位置,找不到时返回-1.
@@ -312,6 +810,375 @@ func (ks *LkkString) Strripos(haystack, needle string, offset int) int {
 		pos += offset
 	}
 	return pos
+}
+
+// Dstrpos 检查字符串str是否包含数组arr的元素之一,返回检查结果和匹配的字符串.
+// chkCase为是否检查大小写.
+func (ks *LkkString) Dstrpos(str string, arr []string, chkCase bool) (bool, string) {
+	if len(str) == 0 || len(arr) == 0 {
+		return false, ""
+	}
+
+	for _, v := range arr {
+		if (chkCase && ks.Strpos(str, v, 0) != -1) || (!chkCase && ks.Stripos(str, v, 0) != -1) {
+			return true, v
+		}
+	}
+
+	return false, ""
+}
+
+// Nl2br 将换行符转换为br标签.
+func (ks *LkkString) Nl2br(str string) string {
+	return strings.Replace(str, "\n", "<br />", -1)
+}
+
+// Br2nl 将br标签转换为换行符.
+func (ks *LkkString) Br2nl(str string) string {
+	// <br> , <br /> , <br/>
+	// <BR> , <BR /> , <BR/>
+
+	l := len(str)
+	buf := make([]byte, 0, l) //prealloca
+
+	for i := 0; i < l; i++ {
+		switch str[i] {
+		case 60: //<
+			if l >= i+3 {
+				/*
+					b = 98
+					B = 66
+					r = 82
+					R = 114
+					SPACE = 32
+					/ = 47
+					> = 62
+				*/
+
+				if l >= i+3 && ((str[i+1] == 98 || str[i+1] == 66) && (str[i+2] == 82 || str[i+2] == 114) && str[i+3] == 62) { // <br> || <BR>
+					buf = append(buf, bytLinefeed...)
+					i += 3
+					continue
+				}
+
+				if l >= i+4 && ((str[i+1] == 98 || str[i+1] == 66) && (str[i+2] == 82 || str[i+2] == 114) && str[i+3] == 47 && str[i+4] == 62) { // <br/> || <BR/>
+					buf = append(buf, bytLinefeed...)
+					i += 4
+					continue
+				}
+
+				if l >= i+5 && ((str[i+1] == 98 || str[i+1] == 66) && (str[i+2] == 82 || str[i+2] == 114) && str[i+3] == 32 && str[i+4] == 47 && str[i+5] == 62) { // <br /> || <BR />
+					buf = append(buf, bytLinefeed...)
+					i += 5
+					continue
+				}
+			}
+		default:
+			buf = append(buf, str[i])
+		}
+	}
+
+	return string(buf)
+}
+
+// RemoveSpace 移除字符串中的空白字符.
+// all为true时移除全部空白,为false时只替换连续的空白字符为一个空格.
+func (ks *LkkString) RemoveSpace(str string, all bool) string {
+	if all && str != "" {
+		return strings.Join(strings.Fields(str), "")
+	} else if str != "" {
+		//先将2个以上的连续空白符转为空格
+		str = RegWhitespaceDuplicate.ReplaceAllString(str, " ")
+		//再将[\t\n\f\r]等转为空格
+		str = RegWhitespace.ReplaceAllString(str, " ")
+	}
+
+	return strings.TrimSpace(str)
+}
+
+// StripTags 过滤html标签.
+func (ks *LkkString) StripTags(str string) string {
+	return RegHtmlTag.ReplaceAllString(str, "")
+}
+
+// Html2Text 将html转换为纯文本.
+func (ks *LkkString) Html2Text(str string) string {
+	domDoc := xhtml.NewTokenizer(strings.NewReader(str))
+	previousStartToken := domDoc.Token()
+	var text string
+loopDom:
+	for {
+		nx := domDoc.Next()
+		switch {
+		case nx == xhtml.ErrorToken:
+			break loopDom // End of the document
+		case nx == xhtml.StartTagToken:
+			previousStartToken = domDoc.Token()
+		case nx == xhtml.TextToken:
+			if chk, _ := ks.Dstrpos(previousStartToken.Data, TextHtmlExcludeTags, false); chk {
+				continue
+			}
+
+			text += " " + strings.TrimSpace(xhtml.UnescapeString(string(domDoc.Text())))
+		}
+	}
+
+	return ks.RemoveSpace(text, false)
+}
+
+// ParseStr 将URI查询字符串转换为字典.
+func (ks *LkkString) ParseStr(encodedString string, result map[string]interface{}) error {
+	// split encodedString.
+	if encodedString[0] == '?' {
+		encodedString = strings.TrimLeft(encodedString, "?")
+	}
+
+	parts := strings.Split(encodedString, "&")
+	for _, part := range parts {
+		pos := strings.Index(part, "=")
+		if pos <= 0 {
+			continue
+		}
+		key, err := url.QueryUnescape(part[:pos])
+		if err != nil {
+			return err
+		}
+		for key[0] == ' ' && key[1:] != "" {
+			key = key[1:]
+		}
+		if key == "" || key[0] == '[' {
+			continue
+		}
+		value, err := url.QueryUnescape(part[pos+1:])
+		if err != nil {
+			return err
+		}
+
+		// split into multiple keys
+		var keys []string
+		left := 0
+		for i, k := range key {
+			if k == '[' && left == 0 {
+				left = i
+			} else if k == ']' {
+				if left > 0 {
+					if len(keys) == 0 {
+						keys = append(keys, key[:left])
+					}
+					keys = append(keys, key[left+1:i])
+					left = 0
+					if i+1 < len(key) && key[i+1] != '[' {
+						break
+					}
+				}
+			}
+		}
+		if len(keys) == 0 {
+			keys = append(keys, key)
+		}
+		// first key
+		first := ""
+		for i, chr := range keys[0] {
+			if chr == ' ' || chr == '.' || chr == '[' {
+				first += "_"
+			} else {
+				first += string(chr)
+			}
+			if chr == '[' {
+				first += keys[0][i+1:]
+				break
+			}
+		}
+		keys[0] = first
+
+		// build nested map
+		if err := buildQueryMap(result, keys, value); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ParseUrl 解析URL,返回其组成部分.
+// component为需要返回的组成;
+// -1: all; 1: scheme; 2: host; 4: port; 8: user; 16: pass; 32: path; 64: query; 128: fragment .
+func (ks *LkkString) ParseUrl(str string, component int16) (map[string]string, error) {
+	u, err := url.Parse(str)
+	if err != nil {
+		return nil, err
+	}
+	if component == -1 {
+		component = 1 | 2 | 4 | 8 | 16 | 32 | 64 | 128
+	}
+	var res = make(map[string]string)
+	if (component & 1) == 1 {
+		res["scheme"] = u.Scheme
+	}
+	if (component & 2) == 2 {
+		res["host"] = u.Hostname()
+	}
+	if (component & 4) == 4 {
+		res["port"] = u.Port()
+	}
+	if (component & 8) == 8 {
+		res["user"] = u.User.Username()
+	}
+	if (component & 16) == 16 {
+		res["pass"], _ = u.User.Password()
+	}
+	if (component & 32) == 32 {
+		res["path"] = u.Path
+	}
+	if (component & 64) == 64 {
+		res["query"] = u.RawQuery
+	}
+	if (component & 128) == 128 {
+		res["fragment"] = u.Fragment
+	}
+	return res, nil
+}
+
+// UrlEncode 编码 URL 字符串.
+func (ks *LkkString) UrlEncode(str string) string {
+	return url.QueryEscape(str)
+}
+
+// UrlDecode 解码已编码的 URL 字符串.
+func (ks *LkkString) UrlDecode(str string) (string, error) {
+	return url.QueryUnescape(str)
+}
+
+// RawUrlEncode 按照 RFC 3986 对 URL 进行编码.
+func (ks *LkkString) RawUrlEncode(str string) string {
+	return strings.Replace(url.QueryEscape(str), "+", "%20", -1)
+}
+
+// RawUrlDecode 对已编码的 URL 字符串进行解码.
+func (ks *LkkString) RawUrlDecode(str string) (string, error) {
+	return url.QueryUnescape(strings.Replace(str, "%20", "+", -1))
+}
+
+// HttpBuildQuery 根据参数生成 URL-encode 之后的请求字符串.
+func (ks *LkkString) HttpBuildQuery(queryData url.Values) string {
+	return queryData.Encode()
+}
+
+// FormatUrl 格式化URL.
+func (ks *LkkString) FormatUrl(str string) string {
+	if str != "" {
+		if ks.Strpos(str, "://", 0) == -1 {
+			str = "http://" + str
+		}
+
+		// 将"\"替换为"/"
+		str = strings.ReplaceAll(str, "\\", "/")
+
+		// 将连续的"//"或"\\"或"\/",替换为"/"
+		str = RegUrlBackslashDuplicate.ReplaceAllString(str, "$1/")
+	}
+
+	return str
+}
+
+// GetDomain 从URL字符串中获取域名.
+// 可选参数isMain,默认为false,取完整域名;为true时,取主域名(如abc.test.com取test.com).
+func (ks *LkkString) GetDomain(str string, isMain ...bool) string {
+	str = ks.FormatUrl(str)
+	u, err := url.Parse(str)
+	main := false
+	if len(isMain) > 0 {
+		main = isMain[0]
+	}
+
+	if err != nil || !strings.Contains(str, ".") {
+		return ""
+	} else if !main {
+		return u.Hostname()
+	}
+
+	parts := strings.Split(u.Hostname(), ".")
+	domain := parts[len(parts)-2] + "." + parts[len(parts)-1]
+
+	return domain
+}
+
+// ClearUrlPrefix 清除URL的前缀;
+// str为URL字符串,prefix为前缀,默认"/".
+func (ks *LkkString) ClearUrlPrefix(str string, prefix ...string) string {
+	var p string = "/"
+	if len(prefix) > 0 {
+		p = prefix[0]
+	}
+
+	for p != "" && strings.HasPrefix(str, p) {
+		str = str[len(p):]
+	}
+
+	return str
+}
+
+// ClearUrlSuffix 清除URL的后缀;
+// str为URL字符串,suffix为后缀,默认"/".
+func (ks *LkkString) ClearUrlSuffix(str string, suffix ...string) string {
+	var s string = "/"
+	if len(suffix) > 0 {
+		s = suffix[0]
+	}
+
+	for s != "" && strings.HasSuffix(str, s) {
+		str = str[0 : len(str)-len(s)]
+	}
+
+	return str
+}
+
+// Random 生成随机字符串.
+// length为长度,rtype为枚举:
+// RAND_STRING_ALPHA 字母;
+// RAND_STRING_NUMERIC 数值;
+// RAND_STRING_ALPHANUM 字母+数值;
+// RAND_STRING_SPECIAL 字母+数值+特殊字符;
+// RAND_STRING_CHINESE 仅中文.
+func (ks *LkkString) Random(length uint8, rtype LkkRandString) string {
+	if length == 0 {
+		return ""
+	}
+
+	var letter []rune
+	alphas := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	numbers := "0123456789"
+	specials := "~!@#$%^&*()_+{}:|<>?`-=;,."
+
+	rand.Seed(time.Now().UTC().UnixNano())
+
+	switch rtype {
+	case RAND_STRING_ALPHA:
+		letter = []rune(alphas)
+	case RAND_STRING_NUMERIC:
+		letter = []rune(numbers)
+	case RAND_STRING_ALPHANUM:
+		letter = []rune(alphas + numbers)
+	case RAND_STRING_SPECIAL:
+		letter = []rune(alphas + numbers + specials)
+	case RAND_STRING_CHINESE:
+		letter = CommonChinese
+	default:
+		letter = []rune(alphas)
+	}
+
+	res := make([]rune, length)
+	for i := range res {
+		res[i] = letter[rand.Intn(len(letter))]
+	}
+
+	return string(res)
+}
+
+// DetectEncoding 匹配字符编码,TODO.
+func (ks *LkkString) DetectEncoding(str string) (res string) {
+	//TODO 检查字符编码
+	return
 }
 
 // Ucfirst 将字符串的第一个字符转换为大写.
@@ -447,9 +1314,14 @@ func (ks *LkkString) MbSubstr(str string, start int, length ...int) string {
 	return string(runes[start:end])
 }
 
-// SubstrCount 计算字符串出现的次数.
+// SubstrCount 计算子串substr在字符串str中出现的次数,区分大小写.
 func (ks *LkkString) SubstrCount(str, substr string) int {
 	return strings.Count(str, substr)
+}
+
+// SubstriCount 计算子串substr在字符串str中出现的次数,忽略大小写.
+func (ks *LkkString) SubstriCount(str, substr string) int {
+	return strings.Count(strings.ToLower(str), strings.ToLower(substr))
 }
 
 // Reverse 反转字符串.
@@ -466,8 +1338,9 @@ func (ks *LkkString) Reverse(str string) string {
 // ChunkSplit 将字符串分割成小块.str为要分割的字符,chunklen为分割的尺寸,end为行尾序列符号.
 func (ks *LkkString) ChunkSplit(str string, chunklen uint, end string) string {
 	if end == "" {
-		end = "\r\n"
+		return str
 	}
+
 	runes, erunes := []rune(str), []rune(end)
 	length := uint(len(runes))
 	if length <= 1 || length < chunklen {
@@ -516,52 +1389,16 @@ func (ks *LkkString) Shuffle(str string) string {
 	return string(runes)
 }
 
-// Trim 去除字符串首尾处的空白字符（或者其他字符）.
-func (ks *LkkString) Trim(str string, characterMask ...string) string {
-	mask := getTrimMask(characterMask)
-	return strings.Trim(str, mask)
-}
-
-// Ltrim 删除字符串开头的空白字符（或其他字符）.
-func (ks *LkkString) Ltrim(str string, characterMask ...string) string {
-	mask := getTrimMask(characterMask)
-	return strings.TrimLeft(str, mask)
-}
-
-// Rtrim 删除字符串末端的空白字符（或者其他字符）.
-func (ks *LkkString) Rtrim(str string, characterMask ...string) string {
-	mask := getTrimMask(characterMask)
-	return strings.TrimRight(str, mask)
-}
-
-// TrimBOM 移除字符串中的BOM
-func (ks *LkkString) TrimBOM(str []byte) []byte {
-	return bytes.Trim(str, "\xef\xbb\xbf")
-}
-
-// Chr 返回相对应于 ascii 所指定的单个字符.
-func (ks *LkkString) Chr(chr int) string {
-	return string(rune(chr))
-}
-
-// Ord 将首字符转换为rune.
+// Ord 将首字符转换为rune(ASCII值).
+// 注意:当字符串为空时返回65533.
 func (ks *LkkString) Ord(char string) rune {
 	r, _ := utf8.DecodeRune([]byte(char))
 	return r
 }
 
-// JsonEncode 对变量进行 JSON 编码.
-// 依赖库github.com/json-iterator/go.
-func (ks *LkkString) JsonEncode(val interface{}) ([]byte, error) {
-	var jsons = jsoniter.ConfigCompatibleWithStandardLibrary
-	return jsons.Marshal(val)
-}
-
-// JsonDecode 对 JSON 格式的字符串进行解码,注意val使用指针.
-// 依赖库github.com/json-iterator/go.
-func (ks *LkkString) JsonDecode(data []byte, val interface{}) error {
-	var jsons = jsoniter.ConfigCompatibleWithStandardLibrary
-	return jsons.Unmarshal(data, val)
+// Chr 返回相对应于 ASCII 所指定的单个字符.
+func (ks *LkkString) Chr(chr uint) string {
+	return string(rune(chr))
 }
 
 // Serialize 对变量进行序列化.
@@ -578,10 +1415,12 @@ func (ks *LkkString) Serialize(val interface{}) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-// UnSerialize 对字符串进行反序列化;其中registers注册对象,其类型必须和Serialize的一致.
-func (ks *LkkString) UnSerialize(data []byte, registers ...interface{}) (val interface{}, err error) {
-	for _, v := range registers {
+// UnSerialize 对字符串进行反序列化.
+// 其中register注册对象,其类型必须和Serialize的一致.
+func (ks *LkkString) UnSerialize(data []byte, register ...interface{}) (val interface{}, err error) {
+	for _, v := range register {
 		gob.Register(v)
+		break
 	}
 
 	buf := bytes.NewBuffer(data)
@@ -590,38 +1429,7 @@ func (ks *LkkString) UnSerialize(data []byte, registers ...interface{}) (val int
 	return
 }
 
-// Addslashes 使用反斜线引用字符串.
-func (ks *LkkString) Addslashes(str string) string {
-	var buf bytes.Buffer
-	for _, char := range str {
-		switch char {
-		case '\'', '"', '\\':
-			buf.WriteRune('\\')
-		}
-		buf.WriteRune(char)
-	}
-	return buf.String()
-}
-
-// Stripslashes 反引用一个引用字符串.
-func (ks *LkkString) Stripslashes(str string) string {
-	var buf bytes.Buffer
-	l, skip := len(str), false
-	for i, char := range str {
-		if skip {
-			skip = false
-		} else if char == '\\' {
-			if i+1 < l && str[i+1] == '\\' {
-				skip = true
-			}
-			continue
-		}
-		buf.WriteRune(char)
-	}
-	return buf.String()
-}
-
-// Quotemeta 转义元字符集,包括 . \ + * ? [ ^ ] ( $ ).
+// Quotemeta 转义元字符集,包括 . \ + * ? [ ^ ] ( $ )等.
 func (ks *LkkString) Quotemeta(str string) string {
 	var buf bytes.Buffer
 	for _, char := range str {
@@ -649,49 +1457,17 @@ func (ks *LkkString) Crc32(str string) uint32 {
 	return crc32.ChecksumIEEE([]byte(str))
 }
 
-// SimilarText 计算两个字符串的相似度,返回在两个字符串中匹配字符的数目;percent为相似程度百分数.
-func (ks *LkkString) SimilarText(first, second string, percent *float64) int {
-	var similarText func(string, string, int, int) int
-	similarText = func(str1, str2 string, len1, len2 int) int {
-		var sum, max int
-		pos1, pos2 := 0, 0
-
-		// Find the longest segment of the same section in two strings
-		for i := 0; i < len1; i++ {
-			for j := 0; j < len2; j++ {
-				for l := 0; (i+l < len1) && (j+l < len2) && (str1[i+l] == str2[j+l]); l++ {
-					if l+1 > max {
-						max = l + 1
-						pos1 = i
-						pos2 = j
-					}
-				}
-			}
-		}
-
-		if sum = max; sum > 0 {
-			if pos1 > 0 && pos2 > 0 {
-				sum += similarText(str1, str2, pos1, pos2)
-			}
-			if (pos1+max < len1) && (pos2+max < len2) {
-				s1 := []byte(str1)
-				s2 := []byte(str2)
-				sum += similarText(string(s1[pos1+max:]), string(s2[pos2+max:]), len1-pos1-max, len2-pos2-max)
-			}
-		}
-
-		return sum
-	}
-
+// SimilarText 计算两个字符串的相似度;返回在两个字符串中匹配字符的数目,以及相似程度百分数.
+func (ks *LkkString) SimilarText(first, second string) (res int, percent float64) {
 	l1, l2 := len(first), len(second)
 	if l1+l2 == 0 {
-		return 0
+		return 0, 0.0
 	}
-	sim := similarText(first, second, l1, l2)
-	if percent != nil {
-		*percent = float64(sim*200) / float64(l1+l2)
-	}
-	return sim
+
+	res = similarText(first, second, l1, l2)
+	percent = float64(res*200) / float64(l1+l2)
+
+	return res, percent
 }
 
 // Explode 字符串分割.delimiters为分隔符,可选,支持多个.
@@ -719,13 +1495,19 @@ func (ks *LkkString) Explode(str string, delimiters ...string) (res []string) {
 	return
 }
 
-// Uniqid 获取一个带前缀、基于当前时间微秒数的唯一ID.
+// Uniqid 获取一个带前缀的唯一ID(24位).
+// prefix 为前缀字符串.
 func (ks *LkkString) Uniqid(prefix string) string {
-	now := time.Now()
-	return fmt.Sprintf("%s%08x%05x", prefix, now.Unix(), now.UnixNano()%0x100000)
+	buf := make([]byte, 12)
+	_, _ = crand.Read(buf)
+
+	return fmt.Sprintf("%s%08x%16x",
+		prefix,
+		buf[0:4],
+		buf[4:12])
 }
 
-// UuidV4 获取UUID(Version4).
+// UuidV4 获取36位UUID(Version4).
 func (ks *LkkString) UuidV4() (string, error) {
 	buf := make([]byte, 16)
 	_, err := crand.Read(buf)
@@ -739,105 +1521,17 @@ func (ks *LkkString) UuidV4() (string, error) {
 }
 
 // VersionCompare 对比两个版本号字符串.
-// 在第一个版本低于第二个时,version_compare() 返回 -1;如果两者相等,返回 0;第二个版本更低时则返回 1.
 // operator允许的操作符有: <, lt, <=, le, >, gt, >=, ge, ==, =, eq, !=, <>, ne .
 // 特定的版本字符串，将会用以下顺序处理：
-// 未找到的任意字符串 < dev < alpha = a < beta = b < RC = rc < # < pl = p
+// 无 < dev < alpha = a < beta = b < RC = rc < # < pl = p < ga < release = r
 // 用法:
 // VersionCompare("1.2.3-alpha", "1.2.3RC7", '>=') ;
 // VersionCompare("1.2.3-beta", "1.2.3pl", 'lt') ;
 // VersionCompare("1.1_dev", "1.2any", 'eq') .
-func (ks *LkkString) VersionCompare(version1, version2, operator string) bool {
-	var vcompare func(string, string) int
+func (ks *LkkString) VersionCompare(version1, version2, operator string) (bool, error) {
 	var canonicalize func(string) string
+	var vcompare func(string, string) int
 	var special func(string, string) int
-
-	// version compare
-	vcompare = func(origV1, origV2 string) int {
-		if origV1 == "" || origV2 == "" {
-			if origV1 == "" && origV2 == "" {
-				return 0
-			}
-			if origV1 == "" {
-				return -1
-			}
-			return 1
-		}
-
-		ver1, ver2, compare := "", "", 0
-		if origV1[0] == '#' {
-			ver1 = origV1
-		} else {
-			ver1 = canonicalize(origV1)
-		}
-		if origV2[0] == '#' {
-			ver2 = origV2
-		} else {
-			ver2 = canonicalize(origV2)
-		}
-		n1, n2 := 0, 0
-		for {
-			p1, p2 := "", ""
-			n1 = strings.IndexByte(ver1, '.')
-			if n1 == -1 {
-				p1, ver1 = ver1[:], ""
-			} else {
-				p1, ver1 = ver1[:n1], ver1[n1+1:]
-			}
-			n2 = strings.IndexByte(ver2, '.')
-			if n2 == -1 {
-				p2, ver2 = ver2, ""
-			} else {
-				p2, ver2 = ver2[:n2], ver2[n2+1:]
-			}
-
-			if p1 == "" || p2 == "" {
-				break
-			}
-
-			if (p1[0] >= '0' && p1[0] <= '9') && (p2[0] >= '0' && p2[0] <= '9') { // all is digit
-				l1, _ := strconv.Atoi(p1)
-				l2, _ := strconv.Atoi(p2)
-				if l1 > l2 {
-					compare = 1
-				} else if l1 == l2 {
-					compare = 0
-				} else {
-					compare = -1
-				}
-			} else if !(p1[0] >= '0' && p1[0] <= '9') && !(p2[0] >= '0' && p2[0] <= '9') { // all not digit
-				compare = special(p1, p2)
-			} else {                              // part is digit
-				if p1[0] >= '0' && p1[0] <= '9' { // is digit
-					compare = special("#N#", p2)
-				} else {
-					compare = special(p1, "#N#")
-				}
-			}
-
-			if compare != 0 || n1 == -1 || n2 == -1 {
-				break
-			}
-		}
-
-		if compare == 0 {
-			if ver1 != "" {
-				if ver1[0] >= '0' && ver1[0] <= '9' {
-					compare = 1
-				} else {
-					compare = vcompare(ver1, "#N#")
-				}
-			} else if ver2 != "" {
-				if ver2[0] >= '0' && ver2[0] <= '9' {
-					compare = -1
-				} else {
-					compare = vcompare("#N#", ver2)
-				}
-			}
-		}
-
-		return compare
-	}
 
 	// canonicalize 规范化转换
 	canonicalize = func(version string) string {
@@ -880,43 +1574,98 @@ func (ks *LkkString) VersionCompare(version1, version2, operator string) bool {
 		return string(buf[:j])
 	}
 
+	// version compare
+	// 在第一个版本低于第二个时,vcompare() 返回 -1;如果两者相等,返回 0;第二个版本更低时则返回 1.
+	vcompare = func(origV1, origV2 string) int {
+		if origV1 == "" || origV2 == "" {
+			if origV1 == "" && origV2 == "" {
+				return 0
+			}
+			if origV1 == "" {
+				return -1
+			}
+			return 1
+		}
+
+		ver1, ver2, compare := canonicalize(origV1), canonicalize(origV2), 0
+		n1, n2 := 0, 0
+		for {
+			p1, p2 := "", ""
+			n1 = strings.IndexByte(ver1, '.')
+			if n1 == -1 {
+				p1, ver1 = ver1[:], ""
+			} else {
+				p1, ver1 = ver1[:n1], ver1[n1+1:]
+			}
+			n2 = strings.IndexByte(ver2, '.')
+			if n2 == -1 {
+				p2, ver2 = ver2, ""
+			} else {
+				p2, ver2 = ver2[:n2], ver2[n2+1:]
+			}
+
+			if p1 == "" || p2 == "" {
+				break
+			}
+
+			if (p1[0] >= '0' && p1[0] <= '9') && (p2[0] >= '0' && p2[0] <= '9') { // all is digit
+				l1, _ := strconv.Atoi(p1)
+				l2, _ := strconv.Atoi(p2)
+				if l1 > l2 {
+					compare = 1
+				} else if l1 == l2 {
+					compare = 0
+				} else {
+					compare = -1
+				}
+			} else {
+				compare = special(p1, p2)
+			}
+			if compare != 0 || n1 == -1 || n2 == -1 {
+				break
+			}
+		}
+
+		return compare
+	}
+
 	// compare special version forms 特殊版本号
 	special = func(form1, form2 string) int {
-		found1, found2, len1, len2 := -1, -1, len(form1), len(form2)
-		// (Any string not found) < dev < alpha = a < beta = b < RC = rc < # < pl = p
+		found1, found2 := -1, -1
+		// (Any string not found) < dev < alpha = a < beta = b < RC = rc < # < pl = p < ga < release = r
 		forms := map[string]int{
-			"dev":   0,
-			"alpha": 1,
-			"a":     1,
-			"beta":  2,
-			"b":     2,
-			"RC":    3,
-			"rc":    3,
-			"#":     4,
-			"pl":    5,
-			"p":     5,
+			"dev":     0,
+			"alpha":   1,
+			"a":       1,
+			"beta":    2,
+			"b":       2,
+			"RC":      3,
+			"rc":      3,
+			"#":       4,
+			"pl":      5,
+			"p":       5,
+			"ga":      6,
+			"release": 7,
+			"r":       7,
 		}
 
 		for name, order := range forms {
-			if len1 < len(name) {
-				continue
-			}
-			if strings.Compare(form1[:len(name)], name) == 0 {
+			if form1 == name {
 				found1 = order
 				break
 			}
 		}
 		for name, order := range forms {
-			if len2 < len(name) {
-				continue
-			}
-			if strings.Compare(form2[:len(name)], name) == 0 {
+			if form2 == name {
 				found2 = order
 				break
 			}
 		}
 
 		if found1 == found2 {
+			if found1 == -1 {
+				return strings.Compare(form1, form2)
+			}
 			return 0
 		} else if found1 > found2 {
 			return 1
@@ -926,22 +1675,22 @@ func (ks *LkkString) VersionCompare(version1, version2, operator string) bool {
 	}
 
 	compare := vcompare(version1, version2)
-
+	// 在第一个版本低于第二个时,vcompare() 返回 -1;如果两者相等,返回 0;第二个版本更低时则返回 1.
 	switch operator {
 	case "<", "lt":
-		return compare == -1
+		return compare == -1, nil
 	case "<=", "le":
-		return compare != 1
+		return compare != 1, nil
 	case ">", "gt":
-		return compare == 1
+		return compare == 1, nil
 	case ">=", "ge":
-		return compare != -1
+		return compare != -1, nil
 	case "==", "=", "eq":
-		return compare == 0
+		return compare == 0, nil
 	case "!=", "<>", "ne":
-		return compare != 0
+		return compare != 0, nil
 	default:
-		panic("[VersionCompare] operator: invalid")
+		return false, errors.New("[VersionCompare]`operator: invalid")
 	}
 }
 
@@ -1047,12 +1796,13 @@ func (ks *LkkString) SBC2DBC(s string) string {
 	return width.Narrow.String(s)
 }
 
-// Levenshtein 计算两个字符串之间的编辑距离.
-func (ks *LkkString) Levenshtein(a, b *string) int {
-	la := len(*a)
-	lb := len(*b)
+// Levenshtein 计算两个字符串之间的编辑距离,返回值越小字符串越相似.
+// 注意字符串最大长度为255.
+func (ks *LkkString) Levenshtein(a, b string) int {
+	la := len(a)
+	lb := len(b)
 
-	if *a == *b {
+	if a == b {
 		return 0
 	} else if la > 255 || lb > 255 {
 		return -1
@@ -1072,7 +1822,7 @@ func (ks *LkkString) Levenshtein(a, b *string) int {
 			if (d[j-1] + 1) < min {
 				min = d[j-1] + 1
 			}
-			if (*a)[j-1] == (*b)[i-1] {
+			if (a)[j-1] == (b)[i-1] {
 				temp = 0
 			} else {
 				temp = 1
@@ -1093,7 +1843,7 @@ func (ks *LkkString) ClosestWord(word string, searchs []string) (string, int) {
 	distance := 10000
 	res := ""
 	for _, search := range searchs {
-		newVal := ks.Levenshtein(&word, &search)
+		newVal := ks.Levenshtein(word, search)
 		if newVal == 0 {
 			distance = 0
 			res = search
@@ -1107,20 +1857,6 @@ func (ks *LkkString) ClosestWord(word string, searchs []string) (string, int) {
 	}
 
 	return res, distance
-}
-
-// Utf8ToGbk UTF-8转GBK编码.
-func (ks *LkkString) Utf8ToGbk(s []byte) ([]byte, error) {
-	reader := transform.NewReader(bytes.NewReader(s), simplifiedchinese.GBK.NewEncoder())
-	d, e := ioutil.ReadAll(reader)
-	return d, e
-}
-
-// GbkToUtf8 GBK转UTF-8编码.
-func (ks *LkkString) GbkToUtf8(s []byte) ([]byte, error) {
-	reader := transform.NewReader(bytes.NewReader(s), simplifiedchinese.GBK.NewDecoder())
-	d, e := ioutil.ReadAll(reader)
-	return d, e
 }
 
 // Utf8ToBig5 UTF-8转BIG5编码.
@@ -1233,22 +1969,6 @@ func (ks *LkkString) FirstLetter(str string) string {
 	return ""
 }
 
-// Dstrpos 检查字符串str是否包含数组arr的元素之一,返回检查结果和匹配的字符串.
-// chkCase为是否检查大小写.
-func (ks *LkkString) Dstrpos(str string, arr []string, chkCase bool) (bool, string) {
-	if len(str) == 0 || len(arr) == 0 {
-		return false, ""
-	}
-
-	for _, v := range arr {
-		if (chkCase && ks.Strpos(str, v, 0) != -1) || (!chkCase && ks.Stripos(str, v, 0) != -1) {
-			return true, v
-		}
-	}
-
-	return false, ""
-}
-
 // HideCard 隐藏证件号码.
 func (ks *LkkString) HideCard(card string) string {
 	res := "******"
@@ -1295,7 +2015,7 @@ func (ks *LkkString) HideTrueName(name string) string {
 	return res
 }
 
-// CountBase64Byte 统计base64字符串大小,字节.
+// CountBase64Byte 粗略统计base64字符串大小,字节.
 func (ks *LkkString) CountBase64Byte(str string) (res int) {
 	pos := strings.Index(str, ",")
 	if pos > 10 {
@@ -1323,10 +2043,8 @@ func (ks *LkkString) Strpad(str string, fill string, max int, ptype LkkPadType) 
 		rlsize := float64(max-runeStrLen) / 2
 		leftsize = int(rlsize)
 		rightsize = int(rlsize + math.Copysign(0.5, rlsize))
-
 	case PAD_LEFT:
 		leftsize = max - runeStrLen
-
 	case PAD_RIGHT:
 		rightsize = max - runeStrLen
 	}
@@ -1381,36 +2099,6 @@ func (ks *LkkString) StrpadBoth(str string, fill string, max int) string {
 	return ks.Strpad(str, fill, max, PAD_BOTH)
 }
 
-// Img2Base64 将字符串转换为base64图片.ext为图片扩展名,默认jpg.
-func (ks *LkkString) Img2Base64(content []byte, ext ...string) string {
-	var imgType string = "jpg"
-	if len(ext) > 0 {
-		imgType = strings.ToLower(ext[0])
-	}
-
-	return fmt.Sprintf("data:image/%s;base64,%s", imgType, base64.StdEncoding.EncodeToString(content))
-}
-
-// Jsonp2Json 将jsonp转为json串.
-// Example: forbar({a:"1",b:2}) to {"a":"1","b":2}
-func (ks *LkkString) Jsonp2Json(str string) (string, error) {
-	start := strings.Index(str, "(")
-	end := strings.LastIndex(str, ")")
-
-	if start == -1 || end == -1 {
-		return "", errors.New("invalid jsonp.")
-	}
-
-	start += 1
-	if start >= end {
-		return "", errors.New("invalid jsonp.")
-	}
-
-	res := str[start:end]
-
-	return res, nil
-}
-
 // CountWords 统计字符串中单词的使用情况.
 // 返回结果:单词总数;和一个字典,包含每个单词的单独统计.
 // 因为没有分词,对中文尚未很好支持.
@@ -1436,489 +2124,9 @@ func (ks *LkkString) CountWords(str string) (int, map[string]int) {
 	return total, mp
 }
 
-// IsLetters 字符串是否全(英文)字母组成.
-func (ks *LkkString) IsLetters(str string) bool {
-	for _, r := range str {
-		if (r < 'a' || r > 'z') && (r < 'A' || r > 'Z') {
-			return false
-		}
-	}
-	return str != ""
-}
-
-// IsEmpty 字符串是否为空(包括空格).
-func (ks *LkkString) IsEmpty(str string) bool {
-	if str == "" || len(ks.Trim(str)) == 0 {
-		return true
-	}
-
-	return false
-}
-
-// IsUpper 字符串是否全部大写.
-func (ks *LkkString) IsUpper(str string) bool {
-	for _, r := range str {
-		if !unicode.IsUpper(r) && unicode.IsLetter(r) {
-			return false
-		}
-	}
-	return str != ""
-}
-
-// IsLower 字符串是否全部小写.
-func (ks *LkkString) IsLower(str string) bool {
-	for _, r := range str {
-		if !unicode.IsLower(r) && unicode.IsLetter(r) {
-			return false
-		}
-	}
-	return str != ""
-}
-
-// HasLetter 字符串是否含有(英文)字母.
-func (ks *LkkString) HasLetter(str string) bool {
-	for _, r := range str {
-		if (r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') {
-			return true
-		}
-	}
-	return false
-}
-
-// IsUtf8 字符串是否UTF-8编码.
-func (ks *LkkString) IsUtf8(str string) bool {
-	return str != "" && utf8.ValidString(str)
-}
-
-// IsASCII 是否IsASCII字符串.
-func (ks *LkkString) IsASCII(str string) bool {
-	//return str != "" && RegAscii.MatchString(str)
-	n := len(str)
-	for i := 0; i < n; i++ {
-		if str[i] > 127 {
-			return false
-		}
-	}
-
-	return str != ""
-}
-
-// IsMultibyte 字符串是否含有多字节字符.
-func (ks *LkkString) IsMultibyte(str string) bool {
-	return str != "" && RegMultiByte.MatchString(str)
-}
-
-// HasFullWidth 是否含有全角字符.
-func (ks *LkkString) HasFullWidth(str string) bool {
-	return str != "" && RegFullWidth.MatchString(str)
-}
-
-// HasHalfWidth 是否含有半角字符.
-func (ks *LkkString) HasHalfWidth(str string) bool {
-	return str != "" && RegHalfWidth.MatchString(str)
-}
-
-// IsEnglish 字符串是否纯英文.letterCase是否检查大小写,枚举值(CASE_NONE,CASE_LOWER,CASE_UPPER).
-func (ks *LkkString) IsEnglish(str string, letterCase LkkCaseSwitch) bool {
-	switch letterCase {
-	case CASE_NONE:
-		return ks.IsLetters(str)
-	case CASE_LOWER:
-		return str != "" && RegAlphaLower.MatchString(str)
-	case CASE_UPPER:
-		return str != "" && RegAlphaUpper.MatchString(str)
-	default:
-		return ks.IsLetters(str)
-	}
-}
-
-// HasEnglish 是否含有英文字符,HasLetter的别名.
-func (ks *LkkString) HasEnglish(str string) bool {
-	return ks.HasLetter(str)
-}
-
-// HasChinese 字符串是否含有中文.
-func (ks *LkkString) HasChinese(str string) bool {
-	for _, r := range str {
-		if unicode.Is(unicode.Scripts["Han"], r) {
-			return true
-		}
-	}
-
-	return false
-}
-
-// IsChinese 字符串是否全部中文.
-func (ks *LkkString) IsChinese(str string) bool {
-	return str != "" && RegChineseAll.MatchString(str)
-}
-
-// IsChineseName 字符串是否中文名称.
-func (ks *LkkString) IsChineseName(str string) bool {
-	return str != "" && RegChineseName.MatchString(str)
-}
-
-// IsWord 是否词语(不以下划线开头的中文、英文、数字、下划线).
-func (ks *LkkString) IsWord(str string) bool {
-	return str != "" && RegWord.MatchString(str)
-}
-
-// HasSpecialChar 字符串是否含有特殊字符.
-func (ks *LkkString) HasSpecialChar(str string) (res bool) {
-	if str == "" {
-		return
-	}
-
-	for _, r := range str {
-		// IsPunct 判断 r 是否为一个标点字符 (类别 P)
-		// IsSymbol 判断 r 是否为一个符号字符
-		// IsMark 判断 r 是否为一个 mark 字符 (类别 M)
-		if unicode.IsPunct(r) || unicode.IsSymbol(r) || unicode.IsMark(r) {
-			res = true
-			return
-		}
-	}
-
-	return
-}
-
-// IsJSON 字符串是否合法的json格式.
-func (ks *LkkString) IsJSON(str string) bool {
-	length := len(str)
-	if length == 0 {
-		return false
-	} else if (str[0] != '{' || str[length-1] != '}') && (str[0] != '[' || str[length-1] != ']') {
-		return false
-	}
-
-	var js json.RawMessage
-	return json.Unmarshal([]byte(str), &js) == nil
-}
-
-// IsIP 检查字符串是否IP地址.
-func (ks *LkkString) IsIP(str string) bool {
-	return str != "" && net.ParseIP(str) != nil
-}
-
-// IsIPv4 检查字符串是否IPv4地址.
-func (ks *LkkString) IsIPv4(str string) bool {
-	ipAddr := net.ParseIP(str)
-	// 不是合法的IP地址
-	if ipAddr == nil {
-		return false
-	}
-
-	return ipAddr.To4() != nil && strings.ContainsRune(str, '.')
-}
-
-// IsIPv6 检查字符串是否IPv6地址.
-func (ks *LkkString) IsIPv6(str string) bool {
-	ipAddr := net.ParseIP(str)
-	return ipAddr != nil && strings.ContainsRune(str, ':')
-}
-
-// IsPort 字符串或数字是否端口号.
-func (ks *LkkString) IsPort(val interface{}) bool {
-	if KConv.IsInt(val) {
-		port := KConv.ToInt(val)
-		if port > 0 && port < 65536 {
-			return true
-		}
-	}
-
-	return false
-}
-
-// IsDNSName 是否DNS名称.
-func (ks *LkkString) IsDNSName(str string) bool {
-	if str == "" || len(strings.Replace(str, ".", "", -1)) > 255 {
-		// constraints already violated
-		return false
-	}
-	return !ks.IsIP(str) && RegDNSname.MatchString(str)
-}
-
-// IsDialString 是否网络拨号字符串(形如127.0.0.1:80),用于net.Dial()检查.
-func (ks *LkkString) IsDialString(str string) bool {
-	h, p, err := net.SplitHostPort(str)
-	if err == nil && h != "" && p != "" && (ks.IsDNSName(h) || ks.IsIP(h)) && ks.IsPort(p) {
-		return true
-	}
-
-	return false
-}
-
-// IsMACAddr 是否MAC物理网卡地址.
-func (ks *LkkString) IsMACAddr(str string) bool {
-	_, err := net.ParseMAC(str)
-	return err == nil
-}
-
-// IsHost 字符串是否主机名(IP或DNS名称).
-func (ks *LkkString) IsHost(str string) bool {
-	return ks.IsIP(str) || ks.IsDNSName(str)
-}
-
-// IsEmail 检查字符串是否邮箱.参数validateTrue,是否验证邮箱主机的真实性.
-func (ks *LkkString) IsEmail(email string, validateHost bool) (bool, error) {
-	//长度检查
-	length := len(email)
-	at := strings.LastIndexByte(email, '@')
-	if (length < 6 || length > 254) || (at <= 0 || at > length-3) {
-		return false, fmt.Errorf("invalid email length")
-	}
-
-	//验证邮箱格式
-	chkFormat := RegEmail.MatchString(email)
-	if !chkFormat {
-		return false, fmt.Errorf("invalid email format")
-	}
-
-	//验证主机
-	if validateHost {
-		host := email[at+1:]
-		if _, err := net.LookupMX(host); err != nil {
-			//因无法确定mx主机的smtp端口,所以去掉Hello/Mail/Rcpt检查邮箱是否存在
-			//仅检查主机是否有效
-			//TODO 仅对国内几家大的邮件厂家进行检查
-			if _, err := net.LookupIP(host); err != nil {
-				return false, err
-			}
-		}
-	}
-
-	return true, nil
-}
-
-// IsMobilecn 检查字符串是否中国大陆手机号.
-func (ks *LkkString) IsMobilecn(str string) bool {
-	return str != "" && RegMobilecn.MatchString(str)
-}
-
-// IsTel 是否固定电话或400/800电话.
-func (ks *LkkString) IsTel(str string) bool {
-	return str != "" && RegTelephone.MatchString(str)
-}
-
-// IsPhone 是否电话号码(手机或固话).
-func (ks *LkkString) IsPhone(str string) bool {
-	return str != "" && RegPhone.MatchString(str)
-}
-
-// IsCreditNo 检查是否(15或18位)身份证号码,并返回经校验的号码.
-func (ks *LkkString) IsCreditNo(str string) (bool, string) {
-	chk := str != "" && RegCreditno.MatchString(str)
-	if !chk {
-		return false, ""
-	}
-
-	// 检查省份代码
-	if _, chk = CreditArea[str[0:2]]; !chk {
-		return false, ""
-	}
-
-	// 将15位身份证升级到18位
-	leng := len(str)
-	if leng == 15 {
-		// 先转为17位,如果身份证顺序码是996 997 998 999,这些是为百岁以上老人的特殊编码
-		if chk, _ = ks.Dstrpos(str[12:], []string{"996", "997", "998", "999"}, false); chk {
-			str = str[0:6] + "18" + str[6:]
-		} else {
-			str = str[0:6] + "19" + str[6:]
-		}
-
-		// 再加上校验码
-		code := append([]byte{}, creditChecksum(str))
-		str += string(code)
-	}
-
-	// 检查生日
-	birthday := str[6:10] + "-" + str[10:12] + "-" + str[12:14]
-	chk, tim := KTime.IsDate2time(birthday)
-	now := KTime.UnixTime()
-	if !chk {
-		return false, ""
-	} else if tim >= now {
-		return false, ""
-	}
-
-	// 18位身份证需要验证最后一位校验位
-	if leng == 18 {
-		str = strings.ToUpper(str)
-		if str[17] != creditChecksum(str) {
-			return false, ""
-		}
-	}
-
-	return true, str
-}
-
-// IsAlphaNumeric 是否字母或数字.
-func (ks *LkkString) IsAlphaNumeric(str string) bool {
-	return str != "" && RegAlphaNumeric.MatchString(str)
-}
-
-// IsHexcolor 检查是否十六进制颜色,并返回带"#"的修正值.
-func (ks *LkkString) IsHexcolor(str string) (bool, string) {
-	chk := str != "" && RegHexcolor.MatchString(str)
-	if chk && !strings.ContainsRune(str, '#') {
-		str = "#" + strings.ToUpper(str)
-	}
-	return chk, str
-}
-
-// IsRGBcolor 检查字符串是否RGB颜色格式.
-func (ks *LkkString) IsRGBcolor(str string) bool {
-	return str != "" && RegRgbcolor.MatchString(str)
-}
-
-// IsBlank 是否空(空白)字符.
-func (ks *LkkString) IsBlank(str string) bool {
-	// Check length
-	if len(str) > 0 {
-		// Iterate string
-		for i := range str {
-			// Check about char different from whitespace
-			// 227为全角空格
-			if str[i] > 32 && str[i] != 227 {
-				return false
-			}
-		}
-	}
-	return true
-}
-
-// IsWhitespaces 是否全部空白字符,不包括空字符串.
-func (ks *LkkString) IsWhitespaces(str string) bool {
-	return str != "" && RegWhitespaceAll.MatchString(str)
-}
-
-// HasWhitespace 是否带有空白字符.
-func (ks *LkkString) HasWhitespace(str string) bool {
-	return str != "" && RegWhitespaceHas.MatchString(str)
-}
-
-// IsBase64 是否base64字符串.
-func (ks *LkkString) IsBase64(str string) bool {
-	return str != "" && RegBase64.MatchString(str)
-}
-
-// IsBase64Image 是否base64编码的图片.
-func (ks *LkkString) IsBase64Image(str string) bool {
-	if str == "" || !strings.ContainsRune(str, ',') {
-		return false
-	}
-
-	dataURI := strings.Split(str, ",")
-	return RegBase64Image.MatchString(dataURI[0]) && RegBase64.MatchString(dataURI[1])
-}
-
-// IsRsaPublicKey 检查字符串是否RSA的公钥,keylen为密钥长度.
-func (ks *LkkString) IsRsaPublicKey(str string, keylen int) bool {
-	bb := bytes.NewBufferString(str)
-	pemBytes, _ := ioutil.ReadAll(bb)
-
-	// 获取公钥
-	block, _ := pem.Decode(pemBytes)
-	if block != nil && block.Type != "PUBLIC KEY" {
-		return false
-	}
-	var der []byte
-	var err error
-
-	if block != nil {
-		der = block.Bytes
-	} else {
-		der, err = base64.StdEncoding.DecodeString(str)
-		if err != nil {
-			return false
-		}
-	}
-
-	key, err := x509.ParsePKIXPublicKey(der)
-	if err != nil {
-		return false
-	}
-	pubkey, ok := key.(*rsa.PublicKey)
-	if !ok {
-		return false
-	}
-	bitlen := len(pubkey.N.Bytes()) * 8
-	return bitlen == int(keylen)
-}
-
-// IsUrl 检查字符串是否URL.
-func (ks *LkkString) IsUrl(str string) bool {
-	if str == "" || len(str) <= 3 || utf8.RuneCountInString(str) >= 2083 || strings.HasPrefix(str, ".") {
-		return false
-	}
-
-	res, err := url.ParseRequestURI(str)
-	if err != nil {
-		return false //Couldn't even parse the url
-	}
-	if len(res.Scheme) == 0 {
-		return false //No Scheme found
-	}
-
-	return true
-}
-
-// IsUrlExists 检查URL是否存在.
-func (ks *LkkString) IsUrlExists(str string) bool {
-	if !ks.IsUrl(str) {
-		return false
-	}
-
-	client := &http.Client{}
-	resp, err := client.Head(str)
-	if err != nil {
-		return false
-	} else if resp.StatusCode == 404 {
-		return false
-	}
-
-	return true
-}
-
-// IsMd5 是否md5值.
-func (ks *LkkString) IsMd5(str string) bool {
-	return str != "" && RegMd5.MatchString(str)
-}
-
-// IsSha1 是否Sha1值.
-func (ks *LkkString) IsSha1(str string) bool {
-	return str != "" && RegSha1.MatchString(str)
-}
-
-// IsSha256 是否Sha256值.
-func (ks *LkkString) IsSha256(str string) bool {
-	return str != "" && RegSha256.MatchString(str)
-}
-
-// IsSha512 是否Sha512值.
-func (ks *LkkString) IsSha512(str string) bool {
-	return str != "" && RegSha512.MatchString(str)
-}
-
-// StartsWith 字符串str是否以sub开头.
-func (ks *LkkString) StartsWith(str, sub string, ignoreCase bool) bool {
-	if str != "" && sub != "" {
-		i := ks.Index(str, sub, ignoreCase)
-		return i == 0
-	}
-
-	return false
-}
-
-// EndsWith 字符串str是否以sub结尾.
-func (ks *LkkString) EndsWith(str, sub string, ignoreCase bool) bool {
-	if str != "" && sub != "" {
-		i := ks.LastIndex(str, sub, ignoreCase)
-		return i != -1 && (len(str)-len(sub)) == i
-	}
-
-	return false
+// HasEmoji 字符串是否含有表情符.
+func (ks *LkkString) HasEmoji(str string) bool {
+	return str != "" && RegEmoji.MatchString(str)
 }
 
 // RemoveEmoji 移除字符串中的表情符(使用正则,效率较低).
@@ -1927,6 +2135,7 @@ func (ks *LkkString) RemoveEmoji(str string) string {
 }
 
 // Gravatar 获取Gravatar头像地址.
+// email为邮箱;size为头像尺寸像素.
 func (ks *LkkString) Gravatar(email string, size uint16) string {
 	h := md5.New()
 	_, _ = io.WriteString(h, email)
@@ -1980,4 +2189,22 @@ func (ks *LkkString) AtWho(text string, minLen ...int) []string {
 	}
 
 	return result
+}
+
+// MatchEquations 匹配字符串中所有的等式.
+func (ks *LkkString) MatchEquations(str string) (res []string) {
+	res = RegEquation.FindAllString(equationStr03, -1)
+	return
+}
+
+// GetEquationValue 获取等式str中变量name的值.
+func (ks *LkkString) GetEquationValue(str, name string) (res string) {
+	pattern := `['"]?` + name + `['"]?[\s]*=[\s]*['"]?(.*)['"]?`
+	reg := regexp.MustCompile(pattern)
+	mat := reg.FindStringSubmatch(str)
+	if len(mat) == 2 {
+		res = mat[1]
+	}
+
+	return
 }

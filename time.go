@@ -47,17 +47,17 @@ var datePatterns = []string{
 	"r", time.RFC1123Z,
 }
 
-// Time 获取当前Unix时间戳(秒).
+// Time 获取当前Unix时间戳(秒,10位).
 func (kt *LkkTime) UnixTime() int64 {
 	return time.Now().Unix()
 }
 
-// MilliTime 获取当前Unix时间戳(毫秒).
+// MilliTime 获取当前Unix时间戳(毫秒,13位).
 func (kt *LkkTime) MilliTime() int64 {
 	return time.Now().UnixNano() / int64(time.Millisecond)
 }
 
-// MicroTime 获取当前Unix时间戳(微秒).
+// MicroTime 获取当前Unix时间戳(微秒,16位).
 func (kt *LkkTime) MicroTime() int64 {
 	return time.Now().UnixNano() / int64(time.Microsecond)
 }
@@ -74,7 +74,7 @@ func (kt *LkkTime) Str2Timestruct(str string, format ...string) (time.Time, erro
 	}
 
 	if len(str) != len(f) {
-		return time.Now(), errors.New("Str2Timestruct: parameter format error")
+		return time.Now(), errors.New("[Str2Timestruct]`format error")
 	}
 
 	return time.ParseInLocation(f, str, Kuptime.Location())
@@ -162,17 +162,17 @@ func (kt *LkkTime) ServiceUptime() time.Duration {
 	return time.Since(Kuptime)
 }
 
-// GetMonthDays 获取指定月份的天数.years年份,可选,默认当前年份.
-func (kt *LkkTime) GetMonthDays(month int, years ...int) (days int) {
+// GetMonthDays 获取指定月份的天数.year年份,可选,默认当前年份.
+func (kt *LkkTime) GetMonthDays(month int, year ...int) (days int) {
 	if month < 1 || month > 12 {
 		return
 	}
 
-	var year int
-	if len(years) == 0 {
-		year = time.Now().Year()
+	var yr int
+	if len(year) == 0 {
+		yr = time.Now().Year()
 	} else {
-		year = years[0]
+		yr = year[0]
 	}
 
 	if month != 2 {
@@ -182,7 +182,7 @@ func (kt *LkkTime) GetMonthDays(month int, years ...int) (days int) {
 			days = 31
 		}
 	} else {
-		if ((year%4) == 0 && (year%100) != 0) || (year%400) == 0 {
+		if ((yr%4) == 0 && (yr%100) != 0) || (yr%400) == 0 {
 			days = 29
 		} else {
 			days = 28
@@ -318,6 +318,7 @@ func (kt *LkkTime) EndOfWeek(date time.Time, weekStartDay ...time.Weekday) time.
 }
 
 // DaysBetween 获取两个日期的间隔天数.
+// fromDate 为开始时间,toDate 为终点时间.
 func (kt *LkkTime) DaysBetween(fromDate, toDate time.Time) int {
 	return int(toDate.Sub(fromDate) / (24 * time.Hour))
 }

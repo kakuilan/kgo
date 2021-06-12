@@ -2,943 +2,932 @@ package kgo
 
 import (
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"os"
-	"os/exec"
 	"strings"
 	"testing"
 )
 
-func TestGetExt(t *testing.T) {
-	filename := "./file.go"
-	if KFile.GetExt(filename) != "go" {
-		t.Error("file extension error")
-		return
-	}
+func TestFile_GetExt(t *testing.T) {
+	var ext string
 
-	KFile.GetExt("./testdata/gitkeep")
+	ext = KFile.GetExt(fileGo)
+	assert.Equal(t, "go", ext)
+
+	ext = KFile.GetExt(fileGitkee)
+	assert.Equal(t, "gitkeep", ext)
+
+	ext = KFile.GetExt(fileSongs)
+	assert.Equal(t, "txt", ext)
+
+	ext = KFile.GetExt(fileNone)
+	assert.Empty(t, ext)
 }
 
-func BenchmarkGetExt(b *testing.B) {
+func BenchmarkFile_GetExt(b *testing.B) {
 	b.ResetTimer()
-	filename := "./README.md"
 	for i := 0; i < b.N; i++ {
-		KFile.GetExt(filename)
+		KFile.GetExt(fileMd)
 	}
 }
 
-func TestReadFile(t *testing.T) {
-	filename := "./file.go"
-	cont, _ := KFile.ReadFile(filename)
-	if string(cont) == "" {
-		t.Error("file get contents error")
-		return
-	}
-	_, _ = KFile.ReadFile("")
+func TestFile_ReadFile(t *testing.T) {
+	var bs []byte
+	var err error
+
+	bs, err = KFile.ReadFile(fileMd)
+	assert.NotEmpty(t, bs)
+	assert.Nil(t, err)
+
+	//不存在的文件
+	bs, err = KFile.ReadFile(fileNone)
+	assert.NotNil(t, err)
 }
 
-func BenchmarkReadFile(b *testing.B) {
+func BenchmarkFile_ReadFile(b *testing.B) {
 	b.ResetTimer()
-	filename := "./README.md"
 	for i := 0; i < b.N; i++ {
-		_, _ = KFile.ReadFile(filename)
+		_, _ = KFile.ReadFile(fileMd)
 	}
 }
 
-func TestWriteFile(t *testing.T) {
-	str := []byte("Hello World!")
-	err := KFile.WriteFile("./testdata/putfile", str)
-	if err != nil {
-		t.Error("file get contents error")
-		return
-	}
-	_ = KFile.WriteFile("./testdata/putfile", str, 0777)
-	_ = KFile.WriteFile("/root/hello/world", str)
-	_ = KFile.WriteFile("/root/how/are", str)
+func TestFile_ReadInArray(t *testing.T) {
+	var sl []string
+	var err error
+
+	sl, err = KFile.ReadInArray(fileDante)
+	assert.Equal(t, 19568, len(sl))
+
+	//不存在的文件
+	sl, err = KFile.ReadInArray(fileNone)
+	assert.NotNil(t, err)
 }
 
-func BenchmarkWriteFile(b *testing.B) {
+func BenchmarkFile_ReadInArray(b *testing.B) {
 	b.ResetTimer()
-	str := []byte("Hello World!")
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.ReadInArray(fileMd)
+	}
+}
+
+func TestFile_ReadFirstLine(t *testing.T) {
+	var res []byte
+
+	res = KFile.ReadFirstLine(fileDante)
+	assert.NotEmpty(t, res)
+
+	//不存在的文件
+	res = KFile.ReadFirstLine(fileNone)
+	assert.Empty(t, res)
+}
+
+func BenchmarkFile_ReadFirstLine(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.ReadFirstLine(fileMd)
+	}
+}
+
+func TestFile_ReadLastLine(t *testing.T) {
+	var res []byte
+
+	res = KFile.ReadLastLine(changLog)
+	assert.NotEmpty(t, res)
+
+	//不存在的文件
+	res = KFile.ReadLastLine(fileNone)
+	assert.Empty(t, res)
+}
+
+func BenchmarkFile_ReadLastLine(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.ReadLastLine(fileMd)
+	}
+}
+
+func TestFile_WriteFile(t *testing.T) {
+	var err error
+
+	err = KFile.WriteFile(putfile, bytsHello)
+	assert.Nil(t, err)
+
+	//设置权限
+	err = KFile.WriteFile(putfile, bytsHello, 0777)
+	assert.Nil(t, err)
+
+	//无权限写
+	err = KFile.WriteFile(rootFile1, bytsHello, 0777)
+	if KOS.IsLinux() || KOS.IsMac() {
+		assert.NotNil(t, err)
+	}
+}
+
+func BenchmarkFile_WriteFile(b *testing.B) {
+	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		filename := fmt.Sprintf("./testdata/file/putfile_%d", i)
-		_ = KFile.WriteFile(filename, str)
+		_ = KFile.WriteFile(filename, bytsHello)
 	}
 }
 
-func TestGetMime(t *testing.T) {
-	filename := "./testdata/diglett.png"
-	mime1 := KFile.GetMime(filename, true)
-	mime2 := KFile.GetMime(filename, false)
-	if mime1 != mime2 {
-		t.Error("GetMime fail")
-		return
-	}
+func TestFile_AppendFile(t *testing.T) {
+	var err error
 
-	KFile.GetMime("./testdata/diglett-lnk", false)
-	KFile.GetMime("./", false)
+	//创建
+	err = KFile.AppendFile(apndfile, bytsHello)
+	assert.Nil(t, err)
+
+	//追加
+	err = KFile.AppendFile(apndfile, bytsHello)
+	assert.Nil(t, err)
+
+	//空路径
+	err = KFile.AppendFile("", bytsHello)
+	assert.NotNil(t, err)
+
+	//权限不足
+	err = KFile.AppendFile(rootFile1, bytsHello)
+	if KOS.IsLinux() || KOS.IsMac() {
+		assert.NotNil(t, err)
+	}
 }
 
-func BenchmarkGetMimeFast(b *testing.B) {
+func BenchmarkFile_AppendFile(b *testing.B) {
 	b.ResetTimer()
-	filename := "./testdata/diglett.png"
 	for i := 0; i < b.N; i++ {
-		_ = KFile.GetMime(filename, true)
+		_ = KFile.AppendFile(apndfile, bytsHello)
 	}
 }
 
-func BenchmarkGetMimeReal(b *testing.B) {
+func TestFile_GetMime(t *testing.T) {
+	var res string
+
+	res = KFile.GetMime(imgPng, false)
+	assert.NotEmpty(t, res)
+
+	res = KFile.GetMime(fileDante, true)
+	if KOS.IsWindows() {
+		assert.NotEmpty(t, res)
+	}
+
+	//不存在的文件
+	res = KFile.GetMime(fileNone, true)
+	assert.Empty(t, res)
+}
+
+func BenchmarkFile_GetMime_Fast(b *testing.B) {
 	b.ResetTimer()
-	filename := "./testdata/diglett.png"
 	for i := 0; i < b.N; i++ {
-		_ = KFile.GetMime(filename, false)
+		KFile.GetMime(fileMd, true)
 	}
 }
 
-func TestFileSize(t *testing.T) {
-	filename := "./file.go"
-	if KFile.FileSize(filename) <= 0 {
-		t.Error("file size error")
-		return
-	}
-
-	KFile.FileSize("./hello")
-}
-
-func BenchmarkFileSize(b *testing.B) {
+func BenchmarkFile_GetMime_NoFast(b *testing.B) {
 	b.ResetTimer()
-	filename := "./README.md"
 	for i := 0; i < b.N; i++ {
-		KFile.FileSize(filename)
+		KFile.GetMime(fileMd, false)
 	}
 }
 
-func TestDirSize(t *testing.T) {
-	dirpath := "./"
-	size := KFile.DirSize(dirpath)
-	if size == 0 {
-		t.Error("dir size error")
-		return
-	}
-	KFile.DirSize("./hello")
+func TestFile_FileSize(t *testing.T) {
+	var res int64
+
+	res = KFile.FileSize(changLog)
+	assert.Greater(t, res, int64(0))
+
+	//不存在的文件
+	res = KFile.FileSize(fileNone)
+	assert.Equal(t, int64(-1), res)
 }
 
-func BenchmarkDirSize(b *testing.B) {
+func BenchmarkFile_FileSize(b *testing.B) {
 	b.ResetTimer()
-	dirpath := "./"
 	for i := 0; i < b.N; i++ {
-		_ = KFile.DirSize(dirpath)
+		KFile.FileSize(fileMd)
 	}
 }
 
-func TestIsExist(t *testing.T) {
-	filename := "./file.go"
-	if !KFile.IsExist(filename) {
-		t.Error("file not exist")
-		return
-	}
+func TestFile_DirSize(t *testing.T) {
+	var res int64
+
+	res = KFile.DirSize(dirCurr)
+	assert.Greater(t, res, int64(0))
+
+	//不存在的目录
+	res = KFile.DirSize(fileNone)
+	assert.Equal(t, int64(0), res)
 }
 
-func BenchmarkIsExist(b *testing.B) {
+func BenchmarkFile_DirSize(b *testing.B) {
 	b.ResetTimer()
-	filename := "./README.md"
 	for i := 0; i < b.N; i++ {
-		KFile.IsExist(filename)
+		KFile.DirSize(dirTdat)
 	}
 }
 
-func TestIsWritable(t *testing.T) {
-	filename := "./README.md"
-	if !KFile.IsWritable(filename) {
-		t.Error("file can not write")
-		return
-	}
-	KFile.IsWritable("./hello")
+func TestFile_IsExist(t *testing.T) {
+	var res bool
+
+	res = KFile.IsExist(changLog)
+	assert.True(t, res)
+
+	res = KFile.IsExist(fileNone)
+	assert.False(t, res)
 }
 
-func BenchmarkIsWritable(b *testing.B) {
+func BenchmarkFile_IsExist(b *testing.B) {
 	b.ResetTimer()
-	filename := "./README.md"
 	for i := 0; i < b.N; i++ {
-		KFile.IsWritable(filename)
+		KFile.IsExist(fileMd)
 	}
 }
 
-func TestIsReadable(t *testing.T) {
-	filename := "./README.md"
-	if !KFile.IsReadable(filename) {
-		t.Error("file can not read")
-		return
-	}
-	KFile.IsReadable("./hello")
+func TestFile_IsReadable(t *testing.T) {
+	var res bool
+
+	res = KFile.IsReadable(dirTdat)
+	assert.True(t, res)
+
+	//不存在的目录
+	res = KFile.IsReadable(fileNone)
+	assert.False(t, res)
 }
 
-func BenchmarkIsReadable(b *testing.B) {
+func BenchmarkFile_IsReadable(b *testing.B) {
 	b.ResetTimer()
-	filename := "./README.md"
 	for i := 0; i < b.N; i++ {
-		KFile.IsReadable(filename)
+		KFile.IsReadable(dirTdat)
 	}
 }
 
-func TestIsExecutable(t *testing.T) {
-	filename := "./hello"
-	res := KFile.IsExecutable(filename)
-	if res {
-		t.Error("file can not execute")
-		return
-	}
+func TestFile_IsWritable(t *testing.T) {
+	var res bool
+
+	res = KFile.IsWritable(dirTdat)
+	assert.True(t, res)
+
+	//不存在的目录
+	res = KFile.IsWritable(fileNone)
+	assert.False(t, res)
 }
 
-func BenchmarkIsExecutable(b *testing.B) {
+func BenchmarkFile_IsWritable(b *testing.B) {
 	b.ResetTimer()
-	filename := "./README.md"
 	for i := 0; i < b.N; i++ {
-		KFile.IsExecutable(filename)
+		KFile.IsWritable(dirTdat)
 	}
 }
 
-func TestIsLink(t *testing.T) {
-	cmd := exec.Command("/bin/bash", "-c", "ln -sf ./testdata/diglett.png ./testdata/diglett-lnk")
-	_ = cmd.Run()
-	filename := "./testdata/diglett-lnk"
-	if !KFile.IsLink(filename) {
-		t.Error("isn`t a link")
-		return
-	}
-	KFile.IsLink("./hello")
+func TestFile_IsExecutable(t *testing.T) {
+	var res bool
+
+	res = KFile.IsExecutable(fileNone)
+	assert.False(t, res)
 }
 
-func BenchmarkIsLink(b *testing.B) {
+func BenchmarkFile_IsExecutable(b *testing.B) {
 	b.ResetTimer()
-	filename := "./testdata/diglett-lnk"
 	for i := 0; i < b.N; i++ {
-		KFile.IsLink(filename)
+		KFile.IsExecutable(fileMd)
 	}
 }
 
-func TestIsFile(t *testing.T) {
+func TestFile_IsLink(t *testing.T) {
+	//创建链接文件
+	if !KFile.IsExist(fileLink) {
+		_ = os.Symlink(filePubPem, fileLink)
+	}
+
+	var res bool
+
+	res = KFile.IsLink(fileLink)
+	assert.True(t, res)
+
+	res = KFile.IsLink(changLog)
+	assert.False(t, res)
+}
+
+func BenchmarkFile_IsLink(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.IsLink(fileLink)
+	}
+}
+
+func TestFile_IsFile(t *testing.T) {
 	tests := []struct {
 		f        string
 		t        LkkFileType
 		expected bool
 	}{
 		{"", FILE_TYPE_ANY, false},
-		{"./hello.go", FILE_TYPE_ANY, false},
-		{"./file.go", FILE_TYPE_ANY, true},
-		{"./file.go", FILE_TYPE_LINK, false},
-		{"./file.go", FILE_TYPE_REGULAR, true},
-		{"./file.go", FILE_TYPE_COMMON, true},
-		{"./testdata/diglett-lnk", FILE_TYPE_LINK, true},
-		{"./", FILE_TYPE_ANY, false},
+		{fileNone, FILE_TYPE_ANY, false},
+		{fileGo, FILE_TYPE_ANY, true},
+		{fileMd, FILE_TYPE_LINK, false},
+		{fileLink, FILE_TYPE_LINK, true},
+		{fileLink, FILE_TYPE_REGULAR, false},
+		{fileGitkee, FILE_TYPE_REGULAR, true},
+		{fileLink, FILE_TYPE_COMMON, true},
+		{imgJpg, FILE_TYPE_COMMON, true},
 	}
-
 	for _, test := range tests {
 		actual := KFile.IsFile(test.f, test.t)
-		if actual != test.expected {
-			t.Errorf("Expected IsFile(%q, %q) to be %v, got %v", test.f, test.t, test.expected, actual)
-			return
-		}
+		assert.Equal(t, test.expected, actual)
 	}
-
-	KFile.IsFile("./hello")
 }
 
-func BenchmarkIsFile(b *testing.B) {
+func BenchmarkFile_IsFile(b *testing.B) {
 	b.ResetTimer()
-	filename := "./README.md"
 	for i := 0; i < b.N; i++ {
-		KFile.IsFile(filename)
+		KFile.IsFile(fileMd, FILE_TYPE_ANY)
 	}
 }
 
-func TestIsDir(t *testing.T) {
-	dirname := "./"
-	if !KFile.IsDir(dirname) {
-		t.Error("isn`t a dir")
-		return
-	}
-	KFile.IsDir("./hello")
-	KFile.IsDir("/root/.bashrc")
+func TestFile_IsDir(t *testing.T) {
+	var res bool
+
+	res = KFile.IsDir(fileMd)
+	assert.False(t, res)
+
+	res = KFile.IsDir(fileNone)
+	assert.False(t, res)
+
+	res = KFile.IsDir(dirTdat)
+	assert.True(t, res)
 }
 
-func BenchmarkIsDir(b *testing.B) {
+func BenchmarkFile_IsDir(b *testing.B) {
 	b.ResetTimer()
-	filename := "./README.md"
 	for i := 0; i < b.N; i++ {
-		KFile.IsDir(filename)
+		KFile.IsDir(dirTdat)
 	}
 }
 
-func TestFileIsBinary(t *testing.T) {
-	filename := "./file.go"
-	if KFile.IsBinary(filename) {
-		t.Error("file isn`t binary")
-		return
-	}
+func TestFile_IsBinary(t *testing.T) {
+	var res bool
+	res = KFile.IsBinary(changLog)
+	assert.False(t, res)
 
-	goroot := os.Getenv("GOROOT")
-	file2 := goroot + "/bin/go"
-	if !KFile.IsBinary(file2) {
-		t.Error("file isn`t binary")
-		return
-	}
-
-	KFile.IsBinary("./hello")
+	res = KFile.IsBinary(imgPng)
+	assert.True(t, res)
 }
 
-func BenchmarkFileIsBinary(b *testing.B) {
+func BenchmarkFile_IsBinary(b *testing.B) {
 	b.ResetTimer()
-	filename := "./README.md"
 	for i := 0; i < b.N; i++ {
-		KFile.IsBinary(filename)
+		KFile.IsBinary(changLog)
 	}
 }
 
-func TestIsImg(t *testing.T) {
-	filename := "./testdata/diglett.png"
-	if !KFile.IsImg(filename) {
-		t.Error("file isn`t img")
-		return
-	}
-	KFile.IsImg("./hello")
+func TestFile_IsImg(t *testing.T) {
+	var res bool
+
+	res = KFile.IsImg(fileMd)
+	assert.False(t, res)
+
+	res = KFile.IsImg(imgSvg)
+	assert.True(t, res)
+
+	res = KFile.IsImg(imgPng)
+	assert.True(t, res)
 }
 
-func BenchmarkIsImg(b *testing.B) {
+func BenchmarkFile_IsImg(b *testing.B) {
 	b.ResetTimer()
-	filename := "./testdata/diglett.png"
 	for i := 0; i < b.N; i++ {
-		KFile.IsImg(filename)
+		KFile.IsImg(imgPng)
 	}
 }
 
-func TestMkdir(t *testing.T) {
-	dir := "./testdata/hello/world"
-	err := KFile.Mkdir(dir, 0777)
+func TestFile_Mkdir(t *testing.T) {
+	var err error
 
-	if err != nil {
-		t.Error("Mkdir fail")
-		return
-	}
+	err = KFile.Mkdir(dirNew, 0777)
+	assert.Nil(t, err)
 }
 
-func BenchmarkMkdir(b *testing.B) {
+func BenchmarkFile_Mkdir(b *testing.B) {
 	b.ResetTimer()
-	dir := "./testdata/hello/world"
 	for i := 0; i < b.N; i++ {
-		_ = KFile.Mkdir(dir, 0777)
+		dname := fmt.Sprintf(dirNew+"/tmp_%d", i)
+		_ = KFile.Mkdir(dname, 0777)
 	}
 }
 
-func TestAbsPath(t *testing.T) {
-	filename := "./testdata/diglett.png"
-	abspath := KFile.AbsPath(filename)
-	if !KFile.IsExist(abspath) {
-		t.Error("file not exist")
-		return
-	}
-	KFile.AbsPath("")
-	KFile.AbsPath("file:///c:/test.go")
+func TestFile_AbsPath(t *testing.T) {
+	var res string
 
-	//手工引发 filepath.Abs 错误
-	//创建目录
-	testpath := "./testdata/testhehetcl/abspath/123"
-	err := os.MkdirAll(testpath, 0755)
-	if err == nil {
-		//当前目录
-		testDir, _ := os.Getwd()
+	res = KFile.AbsPath(changLog)
+	assert.NotEqual(t, '.', rune(res[0]))
 
-		filename = "../../test.jpg"
-		//进入目录
-		_ = os.Chdir(testpath)
-		pwdir, _ := os.Getwd()
-
-		//删除目录
-		_ = os.Remove(pwdir)
-
-		//再获取路径
-		res := KFile.AbsPath(filename)
-		if res != "/test.jpg" {
-			t.Error("KFile.AbsPath fail")
-		}
-
-		//回到旧目录
-		_ = os.Chdir(testDir)
-	}
+	res = KFile.AbsPath(fileNone)
+	assert.NotEmpty(t, res)
 }
 
-func BenchmarkAbsPath(b *testing.B) {
+func BenchmarkFile_AbsPath(b *testing.B) {
 	b.ResetTimer()
-	filename := "./testdata/diglett.png"
 	for i := 0; i < b.N; i++ {
-		KFile.AbsPath(filename)
+		KFile.AbsPath(changLog)
 	}
 }
 
-func TestRealPath(t *testing.T) {
-	pwd, _ := KOS.Getcwd()
-	path1 := "testdata/diglett.png"
-	path2 := "./testdata/diglett.png"
-	path3 := pwd + `/` + path1
+func TestFile_RealPath(t *testing.T) {
+	var res string
 
-	res1 := KFile.RealPath("./hello/nothing")
-	res2 := KFile.RealPath(path3)
-	res3 := KFile.RealPath(path2)
-	if res1 != "" || res2 != res3 {
-		t.Error("RealPath fail")
-		return
-	}
+	res = KFile.RealPath(fileMd)
+	assert.NotEmpty(t, res)
 
-	//手工引发 os.Getwd 错误
-	//创建目录
-	testpath := "./testdata/testhehetcl/abspath/456"
-	err := os.MkdirAll(testpath, 0755)
-	if err == nil {
-		//当前目录
-		testDir, _ := os.Getwd()
-		filename := "../../test.jpg"
-
-		//进入目录
-		_ = os.Chdir(testpath)
-		pwdir, _ := os.Getwd()
-
-		//删除目录
-		_ = os.Remove(pwdir)
-
-		//再获取路径
-		res := KFile.RealPath(filename)
-		if res != "" {
-			t.Error("KFile.RealPath fail")
-		}
-
-		//回到旧目录
-		_ = os.Chdir(testDir)
-	}
+	res = KFile.RealPath(fileNone)
+	assert.Empty(t, res)
 }
 
-func BenchmarkRealPath(b *testing.B) {
+func BenchmarkFile_RealPath(b *testing.B) {
 	b.ResetTimer()
-	path := "testdata/diglett.png"
 	for i := 0; i < b.N; i++ {
-		KFile.RealPath(path)
+		KFile.RealPath(fileMd)
 	}
 }
 
-func TestTouchRenameUnlink(t *testing.T) {
-	file1 := "./testdata/empty/zero"
-	file2 := "./testdata/empty/2m"
-	file3 := "/root/test/empty_zero"
-	file4 := "/root/empty_zero"
+func TestFile_TouchRenameUnlink(t *testing.T) {
+	var res bool
+	var err error
 
-	//创建文件
-	res1 := KFile.Touch(file1, 0)
-	res2 := KFile.Touch(file2, 2097152)
-	if !res1 || !res2 {
-		t.Error("Touch fail")
-		return
-	}
+	res = KFile.Touch(touchfile, 2097152)
+	assert.True(t, res)
 
-	//重命名
-	file5 := "./testdata/empty/zero_re"
-	file6 := "./testdata/empty/2m_re"
-	err1 := KFile.Rename(file1, file5)
-	err2 := KFile.Rename(file2, file6)
-	if err1 != nil || err2 != nil {
-		t.Error("Unlink fail")
-		return
-	}
+	err = KFile.Rename(touchfile, renamefile)
+	assert.Nil(t, err)
 
-	//删除文件
-	err3 := KFile.Unlink(file5)
-	err4 := KFile.Unlink(file6)
-	if err3 != nil || err4 != nil {
-		t.Error("Unlink fail")
-		return
-	}
-
-	KFile.Touch(file3, 0)
-	KFile.Touch(file4, 0)
+	err = KFile.Unlink(renamefile)
+	assert.Nil(t, err)
 }
 
-func BenchmarkTouch(b *testing.B) {
+func BenchmarkFile_Touch(b *testing.B) {
 	b.ResetTimer()
-	filename := ""
+	var filename string
 	for i := 0; i < b.N; i++ {
-		filename = fmt.Sprintf("./testdata/empty/zero_%d", i)
+		filename = fmt.Sprintf(dirTouch+"/zero_%d", i)
 		KFile.Touch(filename, 0)
 	}
 }
 
-func BenchmarkRename(b *testing.B) {
+func BenchmarkFile_Rename(b *testing.B) {
 	b.ResetTimer()
-	filename1 := ""
-	filename2 := ""
+	var f1, f2 string
 	for i := 0; i < b.N; i++ {
-		filename1 = fmt.Sprintf("./testdata/empty/zero_%d", i)
-		filename2 = fmt.Sprintf("./testdata/empty/zero_re%d", i)
-		_ = KFile.Rename(filename1, filename2)
+		f1 = fmt.Sprintf(dirTouch+"/zero_%d", i)
+		f2 = fmt.Sprintf(dirTouch+"/zero_re%d", i)
+		_ = KFile.Rename(f1, f2)
 	}
 }
 
-func BenchmarkUnlink(b *testing.B) {
+func BenchmarkFile_Unlink(b *testing.B) {
 	b.ResetTimer()
-	filename := ""
+	var filename string
 	for i := 0; i < b.N; i++ {
-		filename = fmt.Sprintf("./testdata/empty/zero_re%d", i)
+		filename = fmt.Sprintf(dirTouch+"/zero_re%d", i)
 		_ = KFile.Unlink(filename)
 	}
 }
 
-func TestCopyFile(t *testing.T) {
-	src := "./testdata/diglett.png"
-	des := "./testdata/sub/diglett_copy.png"
-	num, err := KFile.CopyFile(src, des, FILE_COVER_ALLOW)
-	if err != nil || num == 0 {
-		t.Error("copy file fail")
-		return
-	}
+func TestFile_CopyFile(t *testing.T) {
+	var res int64
+	var err error
+
+	//忽略已存在的
+	res, err = KFile.CopyFile(imgPng, imgCopy, FILE_COVER_IGNORE)
+	assert.Nil(t, err)
+
+	//覆盖已存在的
+	res, err = KFile.CopyFile(imgPng, imgCopy, FILE_COVER_ALLOW)
+	assert.Greater(t, res, int64(0))
+
+	//禁止覆盖
+	res, err = KFile.CopyFile(imgPng, imgCopy, FILE_COVER_DENY)
+	assert.NotNil(t, err)
+
+	//源和目标文件相同
+	res, err = KFile.CopyFile(imgPng, imgPng, FILE_COVER_ALLOW)
+	assert.Equal(t, int64(0), res)
+	assert.Nil(t, err)
 
 	//拷贝大文件
-	src = "./testdata/2mfile"
-	des = "./testdata/2mfile_copy"
-	KFile.Touch(src, 2097152)
-	_, _ = KFile.CopyFile(src, des, FILE_COVER_ALLOW)
+	KFile.Touch(touchfile, 2097152)
+	res, err = KFile.CopyFile(touchfile, copyfile, FILE_COVER_ALLOW)
 
-	_, _ = KFile.CopyFile("abc", "abc", FILE_COVER_ALLOW)
-	_, _ = KFile.CopyFile("./hello", "", FILE_COVER_ALLOW)
-	_, _ = KFile.CopyFile(".", "", FILE_COVER_ALLOW)
-	_, _ = KFile.CopyFile("./testdata/diglett.png", "./testdata/.gitkeep", FILE_COVER_IGNORE)
-	_, _ = KFile.CopyFile("./testdata/diglett.png", "./testdata/.gitkeep", FILE_COVER_DENY)
+	//目标为空
+	res, err = KFile.CopyFile(imgPng, "", FILE_COVER_ALLOW)
+	assert.NotNil(t, err)
 
-	_, _ = KFile.CopyFile("./testdata/diglett.png", "/root/test/diglett.png", FILE_COVER_ALLOW)
-	_, _ = KFile.CopyFile("./testdata/diglett.png", "/root/diglett.png", FILE_COVER_ALLOW)
-	_, _ = KFile.CopyFile("./testdata/empty/2m", "./testdata/empty/2m_copy", FILE_COVER_ALLOW)
-	_, _ = KFile.CopyFile("./testdata/empty/2m", "./testdata/empty/2m_copy", FILE_COVER_IGNORE)
-
+	//源非正常文件
+	res, err = KFile.CopyFile(".", "", FILE_COVER_ALLOW)
+	assert.NotNil(t, err)
 }
 
-func BenchmarkCopyFileErrorRead(b *testing.B) {
+func BenchmarkFile_CopyFile(b *testing.B) {
 	b.ResetTimer()
-	src := "./testdata/diglett.png"
-	des := ""
+	var des string
 	for i := 0; i < b.N; i++ {
-		des = fmt.Sprintf("./testdata/sub/diglett_copy_%d.png", i)
-		go func(src, des string) {
-			_, _ = KFile.CopyFile(src, des, FILE_COVER_ALLOW)
-			_ = KFile.Unlink(src)
-		}(src, des)
+		des = fmt.Sprintf(dirCopy+"/diglett_copy_%d.png", i)
+		_, _ = KFile.CopyFile(imgPng, des, FILE_COVER_ALLOW)
 	}
 }
 
-func BenchmarkCopyFile(b *testing.B) {
+func TestFile_FastCopy(t *testing.T) {
+	var res int64
+	var err error
+
+	res, err = KFile.FastCopy(imgJpg, fastcopyfile)
+	assert.Greater(t, res, int64(0))
+
+	//源文件不存在
+	res, err = KFile.FastCopy(fileNone, fastcopyfile)
+	assert.NotNil(t, err)
+
+	//目标为空
+	res, err = KFile.FastCopy(imgJpg, "")
+	assert.NotNil(t, err)
+}
+
+func BenchmarkFile_FastCopy(b *testing.B) {
 	b.ResetTimer()
-	src := "./testdata/diglett.png"
-	des := ""
+	var des string
 	for i := 0; i < b.N; i++ {
-		des = fmt.Sprintf("./testdata/sub/diglett_copy_%d.png", i)
-		_, _ = KFile.CopyFile(src, des, FILE_COVER_ALLOW)
+		des = fmt.Sprintf(dirCopy+"/fast_copy_%d", i)
+		_, _ = KFile.FastCopy(imgJpg, des)
 	}
 }
 
-func TestFastCopy(t *testing.T) {
-	src := "./testdata/diglett.png"
-	des := "./testdata/fast/diglett_copy.png"
+func TestFile_CopyLink(t *testing.T) {
+	var err error
 
-	num, err := KFile.FastCopy(src, des)
-	if err != nil || num == 0 {
-		t.Error("fast copy file fail")
-		return
-	}
+	//源和目标相同
+	err = KFile.CopyLink(fileLink, fileLink)
+	assert.Nil(t, err)
 
-	_, _ = KFile.FastCopy("./hello", "")
-	_, _ = KFile.FastCopy("./testdata/diglett.png", "/root/test/diglett.png")
-	_, _ = KFile.FastCopy("./testdata/diglett.png", "/root/diglett.png")
+	err = KFile.CopyLink(fileLink, copyLink)
+	assert.Nil(t, err)
+
+	//源文件不存在
+	err = KFile.CopyLink(fileNone, copyLink)
+	assert.NotNil(t, err)
+
+	//目标为空
+	err = KFile.CopyLink(fileLink, "")
+	assert.NotNil(t, err)
 }
 
-func BenchmarkFastCopyErrorRead(b *testing.B) {
+func BenchmarkFile_CopyLink(b *testing.B) {
 	b.ResetTimer()
-	src := "./testdata/diglett.png"
-	des := ""
+	var des string
 	for i := 0; i < b.N; i++ {
-		des = fmt.Sprintf("./testdata/fast/diglett_fast_%d.png", i)
-		go func(src, des string) {
-			_, _ = KFile.FastCopy(src, des)
-			_ = KFile.Unlink(src)
-		}(src, des)
+		des = fmt.Sprintf(dirLink+"/lnk_%d.copy", i)
+		_ = KFile.CopyLink(fileLink, des)
 	}
 }
 
-func BenchmarkFastCopy(b *testing.B) {
+func TestFile_CopyDir(t *testing.T) {
+	var res int64
+	var err error
+
+	//忽略已存在的
+	res, err = KFile.CopyDir(dirVendor, dirTdat, FILE_COVER_IGNORE)
+	assert.Nil(t, err)
+
+	//覆盖已存在的
+	res, err = KFile.CopyDir(dirVendor, dirTdat, FILE_COVER_ALLOW)
+	assert.Nil(t, err)
+
+	//禁止覆盖
+	res, err = KFile.CopyDir(dirVendor, dirTdat, FILE_COVER_DENY)
+	assert.Equal(t, int64(0), res)
+
+	//源和目标相同
+	res, err = KFile.CopyDir(dirVendor, dirVendor, FILE_COVER_ALLOW)
+	assert.Equal(t, int64(0), res)
+
+	//目标为空
+	res, err = KFile.CopyDir(dirVendor, "", FILE_COVER_ALLOW)
+	assert.NotNil(t, err)
+
+	//源不是目录
+	res, err = KFile.CopyDir(fileMd, dirTdat, FILE_COVER_ALLOW)
+	assert.NotNil(t, err)
+}
+
+func BenchmarkFile_CopyDir(b *testing.B) {
 	b.ResetTimer()
-	src := "./testdata/diglett.png"
-	des := ""
+	var des string
 	for i := 0; i < b.N; i++ {
-		des = fmt.Sprintf("./testdata/fast/diglett_fast_%d.png", i)
-		_, _ = KFile.FastCopy(src, des)
+		des = fmt.Sprintf(dirCopy+"/copydir_%d", i)
+		_, _ = KFile.CopyDir(dirDoc, des, FILE_COVER_ALLOW)
 	}
 }
 
-func TestCopyLink(t *testing.T) {
-	src := "./testdata/diglett-lnk"
-	des := "./testdata/link/diglett-lnk.copy"
+func TestFile_DelDir(t *testing.T) {
+	var err error
+	var chk bool
 
-	err := KFile.CopyLink(src, des)
-	if err != nil {
-		t.Error("copy link fail:" + err.Error())
-		return
-	}
+	//清空目录
+	err = KFile.DelDir(dirCopy, false)
+	chk = KFile.IsDir(dirCopy)
+	assert.Nil(t, err)
+	assert.True(t, chk)
 
-	_ = KFile.CopyLink(src, des)
-	_ = KFile.CopyLink("abc", "abc")
-	_ = KFile.CopyLink("./helloe", "abc")
-	_ = KFile.CopyLink(src, "/root/test/abc")
-
+	//删除目录
+	err = KFile.DelDir(dirNew, true)
+	chk = KFile.IsDir(dirNew)
+	assert.Nil(t, err)
+	assert.False(t, chk)
 }
 
-func BenchmarkCopyLink(b *testing.B) {
+func BenchmarkFile_DelDir(b *testing.B) {
 	b.ResetTimer()
-	src := "./testdata/diglett-lnk"
-	des := ""
+	var des string
 	for i := 0; i < b.N; i++ {
-		des = fmt.Sprintf("./testdata/link/diglett-lnk_%d.copy", i)
-		_ = KFile.CopyLink(src, des)
+		des = fmt.Sprintf(dirCopy+"/copydir_%d", i)
+		_ = KFile.DelDir(des, true)
 	}
 }
 
-func TestCopyDir(t *testing.T) {
-	src := "./testdata"
-	des := "./test/copy"
-	des2 := "./test/copy2"
-
-	num, err := KFile.CopyDir(src, des, FILE_COVER_ALLOW)
-	if err != nil || num == 0 {
-		t.Error("copy directory fail")
-		return
-	}
-
-	_, _ = KFile.CopyDir("./hello", des, FILE_COVER_ALLOW)
-	_, _ = KFile.CopyDir("./file.go", des, FILE_COVER_ALLOW)
-	_, _ = KFile.CopyDir(src, "/root/test/tdir", FILE_COVER_ALLOW)
-	_, _ = KFile.CopyDir("/root/", des, FILE_COVER_ALLOW)
-	_, _ = KFile.CopyDir(src, des2, FILE_COVER_ALLOW)
-	_, _ = KFile.CopyDir(des, des2, FILE_COVER_IGNORE)
-	_, _ = KFile.CopyDir(des, des2, FILE_COVER_ALLOW)
-}
-
-func BenchmarkCopyDir(b *testing.B) {
-	b.ResetTimer()
-	src := "./testdata"
-	des := ""
-	for i := 0; i < b.N; i++ {
-		des = fmt.Sprintf("./test/copy_%d", i)
-		_, _ = KFile.CopyDir(src, des, FILE_COVER_ALLOW)
-	}
-}
-
-func TestFileImg2Base64(t *testing.T) {
-	img := "./testdata/diglett.png"
-	str, err := KFile.Img2Base64(img)
-	if err != nil || str == "" {
-		t.Error("Img2Base64 fail")
-		return
-	}
-
-	_, _ = KFile.Img2Base64("./testdata/.gitkeep")
-	_, _ = KFile.Img2Base64("./testdata/hello.png")
-
-}
-
-func BenchmarkFileImg2Base64(b *testing.B) {
-	b.ResetTimer()
-	img := "./testdata/diglett.png"
-	for i := 0; i < b.N; i++ {
-		_, _ = KFile.Img2Base64(img)
-	}
-}
-
-func TestDelDir(t *testing.T) {
-	dir := "./test"
-	err := KFile.DelDir(dir, true)
-	if err != nil || KFile.IsDir(dir) {
-		t.Error("DelDir fail")
-		return
-	}
-
-	_ = KFile.DelDir("./hello", true)
-	_ = KFile.DelDir("/root", true)
-
-}
-
-func BenchmarkDelDir(b *testing.B) {
-	b.ResetTimer()
-	dir := "./test"
-	for i := 0; i < b.N; i++ {
-		_ = KFile.DelDir(dir, true)
-	}
-}
-
-func TestFileTree(t *testing.T) {
-	tree := KFile.FileTree("./", FILE_TREE_ALL, true)
-	if len(tree) == 0 {
-		t.Error("FileTree fail")
-		return
-	}
-
-	KFile.FileTree("", FILE_TREE_ALL, true)
-	KFile.FileTree("./README.md", FILE_TREE_ALL, true)
-	KFile.FileTree("/root", FILE_TREE_ALL, true)
-
-	home, _ := KOS.HomeDir()
-	KFile.FileTree(home, FILE_TREE_ALL, true)
-}
-
-func BenchmarkFileTree(b *testing.B) {
-	b.ResetTimer()
-	dir := "./"
-	for i := 0; i < b.N; i++ {
-		_ = KFile.FileTree(dir, FILE_TREE_ALL, true)
-	}
-}
-
-func TestFormatDir(t *testing.T) {
+func TestFile_Img2Base64(t *testing.T) {
 	var res string
-	d1 := `/usr\bin\\golang//fmt/\test\/hehe`
-	d2 := `/usr|///tmp:\\\123/\abc<|\hello>\/%world?\\how$\\are`
+	var err error
 
-	res = KFile.FormatDir(d1)
-	if strings.Contains(res, `\`) || res != `/usr/bin/golang/fmt/test/hehe/` {
-		t.Error("FormatDir fail")
-		return
-	}
+	//png
+	res, err = KFile.Img2Base64(imgPng)
+	assert.Nil(t, err)
+	assert.Contains(t, res, "png")
 
-	res = KFile.FormatDir(d2)
-	if strings.Contains(res, `\`) || res != `/usr/tmp/123/abc/hello/%world/how$/are/` {
-		t.Error("FormatDir fail")
-		return
-	}
+	//jpg
+	res, err = KFile.Img2Base64(imgJpg)
+	assert.Nil(t, err)
+	assert.Contains(t, res, "jpg")
 
-	r1 := KFile.FormatDir(".")
-	r2 := KFile.FormatDir("./")
-	if r1 != r2 || r2 != "./" {
-		t.Error("FormatDir fail")
-		return
-	}
+	//非图片
+	res, err = KFile.Img2Base64(fileMd)
+	assert.NotNil(t, err)
 
-	KFile.FormatDir("")
+	//图片不存在
+	res, err = KFile.Img2Base64(fileNone)
+	assert.NotNil(t, err)
 }
 
-func TestFormatPath(t *testing.T) {
-	p1 := `/usr\bin\\golang//fmt/\test\/hehe`
-	p2 := `/usr|///tmp:\\\123/\abc<|\hello>\/%world?\\how$\\are\@#test.png`
-	p3 := `test.log`
-	p4 := `./test.log`
-
-	res1 := KFile.FormatPath(p1)
-	res2 := KFile.FormatPath(p2)
-	res3 := KFile.FormatPath(p3)
-	res4 := KFile.FormatPath(p4)
-
-	if res1 != `/usr/bin/golang/fmt/test/hehe` {
-		t.Error("FormatPath fail")
-		return
-	}
-	if res2 != `/usr/tmp/123/abc/hello/%world/how$/are/@#test.png` {
-		t.Error("FormatPath fail")
-		return
-	}
-	if res3 != `test.log` {
-		t.Error("FormatPath fail")
-		return
-	}
-	if res4 != `./test.log` {
-		t.Error("FormatPath fail")
-		return
-	}
-
-	KFile.FormatPath("")
-}
-
-
-func BenchmarkFormatDir(b *testing.B) {
+func BenchmarkFile_Img2Base64(b *testing.B) {
 	b.ResetTimer()
-	dir := `/usr\bin\\golang//fmt`
 	for i := 0; i < b.N; i++ {
-		_ = KFile.FormatDir(dir)
+		_, _ = KFile.Img2Base64(imgPng)
 	}
 }
 
-func TestFileMd5(t *testing.T) {
-	file := `./file.go`
-	res1, _ := KFile.Md5(file, 0)
-	res2, _ := KFile.Md5(file, 16)
-	if len(res1) != 32 || !strings.Contains(res1, res2) {
-		t.Error("File Md5 fail")
-		return
-	}
-	_, _ = KFile.Md5("./hello", 32)
-	_, _ = KFile.Md5("/tmp", 32)
+func TestFile_FileTree(t *testing.T) {
+	var res []string
+
+	//显示全部
+	res = KFile.FileTree(dirVendor, FILE_TREE_ALL, true)
+	assert.NotEmpty(t, res)
+
+	//仅目录
+	res = KFile.FileTree(dirVendor, FILE_TREE_DIR, true)
+	assert.NotEmpty(t, res)
+
+	//仅文件
+	res = KFile.FileTree(dirVendor, FILE_TREE_FILE, true)
+	assert.NotEmpty(t, res)
+
+	//不递归
+	res = KFile.FileTree(dirCurr, FILE_TREE_DIR, false)
+	assert.GreaterOrEqual(t, len(res), 4)
+
+	//文件过滤
+	res = KFile.FileTree(dirCurr, FILE_TREE_FILE, true, func(s string) bool {
+		ext := KFile.GetExt(s)
+		return ext == "go"
+	})
+	assert.NotEmpty(t, res)
 }
 
-func BenchmarkFileMd5(b *testing.B) {
+func BenchmarkFile_FileTree(b *testing.B) {
 	b.ResetTimer()
-	file := `./file.go`
 	for i := 0; i < b.N; i++ {
-		_, _ = KFile.Md5(file, 32)
+		KFile.FileTree(dirCurr, FILE_TREE_ALL, false)
 	}
 }
 
-func TestFileShaX(t *testing.T) {
+func TestFile_FormatDir(t *testing.T) {
+	var res string
+
+	res = KFile.FormatDir(pathTes3)
+	assert.NotContains(t, res, "\\")
+
+	//win格式
+	res = KFile.FormatDir(pathTes2)
+	assert.Equal(t, 1, strings.Count(res, ":"))
+
+	//空目录
+	res = KFile.FormatDir("")
+	assert.Empty(t, res)
+}
+
+func BenchmarkFile_FormatDir(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.FormatDir(pathTes3)
+	}
+}
+
+func TestFile_FormatPath(t *testing.T) {
+	var res string
+
+	res = KFile.FormatPath(pathTes1)
+	assert.NotContains(t, res, ":")
+
+	res = KFile.FormatPath(fileGmod)
+	assert.Equal(t, res, fileGmod)
+
+	res = KFile.FormatPath(fileGo)
+	assert.Equal(t, res, fileGo)
+
+	res = KFile.FormatPath(pathTes3)
+	assert.NotContains(t, res, "\\")
+
+	//win格式
+	res = KFile.FormatPath(pathTes2)
+	assert.Equal(t, 1, strings.Count(res, ":"))
+
+	//空路径
+	res = KFile.FormatPath("")
+	assert.Empty(t, res)
+}
+
+func BenchmarkFile_FormatPath(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.FormatPath(pathTes2)
+	}
+}
+
+func TestFile_Md5(t *testing.T) {
+	var res string
+	var err error
+
+	res, err = KFile.Md5(fileMd, 32)
+	assert.NotEmpty(t, res)
+
+	res, err = KFile.Md5(fileMd, 16)
+	assert.Nil(t, err)
+
+	//不存在的文件
+	res, err = KFile.Md5(fileNone, 32)
+	assert.NotNil(t, err)
+}
+
+func BenchmarkFile_Md5(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.Md5(fileMd, 32)
+	}
+}
+
+func TestFile_ShaX(t *testing.T) {
 	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
+		r := recover()
+		assert.NotEmpty(t, r)
 	}()
 
-	file := "./testdata/diglett.png"
+	var res string
+	var err error
 
-	_, err := KFile.ShaX(file, 1)
-	if err != nil {
-		t.Error("File ShaX[1] fail")
-		return
-	}
+	res, err = KFile.ShaX(fileGmod, 1)
+	assert.NotEmpty(t, res)
 
-	_, err = KFile.ShaX(file, 256)
-	if err != nil {
-		t.Error("File ShaX[256] fail")
-		return
-	}
+	res, err = KFile.ShaX(fileGmod, 256)
+	assert.NotEmpty(t, res)
 
-	_, err = KFile.ShaX(file, 512)
-	if err != nil {
-		t.Error("File ShaX[512] fail")
-		return
-	}
+	res, err = KFile.ShaX(fileGmod, 512)
+	assert.NotEmpty(t, res)
 
-	_, _ = KFile.ShaX("./testdata/hello", 256)
-	_, _ = KFile.ShaX(file, 32)
+	//文件不存在
+	res, err = KFile.ShaX(fileNone, 512)
+	assert.NotNil(t, err)
+
+	//err x
+	res, err = KFile.ShaX(fileGmod, 32)
 }
 
-func BenchmarkFileShaX(b *testing.B) {
+func BenchmarkFile_ShaX(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = KFile.ShaX("./testdata/diglett.png", 256)
+		_, _ = KFile.ShaX(fileGmod, 256)
 	}
 }
 
-func TestPathinfo(t *testing.T) {
-	filename := "./testdata/diglett.png"
-	res1 := KFile.Pathinfo(filename, -1)
-	res2 := KFile.Pathinfo(filename, 1)
-	res3 := KFile.Pathinfo(filename, 2)
-	res4 := KFile.Pathinfo(filename, 4)
-	res5 := KFile.Pathinfo(filename, 8)
-	res6 := KFile.Pathinfo("./testdata/.gitkeep", -1)
-	res7 := KFile.Pathinfo("./testdata/hello", -1)
+func TestFile_Pathinfo(t *testing.T) {
+	var res map[string]string
 
-	if len(res1) != 4 {
-		t.Error("Pathinfo[all] fail")
-		return
-	} else if _, ok := res2["dirname"]; !ok {
-		t.Error("Pathinfo[dirname] fail")
-		return
-	} else if _, ok := res3["basename"]; !ok {
-		t.Error("Pathinfo[basename] fail")
-		return
-	} else if _, ok := res4["extension"]; !ok {
-		t.Error("Pathinfo[extension] fail")
-		return
-	} else if _, ok := res5["filename"]; !ok {
-		t.Error("Pathinfo[filename] fail")
-		return
-	} else if ext, _ := res6["extension"]; ext != "gitkeep" {
-		t.Error("Pathinfo fail")
-		return
-	} else if ext, _ := res7["extension"]; ext != "" {
-		t.Error("Pathinfo fail")
-		return
-	}
+	//所有信息
+	res = KFile.Pathinfo(imgPng, -1)
+	assert.Equal(t, 4, len(res))
+
+	//仅目录
+	res = KFile.Pathinfo(imgPng, 1)
+
+	//仅基础名(文件+扩展)
+	res = KFile.Pathinfo(imgPng, 2)
+
+	//仅扩展名
+	res = KFile.Pathinfo(imgPng, 4)
+
+	//仅文件名
+	res = KFile.Pathinfo(imgPng, 8)
+
+	//目录+基础名
+	res = KFile.Pathinfo(imgPng, 3)
+
+	//特殊类型
+	res = KFile.Pathinfo(fileGitkee, -1)
+	assert.Empty(t, res["filename"])
 }
 
-func BenchmarkPathinfo(b *testing.B) {
+func BenchmarkFile_Pathinfo(b *testing.B) {
 	b.ResetTimer()
-	filename := "./testdata/diglett.png"
 	for i := 0; i < b.N; i++ {
-		KFile.Pathinfo(filename, -1)
+		KFile.Pathinfo(imgPng, -1)
 	}
 }
 
-func TestBasename(t *testing.T) {
-	path := "./testdata/diglett.png"
-	res := KFile.Basename(path)
-	if res != "diglett.png" {
-		t.Error("Basename fail")
-		return
-	}
+func TestFile_Basename(t *testing.T) {
+	var res string
+
+	res = KFile.Basename(fileMd)
+	assert.Equal(t, "README.md", res)
+
+	res = KFile.Basename(fileNone)
+	assert.Equal(t, "none", res)
+
+	res = KFile.Basename("")
+	assert.NotEmpty(t, res)
+	assert.Equal(t, ".", res)
 }
 
-func BenchmarkBasename(b *testing.B) {
+func BenchmarkFile_Basename(b *testing.B) {
 	b.ResetTimer()
-	path := "./testdata/diglett.png"
 	for i := 0; i < b.N; i++ {
-		KFile.Basename(path)
+		KFile.Basename(fileDante)
 	}
 }
 
-func TestDirname(t *testing.T) {
-	path1 := "/home/arnie/amelia.jpg"
-	path2 := "/mnt/photos/"
-	path3 := "rabbit.jpg"
-	path4 := "/usr/local//go"
-	path5 := ""
+func TestFile_Dirname(t *testing.T) {
+	var res string
 
-	res1 := KFile.Dirname(path1)
-	res2 := KFile.Dirname(path2)
-	res3 := KFile.Dirname(path3) //返回"."
-	res4 := KFile.Dirname(path4)
-	res5 := KFile.Dirname(path5) //返回"."
+	res = KFile.Dirname(changLog)
+	assert.Equal(t, "docs", res)
 
-	if res1 == "" || res2 == "" || res4 == "" || res3 != res5 || res5 != "." {
-		t.Error("Dirname fail")
-		return
-	}
+	res = KFile.Dirname("")
+	assert.NotEmpty(t, res)
+	assert.Equal(t, ".", res)
 }
 
-func BenchmarkDirname(b *testing.B) {
+func BenchmarkFile_Dirname(b *testing.B) {
 	b.ResetTimer()
-	path := "/home/arnie/amelia.jpg"
 	for i := 0; i < b.N; i++ {
-		KFile.Dirname(path)
+		KFile.Dirname(fileSongs)
 	}
 }
 
-func TestGetModTime(t *testing.T) {
-	path := "./testdata/diglett.png"
-	res := KFile.GetModTime(path)
-	if res == 0 {
-		t.Error("GetModTime fail")
-		return
-	}
+func TestFile_GetModTime(t *testing.T) {
+	var res int64
 
-	KFile.GetModTime("./hello")
+	res = KFile.GetModTime(fileMd)
+	assert.Greater(t, res, int64(0))
+
+	//不存在的文件
+	res = KFile.GetModTime(fileNone)
+	assert.Equal(t, res, int64(0))
+
+	//空路径
+	res = KFile.GetModTime(fileNone)
+	assert.Equal(t, res, int64(0))
 }
 
-func BenchmarkGetModTime(b *testing.B) {
+func BenchmarkFile_GetModTime(b *testing.B) {
 	b.ResetTimer()
-	path := "./testdata/diglett.png"
 	for i := 0; i < b.N; i++ {
-		KFile.GetModTime(path)
+		KFile.GetModTime(fileMd)
 	}
 }
 
-func TestGlob(t *testing.T) {
-	pattern := "*test.go"
-	res, err := KFile.Glob(pattern)
-	if err != nil || len(res) == 0 {
-		t.Error("Glob fail")
-		return
-	}
+func TestFile_Glob(t *testing.T) {
+	var res []string
+	var err error
+
+	res, err = KFile.Glob("*test.go")
+	assert.NotEmpty(t, res)
+	assert.Nil(t, err)
 }
 
-func BenchmarkGlob(b *testing.B) {
+func BenchmarkFile_Glob(b *testing.B) {
 	b.ResetTimer()
 	pattern := "*test.go"
 	for i := 0; i < b.N; i++ {
@@ -946,385 +935,192 @@ func BenchmarkGlob(b *testing.B) {
 	}
 }
 
-func TestTarGzUnTarGz(t *testing.T) {
-	//打包
-	patterns := []string{".*_test.go", ".*.yml", "*_test"}
-	_, err := KFile.TarGz("./", "./targz/test.tar.gz", patterns...)
-	if err != nil {
-		t.Error("TarGz fail")
-		return
+func TestFile_SafeFileName(t *testing.T) {
+	var res string
+
+	res = KFile.SafeFileName(pathTes4)
+	assert.Equal(t, `123456789-ASDF.html`, res)
+
+	res = KFile.SafeFileName(pathTes5)
+	assert.Equal(t, `test.go`, res)
+
+	res = KFile.SafeFileName(pathTes6)
+	assert.Equal(t, `Hello-World.txt`, res)
+
+	res = KFile.SafeFileName("")
+	assert.Equal(t, ".", res)
+}
+
+func BenchmarkFile_SafeFileName(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KFile.SafeFileName(pathTes4)
 	}
+}
+
+func TestFile_TarGzUnTarGz(t *testing.T) {
+	var res1, res2 bool
+	var err1, err2 error
+	var patterns []string
+
+	//打包
+	patterns = []string{".*.md", ".*.yml", ".*_test.go"}
+	res1, err1 = KFile.TarGz(dirVendor, targzfile1, patterns...)
+	assert.True(t, res1)
+	assert.Nil(t, err1)
 
 	//解压
-	_, err = KFile.UnTarGz("./targz/test.tar.gz", "/tmp/targz/tmp")
-	if err != nil {
-		t.Error("UnTarGz fail")
-		return
-	}
+	res2, err2 = KFile.UnTarGz(targzfile1, untarpath1)
+	assert.True(t, res2)
+	assert.Nil(t, err2)
 
-	_, _ = KFile.TarGz("", "./targz/test.tar.gz")
-	_, _ = KFile.TarGz("/root/hello", "./targz/test.tar.gz", patterns...)
-	_, _ = KFile.TarGz("./", "/root/test.tar.gz", patterns...)
-	_, _ = KFile.UnTarGz("./targz/hello.tar.gz", "/root/targz/tmp")
-	_, _ = KFile.UnTarGz("./targz/test.tar.gz", "/root/targz/tmp")
+	//打包不存在的目录
+	res1, err1 = KFile.TarGz(fileNone, targzfile2)
+	assert.False(t, res1)
+	assert.NotNil(t, err1)
+
+	//解压非tar格式的文件
+	res2, err2 = KFile.UnTarGz(fileDante, untarpath1)
+	assert.False(t, res2)
+	assert.NotNil(t, err2)
+
+	//解压不存在的文件
+	res2, err2 = KFile.UnTarGz(fileNone, untarpath1)
+	assert.False(t, res2)
+	assert.NotNil(t, err2)
 }
 
-func TestTarGzUnTarGzError(t *testing.T) {
-	tarDir := "/tmp/targz/limit"
-	go func(tarDir string) {
-		_, _ = KFile.TarGz("/tmp/targz/tmp", tarDir+"/test.tar.gz")
-	}(tarDir)
-
-	go func(tarDir string) {
-		tarDir = "/tmp/targz/tmp"
-		KOS.Chmod(tarDir, 0111)
-	}(tarDir)
-
-	go func(tarDir string) {
-		_, _ = KFile.TarGz("/tmp/targz/tmp", tarDir+"/test.tar.gz")
-	}(tarDir)
-}
-
-func BenchmarkTarGz(b *testing.B) {
+func BenchmarkFile_TarGz(b *testing.B) {
 	b.ResetTimer()
-	src := "./README.md"
 	for i := 0; i < b.N; i++ {
-		dst := fmt.Sprintf("./targz/test_%d.tar.gz", i)
-		_, _ = KFile.TarGz(src, dst)
+		dst := fmt.Sprintf(dirTdat+"/targz/test_%d.tar.gz", i)
+		_, _ = KFile.TarGz(dirDoc, dst)
 	}
 }
 
-func BenchmarkUnTarGz(b *testing.B) {
+func BenchmarkFile_UnTarGz(b *testing.B) {
 	b.ResetTimer()
 	var src, dst string
 	for i := 0; i < b.N; i++ {
-		src = fmt.Sprintf("./targz/test_%d.tar.gz", i)
-		dst = fmt.Sprintf("./targz/test_%d", i)
+		src = fmt.Sprintf(dirTdat+"/targz/test_%d.tar.gz", i)
+		dst = fmt.Sprintf(dirTdat+"/targz/test_%d", i)
 		_, _ = KFile.UnTarGz(src, dst)
 	}
 }
 
-func TestSafeFileName(t *testing.T) {
-	var tests = []struct {
-		param    string
-		expected string
-	}{
-		{"", "."},
-		{"abc", "abc"},
-		{"123456789     '_-?ASDF@£$%£%^é.html", "123456789-asdf.html"},
-		{"ReadMe.md", "readme.md"},
-		{"file:///c:/test.go", "test.go"},
-		{"../../../Hello World!.txt", "hello-world.txt"},
+func TestFile_ChmodBatch(t *testing.T) {
+	var res bool
+	var tmp string
+
+	for i := 0; i < 10; i++ {
+		tmp = fmt.Sprintf(dirChmod+"/tmp_%d", i)
+		KFile.Touch(tmp, 0)
 	}
-	for _, test := range tests {
-		actual := KFile.SafeFileName(test.param)
-		if actual != test.expected {
-			t.Errorf("Expected SafeFileName(%q) to be %v, got %v", test.param, test.expected, actual)
-		}
-	}
+
+	res = KFile.ChmodBatch(dirChmod, 0766, 0755)
+	assert.True(t, res)
+
+	//不存在的路径
+	res = KFile.ChmodBatch(fileNone, 0777, 0766)
+	assert.False(t, res)
 }
 
-func BenchmarkSafeFileName(b *testing.B) {
+func BenchmarkFile_ChmodBatch(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KFile.SafeFileName("../../../Hello World!.txt")
+		KFile.ChmodBatch(dirDoc, 0777, 0766)
 	}
 }
 
-func TestChmodBatch(t *testing.T) {
-	dir := "/tmp/kgotest/test"
-	err := os.MkdirAll(dir, 0766)
-	if err == nil {
-		file1 := "/tmp/kgotest/test/chmod/1.log"
-		file2 := "/tmp/kgotest/test/chmod/2.log"
-		file3 := "/tmp/kgotest/test/chmod/hehe/3.log"
-		file4 := "/tmp/kgotest/test/chmod/hehe/4.log"
+func TestFile_CountLines(t *testing.T) {
+	var res int
+	var err error
 
-		KFile.Touch(file1, 0)
-		KFile.Touch(file2, 0)
-		KFile.Touch(file3, 0)
-		KFile.Touch(file4, 0)
+	res, err = KFile.CountLines(fileDante, 0)
+	assert.Equal(t, 19567, res)
+	assert.Nil(t, err)
 
-		res := KFile.ChmodBatch(dir, 0777, 0755)
-		if !res {
-			t.Error("ChmodBatch fail")
-		}
-	}
+	//非文本文件
+	res, err = KFile.CountLines(imgJpg, 8)
+	assert.Greater(t, res, 0)
+	assert.Nil(t, err)
 
-	res1 := KFile.ChmodBatch("/hello/world/123456", 0766, 0755)
-	res2 := KFile.ChmodBatch("/root", 0766, 0755)
-	if res1 || res2 {
-		t.Error("ChmodBatch fail")
-	}
+	//不存在的文件
+	res, err = KFile.CountLines(fileNone, 0)
+	assert.Equal(t, -1, res)
+	assert.NotNil(t, err)
 }
 
-func BenchmarkChmodBatch(b *testing.B) {
+func BenchmarkFile_CountLines(b *testing.B) {
 	b.ResetTimer()
-	dir := "/tmp/kgotest/test"
 	for i := 0; i < b.N; i++ {
-		KFile.ChmodBatch(dir, 0777, 0755)
+		_, _ = KFile.CountLines(fileMd, 0)
 	}
 }
 
-func TestReadInArray(t *testing.T) {
-	filepath := "./testdata/dante.txt"
-	arr, err := KFile.ReadInArray(filepath)
-	if err != nil || len(arr) != 19568 {
-		t.Error("ReadInArray fail")
-		return
-	}
-
-	_, _ = KFile.ReadInArray("./hello")
-}
-
-func BenchmarkReadInArray(b *testing.B) {
-	b.ResetTimer()
-	filepath := "./testdata/dante.txt"
-	for i := 0; i < b.N; i++ {
-		_, _ = KFile.ReadInArray(filepath)
-	}
-}
-
-func TestCountLines(t *testing.T) {
-	filepath := "./testdata/dante.txt"
-	res, err := KFile.CountLines(filepath, 0)
-	if err != nil || res == 0 {
-		t.Error("CountLines fail")
-		return
-	}
-
-	res, err = KFile.CountLines("./hello", 8)
-	if err == nil || res != -1 {
-		t.Error("CountLines fail")
-		return
-	}
-
-	filepath = "./testdata/gopher10th-small.jpg"
-	backup := "./testdata/gopher10th-small.jpg-bak"
-	_, _ = KFile.FastCopy(filepath, backup)
-	go func() {
-		_ = KFile.Unlink(backup)
-	}()
-	go func() {
-		res, err = KFile.CountLines(backup, 1)
-	}()
-}
-
-func BenchmarkCountLines(b *testing.B) {
-	b.ResetTimer()
-	filepath := "./testdata/dante.txt"
-	for i := 0; i < b.N; i++ {
-		_, _ = KFile.CountLines(filepath, 0)
-	}
-}
-
-func TestZipIszipUnzip(t *testing.T) {
-	zfile := "./zip/test.zip"
+func TestFile_ZipIszipUnzip(t *testing.T) {
 	var res bool
 	var err error
 
-	_, err = KFile.Zip(zfile)
-	if err == nil {
-		t.Error("Zip fail")
-		return
-	}
+	//空输入
+	res, err = KFile.Zip(zipfile1)
+	assert.False(t, res)
+	assert.NotNil(t, err)
 
-	_, err = KFile.Zip(zfile, "hello-world")
-	if err == nil {
-		t.Error("Zip fail")
-		return
-	}
+	//源文件不存在
+	res, err = KFile.Zip(zipfile1, fileNone)
+	assert.False(t, res)
+	assert.NotNil(t, err)
 
-	_, err = KFile.Zip("", "./README.md", "/root")
-	if err == nil {
-		t.Error("Zip fail")
-		return
-	}
-
-	res, err = KFile.Zip(zfile, "./README.md", "./testdata/dante.txt")
-	if !res || err != nil {
-		t.Error("Zip fail")
-		return
-	}
-
-	svgFile := "./testdata/jetbrains.svg-bak"
-	_, _ = KFile.FastCopy("./testdata/jetbrains.svg", svgFile)
-	cmd := exec.Command("/bin/bash", "-c", "ln -sf ./testdata/jetbrains.svg-bak ./testdata/svg-lnk")
-	_ = cmd.Run()
-	_, err = KFile.Zip(zfile, "./testdata")
-	if err == nil {
-		t.Error("Zip fail")
-		return
-	}
-
-	_, err = KFile.Zip(zfile, "./testdata/dante.txt", "./testdata/gopher10th-small.jpg", "./docs", "./docs")
-	if err != nil {
-		t.Error("Zip fail")
-		return
-	}
+	res, err = KFile.Zip(zipfile1, fileMd, fileGo, fileDante, dirDoc)
+	assert.True(t, res)
+	assert.Nil(t, err)
 
 	//判断
-	chk1 := KFile.IsZip("abc.txt")
-	chk2 := KFile.IsZip("abc.zip")
-	chk3 := KFile.IsZip(zfile)
-	if chk1 || chk2 || !chk3 {
-		t.Error("IsZip fail")
-		return
-	}
+	res = KFile.IsZip(zipfile1)
+	assert.True(t, res)
+
+	res = KFile.IsZip(fileNone)
+	assert.False(t, res)
 
 	//解压
-	dstdir := "./zip/unzip/"
-	_, err = KFile.UnZip("hello", dstdir)
-	if err == nil {
-		t.Error("UnZip fail")
-		return
-	}
+	res, err = KFile.UnZip(zipfile1, unzippath1)
+	assert.True(t, res)
+	assert.Nil(t, err)
 
-	_, err = KFile.UnZip(zfile, "/root/hello")
-	if err == nil {
-		t.Error("UnZip fail")
-		return
-	}
+	//解压非zip文件
+	res, err = KFile.UnZip(imgJpg, unzippath1)
+	assert.False(t, res)
+	assert.NotNil(t, err)
 
-	_, err = KFile.UnZip(zfile, dstdir)
-	if err != nil {
-		t.Error("UnZip fail")
-		return
-	}
+	//解压不存在文件
+	res, err = KFile.UnZip(fileNone, unzippath1)
+	assert.False(t, res)
+	assert.NotNil(t, err)
 }
 
-func BenchmarkZip(b *testing.B) {
+func BenchmarkFile_Zip(b *testing.B) {
 	b.ResetTimer()
-	src := "./README.md"
 	for i := 0; i < b.N; i++ {
-		dst := fmt.Sprintf("./zip/test_%d.zip", i)
-		_, _ = KFile.Zip(dst, src)
+		dst := fmt.Sprintf(dirTdat+"/zip/test_%d.zip", i)
+		_, _ = KFile.Zip(dst, dirDoc)
 	}
 }
 
-func BenchmarkUnzip(b *testing.B) {
+func BenchmarkFile_IsZip(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		dst := fmt.Sprintf(dirTdat+"/zip/test_%d.zip", i)
+		KFile.IsZip(dst)
+	}
+}
+
+func BenchmarkFile_UnZip(b *testing.B) {
 	b.ResetTimer()
 	var src, dst string
 	for i := 0; i < b.N; i++ {
-		src = fmt.Sprintf("./zip/test_%d.zip", i)
-		dst = fmt.Sprintf("./zip/unzip/test_%d", i)
+		src = fmt.Sprintf(dirTdat+"/zip/test_%d.zip", i)
+		dst = fmt.Sprintf(dirTdat+"/zip/unzip/test_%d", i)
 		_, _ = KFile.UnZip(src, dst)
-	}
-}
-
-func TestGetFileMode(t *testing.T) {
-	filepath := "./testdata/dante.txt"
-	perm, err := KFile.GetFileMode(filepath)
-	if err != nil || perm <= 0 {
-		t.Error("GetFileMode fail")
-		return
-	}
-
-	perm, err = KFile.GetFileMode("/root/hello/world")
-	if err == nil || perm != 0 {
-		t.Error("GetFileMode fail")
-		return
-	}
-}
-
-func BenchmarkGetFileMode(b *testing.B) {
-	b.ResetTimer()
-	filepath := "./testdata/dante.txt"
-	for i := 0; i < b.N; i++ {
-		_, _ = KFile.GetFileMode(filepath)
-	}
-}
-
-func TestAppendFile(t *testing.T) {
-	cont := []byte("hello world.")
-	err := KFile.AppendFile("", cont)
-	if err == nil {
-		t.Error("AppendFile fail")
-		return
-	}
-
-	pth := "./testdata/append.txt"
-	err = KFile.AppendFile(pth, cont)
-	if err != nil {
-		t.Error("AppendFile fail")
-		return
-	}
-
-	err = KFile.AppendFile(pth, []byte("how are you?"))
-	if err != nil {
-		t.Error("AppendFile fail")
-		return
-	}
-
-	_ = KFile.AppendFile("/root/hello/world", []byte("how are you?"))
-	_ = KFile.AppendFile(pth, []byte(""))
-}
-
-func BenchmarkAppendFile(b *testing.B) {
-	b.ResetTimer()
-	pth := "./testdata/append.txt"
-	cont := []byte("hello world.\r\n")
-	for i := 0; i < b.N; i++ {
-		_ = KFile.AppendFile(pth, cont)
-	}
-}
-
-func TestReadFirstLine(t *testing.T) {
-	var tests = []struct {
-		file     string
-		expected string
-	}{
-		{"", ""},
-		{"./testdata/firstline.log", ""},
-		{"./testdata/dante.txt", "LA DIVINA COMMEDIA"},
-		{"docs/changelog.md", "# Changelog"},
-	}
-	for _, test := range tests {
-		actual := KFile.ReadFirstLine(test.file)
-		if actual != test.expected {
-			t.Errorf("Expected FirstLine(%q) to be %v, got %v", test.file, test.expected, actual)
-		}
-	}
-}
-
-func BenchmarkReadFirstLine(b *testing.B) {
-	b.ResetTimer()
-	fpath := "./testdata/dante.txt"
-	for i := 0; i < b.N; i++ {
-		KFile.ReadFirstLine(fpath)
-	}
-}
-
-func TestReadLastLine(t *testing.T) {
-	tfile1 := "./testdata/lastline1.log"
-	tfile2 := "./testdata/lastline2.log"
-	str := "hello World"
-	KFile.Touch(tfile1, 0)
-	_ = KFile.WriteFile(tfile2, []byte(str))
-
-	var tests = []struct {
-		file     string
-		expected string
-	}{
-		{"", ""},
-		{"./testdata/firstline.log", ""},
-		{tfile1, ""},
-		{tfile2, str},
-		{"./testdata/dante.txt", ""},
-		{"docs/changelog.md", "*--end of file--*"},
-	}
-	for _, test := range tests {
-		actual := KFile.ReadLastLine(test.file)
-		if KStr.Trim(actual) != test.expected {
-			t.Errorf("Expected FirstLine(%q) to be [%s], got [%s]", test.file, test.expected, actual)
-		}
-	}
-}
-
-func BenchmarkReadLastLine(b *testing.B) {
-	b.ResetTimer()
-	fpath := "./testdata/dante.txt"
-	for i := 0; i < b.N; i++ {
-		KFile.ReadLastLine(fpath)
 	}
 }

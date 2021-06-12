@@ -1,230 +1,227 @@
 package kgo
 
 import (
-	"strings"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-func TestGetFuncName(t *testing.T) {
-	res1 := KDbug.GetFuncName(nil, false)
-	res2 := KDbug.GetFuncName(nil, true)
-	res3 := KDbug.GetFuncName(KArr.ArrayDiff, false) // ...ArrayDiff-fm
-	res4 := KDbug.GetFuncName(KArr.ArrayDiff, true)  // ArrayDiff-fm
+func TestDebug_DumpPrint(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Empty(t, r)
+	}()
 
-	if !strings.Contains(res1, "TestGetFuncName") || res2 != "TestGetFuncName" || !strings.Contains(res3, "ArrayDiff") || !strings.HasPrefix(res4, "ArrayDiff") {
-		t.Error("GetFuncName fail")
-		return
-	}
+	KDbug.DumpPrint(Version)
 }
 
-func BenchmarkGetFuncName(b *testing.B) {
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		KDbug.GetFuncName(nil, true)
-	}
-}
+func TestDebug_DumpStacks(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Empty(t, r)
+	}()
 
-func TestGetFuncLine(t *testing.T) {
-	res := KDbug.GetFuncLine()
-	if res <= 0 {
-		t.Error("GetFuncLine fail")
-		return
-	}
-}
-
-func BenchmarkGetFuncLine(b *testing.B) {
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		KDbug.GetFuncLine()
-	}
-}
-
-func TestGetFuncFileDir(t *testing.T) {
-	res1 := KDbug.GetFuncFile()
-	res2 := KDbug.GetFuncDir()
-	if res1 == "" {
-		t.Error("GetFuncFile fail")
-		return
-	} else if res2 == "" {
-		t.Error("GetFuncDir fail")
-		return
-	}
-}
-
-func BenchmarkGetFuncFile(b *testing.B) {
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		KDbug.GetFuncFile()
-	}
-}
-
-func BenchmarkGetFuncDir(b *testing.B) {
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		KDbug.GetFuncDir()
-	}
-}
-
-func TestGetFuncPackage(t *testing.T) {
-	res1 := KDbug.GetFuncPackage()
-	res2 := KDbug.GetFuncPackage(KDbug.GetFuncFile())
-	res3 := KDbug.GetFuncPackage("test")
-
-	if res1 != "kgo" || res1 != res2 || res3 != "" {
-		t.Error("GetFuncPackage fail")
-		return
-	}
-}
-
-func BenchmarkGetFuncPackage(b *testing.B) {
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		KDbug.GetFuncPackage()
-	}
-}
-
-func TestDumpStacks(t *testing.T) {
 	KDbug.DumpStacks()
 }
 
-func BenchmarkDumpStacks(b *testing.B) {
-	b.ResetTimer()
-	for i := 0; i < 100; i++ {
-		KDbug.DumpStacks()
-	}
+func TestDebug_GetCallName(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.NotEmpty(t, r)
+	}()
+
+	var res string
+
+	res = KDbug.GetCallName(nil, false)
+	assert.Contains(t, res, "TestDebug_GetCallName")
+
+	res = KDbug.GetCallName(nil, true)
+	assert.Equal(t, "TestDebug_GetCallName", res)
+
+	res = KDbug.GetCallName("", false)
+	assert.Empty(t, res)
+
+	res = KDbug.GetCallName(KArr.ArrayRand, false)
+	assert.Contains(t, res, "ArrayRand")
+
+	res = KDbug.GetCallName(KArr.ArrayRand, true)
+	assert.Equal(t, "ArrayRand-fm", res)
+
+	//未实现的方法
+	KDbug.GetCallName(itfObj.noRealize, false)
 }
 
-func TestHasMethod(t *testing.T) {
-	var test = &KOS
-
-	chk1 := KDbug.HasMethod(test, "IsLinux")
-	chk2 := KDbug.HasMethod(test, "Hello")
-	if !chk1 || chk2 {
-		t.Error("HasMethod fail")
-		return
-	}
-}
-
-func BenchmarkHasMethod(b *testing.B) {
+func BenchmarkDebug_GetCallName(b *testing.B) {
 	b.ResetTimer()
-	var test = &KOS
 	for i := 0; i < b.N; i++ {
-		KDbug.HasMethod(test, "IsLinux")
+		KDbug.GetCallName(KArr.ArrayRand, false)
 	}
 }
 
-func TestGetMethod(t *testing.T) {
-	var test = &KOS
-
-	fun1 := KDbug.GetMethod(test, "GoMemory")
-	fun2 := KDbug.GetMethod(test, "Hello")
-
-	if fun1 == nil || fun2 != nil {
-		t.Error("GetMethod fail")
-		return
-	}
+func TestDebug_GetCallFile(t *testing.T) {
+	res := KDbug.GetCallFile()
+	assert.NotEmpty(t, res)
 }
 
-func BenchmarkGetMethod(b *testing.B) {
+func BenchmarkDebug_GetCallFile(b *testing.B) {
 	b.ResetTimer()
-	var test = &KOS
 	for i := 0; i < b.N; i++ {
-		KDbug.GetMethod(test, "GoMemory")
+		KDbug.GetCallFile()
 	}
 }
 
-func TestCallMethod(t *testing.T) {
-	var test = &KOS
+func TestDebug_GetCallDir(t *testing.T) {
+	res := KDbug.GetCallDir()
+	assert.NotEmpty(t, res)
+}
 
-	//无参数调用
-	res1, err1 := KDbug.CallMethod(test, "GoMemory")
-	if res1 == nil || err1 != nil {
-		t.Error("CallMethod fail")
-		return
+func BenchmarkDebug_GetCallDir(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KDbug.GetCallDir()
 	}
+}
+
+func TestDebug_GetCallLine(t *testing.T) {
+	res := KDbug.GetCallLine()
+	assert.Greater(t, res, 1)
+}
+
+func BenchmarkDebug_GetCallLine(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KDbug.GetCallLine()
+	}
+}
+
+func TestDebug_GetCallPackage(t *testing.T) {
+	var res string
+
+	res = KDbug.GetCallPackage()
+	assert.Equal(t, "kgo", res)
+
+	res = KDbug.GetCallPackage(KDbug.GetCallFile())
+	assert.Equal(t, "kgo", res)
+
+	res = KDbug.GetCallPackage(strHello)
+	assert.Empty(t, res)
+}
+
+func BenchmarkDebug_GetCallPackage(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KDbug.GetCallPackage()
+	}
+}
+
+func TestDebug_HasMethod(t *testing.T) {
+	var tests = []struct {
+		input    interface{}
+		method   string
+		expected bool
+	}{
+		{intSpeedLight, "", false},
+		{strHello, "toString", false},
+		{KArr, "InIntSlice", true},
+		{&KArr, "InInt64Slice", true},
+		{&KArr, strHello, false},
+	}
+	for _, test := range tests {
+		actual := KDbug.HasMethod(test.input, test.method)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkDebug_HasMethod(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KDbug.HasMethod(KArr, "SliceFill")
+	}
+}
+
+func TestDebug_GetMethod(t *testing.T) {
+	var res interface{}
+
+	res = KDbug.GetMethod(intSpeedLight, "")
+	assert.Nil(t, res)
+
+	res = KDbug.GetMethod(&KArr, "InIntSlice")
+	assert.NotNil(t, res)
+
+	res = KDbug.GetMethod(KArr, "InIntSlice")
+	assert.NotNil(t, res)
+
+	res = KDbug.GetMethod(KArr, strHello)
+	assert.Nil(t, res)
+}
+
+func BenchmarkDebug_GetMethod(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KDbug.GetMethod(&KArr, "InIntSlice")
+	}
+}
+
+func TestDebug_CallMethod(t *testing.T) {
+	var res interface{}
+	var err error
 
 	//调用不存在的方法
-	res2, err2 := KDbug.CallMethod(test, "Hello")
-	if res2 != nil || err2 == nil {
-		t.Error("CallMethod fail")
-		return
-	}
+	res, err = KDbug.CallMethod(KArr, strHello)
+	assert.NotNil(t, err)
 
 	//有参数调用
-	var conv = &KConv
-	res3, err3 := KDbug.CallMethod(conv, "BaseConvert", "123456", 10, 16)
-	//结果 [1e240 <nil>]
-	if len(res3) != 2 || res3[0] != "1e240" || res3[1] != nil || err3 != nil {
-		t.Error("CallMethod fail")
-		return
-	}
+	res, err = KDbug.CallMethod(&KConv, "BaseConvert", "123456", 10, 16)
+	assert.Nil(t, err)
+	assert.NotEmpty(t, res)
+
+	//无参数调用
+	res, err = KDbug.CallMethod(&KOS, "Getcwd")
+	assert.Nil(t, err)
+	assert.NotEmpty(t, res)
 }
 
-func BenchmarkCallMethod(b *testing.B) {
+func BenchmarkDebug_CallMethod(b *testing.B) {
 	b.ResetTimer()
-	var test = &KOS
 	for i := 0; i < b.N; i++ {
-		KDbug.GetMethod(test, "GoMemory")
+		_, _ = KDbug.CallMethod(&KOS, "Getcwd")
 	}
 }
 
-func TestValidFunc(t *testing.T) {
-	var err error
-	var conv = &KConv
-	method := KDbug.GetMethod(conv, "BaseConvert")
+func TestDebug_GetFuncNames(t *testing.T) {
+	var res []string
 
-	//不存在的方法
-	_, _, err = ValidFunc("test", "echo")
-	if err == nil {
-		t.Error("ValidFunc fail")
-		return
-	}
+	//空字符串
+	res = KDbug.GetFuncNames("")
+	assert.Empty(t, res)
 
-	//参数数量不足
-	_, _, err = ValidFunc(method, "12345")
-	if err == nil {
-		t.Error("ValidFunc fail")
-		return
-	}
+	//空变量
+	res = KDbug.GetFuncNames(nil)
+	assert.Empty(t, res)
 
-	//参数类型错误
-	_, _, err = ValidFunc(method, 0, "12345", "10", 16)
-	if err == nil {
-		t.Error("ValidFunc fail")
-		return
-	}
+	//非指针变量
+	res = KDbug.GetFuncNames(KStr)
+	assert.NotEmpty(t, res)
+
+	//指针变量
+	res = KDbug.GetFuncNames(&KConv)
+	assert.NotEmpty(t, res)
+
+	n1 := KDbug.GetFuncNames(KFile)
+	n2 := KDbug.GetFuncNames(KStr)
+	n3 := KDbug.GetFuncNames(KNum)
+	n4 := KDbug.GetFuncNames(KArr)
+	n5 := KDbug.GetFuncNames(KTime)
+	n6 := KDbug.GetFuncNames(KConv)
+	n7 := KDbug.GetFuncNames(KOS)
+	n8 := KDbug.GetFuncNames(KEncr)
+	n9 := KDbug.GetFuncNames(KDbug)
+	funTotal := len(n1) + len(n2) + len(n3) + len(n4) + len(n5) + len(n6) + len(n7) + len(n8) + len(n9)
+	dumpPrint("the package function total:", funTotal)
 }
 
-func TestCallFunc(t *testing.T) {
-	var err error
-	var conv = &KConv
-	method := KDbug.GetMethod(conv, "BaseConvert")
-
-	// 错误的调用
-	_, err = CallFunc(method, "12346", "10", 16)
-	if err == nil {
-		t.Error("CallFunc fail")
-		return
+func BenchmarkDebug_GetFuncNames(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KDbug.GetFuncNames(&KConv)
 	}
-
-	// 正确的调用
-	res1, err1 := CallFunc(method, conv, "12345", 10, 16)
-	if err1 != nil {
-		t.Error("CallFunc fail")
-		return
-	} else if res1[0] != "3039" {
-		t.Error("CallFunc fail")
-		return
-	}
-
-	// 正确的调用
-	res2, err2 := CallFunc(KConv.BaseConvert, "12345", 10, 16)
-	if err2 != nil {
-		t.Error("CallFunc fail")
-		return
-	} else if res2[0] != "3039" {
-		t.Error("CallFunc fail")
-		return
-	}
-
 }

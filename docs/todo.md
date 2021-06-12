@@ -137,6 +137,7 @@ https://github.com/henrylee2cn/goutil/blob/master/pid_file.go
 https://github.com/facebookarchive/pidfile/blob/master/pidfile.go
 https://github.com/struCoder/pidusage/blob/master/pidusage.go
 
+
 ping
 https://github.com/bocajim/helpers/blob/master/ping.go
 
@@ -259,4 +260,34 @@ https://colobu.com/2018/11/03/get-function-name-in-go/
 
 DeleteSlice 删除切片元素/多个
 https://blog.csdn.net/yue7603835/article/details/71196181
+
+golang 根据PID获取进程的执行路径
+https://www.systutorials.com/how-to-get-the-running-process-pid-in-go/
+https://blog.csdn.net/weixin_42324368/article/details/107872138
+https://blog.csdn.net/qq_27870421/article/details/103290155
+https://blog.csdn.net/ycf8788/article/details/99074801
+https://stackoverflow.com/questions/15204162/check-if-a-process-exists-in-go-way
+https://github.com/golang/go/issues/33814
+https://www.btaz.com/mac-os-x/find-the-process-listening-to-port-on-mac-os-x/
+https://blog.jayway.com/2012/09/08/finding-the-pid-listening-on-a-specific-port-on-mac-os-x/
+https://stackoverflow.com/questions/3855127/find-and-kill-process-locking-port-3000-on-mac
+
+
+结构体转MAP
+https://github.com/fatih/structs
+https://www.liwenzhou.com/posts/Go/struct2map/
+https://www.cnblogs.com/liang1101/p/6741262.html
+https://www.cnblogs.com/Detector/p/9746284.html
+https://juejin.cn/post/6855129007193915400
+
+字符编码
+https://github.com/hydra13142/chardet
+https://github.com/fesiong/goproject
+https://github.com/djimenez/iconv-go
+https://pkg.go.dev/golang.org/x/net/html/charset
+https://github.com/timakin/gonvert
+https://github.com/spiegel-im-spiegel/text
+https://github.com/saintfish/chardet
+https://siongui.github.io/2018/10/27/auto-detect-and-convert-html-encoding-to-utf8-in-go/
+
 

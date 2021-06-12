@@ -10,20 +10,36 @@ import (
 	"strings"
 )
 
-// GetFunctionName 获取调用方法的名称;f为目标方法;onlyFun为true时仅返回方法,不包括包名.
-func (kd *LkkDebug) GetFuncName(f interface{}, onlyFun ...bool) string {
+// DumpPrint 打印调试变量.
+func (ks *LkkDebug) DumpPrint(vs ...interface{}) {
+	dumpPrint(vs)
+}
+
+// DumpStacks 打印堆栈信息.
+func (kd *LkkDebug) DumpStacks() {
+	buf := make([]byte, 16384)
+	buf = buf[:runtime.Stack(buf, true)]
+	fmt.Printf("=== BEGIN goroutine stack dump ===\n%s\n=== END goroutine stack dump ===\n\n", buf)
+}
+
+// GetCallName 获取调用的方法名称;f为目标方法;onlyFun为true时仅返回方法,不包括包名.
+func (kd *LkkDebug) GetCallName(f interface{}, onlyFun bool) string {
 	var funcObj *runtime.Func
-	if f == nil {
+	r := reflectPtr(reflect.ValueOf(f))
+	switch r.Kind() {
+	case reflect.Invalid:
 		// Skip this function, and fetch the PC and file for its parent
 		pc, _, _, _ := runtime.Caller(1)
 		// Retrieve a Function object this functions parent
 		funcObj = runtime.FuncForPC(pc)
-	} else {
-		funcObj = runtime.FuncForPC(reflect.ValueOf(f).Pointer())
+	case reflect.Func:
+		funcObj = runtime.FuncForPC(r.Pointer())
+	default:
+		return ""
 	}
 
 	name := funcObj.Name()
-	if len(onlyFun) > 0 && onlyFun[0] == true {
+	if onlyFun {
 		// extract just the function name (and not the module path)
 		return strings.TrimPrefix(filepath.Ext(name), ".")
 	}
@@ -31,31 +47,31 @@ func (kd *LkkDebug) GetFuncName(f interface{}, onlyFun ...bool) string {
 	return name
 }
 
-// GetFuncLine 获取调用方法的行号.
-func (kd *LkkDebug) GetFuncLine() int {
+// GetCallFile 获取调用方法的文件路径.
+func (kd *LkkDebug) GetCallFile() string {
+	_, file, _, _ := runtime.Caller(1)
+	return file
+}
+
+// GetCallDir 获取调用方法的文件目录.
+func (kd *LkkDebug) GetCallDir() string {
+	return filepath.Dir(kd.GetCallFile())
+}
+
+// GetCallLine 获取调用方法的行号.
+func (kd *LkkDebug) GetCallLine() int {
 	// Skip this function, and fetch the PC and file for its parent
 	_, _, line, _ := runtime.Caller(1)
 	return line
 }
 
-// GetFuncFile 获取调用方法的文件路径.
-func (kd *LkkDebug) GetFuncFile() string {
-	_, file, _, _ := runtime.Caller(1)
-	return file
-}
-
-// GetFuncDir 获取调用方法的文件目录.
-func (kd *LkkDebug) GetFuncDir() string {
-	return filepath.Dir(kd.GetFuncFile())
-}
-
-// GetFuncPackage 获取调用方法或源文件的包名.funcFile为源文件路径.
-func (kd *LkkDebug) GetFuncPackage(funcFile ...string) string {
+// GetCallPackage 获取调用方法或调用文件的包名.callFile为调用文件路径.
+func (kd *LkkDebug) GetCallPackage(callFile ...string) string {
 	var sourceFile string
-	if len(funcFile) == 0 {
-		sourceFile = kd.GetFuncFile()
+	if len(callFile) == 0 {
+		sourceFile = kd.GetCallFile()
 	} else {
-		sourceFile = funcFile[0]
+		sourceFile = callFile[0]
 	}
 
 	fset := token.NewFileSet()
@@ -67,43 +83,32 @@ func (kd *LkkDebug) GetFuncPackage(funcFile ...string) string {
 	return astFile.Name.Name
 }
 
-// DumpStacks 打印堆栈信息.
-func (kd *LkkDebug) DumpStacks() {
-	buf := make([]byte, 16384)
-	buf = buf[:runtime.Stack(buf, true)]
-	fmt.Printf("=== BEGIN goroutine stack dump ===\n%s\n=== END goroutine stack dump ===", buf)
-}
-
-// HasMethod 检查对象是否具有某方法.
+// HasMethod 检查对象t是否具有method方法.
 func (kd *LkkDebug) HasMethod(t interface{}, method string) bool {
-	_, ok := reflect.TypeOf(t).MethodByName(method)
-	if ok {
-		return true
-	}
-	return false
+	_, err := methodExists(t, method)
+	return err == nil
 }
 
-// GetMethod 获取对象中的方法.
-// 注意:返回的该方法中的第一个参数是接收者.
-// 所以,调用该方法时,必须将接收者作为第一个参数传递.
+// GetMethod 获取对象t中的method方法.
+// 注意:返回的方法中的第一个参数是接收者.
+// 所以,调用返回的方法时,必须将接收者作为第一个参数传递.
 func (kd *LkkDebug) GetMethod(t interface{}, method string) interface{} {
-	m := getMethod(t, method)
-	if !m.IsValid() || m.IsNil() {
-		return nil
-	}
-	return m.Interface()
+	return getMethod(t, method)
 }
 
 // CallMethod 调用对象的方法.
 // 若执行成功,则结果是该方法的返回结果;
-// 否则返回(nil, error)
+// 否则返回(nil, error).
 func (kd *LkkDebug) CallMethod(t interface{}, method string, args ...interface{}) ([]interface{}, error) {
 	m := kd.GetMethod(t, method)
 	if m == nil {
-		return nil, fmt.Errorf("The %#v have no method: %s", t, method)
+		return nil, fmt.Errorf("[CallMethod] The %#v have no method: %s", t, method)
 	}
-	_args := make([]interface{}, len(args)+1)
-	_args[0] = t
-	copy(_args[1:], args)
-	return CallFunc(m, _args...)
+
+	return CallFunc(m, args...)
+}
+
+// GetFuncNames 获取变量的所有(公开的)函数名.
+func (kd *LkkDebug) GetFuncNames(obj interface{}) (res []string) {
+	return getFuncNames(obj)
 }

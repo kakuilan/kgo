@@ -3,39 +3,55 @@ package kgo
 import (
 	"encoding/binary"
 	"encoding/hex"
-	"encoding/json"
 	"fmt"
 	"math"
 	"net"
 	"reflect"
 	"strconv"
-	"unicode/utf8"
-	"unsafe"
 )
+
+// Struct2Map 结构体转为字典;tagName为要导出的标签名,可以为空,为空时将导出所有字段.
+func (kc *LkkConvert) Struct2Map(obj interface{}, tagName string) (map[string]interface{}, error) {
+	return struct2Map(obj, tagName)
+}
 
 // Int2Str 将整数转换为字符串.
 func (kc *LkkConvert) Int2Str(val interface{}) string {
 	switch val.(type) {
-	// Integers
 	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
 		return fmt.Sprintf("%d", val)
-	// Type is not integers, return empty string
 	default:
-		return ""
+		r := reflect.ValueOf(val)
+		switch r.Kind() {
+		case reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int, reflect.Int64, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint, reflect.Uint64:
+			return fmt.Sprintf("%d", r.Int())
+		default:
+			return ""
+		}
 	}
 }
 
 // Float2Str 将浮点数转换为字符串,decimal为小数位数.
 func (kc *LkkConvert) Float2Str(val interface{}, decimal int) string {
+	if decimal <= 0 {
+		decimal = 2
+	}
+
 	switch val.(type) {
-	// Floats
 	case float32:
 		return strconv.FormatFloat(float64(val.(float32)), 'f', decimal, 32)
 	case float64:
 		return strconv.FormatFloat(val.(float64), 'f', decimal, 64)
-	// Type is not floats, return empty string
 	default:
-		return ""
+		r := reflect.ValueOf(val)
+		switch r.Kind() {
+		case reflect.Float32:
+			return strconv.FormatFloat(r.Float(), 'f', decimal, 32)
+		case reflect.Float64:
+			return strconv.FormatFloat(r.Float(), 'f', decimal, 64)
+		default:
+			return ""
+		}
 	}
 }
 
@@ -55,211 +71,155 @@ func (kc *LkkConvert) Bool2Int(val bool) int {
 	return 0
 }
 
-// Str2IntStrict 严格将字符串转换为有符号整型.
-// bitSize为类型位数,strict为是否严格检查.
-func (kc *LkkConvert) Str2IntStrict(val string, bitSize int, strict bool) int64 {
-	res, err := strconv.ParseInt(val, 0, bitSize)
-	if err != nil {
-		if strict {
-			panic(err)
-		}
-	}
-	return res
-}
-
-// Str2Int 将字符串转换为int.其中"true", "TRUE", "True"为1.
-func (kc *LkkConvert) Str2Int(val string) (res int) {
-	if val == "true" || val == "TRUE" || val == "True" {
-		res = 1
-		return
-	}
-
-	res, _ = strconv.Atoi(val)
-	return
+// Str2Int 将字符串转换为int.其中"true", "TRUE", "True"为1;若为浮点字符串,则取整数部分.
+func (kc *LkkConvert) Str2Int(val string) int {
+	return str2Int(val)
 }
 
 // Str2Int8 将字符串转换为int8.
 func (kc *LkkConvert) Str2Int8(val string) int8 {
-	return int8(kc.Str2IntStrict(val, 8, false))
+	res, _ := strconv.ParseInt(val, 0, 8)
+	return int8(res)
 }
 
 // Str2Int16 将字符串转换为int16.
 func (kc *LkkConvert) Str2Int16(val string) int16 {
-	return int16(kc.Str2IntStrict(val, 16, false))
+	res, _ := strconv.ParseInt(val, 0, 16)
+	return int16(res)
 }
 
 // Str2Int32 将字符串转换为int32.
 func (kc *LkkConvert) Str2Int32(val string) int32 {
-	return int32(kc.Str2IntStrict(val, 32, false))
+	res, _ := strconv.ParseInt(val, 0, 32)
+	return int32(res)
 }
 
 // Str2Int64 将字符串转换为int64.
 func (kc *LkkConvert) Str2Int64(val string) int64 {
-	return kc.Str2IntStrict(val, 64, false)
-}
-
-// Str2UintStrict 严格将字符串转换为无符号整型,bitSize为类型位数,strict为是否严格检查
-func (kc *LkkConvert) Str2UintStrict(val string, bitSize int, strict bool) uint64 {
-	res, err := strconv.ParseUint(val, 0, bitSize)
-	if err != nil {
-		if strict {
-			panic(err)
-		}
-	}
+	res, _ := strconv.ParseInt(val, 0, 64)
 	return res
 }
 
-// Str2Uint 将字符串转换为uint.
+// Str2Uint 将字符串转换为uint.其中"true", "TRUE", "True"为1;若为浮点字符串,则取整数部分;若为负值则取0.
 func (kc *LkkConvert) Str2Uint(val string) uint {
-	return uint(kc.Str2UintStrict(val, 0, false))
+	return str2Uint(val)
 }
 
 // Str2Uint8 将字符串转换为uint8.
 func (kc *LkkConvert) Str2Uint8(val string) uint8 {
-	return uint8(kc.Str2UintStrict(val, 8, false))
+	res, _ := strconv.ParseUint(val, 0, 8)
+	return uint8(res)
 }
 
 // Str2Uint16 将字符串转换为uint16.
 func (kc *LkkConvert) Str2Uint16(val string) uint16 {
-	return uint16(kc.Str2UintStrict(val, 16, false))
+	res, _ := strconv.ParseUint(val, 0, 16)
+	return uint16(res)
 }
 
 // Str2Uint32 将字符串转换为uint32.
 func (kc *LkkConvert) Str2Uint32(val string) uint32 {
-	return uint32(kc.Str2UintStrict(val, 32, false))
+	res, _ := strconv.ParseUint(val, 0, 32)
+	return uint32(res)
 }
 
 // Str2Uint64 将字符串转换为uint64.
 func (kc *LkkConvert) Str2Uint64(val string) uint64 {
-	return uint64(kc.Str2UintStrict(val, 64, false))
-}
-
-// Str2FloatStrict 严格将字符串转换为浮点型.
-// bitSize为类型位数,strict为是否严格检查.
-func (kc *LkkConvert) Str2FloatStrict(val string, bitSize int, strict bool) float64 {
-	res, err := strconv.ParseFloat(val, bitSize)
-	if err != nil {
-		if strict {
-			panic(err)
-		}
-	}
+	res, _ := strconv.ParseUint(val, 0, 64)
 	return res
 }
 
-// Str2Float32 将字符串转换为float32.
+// Str2Float32 将字符串转换为float32;其中"true", "TRUE", "True"为1.0 .
 func (kc *LkkConvert) Str2Float32(val string) float32 {
-	return float32(kc.Str2FloatStrict(val, 32, false))
+	return str2Float32(val)
 }
 
-// Str2Float64 将字符串转换为float64.其中"true", "TRUE", "True"为1.0 .
-func (kc *LkkConvert) Str2Float64(val string) (res float64) {
-	if val == "true" || val == "TRUE" || val == "True" {
-		res = 1.0
-	} else {
-		res = float64(kc.Str2FloatStrict(val, 64, false))
-	}
-
-	return
+// Str2Float64 将字符串转换为float64;其中"true", "TRUE", "True"为1.0 .
+func (kc *LkkConvert) Str2Float64(val string) float64 {
+	return str2Float64(val)
 }
 
 // Str2Bool 将字符串转换为布尔值.
-// 1, t, T, TRUE, true, True 等字符串为真.
+// 1, t, T, TRUE, true, True 等字符串为真;
 // 0, f, F, FALSE, false, False 等字符串为假.
-func (kc *LkkConvert) Str2Bool(val string) (res bool) {
-	if val != "" {
-		res, _ = strconv.ParseBool(val)
-	}
-
-	return
+func (kc *LkkConvert) Str2Bool(val string) bool {
+	return str2Bool(val)
 }
 
 // Str2Bytes 将字符串转换为字节切片.
-// 该方法零拷贝,但不安全.它直接转换底层指针,两者指向的相同的内存,改一个另外一个也会变.
-// 仅当临时需将长字符串转换且不长时间保存时可以使用.
-// 转换之后若没做其他操作直接改变里面的字符,则程序会崩溃.
-// 如 b:=String2bytes("xxx"); b[1]='d'; 程序将panic.
 func (kc *LkkConvert) Str2Bytes(val string) []byte {
-	pSliceHeader := &reflect.SliceHeader{}
-	strHeader := (*reflect.StringHeader)(unsafe.Pointer(&val))
-	pSliceHeader.Data = strHeader.Data
-	pSliceHeader.Len = strHeader.Len
-	pSliceHeader.Cap = strHeader.Len
-	return *(*[]byte)(unsafe.Pointer(pSliceHeader))
+	return str2Bytes(val)
 }
 
 // Bytes2Str 将字节切片转换为字符串.
-// 零拷贝,不安全.效率是string([]byte{})的百倍以上,且转换量越大效率优势越明显.
 func (kc *LkkConvert) Bytes2Str(val []byte) string {
-	return *(*string)(unsafe.Pointer(&val))
+	return bytes2Str(val)
 }
 
-// Dec2Bin 将十进制转换为二进制.
-func (kc *LkkConvert) Dec2Bin(number int64) string {
-	return strconv.FormatInt(number, 2)
+// Str2BytesUnsafe (非安全的)将字符串转换为字节切片.
+// 该方法零拷贝,但不安全.它直接转换底层指针,两者指向的相同的内存,改一个另外一个也会变.
+// 仅当临时需将长字符串转换且不长时间保存时可以使用.
+// 转换之后若没做其他操作直接改变里面的字符,则程序会崩溃.
+// 如 b:=Str2BytesUnsafe("xxx"); b[1]='d'; 程序将panic.
+func (kc *LkkConvert) Str2BytesUnsafe(val string) []byte {
+	return str2BytesUnsafe(val)
 }
 
-// Bin2Dec 将二进制转换为十进制.
+// Bytes2StrUnsafe (非安全的)将字节切片转换为字符串.
+// 零拷贝,不安全.效率是string([]byte{})的百倍以上,且转换量越大效率优势越明显.
+func (kc *LkkConvert) Bytes2StrUnsafe(val []byte) string {
+	return bytes2StrUnsafe(val)
+}
+
+// Dec2Bin 将十进制转换为二进制字符串.
+func (kc *LkkConvert) Dec2Bin(num int64) string {
+	return dec2Bin(num)
+}
+
+// Bin2Dec 将二进制字符串转换为十进制.
 func (kc *LkkConvert) Bin2Dec(str string) (int64, error) {
-	i, err := strconv.ParseInt(str, 2, 0)
-	if err != nil {
-		return 0, err
-	}
-	return i, nil
+	return bin2Dec(str)
 }
 
 // Hex2Bin 将十六进制字符串转换为二进制字符串.
-func (kc *LkkConvert) Hex2Bin(data string) (string, error) {
-	i, err := strconv.ParseInt(data, 16, 0)
-	if err != nil {
-		return "", err
-	}
-	return strconv.FormatInt(i, 2), nil
+func (kc *LkkConvert) Hex2Bin(str string) (string, error) {
+	return hex2Bin(str)
 }
 
 // Bin2Hex 将二进制字符串转换为十六进制字符串.
 func (kc *LkkConvert) Bin2Hex(str string) (string, error) {
-	i, err := strconv.ParseInt(str, 2, 0)
-	if err != nil {
-		return "", err
-	}
-	return strconv.FormatInt(i, 16), nil
+	return bin2Hex(str)
 }
 
 // Dec2Hex 将十进制转换为十六进制.
-func (kc *LkkConvert) Dec2Hex(number int64) string {
-	return strconv.FormatInt(number, 16)
+func (kc *LkkConvert) Dec2Hex(num int64) string {
+	return dec2Hex(num)
 }
 
 // Hex2Dec 将十六进制转换为十进制.
 func (kc *LkkConvert) Hex2Dec(str string) (int64, error) {
-	start := 0
-	if len(str) > 2 && str[0:2] == "0x" {
-		start = 2
-	}
-
-	// bitSize 表示结果的位宽（包括符号位），0 表示最大位宽
-	return strconv.ParseInt(str[start:], 16, 0)
+	return hex2Dec(str)
 }
 
 // Dec2Oct 将十进制转换为八进制.
-func (kc *LkkConvert) Dec2Oct(number int64) string {
-	return strconv.FormatInt(number, 8)
+func (kc *LkkConvert) Dec2Oct(num int64) string {
+	return dec2Oct(num)
 }
 
 // Oct2Dec 将八进制转换为十进制.
 func (kc *LkkConvert) Oct2Dec(str string) (int64, error) {
-	start := 0
-	if len(str) > 1 && str[0:1] == "0" {
-		start = 1
-	}
+	return oct2Dec(str)
+}
 
-	return strconv.ParseInt(str[start:], 8, 0)
+// Runes2Bytes 将[]rune转为[]byte.
+func (kc *LkkConvert) Runes2Bytes(rs []rune) []byte {
+	return runes2Bytes(rs)
 }
 
 // BaseConvert 进制转换,在任意进制之间转换数字.
-// number为输入数值,frombase为原进制,tobase为结果进制.
-func (kc *LkkConvert) BaseConvert(number string, frombase, tobase int) (string, error) {
-	i, err := strconv.ParseInt(number, frombase, 0)
+// num为输入数值,frombase为原进制,tobase为结果进制.
+func (kc *LkkConvert) BaseConvert(num string, frombase, tobase int) (string, error) {
+	i, err := strconv.ParseInt(num, frombase, 0)
 	if err != nil {
 		return "", err
 	}
@@ -283,161 +243,38 @@ func (kc *LkkConvert) Long2Ip(properAddress uint32) string {
 	return ip.String()
 }
 
-// Gettype 获取变量类型.
-func (kc *LkkConvert) Gettype(v interface{}) string {
-	return fmt.Sprintf("%T", v)
-}
-
 // ToStr 强制将变量转换为字符串.
 func (kc *LkkConvert) ToStr(val interface{}) string {
-	//先处理其他类型
-	v := reflect.ValueOf(val)
-	switch v.Kind() {
-	case reflect.Invalid:
-		return ""
-	case reflect.Bool:
-		return strconv.FormatBool(v.Bool())
-	case reflect.String:
-		return v.String()
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		return strconv.FormatInt(v.Int(), 10)
-	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
-		return strconv.FormatUint(v.Uint(), 10)
-	case reflect.Float32:
-		return strconv.FormatFloat(v.Float(), 'f', -1, 32)
-	case reflect.Float64:
-		return strconv.FormatFloat(v.Float(), 'f', -1, 64)
-	case reflect.Ptr, reflect.Struct, reflect.Map: //指针、结构体和字典
-		b, err := json.Marshal(v.Interface())
-		if err != nil {
-			return ""
-		}
-		return string(b)
-	}
-
-	//再处理字节切片
-	switch val.(type) {
-	case []uint8:
-		return string(val.([]uint8))
-	}
-
-	return fmt.Sprintf("%v", val)
+	return toStr(val)
 }
 
 // ToBool 强制将变量转换为布尔值.
+// 数值类型将检查值是否>0;
+// 字符串将使用Str2Bool;
+// 数组、切片、字典、通道类型将检查它们的长度是否>0;
+// 指针、结构体类型为true,其他为false.
 func (kc *LkkConvert) ToBool(val interface{}) bool {
-	switch val.(type) {
-	case int:
-		return (val.(int) > 0)
-	case int8:
-		return (val.(int8) > 0)
-	case int16:
-		return (val.(int16) > 0)
-	case int32:
-		return (val.(int32) > 0)
-	case int64:
-		return (val.(int64) > 0)
-	case uint:
-		return (val.(uint) > 0)
-	case uint8:
-		return (val.(uint8) > 0)
-	case uint16:
-		return (val.(uint16) > 0)
-	case uint32:
-		return (val.(uint32) > 0)
-	case uint64:
-		return (val.(uint64) > 0)
-	case float32:
-		return (val.(float32) > 0)
-	case float64:
-		return (val.(float64) > 0)
-	case []uint8:
-		return kc.Str2Bool(string(val.([]uint8)))
-	case string:
-		return kc.Str2Bool(val.(string))
-	case bool:
-		return val.(bool)
-	default:
-		return false
-	}
+	return toBool(val)
 }
 
-// ToInt 强制将变量转换为整型;其中true或"true"为1.
+// ToInt 强制将变量转换为整型.
+// 数值类型将转为整型;
+// 字符串类型将使用Str2Int;
+// 布尔型的true为1,false为0;
+// 数组、切片、字典、通道类型将取它们的长度;
+// 指针、结构体类型为1,其他为0.
 func (kc *LkkConvert) ToInt(val interface{}) int {
-	switch val.(type) {
-	case int:
-		return val.(int)
-	case int8:
-		return int(val.(int8))
-	case int16:
-		return int(val.(int16))
-	case int32:
-		return int(val.(int32))
-	case int64:
-		return int(val.(int64))
-	case uint:
-		return int(val.(uint))
-	case uint8:
-		return int(val.(uint8))
-	case uint16:
-		return int(val.(uint16))
-	case uint32:
-		return int(val.(uint32))
-	case uint64:
-		return int(val.(uint64))
-	case float32:
-		return int(val.(float32))
-	case float64:
-		return int(val.(float64))
-	case []uint8:
-		return kc.Str2Int(string(val.([]uint8)))
-	case string:
-		return kc.Str2Int(val.(string))
-	case bool:
-		return kc.Bool2Int(val.(bool))
-	default:
-		return 0
-	}
+	return toInt(val)
 }
 
-// ToFloat 强制将变量转换为浮点型;其中true或"true"为1.0 .
+// ToFloat 强制将变量转换为浮点型.
+// 数值类型将转为浮点型;
+// 字符串将使用Str2Float64;
+// 布尔型的true为1.0,false为0;
+// 数组、切片、字典、通道类型将取它们的长度;
+// 指针、结构体类型为1.0,其他为0.
 func (kc *LkkConvert) ToFloat(val interface{}) (res float64) {
-	switch val.(type) {
-	case int:
-		res = float64(val.(int))
-	case int8:
-		res = float64(val.(int8))
-	case int16:
-		res = float64(val.(int16))
-	case int32:
-		res = float64(val.(int32))
-	case int64:
-		res = float64(val.(int64))
-	case uint:
-		res = float64(val.(uint))
-	case uint8:
-		res = float64(val.(uint8))
-	case uint16:
-		res = float64(val.(uint16))
-	case uint32:
-		res = float64(val.(uint32))
-	case uint64:
-		res = float64(val.(uint64))
-	case float32:
-		res = float64(val.(float32))
-	case float64:
-		res = val.(float64)
-	case []uint8:
-		res = kc.Str2Float64(string(val.([]uint8)))
-	case string:
-		res = kc.Str2Float64(val.(string))
-	case bool:
-		if val.(bool) {
-			res = 1.0
-		}
-	}
-
-	return
+	return toFloat(val)
 }
 
 // Float64ToByte 64位浮点数转字节切片.
@@ -483,7 +320,7 @@ func (kc *LkkConvert) Byte2Hexs(val []byte) []byte {
 
 // Hex2Byte 16进制字符串转字节切片.
 func (kc *LkkConvert) Hex2Byte(str string) []byte {
-	h, _ := hex.DecodeString(str)
+	h, _ := hex2Byte(str)
 	return h
 }
 
@@ -498,42 +335,14 @@ func (kc *LkkConvert) Hexs2Byte(val []byte) []byte {
 	return dst
 }
 
-// GetPointerAddrInt 获取变量指针地址整型值.variable为变量.
-func (kc *LkkConvert) GetPointerAddrInt(variable interface{}) int64 {
-	res, _ := kc.Hex2Dec(fmt.Sprintf("%p", &variable))
-	return res
-}
-
-// Runes2Bytes 将[]rune转为[]byte.
-func (kc *LkkConvert) Runes2Bytes(rs []rune) []byte {
-	size := 0
-	for _, r := range rs {
-		size += utf8.RuneLen(r)
-	}
-
-	bs := make([]byte, size)
-
-	count := 0
-	for _, r := range rs {
-		count += utf8.EncodeRune(bs[count:], r)
-	}
-
-	return bs
-}
-
 // IsString 变量是否字符串.
 func (kc *LkkConvert) IsString(val interface{}) bool {
-	return kc.Gettype(val) == "string"
+	return isString(val)
 }
 
 // IsBinary 字符串是否二进制.
 func (kc *LkkConvert) IsBinary(s string) bool {
-	for _, b := range s {
-		if 0 == b {
-			return true
-		}
-	}
-	return false
+	return isBinary(s)
 }
 
 // IsNumeric 变量是否数值(不包含复数和科学计数法).
@@ -551,72 +360,42 @@ func (kc *LkkConvert) IsFloat(val interface{}) bool {
 	return isFloat(val)
 }
 
-// IsEmpty 检查变量是否为空.
+// IsEmpty 变量是否为空.
 func (kc *LkkConvert) IsEmpty(val interface{}) bool {
-	if val == nil {
-		return true
-	}
-	v := reflect.ValueOf(val)
-	switch v.Kind() {
-	case reflect.String, reflect.Array:
-		return v.Len() == 0
-	case reflect.Map, reflect.Slice:
-		return v.Len() == 0 || v.IsNil()
-	case reflect.Bool:
-		return !v.Bool()
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		return v.Int() == 0
-	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
-		return v.Uint() == 0
-	case reflect.Float32, reflect.Float64:
-		return v.Float() == 0
-	case reflect.Interface, reflect.Ptr:
-		return v.IsNil()
-	}
-
-	return reflect.DeepEqual(val, reflect.Zero(v.Type()).Interface())
+	return isEmpty(val)
 }
 
-// IsNil 检查变量是否空值.
+// IsNil 变量是否nil.
 func (kc *LkkConvert) IsNil(val interface{}) bool {
-	if val == nil {
-		return true
-	}
-
-	rv := reflect.ValueOf(val)
-	switch rv.Kind() {
-	case reflect.Chan, reflect.Func, reflect.Map, reflect.Ptr, reflect.Slice, reflect.Interface:
-		if rv.IsNil() {
-			return true
-		}
-	}
-	return false
+	return isNil(val)
 }
 
 // IsBool 是否布尔值.
 func (kc *LkkConvert) IsBool(val interface{}) bool {
-	return val == true || val == false
+	return isBool(val)
 }
 
 // IsHex 是否十六进制字符串.
 func (kc *LkkConvert) IsHex(str string) bool {
-	_, err := kc.Hex2Dec(str)
-	return err == nil
+	return isHex(str)
 }
 
 // IsByte 变量是否字节切片.
 func (kc *LkkConvert) IsByte(val interface{}) bool {
-	return kc.Gettype(val) == "[]uint8"
+	return isByte(val)
 }
 
 // IsStruct 变量是否结构体.
 func (kc *LkkConvert) IsStruct(val interface{}) bool {
-	r := reflectPtr(reflect.ValueOf(val))
-	return r.Kind() == reflect.Struct
+	return isStruct(val)
 }
 
 // IsInterface 变量是否接口.
 func (kc *LkkConvert) IsInterface(val interface{}) bool {
-	r := reflectPtr(reflect.ValueOf(val))
-	return r.Kind() == reflect.Invalid
+	return isInterface(val)
+}
+
+// IsPort 变量值是否端口号(1~65535).
+func (kc *LkkConvert) IsPort(val interface{}) bool {
+	return isPort(val)
 }

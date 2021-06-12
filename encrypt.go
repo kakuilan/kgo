@@ -27,39 +27,59 @@ import (
 
 // Base64Encode 使用 MIME base64 对数据进行编码.
 func (ke *LkkEncrypt) Base64Encode(str []byte) []byte {
-	buf := make([]byte, base64.StdEncoding.EncodedLen(len(str)))
-	base64.StdEncoding.Encode(buf, str)
-	return buf
+	l := len(str)
+	if l > 0 {
+		buf := make([]byte, base64.StdEncoding.EncodedLen(l))
+		base64.StdEncoding.Encode(buf, str)
+		return buf
+	}
+
+	return nil
 }
 
 // Base64Decode 对使用 MIME base64 编码的数据进行解码.
 func (ke *LkkEncrypt) Base64Decode(str []byte) ([]byte, error) {
-	dbuf := make([]byte, base64.StdEncoding.DecodedLen(len(str)))
-	n, err := base64.StdEncoding.Decode(dbuf, str)
-	return dbuf[:n], err
+	l := len(str)
+	if l > 0 {
+		dbuf := make([]byte, base64.StdEncoding.DecodedLen(l))
+		n, err := base64.StdEncoding.Decode(dbuf, str)
+		return dbuf[:n], err
+	}
+
+	return nil, nil
 }
 
 // Base64UrlSafeEncode url安全的Base64Encode,没有'/'和'+'及结尾的'=' .
-func (ke *LkkEncrypt) Base64UrlEncode(source []byte) []byte {
-	buf := make([]byte, base64.StdEncoding.EncodedLen(len(source)))
-	base64.StdEncoding.Encode(buf, source)
+func (ke *LkkEncrypt) Base64UrlEncode(str []byte) []byte {
+	l := len(str)
+	if l > 0 {
+		buf := make([]byte, base64.StdEncoding.EncodedLen(l))
+		base64.StdEncoding.Encode(buf, str)
 
-	// Base64 Url Safe is the same as Base64 but does not contain '/' and '+' (replaced by '_' and '-') and trailing '=' are removed.
-	buf = bytes.Replace(buf, []byte("/"), []byte("_"), -1)
-	buf = bytes.Replace(buf, []byte("+"), []byte("-"), -1)
-	buf = bytes.Replace(buf, []byte("="), []byte(""), -1)
+		// Base64 Url Safe is the same as Base64 but does not contain '/' and '+' (replaced by '_' and '-') and trailing '=' are removed.
+		buf = bytes.Replace(buf, bytSlash, bytUnderscore, -1)
+		buf = bytes.Replace(buf, bytPlus, bytMinus, -1)
+		buf = bytes.Replace(buf, bytEqual, bytEmp, -1)
 
-	return buf
+		return buf
+	}
+
+	return nil
 }
 
 // Base64UrlDecode url安全的Base64Decode.
-func (ke *LkkEncrypt) Base64UrlDecode(data []byte) ([]byte, error) {
-	var missing = (4 - len(data)%4) % 4
-	data = append(data, bytes.Repeat([]byte("="), missing)...)
+func (ke *LkkEncrypt) Base64UrlDecode(str []byte) ([]byte, error) {
+	l := len(str)
+	if l > 0 {
+		var missing = (4 - len(str)%4) % 4
+		str = append(str, bytes.Repeat(bytEqual, missing)...)
 
-	dbuf := make([]byte, base64.URLEncoding.DecodedLen(len(data)))
-	n, err := base64.URLEncoding.Decode(dbuf, data)
-	return dbuf[:n], err
+		dbuf := make([]byte, base64.URLEncoding.DecodedLen(len(str)))
+		n, err := base64.URLEncoding.Decode(dbuf, str)
+		return dbuf[:n], err
+	}
+
+	return nil, nil
 }
 
 // AuthCode 授权码编码或解码;encode为true时编码,为false解码;expiry为有效期,秒;返回结果为加密/解密的字符串和有效期时间戳.
@@ -265,15 +285,12 @@ func (ke *LkkEncrypt) HmacShaX(data, secret []byte, x uint16) []byte {
 	switch x {
 	case 1:
 		h = hmac.New(sha1.New, secret)
-		break
 	case 256:
 		h = hmac.New(sha256.New, secret)
-		break
 	case 512:
 		h = hmac.New(sha512.New, secret)
-		break
 	default:
-		panic("[HmacShaX] x must be in [1, 256, 512]")
+		panic("[HmacShaX]`x must be in [1, 256, 512]")
 	}
 
 	// Write Data to it
@@ -290,6 +307,7 @@ func (ke *LkkEncrypt) HmacShaX(data, secret []byte, x uint16) []byte {
 // clearText为明文;key为密钥,长度16/24/32;
 // mode为模式,枚举值(CBC,CFB,CTR,OFB);
 // paddingType为填充方式,枚举(PKCS_NONE,PKCS_ZERO,PKCS_SEVEN),默认PKCS_SEVEN.
+// 注意:返回的是一个字节切片指针.
 func (ke *LkkEncrypt) aesEncrypt(clearText, key []byte, mode string, paddingType ...LkkPKCSType) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -301,6 +319,7 @@ func (ke *LkkEncrypt) aesEncrypt(clearText, key []byte, mode string, paddingType
 	if len(paddingType) > 0 {
 		pt = paddingType[0]
 	}
+
 	switch pt {
 	case PKCS_ZERO:
 		clearText = zeroPadding(clearText, blockSize)
@@ -308,13 +327,11 @@ func (ke *LkkEncrypt) aesEncrypt(clearText, key []byte, mode string, paddingType
 		clearText = pkcs7Padding(clearText, blockSize, false)
 	}
 
+	//字节切片指针
 	cipherText := make([]byte, blockSize+len(clearText))
 	//初始化向量
 	iv := cipherText[:blockSize]
 	_, _ = io.ReadFull(rand.Reader, iv)
-	//if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-	//	return nil, err
-	//}
 
 	switch mode {
 	case "CBC":
@@ -347,37 +364,37 @@ func (ke *LkkEncrypt) aesDecrypt(cipherText, key []byte, mode string, paddingTyp
 
 	blockSize := block.BlockSize()
 	clen := len(cipherText)
-	if clen < blockSize {
-		return nil, errors.New("cipherText too short")
+	if clen == 0 || clen < blockSize {
+		return nil, errors.New("[aesDecrypt]`cipherText too short")
 	}
 
 	iv := cipherText[:blockSize]
 	cipherText = cipherText[blockSize:]
-
+	originData := make([]byte, clen-blockSize)
 	switch mode {
 	case "CBC":
-		cipher.NewCBCDecrypter(block, iv).CryptBlocks(cipherText, cipherText)
+		cipher.NewCBCDecrypter(block, iv).CryptBlocks(originData, cipherText)
 	case "CFB":
-		cipher.NewCFBDecrypter(block, iv).XORKeyStream(cipherText, cipherText)
+		cipher.NewCFBDecrypter(block, iv).XORKeyStream(originData, cipherText)
 	case "CTR":
-		cipher.NewCTR(block, iv).XORKeyStream(cipherText, cipherText)
+		cipher.NewCTR(block, iv).XORKeyStream(originData, cipherText)
 	case "OFB":
-		cipher.NewOFB(block, iv).XORKeyStream(cipherText, cipherText)
+		cipher.NewOFB(block, iv).XORKeyStream(originData, cipherText)
 	}
 
-	clen = len(cipherText)
-	if pt != PKCS_NONE && clen > 0 && int(cipherText[clen-1]) > clen {
-		return nil, errors.New(fmt.Sprintf("aes [%s] decrypt failed", mode))
+	clen = len(originData)
+	if pt != PKCS_NONE && clen > 0 && int(originData[clen-1]) > clen {
+		return nil, errors.New(fmt.Sprintf("[aesDecrypt] [%s] decrypt failed", mode))
 	}
 
 	var plainText []byte
 	switch pt {
 	case PKCS_ZERO:
-		plainText = zeroUnPadding(cipherText)
+		plainText = zeroUnPadding(originData)
 	case PKCS_SEVEN:
-		plainText = pkcs7UnPadding(cipherText, blockSize)
-	case PKCS_NONE:
-		plainText = cipherText
+		plainText = pkcs7UnPadding(originData, blockSize)
+	default: //case PKCS_NONE
+		plainText = originData
 	}
 
 	return plainText, nil
@@ -407,13 +424,13 @@ func (ke *LkkEncrypt) AesCFBDecrypt(cipherText, key []byte) ([]byte, error) {
 	return ke.aesDecrypt(cipherText, key, "CFB", PKCS_NONE)
 }
 
-// AesECBEncrypt AES-CTR计算器(Counter)模式加密.
+// AesCTREncrypt AES-CTR计算器(Counter)模式加密.
 // clearText为明文;key为密钥,长16/24/32.
 func (ke *LkkEncrypt) AesCTREncrypt(clearText, key []byte) ([]byte, error) {
 	return ke.aesEncrypt(clearText, key, "CTR", PKCS_NONE)
 }
 
-// AesECBDecrypt AES-CTR计算器(Counter)模式解密.
+// AesCTRDecrypt AES-CTR计算器(Counter)模式解密.
 // cipherText为密文;key为密钥,长16/24/32.
 func (ke *LkkEncrypt) AesCTRDecrypt(cipherText, key []byte) ([]byte, error) {
 	return ke.aesDecrypt(cipherText, key, "CTR", PKCS_NONE)
@@ -470,7 +487,7 @@ func (ke *LkkEncrypt) RsaPublicEncrypt(clearText, publicKey []byte) ([]byte, err
 	// 解密pem格式的公钥
 	block, _ := pem.Decode(publicKey)
 	if block == nil {
-		return nil, errors.New("public key error")
+		return nil, errors.New("[RsaPublicEncrypt]`public key error")
 	}
 
 	// 解析公钥
@@ -491,7 +508,7 @@ func (ke *LkkEncrypt) RsaPrivateDecrypt(cipherText, privateKey []byte) ([]byte, 
 	// 获取私钥
 	block, _ := pem.Decode(privateKey)
 	if block == nil {
-		return nil, errors.New("private key error!")
+		return nil, errors.New("[RsaPrivateDecrypt]`private key error!")
 	}
 
 	// 解析PKCS1格式的私钥
@@ -510,7 +527,7 @@ func (ke *LkkEncrypt) RsaPrivateEncrypt(clearText, privateKey []byte) ([]byte, e
 	// 获取私钥
 	block, _ := pem.Decode(privateKey)
 	if block == nil {
-		return nil, errors.New("private key error!")
+		return nil, errors.New("[RsaPrivateEncrypt]`private key error!")
 	}
 
 	// 解析PKCS1格式的私钥
@@ -528,7 +545,7 @@ func (ke *LkkEncrypt) RsaPublicDecrypt(cipherText, publicKey []byte) ([]byte, er
 	// 解密pem格式的公钥
 	block, _ := pem.Decode(publicKey)
 	if block == nil {
-		return nil, errors.New("public key error")
+		return nil, errors.New("[RsaPublicDecrypt]`public key error")
 	}
 
 	// 解析公钥

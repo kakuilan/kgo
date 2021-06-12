@@ -1,1370 +1,1262 @@
 package kgo
 
 import (
-	"fmt"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
-func TestInArray(t *testing.T) {
+func TestArray_ArrayKeys(t *testing.T) {
 	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
+		r := recover()
+		assert.Contains(t, r, "[ArrayKeys]`arr type must be")
+	}()
+
+	var res []interface{}
+
+	res = KArr.ArrayKeys(naturalArr)
+	assert.Equal(t, len(naturalArr), len(res))
+
+	res = KArr.ArrayKeys(colorMp)
+	assert.Equal(t, len(colorMp), len(res))
+
+	res = KArr.ArrayKeys(personS1)
+	assert.NotEmpty(t, res)
+
+	KArr.ArrayKeys(strHello)
+}
+
+func BenchmarkArray_ArrayKeys(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayKeys(naturalArr)
+	}
+}
+
+func TestArray_ArrayValues(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[arrayValues]`arr type must be")
+	}()
+
+	var res []interface{}
+
+	res = KArr.ArrayValues(slItf, false)
+	assert.Equal(t, len(slItf), len(res))
+
+	//将排除nil
+	res = KArr.ArrayValues(slItf, true)
+	assert.Greater(t, len(slItf), len(res))
+
+	//将排除0
+	res = KArr.ArrayValues(int64Slc, true)
+	assert.Greater(t, len(int64Slc), len(res))
+
+	//将排除0.0
+	res = KArr.ArrayValues(flo32Slc, true)
+	assert.Greater(t, len(flo32Slc), len(res))
+
+	//将排除false
+	res = KArr.ArrayValues(booSlc, true)
+	assert.Greater(t, len(booSlc), len(res))
+
+	//将排除""
+	res = KArr.ArrayValues(colorMp, true)
+	assert.Greater(t, len(colorMp), len(res))
+
+	//结构体
+	res = KArr.ArrayValues(personS1, false)
+	assert.NotEmpty(t, res)
+
+	KArr.ArrayValues(strHello, false)
+}
+
+func BenchmarkArray_ArrayValues_Arr(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayValues(slItf, false)
+	}
+}
+
+func BenchmarkArray_ArrayValues_Map(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayValues(colorMp, false)
+	}
+}
+
+func BenchmarkArray_ArrayValues_Struct(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayValues(personS1, false)
+	}
+}
+
+func TestArray_ArrayChunk(t *testing.T) {
+	size := 3
+	res := KArr.ArrayChunk(ssSingle, size)
+	assert.Equal(t, 4, len(res))
+
+	item := res[0]
+	assert.Equal(t, size, len(item))
+
+	KArr.ArrayChunk([]int{}, 1)
+}
+
+func TestArray_ArrayChunk_PanicSize(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArrayChunk]`size cannot be")
+	}()
+	KArr.ArrayChunk(ssSingle, 0)
+}
+
+func TestArray_ArrayChunk_PanicType(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArrayChunk]`arr type must be")
+	}()
+	KArr.ArrayChunk(strHello, 2)
+}
+
+func BenchmarkArray_ArrayChunk(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayChunk(ssSingle, 3)
+	}
+}
+
+func TestArray_ArrayColumn_Struct(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArrayColumn]`arr type must be")
+	}()
+
+	var res []interface{}
+
+	res = KArr.ArrayColumn(crowd, "Name")
+	assert.NotEmpty(t, res)
+
+	res = KArr.ArrayColumn(*orgS1, "Age")
+	assert.NotEmpty(t, res)
+
+	res = KArr.ArrayColumn(*orgS1, "age")
+	assert.Empty(t, res)
+
+	// type err
+	KArr.ArrayColumn(orgS1, "Age")
+}
+
+func TestArray_ArrayColumn_Map(t *testing.T) {
+	var arr map[string]interface{}
+	var res []interface{}
+
+	_ = KStr.JsonDecode([]byte(personsMapJson), &arr)
+
+	res = KArr.ArrayColumn(arr, "Name")
+	assert.Empty(t, res)
+
+	res = KArr.ArrayColumn(arr, "name")
+	assert.NotEmpty(t, res)
+
+	//新元素类型错误
+	arr["person5"] = strHello
+	res2 := KArr.ArrayColumn(arr, "name")
+	assert.Equal(t, len(res), len(res2))
+}
+
+func BenchmarkArray_ArrayColumn(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = KArr.ArrayColumn(crowd, "Name")
+	}
+}
+
+func TestArray_SlicePush_SlicePop(t *testing.T) {
+	var ss []interface{}
+	var item interface{}
+
+	lenght := KArr.SlicePush(&ss, slItf...)
+	assert.Greater(t, lenght, 1)
+
+	item = KArr.SlicePop(&ss)
+	assert.NotEmpty(t, item)
+}
+
+func BenchmarkArray_SlicePush(b *testing.B) {
+	var ss []interface{}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		ss = nil
+		KArr.SlicePush(&ss, slItf...)
+	}
+}
+
+func BenchmarkArray_SlicePop(b *testing.B) {
+	var ss [][]interface{}
+	var sub []interface{}
+	for j := 0; j < 10000000; j++ {
+		sub = nil
+		copy(sub, slItf)
+		ss = append(ss, sub)
+	}
+
+	b.ResetTimer()
+	for _, item := range ss {
+		for i := 0; i < len(item); i++ {
+			KArr.SlicePop(&item)
 		}
+	}
+}
+
+func TestArray_SliceUnshift_SliceShift(t *testing.T) {
+	var ss []interface{}
+	var item interface{}
+	lenght := KArr.SliceUnshift(&ss, slItf...)
+	assert.Greater(t, lenght, 1)
+
+	item = KArr.SliceShift(&ss)
+	assert.NotEmpty(t, item)
+}
+
+func BenchmarkArray_SliceUnshift(b *testing.B) {
+	var ss []interface{}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		ss = nil
+		KArr.SliceUnshift(&ss, slItf...)
+	}
+}
+
+func BenchmarkArray_SliceShift(b *testing.B) {
+	var ss [][]interface{}
+	var sub []interface{}
+	for j := 0; j < 10000000; j++ {
+		sub = nil
+		copy(sub, slItf)
+		ss = append(ss, sub)
+	}
+
+	b.ResetTimer()
+	for _, item := range ss {
+		for i := 0; i < len(item); i++ {
+			KArr.SliceShift(&item)
+		}
+	}
+}
+
+func TestArray_ArrayKeyExists(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArrayKeyExists]`arr type must be")
+	}()
+
+	chk1 := KArr.ArrayKeyExists(len(naturalArr)-1, naturalArr)
+	assert.True(t, chk1)
+
+	chk2 := KArr.ArrayKeyExists(len(slItf)-1, slItf)
+	assert.True(t, chk2)
+
+	chk3 := KArr.ArrayKeyExists("Name", personS1)
+	chk4 := KArr.ArrayKeyExists("name", personS1)
+	assert.True(t, chk3)
+	assert.False(t, chk4)
+
+	var persons map[string]interface{}
+	_ = KStr.JsonDecode([]byte(personsMapJson), &persons)
+	chk5 := KArr.ArrayKeyExists("person1", persons)
+	chk6 := KArr.ArrayKeyExists("Age", persons)
+	assert.True(t, chk5)
+	assert.False(t, chk6)
+
+	var key interface{}
+	chk7 := KArr.ArrayKeyExists(key, persons)
+	assert.False(t, chk7)
+
+	KArr.ArrayKeyExists(1, nil)
+}
+
+func BenchmarkArray_ArrayKeyExists_Slice(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayKeyExists(1, naturalArr)
+	}
+}
+
+func BenchmarkArray_ArrayKeyExists_Struct(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayKeyExists("Name", personS1)
+	}
+}
+
+func BenchmarkArray_ArrayKeyExists_Map(b *testing.B) {
+	var persons map[string]interface{}
+	_ = KStr.JsonDecode([]byte(personsMapJson), &persons)
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayKeyExists("person1", persons)
+	}
+}
+
+func TestArray_ArrayReverse(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArrayReverse]`arr type must be")
+	}()
+
+	res1 := KArr.ArrayReverse(naturalArr)
+	itm1 := KArr.SlicePop(&res1)
+	assert.Equal(t, 0, itm1)
+
+	res2 := KArr.ArrayReverse(ssSingle)
+	itm2 := KArr.SlicePop(&res2)
+	assert.Equal(t, "a", itm2)
+
+	KArr.ArrayReverse(strHello)
+}
+
+func BenchmarkArray_ArrayReverse(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayReverse(naturalArr)
+	}
+}
+
+func TestArray_Implode(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[Implode]`arr type must be")
 	}()
 
 	//数组
-	arr := [5]int{1, 2, 3, 4, 5}
-	it := 2
-	if !KArr.InArray(it, arr) {
-		t.Error("InArray fail")
-		return
-	}
+	res1 := KArr.Implode(",", naturalArr)
+	assert.Contains(t, res1, "0,1,2,3,4,5,6,7,8,9,10")
 
-	//字典
-	mp := map[string]string{
-		"a": "aa",
-		"b": "bb",
-	}
-	it2 := "a"
-	it3 := "bb"
-	if KArr.InArray(it2, mp) {
-		t.Error("InArray fail")
-		return
-	} else if !KArr.InArray(it3, mp) {
-		t.Error("InArray fail")
-		return
-	}
+	//切片
+	res2 := KArr.Implode(",", ssSingle)
+	assert.Contains(t, res2, "a,b,c,d,e,f,g,h,i,j,k")
 
-	if KArr.InArray(it2, "abc") {
-		t.Error("InArray fail")
-		return
-	}
+	//结构体
+	res3 := KArr.Implode(",", personS1)
+	assert.NotEmpty(t, res3)
+
+	//map
+	res4 := KArr.Implode(",", strMp1)
+	assert.NotEmpty(t, res4)
+
+	KArr.Implode(",", strHello)
 }
 
-func BenchmarkInArray(b *testing.B) {
+func BenchmarkArray_Implode(b *testing.B) {
 	b.ResetTimer()
-	sli := []string{"a", "b", "c", "d", "e"}
-	it := "d"
 	for i := 0; i < b.N; i++ {
-		KArr.InArray(it, sli)
+		KArr.Implode(",", naturalArr)
 	}
 }
 
-func TestInIntSlice(t *testing.T) {
-	tests := []struct {
-		list     []int
-		find     int
-		expected bool
-	}{
-		{[]int{42}, 42, true},
-		{[]int{42}, 4, false},
-		{[]int{42, 666, 324523}, 666, true},
-		{[]int{42, 796, 141259}, 0, false},
-		{[]int{}, 0, false},
-	}
-
-	for _, test := range tests {
-		actual := KArr.InIntSlice(test.find, test.list)
-		if actual != test.expected {
-			t.Errorf("Expected InIntSlice(%d, %v) to be %v, got %v", test.find, test.list, test.expected, actual)
-			return
-		}
-	}
+func TestArray_JoinStrings(t *testing.T) {
+	res := KArr.JoinStrings(",", ssSingle)
+	assert.Contains(t, res, "a,b,c,d,e,f,g,h,i,j,k")
 }
 
-func BenchmarkInIntSlice(b *testing.B) {
+func BenchmarkArray_JoinStrings(b *testing.B) {
 	b.ResetTimer()
-	arr := []int{-3, 9, -5, 0, 5, -3, 0, 7}
 	for i := 0; i < b.N; i++ {
-		KArr.InIntSlice(7, arr)
+		KArr.JoinStrings(",", ssSingle)
 	}
 }
 
-func TestInInt64Slice(t *testing.T) {
-	tests := []struct {
-		list     []int64
-		find     int64
-		expected bool
-	}{
-		{[]int64{42}, 42, true},
-		{[]int64{42}, 4, false},
-		{[]int64{42, 666, 324523}, 666, true},
-		{[]int64{42, 796, 141259}, 0, false},
-		{[]int64{}, 0, false},
-	}
-
-	for _, test := range tests {
-		actual := KArr.InInt64Slice(test.find, test.list)
-		if actual != test.expected {
-			t.Errorf("Expected InInt64Slice(%d, %v) to be %v, got %v", test.find, test.list, test.expected, actual)
-			return
-		}
-	}
+func TestArray_JoinInts(t *testing.T) {
+	ints := naturalArr[:]
+	res := KArr.JoinInts(",", ints)
+	assert.Contains(t, res, "0,1,2,3,4,5,6,7,8,9,10")
 }
 
-func BenchmarkInInt64Slice(b *testing.B) {
+func BenchmarkArray_JoinInts(b *testing.B) {
 	b.ResetTimer()
-	arr := []int64{-3, 9, -5, 0, 5, -3, 0, 7}
+	ints := naturalArr[:]
 	for i := 0; i < b.N; i++ {
-		KArr.InInt64Slice(7, arr)
+		KArr.JoinInts(",", ints)
 	}
 }
 
-func TestInStringSlice(t *testing.T) {
-	tests := []struct {
-		list     []string
-		find     string
-		expected bool
-	}{
-		{[]string{}, "", false},
-		{[]string{""}, "", true},
-		{[]string{"aa"}, "bb", false},
-		{[]string{"aa", "bb", "cc", "hello"}, "ee", false},
-		{[]string{"aa", "bb", "cc", "hello"}, "hello", true},
-	}
-
-	for _, test := range tests {
-		actual := KArr.InStringSlice(test.find, test.list)
-		if actual != test.expected {
-			t.Errorf("Expected InStringSlice(%s, %v) to be %v, got %v", test.find, test.list, test.expected, actual)
-			return
-		}
-	}
+func TestArray_UniqueInts(t *testing.T) {
+	sl := naturalArr[:]
+	sl = append(sl, 1, 2, 3, 4, 5, 6)
+	res := KArr.UniqueInts(sl)
+	assert.Equal(t, len(naturalArr), len(res))
 }
 
-func BenchmarkInStringSlice(b *testing.B) {
+func BenchmarkArray_UniqueInts(b *testing.B) {
 	b.ResetTimer()
-	arr := []string{"aa", "bb", "cc", "hello"}
 	for i := 0; i < b.N; i++ {
-		KArr.InStringSlice("hello", arr)
+		KArr.UniqueInts(intSlc)
 	}
 }
 
-func TestArrayFill(t *testing.T) {
-	num := 4
-	res := KArr.ArrayFill("abc", num)
-	if len(res) != num {
-		t.Error("InArray fail")
-		return
-	}
-	KArr.ArrayFill("abc", 0)
+func TestArray_Unique64Ints(t *testing.T) {
+	res := KArr.Unique64Ints(int64Slc)
+	assert.Less(t, len(res), len(int64Slc))
 }
 
-func BenchmarkArrayFill(b *testing.B) {
+func BenchmarkArray_Unique64Ints(b *testing.B) {
 	b.ResetTimer()
-	num := 10
 	for i := 0; i < b.N; i++ {
-		KArr.ArrayFill("abc", num)
+		KArr.Unique64Ints(int64Slc)
 	}
 }
 
-func TestArrayFlip(t *testing.T) {
+func TestArray_UniqueStrings(t *testing.T) {
+	sl := ssSingle[:]
+	sl = append(sl, "a", "b", "c", "d", "e")
+	res := KArr.UniqueStrings(sl)
+	assert.Equal(t, len(ssSingle), len(res))
+}
+
+func BenchmarkArray_UniqueStrings(b *testing.B) {
+	b.ResetTimer()
+	sl := ssSingle[:]
+	sl = append(sl, "a", "b", "c", "d", "e")
+	for i := 0; i < b.N; i++ {
+		KArr.UniqueStrings(sl)
+	}
+}
+
+func TestArray_ArrayDiff(t *testing.T) {
 	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
+		r := recover()
+		assert.Contains(t, r, "[ArrayDiff]`arr1,arr2 type must be")
 	}()
 
-	mp := map[string]int{"a": 1, "b": 2, "c": 3}
-	res := KArr.ArrayFlip(mp)
-	if val, ok := res[1]; !ok || fmt.Sprintf("%v", val) != "a" {
-		t.Error("ArrayFlip fail")
-		return
-	}
+	var res, res2 map[interface{}]interface{}
 
-	var sli []string = make([]string, 5)
-	sli[0] = "aaa"
-	sli[2] = "ccc"
-	sli[3] = "ddd"
-	res = KArr.ArrayFlip(sli)
+	//数组-切片
+	res = KArr.ArrayDiff(strSl1, strSl2, COMPARE_ONLY_VALUE)
+	assert.NotEmpty(t, res)
 
-	KArr.ArrayFlip("hello")
+	res = KArr.ArrayDiff(strSl1, strSl2, COMPARE_ONLY_KEY)
+	assert.NotEmpty(t, res)
+
+	res2 = KArr.ArrayDiff(strSl1, strSl2, COMPARE_BOTH_KEYVALUE)
+	assert.Greater(t, len(res2), len(res))
+
+	res = KArr.ArrayDiff(strSlEmp, strSl1, COMPARE_ONLY_VALUE)
+	assert.Empty(t, res)
+
+	//数组-字典
+	res = KArr.ArrayDiff(strSl1, strMp1, COMPARE_ONLY_VALUE)
+	assert.NotEmpty(t, res)
+
+	res = KArr.ArrayDiff(strSl1, strMp1, COMPARE_ONLY_KEY)
+	assert.NotEmpty(t, res)
+
+	res2 = KArr.ArrayDiff(strSl1, strMp1, COMPARE_BOTH_KEYVALUE)
+	assert.Greater(t, len(res2), len(res))
+
+	res = KArr.ArrayDiff(strSlEmp, strMp1, COMPARE_ONLY_VALUE)
+	assert.Empty(t, res)
+
+	//字典-数组
+	res = KArr.ArrayDiff(strMp1, strSl1, COMPARE_ONLY_VALUE)
+	assert.NotEmpty(t, res)
+
+	res = KArr.ArrayDiff(strMp1, strSl1, COMPARE_ONLY_KEY)
+	assert.NotEmpty(t, res)
+
+	res2 = KArr.ArrayDiff(strMp1, strSl1, COMPARE_BOTH_KEYVALUE)
+	assert.Greater(t, len(res2), len(res))
+
+	res = KArr.ArrayDiff(strMpEmp, strSl1, COMPARE_ONLY_VALUE)
+	assert.Empty(t, res)
+
+	//字典-字典
+	res = KArr.ArrayDiff(strMp1, strMp2, COMPARE_ONLY_VALUE)
+	assert.NotEmpty(t, res)
+
+	res = KArr.ArrayDiff(strMp1, strMp2, COMPARE_ONLY_KEY)
+	assert.NotEmpty(t, res)
+
+	res2 = KArr.ArrayDiff(strMp1, strMp2, COMPARE_BOTH_KEYVALUE)
+	assert.NotEmpty(t, res2)
+
+	KArr.ArrayDiff(strHello, 1234, COMPARE_ONLY_VALUE)
 }
 
-func BenchmarkArrayFlip(b *testing.B) {
+func BenchmarkArray_ArrayDiff_A1A(b *testing.B) {
 	b.ResetTimer()
-	mp := map[string]int{"a": 1, "b": 2, "c": 3}
 	for i := 0; i < b.N; i++ {
-		KArr.ArrayFlip(mp)
+		KArr.ArrayDiff(strSl1, strSl2, COMPARE_ONLY_VALUE)
 	}
 }
 
-func TestArrayKeys(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
-	mp := map[string]int{"a": 1, "b": 2, "c": 3}
-	res := KArr.ArrayKeys(mp)
-	if len(res) != 3 {
-		t.Error("ArrayKeys fail")
-		return
-	}
-
-	var sli []string = make([]string, 5)
-	sli[0] = "aaa"
-	sli[2] = "ccc"
-	sli[3] = "ddd"
-	res = KArr.ArrayKeys(sli)
-	if len(res) != 5 {
-		t.Error("ArrayKeys fail")
-		return
-	}
-
-	KArr.ArrayKeys("hello")
-}
-
-func BenchmarkArrayKeys(b *testing.B) {
+func BenchmarkArray_ArrayDiff_A1M(b *testing.B) {
 	b.ResetTimer()
-	mp := map[string]int{"a": 1, "b": 2, "c": 3}
 	for i := 0; i < b.N; i++ {
-		KArr.ArrayKeys(mp)
+		KArr.ArrayDiff(strSl1, strMp1, COMPARE_ONLY_VALUE)
 	}
 }
 
-func TestArrayValues(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
-	mp := map[string]int{"a": 1, "b": 2, "c": 3}
-	res := KArr.ArrayValues(mp, false)
-	if len(res) != 3 {
-		t.Error("ArrayValues fail")
-		return
-	}
-
-	var sli []string = make([]string, 5)
-	sli[0] = "aaa"
-	sli[2] = "ccc"
-	sli[3] = "ddd"
-	res = KArr.ArrayValues(sli, false)
-	if len(res) != 5 {
-		t.Error("ArrayValues fail")
-		return
-	}
-
-	KArr.ArrayValues("hello", false)
-}
-
-func BenchmarkArrayValues(b *testing.B) {
+func BenchmarkArray_ArrayDiff_M1A(b *testing.B) {
 	b.ResetTimer()
-	mp := map[string]int{"a": 1, "b": 2, "c": 3}
 	for i := 0; i < b.N; i++ {
-		KArr.ArrayValues(mp, false)
+		KArr.ArrayDiff(strMp1, strSl1, COMPARE_ONLY_VALUE)
 	}
 }
 
-func TestMergeSlice(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
-	var arr = [10]int{1, 2, 3, 4, 5, 6}
-	var sli []string = make([]string, 5)
-	sli[0] = "aaa"
-	sli[2] = "ccc"
-	sli[3] = "ddd"
-
-	res1 := KArr.MergeSlice(false, arr, sli)
-	if len(res1) != 15 {
-		t.Error("MergeSlice fail")
-		return
-	}
-
-	res2 := KArr.MergeSlice(true, arr, sli)
-	if len(res2) != 13 {
-		t.Error("MergeSlice fail")
-		return
-	}
-	KArr.MergeSlice(true)
-	KArr.MergeSlice(false, "hellow")
-}
-
-func BenchmarkMergeSlice(b *testing.B) {
+func BenchmarkArray_ArrayDiff_M1M(b *testing.B) {
 	b.ResetTimer()
-	var arr = [10]int{1, 2, 3, 4, 5, 6}
-	var sli []string = make([]string, 5)
-	sli[0] = "aaa"
-	sli[2] = "ccc"
-	sli[3] = "ddd"
 	for i := 0; i < b.N; i++ {
-		KArr.MergeSlice(false, arr, sli)
+		KArr.ArrayDiff(strMp1, strMp2, COMPARE_ONLY_VALUE)
 	}
 }
 
-func TestMergeMap(t *testing.T) {
+func TestArray_ArrayIntersect(t *testing.T) {
 	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
+		r := recover()
+		assert.Contains(t, r, "[ArrayIntersect]`arr1,arr2 type must be")
 	}()
 
-	mp1 := map[string]string{
-		"a": "aa",
-		"b": "bb",
-	}
-	mp2 := map[string]int{
-		"h": 1,
-		"i": 2,
-		"j": 3,
-	}
+	var res, res2 map[interface{}]interface{}
 
-	res := KArr.MergeMap(true, mp1, mp2)
-	_, err := KStr.JsonEncode(res)
-	if err != nil {
-		t.Error("MergeMap fail")
-		return
-	}
-	KArr.MergeMap(false)
-	KArr.MergeMap(false, mp1, mp2)
-	KArr.MergeMap(false, mp1, mp2, "hello")
+	//数组-切片
+	res = KArr.ArrayIntersect(strSl1, strSl2, COMPARE_ONLY_VALUE)
+	assert.NotEmpty(t, res)
+
+	res = KArr.ArrayIntersect(strSl1, strSl2, COMPARE_ONLY_KEY)
+	assert.NotEmpty(t, res)
+
+	res2 = KArr.ArrayIntersect(strSl1, strSl2, COMPARE_BOTH_KEYVALUE)
+	assert.Less(t, len(res2), len(res))
+
+	res = KArr.ArrayIntersect(strSlEmp, strSl1, COMPARE_ONLY_VALUE)
+	assert.Empty(t, res)
+
+	//数组-字典
+	res = KArr.ArrayIntersect(strSl1, strMp1, COMPARE_ONLY_VALUE)
+	assert.NotEmpty(t, res)
+
+	res = KArr.ArrayIntersect(strSl1, strMp1, COMPARE_ONLY_KEY)
+	assert.NotEmpty(t, res)
+
+	res2 = KArr.ArrayIntersect(strSl1, strMp1, COMPARE_BOTH_KEYVALUE)
+	assert.Less(t, len(res2), len(res))
+
+	res = KArr.ArrayIntersect(strSlEmp, strMp1, COMPARE_ONLY_VALUE)
+	assert.Empty(t, res)
+
+	//字典-数组
+	res = KArr.ArrayIntersect(strMp1, strSl1, COMPARE_ONLY_VALUE)
+	assert.NotEmpty(t, res)
+
+	res = KArr.ArrayIntersect(strMp1, strSl1, COMPARE_ONLY_KEY)
+	assert.NotEmpty(t, res)
+
+	res2 = KArr.ArrayIntersect(strMp1, strSl1, COMPARE_BOTH_KEYVALUE)
+	assert.Less(t, len(res2), len(res))
+
+	res = KArr.ArrayIntersect(strMpEmp, strSl1, COMPARE_ONLY_VALUE)
+	assert.Empty(t, res)
+
+	//字典-字典
+	res = KArr.ArrayIntersect(strMp1, strMp2, COMPARE_ONLY_VALUE)
+	assert.NotEmpty(t, res)
+
+	res = KArr.ArrayIntersect(strMp1, strMp2, COMPARE_ONLY_KEY)
+	assert.NotEmpty(t, res)
+
+	res2 = KArr.ArrayIntersect(strMp1, strMp2, COMPARE_BOTH_KEYVALUE)
+	assert.NotEmpty(t, res2)
+
+	KArr.ArrayIntersect(strHello, 1234, COMPARE_ONLY_VALUE)
 }
 
-func BenchmarkMergeMap(b *testing.B) {
+func BenchmarkArray_ArrayIntersect_A1A(b *testing.B) {
 	b.ResetTimer()
-	mp1 := map[string]string{
-		"a": "aa",
-		"b": "bb",
-	}
-	mp2 := map[string]int{
-		"h": 1,
-		"i": 2,
-		"j": 3,
-	}
 	for i := 0; i < b.N; i++ {
-		KArr.MergeMap(true, mp1, mp2)
+		KArr.ArrayIntersect(strSl1, strSl2, COMPARE_ONLY_VALUE)
 	}
 }
 
-func TestArrayChunk(t *testing.T) {
-	size := 3
-	var arr = [11]string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"}
-	res1 := KArr.ArrayChunk(arr, size)
-	if len(res1) != 4 {
-		t.Error("ArrayChunk fail")
-		return
-	}
-
-	var myslice []int
-	KArr.ArrayChunk(myslice, 1)
-}
-
-func TestArrayChunkPanicSize(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
-	var arr = [11]string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"}
-	KArr.ArrayChunk(arr, 0)
-}
-
-func TestArrayChunkPanicType(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
-	KArr.ArrayChunk("hello", 1)
-}
-
-func BenchmarkArrayChunk(b *testing.B) {
+func BenchmarkArray_ArrayIntersect_A1M(b *testing.B) {
 	b.ResetTimer()
-	size := 3
-	var arr = [11]string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"}
 	for i := 0; i < b.N; i++ {
-		KArr.ArrayChunk(arr, size)
+		KArr.ArrayIntersect(strSl1, strMp1, COMPARE_ONLY_VALUE)
 	}
 }
 
-func TestArrayPad(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
-	var sli []int
-	var arr = [3]string{"a", "b", "c"}
-
-	res1 := KArr.ArrayPad(sli, 5, 1)
-	res2 := KArr.ArrayPad(arr, 6, "d")
-	res3 := KArr.ArrayPad(arr, -6, "d")
-	res4 := KArr.ArrayPad(arr, 2, "d")
-	if len(res1) != 5 || len(res2) != 6 || fmt.Sprintf("%v", res3[0]) != "d" || len(res4) != 3 {
-		t.Error("ArrayPad fail")
-		return
-	}
-
-	KArr.ArrayPad("hello", 2, "d")
-}
-
-func BenchmarkArrayPad(b *testing.B) {
+func BenchmarkArray_ArrayIntersect_M1A(b *testing.B) {
 	b.ResetTimer()
-	var arr = [3]string{"a", "b", "c"}
 	for i := 0; i < b.N; i++ {
-		KArr.ArrayPad(arr, 10, "d")
+		KArr.ArrayIntersect(strMp1, strSl1, COMPARE_ONLY_VALUE)
 	}
 }
 
-func TestArraySlice(t *testing.T) {
-	var sli []int
-	var arr = [6]string{"a", "b", "c", "d", "e", "f"}
-
-	res1 := KArr.ArraySlice(sli, 0, 1)
-	res2 := KArr.ArraySlice(arr, 1, 2)
-	res3 := KArr.ArraySlice(arr, -3, 2)
-	res4 := KArr.ArraySlice(arr, -3, 4)
-	if len(res1) != 0 || len(res2) != 2 || len(res3) != 2 || len(res4) != 3 {
-		t.Error("ArraySlice fail")
-		return
-	}
-}
-
-func TestArraySlicePanicSize(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
-	var sli []int
-	KArr.ArraySlice(sli, 0, 0)
-}
-
-func TestArraySlicePanicType(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
-	KArr.ArraySlice("hello", 0, 2)
-}
-
-func BenchmarkArraySlice(b *testing.B) {
+func BenchmarkArray_ArrayIntersect_M1M(b *testing.B) {
 	b.ResetTimer()
-	var arr = [6]string{"a", "b", "c", "d", "e", "f"}
 	for i := 0; i < b.N; i++ {
-		KArr.ArraySlice(arr, 1, 4)
+		KArr.ArrayIntersect(strMp1, strMp2, COMPARE_ONLY_VALUE)
 	}
 }
 
-func TestArrayRand(t *testing.T) {
-	var arr = [8]string{"a", "b", "c", "d", "e", "f", "g", "h"}
-	var sli []int
-
-	res1 := KArr.ArrayRand(sli, 1)
-	res2 := KArr.ArrayRand(arr, 3)
-	res3 := KArr.ArrayRand(arr, 9)
-
-	if len(res1) != 0 || len(res2) != 3 || len(res3) != 8 {
-		t.Error("ArraySlice fail")
-		return
-	}
-}
-
-func TestArrayRandPanicNum(t *testing.T) {
+func TestArray_ArrayUnique(t *testing.T) {
 	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
+		r := recover()
+		assert.Contains(t, r, "[ArrayUnique]`arr type must be")
 	}()
 
-	var sli []int
-	KArr.ArrayRand(sli, 0)
-}
-
-func TestArrayRandPanicType(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
-	KArr.ArrayRand("hello", 2)
-}
-
-func BenchmarkArrayRand(b *testing.B) {
-	b.ResetTimer()
-	var arr = [8]string{"a", "b", "c", "d", "e", "f", "g", "h"}
-	for i := 0; i < b.N; i++ {
-		KArr.ArrayRand(arr, 6)
-	}
-}
-
-func TestArrayColumn(t *testing.T) {
-	//数组切片
-	jsonStr := `[{"name":"zhang3","age":23,"sex":1},{"name":"li4","age":30,"sex":1},{"name":"wang5","age":25,"sex":0},{"name":"zhao6","age":50,"sex":0}]`
-	var arr interface{}
-	err := KStr.JsonDecode([]byte(jsonStr), &arr)
-	if err != nil {
-		t.Error("JsonDecode fail")
-		return
-	}
-
-	res := KArr.ArrayColumn(arr, "name")
-	if len(res) != 4 {
-		t.Error("ArrayColumn fail")
-		return
-	}
-
-	//字典
-	jsonStr = `{"person1":{"name":"zhang3","age":23,"sex":1},"person2":{"name":"li4","age":30,"sex":1},"person3":{"name":"wang5","age":25,"sex":0},"person4":{"name":"zhao6","age":50,"sex":0}}`
-	err = KStr.JsonDecode([]byte(jsonStr), &arr)
-	if err != nil {
-		t.Error("JsonDecode fail")
-		return
-	}
-
-	res = KArr.ArrayColumn(arr, "name")
-	if len(res) != 4 {
-		t.Error("ArrayColumn fail")
-		return
-	}
-}
-
-func TestArrayColumnPanicSlice(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
+	var res map[interface{}]interface{}
 
 	//数组切片
-	jsonStr := `[{"name":"zhang3","age":23,"sex":1},{"name":"li4","age":30,"sex":1},{"name":"wang5","age":25,"sex":0},{"name":"zhao6","age":50,"sex":0}]`
-	var arr []interface{}
-	err := KStr.JsonDecode([]byte(jsonStr), &arr)
-	if err != nil {
-		t.Error("JsonDecode fail")
-		return
-	}
-
-	arr = append(arr, "hello")
-	KArr.ArrayColumn(arr, "name")
-}
-
-func TestArrayColumnPanicMap(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
-	//数组切片
-	jsonStr := `{"person1":{"name":"zhang3","age":23,"sex":1},"person2":{"name":"li4","age":30,"sex":1},"person3":{"name":"wang5","age":25,"sex":0},"person4":{"name":"zhao6","age":50,"sex":0}}`
-	var arr map[string]interface{}
-	err := KStr.JsonDecode([]byte(jsonStr), &arr)
-	if err != nil {
-		t.Error("JsonDecode fail")
-		return
-	}
-
-	arr["person5"] = "hello"
-	KArr.ArrayColumn(arr, "name")
-}
-
-func TestArrayColumnPanicType(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
-	KArr.ArrayColumn("hello", "name")
-}
-
-func BenchmarkArrayColumn(b *testing.B) {
-	b.ResetTimer()
-	jsonStr := `[{"name":"zhang3","age":23,"sex":1},{"name":"li4","age":30,"sex":1},{"name":"wang5","age":25,"sex":0},{"name":"zhao6","age":50,"sex":0}]`
-	var arr interface{}
-	_ = KStr.JsonDecode([]byte(jsonStr), &arr)
-	for i := 0; i < b.N; i++ {
-		KArr.ArrayColumn(arr, "name")
-	}
-}
-
-func TestArrayPushPop(t *testing.T) {
-	var arr []interface{}
-	length := KArr.ArrayPush(&arr, 1, 2, 3, "a", "b", "c")
-	if length != 6 {
-		t.Error("ArrayPush fail")
-		return
-	}
-
-	last := KArr.ArrayPop(&arr)
-	if fmt.Sprintf("%v", last) != "c" {
-		t.Error("ArrayPop fail")
-		return
-	}
-	arr = nil
-	KArr.ArrayPop(&arr)
-}
-
-func BenchmarkArrayPush(b *testing.B) {
-	b.ResetTimer()
-	var arr []interface{}
-	for i := 0; i < b.N; i++ {
-		KArr.ArrayPush(&arr, 1, 2, 3, "a", "b", "c")
-	}
-}
-
-func BenchmarkArrayPop(b *testing.B) {
-	b.ResetTimer()
-	var arr = []interface{}{"a", "b", "c", "d", "e"}
-	for i := 0; i < b.N; i++ {
-		KArr.ArrayPop(&arr)
-	}
-}
-
-func TestArrayShiftUnshift(t *testing.T) {
-	var arr []interface{}
-	length := KArr.ArrayUnshift(&arr, 1, 2, 3, "a", "b", "c")
-	if length != 6 {
-		t.Error("ArrayUnshift fail")
-		return
-	}
-
-	first := KArr.ArrayShift(&arr)
-	if fmt.Sprintf("%v", first) != "1" {
-		t.Error("ArrayPop fail")
-		return
-	}
-	arr = nil
-	KArr.ArrayShift(&arr)
-}
-
-func BenchmarkArrayUnshift(b *testing.B) {
-	b.ResetTimer()
-	var arr []interface{}
-	for i := 0; i < b.N; i++ {
-		KArr.ArrayUnshift(&arr, 1, 2, 3, "a", "b", "c")
-	}
-}
-
-func BenchmarkArrayShift(b *testing.B) {
-	b.ResetTimer()
-	var arr = []interface{}{"a", "b", "c", "d", "e"}
-	for i := 0; i < b.N; i++ {
-		KArr.ArrayShift(&arr)
-	}
-}
-
-func TestArrayKeyExistsArr(t *testing.T) {
-	var arr []interface{}
-	KArr.ArrayPush(&arr, 1, 2, 3, "a", "b", "c")
-
-	chk1 := KArr.ArrayKeyExists(1, arr)
-	chk2 := KArr.ArrayKeyExists(-1, arr)
-	chk3 := KArr.ArrayKeyExists(6, arr)
-	if !chk1 || chk2 || chk3 {
-		t.Error("ArrayKeyExists fail")
-		return
-	}
-
-	var key interface{}
-	KArr.ArrayKeyExists(key, arr)
-
-	arr = nil
-	KArr.ArrayKeyExists(1, arr)
-}
-
-func TestArrayKeyExistsMap(t *testing.T) {
-	jsonStr := `{"person1":{"name":"zhang3","age":23,"sex":1},"person2":{"name":"li4","age":30,"sex":1},"person3":{"name":"wang5","age":25,"sex":0},"person4":{"name":"zhao6","age":50,"sex":0}}`
-	var arr map[string]interface{}
-	_ = KStr.JsonDecode([]byte(jsonStr), &arr)
-
-	chk1 := KArr.ArrayKeyExists("person2", arr)
-	chk2 := KArr.ArrayKeyExists("test", arr)
-	if !chk1 || chk2 {
-		t.Error("ArrayKeyExists fail")
-		return
-	}
-}
-
-func TestArrayKeyExistsPanic(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
-	KArr.ArrayKeyExists("abc", "hello")
-}
-
-func BenchmarkArrayKeyExistsArr(b *testing.B) {
-	b.ResetTimer()
-	var arr []interface{}
-	KArr.ArrayPush(&arr, 1, 2, 3, "a", "b", "c")
-	for i := 0; i < b.N; i++ {
-		KArr.ArrayKeyExists(3, arr)
-	}
-}
-
-func BenchmarkArrayKeyExistsMap(b *testing.B) {
-	b.ResetTimer()
-	jsonStr := `{"person1":{"name":"zhang3","age":23,"sex":1},"person2":{"name":"li4","age":30,"sex":1},"person3":{"name":"wang5","age":25,"sex":0},"person4":{"name":"zhao6","age":50,"sex":0}}`
-	var arr map[string]interface{}
-	_ = KStr.JsonDecode([]byte(jsonStr), &arr)
-	for i := 0; i < b.N; i++ {
-		KArr.ArrayKeyExists("person2", arr)
-	}
-}
-
-func TestArrayReverse(t *testing.T) {
-	var arr = []interface{}{"a", "b", "c", "d", "e"}
-	res := KArr.ArrayReverse(arr)
-
-	if len(res) != 5 || fmt.Sprintf("%s", res[2]) != "c" {
-		t.Error("ArrayReverse fail")
-		return
-	}
-
-	var myslice []int
-	KArr.ArrayReverse(myslice)
-}
-
-func TestArrayReversePanic(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
-	KArr.ArrayReverse("hello")
-}
-
-func BenchmarkArrayReverse(b *testing.B) {
-	b.ResetTimer()
-	var arr = []interface{}{"a", "b", "c", "d", "e"}
-	for i := 0; i < b.N; i++ {
-		KArr.ArrayReverse(arr)
-	}
-}
-
-func TestImplode(t *testing.T) {
-	var arr = []string{"a", "b", "c", "d", "e"}
-	res := KArr.Implode(",", arr)
-
-	arr = nil
-	res = KArr.Implode(",", arr)
-	if res != "" {
-		t.Error("Implode slice fail")
-		return
-	}
+	res = KArr.ArrayUnique(intSlc)
+	assert.Less(t, len(res), len(intSlc))
 
 	//字典
-	var mp1 = make(map[string]string)
-	res = KArr.Implode(",", mp1)
-	if res != "" {
-		t.Error("Implode map fail")
-		return
-	}
+	res = KArr.ArrayUnique(colorMp)
+	assert.Less(t, len(res), len(colorMp))
 
-	mp2 := map[string]string{
-		"a": "aa",
-		"b": "bb",
-		"c": "cc",
-		"d": "dd",
-	}
-	res = KArr.Implode(",", mp2)
-	if res == "" {
-		t.Error("Implode map fail")
-		return
+	KArr.ArrayUnique(strHello)
+}
+
+func BenchmarkArray_ArrayUnique_Arr(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayUnique(intSlc)
 	}
 }
 
-func TestImplodePanic(t *testing.T) {
+func BenchmarkArray_ArrayUnique_Map(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayUnique(colorMp)
+	}
+}
+
+func TestArray_ArraySearchItem(t *testing.T) {
 	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
+		r := recover()
+		assert.Contains(t, r, "[ArraySearchItem]`arr type must be")
 	}()
 
-	KArr.Implode(",", "hello")
+	var res interface{}
+
+	//子元素为字典
+	cond1 := map[string]interface{}{"age": 21, "naction": "cn"}
+	res = KArr.ArraySearchItem(personMps, cond1)
+	assert.NotEmpty(t, res)
+
+	//子元素为结构体
+	cond2 := map[string]interface{}{"Gender": false}
+	res = KArr.ArraySearchItem(perStuMps, cond2)
+
+	KArr.ArraySearchItem(strHello, map[string]interface{}{"a": 1})
 }
 
-func BenchmarkImplode(b *testing.B) {
+func BenchmarkArray_ArraySearchItem_Arr(b *testing.B) {
 	b.ResetTimer()
-	sli := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
-	for i := 0; i < b.N; i++ {
-		KArr.Implode(",", sli)
-	}
-}
-
-func TestJoinStrings(t *testing.T) {
-	var arr = []string{}
-
-	res := KArr.JoinStrings(arr, ",")
-	if res != "" {
-		t.Error("JoinStrings fail")
-		return
-	}
-
-	arr = append(arr, "a", "b", "c", "d", "e")
-	KArr.JoinStrings(arr, ",")
-}
-
-func BenchmarkJoinStrings(b *testing.B) {
-	b.ResetTimer()
-	var arr = []string{"a", "b", "c", "d", "e"}
-	for i := 0; i < b.N; i++ {
-		KArr.JoinStrings(arr, ",")
-	}
-}
-
-func TestJoinJoinInts(t *testing.T) {
-	var arr = []int{}
-
-	res := KArr.JoinInts(arr, ",")
-	if res != "" {
-		t.Error("JoinStrings fail")
-		return
-	}
-
-	arr = append(arr, 1, 2, 3, 4, 5, 6)
-	KArr.JoinInts(arr, ",")
-}
-
-func BenchmarkJoinInts(b *testing.B) {
-	b.ResetTimer()
-	var arr = []int{1, 2, 3, 4, 5, 6}
-	for i := 0; i < b.N; i++ {
-		KArr.JoinInts(arr, ",")
-	}
-}
-
-func TestArrayDiff(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
-	ar1 := []string{"aa", "bb", "cc", "dd", "ee", "", "hh"}
-	ar2 := []string{"bb", "cc", "ff", "gg", "ee", ""}
-	mp1 := map[string]string{"a": "1", "b": "2", "c": "3", "d": "4", "e": "", "2": "cc", "3": "no"}
-	mp2 := map[string]string{"a": "0", "b": "2", "c": "4", "g": "4", "h": "", "2": "cc"}
-	ar3 := []string{}
-	mp3 := make(map[string]string)
-
-	res0 := KArr.ArrayDiff(ar3, ar1, COMPARE_ONLY_VALUE)
-	res1 := KArr.ArrayDiff(ar1, ar2, COMPARE_ONLY_VALUE)
-	res2 := KArr.ArrayDiff(ar1, ar2, COMPARE_ONLY_KEY)
-	res3 := KArr.ArrayDiff(ar1, ar2, COMPARE_BOTH_KEYVALUE)
-
-	if res0 != nil || len(res1) != 3 || len(res2) != 1 || len(res3) != 5 {
-		t.Error("ArrayDiff fail")
-		return
-	}
-
-	res4 := KArr.ArrayDiff(ar3, mp1, COMPARE_ONLY_VALUE)
-	res5 := KArr.ArrayDiff(ar1, mp1, COMPARE_ONLY_VALUE)
-	res6 := KArr.ArrayDiff(ar1, mp1, COMPARE_ONLY_KEY)
-	res7 := KArr.ArrayDiff(ar1, mp1, COMPARE_BOTH_KEYVALUE)
-
-	if res4 != nil || len(res5) != 5 || len(res6) != 5 || len(res7) != 6 {
-		t.Error("ArrayDiff fail")
-		return
-	}
-
-	res8 := KArr.ArrayDiff(mp3, ar1, COMPARE_ONLY_VALUE)
-	res9 := KArr.ArrayDiff(mp1, ar1, COMPARE_ONLY_VALUE)
-	res10 := KArr.ArrayDiff(mp1, ar1, COMPARE_ONLY_KEY)
-	res11 := KArr.ArrayDiff(mp1, ar1, COMPARE_BOTH_KEYVALUE)
-
-	if res8 != nil || len(res9) != 5 || len(res10) != 5 || len(res11) != 6 {
-		t.Error("ArrayDiff fail")
-		return
-	}
-
-	res12 := KArr.ArrayDiff(mp3, mp2, COMPARE_ONLY_VALUE)
-	res13 := KArr.ArrayDiff(mp1, mp2, COMPARE_ONLY_VALUE)
-	res14 := KArr.ArrayDiff(mp1, mp2, COMPARE_ONLY_KEY)
-	res15 := KArr.ArrayDiff(mp1, mp2, COMPARE_BOTH_KEYVALUE)
-
-	if res12 != nil || len(res13) != 3 || len(res14) != 3 || len(res15) != 1 {
-		t.Error("ArrayDiff fail")
-		return
-	}
-
-	//fmt.Printf("%+v\n", res12)
-
-	KArr.ArrayDiff("hello", 1234, COMPARE_ONLY_VALUE)
-}
-
-func BenchmarkArrayDiff(b *testing.B) {
-	b.ResetTimer()
-	mp1 := map[string]string{"a": "1", "b": "2", "c": "3", "d": "4", "e": "", "2": "cc", "3": "no"}
-	mp2 := map[string]string{"a": "0", "b": "2", "c": "4", "g": "4", "h": "", "2": "cc"}
-	for i := 0; i < b.N; i++ {
-		KArr.ArrayDiff(mp1, mp2, COMPARE_BOTH_KEYVALUE)
-	}
-}
-
-func TestArrayIntersect(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
-	ar1 := []string{"aa", "bb", "cc", "dd", "ee", ""}
-	ar2 := []string{"bb", "cc", "ff", "gg", "ee", ""}
-	mp1 := map[string]string{"a": "1", "b": "2", "c": "3", "d": "4", "e": "", "2": "cc", "3": "no"}
-	mp2 := map[string]string{"a": "0", "b": "2", "c": "4", "g": "4", "h": "", "2": "cc"}
-	ar3 := []string{}
-	mp3 := make(map[string]string)
-
-	res0 := KArr.ArrayIntersect(ar1, ar3, COMPARE_ONLY_VALUE)
-	res1 := KArr.ArrayIntersect(ar1, ar2, COMPARE_ONLY_VALUE)
-	res2 := KArr.ArrayIntersect(ar1, ar2, COMPARE_ONLY_KEY)
-	res3 := KArr.ArrayIntersect(ar1, ar2, COMPARE_BOTH_KEYVALUE)
-
-	if res0 != nil || len(res1) != 4 || len(res2) != 6 || len(res3) != 2 {
-		t.Error("ArrayIntersect fail")
-		return
-	}
-
-	res4 := KArr.ArrayIntersect(ar3, mp1, COMPARE_ONLY_VALUE)
-	res5 := KArr.ArrayIntersect(ar1, mp1, COMPARE_ONLY_VALUE)
-	res6 := KArr.ArrayIntersect(ar1, mp1, COMPARE_ONLY_KEY)
-	res7 := KArr.ArrayIntersect(ar1, mp1, COMPARE_BOTH_KEYVALUE)
-
-	if res4 != nil || len(res5) != 2 || len(res6) != 2 || len(res7) != 1 {
-		t.Error("ArrayIntersect fail")
-		return
-	}
-
-	res8 := KArr.ArrayIntersect(mp1, ar3, COMPARE_ONLY_VALUE)
-	res9 := KArr.ArrayIntersect(mp1, ar1, COMPARE_ONLY_VALUE)
-	res10 := KArr.ArrayIntersect(mp1, ar1, COMPARE_ONLY_KEY)
-	res11 := KArr.ArrayIntersect(mp1, ar1, COMPARE_BOTH_KEYVALUE)
-
-	if res8 != nil || len(res9) != 2 || len(res10) != 2 || len(res11) != 1 {
-		t.Error("ArrayIntersect fail")
-		return
-	}
-
-	res12 := KArr.ArrayIntersect(mp1, mp3, COMPARE_ONLY_VALUE)
-	res13 := KArr.ArrayIntersect(mp1, mp2, COMPARE_ONLY_VALUE)
-	res14 := KArr.ArrayIntersect(mp1, mp2, COMPARE_ONLY_KEY)
-	res15 := KArr.ArrayIntersect(mp1, mp2, COMPARE_BOTH_KEYVALUE)
-
-	if res12 != nil || len(res13) != 4 || len(res14) != 4 || len(res15) != 2 {
-		t.Error("ArrayIntersect fail")
-		return
-	}
-
-	//fmt.Printf("%+v\n", res12)
-
-	KArr.ArrayIntersect("hello", 1234, COMPARE_ONLY_VALUE)
-}
-
-func BenchmarkArrayIntersect(b *testing.B) {
-	b.ResetTimer()
-	mp1 := map[string]string{"a": "1", "b": "2", "c": "3", "d": "4", "e": "", "2": "cc", "3": "no"}
-	mp2 := map[string]string{"a": "0", "b": "2", "c": "4", "g": "4", "h": "", "2": "cc"}
-	for i := 0; i < b.N; i++ {
-		KArr.ArrayIntersect(mp1, mp2, COMPARE_BOTH_KEYVALUE)
-	}
-}
-
-func TestArrayUnique(t *testing.T) {
-	arr1 := map[string]string{"a": "green", "0": "red", "b": "green", "1": "blue", "2": "red"}
-	arr2 := []string{"aa", "bb", "cc", "", "bb", "aa"}
-	res1 := KArr.ArrayUnique(arr1)
-	res2 := KArr.ArrayUnique(arr2)
-	if len(res1) == 0 || len(res2) == 0 {
-		t.Error("ArrayUnique fail")
-		return
-	}
-}
-
-func TestArrayUniquePanic(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
-	_ = KArr.ArrayUnique("hello")
-}
-
-func BenchmarkArrayUnique(b *testing.B) {
-	b.ResetTimer()
-	arr := map[string]string{"a": "green", "0": "red", "b": "green", "1": "blue", "2": "red"}
-	for i := 0; i < b.N; i++ {
-		KArr.ArrayUnique(arr)
-	}
-}
-
-func TestArraySearchItemNMutil(t *testing.T) {
-	type titem map[string]interface{}
-
-	var list []interface{}
-	arrs := make(map[string]interface{})
-	cond := make(map[string]interface{})
-
-	res1 := KArr.ArraySearchItem(list, cond)
-	res2 := KArr.ArraySearchItem(arrs, cond)
-	if res1 != nil || res2 != nil {
-		t.Error("ArraySearchItem fail")
-	}
-
-	mul1 := KArr.ArraySearchMutil(list, cond)
-	mul2 := KArr.ArraySearchMutil(arrs, cond)
-	if mul1 != nil || mul2 != nil {
-		t.Error("ArraySearchMutil fail")
-	}
-
-	item1 := titem{"age": 20, "name": "test1", "naction": "us", "tel": "13712345678"}
-	item2 := titem{"age": 21, "name": "test2", "naction": "cn", "tel": "13712345679"}
-	item3 := titem{"age": 22, "name": "test3", "naction": "en", "tel": "13712345670"}
-	item4 := titem{"age": 23, "name": "test4", "naction": "fr", "tel": "13712345671"}
-	item5 := titem{"age": 21, "name": "test5", "naction": "cn", "tel": "13712345672"}
-
-	list = append(list, item1, item2, item3, item4, item5, nil, "hello")
-	arrs["a"] = item1
-	arrs["b"] = item2
-	arrs["c"] = item3
-	arrs["c"] = item4
-	arrs["d"] = nil
-	arrs["d"] = "world"
-	arrs["e"] = item5
-
-	cond1 := map[string]interface{}{"age": 23}
-	cond2 := map[string]interface{}{"age": 21, "naction": "cn"}
-	cond3 := map[string]interface{}{"age": 22, "naction": "cn", "tel": "13712345671"}
-
-	res3 := KArr.ArraySearchItem(list, cond1)
-	res4 := KArr.ArraySearchItem(arrs, cond1)
-	if res3 == nil || res4 == nil {
-		t.Error("ArraySearchItem fail")
-	}
-
-	mul3 := KArr.ArraySearchMutil(list, cond1)
-	mul4 := KArr.ArraySearchMutil(arrs, cond1)
-	if mul3 == nil || mul4 == nil {
-		t.Error("ArraySearchMutil fail")
-	}
-
-	res5 := KArr.ArraySearchItem(list, cond2)
-	res6 := KArr.ArraySearchItem(arrs, cond2)
-	if res5 == nil || res6 == nil {
-		t.Error("ArraySearchItem fail")
-	}
-
-	mul5 := KArr.ArraySearchMutil(list, cond2)
-	mul6 := KArr.ArraySearchMutil(arrs, cond2)
-	if mul5 == nil || mul6 == nil {
-		t.Error("ArraySearchMutil fail")
-	}
-
-	res7 := KArr.ArraySearchItem(list, cond3)
-	res8 := KArr.ArraySearchItem(arrs, cond3)
-	if res7 != nil || res8 != nil {
-		t.Error("ArraySearchItem fail")
-	}
-
-	mul7 := KArr.ArraySearchMutil(list, cond3)
-	mul8 := KArr.ArraySearchMutil(arrs, cond3)
-	if mul7 != nil || mul8 != nil {
-		t.Error("ArraySearchMutil fail")
-	}
-}
-
-func TestArraySearchItemPanic(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
-	KArr.ArraySearchItem("hello", map[string]interface{}{"a": 1})
-}
-
-func TestArraySearchMutilPanic(t *testing.T) {
-	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
-	}()
-
-	KArr.ArraySearchMutil("hello", map[string]interface{}{"a": 1})
-}
-
-func BenchmarkArraySearchItem(b *testing.B) {
-	b.ResetTimer()
-	type titem map[string]interface{}
-	var list []interface{}
-
-	item1 := titem{"age": 20, "name": "test1", "naction": "us", "tel": "13712345678"}
-	item2 := titem{"age": 21, "name": "test2", "naction": "cn", "tel": "13712345679"}
-	item3 := titem{"age": 22, "name": "test3", "naction": "en", "tel": "13712345670"}
-	item4 := titem{"age": 23, "name": "test4", "naction": "fr", "tel": "13712345671"}
-	list = append(list, item1, item2, item3, item4, nil, "hello")
 	cond := map[string]interface{}{"age": 21, "naction": "cn"}
 	for i := 0; i < b.N; i++ {
-		KArr.ArraySearchItem(list, cond)
+		KArr.ArraySearchItem(personMps, cond)
 	}
 }
 
-func BenchmarkArraySearchMutil(b *testing.B) {
+func BenchmarkArray_ArraySearchItem_Map(b *testing.B) {
 	b.ResetTimer()
-	type titem map[string]interface{}
-	var list []interface{}
+	cond := map[string]interface{}{"Gender": false}
+	for i := 0; i < b.N; i++ {
+		KArr.ArraySearchItem(perStuMps, cond)
+	}
+}
 
-	item1 := titem{"age": 20, "name": "test1", "naction": "us", "tel": "13712345678"}
-	item2 := titem{"age": 21, "name": "test2", "naction": "cn", "tel": "13712345679"}
-	item3 := titem{"age": 22, "name": "test3", "naction": "en", "tel": "13712345670"}
-	item4 := titem{"age": 23, "name": "test4", "naction": "fr", "tel": "13712345671"}
-	item5 := titem{"age": 21, "name": "test5", "naction": "cn", "tel": "13712345672"}
-	list = append(list, item1, item2, item3, item4, nil, "hello", item5)
+func TestArray_ArraySearchMutil(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArraySearchMutil]`arr type must be")
+	}()
+
+	var res []interface{}
+
+	//子元素为字典
+	cond1 := map[string]interface{}{"age": 21, "naction": "cn"}
+	res = KArr.ArraySearchMutil(personMps, cond1)
+	assert.NotEmpty(t, res)
+
+	//子元素为结构体
+	cond2 := map[string]interface{}{"Gender": false}
+	res = KArr.ArraySearchMutil(perStuMps, cond2)
+
+	KArr.ArraySearchMutil(strHello, map[string]interface{}{"a": 1})
+}
+
+func BenchmarkArray_ArraySearchMutil_Arr(b *testing.B) {
+	b.ResetTimer()
 	cond := map[string]interface{}{"age": 21, "naction": "cn"}
 	for i := 0; i < b.N; i++ {
-		KArr.ArraySearchMutil(list, cond)
+		KArr.ArraySearchMutil(personMps, cond)
 	}
 }
 
-func TestUniqueInts(t *testing.T) {
-	arr := []int{-3, 9, -5, 0, 5, -3, 0, 7}
-	res := KArr.UniqueInts(arr)
-	if len(arr) == len(res) {
-		t.Error("UniqueInts fail")
-		return
-	}
-}
-
-func BenchmarkUniqueInts(b *testing.B) {
+func BenchmarkArray_ArraySearchMutil_Map(b *testing.B) {
 	b.ResetTimer()
-	arr := []int{-3, 9, -5, 0, 5, -3, 0, 7}
+	cond := map[string]interface{}{"Gender": false}
 	for i := 0; i < b.N; i++ {
-		KArr.UniqueInts(arr)
+		KArr.ArraySearchMutil(perStuMps, cond)
 	}
 }
 
-func TestUnique64Ints(t *testing.T) {
-	arr := []int64{-3, 9, -5, 0, 5, -3, 0, 7}
-	res := KArr.Unique64Ints(arr)
-	if len(arr) == len(res) {
-		t.Error("Unique64Ints fail")
-		return
-	}
-}
-
-func BenchmarkUnique64Ints(b *testing.B) {
-	b.ResetTimer()
-	arr := []int64{-3, 9, -5, 0, 5, -3, 0, 7}
-	for i := 0; i < b.N; i++ {
-		KArr.Unique64Ints(arr)
-	}
-}
-
-func TestUniqueStrings(t *testing.T) {
-	arr1 := []string{}
-	res1 := KArr.UniqueStrings(arr1)
-	if len(res1) != 0 {
-		t.Error("UniqueStrings fail")
-		return
-	}
-
-	arr2 := []string{"", "hello", "world", "hello", "你好", "world", "1234"}
-	res2 := KArr.UniqueStrings(arr2)
-	if len(arr2) == len(res2) {
-		t.Error("UniqueStrings fail")
-		return
-	}
-}
-
-func BenchmarkUniqueStrings(b *testing.B) {
-	b.ResetTimer()
-	arr := []string{"", "hello", "world", "hello", "你好", "world", "1234"}
-	for i := 0; i < b.N; i++ {
-		KArr.UniqueStrings(arr)
-	}
-}
-
-func TestIsEqualArray(t *testing.T) {
-	s1 := []string{"a", "b"}
-	s2 := []string{"b", "a"}
-	chk1 := KArr.IsEqualArray(s1, s2)
-	if !chk1 {
-		t.Error("IsEqualArray fail")
-		return
-	}
-
-	s3 := [2]int{3, 8}
-	s4 := []int{8, 3}
-	chk2 := KArr.IsEqualArray(s3, s4)
-	if !chk2 {
-		t.Error("IsEqualArray fail")
-		return
-	}
-
-	s5 := []string{"3", "8"}
-	chk3 := KArr.IsEqualArray(s3, s5)
-	if chk3 {
-		t.Error("IsEqualArray fail")
-		return
-	}
-
-	type TestType struct {
-		StrKey   string
-		IntSlice []int
-	}
-	s6 := []TestType{
-		{StrKey: "key1", IntSlice: []int{1, 2}},
-		{StrKey: "key2", IntSlice: []int{3, 4, 5}},
-	}
-	s7 := []TestType{
-		{StrKey: "key2", IntSlice: []int{3, 4, 5}},
-		{StrKey: "key1", IntSlice: []int{1, 2}},
-	}
-	s8 := []TestType{
-		{StrKey: "key2", IntSlice: []int{3, 4, 5}},
-		{StrKey: "key3", IntSlice: []int{6, 7}},
-	}
-	chk4 := KArr.IsEqualArray(s6, s7)
-	if !chk4 {
-		t.Error("IsEqualArray fail")
-		return
-	}
-	chk5 := KArr.IsEqualArray(s7, s8)
-	if chk5 {
-		t.Error("IsEqualArray fail")
-		return
-	}
-}
-
-func TestIsEqualArrayPanicExpected(t *testing.T) {
+func TestArray_ArrayShuffle(t *testing.T) {
 	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
+		r := recover()
+		assert.Contains(t, r, "[ArrayShuffle]`arr type must be")
 	}()
 
-	s := []string{"a", "b"}
-	KArr.IsEqualArray("hello", s)
+	var res []interface{}
+	res = KArr.ArrayShuffle(naturalArr)
+	assert.NotEqual(t, toStr(res), toStr(naturalArr))
+
+	res = KArr.ArrayShuffle(ssSingle)
+	assert.NotEqual(t, toStr(res), toStr(ssSingle))
+
+	KArr.ArrayShuffle(strHello)
 }
 
-func TestIsEqualArrayPanicActual(t *testing.T) {
+func BenchmarkArray_ArrayShuffle(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayShuffle(naturalArr)
+	}
+}
+
+func TestArray_IsEqualArray(t *testing.T) {
 	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
+		r := recover()
+		assert.Contains(t, r, "[IsEqualArray]`arr1,arr2 type must be")
 	}()
 
-	s := []string{"a", "b"}
-	KArr.IsEqualArray(s, "hello")
+	var res bool
+
+	ss1 := ssSingle[:]
+	ss2 := KArr.ArrayShuffle(ssSingle)
+
+	res = KArr.IsEqualArray(ssSingle, ss1)
+	assert.True(t, res)
+
+	res = KArr.IsEqualArray(ssSingle, ss2)
+	assert.True(t, res)
+
+	res = KArr.IsEqualArray(naturalArr, ssSingle)
+	assert.False(t, res)
+
+	KArr.IsEqualArray(strHello, ssSingle)
 }
 
-func BenchmarkIsEqualArray(b *testing.B) {
+func BenchmarkArray_IsEqualArray(b *testing.B) {
 	b.ResetTimer()
-	s1 := []string{"a", "b"}
-	s2 := []string{"b", "a"}
 	for i := 0; i < b.N; i++ {
-		KArr.IsEqualArray(s1, s2)
+		KArr.IsEqualArray(naturalArr, ssSingle)
 	}
 }
 
-func TestIsArrayOrSlice(t *testing.T) {
+func TestArray_IsEqualMap(t *testing.T) {
 	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
+		r := recover()
+		assert.Contains(t, r, "[IsEqualMap]`arr1,arr2 type must be")
 	}()
 
-	var arr = [10]int{1, 2, 3, 4, 5, 6}
-	var sli []string = make([]string, 5)
-	sli[0] = "aaa"
-	sli[2] = "ccc"
-	sli[3] = "ddd"
+	var res bool
 
-	res1 := KArr.IsArrayOrSlice(arr, 1)
-	res2 := KArr.IsArrayOrSlice(arr, 2)
-	res3 := KArr.IsArrayOrSlice(arr, 3)
-	if res1 != 10 || res2 != -1 || res3 != 10 {
-		t.Error("IsArrayOrSlice fail")
-		return
-	}
+	mp1, _ := struct2Map(orgS1, "")
+	mp2, _ := struct2Map(orgS1, "")
+	res = KArr.IsEqualMap(mp1, mp2)
+	assert.True(t, res)
 
-	res4 := KArr.IsArrayOrSlice(sli, 1)
-	res5 := KArr.IsArrayOrSlice(sli, 2)
-	res6 := KArr.IsArrayOrSlice(sli, 3)
-	if res4 != -1 || res5 != 5 || res6 != 5 {
-		t.Error("IsArrayOrSlice fail")
-		return
-	}
+	res = KArr.IsEqualMap(personMp1, personMp2)
+	assert.False(t, res)
 
-	KArr.IsArrayOrSlice(sli, 6)
+	KArr.IsEqualMap(personMp1, strHello)
 }
 
-func BenchmarkIsArrayOrSlice(b *testing.B) {
-	b.ResetTimer()
-	var arr = [10]int{1, 2, 3, 4, 5, 6}
-	for i := 0; i < b.N; i++ {
-		KArr.IsArrayOrSlice(arr, 1)
-	}
-}
-
-func TestIsMap(t *testing.T) {
-	mp := map[string]string{
-		"a": "aa",
-		"b": "bb",
-	}
-	res1 := KArr.IsMap(mp)
-	res2 := KArr.IsMap(123)
-	if !res1 || res2 {
-		t.Error("IsMap fail")
-		return
-	}
-}
-
-func BenchmarkIsMap(b *testing.B) {
+func BenchmarkArray_IsEqualMap(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KArr.IsMap("hello")
+		KArr.IsEqualMap(personMp1, personMp2)
 	}
 }
 
-func TestDeleteSliceItems(t *testing.T) {
+func TestArray_Length(t *testing.T) {
+	var res int
+	res = KArr.Length(naturalArr)
+	assert.Equal(t, res, len(naturalArr))
+
+	//非数组或切片
+	res = KArr.Length(strHello)
+	assert.Equal(t, -1, res)
+}
+
+func BenchmarkArray_Length(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.Length(naturalArr)
+	}
+}
+
+func TestArray_IsArray(t *testing.T) {
+	var res bool
+
+	res = KArr.IsArray(naturalArr)
+	assert.True(t, res)
+
+	res = KArr.IsArray(intSlc)
+	assert.False(t, res)
+
+	res = KArr.IsArray(strHello)
+	assert.False(t, res)
+}
+
+func BenchmarkArray_IsArray(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.IsArray(naturalArr)
+	}
+}
+
+func TestArray_IsSlice(t *testing.T) {
+	var res bool
+
+	res = KArr.IsSlice(intSlc)
+	assert.True(t, res)
+
+	res = KArr.IsSlice(naturalArr)
+	assert.False(t, res)
+
+	res = KArr.IsSlice(strHello)
+	assert.False(t, res)
+}
+
+func BenchmarkArray_IsSlice(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.IsSlice(intSlc)
+	}
+}
+
+func TestArray_IsArrayOrSlice(t *testing.T) {
+	var res bool
+
+	res = KArr.IsArrayOrSlice(intSlc)
+	assert.True(t, res)
+
+	res = KArr.IsArrayOrSlice(naturalArr)
+	assert.True(t, res)
+
+	res = KArr.IsArrayOrSlice(strHello)
+	assert.False(t, res)
+}
+
+func BenchmarkArray_IsArrayOrSlice(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.IsArrayOrSlice(intSlc)
+	}
+}
+
+func TestArray_IsMap(t *testing.T) {
+	var res bool
+
+	res = KArr.IsMap(colorMp)
+	assert.True(t, res)
+
+	res = KArr.IsMap(strMpEmp)
+	assert.True(t, res)
+
+	res = KArr.IsMap(naturalArr)
+	assert.False(t, res)
+}
+
+func BenchmarkArray_IsMap(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.IsMap(colorMp)
+	}
+}
+
+func TestArray_IsStruct(t *testing.T) {
+	var res bool
+
+	res = KArr.IsStruct(personS1)
+	assert.True(t, res)
+
+	res = KArr.IsStruct(naturalArr)
+	assert.False(t, res)
+}
+
+func BenchmarkArray_IsStruct(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.IsStruct(personS1)
+	}
+}
+
+func TestArray_DeleteSliceItems(t *testing.T) {
 	defer func() {
-		if r := recover(); r != nil {
-			fmt.Println("recover...:", r)
-		}
+		r := recover()
+		assert.Contains(t, r, "[DeleteSliceItems]`val type must be")
 	}()
 
-	arr := []string{"a", "b", "c", "d", "e", "f", "g", "h", "i"}
+	var res []interface{}
+	var del int
 
-	res0, del0 := KArr.DeleteSliceItems([]int{}, 2)
-	if len(res0) != 0 || del0 != 0 {
-		t.Error("DeleteSliceItems fail")
-		return
-	}
+	res, del = KArr.DeleteSliceItems(naturalArr, 3, 5, 8)
+	assert.Greater(t, len(naturalArr), len(res))
 
-	res1, del1 := KArr.DeleteSliceItems(arr, 1, 4, 7, -3, 36)
-	if len(res1) != 6 || del1 != 3 {
-		t.Error("DeleteSliceItems fail")
-		return
-	}
+	res, del = KArr.DeleteSliceItems(int64Slc, 2, 4, 9)
+	assert.Greater(t, del, 0)
 
-	KArr.DeleteSliceItems("", 2)
+	_, _ = KArr.DeleteSliceItems(strHello, 3, 5, 8)
 }
 
-func BenchmarkDeleteSliceItems(b *testing.B) {
+func BenchmarkArray_DeleteSliceItems(b *testing.B) {
 	b.ResetTimer()
-	arr := []string{"a", "b", "c", "d", "e", "f", "g", "h", "i"}
 	for i := 0; i < b.N; i++ {
-		_, _ = KArr.DeleteSliceItems(arr, 1, 4, 7, -3, 36)
+		KArr.DeleteSliceItems(naturalArr, 3, 5, 8)
 	}
 }
+
+func TestArray_InArray(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[InArray]`haystack type must be")
+	}()
+
+	var res bool
+
+	res = KArr.InArray(9, naturalArr)
+	assert.True(t, res)
+
+	res = KArr.InArray(personMp3, personMps)
+	assert.True(t, res)
+
+	res = KArr.InArray(personMp3, crowd)
+	assert.False(t, res)
+
+	KArr.InArray(9, strHello)
+}
+
+func BenchmarkArray_InArray_Arr(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.InArray(9, naturalArr)
+	}
+}
+
+func BenchmarkArray_InArray_Map(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.InArray(personMp3, personMps)
+	}
+}
+
+func TestArray_InIntSlice(t *testing.T) {
+	var res bool
+
+	res = KArr.InIntSlice(9, intSlc)
+	assert.True(t, res)
+
+	res = KArr.InIntSlice(99, intSlc)
+	assert.False(t, res)
+}
+
+func BenchmarkArray_InIntSlice(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.InIntSlice(9, intSlc)
+	}
+}
+
+func TestArray_InInt64Slice(t *testing.T) {
+	var res bool
+
+	res = KArr.InInt64Slice(9, int64Slc)
+	assert.True(t, res)
+
+	res = KArr.InInt64Slice(99, int64Slc)
+	assert.False(t, res)
+}
+
+func BenchmarkArray_InInt64Slice(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.InInt64Slice(9, int64Slc)
+	}
+}
+
+func TestArray_InStringSlice(t *testing.T) {
+	var res bool
+
+	res = KArr.InStringSlice("c", ssSingle)
+	assert.True(t, res)
+
+	res = KArr.InStringSlice("w", ssSingle)
+	assert.False(t, res)
+}
+
+func BenchmarkArray_InStringSlice(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.InStringSlice("c", ssSingle)
+	}
+}
+
+func TestArray_SliceFill(t *testing.T) {
+	var res []interface{}
+
+	res = KArr.SliceFill(strHello, 9)
+	assert.Equal(t, 9, len(res))
+
+	res = KArr.SliceFill(strHello, 0)
+	assert.Empty(t, res)
+}
+
+func BenchmarkArray_SliceFill(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.SliceFill(strHello, 9)
+	}
+}
+
+func TestArray_ArrayFlip(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArrayFlip]`arr type must be")
+	}()
+
+	var res map[interface{}]interface{}
+	var chk bool
+
+	res = KArr.ArrayFlip(naturalArr)
+	chk = KArr.IsEqualArray(naturalArr, KArr.ArrayValues(res, false))
+	assert.True(t, chk)
+
+	res = KArr.ArrayFlip(colorMp)
+	assert.GreaterOrEqual(t, len(colorMp), len(res))
+
+	KArr.ArrayFlip(strHello)
+}
+
+func BenchmarkArray_ArrayFlip_Arr(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayFlip(naturalArr)
+	}
+}
+
+func BenchmarkArray_ArrayFlip_Map(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayFlip(colorMp)
+	}
+}
+
+func TestArray_MergeSlice(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[MergeSlice]`ss type must be")
+	}()
+
+	var res, res2 []interface{}
+	res = KArr.MergeSlice(false, naturalArr, flo32Slc, booSlc, strSl1)
+	res2 = KArr.MergeSlice(true, naturalArr, flo32Slc, booSlc, strSl1)
+	assert.Greater(t, len(res), len(res2))
+
+	KArr.MergeSlice(false, naturalArr, strHello, booSlc, strSl1)
+}
+
+func BenchmarkArray_MergeSlice(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.MergeSlice(false, naturalArr, intSlc, strSl1)
+	}
+}
+
+func TestArray_MergeMap(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[MergeMap]`ss type must be")
+	}()
+
+	var res map[interface{}]interface{}
+	var chk bool
+
+	res = KArr.MergeMap(personMp1, personMp2)
+	chk = KArr.IsEqualMap(personMp2, res)
+	assert.True(t, chk)
+
+	res = KArr.MergeMap(personMp1, colorMp)
+	assert.Greater(t, len(res), len(personMp1))
+
+	KArr.MergeMap(personMp1, strHello)
+}
+
+func BenchmarkArray_MergeMap(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.MergeMap(personMp1, personMp2)
+	}
+}
+
+func TestArray_ArrayPad(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArrayPad]`arr type must be")
+	}()
+
+	var res []interface{}
+	var chk bool
+
+	//原切片为空
+	res = KArr.ArrayPad(strSlEmp, 5, 1)
+	assert.Equal(t, 5, len(res))
+
+	//填充长度<=原切片长度
+	res = KArr.ArrayPad(strSl1, 6, strHello)
+	chk = KArr.IsEqualArray(strSl1, res)
+	assert.True(t, chk)
+
+	//填充长度>原切片长度
+	res = KArr.ArrayPad(strSl1, 9, strHello)
+	assert.Equal(t, 9, len(res))
+
+	//填充方向从左开始
+	res = KArr.ArrayPad(strSl1, -9, strHello)
+	assert.Equal(t, 9, len(res))
+
+	KArr.ArrayPad(strHello, -9, strHello)
+}
+
+func BenchmarkArray_ArrayPad(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayPad(strSl1, 16, strHello)
+	}
+}
+
+func TestArray_ArrayRand(t *testing.T) {
+	var res []interface{}
+
+	//空数组
+	res = KArr.ArrayRand(strSlEmp, 2)
+	assert.Empty(t, res)
+
+	//切片
+	res = KArr.ArrayRand(ssSingle, 3)
+	assert.Equal(t, 3, len(res))
+
+	//字典
+	res = KArr.ArrayRand(strMp1, 3)
+	assert.Equal(t, 3, len(res))
+}
+
+func TestArray_Panic_Arr(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArrayRand]`arr type must be")
+	}()
+
+	KArr.ArrayRand(strHello, 3)
+}
+
+func TestArray_Panic_Num(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[ArrayRand]`num cannot be")
+	}()
+
+	KArr.ArrayRand(strMp1, -3)
+}
+
+func BenchmarkArray_ArrayRand_Arr(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayRand(ssSingle, 3)
+	}
+}
+
+func BenchmarkArray_ArrayRand_Map(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.ArrayRand(strMp1, 3)
+	}
+}
+
+func TestArray_CutSlice(t *testing.T) {
+	var res []interface{}
+
+	//取空数组
+	res = KArr.CutSlice(strSlEmp, 0, 1)
+	assert.Empty(t, res)
+
+	//正向
+	res = KArr.CutSlice(naturalArr, 1, 2)
+	assert.Equal(t, 2, len(res))
+
+	//反向
+	res = KArr.CutSlice(naturalArr, -3, 2)
+	assert.Equal(t, 2, len(res))
+
+	//数量超出
+	res = KArr.CutSlice(naturalArr, -3, 6)
+	assert.Equal(t, 3, len(res))
+}
+
+func TestArray_CutSlice_Panic_Arr(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[CutSlice]`arr type must be")
+	}()
+	KArr.CutSlice(strHello, 1, 2)
+}
+
+func TestArray_CutSlice_Panic_Size(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[CutSlice]`size cannot be")
+	}()
+	KArr.CutSlice(naturalArr, -3, -2)
+}
+
+func BenchmarkArray_CutSlice(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.CutSlice(naturalArr, 1, 5)
+	}
+}
+
+func TestArray_NewStrMapItf(t *testing.T) {
+	var res map[string]interface{}
+
+	res = KArr.NewStrMapItf()
+	assert.NotNil(t, res)
+	assert.Empty(t, res)
+}
+
+func BenchmarkArray_NewStrMapItf(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.NewStrMapItf()
+	}
+}
+
+func TestArray_NewStrMapStr(t *testing.T) {
+	var res map[string]string
+
+	res = KArr.NewStrMapStr()
+	assert.NotNil(t, res)
+	assert.Empty(t, res)
+}
+
+func BenchmarkArray_NewStrMapStr(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KArr.NewStrMapStr()
+	}
+}
+

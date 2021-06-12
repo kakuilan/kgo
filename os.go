@@ -1,25 +1,20 @@
 package kgo
 
 import (
-	"bufio"
 	"bytes"
 	"encoding/binary"
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net"
 	"net/http"
 	"os"
 	"os/exec"
-	"os/user"
 	"path/filepath"
 	"regexp"
 	"runtime"
 	"runtime/debug"
-	"strconv"
 	"strings"
-	"syscall"
 	"unicode"
 )
 
@@ -27,7 +22,8 @@ import (
 type SystemInfo struct {
 	ServerName   string  `json:"server_name"`    //服务器名称
 	SystemOs     string  `json:"system_os"`      //操作系统名称
-	Runtime      int64   `json:"run_time"`       //服务运行时间,纳秒
+	Runtime      uint64  `json:"run_time"`       //服务运行时间,纳秒
+	Uptime       uint64  `json:"up_time"`        //操作系统运行时间,秒
 	GoroutineNum int     `json:"goroutine_num"`  //goroutine数量
 	CpuNum       int     `json:"cpu_num"`        //cpu核数
 	CpuUser      float64 `json:"cpu_user"`       //cpu用户态比率
@@ -124,19 +120,6 @@ func (ko *LkkOS) Chdir(dir string) error {
 	return os.Chdir(dir)
 }
 
-// HomeDir 获取当前用户的主目录(仅支持Unix-like system).
-func (ko *LkkOS) HomeDir() (string, error) {
-	// Unix-like system, so just assume Unix
-	home := os.Getenv("HOME")
-
-	usr, err := user.Current()
-	if nil == err {
-		home = usr.HomeDir
-	}
-
-	return home, err
-}
-
 // LocalIP 获取本机第一个NIC's IP.
 func (ko *LkkOS) LocalIP() (string, error) {
 	res := ""
@@ -168,24 +151,69 @@ func (ko *LkkOS) OutboundIP() (string, error) {
 	return res, err
 }
 
-// IsPublicIP 是否公网IP.
-func (ko *LkkOS) IsPublicIP(ip net.IP) bool {
+// PrivateCIDR 获取私有网段的CIDR(无类别域间路由).
+func (ko *LkkOS) PrivateCIDR() []*net.IPNet {
+	maxCidrBlocks := []string{
+		"127.0.0.1/8",    // localhost
+		"10.0.0.0/8",     // 24-bit block
+		"172.16.0.0/12",  // 20-bit block
+		"192.168.0.0/16", // 16-bit block
+		"169.254.0.0/16", // link local address
+		"::1/128",        // localhost IPv6
+		"fc00::/7",       // unique local address IPv6
+		"fe80::/10",      // link local address IPv6
+	}
+
+	res := make([]*net.IPNet, len(maxCidrBlocks))
+	for i, maxCidrBlock := range maxCidrBlocks {
+		_, cidr, _ := net.ParseCIDR(maxCidrBlock)
+		res[i] = cidr
+	}
+
+	return res
+}
+
+// IsPrivateIp 是否私有IP地址(ipv4/ipv6).
+func (ko *LkkOS) IsPrivateIp(str string) (bool, error) {
+	ip := net.ParseIP(str)
+	if ip == nil {
+		return false, errors.New("[IsPrivateIp]`str is not valid ip")
+	}
+
+	if KPrivCidrs == nil {
+		KPrivCidrs = ko.PrivateCIDR()
+	}
+	for i := range KPrivCidrs {
+		if KPrivCidrs[i].Contains(ip) {
+			return true, nil
+		}
+	}
+
+	return false, nil
+}
+
+// IsPublicIP 是否公网IPv4.
+func (ko *LkkOS) IsPublicIP(str string) (bool, error) {
+	ip := net.ParseIP(str)
+	if ip == nil {
+		return false, errors.New("[IsPublicIP]`str is not valid ip")
+	}
+
 	if ip.IsLoopback() || ip.IsLinkLocalMulticast() || ip.IsLinkLocalUnicast() {
-		return false
+		return false, nil
 	}
 	if ip4 := ip.To4(); ip4 != nil {
 		switch true {
 		case ip4[0] == 10:
-			return false
+			return false, nil
 		case ip4[0] == 172 && ip4[1] >= 16 && ip4[1] <= 31:
-			return false
+			return false, nil
 		case ip4[0] == 192 && ip4[1] == 168:
-			return false
-		default:
-			return true
+			return false, nil
 		}
 	}
-	return false
+
+	return true, nil
 }
 
 // GetIPs 获取本机的IP列表.
@@ -264,115 +292,24 @@ func (ko *LkkOS) GetHostByIp(ipAddress string) (string, error) {
 	return "", err
 }
 
-// MemoryGetUsage 获取当前go程序的内存使用,返回字节数.
-func (ko *LkkOS) GoMemory() uint64 {
-	stat := new(runtime.MemStats)
-	runtime.ReadMemStats(stat)
-	return stat.Alloc
-}
-
-// MemoryUsage 获取内存使用率(仅支持linux),单位字节.
-// 参数 virtual,是否取虚拟内存.
-// used为已用,
-// free为空闲,
-// total为总数.
-func (ko *LkkOS) MemoryUsage(virtual bool) (used, free, total uint64) {
-	if virtual {
-		// 虚拟机的内存
-		contents, err := ioutil.ReadFile("/proc/meminfo")
-		if err == nil {
-			lines := strings.Split(string(contents), "\n")
-			for _, line := range lines {
-				fields := strings.Fields(line)
-				if len(fields) == 3 {
-					val, _ := strconv.ParseUint(fields[1], 10, 64) // kB
-
-					if strings.HasPrefix(fields[0], "MemTotal") {
-						total = val * 1024
-					} else if strings.HasPrefix(fields[0], "MemFree") {
-						free = val * 1024
-					}
-				}
-			}
-
-			//计算已用内存
-			used = total - free
-		}
-	} else {
-		// 真实物理机内存
-		sysi := &syscall.Sysinfo_t{}
-		err := syscall.Sysinfo(sysi)
-		if err == nil {
-			total = sysi.Totalram * uint64(syscall.Getpagesize()/1024)
-			free = sysi.Freeram * uint64(syscall.Getpagesize()/1024)
-			used = total - free
-		}
-	}
-
-	return
-}
-
-// CpuUsage 获取CPU使用率(仅支持linux),单位jiffies(节拍数).
-// user为用户态(用户进程)的运行时间,
-// idle为空闲时间,
-// total为累计时间.
-func (ko *LkkOS) CpuUsage() (user, idle, total uint64) {
-	contents, _ := ioutil.ReadFile("/proc/stat")
-	if len(contents) > 0 {
-		lines := strings.Split(string(contents), "\n")
-		for _, line := range lines {
-			fields := strings.Fields(line)
-			if fields[0] == "cpu" {
-				//CPU指标：user，nice, system, idle, iowait, irq, softirq
-				// cpu  130216 19944 162525 1491240 3784 24749 17773 0 0 0
-
-				numFields := len(fields)
-				for i := 1; i < numFields; i++ {
-					val, _ := strconv.ParseUint(fields[i], 10, 64)
-					total += val // tally up all the numbers to get total ticks
-					if i == 1 {
-						user = val
-					} else if i == 4 { // idle is the 5th field in the cpu line
-						idle = val
-					}
-				}
-				break
-			}
-		}
-	}
-
-	return
-}
-
-// DiskUsage 获取磁盘/目录使用情况,单位字节.参数path为目录.
-// used为已用,
-// free为空闲,
-// total为总数.
-func (ko *LkkOS) DiskUsage(path string) (used, free, total uint64) {
-	fs := &syscall.Statfs_t{}
-	err := syscall.Statfs(path, fs)
-	if err == nil {
-		total = fs.Blocks * uint64(fs.Bsize)
-		free = fs.Bfree * uint64(fs.Bsize)
-		used = total - free
-	}
-
-	return
-}
-
 // Setenv 设置一个环境变量的值.
 func (ko *LkkOS) Setenv(varname, data string) error {
 	return os.Setenv(varname, data)
 }
 
-// Getenv 获取一个环境变量的值.def为默认值.
-func (ko *LkkOS) Getenv(varname string, def ...string) string {
+// Getenv 获取一个环境变量的值.defvalue为默认值.
+func (ko *LkkOS) Getenv(varname string, defvalue ...string) string {
 	val := os.Getenv(varname)
-	if val == "" && len(def) > 0 {
-		val = def[0]
+	if val == "" && len(defvalue) > 0 {
+		val = defvalue[0]
 	}
 
 	return val
+}
+
+// Unsetenv 删除一个环境变量.
+func (ko *LkkOS) Unsetenv(varname string) error {
+	return os.Unsetenv(varname)
 }
 
 // GetEndian 获取系统字节序类型,小端返回binary.LittleEndian,大端返回binary.BigEndian .
@@ -477,13 +414,8 @@ func (ko *LkkOS) System(command string) (retInt int, outStr, errStr []byte) {
 		return
 	}
 
-	go func() {
-		_, _ = io.Copy(outWr, stdoutIn)
-	}()
-	go func() {
-		_, _ = io.Copy(errWr, stderrIn)
-	}()
-
+	_, _ = io.Copy(outWr, stdoutIn)
+	_, _ = io.Copy(errWr, stderrIn)
 	err = cmd.Wait()
 	if err != nil {
 		stderr.WriteString(err.Error())
@@ -510,47 +442,6 @@ func (ko *LkkOS) Chown(filename string, uid, gid int) bool {
 // GetTempDir 返回用于临时文件的目录.
 func (ko *LkkOS) GetTempDir() string {
 	return os.TempDir()
-}
-
-// PrivateCIDR 获取私有网段的CIDR(无类别域间路由).
-func (ko *LkkOS) PrivateCIDR() []*net.IPNet {
-	maxCidrBlocks := []string{
-		"127.0.0.1/8",    // localhost
-		"10.0.0.0/8",     // 24-bit block
-		"172.16.0.0/12",  // 20-bit block
-		"192.168.0.0/16", // 16-bit block
-		"169.254.0.0/16", // link local address
-		"::1/128",        // localhost IPv6
-		"fc00::/7",       // unique local address IPv6
-		"fe80::/10",      // link local address IPv6
-	}
-
-	res := make([]*net.IPNet, len(maxCidrBlocks))
-	for i, maxCidrBlock := range maxCidrBlocks {
-		_, cidr, _ := net.ParseCIDR(maxCidrBlock)
-		res[i] = cidr
-	}
-
-	return res
-}
-
-// IsPrivateIp 是否私有IP地址(ipv4/ipv6).
-func (ko *LkkOS) IsPrivateIp(address string) (bool, error) {
-	ip := net.ParseIP(address)
-	if ip == nil {
-		return false, errors.New("address is not valid ip")
-	}
-
-	if KPrivCidrs == nil {
-		KPrivCidrs = ko.PrivateCIDR()
-	}
-	for i := range KPrivCidrs {
-		if KPrivCidrs[i].Contains(ip) {
-			return true, nil
-		}
-	}
-
-	return false, nil
 }
 
 // ClientIp 获取客户端真实IP,req为http请求.
@@ -592,6 +483,46 @@ func (ko *LkkOS) ClientIp(req *http.Request) string {
 	return xRealIP
 }
 
+// IsPortOpen 检查主机端口是否开放.
+// host为主机名;port为(整型/字符串)端口号;protocols为协议名称,可选,默认tcp.
+func (ko *LkkOS) IsPortOpen(host string, port interface{}, protocols ...string) bool {
+	if KStr.IsHost(host) && isPort(port) {
+		// 默认tcp协议
+		protocol := "tcp"
+		if len(protocols) > 0 && len(protocols[0]) > 0 {
+			protocol = strings.ToLower(protocols[0])
+		}
+
+		conn, _ := net.DialTimeout(protocol, net.JoinHostPort(host, KConv.ToStr(port)), CHECK_CONNECT_TIMEOUT)
+		if conn != nil {
+			_ = conn.Close()
+			return true
+		}
+	}
+
+	return false
+}
+
+// ForceGC 强制手动GC垃圾回收(阻塞).
+func (ko *LkkOS) ForceGC() {
+	runtime.GC()
+	debug.FreeOSMemory()
+}
+
+// TriggerGC 触发GC(非阻塞).
+func (ko *LkkOS) TriggerGC() {
+	go func() {
+		ko.ForceGC()
+	}()
+}
+
+// MemoryGetUsage 获取当前go程序的内存使用,返回字节数.
+func (ko *LkkOS) GoMemory() uint64 {
+	stat := new(runtime.MemStats)
+	runtime.ReadMemStats(stat)
+	return stat.Alloc
+}
+
 // GetSystemInfo 获取系统运行信息.
 func (ko *LkkOS) GetSystemInfo() *SystemInfo {
 	//运行时信息
@@ -604,17 +535,25 @@ func (ko *LkkOS) GetSystemInfo() *SystemInfo {
 	cpuFreeRate := float64(cpuIdel) / float64(cpuTotal)
 
 	//磁盘空间信息
-	diskUsed, diskFree, diskTotal := ko.DiskUsage("/")
+	var diskUsed, diskFree, diskTotal uint64
+	if runtime.GOOS == "windows" {
+		//TODO 待修改
+		diskUsed, diskFree, diskTotal = ko.DiskUsage("C:")
+	} else {
+		diskUsed, diskFree, diskTotal = ko.DiskUsage("/")
+	}
 
 	//内存使用信息
 	memUsed, memFree, memTotal := ko.MemoryUsage(true)
 
 	serverName, _ := os.Hostname()
+	uptime, _ := ko.Uptime()
 
 	return &SystemInfo{
 		ServerName:   serverName,
 		SystemOs:     runtime.GOOS,
-		Runtime:      int64(KTime.ServiceUptime()),
+		Runtime:      uint64(KTime.ServiceUptime()),
+		Uptime:       uptime,
 		GoroutineNum: runtime.NumGoroutine(),
 		CpuNum:       runtime.NumCPU(),
 		CpuUser:      cpuUserRate,
@@ -638,178 +577,7 @@ func (ko *LkkOS) GetSystemInfo() *SystemInfo {
 	}
 }
 
-// GetBiosInfo 获取BIOS信息.
-func (ko *LkkOS) GetBiosInfo() *BiosInfo {
-	return &BiosInfo{
-		Vendor:  strings.TrimSpace(KFile.ReadFirstLine("/sys/class/dmi/id/bios_vendor")),
-		Version: strings.TrimSpace(KFile.ReadFirstLine("/sys/class/dmi/id/bios_version")),
-		Date:    strings.TrimSpace(KFile.ReadFirstLine("/sys/class/dmi/id/bios_date")),
-	}
-}
-
-// GetBoardInfo 获取Board信息.
-func (ko *LkkOS) GetBoardInfo() *BoardInfo {
-	return &BoardInfo{
-		Name:     strings.TrimSpace(KFile.ReadFirstLine("/sys/class/dmi/id/board_name")),
-		Vendor:   strings.TrimSpace(KFile.ReadFirstLine("/sys/class/dmi/id/board_vendor")),
-		Version:  strings.TrimSpace(KFile.ReadFirstLine("/sys/class/dmi/id/board_version")),
-		Serial:   strings.TrimSpace(KFile.ReadFirstLine("/sys/class/dmi/id/board_serial")),
-		AssetTag: strings.TrimSpace(KFile.ReadFirstLine("/sys/class/dmi/id/board_asset_tag")),
-	}
-}
-
-// GetCpuInfo 获取CPU信息.
-func (ko *LkkOS) GetCpuInfo() *CpuInfo {
-	var res = &CpuInfo{
-		Vendor:  "",
-		Model:   "",
-		Speed:   "",
-		Cache:   0,
-		Cpus:    0,
-		Cores:   0,
-		Threads: 0,
-	}
-
-	res.Threads = uint(runtime.NumCPU())
-	f, err := os.Open("/proc/cpuinfo")
-	if err == nil {
-		cpu := make(map[string]bool)
-		core := make(map[string]bool)
-		var cpuID string
-
-		s := bufio.NewScanner(f)
-		for s.Scan() {
-			if sl := cpuRegTwoColumns.Split(s.Text(), 2); sl != nil {
-				switch sl[0] {
-				case "physical id":
-					cpuID = sl[1]
-					cpu[cpuID] = true
-				case "core id":
-					coreID := fmt.Sprintf("%s/%s", cpuID, sl[1])
-					core[coreID] = true
-				case "vendor_id":
-					if res.Vendor == "" {
-						res.Vendor = sl[1]
-					}
-				case "model name":
-					if res.Model == "" {
-						// CPU model, as reported by /proc/cpuinfo, can be a bit ugly. Clean up...
-						model := cpuRegExtraSpace.ReplaceAllLiteralString(sl[1], " ")
-						res.Model = strings.Replace(model, "- ", "-", 1)
-					}
-				case "cpu MHz":
-					if res.Speed == "" {
-						res.Speed = sl[1]
-					}
-				case "cache size":
-					if res.Cache == 0 {
-						if m := cpuRegCacheSize.FindStringSubmatch(sl[1]); m != nil {
-							if cache, err := strconv.ParseUint(m[1], 10, 64); err == nil {
-								res.Cache = uint(cache)
-							}
-						}
-					}
-				}
-			}
-		}
-
-		res.Cpus = uint(len(cpu))
-		res.Cores = uint(len(core))
-	}
-	defer func() {
-		_ = f.Close()
-	}()
-
-	return res
-}
-
-// IsPortOpen 检查主机端口是否开放.protocols为协议名称,可选,默认tcp.
-func (ko *LkkOS) IsPortOpen(host string, port interface{}, protocols ...string) bool {
-	if KStr.IsHost(host) && KStr.IsPort(port) {
-		// 默认tcp协议
-		protocol := "tcp"
-		if len(protocols) > 0 && len(protocols[0]) > 0 {
-			protocol = strings.ToLower(protocols[0])
-		}
-
-		conn, _ := net.DialTimeout(protocol, net.JoinHostPort(host, KConv.ToStr(port)), CHECK_CONNECT_TIMEOUT)
-		if conn != nil {
-			_ = conn.Close()
-			return true
-		}
-	}
-
-	return false
-}
-
-//GetPidByPort 根据端口号获取监听的进程PID.
-func (ko *LkkOS) GetPidByPort(port int) (pid int) {
-	files := []string{
-		"/proc/net/tcp",
-		"/proc/net/udp",
-		"/proc/net/tcp6",
-		"/proc/net/udp6",
-	}
-
-	procDirs, _ := filepath.Glob("/proc/[0-9]*/fd/[0-9]*")
-	for _, fpath := range files {
-		lines, _ := KFile.ReadInArray(fpath)
-		for _, line := range lines[1:] {
-			fields := strings.Fields(line)
-			if len(fields) < 10 {
-				continue
-			}
-
-			//非 LISTEN 监听状态
-			if fields[3] != "0A" {
-				continue
-			}
-
-			//本地ip和端口
-			ipport := strings.Split(fields[1], ":")
-			locPort, _ := KConv.Hex2Dec(ipport[1])
-
-			// 非该端口
-			if int(locPort) != port {
-				continue
-			}
-
-			pid = getPidByInode(fields[9], procDirs)
-			if pid > 0 {
-				return
-			}
-		}
-	}
-
-	return
-}
-
 // GetProcessExecPath 根据PID获取进程的执行路径.
 func (ko *LkkOS) GetProcessExecPath(pid int) string {
 	return getProcessPathByPid(pid)
-}
-
-// IsProcessExists 进程是否存在.
-func (ko *LkkOS) IsProcessExists(pid int) (res bool) {
-	process, err := os.FindProcess(pid)
-	if err == nil {
-		if err = process.Signal(os.Signal(syscall.Signal(0))); err == nil {
-			res = true
-		}
-	}
-
-	return
-}
-
-// ForceGC 强制手动GC垃圾回收(阻塞).
-func (ko *LkkOS) ForceGC() {
-	runtime.GC()
-	debug.FreeOSMemory()
-}
-
-// TriggerGC 触发GC(非阻塞).
-func (ko *LkkOS) TriggerGC() {
-	go func() {
-		ko.ForceGC()
-	}()
 }
