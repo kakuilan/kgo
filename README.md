@@ -14,7 +14,7 @@ golang 常用函数库/工具集,仅测试支持有限的64位系统.
 [![Starts](https://img.shields.io/github/stars/kakuilan/kgo.svg)](https://github.com/kakuilan/kgo)
 [![Version](https://img.shields.io/github/v/tag/kakuilan/kgo)](https://img.shields.io/github/v/tag/kakuilan/kgo)
 
-### 测试支持(v0.1.5及以后)
+### 测试支持
 
 - GO版本
     - 1.16.x
@@ -22,6 +22,12 @@ golang 常用函数库/工具集,仅测试支持有限的64位系统.
     - ubuntu-latest
     - macos-latest
     - windows-latest
+
+### 依赖第三方库
+
+- github.com/json-iterator/go
+- github.com/StackExchange/wmi
+
 
 ### 安装使用
 
@@ -36,11 +42,6 @@ go get -u github.com/kakuilan/kgo
 ```go
 import "github.com/kakuilan/kgo"
 ```
-
-### 依赖的第三方库
-
-- github.com/json-iterator/go
-- github.com/StackExchange/wmi
 
 ### 函数接收器
 
