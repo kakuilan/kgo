@@ -175,6 +175,9 @@ func TestArray_SlicePush_SlicePop(t *testing.T) {
 	var ss []interface{}
 	var item interface{}
 
+	item = KArr.SlicePop(&ss)
+	assert.Empty(t, item)
+
 	lenght := KArr.SlicePush(&ss, slItf...)
 	assert.Greater(t, lenght, 1)
 
@@ -211,6 +214,10 @@ func BenchmarkArray_SlicePop(b *testing.B) {
 func TestArray_SliceUnshift_SliceShift(t *testing.T) {
 	var ss []interface{}
 	var item interface{}
+
+	item = KArr.SliceShift(&ss)
+	assert.Empty(t, item)
+
 	lenght := KArr.SliceUnshift(&ss, slItf...)
 	assert.Greater(t, lenght, 1)
 
