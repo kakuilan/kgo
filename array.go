@@ -705,8 +705,6 @@ func (ka *LkkArray) ArraySearchItem(arr interface{}, condition map[string]interf
 			}
 		}
 	}
-
-	return
 }
 
 // ArraySearchMutil 从数组(切片/字典)中搜索对应元素(多个).
