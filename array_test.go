@@ -774,6 +774,9 @@ func TestArray_IsEqualArray(t *testing.T) {
 	res = KArr.IsEqualArray(naturalArr, ssSingle)
 	assert.False(t, res)
 
+	res = KArr.IsEqualArray(strMpEmp, ssSingle)
+	assert.False(t, res)
+
 	KArr.IsEqualArray(strHello, ssSingle)
 }
 
