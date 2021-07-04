@@ -374,6 +374,9 @@ func BenchmarkArray_Implode(b *testing.B) {
 func TestArray_JoinStrings(t *testing.T) {
 	res := KArr.JoinStrings(",", ssSingle)
 	assert.Contains(t, res, "a,b,c,d,e,f,g,h,i,j,k")
+
+	res = KArr.JoinStrings(",", strSlEmp)
+	assert.Empty(t, res)
 }
 
 func BenchmarkArray_JoinStrings(b *testing.B) {
