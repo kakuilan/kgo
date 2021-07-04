@@ -945,6 +945,9 @@ func TestArray_DeleteSliceItems(t *testing.T) {
 	res, del = KArr.DeleteSliceItems(int64Slc, 2, 4, 9)
 	assert.Greater(t, del, 0)
 
+	res, del = KArr.DeleteSliceItems(strSlEmp, 2, 4, 9)
+	assert.Equal(t, del, 0)
+
 	_, _ = KArr.DeleteSliceItems(strHello, 3, 5, 8)
 }
 
