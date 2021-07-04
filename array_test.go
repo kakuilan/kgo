@@ -774,7 +774,7 @@ func TestArray_IsEqualArray(t *testing.T) {
 	res = KArr.IsEqualArray(naturalArr, ssSingle)
 	assert.False(t, res)
 
-	res = KArr.IsEqualArray(strMpEmp, ssSingle)
+	res = KArr.IsEqualArray(strSlEmp, ssSingle)
 	assert.False(t, res)
 
 	KArr.IsEqualArray(strHello, ssSingle)
@@ -801,6 +801,9 @@ func TestArray_IsEqualMap(t *testing.T) {
 	assert.True(t, res)
 
 	res = KArr.IsEqualMap(personMp1, personMp2)
+	assert.False(t, res)
+
+	res = KArr.IsEqualMap(strMpEmp, personMp2)
 	assert.False(t, res)
 
 	KArr.IsEqualMap(personMp1, strHello)
