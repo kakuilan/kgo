@@ -351,6 +351,16 @@ func TestArray_Implode(t *testing.T) {
 	res4 := KArr.Implode(",", strMp1)
 	assert.NotEmpty(t, res4)
 
+	//空字典
+	res5 := KArr.Implode(",", strMpEmp)
+	assert.Empty(t, res5)
+	//空数组
+	res6 := KArr.Implode(",", strSlEmp)
+	assert.Empty(t, res6)
+	//空结构体
+	res7 := KArr.Implode(",", KFile)
+	assert.Empty(t, res7)
+
 	KArr.Implode(",", strHello)
 }
 
