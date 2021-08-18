@@ -175,6 +175,9 @@ func TestArray_SlicePush_SlicePop(t *testing.T) {
 	var ss []interface{}
 	var item interface{}
 
+	item = KArr.SlicePop(&ss)
+	assert.Empty(t, item)
+
 	lenght := KArr.SlicePush(&ss, slItf...)
 	assert.Greater(t, lenght, 1)
 
@@ -211,6 +214,10 @@ func BenchmarkArray_SlicePop(b *testing.B) {
 func TestArray_SliceUnshift_SliceShift(t *testing.T) {
 	var ss []interface{}
 	var item interface{}
+
+	item = KArr.SliceShift(&ss)
+	assert.Empty(t, item)
+
 	lenght := KArr.SliceUnshift(&ss, slItf...)
 	assert.Greater(t, lenght, 1)
 
@@ -344,6 +351,16 @@ func TestArray_Implode(t *testing.T) {
 	res4 := KArr.Implode(",", strMp1)
 	assert.NotEmpty(t, res4)
 
+	//空字典
+	res5 := KArr.Implode(",", strMpEmp)
+	assert.Empty(t, res5)
+	//空数组
+	res6 := KArr.Implode(",", strSlEmp)
+	assert.Empty(t, res6)
+	//空结构体
+	res7 := KArr.Implode(",", KFile)
+	assert.Empty(t, res7)
+
 	KArr.Implode(",", strHello)
 }
 
@@ -357,6 +374,9 @@ func BenchmarkArray_Implode(b *testing.B) {
 func TestArray_JoinStrings(t *testing.T) {
 	res := KArr.JoinStrings(",", ssSingle)
 	assert.Contains(t, res, "a,b,c,d,e,f,g,h,i,j,k")
+
+	res = KArr.JoinStrings(",", strSlEmp)
+	assert.Empty(t, res)
 }
 
 func BenchmarkArray_JoinStrings(b *testing.B) {
@@ -370,6 +390,9 @@ func TestArray_JoinInts(t *testing.T) {
 	ints := naturalArr[:]
 	res := KArr.JoinInts(",", ints)
 	assert.Contains(t, res, "0,1,2,3,4,5,6,7,8,9,10")
+
+	res = KArr.JoinInts(",", intSlEmp)
+	assert.Empty(t, res)
 }
 
 func BenchmarkArray_JoinInts(b *testing.B) {
@@ -648,6 +671,11 @@ func TestArray_ArraySearchItem(t *testing.T) {
 	cond2 := map[string]interface{}{"Gender": false}
 	res = KArr.ArraySearchItem(perStuMps, cond2)
 
+	//空条件
+	cond3 := map[string]interface{}{}
+	res = KArr.ArraySearchItem(perStuMps, cond3)
+	assert.Empty(t, res)
+
 	KArr.ArraySearchItem(strHello, map[string]interface{}{"a": 1})
 }
 
@@ -746,6 +774,9 @@ func TestArray_IsEqualArray(t *testing.T) {
 	res = KArr.IsEqualArray(naturalArr, ssSingle)
 	assert.False(t, res)
 
+	res = KArr.IsEqualArray(strSlEmp, ssSingle)
+	assert.False(t, res)
+
 	KArr.IsEqualArray(strHello, ssSingle)
 }
 
@@ -770,6 +801,9 @@ func TestArray_IsEqualMap(t *testing.T) {
 	assert.True(t, res)
 
 	res = KArr.IsEqualMap(personMp1, personMp2)
+	assert.False(t, res)
+
+	res = KArr.IsEqualMap(strMpEmp, personMp2)
 	assert.False(t, res)
 
 	KArr.IsEqualMap(personMp1, strHello)
@@ -910,6 +944,9 @@ func TestArray_DeleteSliceItems(t *testing.T) {
 
 	res, del = KArr.DeleteSliceItems(int64Slc, 2, 4, 9)
 	assert.Greater(t, del, 0)
+
+	res, del = KArr.DeleteSliceItems(strSlEmp, 2, 4, 9)
+	assert.Equal(t, del, 0)
 
 	_, _ = KArr.DeleteSliceItems(strHello, 3, 5, 8)
 }
