@@ -8,6 +8,6 @@ http://192.168.1.1:6060/pkg/github.com/kakuilan
 
 ### 生成markdown
 ```sh
-go get github.com/robertkrimen/godocdown/godocdown
-godocdown . > docs/v0.1.5.md
+go get -d github.com/robertkrimen/godocdown/godocdown
+godocdown . > docs/v0.1.6.md
 ```

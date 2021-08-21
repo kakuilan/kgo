@@ -1,11 +1,34 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
+## [v0.1.6]- 2021-8-21
+
+#### Added
+
+- 新增`KNum.NearLogarithm`,求对数临近值
+- 新增`KNum.SplitNaturalNum`,将自然数按底数拆解
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- none
+
+#### Removed
+
+- none
+
 ## [v0.1.5]- 2021-6-11
+
 - 重构版本，改动太多，懒得整理，就不再一一列出
 
 ## [v0.1.4]- 2020-12-1
+
 #### Added
+
 - 新增`KArr.ArrayIntersect`,求数组交集
 - 新增`KArr.DeleteSliceItems`,删除切片多个元素
 - 新增`KFile.FormatPath`,格式化路径
@@ -13,9 +36,11 @@ All notable changes to this project will be documented in this file.
 - 新增`KNum.Log`,求任意底数的对数
 
 #### Fixed
+
 - 修改`KNum.IsNatural`,自然数包含0
 
 #### Changed
+
 - 修改`KArr.ArrayDiff`,增加比较方式参数`compareType`,返回字典
 - 修改`KFile.FormatDir`,过滤特殊字符
 - 修改`KNum.IsNan`,接收任意类型参数
@@ -23,73 +48,98 @@ All notable changes to this project will be documented in this file.
 - 修改`KNum.Range`,支持生成降序的数组
 
 #### Removed
+
 - none
 
 ## [v0.1.3]- 2020-11-11
+
 #### Added
+
 - none
 
 #### Fixed
+
 - none
 
 #### Changed
+
 - 修改`KStr.Chr`,使用rune转换字符码
 - 修改`KDbug.CallMethod`错误提示
 
 #### Removed
+
 - none
 
 ## [v0.1.2]- 2020-06-25
+
 #### Added
+
 - `KStr.Md5Byte`
 - `KStr.ShaXByte`
 
 #### Fixed
+
 - none
 
 #### Changed
+
 - rename `md5Str` to `md5Byte`
 - rename `shaXStr` to `shaXByte`
 
 #### Removed
+
 - none
 
 ## [v0.1.1]- 2020-06-23
+
 #### Added
+
 - `KStr.Serialize`
 - `KStr.UnSerialize`
 - `KStr.TrimBOM`
 
 #### Fixed
+
 - none
 
 #### Changed
+
 - none
 
 #### Removed
+
 - none
 
 ## [v0.1.0]- 2020-06-22
+
 #### Added
+
 - none
 
 #### Fixed
+
 - none
 
 #### Changed
-- 修改`KTime.Str2Timestruct`使用本地时区而非UTC 
+
+- 修改`KTime.Str2Timestruct`使用本地时区而非UTC
 
 #### Removed
+
 - none
 
 ## [v0.0.9]- 2020-06-20
+
 #### Added
+
 - none
 
 #### Fixed
+
 - none
 
 #### Changed
+
 - 修改`KEncr.Base64Encode`结果类型为[]byte
 - 修改`KEncr.Base64Decode`参数类型为[]byte
 - 修改`KEncr.Base64UrlEncode`结果类型为[]byte
@@ -100,49 +150,67 @@ All notable changes to this project will be documented in this file.
 - 修改`KEncr.HmacShaX`结果类型为[]byte
 
 #### Removed
+
 - none
 
 ## [v0.0.8]- 2020-05-31
+
 #### Added
+
 - none
 
 #### Fixed
+
 - none
 
 #### Changed
+
 - `KOS.GetSystemInfo`增加`SystemOs`操作系统名称字段
 
 #### Removed
+
 - none
 
 ## [v0.0.7]- 2020-05-21
+
 #### Added
+
 - none
 
 #### Fixed
+
 - 修复`KStr.ToCamelCase`将首字母大写的驼峰串(如SayHello->Sayhello)转换错误问题
 
 #### Changed
+
 - none
 
 #### Removed
+
 - none
 
 ## [v0.0.6]- 2020-04-28
+
 #### Added
+
 - `KNum.AbsInt`
 
 #### Fixed
+
 - none
 
 #### Changed
+
 - rename `KNum.Abs` to `KNum.AbsFloat`
 
 #### Removed
+
 - none
 
 ## [v0.0.5]- 2020-03-20
+
 #### Added
+
 - `KArr.InInt64Slice`
 - `KArr.InIntSlice`
 - `KArr.InStringSlice`
@@ -191,9 +259,11 @@ All notable changes to this project will be documented in this file.
 - `KTime.StartOfYear`
 
 #### Fixed
+
 - none
 
 #### Changed
+
 - `KFile.IsFile` 增加文件类型参数LkkFileType
 - `KFile.WriteFile` 增加权限参数perm
 - `KOS.Getenv` 增加默认值参数
@@ -203,33 +273,43 @@ All notable changes to this project will be documented in this file.
 - rename `KTime.Time` to `KTime.UnixTime`
 
 #### Removed
+
 - none
 
 ## [v0.0.4]- 2020-03-06
+
 #### Added
+
 - `KStr.Index`
 - `KStr.LastIndex`
 
 #### Fixed
+
 - none
 
 #### Changed
+
 - `KStr.RemoveBefore` 增加参数ignoreCase
 - `KStr.RemoveAfter` 增加参数ignoreCase
 - `KStr.StartsWith` 增加参数ignoreCase,使用Index代替MbSubstr
 - `KStr.EndsWith` 增加参数ignoreCase,使用LastIndex代替MbSubstr
 
 #### Removed
+
 - none
 
 ## [v0.0.3]- 2020-03-03
+
 #### Added
+
 - 增加常量`DYNAMIC_KEY_LEN`动态密钥长度
 
 #### Fixed
+
 - `KEncr.AuthCode` 修复bounds out of range错误
 
 #### Changed
+
 - `KEncr.AuthCode` 动态密钥长度改为8
 - `KEncr.EasyEncrypt` 动态密钥长度改为8
 - `KEncr.EasyDecrypt` 动态密钥长度改为8
@@ -237,10 +317,13 @@ All notable changes to this project will be documented in this file.
 - `KNum.ByteFormat` 增加'delimiter'参数,为数字和单位间的分隔符
 
 #### Removed
+
 - none
 
 ## [v0.0.2]- 2020-02-09
+
 #### Added
+
 - `KArr.JoinInts`
 - `KArr.JoinStrings`
 - `KArr.Unique64Ints`
@@ -299,9 +382,11 @@ All notable changes to this project will be documented in this file.
 - `KTime.Year`
 
 #### Fixed
+
 - `KStr.Trim`, 当输入"0"时,结果为空的BUG.
 
 #### Changed
+
 - `KArr.Implode`, 增加对map的处理.
 - `KEncr.EasyDecrypt`, 改进循环.
 - `KEncr.EasyEncrypt`, 改进循环.
@@ -344,7 +429,7 @@ All notable changes to this project will be documented in this file.
 - rename `KTime.Strtotime` to `Str2Timestamp`
 
 #### Removed
-- remove `KConv.Int2Bool`
 
+- remove `KConv.Int2Bool`
 
 *--end of file--*
