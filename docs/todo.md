@@ -129,8 +129,6 @@
 - 时间轮定时器
 - 简单http请求
 - 增加sync.go
-- 支持windows
-- splitNaturalNum
 
 pid
 https://github.com/bitnami/gonit/blob/master/utils/process.go

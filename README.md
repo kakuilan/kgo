@@ -18,6 +18,7 @@ golang 常用函数库/工具集,仅测试支持有限的64位系统.
 
 - GO版本
     - 1.16.x
+    - 1.17.x
 - OS系统
     - ubuntu-latest
     - macos-latest
