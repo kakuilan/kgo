@@ -1161,3 +1161,45 @@ func BenchmarkNumber_GeoDistance(b *testing.B) {
 		KNum.GeoDistance(lng1, lat1, lng2, lat2)
 	}
 }
+
+func TestNearLogarithm(t *testing.T) {
+	var actual int
+	var tests = []struct {
+		num int
+		base int
+		left bool
+		expected int
+	}{
+		{10, 2, false, 3},
+		{10, 2, true, 4},
+		{16, 2, true, 4},
+		{16, 2, true, 4},
+	}
+	for _, test := range tests {
+		actual = KNum.nearLogarithm(test.num, test.base, test.left)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func TestNearLogarithm_Panic_Num(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "num must be non-negative")
+	}()
+	_ = KNum.nearLogarithm(-9, 2, false)
+}
+
+func TestNearLogarithm_Panic_Base(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "base must be a positive integer")
+	}()
+	_ = KNum.nearLogarithm(9, -2, false)
+}
+
+func BenchmarkNearLogarithm(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.nearLogarithm(99, 4, true)
+	}
+}

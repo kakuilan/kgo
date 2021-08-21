@@ -574,3 +574,20 @@ func (kn *LkkNumber) GeoDistance(lng1, lat1, lng2, lat2 float64) float64 {
 	dist := math.Acos(math.Sin(lat1)*math.Sin(lat2) + math.Cos(lat1)*math.Cos(lat2)*math.Cos(theta))
 	return dist * radius
 }
+
+// nearLogarithm 求以 base 为底 num 的对数临近值.
+// num为自然数,base为正整数,left是否向左取整.
+func (kn *LkkNumber) nearLogarithm(num, base int, left bool) int  {
+	if num < 0 {
+		panic("[nearLogarithm]` num must be non-negative")
+	}else if base<=0 {
+		panic("[nearLogarithm]` base must be a positive integer")
+	}
+
+	res := kn.Log(toFloat(num), toFloat(base))
+	if left {
+		return int(kn.Floor(res))
+	}
+
+	return int(kn.Ceil(res))
+}
