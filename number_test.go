@@ -1170,8 +1170,8 @@ func TestNearLogarithm(t *testing.T) {
 		left     bool
 		expected int
 	}{
-		{10, 2, false, 3},
-		{10, 2, true, 4},
+		{10, 2, false, 4},
+		{10, 2, true, 3},
 		{16, 2, true, 4},
 		{16, 2, true, 4},
 	}
