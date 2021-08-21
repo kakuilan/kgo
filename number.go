@@ -575,19 +575,44 @@ func (kn *LkkNumber) GeoDistance(lng1, lat1, lng2, lat2 float64) float64 {
 	return dist * radius
 }
 
-// nearLogarithm 求以 base 为底 num 的对数临近值.
+// NearLogarithm 求以 base 为底 num 的对数临近值.
 // num为自然数,base为正整数,left是否向左取整.
-func (kn *LkkNumber) nearLogarithm(num, base int, left bool) int  {
+func (kn *LkkNumber) NearLogarithm(num, base int, left bool) int {
 	if num < 0 {
 		panic("[nearLogarithm]` num must be non-negative")
-	}else if base<=0 {
+	} else if base <= 0 {
 		panic("[nearLogarithm]` base must be a positive integer")
 	}
 
-	res := kn.Log(toFloat(num), toFloat(base))
+	res := kn.Log(float64(num), float64(base))
 	if left {
 		return int(kn.Floor(res))
 	}
 
 	return int(kn.Ceil(res))
+}
+
+// SplitNaturalNum 将自然数 num 按底数 base 进行拆解.
+func (kn *LkkNumber) SplitNaturalNum(num, base int) []int {
+	var res []int
+
+	if !kn.IsNatural(toFloat(num)) {
+		panic("[splitNaturalNum]` num must be a natural number")
+	} else if base <= 0 {
+		panic("[splitNaturalNum]` base must be a positive integer")
+	}
+
+	var n, child int
+	for num > base {
+		n = kn.NearLogarithm(num, base, true)
+		child = int(math.Pow(float64(base), float64(n)))
+		num -= child
+		res = append(res, child)
+	}
+
+	if (num > 0) || (num == 0 && len(res) == 0) {
+		res = append(res, num)
+	}
+
+	return res
 }

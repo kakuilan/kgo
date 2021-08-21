@@ -1165,9 +1165,9 @@ func BenchmarkNumber_GeoDistance(b *testing.B) {
 func TestNearLogarithm(t *testing.T) {
 	var actual int
 	var tests = []struct {
-		num int
-		base int
-		left bool
+		num      int
+		base     int
+		left     bool
 		expected int
 	}{
 		{10, 2, false, 3},
@@ -1176,7 +1176,7 @@ func TestNearLogarithm(t *testing.T) {
 		{16, 2, true, 4},
 	}
 	for _, test := range tests {
-		actual = KNum.nearLogarithm(test.num, test.base, test.left)
+		actual = KNum.NearLogarithm(test.num, test.base, test.left)
 		assert.Equal(t, actual, test.expected)
 	}
 }
@@ -1186,7 +1186,7 @@ func TestNearLogarithm_Panic_Num(t *testing.T) {
 		r := recover()
 		assert.Contains(t, r, "num must be non-negative")
 	}()
-	_ = KNum.nearLogarithm(-9, 2, false)
+	_ = KNum.NearLogarithm(-9, 2, false)
 }
 
 func TestNearLogarithm_Panic_Base(t *testing.T) {
@@ -1194,12 +1194,37 @@ func TestNearLogarithm_Panic_Base(t *testing.T) {
 		r := recover()
 		assert.Contains(t, r, "base must be a positive integer")
 	}()
-	_ = KNum.nearLogarithm(9, -2, false)
+	_ = KNum.NearLogarithm(9, -2, false)
 }
 
 func BenchmarkNearLogarithm(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KNum.nearLogarithm(99, 4, true)
+		KNum.NearLogarithm(99, 4, true)
+	}
+}
+
+func TestSplitNaturalNum(t *testing.T) {
+	var actual []int
+	var tests = []struct {
+		num      int
+		base     int
+		expected int
+	}{
+		{10, 2, 2},  //[8 2]
+		{16, 2, 1},  //[16]
+		{56, 3, 3},  //[27 27 2]
+		{199, 6, 9}, //[36 36 36 36 36 6 6 6 1]
+	}
+	for _, test := range tests {
+		actual = KNum.SplitNaturalNum(test.num, test.base)
+		assert.Equal(t, len(actual), test.expected)
+	}
+}
+
+func BenchmarkSplitNaturalNum(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.SplitNaturalNum(199, 3)
 	}
 }
