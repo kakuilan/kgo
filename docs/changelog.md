@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.1.7]- 2021-10-15
+
+#### Added
+
+- none
+
+#### Fixed
+
+- 修复`KEncr.AuthCode`中keyb变化问题
+
+#### Changed
+
+- none
+
+#### Removed
+
+- none
+
 ## [v0.1.6]- 2021-8-21
 
 #### Added
