@@ -61,7 +61,7 @@ type (
 
 const (
 	// Version 版本号
-	Version = "0.1.6"
+	Version = "0.1.7"
 
 	Unknown = "Unknown"
 
