@@ -103,7 +103,8 @@ func (ke *LkkEncrypt) AuthCode(str, key []byte, encode bool, expiry int64) ([]by
 	keya := keyByte[:16]
 
 	// 密钥b会用来做数据完整性验证
-	keyb := keyByte[16:]
+	keyb := make([]byte, 16)
+	copy(keyb, keyByte[16:])
 
 	// 密钥c用于变化生成的密文
 	var keyc []byte
@@ -134,7 +135,6 @@ func (ke *LkkEncrypt) AuthCode(str, key []byte, encode bool, expiry int64) ([]by
 		}
 		expMd5 := md5Byte(append(str, keyb...), 16)
 		str = []byte(fmt.Sprintf("%010d%s%s", expiry, expMd5, str))
-		//str = append([]byte(fmt.Sprintf("%010d", expiry)), append(expMd5, str...)...)
 	}
 
 	strLen = len(str)
