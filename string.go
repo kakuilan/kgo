@@ -19,6 +19,8 @@ import (
 	"golang.org/x/text/encoding/traditionalchinese"
 	"golang.org/x/text/transform"
 	"golang.org/x/text/width"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 	"hash/crc32"
 	"html"
 	"io"
@@ -1201,7 +1203,8 @@ func (ks *LkkString) Lcfirst(str string) string {
 
 // Ucwords 将字符串中每个词的首字母转换为大写.
 func (ks *LkkString) Ucwords(str string) string {
-	return strings.Title(str)
+	caser := cases.Title(language.English)
+	return caser.String(str)
 }
 
 // Lcwords 将字符串中每个词的首字母转换为小写.
