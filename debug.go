@@ -12,7 +12,7 @@ import (
 
 // DumpPrint 打印调试变量.
 func (ks *LkkDebug) DumpPrint(vs ...interface{}) {
-	dumpPrint(vs)
+	dumpPrint(vs...)
 }
 
 // DumpStacks 打印堆栈信息.
