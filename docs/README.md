@@ -9,5 +9,5 @@ http://192.168.1.1:6060/pkg/github.com/kakuilan
 ### 生成markdown
 ```sh
 go get -d github.com/robertkrimen/godocdown/godocdown
-godocdown . > docs/v0.1.7.md
+godocdown . > docs/v0.1.8.md
 ```
