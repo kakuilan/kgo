@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.1.8]- 2021-11-08
+
+#### Added
+
+- none
+
+#### Fixed
+
+- 修复`KDbug.DumpPrint`打印多变量问题
+- 修改`KStr.Ucwords`因go1.18废弃strings.Title,使用cases.Title代替
+
+#### Changed
+
+- none
+
+#### Removed
+
+- none
+
 ## [v0.1.7]- 2021-10-15
 
 #### Added
