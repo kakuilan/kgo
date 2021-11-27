@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.1.9]- 2021-11-27
+
+#### Added
+
+- 新增`IsPointer`检查变量是否指针类型
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- none
+
+#### Removed
+
+- none
+
 ## [v0.1.8]- 2021-11-08
 
 #### Added
