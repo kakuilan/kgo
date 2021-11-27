@@ -58,8 +58,36 @@ func TestFun_GetVariatePointerAddr(t *testing.T) {
 	}
 }
 
-func BenchmarkConvert_GetVariatePointerAddr(b *testing.B) {
+func BenchmarkFun_GetVariatePointerAddr(b *testing.B) {
+	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		GetVariatePointerAddr(intSpeedLight)
+	}
+}
+
+func TestFun_IsPointer(t *testing.T) {
+	var chk bool
+
+	//非指针
+	chk = IsPointer(itfObj, false)
+	assert.False(t, chk)
+
+	//指针
+	chk = IsPointer(orgS1, false)
+	assert.True(t, chk)
+
+	//非nil指针
+	chk = IsPointer(orgS1, true)
+	assert.True(t, chk)
+
+	//空指针
+	chk = IsPointer(itfObj, true)
+	assert.False(t, chk)
+}
+
+func BenchmarkFun_IsPointer(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		IsPointer(orgS1, true)
 	}
 }

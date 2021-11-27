@@ -1363,6 +1363,19 @@ func GetVariatePointerAddr(val interface{}) int64 {
 	return res
 }
 
+// IsPointer 检查变量是否指针类型;
+// notNil 是否检查变量非nil.
+func IsPointer(val interface{}, notNil bool) (res bool) {
+	v := reflect.ValueOf(val)
+	if v.Kind() == reflect.Ptr {
+		if notNil == false || (notNil && val != nil) {
+			res = true
+		}
+	}
+
+	return
+}
+
 // VerifyFunc 验证是否函数,并且参数个数、类型是否正确.
 // 返回有效的函数、有效的参数.
 func VerifyFunc(f interface{}, args ...interface{}) (vf reflect.Value, vargs []reflect.Value, err error) {
