@@ -1676,7 +1676,7 @@ func BenchmarkString_IsCreditNo(b *testing.B) {
 	}
 }
 
-func TestString_IsHexcolor(t *testing.T) {
+func TestString_IsHexColor(t *testing.T) {
 	var tests = []struct {
 		param    string
 		expected bool
@@ -1693,15 +1693,15 @@ func TestString_IsHexcolor(t *testing.T) {
 		{tesColor08, true},
 	}
 	for _, test := range tests {
-		actual, _ := KStr.IsHexcolor(test.param)
+		actual, _ := KStr.IsHexColor(test.param)
 		assert.Equal(t, actual, test.expected)
 	}
 }
 
-func BenchmarkString_IsHexcolor(b *testing.B) {
+func BenchmarkString_IsHexColor(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = KStr.IsHexcolor(tesColor08)
+		_, _ = KStr.IsHexColor(tesColor08)
 	}
 }
 
