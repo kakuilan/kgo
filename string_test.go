@@ -804,6 +804,7 @@ func TestString_IsASCII(t *testing.T) {
 		{tesStr16, false},
 		{tesStr17, false},
 		{utf8Hello, false},
+		{tesHtmlDoc, false},
 		{tesStr18, true},
 		{otcAstronomicalUnit, true},
 		{tesEmail1, true},

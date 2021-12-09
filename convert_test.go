@@ -753,6 +753,7 @@ func TestConvert_ToStr(t *testing.T) {
 		{fnCb1, "<nil>"},
 		{fnPtr1, ""},
 		{bytsHello, strHello},
+		{bytColon, ":"},
 		{int64(INT64_MAX), "9223372036854775807"},
 		{uint64(UINT64_MAX), "18446744073709551615"},
 		{float32(math.Pi), "3.1415927"},
@@ -977,7 +978,7 @@ func TestConvert_Byte2Hex(t *testing.T) {
 	res = KConv.Byte2Hex(bytsHello)
 	assert.Equal(t, strHelloHex, res)
 
-	res = KConv.Byte2Hex(bytEmp)
+	res = KConv.Byte2Hex(bytEmpty)
 	assert.Empty(t, res)
 }
 
@@ -994,7 +995,7 @@ func TestConvert_Byte2Hexs(t *testing.T) {
 	res = KConv.Byte2Hexs(bytsHello)
 	assert.Equal(t, strHelloHex, string(res))
 
-	res = KConv.Byte2Hexs(bytEmp)
+	res = KConv.Byte2Hexs(bytEmpty)
 	assert.Empty(t, res)
 }
 

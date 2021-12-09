@@ -340,11 +340,14 @@ func (ks *LkkString) HasLetter(str string) bool {
 
 // IsASCII 是否ASCII字符串.
 func (ks *LkkString) IsASCII(str string) bool {
-	//return str != "" && RegAscii.MatchString(str)
 	n := len(str)
-	for i := 0; i < n; i++ {
-		if str[i] > 127 {
-			return false
+	if n > 256 {
+		return str != "" && RegAscii.MatchString(str)
+	} else {
+		for i := 0; i < n; i++ {
+			if str[i] > 127 {
+				return false
+			}
 		}
 	}
 
@@ -555,7 +558,7 @@ func (ks *LkkString) IsCreditNo(str string) (bool, string) {
 	}
 
 	// 检查省份代码
-	if _, chk = CreditArea[str[0:2]]; !chk {
+	if _, chk = creditArea[str[0:2]]; !chk {
 		return false, ""
 	}
 
@@ -917,7 +920,7 @@ loopDom:
 		case nx == xhtml.StartTagToken:
 			previousStartToken = domDoc.Token()
 		case nx == xhtml.TextToken:
-			if chk, _ := ks.Dstrpos(previousStartToken.Data, TextHtmlExcludeTags, false); chk {
+			if chk, _ := ks.Dstrpos(previousStartToken.Data, textHtmlExcludeTags, false); chk {
 				continue
 			}
 
@@ -1164,7 +1167,7 @@ func (ks *LkkString) Random(length uint8, rtype LkkRandString) string {
 	case RAND_STRING_SPECIAL:
 		letter = []rune(alphas + numbers + specials)
 	case RAND_STRING_CHINESE:
-		letter = CommonChinese
+		letter = commonChinese
 	default:
 		letter = []rune(alphas)
 	}
