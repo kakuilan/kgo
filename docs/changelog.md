@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.2.0]- 2021-12-09
+
+#### Added
+
+- 新增`KStr.ToRunes`将字符串转为字符切片
+- 新增`KConv.ToInterfaces`将变量转为接口切片
+- 新增`KDbug.WrapError`错误包裹
+
+#### Fixed
+
+- 修改`KStr.IsASCII`根据字符串长度使用不同方法
+
+#### Changed
+
+- 重命名`KStr.IsHexcolor`为`IsHexColor`
+- 重命名`KStr.IsRGBcolor`为`IsRgbColor`
+- 将部分公开变量转为私有
+
+#### Removed
+
+- none
+
 ## [v0.1.9]- 2021-11-27
 
 #### Added
