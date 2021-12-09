@@ -1374,3 +1374,25 @@ func BenchmarkConvert_IsPort(b *testing.B) {
 		KConv.IsPort(80)
 	}
 }
+
+func TestConvert_ToInterfaces(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.Contains(t, r, "[arrayValues]`arr type must be")
+	}()
+
+	var res []interface{}
+
+	res = KConv.ToInterfaces(ssSingle)
+	assert.NotNil(t, res)
+	assert.Equal(t, len(res), len(ssSingle))
+
+	KConv.ToInterfaces(strHello)
+}
+
+func BenchmarkConvert_ToInterfaces(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KConv.ToInterfaces(ssSingle)
+	}
+}

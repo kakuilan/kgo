@@ -399,3 +399,9 @@ func (kc *LkkConvert) IsInterface(val interface{}) bool {
 func (kc *LkkConvert) IsPort(val interface{}) bool {
 	return isPort(val)
 }
+
+// ToInterfaces 强制将变量转为接口切片;和KArr.ArrayValues相同.
+// 其中val类型必须是数组/切片/字典/结构体.
+func (kc *LkkConvert) ToInterfaces(val interface{}) []interface{} {
+	return arrayValues(val, false)
+}
