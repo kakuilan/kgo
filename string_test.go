@@ -3362,3 +3362,16 @@ func BenchmarkString_GetEquationValue(b *testing.B) {
 		KStr.GetEquationValue(equationStr01, "utm_source")
 	}
 }
+
+func TestString_ToRunes(t *testing.T) {
+	rs := KStr.ToRunes(strHello)
+	assert.NotNil(t, rs)
+	assert.Equal(t, len(rs), KStr.MbStrlen(strHello))
+}
+
+func BenchmarkString_ToRunes(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.ToRunes(strHello)
+	}
+}

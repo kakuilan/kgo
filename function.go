@@ -828,6 +828,11 @@ func str2Bytes(val string) []byte {
 	return []byte(val)
 }
 
+// str2Runes 将字符串转为字符切片.
+func str2Runes(val string) []rune {
+	return []rune(val)
+}
+
 // bytes2Str 将字节切片转换为字符串.
 func bytes2Str(val []byte) string {
 	return string(val)

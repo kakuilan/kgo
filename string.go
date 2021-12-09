@@ -15,12 +15,12 @@ import (
 	"fmt"
 	"github.com/json-iterator/go"
 	xhtml "golang.org/x/net/html"
+	"golang.org/x/text/cases"
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/encoding/traditionalchinese"
+	"golang.org/x/text/language"
 	"golang.org/x/text/transform"
 	"golang.org/x/text/width"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 	"hash/crc32"
 	"html"
 	"io"
@@ -2210,4 +2210,9 @@ func (ks *LkkString) GetEquationValue(str, name string) (res string) {
 	}
 
 	return
+}
+
+// ToRunes 将字符串转为字符切片.
+func (ks *LkkString) ToRunes(str string) []rune {
+	return str2Runes(str)
 }
