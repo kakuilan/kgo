@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"errors"
 	"fmt"
 	"go/parser"
 	"go/token"
@@ -111,4 +112,27 @@ func (kd *LkkDebug) CallMethod(t interface{}, method string, args ...interface{}
 // GetFuncNames 获取变量的所有(公开的)函数名.
 func (kd *LkkDebug) GetFuncNames(obj interface{}) (res []string) {
 	return getFuncNames(obj)
+}
+
+// WrapError 错误包裹.
+func (ks *LkkDebug) WrapError(err error, args ...interface{}) (res error) {
+	num := len(args)
+	if err == nil && num == 0 {
+		res = errors.New("[WrapError] parameter error")
+	} else if err != nil && num == 0 {
+		res = err
+	} else {
+		var msg []string
+		for _, v := range args {
+			msg = append(msg, toStr(v))
+		}
+
+		if err != nil {
+			msg = append(msg, fmt.Sprintf("last error: %s", err.Error()))
+		}
+
+		res = errors.New(strings.Join(msg, "\r\n"))
+	}
+
+	return
 }
