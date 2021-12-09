@@ -341,8 +341,10 @@ func (ks *LkkString) HasLetter(str string) bool {
 // IsASCII 是否ASCII字符串.
 func (ks *LkkString) IsASCII(str string) bool {
 	n := len(str)
-	if n > 256 {
-		return str != "" && RegAscii.MatchString(str)
+	if n == 0 {
+		return false
+	} else if n > 256 {
+		return RegAscii.MatchString(str)
 	} else {
 		for i := 0; i < n; i++ {
 			if str[i] > 127 {
@@ -351,7 +353,7 @@ func (ks *LkkString) IsASCII(str string) bool {
 		}
 	}
 
-	return str != ""
+	return true
 }
 
 // IsMultibyte 字符串是否含有多字节字符.
