@@ -274,15 +274,16 @@ func numeric2Float(val interface{}) (res float64, err error) {
 func md5Byte(str []byte, length uint8) []byte {
 	var res []byte
 	h := md5.New()
-	_, _ = h.Write(str)
-
-	hBytes := h.Sum(nil)
-	dst := make([]byte, hex.EncodedLen(len(hBytes)))
-	hex.Encode(dst, hBytes)
-	if length > 0 && length < 32 {
-		res = dst[:length]
-	} else {
-		res = dst
+	_, err := h.Write(str)
+	if err == nil {
+		hBytes := h.Sum(nil)
+		dst := make([]byte, hex.EncodedLen(len(hBytes)))
+		hex.Encode(dst, hBytes)
+		if length > 0 && length < 32 {
+			res = dst[:length]
+		} else {
+			res = dst
+		}
 	}
 
 	return res
@@ -305,7 +306,10 @@ func shaXByte(str []byte, x uint16) []byte {
 		panic(fmt.Sprintf("[shaXByte]`x must be in [1, 256, 512]; but: %d", x))
 	}
 
-	h.Write(str)
+	_, err := h.Write(str)
+	if err != nil {
+		return nil
+	}
 
 	hBytes := h.Sum(nil)
 	res := make([]byte, hex.EncodedLen(len(hBytes)))

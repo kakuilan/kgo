@@ -294,7 +294,10 @@ func (ke *LkkEncrypt) HmacShaX(data, secret []byte, x uint16) []byte {
 	}
 
 	// Write Data to it
-	h.Write(data)
+	_, err := h.Write(data)
+	if err != nil {
+		return nil
+	}
 
 	src := h.Sum(nil)
 	dst := make([]byte, hex.EncodedLen(len(src)))
