@@ -101,7 +101,7 @@ func TestTime_Date(t *testing.T) {
 	res = KTime.Date("y-n-j H:i:s", int64(intTime1))
 	assert.NotEmpty(t, res)
 
-	res = KTime.Date("m/d/y h-i-s", Kuptime)
+	res = KTime.Date("m/d/y h-i-s", kuptime)
 	assert.NotEmpty(t, res)
 
 	res = KTime.Date("Y-m-d H:i:s")
@@ -236,9 +236,9 @@ func TestTime_YearMonthDay(t *testing.T) {
 	m1 = KTime.Month()
 	d1 = KTime.Day()
 
-	y2 = KTime.Year(Kuptime)
-	m2 = KTime.Month(Kuptime)
-	d2 = KTime.Day(Kuptime)
+	y2 = KTime.Year(kuptime)
+	m2 = KTime.Month(kuptime)
+	d2 = KTime.Day(kuptime)
 
 	assert.Equal(t, y1, y2)
 	assert.Equal(t, m1, m2)
@@ -248,21 +248,21 @@ func TestTime_YearMonthDay(t *testing.T) {
 func BenchmarkTime_Year(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KTime.Year(Kuptime)
+		KTime.Year(kuptime)
 	}
 }
 
 func BenchmarkTime_Month(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KTime.Month(Kuptime)
+		KTime.Month(kuptime)
 	}
 }
 
 func BenchmarkTime_Day(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KTime.Year(Kuptime)
+		KTime.Year(kuptime)
 	}
 }
 
@@ -287,21 +287,21 @@ func TestTime_HourMinuteSecond(t *testing.T) {
 func BenchmarkTime_Hour(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KTime.Hour(Kuptime)
+		KTime.Hour(kuptime)
 	}
 }
 
 func BenchmarkTime_Minute(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KTime.Minute(Kuptime)
+		KTime.Minute(kuptime)
 	}
 }
 
 func BenchmarkTime_Second(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KTime.Second(Kuptime)
+		KTime.Second(kuptime)
 	}
 }
 

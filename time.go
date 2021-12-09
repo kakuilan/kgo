@@ -77,7 +77,7 @@ func (kt *LkkTime) Str2Timestruct(str string, format ...string) (time.Time, erro
 		return time.Now(), errors.New("[Str2Timestruct]`format error")
 	}
 
-	return time.ParseInLocation(f, str, Kuptime.Location())
+	return time.ParseInLocation(f, str, kuptime.Location())
 }
 
 // Str2Timestamp 将字符串转换为时间戳,秒.
@@ -154,12 +154,12 @@ func (kt *LkkTime) Usleep(t int64) {
 
 // ServiceStartime 获取当前服务启动时间戳,秒.
 func (kt *LkkTime) ServiceStartime() int64 {
-	return Kuptime.Unix()
+	return kuptime.Unix()
 }
 
 // ServiceUptime 获取当前服务运行时间,纳秒int64.
 func (kt *LkkTime) ServiceUptime() time.Duration {
-	return time.Since(Kuptime)
+	return time.Since(kuptime)
 }
 
 // GetMonthDays 获取指定月份的天数.year年份,可选,默认当前年份.

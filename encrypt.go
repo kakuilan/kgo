@@ -59,7 +59,7 @@ func (ke *LkkEncrypt) Base64UrlEncode(str []byte) []byte {
 		// Base64 Url Safe is the same as Base64 but does not contain '/' and '+' (replaced by '_' and '-') and trailing '=' are removed.
 		buf = bytes.Replace(buf, bytSlash, bytUnderscore, -1)
 		buf = bytes.Replace(buf, bytPlus, bytMinus, -1)
-		buf = bytes.Replace(buf, bytEqual, bytEmp, -1)
+		buf = bytes.Replace(buf, bytEqual, bytEmpty, -1)
 
 		return buf
 	}

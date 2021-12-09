@@ -180,11 +180,11 @@ func (ko *LkkOS) IsPrivateIp(str string) (bool, error) {
 		return false, errors.New("[IsPrivateIp]`str is not valid ip")
 	}
 
-	if KPrivCidrs == nil {
-		KPrivCidrs = ko.PrivateCIDR()
+	if kPrivCidrs == nil {
+		kPrivCidrs = ko.PrivateCIDR()
 	}
-	for i := range KPrivCidrs {
-		if KPrivCidrs[i].Contains(ip) {
+	for i := range kPrivCidrs {
+		if kPrivCidrs[i].Contains(ip) {
 			return true, nil
 		}
 	}

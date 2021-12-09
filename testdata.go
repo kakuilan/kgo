@@ -392,8 +392,8 @@ var myDate2, _ = time.ParseInLocation("2006-01-02 15:04:05", strTime5, time.Loca
 var myDate3, _ = time.ParseInLocation("2006-01-02 15:04:05", strTime6, time.Local)
 
 //当前时间
-var nowNanoInt = Kuptime.UnixNano()
-var nowNanoStr = toStr(Kuptime.UnixNano())
+var nowNanoInt = kuptime.UnixNano()
+var nowNanoStr = toStr(kuptime.UnixNano())
 
 //IP
 var noneIp = "0.0.0.0"

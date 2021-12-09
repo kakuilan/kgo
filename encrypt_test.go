@@ -9,7 +9,7 @@ import (
 func TestEncrypt_Base64Encode(t *testing.T) {
 	var res []byte
 
-	res = KEncr.Base64Encode(bytEmp)
+	res = KEncr.Base64Encode(bytEmpty)
 	assert.Nil(t, res)
 
 	res = KEncr.Base64Encode(bytsHello)
@@ -27,7 +27,7 @@ func TestEncrypt_Base64Decode(t *testing.T) {
 	var res []byte
 	var err error
 
-	res, err = KEncr.Base64Decode(bytEmp)
+	res, err = KEncr.Base64Decode(bytEmpty)
 	assert.Nil(t, res)
 	assert.Nil(t, err)
 
@@ -50,7 +50,7 @@ func BenchmarkEncrypt_Base64Decode(b *testing.B) {
 func TestEncrypt_Base64UrlEncode(t *testing.T) {
 	var res []byte
 
-	res = KEncr.Base64UrlEncode(bytEmp)
+	res = KEncr.Base64UrlEncode(bytEmpty)
 	assert.Nil(t, res)
 
 	res = KEncr.Base64UrlEncode([]byte(str2Code))
@@ -69,7 +69,7 @@ func TestEncrypt_Base64UrlDecode(t *testing.T) {
 	var res []byte
 	var err error
 
-	res, err = KEncr.Base64UrlDecode(bytEmp)
+	res, err = KEncr.Base64UrlDecode(bytEmpty)
 	assert.Nil(t, res)
 	assert.Nil(t, err)
 
@@ -106,18 +106,18 @@ func TestEncrypt_AuthCode(t *testing.T) {
 	assert.Greater(t, exp, int64(0))
 
 	//空串
-	res, exp = KEncr.AuthCode(bytEmp, bytSpeedLight, true, 0)
+	res, exp = KEncr.AuthCode(bytEmpty, bytSpeedLight, true, 0)
 	assert.Empty(t, res)
 
 	//空密钥
-	res, exp = KEncr.AuthCode(bytsHello, bytEmp, true, 0)
+	res, exp = KEncr.AuthCode(bytsHello, bytEmpty, true, 0)
 	assert.NotEmpty(t, res)
 
 	//不合法
 	KEncr.AuthCode([]byte("7caeNfPt/N1zHdj5k/7i7pol6NHsVs0Cji7c15h4by1RYcrBoo7EEw=="), bytSpeedLight, false, 0)
 	KEncr.AuthCode([]byte("7caeNfPt/N1zHdj5k/7i7pol6N"), bytSpeedLight, false, 0)
-	KEncr.AuthCode([]byte("123456"), bytEmp, false, 0)
-	KEncr.AuthCode([]byte("1234#iu3498r"), bytEmp, false, 0)
+	KEncr.AuthCode([]byte("123456"), bytEmpty, false, 0)
+	KEncr.AuthCode([]byte("1234#iu3498r"), bytEmpty, false, 0)
 }
 
 func BenchmarkEncrypt_AuthCode_Encode(b *testing.B) {
@@ -140,7 +140,7 @@ func TestEncrypt_PasswordHash(t *testing.T) {
 	var err error
 
 	//空密码
-	res, err = KEncr.PasswordHash(bytEmp)
+	res, err = KEncr.PasswordHash(bytEmpty)
 	assert.NotNil(t, res)
 	assert.Nil(t, err)
 
@@ -186,11 +186,11 @@ func TestEncrypt_EasyEncryptDecrypt(t *testing.T) {
 	assert.Equal(t, bytsHello, dec)
 
 	//空字符串
-	enc = KEncr.EasyEncrypt(bytEmp, bytSpeedLight)
+	enc = KEncr.EasyEncrypt(bytEmpty, bytSpeedLight)
 	assert.Empty(t, enc)
 
 	//空密钥
-	enc = KEncr.EasyEncrypt(bytsHello, bytEmp)
+	enc = KEncr.EasyEncrypt(bytsHello, bytEmpty)
 	assert.NotEmpty(t, enc)
 
 	//密钥错误
@@ -281,7 +281,7 @@ func TestEncrypt_AesCBCEncryptDecrypt(t *testing.T) {
 	assert.Equal(t, bytsHello, des)
 
 	//空字符串
-	enc, err = KEncr.AesCBCEncrypt(bytEmp, bytCryptKey)
+	enc, err = KEncr.AesCBCEncrypt(bytEmpty, bytCryptKey)
 	des, err = KEncr.AesCBCDecrypt(enc, bytCryptKey)
 	assert.NotEmpty(t, enc)
 	assert.Empty(t, des)
@@ -344,7 +344,7 @@ func TestEncrypt_AesCFBEncryptDecrypt(t *testing.T) {
 	assert.NotEqual(t, bytsHello, des2)
 
 	//空字符串
-	enc, err = KEncr.AesCFBEncrypt(bytEmp, bytCryptKey)
+	enc, err = KEncr.AesCFBEncrypt(bytEmpty, bytCryptKey)
 	des, err = KEncr.AesCFBDecrypt(enc, bytCryptKey)
 	assert.NotEmpty(t, enc)
 	assert.Empty(t, des)
@@ -392,7 +392,7 @@ func TestEncrypt_AesCTREncryptDecrypt(t *testing.T) {
 	assert.NotEqual(t, bytsHello, des2)
 
 	//空字符串
-	enc, err = KEncr.AesCTREncrypt(bytEmp, bytCryptKey)
+	enc, err = KEncr.AesCTREncrypt(bytEmpty, bytCryptKey)
 	des, err = KEncr.AesCTRDecrypt(enc, bytCryptKey)
 	assert.NotEmpty(t, enc)
 	assert.Empty(t, des)
@@ -440,7 +440,7 @@ func TestEncrypt_AesOFBEncryptDecrypt(t *testing.T) {
 	assert.NotEqual(t, bytsHello, des2)
 
 	//空字符串
-	enc, err = KEncr.AesOFBEncrypt(bytEmp, bytCryptKey)
+	enc, err = KEncr.AesOFBEncrypt(bytEmpty, bytCryptKey)
 	des, err = KEncr.AesOFBDecrypt(enc, bytCryptKey)
 	assert.NotEmpty(t, enc)
 	assert.Empty(t, des)
