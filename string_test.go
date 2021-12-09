@@ -1705,7 +1705,7 @@ func BenchmarkString_IsHexColor(b *testing.B) {
 	}
 }
 
-func TestString_IsRGBcolor(t *testing.T) {
+func TestString_IsRgbColor(t *testing.T) {
 	var tests = []struct {
 		param    string
 		expected bool
@@ -1721,15 +1721,15 @@ func TestString_IsRGBcolor(t *testing.T) {
 		{tesColor15, false},
 	}
 	for _, test := range tests {
-		actual := KStr.IsRGBcolor(test.param)
+		actual := KStr.IsRgbColor(test.param)
 		assert.Equal(t, actual, test.expected)
 	}
 }
 
-func BenchmarkString_IsRGBcolor(b *testing.B) {
+func BenchmarkString_IsRgbColor(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		KStr.IsRGBcolor(tesColor11)
+		KStr.IsRgbColor(tesColor11)
 	}
 }
 

@@ -604,8 +604,8 @@ func (ks *LkkString) IsHexColor(str string) (bool, string) {
 	return chk, str
 }
 
-// IsRGBcolor 检查字符串是否RGB颜色格式.
-func (ks *LkkString) IsRGBcolor(str string) bool {
+// IsRgbColor 检查字符串是否RGB颜色格式.
+func (ks *LkkString) IsRgbColor(str string) bool {
 	return str != "" && RegRgbcolor.MatchString(str)
 }
 
