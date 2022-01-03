@@ -451,7 +451,7 @@ func (ke *LkkEncrypt) AesOFBDecrypt(cipherText, key []byte) ([]byte, error) {
 	return ke.aesDecrypt(cipherText, key, "OFB", PKCS_NONE)
 }
 
-// GenerateRsaKeys 生成RSA密钥对.bits为密钥位数,通常为1024或2048.
+// GenerateRsaKeys 生成RSA密钥对.bits为密钥位数,必须是64的倍数,范围为512-65536,通常为1024或2048.
 func (ke *LkkEncrypt) GenerateRsaKeys(bits int) (private []byte, public []byte, err error) {
 	// 生成私钥文件
 	var privateKey *rsa.PrivateKey
