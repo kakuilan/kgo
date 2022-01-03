@@ -1343,7 +1343,7 @@ func (ks *LkkString) Reverse(str string) string {
 	return string(runes[n:])
 }
 
-// ChunkBytes 将字节切片分割为小块.其中size为每块的长度.
+// ChunkBytes 将字节切片分割为多个小块.其中size为每块的长度.
 func (ks *LkkString) ChunkBytes(bs []byte, size int) [][]byte {
 	bsLen := len(bs)
 	if bsLen == 0 || size <= 0 {
