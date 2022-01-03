@@ -5,32 +5,6 @@ import (
 	"testing"
 )
 
-func TestString_ChunkBytes(t *testing.T) {
-	res1 := KStr.ChunkBytes(bytEmpty, 5)
-	assert.Nil(t, res1)
-
-	res2 := KStr.ChunkBytes(bytsUtf8Hello, 0)
-	assert.Nil(t, res2)
-
-	res3 := KStr.ChunkBytes(bytCryptKey, 20)
-	assert.Equal(t, 1, len(res3))
-
-	bs := []byte(strJson7)
-	res4 := KStr.ChunkBytes(bs, 5)
-	assert.Equal(t, 32, len(res4))
-
-	res5 := KStr.ChunkBytes(bs, 10)
-	assert.Equal(t, 16, len(res5))
-}
-
-func BenchmarkString_ChunkBytes(b *testing.B) {
-	b.ResetTimer()
-	bs := []byte(strJson7)
-	for i := 0; i < b.N; i++ {
-		KStr.ChunkBytes(bs, 10)
-	}
-}
-
 func TestArray_ArrayKeys(t *testing.T) {
 	defer func() {
 		r := recover()
