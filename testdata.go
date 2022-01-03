@@ -202,6 +202,7 @@ var strJson3 = "call)hello world(done"
 var strJson4 = `JsonpCallbackFn_abc123etc({"meta":{"Status":200,"Content-Type":"application/json","Content-Length":"19","etc":"etc"},"data":{"name":"yummy"}})`
 var strJson5 = `{"id":"1"}`
 var strJson6 = `[{"key1":"value1"},{"key2":"value2"}]`
+var strJson7 = `{"message_code":["bb9041bcfd55be4be20243b8e051963b","e5d94d692a4af45397a04c403d89bc3a"],"send_to":"tester","create_time":1641201974,"expire_time":4102415999}`
 
 //email
 var tesEmail1 = "test@example.com"
