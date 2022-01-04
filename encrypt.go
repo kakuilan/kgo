@@ -71,7 +71,7 @@ func (ke *LkkEncrypt) Base64UrlEncode(str []byte) []byte {
 func (ke *LkkEncrypt) Base64UrlDecode(str []byte) ([]byte, error) {
 	l := len(str)
 	if l > 0 {
-		var missing = (4 - len(str)%4) % 4
+		var missing = (4 - l%4) % 4
 		str = append(str, bytes.Repeat(bytEqual, missing)...)
 
 		buf := make([]byte, base64.URLEncoding.DecodedLen(len(str)))

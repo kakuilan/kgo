@@ -25,7 +25,6 @@ import (
 func dumpPrint(vs ...interface{}) {
 	for _, v := range vs {
 		fmt.Printf("%+v\n", v)
-		//fmt.Printf("%#v\n", v)
 	}
 }
 
