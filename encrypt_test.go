@@ -630,3 +630,84 @@ func BenchmarkEncrypt_RsaPublicDecrypt(b *testing.B) {
 		_, _ = KEncr.RsaPublicDecrypt(enc, pubFileBs)
 	}
 }
+
+func TestEncrypt_RsaPublicEncryptPrivateDecrypt_Long(t *testing.T) {
+	var enc, des []byte
+	var err error
+
+	cont := []byte(tesHtmlDoc)
+	pubFileBs, _ := ioutil.ReadFile(filePubPem)
+	priFileBs, _ := ioutil.ReadFile(filePriPem)
+	pubFileBs2048, _ := ioutil.ReadFile(filePubPem2048)
+	priFileBs2048, _ := ioutil.ReadFile(filePriPem2048)
+
+	//1024-过长
+	enc, err = KEncr.RsaPublicEncrypt(cont, pubFileBs)
+	assert.Empty(t, enc)
+	assert.NotNil(t, err)
+
+	//2048-过长
+	enc, err = KEncr.RsaPublicEncrypt(cont, pubFileBs2048)
+	assert.Empty(t, enc)
+	assert.NotNil(t, err)
+
+	//1024-long
+	enc, err = KEncr.RsaPublicEncryptLong(cont, pubFileBs)
+	assert.NotEmpty(t, enc)
+	assert.Nil(t, err)
+
+	des, err = KEncr.RsaPrivateDecryptLong(enc, priFileBs)
+	assert.NotEmpty(t, des)
+	assert.Nil(t, err)
+	assert.Equal(t, tesHtmlDoc, string(des))
+
+	//2048-long
+	enc, err = KEncr.RsaPublicEncryptLong(cont, pubFileBs2048)
+	assert.NotEmpty(t, enc)
+	assert.Nil(t, err)
+
+	des, err = KEncr.RsaPrivateDecryptLong(enc, priFileBs2048)
+	assert.NotEmpty(t, des)
+	assert.Nil(t, err)
+	assert.Equal(t, tesHtmlDoc, string(des))
+}
+
+func BenchmarkEncrypt_RsaPublicEncryptLong_1024(b *testing.B) {
+	b.ResetTimer()
+	cont := []byte(tesHtmlDoc)
+	pubFileBs, _ := ioutil.ReadFile(filePubPem)
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.RsaPublicEncryptLong(cont, pubFileBs)
+	}
+}
+
+func BenchmarkEncrypt_RsaPublicEncryptLong_2048(b *testing.B) {
+	b.ResetTimer()
+	cont := []byte(tesHtmlDoc)
+	pubFileBs2048, _ := ioutil.ReadFile(filePubPem2048)
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.RsaPublicEncryptLong(cont, pubFileBs2048)
+	}
+}
+
+func BenchmarkEncrypt_RsaPrivateDecryptLong_1024(b *testing.B) {
+	b.ResetTimer()
+	cont := []byte(tesHtmlDoc)
+	pubFileBs, _ := ioutil.ReadFile(filePubPem)
+	priFileBs, _ := ioutil.ReadFile(filePriPem)
+	enc, _ := KEncr.RsaPublicEncryptLong(cont, pubFileBs)
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.RsaPrivateDecryptLong(enc, priFileBs)
+	}
+}
+
+func BenchmarkEncrypt_RsaPrivateDecryptLong_2048(b *testing.B) {
+	b.ResetTimer()
+	cont := []byte(tesHtmlDoc)
+	pubFileBs2048, _ := ioutil.ReadFile(filePubPem2048)
+	priFileBs2048, _ := ioutil.ReadFile(filePriPem2048)
+	enc, _ := KEncr.RsaPublicEncryptLong(cont, pubFileBs2048)
+	for i := 0; i < b.N; i++ {
+		_, _ = KEncr.RsaPrivateDecryptLong(enc, priFileBs2048)
+	}
+}

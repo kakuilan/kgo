@@ -13,6 +13,7 @@ import (
 	"errors"
 	"fmt"
 	"hash"
+	"math"
 	"reflect"
 	"strconv"
 	"strings"
@@ -1349,6 +1350,31 @@ func similarText(str1, str2 string, len1, len2 int) int {
 	}
 
 	return sum
+}
+
+// chunkBytes 将字节切片分割为多个小块.其中size为每块的长度.
+func chunkBytes(bs []byte, size int) [][]byte {
+	bsLen := len(bs)
+	if bsLen == 0 || size <= 0 {
+		return nil
+	} else if bsLen < size {
+		return [][]byte{bs}
+	}
+
+	var start, last int
+	pages := int(math.Ceil(float64(bsLen) / float64(size)))
+	res := make([][]byte, pages)
+	for i := 0; i < pages; i++ {
+		last = start + size
+		if last > bsLen {
+			res[i] = bs[start:]
+		} else {
+			res[i] = bs[start:last]
+		}
+		start = last
+	}
+
+	return res
 }
 
 // GetVariateType 获取变量类型.

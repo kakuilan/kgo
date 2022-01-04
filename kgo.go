@@ -364,6 +364,8 @@ var (
 	bytLinefeed = []byte("\n")
 	// 冒号切片
 	bytColon = []byte(":")
+	// 本库分隔符
+	bytDelimiter = []byte(KDelimiter)
 
 	//空白字符
 	blankChars = " \t\n\r\v\f\x00　"

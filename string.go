@@ -1345,27 +1345,7 @@ func (ks *LkkString) Reverse(str string) string {
 
 // ChunkBytes 将字节切片分割为多个小块.其中size为每块的长度.
 func (ks *LkkString) ChunkBytes(bs []byte, size int) [][]byte {
-	bsLen := len(bs)
-	if bsLen == 0 || size <= 0 {
-		return nil
-	} else if bsLen < size {
-		return [][]byte{bs}
-	}
-
-	var start, last int
-	pages := int(math.Ceil(float64(bsLen) / float64(size)))
-	res := make([][]byte, pages)
-	for i := 0; i < pages; i++ {
-		last = start + size
-		if last > bsLen {
-			res[i] = bs[start:]
-		} else {
-			res[i] = bs[start:last]
-		}
-		start = last
-	}
-
-	return res
+	return chunkBytes(bs, size)
 }
 
 // ChunkSplit 将字符串分割成小块.str为要分割的字符,chunklen为分割的尺寸,end为行尾序列符号.
