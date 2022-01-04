@@ -568,17 +568,35 @@ func TestEncrypt_RsaPrivateEncryptPublicDecrypt(t *testing.T) {
 
 	pubFileBs, _ := ioutil.ReadFile(filePubPem)
 	priFileBs, _ := ioutil.ReadFile(filePriPem)
+	pubFileBs2048, _ := ioutil.ReadFile(filePubPem2048)
+	priFileBs2048, _ := ioutil.ReadFile(filePriPem2048)
 
-	//私钥加密
+	//私钥加密-1024
 	enc, err = KEncr.RsaPrivateEncrypt(bytsHello, priFileBs)
 	assert.NotEmpty(t, enc)
 	assert.Nil(t, err)
 
-	//公钥解密
+	//公钥解密-1024
 	des, err = KEncr.RsaPublicDecrypt(enc, pubFileBs)
 	assert.NotEmpty(t, des)
 	assert.Nil(t, err)
 	assert.Equal(t, bytsHello, des)
+
+	//私钥加密-1024内容过长
+	enc, err = KEncr.RsaPrivateEncrypt([]byte(strJson7), priFileBs)
+	assert.Empty(t, enc)
+	assert.NotNil(t, err)
+
+	//私钥加密-2048
+	enc, err = KEncr.RsaPrivateEncrypt([]byte(strJson7), priFileBs2048)
+	assert.NotEmpty(t, enc)
+	assert.Nil(t, err)
+
+	//公钥解密-2048
+	des, err = KEncr.RsaPublicDecrypt(enc, pubFileBs2048)
+	assert.NotEmpty(t, des)
+	assert.Nil(t, err)
+	assert.Equal(t, strJson7, string(des))
 
 	//错误的私钥
 	_, err = KEncr.RsaPrivateEncrypt(bytsHello, bytSpeedLight)
