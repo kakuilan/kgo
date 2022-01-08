@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.2.1]- 2022-01-05
+
+#### Added
+
+- 新增`KStr.ChunkBytes`将字节切片分割为多个小块
+- 新增`KEncr.RsaPublicEncryptLong`使用RSA公钥加密长文本
+- 新增`KEncr.RsaPrivateDecryptLong`使用RSA私钥解密长文本
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- none
+
+#### Removed
+
+- none
+
 ## [v0.2.0]- 2021-12-09
 
 #### Added
