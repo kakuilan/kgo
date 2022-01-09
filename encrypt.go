@@ -708,5 +708,5 @@ func (ke *LkkEncrypt) RsaPublicDecryptLong(cipherText, publicKey []byte) ([]byte
 		res = append(res, out[skip:]...)
 	}
 
-	return nil, nil
+	return res, nil
 }
