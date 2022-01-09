@@ -637,3 +637,11 @@ func (ke *LkkEncrypt) RsaPrivateDecryptLong(cipherText, privateKey []byte) ([]by
 	}
 	return res, nil
 }
+
+func (ke *LkkEncrypt) RsaPrivateEncryptLong(clearText, privateKey []byte) ([]byte, error) {
+	return nil, nil
+}
+
+func (ke *LkkEncrypt) RsaPublicDecryptLong(cipherText, publicKey []byte) ([]byte, error) {
+	return nil, nil
+}
