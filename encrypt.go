@@ -638,10 +638,75 @@ func (ke *LkkEncrypt) RsaPrivateDecryptLong(cipherText, privateKey []byte) ([]by
 	return res, nil
 }
 
+// RsaPrivateEncrypt RSA私钥加密长文本.比解密耗时.
+// clearText为明文,privateKey为私钥.
 func (ke *LkkEncrypt) RsaPrivateEncryptLong(clearText, privateKey []byte) ([]byte, error) {
-	return nil, nil
+	// 获取私钥
+	block, _ := pem.Decode(privateKey)
+	if block == nil {
+		return nil, errors.New("[RsaPrivateEncryptLong]`private key error!")
+	}
+
+	// 解析PKCS1格式的私钥
+	priv, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+
+	var res, item []byte
+	bits := chunkBytes(clearText, priv.Size()-56)
+	all := len(bits)
+	for i, bs := range bits {
+		item, err = rsa.SignPKCS1v15(nil, priv, crypto.Hash(0), bs)
+		if err != nil {
+			return nil, err
+		}
+		res = append(res, item...)
+		if i < (all - 1) {
+			res = append(res, bytDelimiter...)
+		}
+	}
+
+	return res, nil
 }
 
+// RsaPublicDecrypt RSA公钥解密长文本.
+// cipherText为密文,publicKey为公钥.
 func (ke *LkkEncrypt) RsaPublicDecryptLong(cipherText, publicKey []byte) ([]byte, error) {
+	// 解密pem格式的公钥
+	block, _ := pem.Decode(publicKey)
+	if block == nil {
+		return nil, errors.New("[RsaPublicDecryptLong]`public key error")
+	}
+
+	// 解析公钥
+	pubInterface, err := x509.ParsePKIXPublicKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+
+	// 类型断言
+	pubKey := pubInterface.(*rsa.PublicKey)
+
+	var res []byte
+	bits := bytes.Split(cipherText, bytDelimiter)
+	for _, bs := range bits {
+		c := new(big.Int)
+		m := new(big.Int)
+		m.SetBytes(bs)
+		e := big.NewInt(int64(pubKey.E))
+		c.Exp(m, e, pubKey.N)
+		out := c.Bytes()
+		olen := len(out)
+		skip := 0
+		for i := 2; i < olen; i++ {
+			if (i+1 < olen) && out[i] == 0xff && out[i+1] == 0 {
+				skip = i + 2
+				break
+			}
+		}
+		res = append(res, out[skip:]...)
+	}
+
 	return nil, nil
 }
