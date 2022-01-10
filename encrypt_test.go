@@ -632,6 +632,9 @@ func TestEncrypt_RsaPrivateEncryptPublicDecrypt(t *testing.T) {
 
 	_, err = KEncr.RsaPublicDecrypt(enc, []byte(rsaPublicErrStr))
 	assert.NotNil(t, err)
+
+	_, err = KEncr.RsaPublicDecrypt(enc, priFileBs)
+	assert.NotNil(t, err)
 }
 
 func BenchmarkEncrypt_RsaPrivateEncrypt(b *testing.B) {
