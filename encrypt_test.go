@@ -274,6 +274,14 @@ func TestEncrypt_AesCBCEncryptDecrypt(t *testing.T) {
 	_, err = KEncr.AesCBCEncrypt(bytsHello, bytSpeedLight)
 	assert.NotNil(t, err)
 
+	//密钥长度不符合
+	_, err = KEncr.AesCBCDecrypt(enc, bytSlash)
+	assert.NotNil(t, err)
+
+	//密文太短
+	_, err = KEncr.AesCBCDecrypt(bytUnderscore, bytCryptKey)
+	assert.NotNil(t, err)
+
 	//错误的密钥
 	des2, err = KEncr.AesCBCDecrypt(enc, []byte("1234561234567890"))
 	assert.NotEqual(t, bytsHello, des2)
