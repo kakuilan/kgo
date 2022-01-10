@@ -554,6 +554,9 @@ func TestEncrypt_RsaPublicEncryptPrivateDecrypt(t *testing.T) {
 	_, err = KEncr.RsaPublicEncrypt(bytsHello, []byte(rsaPublicErrStr))
 	assert.NotNil(t, err)
 
+	_, err = KEncr.RsaPublicEncrypt(bytsHello, priFileBs)
+	assert.NotNil(t, err)
+
 	//错误的私钥
 	_, err = KEncr.RsaPrivateDecrypt(enc, bytSpeedLight)
 	assert.NotNil(t, err)
