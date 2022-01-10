@@ -799,6 +799,23 @@ func TestEncrypt_RsaPrivateEncryptPublicDecrypt_Long(t *testing.T) {
 	assert.NotEmpty(t, des)
 	assert.Nil(t, err)
 	assert.Equal(t, tesHtmlDoc, string(des))
+
+	//错误的私钥
+	_, err = KEncr.RsaPrivateEncryptLong(bytsHello, bytSpeedLight)
+	assert.NotNil(t, err)
+
+	_, err = KEncr.RsaPrivateEncryptLong(bytsHello, []byte(rsaPrivateErrStr))
+	assert.NotNil(t, err)
+
+	//错误的公钥
+	_, err = KEncr.RsaPublicDecryptLong(enc, bytSpeedLight)
+	assert.NotNil(t, err)
+
+	_, err = KEncr.RsaPublicDecryptLong(enc, []byte(rsaPublicErrStr))
+	assert.NotNil(t, err)
+
+	_, err = KEncr.RsaPublicDecryptLong(enc, priFileBs)
+	assert.NotNil(t, err)
 }
 
 func BenchmarkEncrypt_RsaPrivateEncryptLong_1024(b *testing.B) {
