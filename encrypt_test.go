@@ -177,13 +177,23 @@ func BenchmarkEncrypt_PasswordVerify(b *testing.B) {
 }
 
 func TestEncrypt_EasyEncryptDecrypt(t *testing.T) {
-	var enc, dec []byte
+	var ori, enc, dec []byte
 
 	enc = KEncr.EasyEncrypt(bytsHello, bytSpeedLight)
 	assert.NotEmpty(t, enc)
-
 	dec = KEncr.EasyDecrypt(enc, bytSpeedLight)
 	assert.Equal(t, bytsHello, dec)
+
+	//长内容
+	ori = []byte(personsArrJson)
+	enc = KEncr.EasyEncrypt(ori, bytSpeedLight)
+	assert.NotEmpty(t, enc)
+	dec = KEncr.EasyDecrypt(enc, bytSpeedLight)
+	assert.Equal(t, ori, dec)
+
+	//短待解密
+	dec = KEncr.EasyDecrypt(bytSlash, bytSpeedLight)
+	assert.Empty(t, dec)
 
 	//空字符串
 	enc = KEncr.EasyEncrypt(bytEmpty, bytSpeedLight)
