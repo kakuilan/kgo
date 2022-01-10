@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.2.2]- 2022-01-10
+
+#### Added
+
+- 新增`KEncr.RsaPrivateEncryptLong`使用RSA私钥加密长文本
+- 新增`KEncr.RsaPublicDecryptLong`使用RSA公钥解密长文本
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- none
+
+#### Removed
+
+- none
+
 ## [v0.2.1]- 2022-01-05
 
 #### Added
