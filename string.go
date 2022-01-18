@@ -1533,6 +1533,15 @@ func (ks *LkkString) UuidV4() (string, error) {
 		buf[10:16]), err
 }
 
+// UuidV5 生成提供字符的sha1值(Version5).
+func (ks *LkkString) UuidV5(name, namespace string) (string, error) {
+	// TODO
+	//https://github.com/gofrs/uuid
+	//https://github.com/satori/
+	//https://stackoverflow.com/questions/10867405/generating-v5-uuid-what-is-name-and-namespace
+	return "", nil
+}
+
 // VersionCompare 对比两个版本号字符串.
 // operator允许的操作符有: <, lt, <=, le, >, gt, >=, ge, ==, =, eq, !=, <>, ne .
 // 特定的版本字符串，将会用以下顺序处理：
