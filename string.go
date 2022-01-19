@@ -5,6 +5,7 @@ import (
 	"crypto/md5"
 	crand "crypto/rand"
 	"crypto/rsa"
+	"crypto/sha1"
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/gob"
@@ -1533,13 +1534,26 @@ func (ks *LkkString) UuidV4() (string, error) {
 		buf[10:16]), err
 }
 
-// UuidV5 生成提供字符的sha1值(Version5).
-func (ks *LkkString) UuidV5(name, namespace string) (string, error) {
-	// TODO
-	//https://github.com/gofrs/uuid
-	//https://github.com/satori/
-	//https://stackoverflow.com/questions/10867405/generating-v5-uuid-what-is-name-and-namespace
-	return "", nil
+// UuidV5 根据提供的字符生成sha1值(Version5).
+func (ks *LkkString) UuidV5(name, namespace []byte) string {
+	var h = sha1.New()
+	h.Write(namespace)
+	h.Write(name)
+
+	u := h.Sum(nil)
+	buf := make([]byte, 36)
+
+	hex.Encode(buf[0:8], u[0:4])
+	buf[8] = '-'
+	hex.Encode(buf[9:13], u[4:6])
+	buf[13] = '-'
+	hex.Encode(buf[14:18], u[6:8])
+	buf[18] = '-'
+	hex.Encode(buf[19:23], u[8:10])
+	buf[23] = '-'
+	hex.Encode(buf[24:], u[10:])
+
+	return string(buf)
 }
 
 // VersionCompare 对比两个版本号字符串.
