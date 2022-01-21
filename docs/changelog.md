@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.2.3]- 2022-01-21
+
+#### Added
+
+- 新增`KStr.UuidV5`,根据提供的字符,使用sha1生成36位哈希值
+
+#### Fixed
+
+- 修改`KStr.UuidV4`,添加version/variant信息
+
+- none
+
+#### Changed
+
+- none
+
+#### Removed
+
+- none
+
 ## [v0.2.2]- 2022-01-10
 
 #### Added
