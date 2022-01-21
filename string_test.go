@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"bytes"
 	"github.com/stretchr/testify/assert"
 	"net/url"
 	"testing"
@@ -2668,6 +2669,52 @@ func BenchmarkString_UuidV4(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_, _ = KStr.UuidV4()
+	}
+}
+
+func TestString_UuidV5(t *testing.T) {
+	var res string
+	var err error
+
+	//空的namespace
+	res, err = KStr.UuidV5(nil, nil)
+	assert.NotNil(t, err)
+	assert.Empty(t, res)
+
+	//namespace长度不符
+	res, err = KStr.UuidV5(nil, bytsHello)
+	assert.NotNil(t, err)
+	assert.Empty(t, res)
+
+	var nsDns = KConv.Hexs2Byte(bytsUuidNamespaceDNS)
+	var nsUrl = KConv.Hexs2Byte(bytsUuidNamespaceUrl)
+	res, err = KStr.UuidV5(nil, nsUrl)
+	assert.Nil(t, err)
+	assert.NotEmpty(t, res)
+
+	res, err = KStr.UuidV5([]byte("www.example.com"), nsDns)
+	assert.Nil(t, err)
+	assert.NotEmpty(t, res)
+	assert.Equal(t, "2ed6657d-e927-568b-95e1-2665a8aea6a2", res)
+
+	res, err = KStr.UuidV5([]byte(tesUrl40), nsUrl)
+	assert.Nil(t, err)
+	assert.NotEmpty(t, res)
+	assert.Equal(t, "c106a26a-21bb-5538-8bf2-57095d1976c1", res)
+
+	var ns2 = bytes.Replace([]byte("1b671a64-40d5-491e-99b0-da01ff1f3341"), bytMinus, bytEmpty, -1)
+	var ns3 = KConv.Hexs2Byte(ns2)
+	res, err = KStr.UuidV5([]byte("Hello, World!"), ns3)
+	assert.Nil(t, err)
+	assert.NotEmpty(t, res)
+	assert.Equal(t, "630eb68f-e0fa-5ecc-887a-7c7a62614681", res)
+}
+
+func BenchmarkString_UuidV5(b *testing.B) {
+	b.ResetTimer()
+	var ns = KConv.Hexs2Byte(bytsUuidNamespaceDNS)
+	for i := 0; i < b.N; i++ {
+		_, _ = KStr.UuidV5(bytsHello, ns)
 	}
 }
 

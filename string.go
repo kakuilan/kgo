@@ -1521,26 +1521,45 @@ func (ks *LkkString) Uniqid(prefix string) string {
 		buf[4:12])
 }
 
-// UuidV4 获取36位UUID(Version4).
+// UuidV4 获取36位UUID(Version4,RFC4122).
 func (ks *LkkString) UuidV4() (string, error) {
-	buf := make([]byte, 16)
-	_, err := crand.Read(buf)
+	u := make([]byte, 16)
+	_, err := crand.Read(u)
+
+	//sets the version bits
+	u[6] = (u[6] & 0x0f) | (3 << 4)
+	//sets the variant bits
+	u[8] = (u[8]&(0xff>>2) | (0x02 << 6))
 
 	return fmt.Sprintf("%08x-%04x-%04x-%04x-%12x",
-		buf[0:4],
-		buf[4:6],
-		buf[6:8],
-		buf[8:10],
-		buf[10:16]), err
+		u[0:4],
+		u[4:6],
+		u[6:8],
+		u[8:10],
+		u[10:16]), err
 }
 
-// UuidV5 根据提供的字符生成sha1值(Version5).
-func (ks *LkkString) UuidV5(name, namespace []byte) string {
+// UuidV5 根据提供的字符,使用sha1生成36位哈希值(Version5,RFC4122);
+// name为要计算散列值的字符,可以为nil;
+// namespace为命名空间,长度必须为16.
+func (ks *LkkString) UuidV5(name, namespace []byte) (string, error) {
+	var nsSize = len(namespace)
+	if nsSize != 16 {
+		return "", fmt.Errorf("[UuidV5]`s namespace must be exactly 16 bytes long, got %d bytes", nsSize)
+	}
+
 	var h = sha1.New()
 	h.Write(namespace)
 	h.Write(name)
 
-	u := h.Sum(nil)
+	u := make([]byte, 16)
+	copy(u[:], h.Sum(nil))
+
+	//sets the version bits
+	u[6] = (u[6] & 0x0f) | (5 << 4)
+	//sets the variant bits
+	u[8] = (u[8]&(0xff>>2) | (0x02 << 6))
+
 	buf := make([]byte, 36)
 
 	hex.Encode(buf[0:8], u[0:4])
@@ -1553,7 +1572,7 @@ func (ks *LkkString) UuidV5(name, namespace []byte) string {
 	buf[23] = '-'
 	hex.Encode(buf[24:], u[10:])
 
-	return string(buf)
+	return string(buf), nil
 }
 
 // VersionCompare 对比两个版本号字符串.

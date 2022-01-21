@@ -3,6 +3,7 @@
 package kgo
 
 import (
+	"bytes"
 	"github.com/brianvoe/gofakeit/v6"
 	"time"
 )
@@ -121,6 +122,8 @@ var strKor = "안녕하세요"
 var strSha1 = "82c9c0b34622756f6ef9731fbd8fbcef168a907f"
 var strSha256 = "dcad188403ba3a4931288076f8398283abed9a90d1955364b3b5beeb551f0062"
 var strSha512 = "057e65f970c85399b3953059b059c58c5b4eeeb572c741adb13af2fe2696f1ca3edc3757005aa801ea2bedc29529ba0c638e945fd95341d4dfbb6b693c3f6dfb"
+var uuidNamespaceDNS = "6ba7b810-9dad-11d1-80b4-00c04fd430c8"
+var uuidNamespaceURL = "6ba7b811-9dad-11d1-80b4-00c04fd430c8"
 var tesStr1 = "'test-bla-bla-4>2-y-3<6'"
 var tesStr2 = "one%20%26%20two"
 var tesStr3 = "'foo @+%/'你好"
@@ -497,6 +500,8 @@ var bytsPasswd = []byte("$2a$10$j3WOP6rP2I7skNoxiFdNdOh6OhPxP0Sp3Wmeuekh90oeF3D1
 var bytCryptKey = []byte("1234567890123456")
 var bytsUtf8Hello = []byte(utf8Hello)
 var bytsGbkHello = []byte{0xC4, 0xE3, 0xBA, 0xC3, 0xA3, 0xAC, 0xCA, 0xC0, 0xBD, 0xE7, 0xA3, 0xA1}
+var bytsUuidNamespaceDNS = bytes.Replace([]byte(uuidNamespaceDNS), bytMinus, bytEmpty, -1)
+var bytsUuidNamespaceUrl = bytes.Replace([]byte(uuidNamespaceURL), bytMinus, bytEmpty, -1)
 
 //单字符切片
 var ssSingle = []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"}
@@ -725,6 +730,7 @@ var tesUrl36 = "mailto:someone@example.com"
 var tesUrl37 = "rtmp://foobar.com"
 var tesUrl38 = "xyz://foobar.com"
 var tesUrl39 = "https://www.baidu.com/"
+var tesUrl40 = "https://www.w3.org/"
 
 //命令
 var tesCommand01 = " ls -a -h"
