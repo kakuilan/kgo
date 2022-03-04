@@ -20,7 +20,7 @@ func (ks *LkkDebug) DumpPrint(vs ...interface{}) {
 func (kd *LkkDebug) DumpStacks() {
 	buf := make([]byte, 16384)
 	buf = buf[:runtime.Stack(buf, true)]
-	fmt.Printf("=== BEGIN goroutine stack dump ===\n%s\n=== END goroutine stack dump ===\n\n", buf)
+	fmt.Printf("=== BEGIN stack dump ===\n%s\n=== END stack dump ===\n\n", buf)
 }
 
 // GetCallName 获取调用的方法名称;f为目标方法;onlyFun为true时仅返回方法,不包括包名.
