@@ -251,3 +251,27 @@ func BenchmarkDebug_WrapError(b *testing.B) {
 		_ = KDbug.WrapError(err, helloEng, utf8Hello)
 	}
 }
+
+func TestDebug_Stacks(t *testing.T) {
+	var res1, res2, res3 []byte
+	var len1, len2, len3 int
+
+	res1 = KDbug.Stacks(-1)
+	len1 = len(res1)
+	assert.Greater(t, len1, 1)
+
+	res2 = KDbug.Stacks(0)
+	len2 = len(res2)
+	assert.Greater(t, len1, len2)
+
+	res3 = KDbug.Stacks(1)
+	len3 = len(res3)
+	assert.Greater(t, len2, len3)
+}
+
+func BenchmarkDebug_Stacks(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = KDbug.Stacks(0)
+	}
+}

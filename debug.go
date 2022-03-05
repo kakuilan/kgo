@@ -1,10 +1,12 @@
 package kgo
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"go/parser"
 	"go/token"
+	"io/ioutil"
 	"path/filepath"
 	"reflect"
 	"runtime"
@@ -23,23 +25,62 @@ func (kd *LkkDebug) DumpStacks() {
 	fmt.Printf("=== BEGIN stack dump ===\n%s\n=== END stack dump ===\n\n", buf)
 }
 
+// Stacks 获取堆栈信息;skip为要跳过的帧数.
+func (kd *LkkDebug) Stacks(skip int) []byte {
+	buf := new(bytes.Buffer)
+	var lines [][]byte
+	var lastFile string
+
+	//获取第N行的内容
+	var sourceLine = func(lines [][]byte, n int) []byte {
+		n-- // in stack trace, lines are 1-indexed but our array is 0-indexed
+		if n < 0 || n >= len(lines) {
+			return bytDunno
+		}
+		return bytes.TrimSpace(lines[n])
+	}
+
+	for i := skip; ; i++ {
+		pc, file, line, ok := runtime.Caller(i)
+		if !ok {
+			break
+		}
+
+		_, _ = fmt.Fprintf(buf, "%s:%d (0x%x)\n", file, line, pc)
+		if file != lastFile {
+			data, err := ioutil.ReadFile(file)
+			if err != nil {
+				continue
+			}
+			lines = bytes.Split(data, bytLinefeed)
+			lastFile = file
+		}
+		_, _ = fmt.Fprintf(buf, "\t%s: %s\n", kd.GetCallName(pc, true), sourceLine(lines, line))
+	}
+	buf.Write(bytLinefeed)
+
+	return buf.Bytes()
+}
+
 // GetCallName 获取调用的方法名称;f为目标方法;onlyFun为true时仅返回方法,不包括包名.
 func (kd *LkkDebug) GetCallName(f interface{}, onlyFun bool) string {
-	var funcObj *runtime.Func
+	var fn *runtime.Func
 	r := reflectPtr(reflect.ValueOf(f))
 	switch r.Kind() {
 	case reflect.Invalid:
 		// Skip this function, and fetch the PC and file for its parent
 		pc, _, _, _ := runtime.Caller(1)
 		// Retrieve a Function object this functions parent
-		funcObj = runtime.FuncForPC(pc)
+		fn = runtime.FuncForPC(pc)
 	case reflect.Func:
-		funcObj = runtime.FuncForPC(r.Pointer())
+		fn = runtime.FuncForPC(r.Pointer())
+	case reflect.Uintptr:
+		fn = runtime.FuncForPC(f.(uintptr))
 	default:
 		return ""
 	}
 
-	name := funcObj.Name()
+	name := fn.Name()
 	if onlyFun {
 		// extract just the function name (and not the module path)
 		return strings.TrimPrefix(filepath.Ext(name), ".")

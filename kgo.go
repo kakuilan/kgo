@@ -364,6 +364,12 @@ var (
 	bytLinefeed = []byte("\n")
 	// 冒号切片
 	bytColon = []byte(":")
+	// 点号
+	//bytDot = []byte(".")
+	// 中点号
+	//bytCenterDot = []byte("·")
+	// 未知
+	bytDunno = []byte("???")
 	// 本库分隔符
 	bytDelimiter = []byte(KDelimiter)
 
