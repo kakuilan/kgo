@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.2.4]- 2022-03-05
+
+#### Added
+
+- 新增`KDbug.Stacks`,获取堆栈信息
+
+#### Fixed
+
+- 修改`KDbug.GetCallName`,参数`f`支持`uintptr`类型
+
+#### Changed
+
+- none
+
+#### Removed
+
+- none
+
 ## [v0.2.3]- 2022-01-21
 
 #### Added
@@ -11,8 +29,6 @@ All notable changes to this project will be documented in this file.
 #### Fixed
 
 - 修改`KStr.UuidV4`,添加version/variant信息
-
-- none
 
 #### Changed
 
