@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.2.5]- 2022-03-31
+
+#### Added
+
+- none
+
+#### Fixed
+
+- 优化`KEncr.AuthCode`
+
+#### Changed
+
+- none
+
+#### Removed
+
 ## [v0.2.4]- 2022-03-05
 
 #### Added
