@@ -82,7 +82,10 @@ func (ke *LkkEncrypt) Base64UrlDecode(str []byte) ([]byte, error) {
 	return nil, nil
 }
 
-// AuthCode 授权码编码或解码;encode为true时编码,为false解码;expiry为有效期,秒;返回结果为加密/解密的字符串和有效期时间戳.
+// AuthCode 授权码编码或解码;
+// encode为true时编码,为false解码;
+// expiry为加密时的有效期,单位秒,为0时代表永久(100年);
+// 返回结果为加密/解密的字符串和有效期时间戳.
 func (ke *LkkEncrypt) AuthCode(str, key []byte, encode bool, expiry int64) ([]byte, int64) {
 	// DYNAMIC_KEY_LEN 动态密钥长度，相同的明文会生成不同密文就是依靠动态密钥
 	// 加入随机密钥，可以令密文无任何规律，即便是原文和密钥完全相同，加密结果也会每次不同，增大破解难度。
@@ -130,9 +133,10 @@ func (ke *LkkEncrypt) AuthCode(str, key []byte, encode bool, expiry int64) ([]by
 			return nil, 0
 		}
 	} else {
-		if expiry != 0 {
-			expiry = expiry + time.Now().Unix()
+		if expiry == 0 {
+			expiry = 3153600000 //100年
 		}
+		expiry = expiry + time.Now().Unix()
 		expMd5 := md5Byte(append(str, keyb...), 16)
 		str = []byte(fmt.Sprintf("%010d%s%s", expiry, expMd5, str))
 	}
@@ -171,10 +175,12 @@ func (ke *LkkEncrypt) AuthCode(str, key []byte, encode bool, expiry int64) ([]by
 		// 验证数据有效性，请看未加密明文的格式
 		if len(resdata) <= 26 {
 			return nil, 0
+		} else if string(resdata[10:26]) != string(md5Byte(append(resdata[26:], keyb...), 16)) {
+			return nil, 0
 		}
 
 		expTime, _ := strconv.ParseInt(string(resdata[:10]), 10, 0)
-		if (expTime == 0 || expTime-time.Now().Unix() > 0) && string(resdata[10:26]) == string(md5Byte(append(resdata[26:], keyb...), 16)) {
+		if (expTime - time.Now().Unix()) > 0 {
 			return resdata[26:], expTime
 		} else {
 			return nil, expTime
