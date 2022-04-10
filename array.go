@@ -1185,3 +1185,21 @@ func (ka *LkkArray) NewStrMapItf() map[string]interface{} {
 func (ka *LkkArray) NewStrMapStr() map[string]string {
 	return make(map[string]string)
 }
+
+// CopyToStruct 将resources值拷贝到dest目标结构体.要求所有参数都是结构体;若resources存在多个相同字段的元素,以最后的为准.
+func (ka *LkkArray) CopyToStruct(dest interface{}, resources ...interface{}) interface{} {
+	if !isStruct(dest) {
+		return nil
+	}
+
+	return dest
+}
+
+// CopyToMap 将resources值拷贝到dest目标字典.要求所有参数都是字典;若resources存在多个相同字段的元素,以最后的为准.
+func (ka *LkkArray) CopyToMap(dest interface{}, resources ...interface{}) interface{} {
+	if !isMap(dest) {
+		return nil
+	}
+
+	return nil
+}
