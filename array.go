@@ -1192,6 +1192,22 @@ func (ka *LkkArray) CopyToStruct(dest interface{}, resources ...interface{}) int
 		return nil
 	}
 
+	immutableV := reflect.ValueOf(&dest).Elem()
+	immutableT := reflect.TypeOf(dest)
+	for resource, _ := range resources {
+		if !isStruct(resource) {
+			continue
+		}
+		rVal := reflect.ValueOf(resource)
+		rTyp := rVal.Type()
+		for i := 0; i < rTyp.NumField(); i++ {
+			field := rTyp.Field(i).Name
+			if _, ok := immutableT.FieldByName(field); ok {
+				immutableV.Set(rVal.FieldByName(field))
+			}
+		}
+	}
+
 	return dest
 }
 
@@ -1200,6 +1216,7 @@ func (ka *LkkArray) CopyToMap(dest interface{}, resources ...interface{}) interf
 	if !isMap(dest) {
 		return nil
 	}
+	//https://studygolang.com/articles/21115
 
 	return nil
 }

@@ -36,6 +36,24 @@ type sOrganization struct {
 	Members    sPersons //成员
 }
 
+type userAccount struct {
+	ID       uint32 `json:"id"`
+	Status   bool   `json:"status"`
+	Type     uint8  `json:"type"`
+	Username string `json:"username"`
+	Nickname string `json:"nickname"`
+	Password string `json:"-"`
+	Avatar   string `json:"avatar"`
+}
+
+type userAccountJson struct {
+	ID       uint32 `json:"id"`
+	Type     uint8  `json:"type"`
+	Nickname string `json:"nickname"`
+	Avatar   string `json:"avatar"`
+	sPerson
+}
+
 //接口对象
 var itfObj itfType
 
