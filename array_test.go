@@ -5,6 +5,25 @@ import (
 	"testing"
 )
 
+func TestArray_CopyToStruct(t *testing.T) {
+	var acc userAccountJson
+	var res interface{}
+
+	//目标非结构体
+	res = KArr.CopyToStruct(ssSingle)
+	assert.Nil(t, res)
+
+	//没有复制源
+	res = KArr.CopyToStruct(acc)
+	assert.Equal(t, res, acc)
+
+	//正常
+	res = KArr.CopyToStruct(acc, account1, personMp6)
+	dumpPrint("--------------src:", personMp6, account1)
+	dumpPrint("==========res:", res, "888")
+
+}
+
 func TestArray_ArrayKeys(t *testing.T) {
 	defer func() {
 		r := recover()

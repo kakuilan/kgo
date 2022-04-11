@@ -66,6 +66,9 @@ var crowd sPersons
 //结构体-组织
 var orgS1 = new(sOrganization) //返回指针
 
+//结构体-用户账号
+var account1 userAccount
+
 //字典-普通人员
 var personMp1 = map[string]interface{}{"age": 20, "name": "test1", "naction": "us", "tel": "13712345678"}
 var personMp2 = map[string]interface{}{"age": 21, "name": "test2", "naction": "cn", "tel": "13712345679"}
@@ -840,6 +843,7 @@ func init() {
 	gofakeit.Struct(&personS3)
 	gofakeit.Struct(&personS4)
 	gofakeit.Struct(&personS5)
+	gofakeit.Struct(&account1)
 
 	crowd = append(crowd, personS1, personS2, personS3, personS4, personS5)
 

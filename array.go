@@ -1189,22 +1189,27 @@ func (ka *LkkArray) NewStrMapStr() map[string]string {
 // CopyToStruct 将resources的值拷贝到dest目标结构体;
 // 要求dest是结构体,resources为结构体或字典;若resources存在多个相同字段的元素,结果以最后的为准.
 func (ka *LkkArray) CopyToStruct(dest interface{}, resources ...interface{}) interface{} {
-	immutableV := reflect.ValueOf(&dest).Elem()
-	if immutableV.Kind() != reflect.Struct {
+	dv := reflect.ValueOf(dest)
+	if dv.Kind() != reflect.Struct {
 		return nil
 	}
 
 	var field string
+	immutableV := reflect.ValueOf(&dest).Elem()
+	dumpPrint("-----------dest:", dest)
+	dumpPrint("-----------immutableV:", immutableV.Kind())
 	immutableT := reflect.TypeOf(dest)
-	for resource, _ := range resources {
+	for _, resource := range resources {
 		rVal := reflect.ValueOf(resource)
 		rTyp := rVal.Type()
+		dumpPrint("----------------00:", resource, rVal.Kind())
 		switch rVal.Kind() {
 		case reflect.Map:
 			for _, k := range rVal.MapKeys() {
 				field = fmt.Sprintf("%s", k)
 				if _, ok := immutableT.FieldByName(field); ok {
-					immutableV.Set(rVal.MapIndex(k))
+					println("--------mf:", field)
+					immutableV.FieldByName(field).Set(rVal.MapIndex(k))
 				}
 			}
 			break
@@ -1212,7 +1217,8 @@ func (ka *LkkArray) CopyToStruct(dest interface{}, resources ...interface{}) int
 			for i := 0; i < rTyp.NumField(); i++ {
 				field = rTyp.Field(i).Name
 				if _, ok := immutableT.FieldByName(field); ok {
-					immutableV.Set(rVal.FieldByName(field))
+					println("--------sf:", field)
+					immutableV.FieldByName(field).Set(rVal.FieldByName(field))
 				}
 			}
 			break
