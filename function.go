@@ -360,6 +360,7 @@ func reflectPtr(r reflect.Value) (reflect.Value, bool) {
 	// 如果是指针,则获取其所指向的元素
 	if r.Kind() == reflect.Ptr {
 		r = r.Elem()
+		isPtr = true
 	}
 	return r, isPtr
 }
