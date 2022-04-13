@@ -365,6 +365,17 @@ func reflectFinalValue(r reflect.Value) (reflect.Value, bool) {
 	return r, isPtr
 }
 
+// reflectFinalType 获取反射的最终类型.
+func reflectFinalType(r reflect.Type) (reflect.Type, bool) {
+	var isPtr bool
+	// 如果是指针,则获取其所指向的元素
+	if r.Kind() == reflect.Ptr {
+		r = r.Elem()
+		isPtr = true
+	}
+	return r, isPtr
+}
+
 // reflect2Itf 将反射值转为接口(原值)
 func reflect2Itf(r reflect.Value) (res interface{}) {
 	switch r.Kind() {
