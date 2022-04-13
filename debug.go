@@ -65,7 +65,7 @@ func (kd *LkkDebug) Stacks(skip int) []byte {
 // GetCallName 获取调用的方法名称;f为目标方法;onlyFun为true时仅返回方法,不包括包名.
 func (kd *LkkDebug) GetCallName(f interface{}, onlyFun bool) string {
 	var fn *runtime.Func
-	r := reflectPtr(reflect.ValueOf(f))
+	r, _ := reflectFinalValue(reflect.ValueOf(f))
 	switch r.Kind() {
 	case reflect.Invalid:
 		// Skip this function, and fetch the PC and file for its parent
