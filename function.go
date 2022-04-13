@@ -64,13 +64,13 @@ func isMap(val interface{}) bool {
 
 // isStruct 检查变量是否结构体.
 func isStruct(val interface{}) bool {
-	r := reflectPtr(reflect.ValueOf(val))
+	r, _ := reflectPtr(reflect.ValueOf(val))
 	return r.Kind() == reflect.Struct
 }
 
 // isInterface 变量是否接口.
 func isInterface(val interface{}) bool {
-	r := reflectPtr(reflect.ValueOf(val))
+	r, _ := reflectPtr(reflect.ValueOf(val))
 	return r.Kind() == reflect.Invalid
 }
 
@@ -355,12 +355,13 @@ func arrayValues(arr interface{}, filterZero bool) []interface{} {
 }
 
 // reflectPtr 获取反射的指向.
-func reflectPtr(r reflect.Value) reflect.Value {
+func reflectPtr(r reflect.Value) (reflect.Value, bool) {
+	var isPtr bool
 	// 如果是指针,则获取其所指向的元素
 	if r.Kind() == reflect.Ptr {
 		r = r.Elem()
 	}
-	return r
+	return r, isPtr
 }
 
 // reflect2Itf 将反射值转为接口(原值)
