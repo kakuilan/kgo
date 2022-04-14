@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.2.7]- 2022-04-14
+
+#### Added
+
+- none
+
+#### Fixed
+
+- 修改`reflectTypesMap`,获取匿名字段
+
+#### Changed
+
+- none
+
+#### Removed
+
+- none
+
 ## [v0.2.6]- 2022-04-14
 
 #### Added
