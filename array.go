@@ -1186,39 +1186,63 @@ func (ka *LkkArray) NewStrMapStr() map[string]string {
 	return make(map[string]string)
 }
 
-// CopyToStruct 将resources的值拷贝到dest目标结构体;
-// 要求dest是结构体,resources为结构体或字典;若resources存在多个相同字段的元素,结果以最后的为准.
+// CopyToStruct 将resources的值拷贝到dest目标结构体,只简单核对字段名,无错误处理;
+// 要求dest必须是结构体指针,resources为结构体;若resources存在多个相同字段的元素,结果以最后的为准.
 func (ka *LkkArray) CopyToStruct(dest interface{}, resources ...interface{}) interface{} {
-	dv := reflect.ValueOf(dest)
-	if dv.Kind() != reflect.Struct {
+	dVal := reflect.ValueOf(dest)
+	dTyp := reflect.TypeOf(dest)
+
+	if dTyp.Kind() != reflect.Ptr {
+		println("-----------00:")
 		return nil
 	}
 
+	// dest是指针,需要.Elem()取得指针指向的value
+	dVal = dVal.Elem()
+	dTyp = dTyp.Elem()
+
+	// 非结构体
+	if dVal.Kind() != reflect.Struct {
+		dumpPrint("------------11:", dest)
+		return nil
+	}
+
+	//目标结构体可导出的字段
+	dFields := make(map[string]reflect.Type, dTyp.NumField())
+	println("-----------dFields:", dTyp.NumField())
+	for i := 0; i < dTyp.NumField(); i++ {
+		field := dTyp.Field(i)
+		if field.IsExported() {
+			dFields[field.Name] = field.Type
+		} else if field.Anonymous { //匿名字段
+			subVal, _ := reflectFinalValue(dVal.Field(i))
+			subTyp := subVal.Type()
+			println("-----------subField:", subTyp.NumField())
+			for j := 0; j < subTyp.NumField(); j++ {
+				subField := subTyp.Field(j)
+				if subField.IsExported() {
+					dFields[subField.Name] = subField.Type
+				}
+			}
+		}
+	}
+	dumpPrint("-----------map:", dFields)
+
 	var field string
-	immutableV := reflect.ValueOf(&dest).Elem()
-	dumpPrint("-----------dest:", dest)
-	dumpPrint("-----------immutableV:", immutableV.Kind())
-	immutableT := reflect.TypeOf(dest)
 	for _, resource := range resources {
 		rVal := reflect.ValueOf(resource)
 		rTyp := rVal.Type()
-		dumpPrint("----------------00:", resource, rVal.Kind())
+		if rTyp.Kind() == reflect.Ptr {
+			rVal = rVal.Elem()
+			rTyp = rTyp.Elem()
+		}
+
 		switch rVal.Kind() {
-		case reflect.Map:
-			for _, k := range rVal.MapKeys() {
-				field = fmt.Sprintf("%s", k)
-				if _, ok := immutableT.FieldByName(field); ok {
-					println("--------mf:", field)
-					immutableV.FieldByName(field).Set(rVal.MapIndex(k))
-				}
-			}
-			break
 		case reflect.Struct:
 			for i := 0; i < rTyp.NumField(); i++ {
 				field = rTyp.Field(i).Name
-				if _, ok := immutableT.FieldByName(field); ok {
-					println("--------sf:", field)
-					immutableV.FieldByName(field).Set(rVal.FieldByName(field))
+				if typ, ok := dFields[field]; ok {
+					dVal.FieldByName(field).Set(rVal.FieldByName(field).Convert(typ))
 				}
 			}
 			break

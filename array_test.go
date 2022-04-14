@@ -6,19 +6,24 @@ import (
 )
 
 func TestArray_CopyToStruct(t *testing.T) {
-	var acc userAccountJson
+	var acc1 userAccountJson
+	var acc2 = new(userAccountJson)
 	var res interface{}
 
+	//目标非指针
+	res = KArr.CopyToStruct(acc1)
+	assert.Nil(t, res)
+
 	//目标非结构体
-	res = KArr.CopyToStruct(ssSingle)
+	res = KArr.CopyToStruct(&ssSingle)
 	assert.Nil(t, res)
 
 	//没有复制源
-	res = KArr.CopyToStruct(acc)
-	assert.Equal(t, res, acc)
+	res = KArr.CopyToStruct(acc2)
+	assert.Equal(t, res, acc2)
 
 	//正常
-	res = KArr.CopyToStruct(acc, account1, personMp6)
+	res = KArr.CopyToStruct(acc2, account1, personMp6)
 	dumpPrint("--------------src:", personMp6, account1)
 	dumpPrint("==========res:", res, "888")
 
