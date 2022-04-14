@@ -5,30 +5,6 @@ import (
 	"testing"
 )
 
-func TestArray_CopyToStruct(t *testing.T) {
-	var acc1 userAccountJson
-	var acc2 = new(userAccountJson)
-	var res interface{}
-
-	//目标非指针
-	res = KArr.CopyToStruct(acc1)
-	assert.Nil(t, res)
-
-	//目标非结构体
-	res = KArr.CopyToStruct(&ssSingle)
-	assert.Nil(t, res)
-
-	//没有复制源
-	res = KArr.CopyToStruct(acc2)
-	assert.Equal(t, res, acc2)
-
-	//正常
-	res = KArr.CopyToStruct(acc2, account1, personMp6)
-	dumpPrint("--------------src:", personMp6, account1)
-	dumpPrint("==========res:", res, "888")
-
-}
-
 func TestArray_ArrayKeys(t *testing.T) {
 	defer func() {
 		r := recover()
@@ -1318,5 +1294,45 @@ func BenchmarkArray_NewStrMapStr(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KArr.NewStrMapStr()
+	}
+}
+
+func TestArray_CopyToStruct(t *testing.T) {
+	var acc1 userAccountJson
+	var acc2 = new(userAccountJson)
+	var res interface{}
+
+	//目标非指针
+	res = KArr.CopyToStruct(acc1)
+	assert.Nil(t, res)
+
+	//目标非结构体
+	res = KArr.CopyToStruct(&ssSingle)
+	assert.Nil(t, res)
+
+	//没有复制源
+	res = KArr.CopyToStruct(acc2)
+	assert.Equal(t, res, acc2)
+
+	//正常
+	res = KArr.CopyToStruct(acc2, account1, personS5)
+	user, ok := res.(*userAccountJson)
+	assert.NotEmpty(t, user)
+	assert.True(t, ok)
+	assert.Equal(t, user.ID, account1.ID)
+	assert.Equal(t, user.Type, account1.Type)
+	assert.Equal(t, user.Nickname, account1.Nickname)
+	assert.Equal(t, user.Avatar, account1.Avatar)
+	assert.Equal(t, user.Name, personS5.Name)
+	assert.Equal(t, user.Addr, personS5.Addr)
+	assert.Equal(t, user.Age, personS5.Age)
+	assert.Equal(t, user.Gender, personS5.Gender)
+}
+
+func BenchmarkLkkArray_CopyToStruct(b *testing.B) {
+	b.ResetTimer()
+	var acc = new(userAccountJson)
+	for i := 0; i < b.N; i++ {
+		KArr.CopyToStruct(acc, account1)
 	}
 }

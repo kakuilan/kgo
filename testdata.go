@@ -75,7 +75,6 @@ var personMp2 = map[string]interface{}{"age": 21, "name": "test2", "naction": "c
 var personMp3 = map[string]interface{}{"age": 22, "name": "test3", "naction": "en", "tel": "13712345670"}
 var personMp4 = map[string]interface{}{"age": 23, "name": "test4", "naction": "fr", "tel": "13712345671"}
 var personMp5 = map[string]interface{}{"age": 21, "name": "test5", "naction": "cn", "tel": "13712345672"}
-var personMp6 = map[string]interface{}{"Age": 28, "Name": "test6", "naction": "cn", "tel": "13712345673"}
 var personMps = []interface{}{personMp1, personMp2, personMp3, personMp4, personMp5}
 
 //字典-结构体人员

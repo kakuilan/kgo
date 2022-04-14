@@ -1186,47 +1186,29 @@ func (ka *LkkArray) NewStrMapStr() map[string]string {
 	return make(map[string]string)
 }
 
-// CopyToStruct 将resources的值拷贝到dest目标结构体,只简单核对字段名,无错误处理;
-// 要求dest必须是结构体指针,resources为结构体;若resources存在多个相同字段的元素,结果以最后的为准.
+// CopyToStruct 将resources的值拷贝到dest目标结构体;
+// 要求dest必须是结构体指针,resources为多个源结构体;若resources存在多个相同字段的元素,结果以最后的为准;
+// 只简单核对字段名,无错误处理,需开发自行检查dest和resources字段类型才可操作.
 func (ka *LkkArray) CopyToStruct(dest interface{}, resources ...interface{}) interface{} {
 	dVal := reflect.ValueOf(dest)
 	dTyp := reflect.TypeOf(dest)
 
 	if dTyp.Kind() != reflect.Ptr {
-		println("-----------00:")
 		return nil
 	}
 
-	// dest是指针,需要.Elem()取得指针指向的value
+	//dest是指针,需要.Elem()取得指针指向的value
 	dVal = dVal.Elem()
 	dTyp = dTyp.Elem()
 
 	// 非结构体
 	if dVal.Kind() != reflect.Struct {
-		dumpPrint("------------11:", dest)
 		return nil
 	}
 
 	//目标结构体可导出的字段
-	dFields := make(map[string]reflect.Type, dTyp.NumField())
-	println("-----------dFields:", dTyp.NumField())
-	for i := 0; i < dTyp.NumField(); i++ {
-		field := dTyp.Field(i)
-		if field.IsExported() {
-			dFields[field.Name] = field.Type
-		} else if field.Anonymous { //匿名字段
-			subVal, _ := reflectFinalValue(dVal.Field(i))
-			subTyp := subVal.Type()
-			println("-----------subField:", subTyp.NumField())
-			for j := 0; j < subTyp.NumField(); j++ {
-				subField := subTyp.Field(j)
-				if subField.IsExported() {
-					dFields[subField.Name] = subField.Type
-				}
-			}
-		}
-	}
-	dumpPrint("-----------map:", dFields)
+	var dFields = make(map[string]reflect.Type, dTyp.NumField())
+	reflectTypesMap(dTyp, dFields)
 
 	var field string
 	for _, resource := range resources {
