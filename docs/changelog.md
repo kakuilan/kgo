@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.2.6]- 2022-04-14
+
+#### Added
+
+- 新增`KArr.CopyToStruct`,拷贝结构体
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- none
+
+#### Removed
+
+- none
+
 ## [v0.2.5]- 2022-03-31
 
 #### Added
@@ -17,6 +35,8 @@ All notable changes to this project will be documented in this file.
 - none
 
 #### Removed
+
+- none
 
 ## [v0.2.4]- 2022-03-05
 
