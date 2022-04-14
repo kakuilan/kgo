@@ -380,7 +380,7 @@ func reflectFinalType(r reflect.Type) (reflect.Type, bool) {
 func reflectTypesMap(r reflect.Type, res map[string]reflect.Type) {
 	for i := 0; i < r.NumField(); i++ {
 		field := r.Field(i)
-		if field.IsExported() { //公开字段
+		if field.PkgPath == "" { //公开字段
 			res[field.Name] = field.Type
 		} else if field.Anonymous { //匿名字段
 			subTyp := r.Field(i).Type
