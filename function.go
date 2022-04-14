@@ -437,27 +437,6 @@ func structFields(obj interface{}, all bool) ([]reflect.StructField, error) {
 	return fs, nil
 }
 
-// structFieldMap 获取结构体的字段字典;all是否包含所有字段(包括未导出的).
-func structFieldMap(obj interface{}, all bool) (map[string]struct{}, error) {
-	v, e := structVal(obj)
-	if e != nil {
-		return nil, e
-	}
-	var m map[string]struct{}
-	var t = v.Type()
-	for i := 0; i < t.NumField(); i++ {
-		field := t.Field(i)
-		// 不能访问未导出的字段
-		if !all && field.PkgPath != "" {
-			continue
-		}
-
-		m[field.Name] = struct{}{}
-	}
-
-	return m, nil
-}
-
 // struct2Map 结构体转为字典;tagName为要导出的标签名,可以为空,为空时将导出所有字段.
 func struct2Map(obj interface{}, tagName string) (map[string]interface{}, error) {
 	v, e := structVal(obj)
