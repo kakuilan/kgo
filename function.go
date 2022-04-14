@@ -376,6 +376,19 @@ func reflectFinalType(r reflect.Type) (reflect.Type, bool) {
 	return r, isPtr
 }
 
+// reflectTypesMap 递归获取反射字段类型Map.
+func reflectTypesMap(r reflect.Type, res map[string]reflect.Type) {
+	for i := 0; i < r.NumField(); i++ {
+		field := r.Field(i)
+		if field.IsExported() { //公开字段
+			res[field.Name] = field.Type
+		} else if field.Anonymous { //匿名字段
+			subTyp := r.Field(i).Type
+			reflectTypesMap(subTyp, res)
+		}
+	}
+}
+
 // reflect2Itf 将反射值转为接口(原值)
 func reflect2Itf(r reflect.Value) (res interface{}) {
 	switch r.Kind() {
