@@ -2248,7 +2248,7 @@ func (ks *LkkString) AtWho(text string, minLen ...int) []string {
 
 // MatchEquations 匹配字符串中所有的等式.
 func (ks *LkkString) MatchEquations(str string) (res []string) {
-	res = RegEquation.FindAllString(equationStr03, -1)
+	res = RegEquation.FindAllString(str, -1)
 	return
 }
 
