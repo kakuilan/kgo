@@ -936,8 +936,7 @@ func BenchmarkConvert_Byte2Float64(b *testing.B) {
 }
 
 func TestConvert_Int64ToByte(t *testing.T) {
-	var res []byte
-	res = KConv.Int64ToByte(intAstronomicalUnit)
+	res := KConv.Int64ToByte(intAstronomicalUnit)
 	assert.NotEmpty(t, res)
 }
 
@@ -954,8 +953,7 @@ func TestConvert_Byte2Int64(t *testing.T) {
 		assert.NotEmpty(t, r)
 	}()
 
-	var res int64
-	res = KConv.Byte2Int64(bytAstronomicalUnit)
+	res := KConv.Byte2Int64(bytAstronomicalUnit)
 	assert.Equal(t, intAstronomicalUnit, res)
 
 	//不合法
@@ -1040,9 +1038,7 @@ func BenchmarkConvert_Hexs2Byte(b *testing.B) {
 }
 
 func TestConvert_Runes2Bytes(t *testing.T) {
-	var res []byte
-
-	res = KConv.Runes2Bytes(runesHello)
+	res := KConv.Runes2Bytes(runesHello)
 	assert.Equal(t, bytsHello, res)
 }
 

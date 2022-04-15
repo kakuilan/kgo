@@ -1,3 +1,4 @@
+//go:build linux || darwin
 // +build linux darwin
 
 package kgo
@@ -11,28 +12,19 @@ import (
 // IsReadable 路径是否可读.
 func (kf *LkkFile) IsReadable(fpath string) bool {
 	err := unix.Access(fpath, unix.R_OK)
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
 // IsWritable 路径是否可写.
 func (kf *LkkFile) IsWritable(fpath string) bool {
 	err := unix.Access(fpath, unix.W_OK)
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
 // IsExecutable 是否可执行文件.
 func (kf *LkkFile) IsExecutable(fpath string) bool {
 	err := unix.Access(fpath, unix.X_OK)
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
 // FormatPath 格式化路径.
