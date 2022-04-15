@@ -1268,9 +1268,7 @@ func BenchmarkArray_CutSlice(b *testing.B) {
 }
 
 func TestArray_NewStrMapItf(t *testing.T) {
-	var res map[string]interface{}
-
-	res = KArr.NewStrMapItf()
+	res := KArr.NewStrMapItf()
 	assert.NotNil(t, res)
 	assert.Empty(t, res)
 }

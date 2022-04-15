@@ -720,7 +720,7 @@ func (kf *LkkFile) Pathinfo(fpath string, option int) map[string]string {
 	if ((option & 4) == 4) || ((option & 8) == 8) {
 		basename := ""
 		if (option & 2) == 2 {
-			basename, _ = res["basename"]
+			basename = res["basename"]
 		} else {
 			basename = filepath.Base(fpath)
 		}
@@ -973,8 +973,7 @@ func (kf *LkkFile) UnTarGz(srcTar, dstDir string) (bool, error) {
 // ChmodBatch 批量改变路径权限模式(包括子目录和所属文件).
 // filemode为文件权限模式,dirmode为目录权限模式.
 func (kf *LkkFile) ChmodBatch(fpath string, filemode, dirmode os.FileMode) (res bool) {
-	var err error
-	err = filepath.Walk(fpath, func(fpath string, f os.FileInfo, err error) error {
+	err := filepath.Walk(fpath, func(fpath string, f os.FileInfo, err error) error {
 		if f == nil {
 			return err
 		}

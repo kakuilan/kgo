@@ -295,13 +295,10 @@ func shaXByte(str []byte, x uint16) []byte {
 	switch x {
 	case 1:
 		h = sha1.New()
-		break
 	case 256:
 		h = sha256.New()
-		break
 	case 512:
 		h = sha512.New()
-		break
 	default:
 		panic(fmt.Sprintf("[shaXByte]`x must be in [1, 256, 512]; but: %d", x))
 	}
