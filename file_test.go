@@ -280,9 +280,7 @@ func BenchmarkFile_IsWritable(b *testing.B) {
 }
 
 func TestFile_IsExecutable(t *testing.T) {
-	var res bool
-
-	res = KFile.IsExecutable(fileNone)
+	res := KFile.IsExecutable(fileNone)
 	assert.False(t, res)
 }
 
@@ -401,9 +399,7 @@ func BenchmarkFile_IsImg(b *testing.B) {
 }
 
 func TestFile_Mkdir(t *testing.T) {
-	var err error
-
-	err = KFile.Mkdir(dirNew, 0777)
+	err := KFile.Mkdir(dirNew, 0777)
 	assert.Nil(t, err)
 }
 

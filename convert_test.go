@@ -1375,9 +1375,7 @@ func TestConvert_ToInterfaces(t *testing.T) {
 		assert.Contains(t, r, "[arrayValues]`arr type must be")
 	}()
 
-	var res []interface{}
-
-	res = KConv.ToInterfaces(ssSingle)
+	res := KConv.ToInterfaces(ssSingle)
 	assert.NotNil(t, res)
 	assert.Equal(t, len(res), len(ssSingle))
 
