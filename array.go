@@ -1129,9 +1129,7 @@ func (ka *LkkArray) ArrayRand(arr interface{}, num int) []interface{} {
 		}
 	case reflect.Map:
 		var ks []reflect.Value
-		for _, k := range val.MapKeys() {
-			ks = append(ks, k)
-		}
+		ks = append(ks, val.MapKeys()...)
 		for i, v := range r.Perm(length) {
 			if i < num {
 				res[i] = val.MapIndex(ks[v]).Interface()
