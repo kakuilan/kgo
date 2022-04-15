@@ -393,7 +393,7 @@ func (ke *LkkEncrypt) aesDecrypt(cipherText, key []byte, mode string, paddingTyp
 
 	clen = len(originData)
 	if pt != PKCS_NONE && clen > 0 && int(originData[clen-1]) > clen {
-		return nil, errors.New(fmt.Sprintf("[aesDecrypt] [%s] decrypt failed", mode))
+		return nil, fmt.Errorf("[aesDecrypt] [%s] decrypt failed", mode)
 	}
 
 	var plainText []byte
