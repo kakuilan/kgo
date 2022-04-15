@@ -1281,9 +1281,7 @@ func BenchmarkArray_NewStrMapItf(b *testing.B) {
 }
 
 func TestArray_NewStrMapStr(t *testing.T) {
-	var res map[string]string
-
-	res = KArr.NewStrMapStr()
+	res := KArr.NewStrMapStr()
 	assert.NotNil(t, res)
 	assert.Empty(t, res)
 }

@@ -111,7 +111,7 @@ func (ke *LkkEncrypt) AuthCode(str, key []byte, encode bool, expiry int64) ([]by
 
 	// 密钥c用于变化生成的密文
 	var keyc []byte
-	if encode == false {
+	if !encode {
 		keyc = str[:DYNAMIC_KEY_LEN]
 	} else {
 		now, _ := time.Now().MarshalBinary()
@@ -126,7 +126,7 @@ func (ke *LkkEncrypt) AuthCode(str, key []byte, encode bool, expiry int64) ([]by
 	cryptkeyLen := len(cryptkey)
 	// 明文，前10位用来保存时间戳，解密时验证数据有效性，10到26位用来保存keyb(密钥b)，解密时会通过这个密钥验证数据完整性
 	// 如果是解码的话，会从第 DYNAMIC_KEY_LEN 位开始，因为密文前 DYNAMIC_KEY_LEN 位保存 动态密钥，以保证解密正确
-	if encode == false { //解密
+	if !encode { //解密
 		var err error
 		str, err = ke.Base64UrlDecode(str[DYNAMIC_KEY_LEN:])
 		if err != nil {
@@ -168,7 +168,7 @@ func (ke *LkkEncrypt) AuthCode(str, key []byte, encode bool, expiry int64) ([]by
 		// 从密钥簿得出密钥进行异或，再转成字符
 		resdata = append(resdata, byte(int(str[i])^box[(box[h]+box[j])%256]))
 	}
-	if encode == false { //解密
+	if !encode { //解密
 		// substr($result, 0, 10) == 0 验证数据有效性
 		// substr($result, 0, 10) - time() > 0 验证数据有效性
 		// substr($result, 10, 16) == substr(md5(substr($result, 26).$keyb), 0, 16) 验证数据完整性

@@ -904,8 +904,7 @@ func BenchmarkConvert_ToFloat(b *testing.B) {
 }
 
 func TestConvert_Float64ToByte(t *testing.T) {
-	var res []byte
-	res = KConv.Float64ToByte(flPi2)
+	res := KConv.Float64ToByte(flPi2)
 	assert.NotEmpty(t, res)
 }
 
@@ -922,9 +921,7 @@ func TestConvert_Byte2Float64(t *testing.T) {
 		assert.NotEmpty(t, r)
 	}()
 
-	var res float64
-
-	res = KConv.Byte2Float64(bytPi5)
+	res := KConv.Byte2Float64(bytPi5)
 	assert.Equal(t, flPi2, res)
 
 	//不合法
