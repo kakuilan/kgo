@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.2.8]- 2022-04-15
+
+#### Added
+
+- none
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- rename `KArr.CopyToStruct` to `KArr.CopyStruct`
+
+#### Removed
+
+- none
+
 ## [v0.2.7]- 2022-04-14
 
 #### Added
