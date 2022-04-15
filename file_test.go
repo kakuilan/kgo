@@ -957,10 +957,9 @@ func BenchmarkFile_SafeFileName(b *testing.B) {
 func TestFile_TarGzUnTarGz(t *testing.T) {
 	var res1, res2 bool
 	var err1, err2 error
-	var patterns []string
 
 	//打包
-	patterns = []string{".*.md", ".*.yml", ".*_test.go"}
+	patterns := []string{".*.md", ".*.yml", ".*_test.go"}
 	res1, err1 = KFile.TarGz(dirVendor, targzfile1, patterns...)
 	assert.True(t, res1)
 	assert.Nil(t, err1)

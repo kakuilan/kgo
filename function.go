@@ -1425,7 +1425,7 @@ func GetVariatePointerAddr(val interface{}) int64 {
 func IsPointer(val interface{}, notNil bool) (res bool) {
 	v := reflect.ValueOf(val)
 	if v.Kind() == reflect.Ptr {
-		if notNil == false || (notNil && val != nil) {
+		if !notNil || (notNil && val != nil) {
 			res = true
 		}
 	}

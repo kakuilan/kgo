@@ -1,3 +1,4 @@
+//go:build linux || darwin
 // +build linux darwin
 
 package kgo
@@ -8,14 +9,12 @@ import (
 )
 
 func TestFileUnix_IsReadable_Deny(t *testing.T) {
-	var res bool
-	res = KFile.IsReadable(rootDir)
+	res := KFile.IsReadable(rootDir)
 	assert.False(t, res)
 }
 
 func TestFileUnix_IsWritable_Deny(t *testing.T) {
-	var res bool
-	res = KFile.IsWritable(rootDir)
+	res := KFile.IsWritable(rootDir)
 	assert.False(t, res)
 }
 
