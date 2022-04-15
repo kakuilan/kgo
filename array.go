@@ -1186,10 +1186,10 @@ func (ka *LkkArray) NewStrMapStr() map[string]string {
 	return make(map[string]string)
 }
 
-// CopyToStruct 将resources的值拷贝到dest目标结构体;
+// CopyStruct 将resources的值拷贝到dest目标结构体;
 // 要求dest必须是结构体指针,resources为多个源结构体;若resources存在多个相同字段的元素,结果以最后的为准;
 // 只简单核对字段名,无错误处理,需开发自行检查dest和resources字段类型才可操作.
-func (ka *LkkArray) CopyToStruct(dest interface{}, resources ...interface{}) interface{} {
+func (ka *LkkArray) CopyStruct(dest interface{}, resources ...interface{}) interface{} {
 	dVal := reflect.ValueOf(dest)
 	dTyp := reflect.TypeOf(dest)
 
@@ -1219,15 +1219,13 @@ func (ka *LkkArray) CopyToStruct(dest interface{}, resources ...interface{}) int
 			rTyp = rTyp.Elem()
 		}
 
-		switch rVal.Kind() {
-		case reflect.Struct:
+		if rVal.Kind() == reflect.Struct {
 			for i := 0; i < rTyp.NumField(); i++ {
 				field = rTyp.Field(i).Name
 				if typ, ok := dFields[field]; ok {
 					dVal.FieldByName(field).Set(rVal.FieldByName(field).Convert(typ))
 				}
 			}
-			break
 		}
 	}
 

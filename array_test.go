@@ -1297,25 +1297,25 @@ func BenchmarkArray_NewStrMapStr(b *testing.B) {
 	}
 }
 
-func TestArray_CopyToStruct(t *testing.T) {
+func TestArray_CopyStruct(t *testing.T) {
 	var acc1 userAccountJson
 	var acc2 = new(userAccountJson)
 	var res interface{}
 
 	//目标非指针
-	res = KArr.CopyToStruct(acc1)
+	res = KArr.CopyStruct(acc1)
 	assert.Nil(t, res)
 
 	//目标非结构体
-	res = KArr.CopyToStruct(&ssSingle)
+	res = KArr.CopyStruct(&ssSingle)
 	assert.Nil(t, res)
 
 	//没有复制源
-	res = KArr.CopyToStruct(acc2)
+	res = KArr.CopyStruct(acc2)
 	assert.Equal(t, res, acc2)
 
 	//正常
-	res = KArr.CopyToStruct(acc2, account1, personS5)
+	res = KArr.CopyStruct(acc2, account1, personS5)
 	user, ok := res.(*userAccountJson)
 	assert.NotEmpty(t, user)
 	assert.True(t, ok)
@@ -1329,10 +1329,10 @@ func TestArray_CopyToStruct(t *testing.T) {
 	assert.Equal(t, user.Gender, personS5.Gender)
 }
 
-func BenchmarkLkkArray_CopyToStruct(b *testing.B) {
+func BenchmarkLkkArray_CopyStruct(b *testing.B) {
 	b.ResetTimer()
 	var acc = new(userAccountJson)
 	for i := 0; i < b.N; i++ {
-		KArr.CopyToStruct(acc, account1)
+		KArr.CopyStruct(acc, account1)
 	}
 }
