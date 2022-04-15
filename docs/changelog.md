@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.2.9]- 2022-04-15
+
+#### Added
+
+- none
+
+#### Fixed
+
+- 修复`KStr.MatchEquations`
+
+#### Changed
+
+- 优化`LkkEncrypt.aesDecrypt`
+
+#### Removed
+
+- none
+
 ## [v0.2.8]- 2022-04-15
 
 #### Added
