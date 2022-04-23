@@ -47,7 +47,7 @@ var datePatterns = []string{
 	"r", time.RFC1123Z,
 }
 
-// Time 获取当前Unix时间戳(秒,10位).
+// UnixTime 获取当前Unix时间戳(秒,10位).
 func (kt *LkkTime) UnixTime() int64 {
 	return time.Now().Unix()
 }
@@ -62,7 +62,7 @@ func (kt *LkkTime) MicroTime() int64 {
 	return time.Now().UnixNano() / int64(time.Microsecond)
 }
 
-// Str2Time 将字符串转换为时间结构.
+// Str2Timestruct 将字符串转换为时间结构.
 // str 为要转换的字符串;
 // format 为该字符串的格式,默认为"2006-01-02 15:04:05" .
 func (kt *LkkTime) Str2Timestruct(str string, format ...string) (time.Time, error) {
