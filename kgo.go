@@ -389,4 +389,33 @@ var (
 
 	// html抽取文本要排除的标签
 	textHtmlExcludeTags = []string{"head", "title", "img", "form", "textarea", "input", "select", "button", "iframe", "script", "style", "option"}
+
+	//弱密码
+	weakPasswords = []string{
+		"00000000000",
+		"01234567890",
+		"09876543210",
+		"11111111111",
+		"123123123123",
+		"1q2w3e4r5t",
+		"22222222222",
+		"31415926",
+		"66666666666",
+		"77777777777",
+		"88888888888",
+		"a123456789a",
+		"aaaaaaaaaaa",
+		"abc12345689",
+		"abcd1234567",
+		"asdasdasdasd",
+		"asdfghjkl",
+		"iloveyou",
+		"password",
+		"q1w2e3r4t5y6",
+		"qazwsxedc",
+		"qq123456qq",
+		"qqqqqqqqqq",
+		"qwertyuiop",
+		"zxcvbnm",
+	}
 )

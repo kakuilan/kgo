@@ -2268,3 +2268,78 @@ func (ks *LkkString) GetEquationValue(str, name string) (res string) {
 func (ks *LkkString) ToRunes(str string) []rune {
 	return str2Runes(str)
 }
+
+func (ks *LkkString) PasswordSafeLevel(str string) (res uint8) {
+	var scoreTotal, scoreNumber, scoreLower, scoreUpper, scoreSpecial int
+
+	leng := len(str)
+	if leng > 0 {
+		//根据长度加分
+		if leng >= 6 {
+			scoreTotal += leng
+		} else {
+			scoreTotal += 1
+		}
+
+		var repeatMap = make(map[rune]int)
+
+		//根据类型加分
+		for _, char := range str {
+			if _, ok := repeatMap[char]; ok {
+				repeatMap[char] += 1
+			} else {
+				repeatMap[char] = 1
+			}
+
+			if unicode.IsNumber(char) {
+				if scoreNumber == 0 {
+					scoreNumber = 3
+				} else {
+					scoreTotal += 1
+				}
+			} else if unicode.IsLower(char) {
+				if scoreLower == 0 {
+					scoreLower = 3
+				} else {
+					scoreTotal += 1
+				}
+			} else if unicode.IsUpper(char) {
+				if scoreUpper == 0 {
+					scoreUpper = 3
+				} else {
+					scoreTotal += 1
+				}
+			} else { //其他(特殊)字符
+				if scoreSpecial == 0 {
+					scoreSpecial = 6
+				} else {
+					scoreSpecial += 2
+				}
+			}
+		}
+
+		//重复性检查
+
+		if scoreTotal <= 0 { //极弱
+			res = 0
+		} else if scoreTotal <= 20 { //弱
+			res = 1
+		} else if scoreTotal <= 30 { //一般
+			res = 2
+		} else if scoreTotal <= 40 { //很好
+			res = 3
+		} else { //极佳
+			res = 4
+		}
+
+		//是否弱密码
+		for _, v := range weakPasswords {
+			if v == str || ks.Index(str, v, true) == 0 {
+				res = 1
+				break
+			}
+		}
+	}
+
+	return
+}
