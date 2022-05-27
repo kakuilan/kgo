@@ -2269,14 +2269,15 @@ func (ks *LkkString) ToRunes(str string) []rune {
 	return str2Runes(str)
 }
 
+// PasswordSafeLevel 检查密码安全等级;为0 极弱,为1 弱,为2 一般,为3 很好,为4 极佳.
 func (ks *LkkString) PasswordSafeLevel(str string) (res uint8) {
-	var scoreTotal, scoreNumber, scoreLower, scoreUpper, scoreSpecial int
+	length := len(str)
+	if length > 0 {
+		var scoreTotal, scoreAlphaNumber, scoreSpecial int
 
-	leng := len(str)
-	if leng > 0 {
 		//根据长度加分
-		if leng >= 6 {
-			scoreTotal += leng
+		if length >= 6 {
+			scoreTotal += length
 		} else {
 			scoreTotal += 1
 		}
@@ -2291,34 +2292,28 @@ func (ks *LkkString) PasswordSafeLevel(str string) (res uint8) {
 				repeatMap[char] = 1
 			}
 
-			if unicode.IsNumber(char) {
-				if scoreNumber == 0 {
-					scoreNumber = 3
-				} else {
-					scoreTotal += 1
-				}
-			} else if unicode.IsLower(char) {
-				if scoreLower == 0 {
-					scoreLower = 3
-				} else {
-					scoreTotal += 1
-				}
-			} else if unicode.IsUpper(char) {
-				if scoreUpper == 0 {
-					scoreUpper = 3
-				} else {
-					scoreTotal += 1
-				}
-			} else { //其他(特殊)字符
+			if !unicode.IsNumber(char) && !unicode.IsLower(char) && !unicode.IsUpper(char) { //其他(特殊)字符
 				if scoreSpecial == 0 {
 					scoreSpecial = 6
 				} else {
 					scoreSpecial += 2
 				}
+			} else {
+				if scoreAlphaNumber == 0 {
+					scoreAlphaNumber = 3
+				} else {
+					scoreTotal += 1
+				}
 			}
 		}
+		scoreTotal += scoreAlphaNumber + scoreSpecial
 
 		//重复性检查
+		for _, num := range repeatMap {
+			if num > 1 {
+				scoreTotal -= num * 2
+			}
+		}
 
 		if scoreTotal <= 0 { //极弱
 			res = 0

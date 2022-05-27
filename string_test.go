@@ -3449,3 +3449,31 @@ func BenchmarkString_ToRunes(b *testing.B) {
 		KStr.ToRunes(strHello)
 	}
 }
+
+func TestString_PasswordSafeLevel(t *testing.T) {
+	var tests = []struct {
+		str      string
+		expected uint8
+	}{
+		{"", 0},
+		{"12abc", 1},
+		{"1223456", 1},
+		{"abc123456", 1},
+		{"abc@123456", 2},
+		{"abc@123aPPT", 2},
+		{"tcl@123aPPT", 2},
+		{b64Hello, 3},
+		{"bom7o++iQ,B)aWxD>a?MkmXR9", 4},
+	}
+	for _, test := range tests {
+		actual := KStr.PasswordSafeLevel(test.str)
+		assert.Equal(t, actual, test.expected)
+	}
+}
+
+func BenchmarkString_PasswordSafeLevel(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = KStr.PasswordSafeLevel(b64Hello)
+	}
+}
