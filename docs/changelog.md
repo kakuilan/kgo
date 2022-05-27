@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.3.0]- 2022-05-27
+
+#### Added
+
+- 新增`KStr.PasswordSafeLevel`,检查密码安全等级
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- none
+
+#### Removed
+
+- none
+
 ## [v0.2.9]- 2022-04-15
 
 #### Added
