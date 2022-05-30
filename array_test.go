@@ -671,11 +671,15 @@ func TestArray_ArraySearchItem(t *testing.T) {
 	cond2 := map[string]interface{}{"Gender": false}
 	res = KArr.ArraySearchItem(perStuMps, cond2)
 
-	//空条件
-	cond3 := map[string]interface{}{}
+	cond3 := map[string]interface{}{"Gender": true}
 	res = KArr.ArraySearchItem(perStuMps, cond3)
+
+	//空条件
+	cond4 := map[string]interface{}{}
+	res = KArr.ArraySearchItem(perStuMps, cond4)
 	assert.Empty(t, res)
 
+	//异常
 	KArr.ArraySearchItem(strHello, map[string]interface{}{"a": 1})
 }
 

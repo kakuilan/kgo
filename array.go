@@ -684,24 +684,21 @@ func (ka *LkkArray) ArraySearchItem(arr interface{}, condition map[string]interf
 		panic("[ArraySearchItem]`arr type must be array|slice|map; but : " + typ.String())
 	}
 
-	// 条件为空
-	if len(condition) == 0 {
-		return
-	}
-
-	switch typ {
-	case reflect.Array, reflect.Slice:
-		for i := 0; i < val.Len(); i++ {
-			res = compareConditionMap(condition, val.Index(i).Interface())
-			if res != nil {
-				return
+	if len(condition) > 0 {
+		switch typ {
+		case reflect.Array, reflect.Slice:
+			for i := 0; i < val.Len(); i++ {
+				res = compareConditionMap(condition, val.Index(i).Interface())
+				if res != nil {
+					return
+				}
 			}
-		}
-	case reflect.Map:
-		for _, k := range val.MapKeys() {
-			res = compareConditionMap(condition, val.MapIndex(k).Interface())
-			if res != nil {
-				return
+		case reflect.Map:
+			for _, k := range val.MapKeys() {
+				res = compareConditionMap(condition, val.MapIndex(k).Interface())
+				if res != nil {
+					return
+				}
 			}
 		}
 	}
