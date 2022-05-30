@@ -716,6 +716,15 @@ func TestArray_ArraySearchMutil(t *testing.T) {
 	cond2 := map[string]interface{}{"Gender": false}
 	res = KArr.ArraySearchMutil(perStuMps, cond2)
 
+	cond3 := map[string]interface{}{"Gender": true}
+	res = KArr.ArraySearchMutil(perStuMps, cond3)
+
+	//空条件
+	cond4 := map[string]interface{}{}
+	res = KArr.ArraySearchMutil(perStuMps, cond4)
+	assert.Empty(t, res)
+
+	//异常
 	KArr.ArraySearchMutil(strHello, map[string]interface{}{"a": 1})
 }
 

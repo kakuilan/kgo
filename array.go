@@ -715,25 +715,22 @@ func (ka *LkkArray) ArraySearchMutil(arr interface{}, condition map[string]inter
 		panic("[ArraySearchMutil]`arr type must be array|slice|map; but : " + typ.String())
 	}
 
-	// 条件为空
-	if len(condition) == 0 {
-		return
-	}
-
-	var item interface{}
-	switch typ {
-	case reflect.Array, reflect.Slice:
-		for i := 0; i < val.Len(); i++ {
-			item = compareConditionMap(condition, val.Index(i).Interface())
-			if item != nil {
-				res = append(res, item)
+	if len(condition) > 0 {
+		var item interface{}
+		switch typ {
+		case reflect.Array, reflect.Slice:
+			for i := 0; i < val.Len(); i++ {
+				item = compareConditionMap(condition, val.Index(i).Interface())
+				if item != nil {
+					res = append(res, item)
+				}
 			}
-		}
-	case reflect.Map:
-		for _, k := range val.MapKeys() {
-			item = compareConditionMap(condition, val.MapIndex(k).Interface())
-			if item != nil {
-				res = append(res, item)
+		case reflect.Map:
+			for _, k := range val.MapKeys() {
+				item = compareConditionMap(condition, val.MapIndex(k).Interface())
+				if item != nil {
+					res = append(res, item)
+				}
 			}
 		}
 	}
