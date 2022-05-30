@@ -979,6 +979,7 @@ func TestArray_InArray(t *testing.T) {
 
 	var res bool
 
+	//查找数组
 	res = KArr.InArray(9, naturalArr)
 	assert.True(t, res)
 
@@ -988,6 +989,11 @@ func TestArray_InArray(t *testing.T) {
 	res = KArr.InArray(personMp3, crowd)
 	assert.False(t, res)
 
+	//查找字典
+	res = KArr.InArray(20, personMp1)
+	assert.True(t, res)
+
+	//异常
 	KArr.InArray(9, strHello)
 }
 
