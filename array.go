@@ -995,10 +995,7 @@ func (ka *LkkArray) ArrayFlip(arr interface{}) map[interface{}]interface{} {
 // ss是元素为数组/切片的切片.
 func (ka *LkkArray) MergeSlice(filterZero bool, ss ...interface{}) []interface{} {
 	var res []interface{}
-	switch len(ss) {
-	case 0:
-		break
-	default:
+	if len(ss) > 0 {
 		n := 0
 		for i, v := range ss {
 			chkLen := lenArrayOrSlice(v, 3)
