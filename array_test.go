@@ -1209,6 +1209,10 @@ func TestArray_ArrayRand(t *testing.T) {
 	//字典
 	res = KArr.ArrayRand(strMp1, 3)
 	assert.Equal(t, 3, len(res))
+
+	//长度
+	res = KArr.ArrayRand(ssSingle, 90)
+	assert.Equal(t, 11, len(res))
 }
 
 func TestArray_Panic_Arr(t *testing.T) {
