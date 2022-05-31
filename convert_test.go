@@ -1018,7 +1018,7 @@ func BenchmarkConvert_Hex2Byte(b *testing.B) {
 	}
 }
 
-func (t *testing.T) {
+func TestConvert_Hexs2Byte(t *testing.T) {
 	var res []byte
 
 	bs := KConv.Byte2Hexs(bytsHello)
