@@ -1346,6 +1346,20 @@ func TestArray_CopyStruct(t *testing.T) {
 	assert.Equal(t, user.Addr, personS5.Addr)
 	assert.Equal(t, user.Age, personS5.Age)
 	assert.Equal(t, user.Gender, personS5.Gender)
+
+	//引用
+	res = KArr.CopyStruct(acc2, &account1, &personS5)
+	user, ok = res.(*userAccountJson)
+	assert.NotEmpty(t, user)
+	assert.True(t, ok)
+	assert.Equal(t, user.ID, account1.ID)
+	assert.Equal(t, user.Type, account1.Type)
+	assert.Equal(t, user.Nickname, account1.Nickname)
+	assert.Equal(t, user.Avatar, account1.Avatar)
+	assert.Equal(t, user.Name, personS5.Name)
+	assert.Equal(t, user.Addr, personS5.Addr)
+	assert.Equal(t, user.Age, personS5.Age)
+	assert.Equal(t, user.Gender, personS5.Gender)
 }
 
 func BenchmarkLkkArray_CopyStruct(b *testing.B) {
