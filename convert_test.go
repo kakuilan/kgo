@@ -1018,14 +1018,18 @@ func BenchmarkConvert_Hex2Byte(b *testing.B) {
 	}
 }
 
-func TestConvert_Hexs2Byte(t *testing.T) {
+func (t *testing.T) {
 	var res []byte
 
 	bs := KConv.Byte2Hexs(bytsHello)
 	res = KConv.Hexs2Byte(bs)
 	assert.Equal(t, strHello, string(res))
 
-	res = KConv.Byte2Hexs([]byte{})
+	res = KConv.Hexs2Byte([]byte{})
+	assert.Empty(t, res)
+
+	//非16进制
+	res = KConv.Hexs2Byte([]byte(utf8Hello))
 	assert.Empty(t, res)
 }
 
