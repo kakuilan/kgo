@@ -1029,10 +1029,7 @@ func (ka *LkkArray) MergeSlice(filterZero bool, ss ...interface{}) []interface{}
 // ss是元素为字典的切片.
 func (ka *LkkArray) MergeMap(ss ...interface{}) map[interface{}]interface{} {
 	res := make(map[interface{}]interface{})
-	switch len(ss) {
-	case 0:
-		break
-	default:
+	if len(ss) > 0 {
 		for i, v := range ss {
 			val := reflect.ValueOf(v)
 			switch val.Kind() {
@@ -1045,6 +1042,7 @@ func (ka *LkkArray) MergeMap(ss ...interface{}) map[interface{}]interface{} {
 			}
 		}
 	}
+
 	return res
 }
 
