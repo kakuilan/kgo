@@ -113,6 +113,10 @@ func TestEncrypt_AuthCode(t *testing.T) {
 	res, exp = KEncr.AuthCode(bytsHello, bytEmpty, true, 0)
 	assert.NotEmpty(t, res)
 
+	//解密校验
+	res2, exp = KEncr.AuthCode([]byte(strSha512), bytSpeedLight, false, 0)
+	assert.Empty(t, res2)
+
 	//不合法
 	KEncr.AuthCode([]byte("7caeNfPt/N1zHdj5k/7i7pol6NHsVs0Cji7c15h4by1RYcrBoo7EEw=="), bytSpeedLight, false, 0)
 	KEncr.AuthCode([]byte("7caeNfPt/N1zHdj5k/7i7pol6N"), bytSpeedLight, false, 0)
