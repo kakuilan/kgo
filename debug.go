@@ -28,16 +28,17 @@ func (kd *LkkDebug) DumpStacks() {
 // Stacks 获取堆栈信息;skip为要跳过的帧数.
 func (kd *LkkDebug) Stacks(skip int) []byte {
 	buf := new(bytes.Buffer)
-	var lines [][]byte
 	var lastFile string
 
 	//获取第N行的内容
 	var sourceLine = func(lines [][]byte, n int) []byte {
 		n-- // in stack trace, lines are 1-indexed but our array is 0-indexed
-		if n < 0 || n >= len(lines) {
-			return bytDunno
+		var res []byte = bytDunno
+		if n >= 0 && n < len(lines) {
+			res = bytes.TrimSpace(lines[n])
 		}
-		return bytes.TrimSpace(lines[n])
+
+		return res
 	}
 
 	for i := skip; ; i++ {
@@ -47,13 +48,13 @@ func (kd *LkkDebug) Stacks(skip int) []byte {
 		}
 
 		_, _ = fmt.Fprintf(buf, "%s:%d (0x%x)\n", file, line, pc)
+		var lines [][]byte
 		if file != lastFile {
 			data, err := ioutil.ReadFile(file)
-			if err != nil {
-				continue
+			if err == nil {
+				lines = bytes.Split(data, bytLinefeed)
+				lastFile = file
 			}
-			lines = bytes.Split(data, bytLinefeed)
-			lastFile = file
 		}
 		_, _ = fmt.Fprintf(buf, "\t%s: %s\n", kd.GetCallName(pc, true), sourceLine(lines, line))
 	}
