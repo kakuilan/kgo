@@ -21,6 +21,7 @@ import (
 // SystemInfo 系统信息
 type SystemInfo struct {
 	ServerName   string  `json:"server_name"`    //服务器名称
+	SystemArch   string  `json:"system_arch"`    //系统架构
 	SystemOs     string  `json:"system_os"`      //操作系统名称
 	Runtime      uint64  `json:"run_time"`       //服务运行时间,纳秒
 	Uptime       uint64  `json:"up_time"`        //操作系统运行时间,秒
@@ -551,6 +552,7 @@ func (ko *LkkOS) GetSystemInfo() *SystemInfo {
 
 	return &SystemInfo{
 		ServerName:   serverName,
+		SystemArch:   runtime.GOARCH,
 		SystemOs:     runtime.GOOS,
 		Runtime:      uint64(KTime.ServiceUptime()),
 		Uptime:       uptime,
