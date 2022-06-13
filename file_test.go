@@ -308,7 +308,12 @@ func TestFile_IsLink(t *testing.T) {
 	res = KFile.IsLink(fileLink)
 	assert.True(t, res)
 
+	//非链接
 	res = KFile.IsLink(changLog)
+	assert.False(t, res)
+
+	//不存在
+	res = KFile.IsLink(fileNone)
 	assert.False(t, res)
 }
 

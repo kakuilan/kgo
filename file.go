@@ -202,12 +202,13 @@ func (kf *LkkFile) IsExist(fpath string) bool {
 
 // IsLink 是否链接文件(软链接,且存在).
 func (kf *LkkFile) IsLink(fpath string) bool {
+	var res bool
 	f, err := os.Lstat(fpath)
-	if err != nil {
-		return false
+	if err == nil {
+		res = f.Mode()&os.ModeSymlink == os.ModeSymlink
 	}
 
-	return f.Mode()&os.ModeSymlink == os.ModeSymlink
+	return res
 }
 
 // IsFile 是否(某类型)文件,且存在.
