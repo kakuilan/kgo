@@ -153,21 +153,17 @@ func (kf *LkkFile) GetMime(fpath string, fast bool) string {
 	var res string
 	if fast {
 		suffix := filepath.Ext(fpath)
-		//当unix系统中没有相关的mime.types文件时,将返回空
+		//若unix系统中没有相关的mime.types文件时,将返回空
 		res = mime.TypeByExtension(suffix)
 	} else {
 		srcFile, err := os.Open(fpath)
-		if err != nil {
-			return res
+		if err == nil {
+			buffer := make([]byte, 512)
+			_, err = srcFile.Read(buffer)
+			if err == nil {
+				res = http.DetectContentType(buffer)
+			}
 		}
-
-		buffer := make([]byte, 512)
-		_, err = srcFile.Read(buffer)
-		if err != nil {
-			return res
-		}
-
-		res = http.DetectContentType(buffer)
 	}
 
 	return res

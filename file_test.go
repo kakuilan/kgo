@@ -171,6 +171,12 @@ func TestFile_GetMime(t *testing.T) {
 		assert.NotEmpty(t, res)
 	}
 
+	res = KFile.GetMime(imgJpg, true)
+
+	//空文件
+	res = KFile.GetMime(gitkeep, false)
+	assert.Empty(t, res)
+
 	//不存在的文件
 	res = KFile.GetMime(fileNone, true)
 	assert.Empty(t, res)
