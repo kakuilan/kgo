@@ -380,6 +380,10 @@ func TestFile_IsBinary(t *testing.T) {
 
 	res = KFile.IsBinary(imgPng)
 	assert.True(t, res)
+
+	//不存在
+	res = KFile.IsBinary(fileNone)
+	assert.False(t, res)
 }
 
 func BenchmarkFile_IsBinary(b *testing.B) {

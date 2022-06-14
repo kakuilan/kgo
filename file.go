@@ -261,11 +261,8 @@ func (kf *LkkFile) IsDir(fpath string) bool {
 // IsBinary 是否二进制文件(且存在).
 func (kf *LkkFile) IsBinary(fpath string) bool {
 	cont, err := kf.ReadFile(fpath)
-	if err != nil {
-		return false
-	}
 
-	return isBinary(string(cont))
+	return err == nil && isBinary(string(cont))
 }
 
 // IsImg 是否图片文件(仅检查后缀).
