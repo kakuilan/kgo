@@ -283,15 +283,13 @@ func (kf *LkkFile) Mkdir(fpath string, mode os.FileMode) error {
 
 // AbsPath 获取绝对路径,path可允许不存在.
 func (kf *LkkFile) AbsPath(fpath string) string {
-	fullPath := ""
 	res, err := filepath.Abs(fpath) // filepath.Abs最终使用到os.Getwd()检查
+	println("00000999999999--", err)
 	if err != nil {
-		fullPath = filepath.Clean(filepath.Join(`/`, fpath))
-	} else {
-		fullPath = res
+		res = filepath.Clean(filepath.Join(`/`, fpath))
 	}
 
-	return fullPath
+	return res
 }
 
 // RealPath 返回规范化的真实绝对路径名.path必须存在,若路径不存在则返回空字符串.

@@ -838,12 +838,12 @@ var tesEmoji1 = `Lorem ipsum 🥊dolor 🤒sit amet, consectetur adipiscing 🍂
 var tesEmoji2 = `Hi!😀👽😀☂❤华み원❤This is a string 😄 🐷 with some 👍🏻 🙈 emoji! 🐷 🏃🏿‍♂️`
 
 func init() {
-	gofakeit.Struct(&personS1)
-	gofakeit.Struct(&personS2)
-	gofakeit.Struct(&personS3)
-	gofakeit.Struct(&personS4)
-	gofakeit.Struct(&personS5)
-	gofakeit.Struct(&account1)
+	_ = gofakeit.Struct(&personS1)
+	_ = gofakeit.Struct(&personS2)
+	_ = gofakeit.Struct(&personS3)
+	_ = gofakeit.Struct(&personS4)
+	_ = gofakeit.Struct(&personS5)
+	_ = gofakeit.Struct(&account1)
 
 	crowd = append(crowd, personS1, personS2, personS3, personS4, personS5)
 
