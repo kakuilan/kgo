@@ -449,6 +449,7 @@ func TestFile_RealPath(t *testing.T) {
 	res = KFile.RealPath(fileMd)
 	assert.NotEmpty(t, res)
 
+	//不存在的路径
 	res = KFile.RealPath(fileNone)
 	assert.Empty(t, res)
 }
