@@ -285,7 +285,7 @@ func (kf *LkkFile) Mkdir(fpath string, mode os.FileMode) error {
 func (kf *LkkFile) AbsPath(fpath string) string {
 	res, err := filepath.Abs(fpath) // filepath.Abs最终使用到os.Getwd()检查
 	if err != nil {
-		res = filepath.Clean(filepath.Join(`/`, fpath))
+		res = filepath.Clean(filepath.Join(string(os.PathSeparator), fpath))
 	}
 
 	return res

@@ -434,6 +434,19 @@ func TestFile_AbsPath(t *testing.T) {
 
 	res = KFile.AbsPath(fileNone)
 	assert.NotEmpty(t, res)
+
+	//空路径
+	res = KFile.AbsPath("")
+	assert.NotEmpty(t, res)
+
+	//windows下
+	var bt = string(bytAstronomicalUnit)
+	res = KFile.AbsPath(bt)
+	assert.NotEmpty(t, res)
+	if KOS.IsWindows() {
+		chk := KStr.StartsWith(res, "\\", false)
+		assert.True(t, chk)
+	}
 }
 
 func BenchmarkFile_AbsPath(b *testing.B) {
