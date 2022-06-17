@@ -465,12 +465,19 @@ func TestFile_TouchRenameUnlink(t *testing.T) {
 	var res bool
 	var err error
 
+	//创建不存在的文件
 	res = KFile.Touch(touchfile, 2097152)
 	assert.True(t, res)
 
+	//创建已存在的文件
+	res = KFile.Touch(fileGitkee, 256)
+	assert.False(t, res)
+
+	//重命名
 	err = KFile.Rename(touchfile, renamefile)
 	assert.Nil(t, err)
 
+	//删除
 	err = KFile.Unlink(renamefile)
 	assert.Nil(t, err)
 }

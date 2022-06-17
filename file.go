@@ -307,28 +307,29 @@ func (kf *LkkFile) RealPath(fpath string) string {
 	return res
 }
 
-// Touch 快速创建指定大小的文件,size为字节.
-func (kf *LkkFile) Touch(fpath string, size int64) bool {
-	//创建目录
-	destDir := filepath.Dir(fpath)
-	if err := os.MkdirAll(destDir, 0777); err != nil {
-		return false
+// Touch 快速创建指定大小的文件,fpath为文件路径,size为字节.
+func (kf *LkkFile) Touch(fpath string, size int64) (res bool) {
+	//检查文件是否存在
+	if !kf.IsExist(fpath) {
+		//创建目录
+		destDir := filepath.Dir(fpath)
+		err := os.MkdirAll(destDir, 0766)
+		if err == nil {
+			fd, err := os.OpenFile(fpath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0766)
+			defer func() {
+				_ = fd.Close()
+			}()
+			if err == nil {
+				res = true
+				if size > 1 {
+					_, _ = fd.Seek(size-1, 0)
+					_, _ = fd.Write([]byte{0})
+				}
+			}
+		}
 	}
 
-	fd, err := os.OpenFile(fpath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0777)
-	if err != nil {
-		return false
-	}
-	defer func() {
-		_ = fd.Close()
-	}()
-
-	if size > 1 {
-		_, _ = fd.Seek(size-1, 0)
-		_, _ = fd.Write([]byte{0})
-	}
-
-	return true
+	return
 }
 
 // Rename 重命名(或移动)文件/目录.
