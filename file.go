@@ -342,7 +342,7 @@ func (kf *LkkFile) Unlink(fpath string) error {
 	return os.Remove(fpath)
 }
 
-// CopyFile 拷贝源文件到目标文件,cover为枚举(FILE_COVER_ALLOW、FILE_COVER_IGNORE、FILE_COVER_DENY).
+// CopyFile 拷贝source源文件到dest目标文件,cover为是否覆盖,枚举值(FILE_COVER_ALLOW、FILE_COVER_IGNORE、FILE_COVER_DENY).
 func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int64, error) {
 	if source == dest {
 		return 0, nil
@@ -351,10 +351,11 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 	sourceStat, err := os.Stat(source)
 	if err != nil {
 		return 0, err
-	} else if !sourceStat.Mode().IsRegular() {
+	} else if !sourceStat.Mode().IsRegular() { //是否普通文件
 		return 0, fmt.Errorf("[CopyFile]`source %s is not a regular file", source)
 	}
 
+	//非覆盖模式
 	if cover != FILE_COVER_ALLOW {
 		if _, err := os.Stat(dest); err == nil {
 			if cover == FILE_COVER_IGNORE {

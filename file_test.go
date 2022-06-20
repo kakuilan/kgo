@@ -527,6 +527,10 @@ func TestFile_CopyFile(t *testing.T) {
 	var res int64
 	var err error
 
+	//源文件不存在
+	res, err = KFile.CopyFile(fileNone, imgCopy, FILE_COVER_IGNORE)
+	assert.NotNil(t, err)
+
 	//忽略已存在的
 	res, err = KFile.CopyFile(imgPng, imgCopy, FILE_COVER_IGNORE)
 	assert.Nil(t, err)
