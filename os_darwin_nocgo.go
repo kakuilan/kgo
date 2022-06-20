@@ -22,20 +22,20 @@ func (ko *LkkOS) CpuUsage() (user, idle, total uint64) {
 func getProcessPathByPid(pid int) (res string) {
 	lsof, err := exec.LookPath("lsof")
 	if err != nil {
-		return
+		return ""
 	}
 	command := fmt.Sprintf("%s -p %d -Fpfn", lsof, pid)
-	_, out, _ = KOS.System(command)
+	_, out, _ := KOS.System(command)
 	txtFound := 0
 	lines := strings.Split(string(out), "\n")
 	for i := 1; i < len(lines); i++ {
 		if lines[i] == "ftxt" {
 			txtFound++
 			if txtFound == 2 {
-				return lines[i-1][1:], nil
+				return lines[i-1][1:]
 			}
 		}
 	}
 
-	return
+	return ""
 }
