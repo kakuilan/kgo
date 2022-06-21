@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.3.1]- 2022-06-21
+
+#### Added
+
+- none
+
+#### Fixed
+
+- 修复`KFile.Touch`,创建文件前检查文件是否存在
+- 修复非cgo的darwin下`KOS.GetProcessExecPath`编译失败问题
+
+#### Changed
+
+- `SystemInfo`系统信息结构体增加`SystemArch`字段
+
+#### Removed
+
+- none
+
 ## [v0.3.0]- 2022-05-27
 
 #### Added
