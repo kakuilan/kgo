@@ -1122,12 +1122,14 @@ func TestConvert_IsInt(t *testing.T) {
 		expected bool
 	}{
 		{intSpeedLight, true},
-		{flPi1, false},
 		{strSpeedLight, true},
 		{tesStr42, true},
+		{flPi1, false},
 		{strPi6, false},
 		{strHello, false},
+		{strHelloHex, false},
 		{crowd, false},
+		{tesStr17, false},
 		{"", false},
 	}
 	for _, test := range tests {
