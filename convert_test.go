@@ -1148,12 +1148,17 @@ func TestConvert_IsFloat(t *testing.T) {
 		input    interface{}
 		expected bool
 	}{
-		{intSpeedLight, false},
 		{flPi1, true},
-		{strSpeedLight, false},
 		{strPi6, true},
+		{tesStr44, true},
+		{tesStr45, true},
+		{intSpeedLight, false},
+		{strSpeedLight, false},
 		{strHello, false},
 		{crowd, false},
+		{tesStr17, false},
+		{tesStr21, false},
+		{tesStr43, false},
 		{"", false},
 	}
 	for _, test := range tests {

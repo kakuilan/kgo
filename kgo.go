@@ -191,7 +191,7 @@ const (
 	PATTERN_WORD = "^[a-zA-Z0-9\u4e00-\u9fa5][a-zA-Z0-9_\u4e00-\u9fa5]+$"
 
 	// 正则模式-浮点数
-	PATTERN_FLOAT = `^(-?\d+)(\.\d+)`
+	PATTERN_FLOAT = `^([+-]?\d+)(\.\d+)$`
 
 	// 正则模式-邮箱
 	PATTERN_EMAIL = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"

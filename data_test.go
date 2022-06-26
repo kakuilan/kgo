@@ -200,6 +200,9 @@ var tesStr39 = "中国"
 var tesStr40 = "中华人民共和国"
 var tesStr41 = "中华"
 var tesStr42 = "000000"
+var tesStr43 = "3.0.504"
+var tesStr44 = "-3.14159"
+var tesStr45 = "+3.14159"
 
 //中文名
 var tesChineseName1 = "李四"
