@@ -199,6 +199,7 @@ var tesStr38 = "The quick brown fox jumped over the lazy dog"
 var tesStr39 = "中国"
 var tesStr40 = "中华人民共和国"
 var tesStr41 = "中华"
+var tesStr42 = "000000"
 
 //中文名
 var tesChineseName1 = "李四"

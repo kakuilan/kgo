@@ -1124,6 +1124,7 @@ func TestConvert_IsInt(t *testing.T) {
 		{intSpeedLight, true},
 		{flPi1, false},
 		{strSpeedLight, true},
+		{tesStr42, true},
 		{strPi6, false},
 		{strHello, false},
 		{crowd, false},
