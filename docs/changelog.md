@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.3.2]- 2022-06-26
+
+#### Added
+
+- none
+
+#### Fixed
+
+- 修复`KConv.IsFloat`
+
+#### Changed
+
+- none
+
+#### Removed
+
+- none
+
 ## [v0.3.1]- 2022-06-21
 
 #### Added
