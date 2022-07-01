@@ -414,7 +414,7 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 		nBytes, err = io.Copy(destFile, sourceFile)
 	}
 
-	if err == nil {
+	if err == nil || err == io.EOF {
 		err = os.Chmod(dest, sourceStat.Mode())
 	}
 
