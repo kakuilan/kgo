@@ -555,7 +555,9 @@ func TestFile_CopyFile(t *testing.T) {
 
 	//目标路径无权限
 	res, err = KFile.CopyFile(imgPng, rootFile1, FILE_COVER_ALLOW)
-	assert.NotNil(t, err)
+	if KOS.IsLinux() {
+		assert.NotNil(t, err)
+	}
 
 	//拷贝大文件
 	KFile.Touch(touchfile, 2097152)
