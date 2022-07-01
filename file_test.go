@@ -535,11 +535,16 @@ func TestFile_CopyFile(t *testing.T) {
 	res, err = KFile.CopyFile(imgPng, imgCopy, FILE_COVER_IGNORE)
 	assert.Nil(t, err)
 
-	//覆盖已存在的
+	//覆盖已存在的-允许
 	res, err = KFile.CopyFile(imgPng, imgCopy, FILE_COVER_ALLOW)
 	assert.Greater(t, res, int64(0))
 
-	//禁止覆盖
+	//覆盖已存在的-忽略
+	res, err = KFile.CopyFile(imgPng, imgCopy, FILE_COVER_IGNORE)
+	assert.Nil(t, err)
+	assert.Equal(t, int64(0), res)
+
+	//覆盖已存在的-拒绝
 	res, err = KFile.CopyFile(imgPng, imgCopy, FILE_COVER_DENY)
 	assert.NotNil(t, err)
 
@@ -547,6 +552,10 @@ func TestFile_CopyFile(t *testing.T) {
 	res, err = KFile.CopyFile(imgPng, imgPng, FILE_COVER_ALLOW)
 	assert.Equal(t, int64(0), res)
 	assert.Nil(t, err)
+
+	//目标路径无权限
+	res, err = KFile.CopyFile(imgPng, rootFile1, FILE_COVER_ALLOW)
+	assert.NotNil(t, err)
 
 	//拷贝大文件
 	KFile.Touch(touchfile, 2097152)

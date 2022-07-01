@@ -391,7 +391,7 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 	var nBytes int64
 	sourceSize := sourceStat.Size()
 	if sourceSize <= 1048576 { //1M以内小文件使用buffer拷贝
-		var total int
+		var total, num int
 		var bufferSize int = 102400
 		if sourceSize < 524288 {
 			bufferSize = 51200
@@ -399,25 +399,23 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 
 		buf := make([]byte, bufferSize)
 		for {
-			n, err := sourceFile.Read(buf)
-			if err != nil && err != io.EOF {
-				return int64(total), err
-			} else if n == 0 {
+			num, err = sourceFile.Read(buf)
+			if err == nil && num > 0 {
+				total += num
+				_, err = destFile.Write(buf[:num])
+			}
+
+			if num == 0 || err != nil {
 				break
 			}
-
-			if _, err := destFile.Write(buf[:n]); err != nil || !kf.IsExist(dest) {
-				return int64(total), err
-			}
-
-			total += n
 		}
 		nBytes = int64(total)
 	} else {
 		nBytes, err = io.Copy(destFile, sourceFile)
-		if err == nil {
-			err = os.Chmod(dest, sourceStat.Mode())
-		}
+	}
+
+	if err == nil {
+		err = os.Chmod(dest, sourceStat.Mode())
 	}
 
 	return nBytes, err
