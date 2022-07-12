@@ -590,13 +590,13 @@ func TestFile_FastCopy(t *testing.T) {
 
 	//源文件不存在
 	res, err = KFile.FastCopy(fileNone, fastcopyfile)
-	if KOS.IsLinux() {
-		assert.NotNil(t, err)
-	}
+	assert.NotNil(t, err)
 
 	//目录目录无权限
 	res, err = KFile.FastCopy(imgJpg, rootFile1)
-	assert.NotNil(t, err)
+	if KOS.IsLinux() {
+		assert.NotNil(t, err)
+	}
 
 	//目标为空
 	res, err = KFile.FastCopy(imgJpg, "")
