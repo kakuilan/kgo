@@ -433,7 +433,7 @@ func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
 
 	//创建目录
 	destDir := filepath.Dir(dest)
-	if err = os.MkdirAll(destDir, 0777); err != nil {
+	if err = os.MkdirAll(destDir, 0766); err != nil {
 		return 0, err
 	}
 
@@ -446,21 +446,20 @@ func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
 	}()
 
 	var bufferSize int = 32768
-	var nBytes int
+	var nBytes, num int
 	buf := make([]byte, bufferSize)
 	for {
-		n, err := sourceFile.Read(buf)
-		if err != nil && err != io.EOF {
-			return int64(nBytes), err
-		} else if n == 0 {
+		num, err = sourceFile.Read(buf)
+		if err == nil && num > 0 {
+			nBytes += num
+			_, err = destFile.Write(buf[:num])
+		}
+		if num == 0 || err != nil {
 			break
 		}
-
-		if _, err := destFile.Write(buf[:n]); err != nil || !kf.IsExist(dest) {
-			return int64(nBytes), err
-		}
-
-		nBytes += n
+	}
+	if err == io.EOF {
+		err = nil
 	}
 
 	return int64(nBytes), err
