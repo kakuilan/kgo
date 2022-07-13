@@ -574,13 +574,13 @@ func (kf *LkkFile) DelDir(dir string, delete bool) error {
 		return fmt.Errorf("[DelDir]`dir %s not exists", dir)
 	}
 
-	names, err := os.ReadDir(realPath)
+	files, err := os.ReadDir(realPath)
 	if err != nil {
 		return err
 	}
 
-	for _, entery := range names {
-		file := path.Join([]string{realPath, entery.Name()}...)
+	for _, item := range files {
+		file := path.Join(realPath, item.Name())
 		err = os.RemoveAll(file)
 	}
 
