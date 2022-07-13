@@ -491,7 +491,7 @@ func (kf *LkkFile) CopyLink(source string, dest string, cover LkkFileCover) erro
 	}
 
 	//源目录
-	srcDirStat, _ := os.Stat(filepath.Dir(srcFile))
+	srcDirStat, _ := os.Stat(filepath.Dir(source))
 
 	//创建目录
 	destDir := filepath.Dir(dest)
@@ -499,7 +499,7 @@ func (kf *LkkFile) CopyLink(source string, dest string, cover LkkFileCover) erro
 		return err
 	}
 
-	return os.Symlink(source, dest)
+	return os.Symlink(srcFile, dest)
 }
 
 // CopyDir 拷贝源目录到目标目录,cover为枚举(FILE_COVER_ALLOW、FILE_COVER_IGNORE、FILE_COVER_DENY).
