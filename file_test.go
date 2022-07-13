@@ -691,6 +691,10 @@ func TestFile_CopyDir(t *testing.T) {
 	//源不是目录
 	res, err = KFile.CopyDir(fileMd, dirTdat, FILE_COVER_ALLOW)
 	assert.NotNil(t, err)
+
+	//目标路径无权限
+	res, err = KFile.CopyDir(dirVendor, rootDir2, FILE_COVER_ALLOW)
+	assert.NotNil(t, err)
 }
 
 func BenchmarkFile_CopyDir(b *testing.B) {
