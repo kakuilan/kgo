@@ -502,10 +502,9 @@ func (kf *LkkFile) CopyLink(source string, dest string, cover LkkFileCover) erro
 	return os.Symlink(srcFile, dest)
 }
 
-// CopyDir 拷贝源目录到目标目录,cover为枚举(FILE_COVER_ALLOW、FILE_COVER_IGNORE、FILE_COVER_DENY).
+// CopyDir 拷贝目录.source为源目录,dest为目标目录,cover为是否覆盖,枚举值(FILE_COVER_ALLOW、FILE_COVER_IGNORE、FILE_COVER_DENY).
 func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int64, error) {
 	var total, nBytes int64
-	var err error
 
 	if source == "" || source == dest {
 		return 0, nil
@@ -518,7 +517,7 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 		return 0, fmt.Errorf("[CopyDir]`source %s is not a directory", source)
 	}
 
-	// create dest dir
+	// 创建目录
 	if err = os.MkdirAll(dest, sourceInfo.Mode()); err != nil {
 		return 0, err
 	}
@@ -528,20 +527,22 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 		_ = directory.Close()
 	}()
 
-	objects, err := directory.Readdir(-1)
+	var objects []os.FileInfo
+	objects, err = directory.Readdir(-1)
 	if err != nil {
 		return 0, err
 	}
 
+	var destFileInfo os.FileInfo
 	for _, obj := range objects {
 		srcFilePath := filepath.Join(source, obj.Name())
 		destFilePath := filepath.Join(dest, obj.Name())
 
 		if obj.IsDir() {
-			// create sub-directories - recursively
+			// 递归创建子目录
 			nBytes, err = kf.CopyDir(srcFilePath, destFilePath, cover)
 		} else {
-			destFileInfo, err := os.Stat(destFilePath)
+			destFileInfo, err = os.Stat(destFilePath)
 			if err == nil {
 				if cover != FILE_COVER_ALLOW || os.SameFile(obj, destFileInfo) {
 					continue
@@ -549,8 +550,8 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 			}
 
 			if obj.Mode()&os.ModeSymlink != 0 {
-				// a link
-				_ = kf.CopyLink(srcFilePath, destFilePath, cover)
+				// 链接文件
+				err = kf.CopyLink(srcFilePath, destFilePath, cover)
 			} else {
 				nBytes, err = kf.CopyFile(srcFilePath, destFilePath, cover)
 			}
@@ -558,6 +559,8 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 
 		if err == nil {
 			total += nBytes
+		} else {
+			break
 		}
 	}
 
