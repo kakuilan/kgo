@@ -468,13 +468,12 @@ func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
 
 // CopyLink 拷贝链接.source为源链接,dest为目标链接,cover为是否覆盖,枚举值(FILE_COVER_ALLOW、FILE_COVER_IGNORE、FILE_COVER_DENY).
 func (kf *LkkFile) CopyLink(source string, dest string, cover LkkFileCover) error {
-	var err error
 	if source == dest {
 		return nil
 	}
 
 	//获取原文件地址
-	source, err = os.Readlink(source)
+	srcFile, err := os.Readlink(source)
 	if err != nil {
 		return err
 	}
@@ -491,9 +490,12 @@ func (kf *LkkFile) CopyLink(source string, dest string, cover LkkFileCover) erro
 		}
 	}
 
+	//源目录
+	srcDirStat, _ := os.Stat(filepath.Dir(srcFile))
+
 	//创建目录
 	destDir := filepath.Dir(dest)
-	if err = os.MkdirAll(destDir, 0766); err != nil {
+	if err = os.MkdirAll(destDir, srcDirStat.Mode()); err != nil {
 		return err
 	}
 
