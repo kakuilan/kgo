@@ -348,6 +348,7 @@ func (kf *LkkFile) CopyFile(source string, dest string, cover LkkFileCover) (int
 		return 0, nil
 	}
 
+	// os.Stat,获取文件信息对象,符号链接将跳转
 	sourceStat, err := os.Stat(source)
 	if err != nil {
 		return 0, err
@@ -465,26 +466,34 @@ func (kf *LkkFile) FastCopy(source string, dest string) (int64, error) {
 	return int64(nBytes), err
 }
 
-// CopyLink 拷贝链接.
-func (kf *LkkFile) CopyLink(source string, dest string) error {
+// CopyLink 拷贝链接.source为源链接,dest为目标链接,cover为是否覆盖,枚举值(FILE_COVER_ALLOW、FILE_COVER_IGNORE、FILE_COVER_DENY).
+func (kf *LkkFile) CopyLink(source string, dest string, cover LkkFileCover) error {
+	var err error
 	if source == dest {
 		return nil
 	}
 
-	source, err := os.Readlink(source)
+	//获取原文件地址
+	source, err = os.Readlink(source)
 	if err != nil {
 		return err
 	}
 
-	//移除已存在的目标文件
+	// os.Lstat,获取文件信息对象,符号链接不跳转
 	_, err = os.Lstat(dest)
 	if err == nil {
-		_ = os.Remove(dest)
+		if cover == FILE_COVER_IGNORE { //忽略,不覆盖
+			return nil
+		} else if cover == FILE_COVER_DENY { //禁止覆盖
+			return fmt.Errorf("[CopyLink]`dest File %s already exists", dest)
+		} else { //移除已存在的目标文件
+			_ = os.Remove(dest)
+		}
 	}
 
 	//创建目录
 	destDir := filepath.Dir(dest)
-	if err := os.MkdirAll(destDir, 0777); err != nil {
+	if err = os.MkdirAll(destDir, 0766); err != nil {
 		return err
 	}
 
@@ -539,7 +548,7 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 
 			if obj.Mode()&os.ModeSymlink != 0 {
 				// a link
-				_ = kf.CopyLink(srcFilePath, destFilePath)
+				_ = kf.CopyLink(srcFilePath, destFilePath, cover)
 			} else {
 				nBytes, err = kf.CopyFile(srcFilePath, destFilePath, cover)
 			}

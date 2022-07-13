@@ -615,20 +615,42 @@ func BenchmarkFile_FastCopy(b *testing.B) {
 func TestFile_CopyLink(t *testing.T) {
 	var err error
 
+	//创建链接文件
+	if !KFile.IsExist(fileLink) {
+		_ = os.Symlink(filePubPem, fileLink)
+	}
+
+	//源链接不存在
+	err = KFile.CopyLink(fileNone, copyLink, FILE_COVER_IGNORE)
+	assert.NotNil(t, err)
+
 	//源和目标相同
-	err = KFile.CopyLink(fileLink, fileLink)
+	err = KFile.CopyLink(fileLink, fileLink, FILE_COVER_IGNORE)
 	assert.Nil(t, err)
 
-	err = KFile.CopyLink(fileLink, copyLink)
-	assert.Nil(t, err)
-
-	//源文件不存在
-	err = KFile.CopyLink(fileNone, copyLink)
+	//目标路径无权限
+	err = KFile.CopyLink(fileLink, rootFile1, FILE_COVER_ALLOW)
 	assert.NotNil(t, err)
 
 	//目标为空
-	err = KFile.CopyLink(fileLink, "")
+	err = KFile.CopyLink(fileLink, "", FILE_COVER_IGNORE)
 	assert.NotNil(t, err)
+
+	//成功拷贝
+	err = KFile.CopyLink(fileLink, copyLink, FILE_COVER_ALLOW)
+	assert.Nil(t, err)
+
+	//已存在-忽略
+	err = KFile.CopyLink(fileLink, copyLink, FILE_COVER_IGNORE)
+	assert.Nil(t, err)
+
+	//已存在-拒绝
+	err = KFile.CopyLink(fileLink, copyLink, FILE_COVER_DENY)
+	assert.NotNil(t, err)
+
+	//已存在-允许
+	err = KFile.CopyLink(fileLink, copyLink, FILE_COVER_ALLOW)
+	assert.Nil(t, err)
 }
 
 func BenchmarkFile_CopyLink(b *testing.B) {
@@ -636,7 +658,7 @@ func BenchmarkFile_CopyLink(b *testing.B) {
 	var des string
 	for i := 0; i < b.N; i++ {
 		des = fmt.Sprintf(dirLink+"/lnk_%d.copy", i)
-		_ = KFile.CopyLink(fileLink, des)
+		_ = KFile.CopyLink(fileLink, des, FILE_COVER_ALLOW)
 	}
 }
 
