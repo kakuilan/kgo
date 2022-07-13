@@ -630,7 +630,9 @@ func TestFile_CopyLink(t *testing.T) {
 
 	//目标路径无权限
 	err = KFile.CopyLink(fileLink, rootFile1, FILE_COVER_ALLOW)
-	assert.NotNil(t, err)
+	if KOS.IsLinux() {
+		assert.NotNil(t, err)
+	}
 
 	//目标为空
 	err = KFile.CopyLink(fileLink, "", FILE_COVER_IGNORE)
