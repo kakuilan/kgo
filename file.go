@@ -1135,22 +1135,24 @@ func (kf *LkkFile) UnZip(srcZip, dstDir string) (bool, error) {
 }
 
 // IsZip 是否zip文件.
-func (kf *LkkFile) IsZip(fpath string) bool {
+func (kf *LkkFile) IsZip(fpath string) (bool, error) {
+	var res bool
+	var err error
+
 	ext := kf.GetExt(fpath)
-	if ext != "zip" {
-		return false
+	if ext == "zip" {
+		var f *os.File
+		var n int
+		f, err = os.Open(fpath)
+		defer func() {
+			_ = f.Close()
+		}()
+		if err == nil {
+			buf := make([]byte, 4)
+			n, err = f.Read(buf)
+			res = err == nil && n == 4 && bytes.Equal(buf, []byte("PK\x03\x04"))
+		}
 	}
 
-	f, err := os.Open(fpath)
-	if err != nil {
-		return false
-	}
-	defer func() {
-		_ = f.Close()
-	}()
-
-	buf := make([]byte, 4)
-	n, err := f.Read(buf)
-
-	return err == nil && n == 4 && bytes.Equal(buf, []byte("PK\x03\x04"))
+	return res, err
 }

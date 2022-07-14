@@ -1187,11 +1187,20 @@ func TestFile_ZipIszipUnzip(t *testing.T) {
 	assert.Nil(t, err)
 
 	//判断
-	res = KFile.IsZip(zipfile1)
+	res, err = KFile.IsZip(zipfile1)
 	assert.True(t, res)
 
-	res = KFile.IsZip(fileNone)
+	//后缀名不符
+	res, err = KFile.IsZip(fileNone)
 	assert.False(t, res)
+	assert.Nil(t, err)
+
+	//无权限检查
+	res, err = KFile.IsZip(rootFile2)
+	if KOS.IsLinux() || KOS.IsMac() {
+		assert.False(t, res)
+		assert.NotNil(t, err)
+	}
 
 	//解压
 	res, err = KFile.UnZip(zipfile1, unzippath1)
@@ -1221,7 +1230,7 @@ func BenchmarkFile_IsZip(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		dst := fmt.Sprintf(dirTdat+"/zip/test_%d.zip", i)
-		KFile.IsZip(dst)
+		_, _ = KFile.IsZip(dst)
 	}
 }
 

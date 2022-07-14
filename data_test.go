@@ -637,6 +637,7 @@ xVZ+SCC8Wd6nIK4FyZbYaa3Jz7GkqHdMelsl
 var rootDir = "/root"
 var rootDir2 = "/root/hello/directory"
 var rootFile1 = "/root/hello/world"
+var rootFile2 = "/root/hello/ok.zip"
 var admDir = `C:\Users\Administrator`
 var admTesDir = admDir + `\Test`
 var dirCurr = "./"
