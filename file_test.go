@@ -723,6 +723,16 @@ func TestFile_DelDir(t *testing.T) {
 	var err error
 	var chk bool
 
+	//非目录
+	err = KFile.DelDir(fileMd, false)
+	assert.NotNil(t, err)
+
+	//无权限
+	err = KFile.DelDir(rootDir, false)
+	if KOS.IsLinux() {
+		assert.NotNil(t, err)
+	}
+
 	//清空目录
 	err = KFile.DelDir(dirCopy, false)
 	chk = KFile.IsDir(dirCopy)
