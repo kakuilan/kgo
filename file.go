@@ -612,13 +612,6 @@ func (kf *LkkFile) Img2Base64(fpath string) (string, error) {
 func (kf *LkkFile) FileTree(fpath string, ftype LkkFileTree, recursive bool, filters ...FileFilter) []string {
 	var trees []string
 
-	if kf.IsFile(fpath, FILE_TYPE_ANY) {
-		if ftype != FILE_TREE_DIR {
-			trees = append(trees, fpath)
-		}
-		return trees
-	}
-
 	fpath = strings.TrimRight(fpath, "/\\")
 	files, err := filepath.Glob(filepath.Join(fpath, "*"))
 	if err != nil || len(files) == 0 {

@@ -799,8 +799,9 @@ func TestFile_FileTree(t *testing.T) {
 	assert.NotEmpty(t, res)
 
 	//仅文件
-	res = KFile.FileTree(dirVendor, FILE_TREE_FILE, true)
+	res = KFile.FileTree(dirTdat, FILE_TREE_FILE, true)
 	assert.NotEmpty(t, res)
+	assert.GreaterOrEqual(t, len(res), 10)
 
 	//不递归
 	res = KFile.FileTree(dirCurr, FILE_TREE_DIR, false)
