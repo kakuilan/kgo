@@ -121,6 +121,10 @@ func TestFile_WriteFile(t *testing.T) {
 	if KOS.IsLinux() || KOS.IsMac() {
 		assert.NotNil(t, err)
 	}
+
+	//空路径
+	err = KFile.WriteFile("", bytsHello, 0777)
+	assert.NotNil(t, err)
 }
 
 func BenchmarkFile_WriteFile(b *testing.B) {

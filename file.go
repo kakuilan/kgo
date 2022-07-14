@@ -119,28 +119,28 @@ func (kf *LkkFile) GetFileMode(fpath string) (os.FileMode, error) {
 	return finfo.Mode(), nil
 }
 
-// AppendFile 插入文件内容.
+// AppendFile 插入文件内容.若文件不存在,则自动创建.
 func (kf *LkkFile) AppendFile(fpath string, data []byte) error {
-	if fpath == "" {
-		return errors.New("[AppendFile] no path provided")
-	}
-
+	var err error
 	var file *os.File
-	filePerm, err := kf.GetFileMode(fpath)
-	if err != nil {
-		file, err = os.Create(fpath)
-	} else {
-		file, err = os.OpenFile(fpath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, filePerm)
-	}
-	if err != nil {
-		return err
-	}
 
-	defer func() {
-		_ = file.Close()
-	}()
+	dir := path.Dir(fpath)
+	if err = os.MkdirAll(dir, os.ModePerm); err == nil {
+		var filePerm os.FileMode
+		filePerm, err = kf.GetFileMode(fpath)
+		if err != nil {
+			file, err = os.Create(fpath)
+		} else {
+			file, err = os.OpenFile(fpath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, filePerm)
+		}
+		defer func() {
+			_ = file.Close()
+		}()
 
-	_, err = file.Write(data)
+		if err == nil {
+			_, err = file.Write(data)
+		}
+	}
 
 	return err
 }
