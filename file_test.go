@@ -117,7 +117,7 @@ func TestFile_WriteFile(t *testing.T) {
 	assert.Nil(t, err)
 
 	//无权限写
-	err = KFile.WriteFile(rootFile1, bytsHello, 0777)
+	err = KFile.WriteFile(rootFile1, bytsHello)
 	if KOS.IsLinux() || KOS.IsMac() {
 		assert.NotNil(t, err)
 	}

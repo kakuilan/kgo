@@ -102,7 +102,7 @@ func (kf *LkkFile) WriteFile(fpath string, data []byte, perm ...os.FileMode) err
 		return err
 	}
 
-	var p os.FileMode = 0777
+	var p os.FileMode = 0655
 	if len(perm) > 0 {
 		p = perm[0]
 	}
