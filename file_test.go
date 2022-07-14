@@ -641,6 +641,8 @@ func TestFile_CopyLink(t *testing.T) {
 	//成功拷贝
 	err = KFile.CopyLink(fileLink, copyLink, FILE_COVER_ALLOW)
 	assert.Nil(t, err)
+	err = KFile.CopyLink(fileLink, copyLink2, FILE_COVER_ALLOW)
+	assert.Nil(t, err)
 
 	//已存在-忽略
 	err = KFile.CopyLink(fileLink, copyLink, FILE_COVER_IGNORE)
@@ -668,6 +670,29 @@ func TestFile_CopyDir(t *testing.T) {
 	var res int64
 	var err error
 
+	//源和目标相同
+	res, err = KFile.CopyDir(dirVendor, dirVendor, FILE_COVER_ALLOW)
+	assert.Equal(t, int64(0), res)
+	assert.Nil(t, err)
+
+	//源不存在
+	res, err = KFile.CopyDir(fileNone, dirTdat, FILE_COVER_IGNORE)
+	assert.NotNil(t, err)
+
+	//源不是目录
+	res, err = KFile.CopyDir(fileMd, dirTdat, FILE_COVER_ALLOW)
+	assert.NotNil(t, err)
+
+	//目标路径无权限
+	res, err = KFile.CopyDir(dirVendor, rootDir2, FILE_COVER_ALLOW)
+	if KOS.IsLinux() {
+		assert.NotNil(t, err)
+	}
+
+	//源路径无权限
+	res, err = KFile.CopyDir(rootDir, dirTdat, FILE_COVER_ALLOW)
+	assert.NotNil(t, err)
+
 	//忽略已存在的
 	res, err = KFile.CopyDir(dirVendor, dirTdat, FILE_COVER_IGNORE)
 	assert.Nil(t, err)
@@ -680,23 +705,9 @@ func TestFile_CopyDir(t *testing.T) {
 	res, err = KFile.CopyDir(dirVendor, dirTdat, FILE_COVER_DENY)
 	assert.Equal(t, int64(0), res)
 
-	//源和目标相同
-	res, err = KFile.CopyDir(dirVendor, dirVendor, FILE_COVER_ALLOW)
-	assert.Equal(t, int64(0), res)
-
 	//目标为空
 	res, err = KFile.CopyDir(dirVendor, "", FILE_COVER_ALLOW)
 	assert.NotNil(t, err)
-
-	//源不是目录
-	res, err = KFile.CopyDir(fileMd, dirTdat, FILE_COVER_ALLOW)
-	assert.NotNil(t, err)
-
-	//目标路径无权限
-	res, err = KFile.CopyDir(dirVendor, rootDir2, FILE_COVER_ALLOW)
-	if KOS.IsLinux() {
-		assert.NotNil(t, err)
-	}
 }
 
 func BenchmarkFile_CopyDir(b *testing.B) {

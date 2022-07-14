@@ -519,16 +519,17 @@ func (kf *LkkFile) CopyDir(source string, dest string, cover LkkFileCover) (int6
 		return 0, err
 	}
 
-	directory, _ := os.Open(source)
+	var directory *os.File
+	directory, err = os.Open(source)
 	defer func() {
 		_ = directory.Close()
 	}()
-
-	var objects []os.FileInfo
-	objects, err = directory.Readdir(-1)
 	if err != nil {
 		return 0, err
 	}
+
+	var objects []os.FileInfo
+	objects, _ = directory.Readdir(-1)
 
 	var destFileInfo os.FileInfo
 	for _, obj := range objects {
