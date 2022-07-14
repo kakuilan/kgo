@@ -955,6 +955,10 @@ func TestFile_Pathinfo(t *testing.T) {
 	//特殊类型
 	res = KFile.Pathinfo(fileGitkee, -1)
 	assert.Empty(t, res["filename"])
+
+	//文件名没有后缀
+	res = KFile.Pathinfo(rootFile1, -1)
+	assert.Equal(t, res["basename"], res["filename"])
 }
 
 func BenchmarkFile_Pathinfo(b *testing.B) {
