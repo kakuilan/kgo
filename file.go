@@ -128,14 +128,11 @@ func (kf *LkkFile) AppendFile(fpath string, data []byte) error {
 	var file *os.File
 	filePerm, err := kf.GetFileMode(fpath)
 	if err != nil {
-		// create the file
 		file, err = os.Create(fpath)
 	} else {
-		// open for append
 		file, err = os.OpenFile(fpath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, filePerm)
 	}
 	if err != nil {
-		// failed to create or open-for-append the file
 		return err
 	}
 
