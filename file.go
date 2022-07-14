@@ -660,28 +660,25 @@ func (kf *LkkFile) FormatDir(fpath string) string {
 func (kf *LkkFile) Md5(fpath string, length uint8) (string, error) {
 	var res string
 	f, err := os.Open(fpath)
-	if err != nil {
-		return res, err
-	}
 	defer func() {
 		_ = f.Close()
 	}()
 
-	hash := md5.New()
-	if _, err := io.Copy(hash, f); err != nil {
-		return res, err
+	if err == nil {
+		hash := md5.New()
+		if _, err = io.Copy(hash, f); err == nil {
+			hashInBytes := hash.Sum(nil)
+			if length > 0 && length < 32 {
+				dst := make([]byte, hex.EncodedLen(len(hashInBytes)))
+				hex.Encode(dst, hashInBytes)
+				res = string(dst[:length])
+			} else {
+				res = hex.EncodeToString(hashInBytes)
+			}
+		}
 	}
 
-	hashInBytes := hash.Sum(nil)
-	if length > 0 && length < 32 {
-		dst := make([]byte, hex.EncodedLen(len(hashInBytes)))
-		hex.Encode(dst, hashInBytes)
-		res = string(dst[:length])
-	} else {
-		res = hex.EncodeToString(hashInBytes)
-	}
-
-	return res, nil
+	return res, err
 }
 
 // ShaX 计算文件的 shaX 散列值,x为1/256/512.
