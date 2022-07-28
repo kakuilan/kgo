@@ -168,20 +168,19 @@ func (ko *LkkOS) CpuUsage() (user, idle, total uint64) {
 		uintptr(unsafe.Pointer(&lpIdleTime)),
 		uintptr(unsafe.Pointer(&lpKernelTime)),
 		uintptr(unsafe.Pointer(&lpUserTime)))
-	if r == 0 {
-		return
+
+	if r > 0 {
+		LOT := float64(0.0000001)
+		HIT := (LOT * 4294967296.0)
+		tmpIdle := ((HIT * float64(lpIdleTime.DwHighDateTime)) + (LOT * float64(lpIdleTime.DwLowDateTime)))
+		tmpUser := ((HIT * float64(lpUserTime.DwHighDateTime)) + (LOT * float64(lpUserTime.DwLowDateTime)))
+		tmpKernel := ((HIT * float64(lpKernelTime.DwHighDateTime)) + (LOT * float64(lpKernelTime.DwLowDateTime)))
+		//tmpSystem := (tmpKernel - tmpIdle)
+
+		user = uint64(tmpUser)
+		idle = uint64(tmpIdle)
+		total = user + idle + uint64(tmpKernel)
 	}
-
-	LOT := float64(0.0000001)
-	HIT := (LOT * 4294967296.0)
-	tmpIdle := ((HIT * float64(lpIdleTime.DwHighDateTime)) + (LOT * float64(lpIdleTime.DwLowDateTime)))
-	tmpUser := ((HIT * float64(lpUserTime.DwHighDateTime)) + (LOT * float64(lpUserTime.DwLowDateTime)))
-	tmpKernel := ((HIT * float64(lpKernelTime.DwHighDateTime)) + (LOT * float64(lpKernelTime.DwLowDateTime)))
-	//tmpSystem := (tmpKernel - tmpIdle)
-
-	user = uint64(tmpUser)
-	idle = uint64(tmpIdle)
-	total = user + idle + uint64(tmpKernel)
 
 	return
 }
