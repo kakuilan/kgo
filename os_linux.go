@@ -134,7 +134,7 @@ func (ko *LkkOS) Uptime() (res uint64, err error) {
 	info := &unix.Sysinfo_t{}
 	err = unix.Sysinfo(info)
 	if err == nil {
-		res = uint64(sysinfo.Uptime)
+		res = uint64(info.Uptime)
 	}
 
 	return
