@@ -1,3 +1,4 @@
+//go:build windows
 // +build windows
 
 package kgo
@@ -125,11 +126,6 @@ func getProcessPathByPid(pid int) (res string) {
 		res = *ps[0].ExecutablePath
 	}
 
-	return
-}
-
-// getPidByPort 根据端口号获取监听的进程PID.
-func getPidByPort(port int) (pid int) {
 	return
 }
 
