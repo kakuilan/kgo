@@ -1,3 +1,4 @@
+//go:build darwin
 // +build darwin
 
 package kgo
@@ -33,11 +34,6 @@ func bootTime() (uint64, error) {
 	atomic.StoreUint64(&cachedBootTime, uint64(tv.Sec))
 
 	return uint64(tv.Sec), nil
-}
-
-// getPidByPort 根据端口号获取监听的进程PID.
-func getPidByPort(port int) (pid int) {
-	return
 }
 
 // getIOInfos 获取系统IO信息
