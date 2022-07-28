@@ -4,6 +4,7 @@
 package kgo
 
 import (
+	"errors"
 	"fmt"
 	"github.com/StackExchange/wmi"
 	"golang.org/x/sys/windows"
@@ -211,6 +212,7 @@ func (ko *LkkOS) DiskUsage(path string) (used, free, total uint64) {
 // Uptime 获取系统运行时间,秒.
 func (ko *LkkOS) Uptime() (uint64, error) {
 	var res uint64
+	var err error
 
 	procGetTickCount := procGetTickCount64
 	chkErr := procGetTickCount64.Find()
@@ -222,9 +224,11 @@ func (ko *LkkOS) Uptime() (uint64, error) {
 	ret, _, errno := syscall.Syscall(procGetTickCount.Addr(), 0, 0, 0, 0)
 	if errno == 0 {
 		res = uint64((time.Duration(ret) * time.Millisecond).Seconds())
+	} else {
+		err = errors.New(errno.Error())
 	}
 
-	return res, errno
+	return res, err
 }
 
 // GetBiosInfo 获取BIOS信息.
