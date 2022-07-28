@@ -147,13 +147,11 @@ func (ko *LkkOS) MemoryUsage(virtual bool) (used, free, total uint64) {
 	var memInfo memoryStatusEx
 	memInfo.cbSize = uint32(unsafe.Sizeof(memInfo))
 	mem, _, _ := procGlobalMemoryStatusEx.Call(uintptr(unsafe.Pointer(&memInfo)))
-	if mem == 0 {
-		return
+	if mem > 0 {
+		total = memInfo.ullTotalPhys
+		free = memInfo.ullAvailPhys
+		used = memInfo.ullTotalPhys - memInfo.ullAvailPhys
 	}
-
-	total = memInfo.ullTotalPhys
-	free = memInfo.ullAvailPhys
-	used = memInfo.ullTotalPhys - memInfo.ullAvailPhys
 
 	return
 }
