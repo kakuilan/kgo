@@ -583,3 +583,8 @@ func (ko *LkkOS) GetSystemInfo() *SystemInfo {
 func (ko *LkkOS) GetProcessExecPath(pid int) string {
 	return getProcessPathByPid(pid)
 }
+
+// HomeDir 获取当前用户的主目录.
+func (ko *LkkOS) HomeDir() (string, error) {
+	return os.UserHomeDir()
+}

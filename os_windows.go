@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"github.com/StackExchange/wmi"
 	"golang.org/x/sys/windows"
-	"os"
 	"strings"
 	"syscall"
 	"time"
@@ -127,16 +126,6 @@ func getProcessPathByPid(pid int) (res string) {
 	}
 
 	return
-}
-
-// HomeDir 获取当前用户的主目录.
-func (ko *LkkOS) HomeDir() (string, error) {
-	home := os.Getenv("HOMEDRIVE") + os.Getenv("HOMEPATH")
-	if home == "" {
-		home = os.Getenv("USERPROFILE")
-	}
-
-	return home, nil
 }
 
 // MemoryUsage 获取内存使用率,单位字节.
