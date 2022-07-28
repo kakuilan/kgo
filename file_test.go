@@ -557,12 +557,6 @@ func TestFile_CopyFile(t *testing.T) {
 	assert.Equal(t, int64(0), res)
 	assert.Nil(t, err)
 
-	//目标路径无权限
-	res, err = KFile.CopyFile(imgPng, rootFile1, FILE_COVER_ALLOW)
-	if KOS.IsLinux() || KOS.IsMac() {
-		assert.NotNil(t, err)
-	}
-
 	//拷贝大文件
 	KFile.Touch(touchfile, 2097152)
 	res, err = KFile.CopyFile(touchfile, copyfile, FILE_COVER_ALLOW)
@@ -596,12 +590,6 @@ func TestFile_FastCopy(t *testing.T) {
 	res, err = KFile.FastCopy(fileNone, fastcopyfile)
 	assert.NotNil(t, err)
 
-	//目录无权限
-	res, err = KFile.FastCopy(imgJpg, rootFile1)
-	if KOS.IsLinux() || KOS.IsMac() {
-		assert.NotNil(t, err)
-	}
-
 	//目标为空
 	res, err = KFile.FastCopy(imgJpg, "")
 	assert.NotNil(t, err)
@@ -631,12 +619,6 @@ func TestFile_CopyLink(t *testing.T) {
 	//源和目标相同
 	err = KFile.CopyLink(fileLink, fileLink, FILE_COVER_IGNORE)
 	assert.Nil(t, err)
-
-	//目标路径无权限
-	err = KFile.CopyLink(fileLink, rootFile1, FILE_COVER_ALLOW)
-	if KOS.IsLinux() || KOS.IsMac() {
-		assert.NotNil(t, err)
-	}
 
 	//目标为空
 	err = KFile.CopyLink(fileLink, "", FILE_COVER_IGNORE)
@@ -687,18 +669,6 @@ func TestFile_CopyDir(t *testing.T) {
 	res, err = KFile.CopyDir(fileMd, dirTdat, FILE_COVER_ALLOW)
 	assert.NotNil(t, err)
 
-	//目标路径无权限
-	res, err = KFile.CopyDir(dirVendor, rootDir2, FILE_COVER_ALLOW)
-	if KOS.IsLinux() || KOS.IsMac() {
-		assert.NotNil(t, err)
-	}
-
-	//源路径无权限
-	res, err = KFile.CopyDir(rootDir, dirTdat, FILE_COVER_ALLOW)
-	if KOS.IsLinux() || KOS.IsMac() {
-		assert.NotNil(t, err)
-	}
-
 	//忽略已存在的
 	res, err = KFile.CopyDir(dirVendor, dirTdat, FILE_COVER_IGNORE)
 	assert.Nil(t, err)
@@ -732,12 +702,6 @@ func TestFile_DelDir(t *testing.T) {
 	//非目录
 	err = KFile.DelDir(fileMd, false)
 	assert.NotNil(t, err)
-
-	//无权限
-	err = KFile.DelDir(rootDir, false)
-	if KOS.IsLinux() || KOS.IsMac() {
-		assert.NotNil(t, err)
-	}
 
 	//清空目录
 	err = KFile.DelDir(dirCopy, false)

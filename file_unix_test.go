@@ -5,6 +5,7 @@ package kgo
 
 import (
 	"github.com/stretchr/testify/assert"
+	"os"
 	"testing"
 )
 
@@ -22,6 +23,51 @@ func TestFileUnix_IsExecutable_Deny(t *testing.T) {
 	var res bool
 	res = KFile.IsExecutable(rootDir)
 	assert.False(t, res)
+}
+
+func TestFileUnix_CopyFile_Deny(t *testing.T) {
+	var err error
+	//目标路径无权限
+	_, err = KFile.CopyFile(imgPng, rootFile1, FILE_COVER_ALLOW)
+	assert.NotNil(t, err)
+}
+
+func TestFileUnix_FastCopy_Deny(t *testing.T) {
+	var err error
+	//目录无权限
+	_, err = KFile.FastCopy(imgJpg, rootFile1)
+	assert.NotNil(t, err)
+}
+
+func TestFileUnix_CopyLink_Deny(t *testing.T) {
+	var err error
+
+	//创建链接文件
+	if !KFile.IsExist(fileLink) {
+		_ = os.Symlink(filePubPem, fileLink)
+	}
+
+	//目标路径无权限
+	err = KFile.CopyLink(fileLink, rootFile1, FILE_COVER_ALLOW)
+	assert.NotNil(t, err)
+}
+
+func TestFileUnix_CopyDir_Deny(t *testing.T) {
+	var err error
+	//目标路径无权限
+	_, err = KFile.CopyDir(dirVendor, rootDir2, FILE_COVER_ALLOW)
+	assert.NotNil(t, err)
+
+	//源路径无权限
+	_, err = KFile.CopyDir(rootDir, dirTdat, FILE_COVER_ALLOW)
+	assert.NotNil(t, err)
+}
+
+func TestFileUnix_DelDir_Deny(t *testing.T) {
+	var err error
+	//目录无权限
+	err = KFile.DelDir(rootDir, false)
+	assert.NotNil(t, err)
 }
 
 func TestFileUnix_TarGzUnTarGz(t *testing.T) {
