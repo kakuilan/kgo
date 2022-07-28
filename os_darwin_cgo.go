@@ -1,5 +1,5 @@
-// +build darwin
-// +build cgo
+//go:build darwin && cgo
+// +build darwin,cgo
 
 package kgo
 
@@ -20,13 +20,11 @@ func (ko *LkkOS) CpuUsage() (user, idle, total uint64) {
 	var cpuLoad C.host_cpu_load_info_data_t
 	var count C.mach_msg_type_number_t = C.HOST_CPU_LOAD_INFO_COUNT
 	ret := C.host_statistics(C.host_t(C.mach_host_self()), C.HOST_CPU_LOAD_INFO, C.host_info_t(unsafe.Pointer(&cpuLoad)), &count)
-	if ret != C.KERN_SUCCESS {
-		return
+	if ret == C.KERN_SUCCESS {
+		user = uint64(cpuLoad.cpu_ticks[C.CPU_STATE_USER])
+		idle = uint64(cpuLoad.cpu_ticks[C.CPU_STATE_IDLE])
+		total = user + idle + uint64(cpuLoad.cpu_ticks[C.CPU_STATE_SYSTEM]) + uint64(cpuLoad.cpu_ticks[C.CPU_STATE_NICE])
 	}
-
-	user = uint64(cpuLoad.cpu_ticks[C.CPU_STATE_USER])
-	idle = uint64(cpuLoad.cpu_ticks[C.CPU_STATE_IDLE])
-	total = user + idle + uint64(cpuLoad.cpu_ticks[C.CPU_STATE_SYSTEM]) + uint64(cpuLoad.cpu_ticks[C.CPU_STATE_NICE])
 
 	return
 }
@@ -39,12 +37,9 @@ func getProcessPathByPid(pid int) (res string) {
 	defer C.free(unsafe.Pointer(buffer))
 
 	ret, err := C.proc_pidpath(C.int(pid), unsafe.Pointer(buffer), C.uint32_t(bufsize))
-	if err != nil {
-		return
-	}
-	if ret <= 0 {
-		return
+	if err == nil && ret > 0 {
+		res = C.GoString(buffer)
 	}
 
-	return C.GoString(buffer)
+	return
 }
