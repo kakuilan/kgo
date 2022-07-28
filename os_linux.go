@@ -1,3 +1,4 @@
+//go:build linux
 // +build linux
 
 package kgo
@@ -18,10 +19,6 @@ import (
 
 // getPidByInode 根据套接字的inode获取PID.须root权限.
 func getPidByInode(inode string, procDirs []string) (pid int) {
-	if len(procDirs) == 0 {
-		procDirs, _ = filepath.Glob("/proc/[0-9]*/fd/[0-9]*")
-	}
-
 	re := regexp.MustCompile(inode)
 	for _, item := range procDirs {
 		path, _ := os.Readlink(item)
@@ -133,12 +130,14 @@ func (ko *LkkOS) DiskUsage(path string) (used, free, total uint64) {
 }
 
 // Uptime 获取系统运行时间,秒.
-func (ko *LkkOS) Uptime() (uint64, error) {
-	sysinfo := &unix.Sysinfo_t{}
-	if err := unix.Sysinfo(sysinfo); err != nil {
-		return 0, err
+func (ko *LkkOS) Uptime() (res uint64, err error) {
+	info := &unix.Sysinfo_t{}
+	err = unix.Sysinfo(info)
+	if err == nil {
+		res = uint64(sysinfo.Uptime)
 	}
-	return uint64(sysinfo.Uptime), nil
+
+	return
 }
 
 // GetBiosInfo 获取BIOS信息.
