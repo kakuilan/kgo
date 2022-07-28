@@ -71,18 +71,26 @@ func TestFileUnix_DelDir_Deny(t *testing.T) {
 }
 
 func TestFileUnix_TarGzUnTarGz(t *testing.T) {
-	var res1, res2 bool
-	var err1, err2 error
+	var res bool
+	var err error
 
-	//打包无权限的目录
-	res1, err1 = KFile.TarGz(rootDir, targzfile2)
-	assert.False(t, res1)
-	assert.NotNil(t, err1)
+	//打包-源目录无权限
+	res, err = KFile.TarGz(rootDir, targzfile2)
+	assert.False(t, res)
+	assert.NotNil(t, err)
+
+	//打包-目标目录无权限
+	res, err = KFile.TarGz(dirVendor, rootFile3)
+	assert.False(t, res)
+	assert.NotNil(t, err)
 
 	//解压到无权限的目录
-	res2, err2 = KFile.UnTarGz(targzfile1, rootDir)
-	assert.False(t, res2)
-	assert.NotNil(t, err2)
+	if !KFile.IsExist(targzfile1) {
+		_, _ = KFile.TarGz(dirVendor, targzfile1)
+	}
+	res, err = KFile.UnTarGz(targzfile1, rootDir)
+	assert.False(t, res)
+	assert.NotNil(t, err)
 }
 
 func TestFileUnix_ChmodBatch(t *testing.T) {

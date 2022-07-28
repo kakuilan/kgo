@@ -782,13 +782,12 @@ func (kf *LkkFile) TarGz(src string, dstTar string, ignorePatterns ...string) (b
 		res := true
 		for _, pattern := range ignorePatterns {
 			re, err := regexp.Compile(pattern)
-			if err != nil {
-				continue
-			}
-			chk := re.MatchString(file)
-			if chk {
-				res = false
-				break
+			if err == nil {
+				chk := re.MatchString(file)
+				if chk {
+					res = false
+					break
+				}
 			}
 		}
 		return res
@@ -797,12 +796,10 @@ func (kf *LkkFile) TarGz(src string, dstTar string, ignorePatterns ...string) (b
 	src = kf.AbsPath(src)
 	dstTar = kf.AbsPath(dstTar)
 
-	dstDir := kf.Dirname(dstTar)
-	if !kf.IsDir(dstDir) {
-		err := os.MkdirAll(dstDir, os.ModePerm)
-		if err != nil {
-			return false, err
-		}
+	//创建目录
+	dstDir := filepath.Dir(dstTar)
+	if err := os.MkdirAll(dstDir, os.ModePerm); err != nil {
+		return false, err
 	}
 
 	files := kf.FileTree(src, FILE_TREE_ALL, true, filter)
@@ -905,12 +902,10 @@ func (kf *LkkFile) UnTarGz(srcTar, dstDir string) (bool, error) {
 		_ = fr.Close()
 	}()
 
+	//创建目录
 	dstDir = strings.TrimRight(kf.AbsPath(dstDir), "/\\")
-	if !kf.IsDir(dstDir) {
-		err := os.MkdirAll(dstDir, os.ModePerm)
-		if err != nil {
-			return false, err
-		}
+	if err = os.MkdirAll(dstDir, os.ModePerm); err != nil {
+		return false, err
 	}
 
 	// Gzip reader
@@ -933,11 +928,8 @@ func (kf *LkkFile) UnTarGz(srcTar, dstDir string) (bool, error) {
 		// Create diretory before create file
 		newPath := dstDir + "/" + strings.TrimLeft(hdr.Name, "/\\")
 		parentDir := path.Dir(newPath)
-		if !kf.IsDir(parentDir) {
-			err := os.MkdirAll(parentDir, os.ModePerm)
-			if err != nil {
-				return false, err
-			}
+		if err = os.MkdirAll(parentDir, os.ModePerm); err != nil {
+			return false, err
 		}
 
 		if hdr.Typeflag != tar.TypeDir {
