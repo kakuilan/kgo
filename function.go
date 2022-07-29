@@ -1433,33 +1433,36 @@ func VerifyFunc(f interface{}, args ...interface{}) (vf reflect.Value, vargs []r
 	}
 
 	tf := vf.Type()
-	_len := len(args)
-	if tf.NumIn() != _len {
-		return reflect.ValueOf(nil), nil, fmt.Errorf("[VerifyFunc] %d number of the argument is incorrect", _len)
+	num := len(args)
+	if tf.NumIn() != num {
+		return reflect.ValueOf(nil), nil, fmt.Errorf("[VerifyFunc] %d number of the argument is incorrect", num)
 	}
 
-	vargs = make([]reflect.Value, _len)
-	for i := 0; i < _len; i++ {
+	vargs = make([]reflect.Value, num)
+	for i := 0; i < num; i++ {
 		typ := tf.In(i).Kind()
 		if (typ != reflect.Interface) && (typ != reflect.TypeOf(args[i]).Kind()) {
 			return reflect.ValueOf(nil), nil, fmt.Errorf("[VerifyFunc] %d-td argument`s type is incorrect", i+1)
 		}
 		vargs[i] = reflect.ValueOf(args[i])
 	}
+
 	return vf, vargs, nil
 }
 
 // CallFunc 动态调用函数.
-func CallFunc(f interface{}, args ...interface{}) (results []interface{}, err error) {
-	vf, vargs, _err := VerifyFunc(f, args...)
-	if _err != nil {
-		return nil, _err
+func CallFunc(f interface{}, args ...interface{}) ([]interface{}, error) {
+	vf, vargs, err := VerifyFunc(f, args...)
+	if err != nil {
+		return nil, err
 	}
+
 	ret := vf.Call(vargs)
-	_len := len(ret)
-	results = make([]interface{}, _len)
-	for i := 0; i < _len; i++ {
+	num := len(ret)
+	results := make([]interface{}, num)
+	for i := 0; i < num; i++ {
 		results[i] = ret[i].Interface()
 	}
-	return
+
+	return results, nil
 }

@@ -150,3 +150,24 @@ func BenchmarkFun_IsPointer(b *testing.B) {
 		IsPointer(orgS1, true)
 	}
 }
+
+func TestFun_VerifyFunc_CallFunc(t *testing.T) {
+	var res []interface{}
+	var err error
+
+	//不存在的对象方法调用
+	res, err = CallFunc(strHello, helloEngICase)
+	assert.NotNil(t, err)
+	assert.Empty(t, res)
+
+	//方法存在,但参数数量错误
+	fn := getMethod(&KConv, "BaseConvert")
+	res, err = CallFunc(fn)
+	assert.NotNil(t, err)
+	assert.Empty(t, res)
+
+	//方法存在,参数数量无误,但参数类型错误
+	res, err = CallFunc(fn, strHello, false, 1)
+	assert.NotNil(t, err)
+	assert.Empty(t, res)
+}

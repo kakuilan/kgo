@@ -139,7 +139,7 @@ func (kd *LkkDebug) GetMethod(t interface{}, method string) interface{} {
 	return getMethod(t, method)
 }
 
-// CallMethod 调用对象的方法.
+// CallMethod 调用对象t的method方法.
 // 若执行成功,则结果是该方法的返回结果;
 // 否则返回(nil, error).
 func (kd *LkkDebug) CallMethod(t interface{}, method string, args ...interface{}) ([]interface{}, error) {
