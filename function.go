@@ -297,14 +297,11 @@ func shaXByte(str []byte, x uint16) []byte {
 		panic(fmt.Sprintf("[shaXByte]`x must be in [1, 256, 512]; but: %d", x))
 	}
 
-	_, err := h.Write(str)
-	if err != nil {
-		return nil
-	}
-
+	_, _ = h.Write(str)
 	hBytes := h.Sum(nil)
 	res := make([]byte, hex.EncodedLen(len(hBytes)))
 	hex.Encode(res, hBytes)
+
 	return res
 }
 
