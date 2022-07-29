@@ -21,6 +21,21 @@ func TestFun_lenArrayOrSlice(t *testing.T) {
 	assert.Greater(t, res, 0)
 }
 
+func TestFun_isNil(t *testing.T) {
+	var s []int
+	var i interface{}
+	var res bool
+
+	res = isNil(s)
+	assert.True(t, res)
+
+	res = isNil(&s)
+	assert.False(t, res)
+
+	res = isNil(i)
+	assert.True(t, res)
+}
+
 func TestFun_GetVariateType(t *testing.T) {
 	var res string
 
