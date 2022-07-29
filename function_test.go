@@ -36,6 +36,31 @@ func TestFun_isNil(t *testing.T) {
 	assert.True(t, res)
 }
 
+func TestFun_numeric2Float(t *testing.T) {
+	var tests = []struct {
+		num      interface{}
+		expected error
+	}{
+		{123, nil},
+		{int8(12), nil},
+		{int16(12), nil},
+		{int32(12), nil},
+		{int64(12), nil},
+		{uint(123), nil},
+		{uint8(13), nil},
+		{uint16(13), nil},
+		{uint32(13), nil},
+		{uint64(13), nil},
+		{float32(3.1415), nil},
+		{float64(3.1415), nil},
+		{"6145", nil},
+	}
+	for _, test := range tests {
+		_, actual := numeric2Float(test.num)
+		assert.Equal(t, test.expected, actual)
+	}
+}
+
 func TestFun_GetVariateType(t *testing.T) {
 	var res string
 
