@@ -11,7 +11,7 @@ import (
 func TestConvert_Struct2Map(t *testing.T) {
 	//结构体
 	var p1 sPerson
-	gofakeit.Struct(&p1)
+	_ = gofakeit.Struct(&p1)
 	mp1, _ := KConv.Struct2Map(p1, "json")
 	mp2, _ := KConv.Struct2Map(p1, "")
 
@@ -33,7 +33,7 @@ func TestConvert_Struct2Map(t *testing.T) {
 func BenchmarkConvert_Struct2Map_UseTag(b *testing.B) {
 	b.ResetTimer()
 	var p1 sPerson
-	gofakeit.Struct(&p1)
+	_ = gofakeit.Struct(&p1)
 	for i := 0; i < b.N; i++ {
 		_, _ = KConv.Struct2Map(p1, "json")
 	}
@@ -42,7 +42,7 @@ func BenchmarkConvert_Struct2Map_UseTag(b *testing.B) {
 func BenchmarkConvert_Struct2Map_NoTag(b *testing.B) {
 	b.ResetTimer()
 	var p1 sPerson
-	gofakeit.Struct(&p1)
+	_ = gofakeit.Struct(&p1)
 	for i := 0; i < b.N; i++ {
 		_, _ = KConv.Struct2Map(p1, "")
 	}

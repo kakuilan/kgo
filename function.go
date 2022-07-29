@@ -174,9 +174,6 @@ func isNil(val interface{}) bool {
 
 // isEmpty 检查变量是否为空.
 func isEmpty(val interface{}) bool {
-	if val == nil {
-		return true
-	}
 	v := reflect.ValueOf(val)
 	switch v.Kind() {
 	case reflect.Invalid:
