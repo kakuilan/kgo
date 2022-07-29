@@ -5,6 +5,22 @@ import (
 	"testing"
 )
 
+func TestFun_lenArrayOrSlice(t *testing.T) {
+	var res int
+
+	res = lenArrayOrSlice(naturalArr, 3)
+	assert.Greater(t, res, 0)
+
+	res = lenArrayOrSlice(naturalArr, 1)
+	assert.Greater(t, res, 0)
+
+	res = lenArrayOrSlice(naturalArr, 2)
+	assert.Equal(t, res, -1)
+
+	res = lenArrayOrSlice(naturalArr, 9)
+	assert.Greater(t, res, 0)
+}
+
 func TestFun_GetVariateType(t *testing.T) {
 	var res string
 
