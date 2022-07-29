@@ -112,6 +112,9 @@ func TestFun_GetVariatePointerAddr(t *testing.T) {
 		actual := GetVariatePointerAddr(test.input)
 		assert.Greater(t, actual, int64(test.expected))
 	}
+
+	res := GetVariatePointerAddr(&tests)
+	assert.Greater(t, res, int64(0))
 }
 
 func BenchmarkFun_GetVariatePointerAddr(b *testing.B) {
