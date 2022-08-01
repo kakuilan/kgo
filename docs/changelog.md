@@ -2,6 +2,50 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.3.3]- 2022-08-01
+
+#### Added
+
+- none
+
+#### Fixed
+
+- 优化`KFile.CopyFile`
+- 优化`KFile.FastCopy`
+- 优化`KFile.CopyDir`
+- 优化`KFile.DelDir`
+- 优化`KFile.WriteFile`
+- 优化`KFile.FileTree`
+- 优化`KFile.Md5`
+- 优化`KFile.IsZip`
+- 优化`KFile.TarGz`
+- 优化`KFile.UnTarGz`
+- 优化os_darwin_cgo下`getProcessPathByPid`
+- 优化os_darwin_cgo下`LkkOS.CpuUsage`
+- 优化os_linux下`getPidByInode`
+- 优化os_linux下`LkkOS.Uptime`
+- 优化os_windows下`LkkOS.MemoryUsage`
+- 优化os_windows下`LkkOS.CpuUsage`
+- 优化os_windows下`LkkOS.DiskUsage`
+- 优化os_windows下`LkkOS.Uptime`
+- 优化os_windows下`LkkOS.GetBiosInfo`
+- 优化os_windows下`LkkOS.GetBoardInfo`
+- 优化os_windows下`LkkOS.GetCpuInfo`
+- 优化os_windows下`LkkOS.IsProcessExists`
+- 优化`isEmpty`
+- 优化`shaXByte`
+- 优化`pkcs7UnPadding`
+
+#### Changed
+
+- 修改`KFile.CopyLink`,增加`cover`文件覆盖参数
+- 修改`LkkOS.HomeDir`,不再自行区分windows/unix,使用自带的`os.UserHomeDir`
+
+#### Removed
+
+- 删除os_darwin下`getPidByPort`
+- 删除os_windows下`getPidByPort`
+
 ## [v0.3.2]- 2022-06-26
 
 #### Added
