@@ -843,58 +843,131 @@ func BenchmarkFile_FormatPath(b *testing.B) {
 	}
 }
 
-func TestFile_Md5(t *testing.T) {
-	var res string
+func TestFile_Md5File_Md5Reader(t *testing.T) {
+	var res1, res2 string
 	var err error
 
-	res, err = KFile.Md5(fileMd, 32)
-	assert.NotEmpty(t, res)
+	fh1, _ := os.Open(fileMd)
+	fh2, _ := os.Open(fileMd)
+	defer func() {
+		_ = fh1.Close()
+		_ = fh2.Close()
+	}()
 
-	res, err = KFile.Md5(fileMd, 16)
+	//16
+	res1, err = KFile.Md5File(fileMd, 16)
+	assert.NotEmpty(t, res1)
 	assert.Nil(t, err)
 
+	res2, err = KFile.Md5Reader(fh1, 16)
+	assert.NotEmpty(t, res2)
+	assert.Nil(t, err)
+	assert.Equal(t, res1, res2)
+
+	//32
+	res1, err = KFile.Md5File(fileMd, 32)
+	assert.NotEmpty(t, res1)
+	assert.Nil(t, err)
+
+	res2, err = KFile.Md5Reader(fh2, 32)
+	assert.NotEmpty(t, res2)
+	assert.Nil(t, err)
+	assert.Equal(t, res1, res2)
+
 	//不存在的文件
-	res, err = KFile.Md5(fileNone, 32)
+	_, err = KFile.Md5File(fileNone, 32)
 	assert.NotNil(t, err)
 }
 
-func BenchmarkFile_Md5(b *testing.B) {
+func BenchmarkFile_Md5File(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = KFile.Md5(fileMd, 32)
+		_, _ = KFile.Md5File(fileMd, 32)
 	}
 }
 
-func TestFile_ShaX(t *testing.T) {
+func BenchmarkFile_Md5Reader(b *testing.B) {
+	b.ResetTimer()
+	fh, _ := os.Open(fileMd)
+	defer func() {
+		_ = fh.Close()
+	}()
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.Md5Reader(fh, 32)
+	}
+}
+
+func TestFile_ShaXFile_ShaXReader(t *testing.T) {
 	defer func() {
 		r := recover()
 		assert.NotEmpty(t, r)
 	}()
 
-	var res string
+	var res1, res2 string
 	var err error
 
-	res, err = KFile.ShaX(fileGmod, 1)
-	assert.NotEmpty(t, res)
+	fh1, _ := os.Open(fileGmod)
+	fh2, _ := os.Open(fileGmod)
+	fh3, _ := os.Open(fileGmod)
+	defer func() {
+		_ = fh1.Close()
+		_ = fh2.Close()
+		_ = fh3.Close()
+	}()
 
-	res, err = KFile.ShaX(fileGmod, 256)
-	assert.NotEmpty(t, res)
+	//1
+	res1, err = KFile.ShaXFile(fileGmod, 1)
+	assert.NotEmpty(t, res1)
+	assert.Nil(t, err)
 
-	res, err = KFile.ShaX(fileGmod, 512)
-	assert.NotEmpty(t, res)
+	res2, err = KFile.ShaXReader(fh1, 1)
+	assert.NotEmpty(t, res2)
+	assert.Nil(t, err)
+	assert.Equal(t, res1, res2)
+
+	//256
+	res1, err = KFile.ShaXFile(fileGmod, 256)
+	assert.NotEmpty(t, res1)
+	assert.Nil(t, err)
+
+	res2, err = KFile.ShaXReader(fh2, 256)
+	assert.NotEmpty(t, res2)
+	assert.Nil(t, err)
+	assert.Equal(t, res1, res2)
+
+	//512
+	res1, err = KFile.ShaXFile(fileGmod, 512)
+	assert.NotEmpty(t, res1)
+	assert.Nil(t, err)
+
+	res2, err = KFile.ShaXReader(fh3, 512)
+	assert.NotEmpty(t, res2)
+	assert.Nil(t, err)
+	assert.Equal(t, res1, res2)
 
 	//文件不存在
-	res, err = KFile.ShaX(fileNone, 512)
+	_, err = KFile.ShaXFile(fileNone, 512)
 	assert.NotNil(t, err)
 
 	//err x
-	res, err = KFile.ShaX(fileGmod, 32)
+	_, err = KFile.ShaXFile(fileGmod, 32)
 }
 
-func BenchmarkFile_ShaX(b *testing.B) {
+func BenchmarkFile_ShaXFile(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		_, _ = KFile.ShaX(fileGmod, 256)
+		_, _ = KFile.ShaXFile(fileGmod, 256)
+	}
+}
+
+func BenchmarkFile_ShaXReader(b *testing.B) {
+	b.ResetTimer()
+	fh, _ := os.Open(fileMd)
+	defer func() {
+		_ = fh.Close()
+	}()
+	for i := 0; i < b.N; i++ {
+		_, _ = KFile.ShaXReader(fh, 256)
 	}
 }
 

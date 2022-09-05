@@ -6,8 +6,6 @@ import (
 	"bufio"
 	"bytes"
 	"compress/gzip"
-	"crypto/md5"
-	"encoding/hex"
 	"errors"
 	"fmt"
 	"io"
@@ -656,39 +654,46 @@ func (kf *LkkFile) FormatDir(fpath string) string {
 	return formatDir(fpath)
 }
 
-// Md5 获取文件md5值,length指定结果长度32/16.
-func (kf *LkkFile) Md5(fpath string, length uint8) (string, error) {
-	var res string
+// Md5File 获取文件md5值,fpath为文件路径,length指定结果长度32/16.
+func (kf *LkkFile) Md5File(fpath string, length uint8) (string, error) {
+	var res []byte
 	f, err := os.Open(fpath)
 	defer func() {
 		_ = f.Close()
 	}()
 
 	if err == nil {
-		hash := md5.New()
-		if _, err = io.Copy(hash, f); err == nil {
-			hashInBytes := hash.Sum(nil)
-			if length > 0 && length < 32 {
-				dst := make([]byte, hex.EncodedLen(len(hashInBytes)))
-				hex.Encode(dst, hashInBytes)
-				res = string(dst[:length])
-			} else {
-				res = hex.EncodeToString(hashInBytes)
-			}
-		}
+		res, err = md5Reader(f, length)
 	}
 
-	return res, err
+	return string(res), err
 }
 
-// ShaX 计算文件的 shaX 散列值,x为1/256/512.
-func (kf *LkkFile) ShaX(fpath string, x uint16) (string, error) {
-	data, err := os.ReadFile(fpath)
-	if err != nil {
-		return "", err
+// Md5Reader 计算Reader的 MD5 散列值.
+func (kf *LkkFile) Md5Reader(reader io.Reader, length uint8) (string, error) {
+	res, err := md5Reader(reader, length)
+	return string(res), err
+}
+
+// ShaXFile 计算文件的 shaX 散列值,fpath为文件路径,x为1/256/512.
+func (kf *LkkFile) ShaXFile(fpath string, x uint16) (string, error) {
+	var res []byte
+	f, err := os.Open(fpath)
+	defer func() {
+		_ = f.Close()
+	}()
+
+	if err == nil {
+		res, err = shaXReader(f, x)
 	}
 
-	return string(shaXByte(data, x)), nil
+	return string(res), err
+}
+
+// ShaXReader 计算Reader的 shaX 散列值,x为1/256/512.
+func (kf *LkkFile) ShaXReader(reader io.Reader, x uint16) (string, error) {
+	res, err := shaXReader(reader, x)
+	return string(res), err
 }
 
 // Pathinfo 获取文件路径的信息.

@@ -13,6 +13,7 @@ import (
 	"errors"
 	"fmt"
 	"hash"
+	"io"
 	"math"
 	"reflect"
 	"strconv"
@@ -270,9 +271,9 @@ func md5Byte(str []byte, length uint8) []byte {
 	h := md5.New()
 	_, err := h.Write(str)
 	if err == nil {
-		hBytes := h.Sum(nil)
-		dst := make([]byte, hex.EncodedLen(len(hBytes)))
-		hex.Encode(dst, hBytes)
+		hashInBytes := h.Sum(nil)
+		dst := make([]byte, hex.EncodedLen(len(hashInBytes)))
+		hex.Encode(dst, hashInBytes)
 		if length > 0 && length < 32 {
 			res = dst[:length]
 		} else {
@@ -281,6 +282,23 @@ func md5Byte(str []byte, length uint8) []byte {
 	}
 
 	return res
+}
+
+// md5Reader 计算Reader的 MD5 散列值.
+func md5Reader(reader io.Reader, length uint8) (res []byte, err error) {
+	h := md5.New()
+	if _, err = io.Copy(h, reader); err == nil {
+		hashInBytes := h.Sum(nil)
+		dst := make([]byte, hex.EncodedLen(len(hashInBytes)))
+		hex.Encode(dst, hashInBytes)
+		if length > 0 && length < 32 {
+			res = dst[:length]
+		} else {
+			res = dst
+		}
+	}
+
+	return
 }
 
 // shaXByte 计算字节切片的 shaX 散列值,x为1/256/512.
@@ -298,11 +316,34 @@ func shaXByte(str []byte, x uint16) []byte {
 	}
 
 	_, _ = h.Write(str)
-	hBytes := h.Sum(nil)
-	res := make([]byte, hex.EncodedLen(len(hBytes)))
-	hex.Encode(res, hBytes)
+	hashInBytes := h.Sum(nil)
+	res := make([]byte, hex.EncodedLen(len(hashInBytes)))
+	hex.Encode(res, hashInBytes)
 
 	return res
+}
+
+// shaXReader 计算Reader的 shaX 散列值,x为1/256/512.
+func shaXReader(reader io.Reader, x uint16) (res []byte, err error) {
+	var h hash.Hash
+	switch x {
+	case 1:
+		h = sha1.New()
+	case 256:
+		h = sha256.New()
+	case 512:
+		h = sha512.New()
+	default:
+		panic(fmt.Sprintf("[shaXReader]`x must be in [1, 256, 512]; but: %d", x))
+	}
+
+	if _, err = io.Copy(h, reader); err == nil {
+		hashInBytes := h.Sum(nil)
+		res = make([]byte, hex.EncodedLen(len(hashInBytes)))
+		hex.Encode(res, hashInBytes)
+	}
+
+	return
 }
 
 // arrayValues 返回arr(数组/切片/字典/结构体)中所有的值.
