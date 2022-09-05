@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.3.4]- 2022-09-05
+
+#### Added
+
+- 新增`LkkFile.Md5Reader`
+- 新增`LkkFile.ShaXReader`
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- 重命名 `LkkFile.Md5` 为 `LkkFile.Md5File`
+- 重命名 `LkkFile.ShaX` 为 `LkkFile.ShaXFile`
+
+#### Removed
+
+- none
+
 ## [v0.3.3]- 2022-08-01
 
 #### Added
