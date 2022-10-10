@@ -2,7 +2,7 @@ package kgo
 
 import (
 	"github.com/stretchr/testify/assert"
-	"io/ioutil"
+	"os"
 	"testing"
 )
 
@@ -518,11 +518,11 @@ func TestEncrypt_RsaPublicEncryptPrivateDecrypt(t *testing.T) {
 	var enc, des []byte
 	var err error
 
-	pubFileBs, _ := ioutil.ReadFile(filePubPem)
-	priFileBs, _ := ioutil.ReadFile(filePriPem)
+	pubFileBs, _ := os.ReadFile(filePubPem)
+	priFileBs, _ := os.ReadFile(filePriPem)
 
-	pubFileBs2048, _ := ioutil.ReadFile(filePubPem2048)
-	priFileBs2048, _ := ioutil.ReadFile(filePriPem2048)
+	pubFileBs2048, _ := os.ReadFile(filePubPem2048)
+	priFileBs2048, _ := os.ReadFile(filePriPem2048)
 
 	//公钥加密-1024
 	enc, err = KEncr.RsaPublicEncrypt(bytsHello, pubFileBs)
@@ -571,7 +571,7 @@ func TestEncrypt_RsaPublicEncryptPrivateDecrypt(t *testing.T) {
 
 func BenchmarkEncrypt_RsaPublicEncrypt(b *testing.B) {
 	b.ResetTimer()
-	pubFileBs, _ := ioutil.ReadFile(filePubPem)
+	pubFileBs, _ := os.ReadFile(filePubPem)
 	for i := 0; i < b.N; i++ {
 		_, _ = KEncr.RsaPublicEncrypt(bytsHello, pubFileBs)
 	}
@@ -579,8 +579,8 @@ func BenchmarkEncrypt_RsaPublicEncrypt(b *testing.B) {
 
 func BenchmarkEncrypt_RsaPrivateDecrypt(b *testing.B) {
 	b.ResetTimer()
-	pubFileBs, _ := ioutil.ReadFile(filePubPem)
-	priFileBs, _ := ioutil.ReadFile(filePriPem)
+	pubFileBs, _ := os.ReadFile(filePubPem)
+	priFileBs, _ := os.ReadFile(filePriPem)
 	enc, _ := KEncr.RsaPublicEncrypt(bytsHello, pubFileBs)
 	for i := 0; i < b.N; i++ {
 		_, _ = KEncr.RsaPrivateDecrypt(enc, priFileBs)
@@ -591,10 +591,10 @@ func TestEncrypt_RsaPrivateEncryptPublicDecrypt(t *testing.T) {
 	var enc, des []byte
 	var err error
 
-	pubFileBs, _ := ioutil.ReadFile(filePubPem)
-	priFileBs, _ := ioutil.ReadFile(filePriPem)
-	pubFileBs2048, _ := ioutil.ReadFile(filePubPem2048)
-	priFileBs2048, _ := ioutil.ReadFile(filePriPem2048)
+	pubFileBs, _ := os.ReadFile(filePubPem)
+	priFileBs, _ := os.ReadFile(filePriPem)
+	pubFileBs2048, _ := os.ReadFile(filePubPem2048)
+	priFileBs2048, _ := os.ReadFile(filePriPem2048)
 
 	//私钥加密-1024
 	enc, err = KEncr.RsaPrivateEncrypt(bytsHello, priFileBs)
@@ -643,7 +643,7 @@ func TestEncrypt_RsaPrivateEncryptPublicDecrypt(t *testing.T) {
 
 func BenchmarkEncrypt_RsaPrivateEncrypt(b *testing.B) {
 	b.ResetTimer()
-	priFileBs, _ := ioutil.ReadFile(filePriPem)
+	priFileBs, _ := os.ReadFile(filePriPem)
 	for i := 0; i < b.N; i++ {
 		_, _ = KEncr.RsaPrivateEncrypt(bytsHello, priFileBs)
 	}
@@ -651,8 +651,8 @@ func BenchmarkEncrypt_RsaPrivateEncrypt(b *testing.B) {
 
 func BenchmarkEncrypt_RsaPublicDecrypt(b *testing.B) {
 	b.ResetTimer()
-	pubFileBs, _ := ioutil.ReadFile(filePubPem)
-	priFileBs, _ := ioutil.ReadFile(filePriPem)
+	pubFileBs, _ := os.ReadFile(filePubPem)
+	priFileBs, _ := os.ReadFile(filePriPem)
 	enc, _ := KEncr.RsaPrivateEncrypt(bytsHello, priFileBs)
 	for i := 0; i < b.N; i++ {
 		_, _ = KEncr.RsaPublicDecrypt(enc, pubFileBs)
@@ -664,10 +664,10 @@ func TestEncrypt_RsaPublicEncryptPrivateDecrypt_Long(t *testing.T) {
 	var err error
 
 	cont := []byte(tesHtmlDoc)
-	pubFileBs, _ := ioutil.ReadFile(filePubPem)
-	priFileBs, _ := ioutil.ReadFile(filePriPem)
-	pubFileBs2048, _ := ioutil.ReadFile(filePubPem2048)
-	priFileBs2048, _ := ioutil.ReadFile(filePriPem2048)
+	pubFileBs, _ := os.ReadFile(filePubPem)
+	priFileBs, _ := os.ReadFile(filePriPem)
+	pubFileBs2048, _ := os.ReadFile(filePubPem2048)
+	priFileBs2048, _ := os.ReadFile(filePriPem2048)
 
 	//1024-过长
 	enc, err = KEncr.RsaPublicEncrypt(cont, pubFileBs)
@@ -727,7 +727,7 @@ func TestEncrypt_RsaPublicEncryptPrivateDecrypt_Long(t *testing.T) {
 func BenchmarkEncrypt_RsaPublicEncryptLong_1024(b *testing.B) {
 	b.ResetTimer()
 	cont := []byte(tesHtmlDoc)
-	pubFileBs, _ := ioutil.ReadFile(filePubPem)
+	pubFileBs, _ := os.ReadFile(filePubPem)
 	for i := 0; i < b.N; i++ {
 		_, _ = KEncr.RsaPublicEncryptLong(cont, pubFileBs)
 	}
@@ -736,7 +736,7 @@ func BenchmarkEncrypt_RsaPublicEncryptLong_1024(b *testing.B) {
 func BenchmarkEncrypt_RsaPublicEncryptLong_2048(b *testing.B) {
 	b.ResetTimer()
 	cont := []byte(tesHtmlDoc)
-	pubFileBs2048, _ := ioutil.ReadFile(filePubPem2048)
+	pubFileBs2048, _ := os.ReadFile(filePubPem2048)
 	for i := 0; i < b.N; i++ {
 		_, _ = KEncr.RsaPublicEncryptLong(cont, pubFileBs2048)
 	}
@@ -745,8 +745,8 @@ func BenchmarkEncrypt_RsaPublicEncryptLong_2048(b *testing.B) {
 func BenchmarkEncrypt_RsaPrivateDecryptLong_1024(b *testing.B) {
 	b.ResetTimer()
 	cont := []byte(tesHtmlDoc)
-	pubFileBs, _ := ioutil.ReadFile(filePubPem)
-	priFileBs, _ := ioutil.ReadFile(filePriPem)
+	pubFileBs, _ := os.ReadFile(filePubPem)
+	priFileBs, _ := os.ReadFile(filePriPem)
 	enc, _ := KEncr.RsaPublicEncryptLong(cont, pubFileBs)
 	for i := 0; i < b.N; i++ {
 		_, _ = KEncr.RsaPrivateDecryptLong(enc, priFileBs)
@@ -756,8 +756,8 @@ func BenchmarkEncrypt_RsaPrivateDecryptLong_1024(b *testing.B) {
 func BenchmarkEncrypt_RsaPrivateDecryptLong_2048(b *testing.B) {
 	b.ResetTimer()
 	cont := []byte(tesHtmlDoc)
-	pubFileBs2048, _ := ioutil.ReadFile(filePubPem2048)
-	priFileBs2048, _ := ioutil.ReadFile(filePriPem2048)
+	pubFileBs2048, _ := os.ReadFile(filePubPem2048)
+	priFileBs2048, _ := os.ReadFile(filePriPem2048)
 	enc, _ := KEncr.RsaPublicEncryptLong(cont, pubFileBs2048)
 	for i := 0; i < b.N; i++ {
 		_, _ = KEncr.RsaPrivateDecryptLong(enc, priFileBs2048)
@@ -769,10 +769,10 @@ func TestEncrypt_RsaPrivateEncryptPublicDecrypt_Long(t *testing.T) {
 	var err error
 
 	cont := []byte(tesHtmlDoc)
-	pubFileBs, _ := ioutil.ReadFile(filePubPem)
-	priFileBs, _ := ioutil.ReadFile(filePriPem)
-	pubFileBs2048, _ := ioutil.ReadFile(filePubPem2048)
-	priFileBs2048, _ := ioutil.ReadFile(filePriPem2048)
+	pubFileBs, _ := os.ReadFile(filePubPem)
+	priFileBs, _ := os.ReadFile(filePriPem)
+	pubFileBs2048, _ := os.ReadFile(filePubPem2048)
+	priFileBs2048, _ := os.ReadFile(filePriPem2048)
 
 	//1024-过长
 	enc, err = KEncr.RsaPrivateEncrypt(cont, priFileBs)
@@ -825,7 +825,7 @@ func TestEncrypt_RsaPrivateEncryptPublicDecrypt_Long(t *testing.T) {
 func BenchmarkEncrypt_RsaPrivateEncryptLong_1024(b *testing.B) {
 	b.ResetTimer()
 	cont := []byte(tesHtmlDoc)
-	priFileBs, _ := ioutil.ReadFile(filePriPem)
+	priFileBs, _ := os.ReadFile(filePriPem)
 	for i := 0; i < b.N; i++ {
 		_, _ = KEncr.RsaPrivateEncryptLong(cont, priFileBs)
 	}
@@ -834,7 +834,7 @@ func BenchmarkEncrypt_RsaPrivateEncryptLong_1024(b *testing.B) {
 func BenchmarkEncrypt_RsaPrivateEncryptLong_2048(b *testing.B) {
 	b.ResetTimer()
 	cont := []byte(tesHtmlDoc)
-	priFileBs2048, _ := ioutil.ReadFile(filePriPem2048)
+	priFileBs2048, _ := os.ReadFile(filePriPem2048)
 	for i := 0; i < b.N; i++ {
 		_, _ = KEncr.RsaPrivateEncryptLong(cont, priFileBs2048)
 	}
@@ -843,8 +843,8 @@ func BenchmarkEncrypt_RsaPrivateEncryptLong_2048(b *testing.B) {
 func BenchmarkEncrypt_RsaPublicDecryptLong_1024(b *testing.B) {
 	b.ResetTimer()
 	cont := []byte(tesHtmlDoc)
-	pubFileBs2048, _ := ioutil.ReadFile(filePubPem2048)
-	priFileBs2048, _ := ioutil.ReadFile(filePriPem2048)
+	pubFileBs2048, _ := os.ReadFile(filePubPem2048)
+	priFileBs2048, _ := os.ReadFile(filePriPem2048)
 	enc, _ := KEncr.RsaPrivateEncryptLong(cont, priFileBs2048)
 	for i := 0; i < b.N; i++ {
 		_, _ = KEncr.RsaPublicDecryptLong(enc, pubFileBs2048)
@@ -854,8 +854,8 @@ func BenchmarkEncrypt_RsaPublicDecryptLong_1024(b *testing.B) {
 func BenchmarkEncrypt_RsaPublicDecryptLong_2048(b *testing.B) {
 	b.ResetTimer()
 	cont := []byte(tesHtmlDoc)
-	pubFileBs, _ := ioutil.ReadFile(filePubPem)
-	priFileBs, _ := ioutil.ReadFile(filePriPem)
+	pubFileBs, _ := os.ReadFile(filePubPem)
+	priFileBs, _ := os.ReadFile(filePriPem)
 	enc, _ := KEncr.RsaPrivateEncryptLong(cont, priFileBs)
 	for i := 0; i < b.N; i++ {
 		_, _ = KEncr.RsaPublicDecryptLong(enc, pubFileBs)

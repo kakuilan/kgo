@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"go/parser"
 	"go/token"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"reflect"
 	"runtime"
@@ -50,7 +50,7 @@ func (kd *LkkDebug) Stacks(skip int) []byte {
 		_, _ = fmt.Fprintf(buf, "%s:%d (0x%x)\n", file, line, pc)
 		var lines [][]byte
 		if file != lastFile {
-			data, err := ioutil.ReadFile(file)
+			data, err := os.ReadFile(file)
 			if err == nil {
 				lines = bytes.Split(data, bytLinefeed)
 				lastFile = file
