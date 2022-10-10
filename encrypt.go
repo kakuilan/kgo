@@ -41,15 +41,15 @@ func (ke *LkkEncrypt) Base64Encode(str []byte) []byte {
 func (ke *LkkEncrypt) Base64Decode(str []byte) ([]byte, error) {
 	l := len(str)
 	if l > 0 {
-		dbuf := make([]byte, base64.StdEncoding.DecodedLen(l))
-		n, err := base64.StdEncoding.Decode(dbuf, str)
-		return dbuf[:n], err
+		buf := make([]byte, base64.StdEncoding.DecodedLen(l))
+		n, err := base64.StdEncoding.Decode(buf, str)
+		return buf[:n], err
 	}
 
 	return nil, nil
 }
 
-// Base64UrlSafeEncode url安全的Base64Encode,没有'/'和'+'及结尾的'=' .
+// Base64UrlEncode url安全的Base64Encode,没有'/'和'+'及结尾的'=' .
 func (ke *LkkEncrypt) Base64UrlEncode(str []byte) []byte {
 	l := len(str)
 	if l > 0 {
@@ -162,8 +162,8 @@ func (ke *LkkEncrypt) AuthCode(str, key []byte, encode bool, expiry int64) ([]by
 	h = 0
 	j = 0
 	for i = 0; i < strLen; i++ {
-		h = ((h + 1) % 256)
-		j = ((j + box[h]) % 256)
+		h = (h + 1) % 256
+		j = (j + box[h]) % 256
 		box[h], box[j] = box[j], box[h]
 		// 从密钥簿得出密钥进行异或，再转成字符
 		resdata = append(resdata, byte(int(str[i])^box[(box[h]+box[j])%256]))
@@ -515,7 +515,7 @@ func (ke *LkkEncrypt) RsaPrivateDecrypt(cipherText, privateKey []byte) ([]byte, 
 	// 获取私钥
 	block, _ := pem.Decode(privateKey)
 	if block == nil {
-		return nil, errors.New("[RsaPrivateDecrypt]`private key error!")
+		return nil, errors.New("[RsaPrivateDecrypt]`private key error")
 	}
 
 	// 解析PKCS1格式的私钥
@@ -534,7 +534,7 @@ func (ke *LkkEncrypt) RsaPrivateEncrypt(clearText, privateKey []byte) ([]byte, e
 	// 获取私钥
 	block, _ := pem.Decode(privateKey)
 	if block == nil {
-		return nil, errors.New("[RsaPrivateEncrypt]`private key error!")
+		return nil, errors.New("[RsaPrivateEncrypt]`private key error")
 	}
 
 	// 解析PKCS1格式的私钥
@@ -620,7 +620,7 @@ func (ke *LkkEncrypt) RsaPrivateDecryptLong(cipherText, privateKey []byte) ([]by
 	// 获取私钥
 	block, _ := pem.Decode(privateKey)
 	if block == nil {
-		return nil, errors.New("[RsaPrivateDecryptLong]`private key error!")
+		return nil, errors.New("[RsaPrivateDecryptLong]`private key error")
 	}
 
 	// 解析PKCS1格式的私钥
@@ -642,13 +642,13 @@ func (ke *LkkEncrypt) RsaPrivateDecryptLong(cipherText, privateKey []byte) ([]by
 	return res, nil
 }
 
-// RsaPrivateEncrypt RSA私钥加密长文本.比解密耗时.
+// RsaPrivateEncryptLong RSA私钥加密长文本.比解密耗时.
 // clearText为明文,privateKey为私钥.
 func (ke *LkkEncrypt) RsaPrivateEncryptLong(clearText, privateKey []byte) ([]byte, error) {
 	// 获取私钥
 	block, _ := pem.Decode(privateKey)
 	if block == nil {
-		return nil, errors.New("[RsaPrivateEncryptLong]`private key error!")
+		return nil, errors.New("[RsaPrivateEncryptLong]`private key error")
 	}
 
 	// 解析PKCS1格式的私钥
@@ -674,7 +674,7 @@ func (ke *LkkEncrypt) RsaPrivateEncryptLong(clearText, privateKey []byte) ([]byt
 	return res, nil
 }
 
-// RsaPublicDecrypt RSA公钥解密长文本.
+// RsaPublicDecryptLong RSA公钥解密长文本.
 // cipherText为密文,publicKey为公钥.
 func (ke *LkkEncrypt) RsaPublicDecryptLong(cipherText, publicKey []byte) ([]byte, error) {
 	// 解密pem格式的公钥

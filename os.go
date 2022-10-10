@@ -269,7 +269,7 @@ func (ko *LkkOS) GetIpByHostname(hostname string) (string, error) {
 	return "", err
 }
 
-// GetIpsByHost 获取互联网域名/主机名对应的 IPv4 地址列表.
+// GetIpsByDomain 获取互联网域名/主机名对应的 IPv4 地址列表.
 func (ko *LkkOS) GetIpsByDomain(domain string) ([]string, error) {
 	ips, err := net.LookupIP(domain)
 	if ips != nil {
@@ -517,7 +517,7 @@ func (ko *LkkOS) TriggerGC() {
 	}()
 }
 
-// MemoryGetUsage 获取当前go程序的内存使用,返回字节数.
+// GoMemory 获取当前go程序的内存使用,返回字节数.
 func (ko *LkkOS) GoMemory() uint64 {
 	stat := new(runtime.MemStats)
 	runtime.ReadMemStats(stat)

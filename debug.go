@@ -14,7 +14,7 @@ import (
 )
 
 // DumpPrint 打印调试变量.
-func (ks *LkkDebug) DumpPrint(vs ...interface{}) {
+func (kd *LkkDebug) DumpPrint(vs ...interface{}) {
 	dumpPrint(vs...)
 }
 
@@ -157,7 +157,7 @@ func (kd *LkkDebug) GetFuncNames(obj interface{}) (res []string) {
 }
 
 // WrapError 错误包裹.
-func (ks *LkkDebug) WrapError(err error, args ...interface{}) (res error) {
+func (kd *LkkDebug) WrapError(err error, args ...interface{}) (res error) {
 	num := len(args)
 	if err == nil && num == 0 {
 		res = errors.New("[WrapError] parameter error")

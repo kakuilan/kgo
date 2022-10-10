@@ -1032,7 +1032,7 @@ func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
 	}()
 
 	if len(fpaths) == 0 {
-		return false, errors.New("[Zip] no input files.")
+		return false, errors.New("[Zip] no input files")
 	}
 
 	var allfiles, files []string
@@ -1049,7 +1049,7 @@ func (kf *LkkFile) Zip(dst string, fpaths ...string) (bool, error) {
 	}
 
 	if len(allfiles) == 0 {
-		return false, errors.New("[Zip] no exist files.")
+		return false, errors.New("[Zip] no exist files")
 	}
 
 	zipw := zip.NewWriter(fzip)

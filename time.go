@@ -107,7 +107,7 @@ func (kt *LkkTime) Date(format string, ts ...interface{}) string {
 		} else if v, ok := val.(int); ok {
 			t = time.Unix(int64(v), 0)
 		} else if v, ok := val.(int64); ok {
-			t = time.Unix(int64(v), 0)
+			t = time.Unix(v, 0)
 		} else {
 			return ""
 		}
@@ -325,6 +325,7 @@ func (kt *LkkTime) DaysBetween(fromDate, toDate time.Time) int {
 
 // IsDate2time 检查字符串是否日期格式,并转换为时间戳.注意,时间戳可能为负数(小于1970年时).
 // 匹配如:
+//
 //	0000
 //	0000-00
 //	0000/00
@@ -336,6 +337,7 @@ func (kt *LkkTime) DaysBetween(fromDate, toDate time.Time) int {
 //	0000/00/00 00:00
 //	0000-00-00 00:00:00
 //	0000/00/00 00:00:00
+//
 // 等日期格式.
 func (kt *LkkTime) IsDate2time(str string) (bool, int64) {
 	if str == "" {

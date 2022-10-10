@@ -135,7 +135,7 @@ func (kn *LkkNumber) RandInt(min, max int) int {
 
 	//范围是否在边界内
 	mMax := int(math.MaxInt32)
-	mMin := int(math.MinInt32)
+	mMin := math.MinInt32
 	inrang := (mMin <= min && max <= mMax) || (INT_MIN <= min && max <= 0) || (0 <= min && max <= INT_MAX)
 	if !inrang {
 		min, max = mMin, mMax
@@ -157,7 +157,7 @@ func (kn *LkkNumber) RandFloat64(min, max float64) float64 {
 	}
 
 	//范围是否在边界内
-	mMax := float64(math.MaxFloat32)
+	mMax := math.MaxFloat32
 	mMin := -mMax
 	inrang := (mMin <= min && max <= mMax) || (-math.MaxFloat64 <= min && max <= 0) || (0 <= min && max <= math.MaxFloat64)
 	if !inrang {
@@ -314,7 +314,7 @@ func (kn *LkkNumber) Log(x, y float64) float64 {
 func (kn *LkkNumber) ByteFormat(size float64, decimal uint8, delimiter string) string {
 	var arr = []string{"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB", Unknown}
 	var pos int = 0
-	var j float64 = float64(size)
+	var j float64 = size
 	for {
 		if size >= 1024 {
 			size = size / 1024

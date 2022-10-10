@@ -39,7 +39,7 @@ import (
 	"unicode/utf8"
 )
 
-// Md5 获取字节切片md5值.
+// Md5Byte 获取字节切片md5值.
 // length指定结果长度,默认32.
 func (ks *LkkString) Md5Byte(str []byte, length ...uint8) []byte {
 	var l uint8 = 32
@@ -214,7 +214,7 @@ func (ks *LkkString) IsGbk(s []byte) (res bool) {
 
 // Img2Base64 将图片字节转换为base64字符串.ext为图片扩展名,默认jpg.
 func (ks *LkkString) Img2Base64(content []byte, ext ...string) string {
-	var imgType string = "jpg"
+	var imgType = "jpg"
 	if len(ext) > 0 {
 		imgType = strings.ToLower(ext[0])
 	}
@@ -731,12 +731,12 @@ func (ks *LkkString) Jsonp2Json(str string) (string, error) {
 	end := strings.LastIndex(str, ")")
 
 	if start == -1 || end == -1 {
-		return "", errors.New("[Jsonp2Json] invalid jsonp.")
+		return "", errors.New("[Jsonp2Json] invalid jsonp")
 	}
 
 	start += 1
 	if start >= end {
-		return "", errors.New("[Jsonp2Json] invalid jsonp.")
+		return "", errors.New("[Jsonp2Json] invalid jsonp")
 	}
 
 	res := str[start:end]
@@ -1114,7 +1114,7 @@ func (ks *LkkString) GetDomain(str string, isMain ...bool) string {
 // ClearUrlPrefix 清除URL的前缀;
 // str为URL字符串,prefix为前缀,默认"/".
 func (ks *LkkString) ClearUrlPrefix(str string, prefix ...string) string {
-	var p string = "/"
+	var p = "/"
 	if len(prefix) > 0 {
 		p = prefix[0]
 	}
@@ -1529,7 +1529,7 @@ func (ks *LkkString) UuidV4() (string, error) {
 	//sets the version bits
 	u[6] = (u[6] & 0x0f) | (3 << 4)
 	//sets the variant bits
-	u[8] = (u[8]&(0xff>>2) | (0x02 << 6))
+	u[8] = u[8]&(0xff>>2) | (0x02 << 6)
 
 	return fmt.Sprintf("%08x-%04x-%04x-%04x-%12x",
 		u[0:4],
@@ -1558,7 +1558,7 @@ func (ks *LkkString) UuidV5(name, namespace []byte) (string, error) {
 	//sets the version bits
 	u[6] = (u[6] & 0x0f) | (5 << 4)
 	//sets the variant bits
-	u[8] = (u[8]&(0xff>>2) | (0x02 << 6))
+	u[8] = u[8]&(0xff>>2) | (0x02 << 6)
 
 	buf := make([]byte, 36)
 
@@ -1805,7 +1805,7 @@ func (ks *LkkString) ToSnakeCase(str string) string {
 	return camelCaseToLowerCase(str, '_')
 }
 
-// ToSnakeCase 转为串形写法.
+// ToKebabCase 转为串形写法.
 // 使用横杠"-"连接.
 func (ks *LkkString) ToKebabCase(str string) string {
 	return camelCaseToLowerCase(str, '-')
@@ -2075,7 +2075,7 @@ func (ks *LkkString) CountBase64Byte(str string) (res int) {
 	pos := strings.Index(str, ",")
 	if pos > 10 {
 		img := strings.Replace(str[pos:], "=", "", -1)
-		res = int(float64(len(img)) * float64(3.0/4.0))
+		res = int(float64(len(img)) * (3.0 / 4.0))
 	}
 
 	return
@@ -2201,7 +2201,7 @@ func (ks *LkkString) Gravatar(email string, size uint16) string {
 func (ks *LkkString) AtWho(text string, minLen ...int) []string {
 	var result = []string{}
 	var username string
-	var min int = 5
+	var min = 5
 	if len(minLen) > 0 && minLen[0] > 0 {
 		min = minLen[0]
 	}
