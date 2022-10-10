@@ -3477,3 +3477,20 @@ func BenchmarkString_PasswordSafeLevel(b *testing.B) {
 		_ = KStr.PasswordSafeLevel(b64Hello)
 	}
 }
+
+func TestString_StrOffset(t *testing.T) {
+	res0 := KStr.StrOffset("", 55)
+	res1 := KStr.StrOffset(helloOther, 2360)
+	res2 := KStr.StrOffset(res1, -2360)
+
+	assert.Empty(t, res0)
+	assert.NotEmpty(t, res1)
+	assert.Equal(t, res2, helloOther)
+}
+
+func BenchmarkString_StrOffset(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KStr.StrOffset(strHello, 33)
+	}
+}

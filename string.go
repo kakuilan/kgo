@@ -2338,3 +2338,23 @@ func (ks *LkkString) PasswordSafeLevel(str string) (res uint8) {
 
 	return
 }
+
+// StrOffset 字符串整体偏移.
+func (ks *LkkString) StrOffset(str string, num int) string {
+	var buffer bytes.Buffer
+	var all = len(str)
+	if all > 0 {
+		//取余
+		rem := num % 256
+		if rem < 0 {
+			rem += 256
+		}
+
+		for i := 0; i < all; i++ {
+			c := (int(str[i]) + rem) % 256
+			buffer.WriteByte(byte(c))
+		}
+	}
+
+	return buffer.String()
+}
