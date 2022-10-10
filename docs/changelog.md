@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.3.5]- 2022-10-10
+
+#### Added
+
+- 新增`KStr.StrOffset`,字符串整体偏移
+
+#### Fixed
+
+- fix ioutil.ReadAll Deprecated, replace to io.ReadAll
+- fix ioutil.ReadFile Deprecated, replace to os.ReadFile
+
+#### Changed
+
+- none
+
+#### Removed
+
+- none
+
 ## [v0.3.4]- 2022-09-05
 
 #### Added
