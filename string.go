@@ -25,7 +25,6 @@ import (
 	"hash/crc32"
 	"html"
 	"io"
-	"io/ioutil"
 	"math"
 	"math/rand"
 	"net"
@@ -658,8 +657,8 @@ func (ks *LkkString) IsBase64Image(str string) bool {
 
 // IsRsaPublicKey 检查字符串是否RSA的公钥,keylen为密钥长度.
 func (ks *LkkString) IsRsaPublicKey(str string, keylen uint16) bool {
-	bb := bytes.NewBufferString(str)
-	pemBytes, _ := ioutil.ReadAll(bb)
+	bf := bytes.NewBufferString(str)
+	pemBytes, _ := io.ReadAll(bf)
 
 	// 获取公钥
 	block, _ := pem.Decode(pemBytes)
@@ -1917,14 +1916,14 @@ func (ks *LkkString) ClosestWord(word string, searchs []string) (string, int) {
 // Utf8ToBig5 UTF-8转BIG5编码.
 func (ks *LkkString) Utf8ToBig5(s []byte) ([]byte, error) {
 	reader := transform.NewReader(bytes.NewReader(s), traditionalchinese.Big5.NewEncoder())
-	d, e := ioutil.ReadAll(reader)
+	d, e := io.ReadAll(reader)
 	return d, e
 }
 
 // Big5ToUtf8 BIG5转UTF-8编码.
 func (ks *LkkString) Big5ToUtf8(s []byte) ([]byte, error) {
 	reader := transform.NewReader(bytes.NewReader(s), traditionalchinese.Big5.NewDecoder())
-	d, e := ioutil.ReadAll(reader)
+	d, e := io.ReadAll(reader)
 	return d, e
 }
 

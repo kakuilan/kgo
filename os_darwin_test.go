@@ -1,3 +1,4 @@
+//go:build darwin
 // +build darwin
 
 package kgo
@@ -5,7 +6,7 @@ package kgo
 import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
-	"io/ioutil"
+	"io"
 	"net"
 	"testing"
 	"time"
@@ -147,7 +148,7 @@ func TestOS_Darwin_GetPidByPort(t *testing.T) {
 		}()
 
 		//接收
-		buf, err := ioutil.ReadAll(conn)
+		buf, err := io.ReadAll(conn)
 		assert.Nil(t, err)
 
 		msg := string(buf[:])
