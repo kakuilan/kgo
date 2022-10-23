@@ -117,6 +117,7 @@
 - https://github.com/thoas/go-funk
 - https://gitee.com/tym_hmm/go-helper
 - https://github.com/hyacinthus/x
+- https://github.com/fufuok/utils
 
 
 ### 其他库
