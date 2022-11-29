@@ -1,6 +1,7 @@
 package kgo
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/binary"
 	"errors"
@@ -587,4 +588,64 @@ func (ko *LkkOS) GetProcessExecPath(pid int) string {
 // HomeDir 获取当前用户的主目录.
 func (ko *LkkOS) HomeDir() (string, error) {
 	return os.UserHomeDir()
+}
+
+// DownloadFile 下载文件.其中
+// url 为文件网址;
+// savePath 为保存路径;
+// cover 是否覆盖已有文件;
+// client 为自定义的请求客户端,不提供时默认使用http.DefaultClient.
+func (ko *LkkOS) DownloadFile(url string, savePath string, cover bool, client *http.Client) (written int64, err error) {
+	if !isUrl(url) {
+		return 0, errors.New("url is not a valid URL")
+	}
+
+	savePath = trim(savePath)
+	if savePath == "" {
+		return 0, errors.New("savePath cannot be empty")
+	}
+
+	//已存在
+	if !cover && KFile.IsExist(savePath) {
+		return 0, nil
+	}
+
+	if client == nil {
+		client = http.DefaultClient
+	}
+
+	//父级目录
+	dir := KFile.Dirname(savePath)
+	if err = os.MkdirAll(dir, 0766); err != nil {
+		return 0, err
+	}
+
+	var resp *http.Response
+	resp, err = client.Get(url)
+	if err != nil {
+		return 0, err
+	}
+	defer func() {
+		_ = resp.Body.Close()
+	}()
+
+	//创建文件
+	var out *os.File
+	out, err = os.Create(savePath)
+	if err != nil {
+		return 0, err
+	}
+	defer func() {
+		_ = out.Close()
+	}()
+
+	//添加缓冲 bufio 是通过缓冲来提高效率。
+	wt := bufio.NewWriter(out)
+	written, err = io.Copy(wt, resp.Body)
+	if err == nil {
+		//将缓存的数据写入到文件中
+		err = wt.Flush()
+	}
+
+	return written, err
 }

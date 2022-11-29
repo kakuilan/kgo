@@ -691,19 +691,7 @@ func (ks *LkkString) IsRsaPublicKey(str string, keylen uint16) bool {
 
 // IsUrl 检查字符串是否URL.
 func (ks *LkkString) IsUrl(str string) bool {
-	if str == "" || len(str) <= 3 || utf8.RuneCountInString(str) >= 2083 || strings.HasPrefix(str, ".") {
-		return false
-	}
-
-	res, err := url.ParseRequestURI(str)
-	if err != nil {
-		return false //Couldn't even parse the url
-	}
-	if len(res.Scheme) == 0 {
-		return false //No Scheme found
-	}
-
-	return true
+	return isUrl(str)
 }
 
 // IsUrlExists 检查URL是否存在.
@@ -712,7 +700,7 @@ func (ks *LkkString) IsUrlExists(str string) bool {
 		return false
 	}
 
-	client := &http.Client{}
+	client := http.DefaultClient
 	resp, err := client.Head(str)
 	if err != nil {
 		return false

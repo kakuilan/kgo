@@ -763,6 +763,9 @@ var tesUrl38 = "xyz://foobar.com"
 var tesUrl39 = "https://www.baidu.com/"
 var tesUrl40 = "https://www.w3.org/"
 
+//下载文件
+var downloadfile01 = "./testdata/download/test001/file001"
+
 //命令
 var tesCommand01 = " ls -a -h"
 var tesCommand02 = " ls -a\"\" -h 'hehe'"

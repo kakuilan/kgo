@@ -8,6 +8,7 @@ import (
 	"os/user"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestOS_Pwd(t *testing.T) {
@@ -498,4 +499,36 @@ func BenchmarkOS_GetSystemInfo(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		KOS.GetSystemInfo()
 	}
+}
+
+func TestOS_DownloadFile(t *testing.T) {
+	var written int64
+	var err error
+
+	//非url
+	written, err = KOS.DownloadFile(strHello, "", false, nil)
+	assert.NotNil(t, err)
+	assert.Equal(t, written, int64(0))
+
+	//空路径
+	written, err = KOS.DownloadFile(tesUrl39, "", false, nil)
+	assert.NotNil(t, err)
+	assert.Equal(t, written, int64(0))
+
+	//使用默认客户端
+	written, err = KOS.DownloadFile(tesUrl39, downloadfile01, false, nil)
+	assert.Nil(t, err)
+	assert.Greater(t, written, int64(0))
+
+	//已存在文件
+	written, err = KOS.DownloadFile(tesUrl39, downloadfile01, false, nil)
+	assert.Nil(t, err)
+	assert.Equal(t, written, int64(0))
+
+	//自定义客户端,覆盖已存在文件
+	client := &http.Client{}
+	client.Timeout = 6 * time.Second
+	written, err = KOS.DownloadFile(tesUrl39, downloadfile01, true, client)
+	assert.Nil(t, err)
+	assert.Greater(t, written, int64(0))
 }

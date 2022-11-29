@@ -15,6 +15,7 @@ import (
 	"hash"
 	"io"
 	"math"
+	"net/url"
 	"reflect"
 	"strconv"
 	"strings"
@@ -213,6 +214,23 @@ func isLittleEndian() bool {
 	// 小端: 04 (03 02 01)
 	// 大端: 01 (02 03 04)
 	return (b == 0x04)
+}
+
+// isUrl 字符串是否URL.
+func isUrl(str string) bool {
+	if str == "" || len(str) <= 3 || utf8.RuneCountInString(str) >= 2083 || strings.HasPrefix(str, ".") {
+		return false
+	}
+
+	res, err := url.ParseRequestURI(str)
+	if err != nil {
+		return false //Couldn't even parse the url
+	}
+	if len(res.Scheme) == 0 {
+		return false //No Scheme found
+	}
+
+	return true
 }
 
 // getEndian 获取系统字节序类型,小端返回binary.LittleEndian,大端返回binary.BigEndian .
@@ -1506,4 +1524,10 @@ func CallFunc(f interface{}, args ...interface{}) ([]interface{}, error) {
 	}
 
 	return results, nil
+}
+
+// trim 字符串修剪.
+func trim(str string, characterMask ...string) string {
+	mask := getTrimMask(characterMask)
+	return strings.Trim(str, mask)
 }
