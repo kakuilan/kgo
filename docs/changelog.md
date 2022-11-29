@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.3.6]- 2022-11-29
+
+#### Added
+
+- 新增`KOS.DownloadFile`,文件下载
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- none
+
+#### Removed
+
+- none
+
 ## [v0.3.5]- 2022-10-10
 
 #### Added
