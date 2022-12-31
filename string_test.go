@@ -1857,7 +1857,7 @@ func TestString_IsBase64Image(t *testing.T) {
 		{tesBase64_12, false},
 	}
 	for _, test := range tests {
-		actual := KStr.IsBase64Image(test.param)
+		actual, _ := KStr.IsBase64Image(test.param)
 		assert.Equal(t, actual, test.expected)
 	}
 }

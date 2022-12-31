@@ -726,8 +726,9 @@ func BenchmarkFile_DelDir(b *testing.B) {
 }
 
 func TestFile_Img2Base64(t *testing.T) {
-	var res string
+	var res, ext string
 	var err error
+	var ok bool
 
 	//非图片
 	res, err = KFile.Img2Base64(fileMd)
@@ -739,13 +740,17 @@ func TestFile_Img2Base64(t *testing.T) {
 
 	//png
 	res, err = KFile.Img2Base64(imgPng)
+	ok, ext = KStr.IsBase64Image(res)
 	assert.Nil(t, err)
-	assert.Contains(t, res, "png")
+	assert.True(t, ok)
+	assert.Equal(t, ext, "png")
 
 	//jpg
 	res, err = KFile.Img2Base64(imgJpg)
+	ok, ext = KStr.IsBase64Image(res)
 	assert.Nil(t, err)
-	assert.Contains(t, res, "jpg")
+	assert.True(t, ok)
+	assert.Equal(t, ext, "jpg")
 }
 
 func BenchmarkFile_Img2Base64(b *testing.B) {

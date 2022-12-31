@@ -645,14 +645,20 @@ func (ks *LkkString) IsBase64(str string) bool {
 	return str != "" && RegBase64.MatchString(str)
 }
 
-// IsBase64Image 是否base64编码的图片.
-func (ks *LkkString) IsBase64Image(str string) bool {
+// IsBase64Image 是否base64编码的图片,并返回扩展名.
+func (ks *LkkString) IsBase64Image(str string) (chk bool, ext string) {
 	if str == "" || !strings.ContainsRune(str, ',') {
-		return false
+		return
 	}
 
-	dataURI := strings.Split(str, ",")
-	return RegBase64Image.MatchString(dataURI[0]) && RegBase64.MatchString(dataURI[1])
+	data := strings.Split(str, ",")
+	chk = RegBase64Image.MatchString(data[0]) && RegBase64.MatchString(data[1])
+	if chk {
+		match := RegBase64Image.FindStringSubmatch(data[0])
+		ext = match[2]
+	}
+
+	return
 }
 
 // IsRsaPublicKey 检查字符串是否RSA的公钥,keylen为密钥长度.
