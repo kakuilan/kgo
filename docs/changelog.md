@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.3.7]- 2022-12-31
+
+#### Added
+
+- none
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- 修改`LkkString.IsBase64Image`,增加返回扩展名
+
+#### Removed
+
+- none
+
 ## [v0.3.6]- 2022-11-29
 
 #### Added

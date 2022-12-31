@@ -61,7 +61,7 @@ type (
 
 const (
 	// Version 版本号
-	Version = "0.3.6"
+	Version = "0.3.7"
 
 	// KDelimiter 本库自定义分隔符
 	KDelimiter = "$@#KSYSK#@$"
