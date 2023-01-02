@@ -316,6 +316,50 @@ func BenchmarkNumber_MaxInt(b *testing.B) {
 	}
 }
 
+func TestNumber_MaxInt64(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.NotEmpty(t, r)
+	}()
+
+	var res int64
+
+	res = KNum.MaxInt64(int64Slc...)
+	assert.Equal(t, res, int64(15))
+
+	//无输入
+	KNum.MaxInt64()
+}
+
+func BenchmarkNumber_MaxInt64(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.MaxInt64(int64Slc...)
+	}
+}
+
+func TestNumber_MaxFloat32(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.NotEmpty(t, r)
+	}()
+
+	var res float32
+
+	res = KNum.MaxFloat32(flo32Slc...)
+	assert.Equal(t, res, flPi1)
+
+	//无输入
+	KNum.MaxFloat32()
+}
+
+func BenchmarkNumber_MaxFloat32(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.MaxFloat32(flo32Slc...)
+	}
+}
+
 func TestNumber_MaxFloat64(t *testing.T) {
 	defer func() {
 		r := recover()
@@ -383,6 +427,50 @@ func BenchmarkNumber_MinInt(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KNum.MinInt(intSlc...)
+	}
+}
+
+func TestNumber_MinInt64(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.NotEmpty(t, r)
+	}()
+
+	var res int64
+
+	res = KNum.MinInt64(int64Slc...)
+	assert.Equal(t, res, int64(0))
+
+	//无输入
+	KNum.MinInt64()
+}
+
+func BenchmarkNumber_MinInt64(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.MinInt64(int64Slc...)
+	}
+}
+
+func TestNumber_MinFloat32(t *testing.T) {
+	defer func() {
+		r := recover()
+		assert.NotEmpty(t, r)
+	}()
+
+	var res float32
+
+	res = KNum.MinFloat32(flo32Slc...)
+	assert.Equal(t, res, float32(0))
+
+	//无输入
+	KNum.MinFloat64()
+}
+
+func BenchmarkNumber_MinFloat32(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.MinFloat32(flo32Slc...)
 	}
 }
 

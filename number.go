@@ -193,10 +193,42 @@ func (kn *LkkNumber) Ceil(value float64) float64 {
 	return math.Ceil(value)
 }
 
-// MaxInt 整数序列求最大值.
+// MaxInt int整数序列求最大值.
 func (kn *LkkNumber) MaxInt(nums ...int) (res int) {
 	if len(nums) < 1 {
 		panic("[MaxInt]` nums length is less than 1")
+	}
+
+	res = nums[0]
+	for _, v := range nums {
+		if v > res {
+			res = v
+		}
+	}
+
+	return
+}
+
+// MaxInt64 int64整数序列求最大值.
+func (kn *LkkNumber) MaxInt64(nums ...int64) (res int64) {
+	if len(nums) < 1 {
+		panic("[MaxInt64]` nums length is less than 1")
+	}
+
+	res = nums[0]
+	for _, v := range nums {
+		if v > res {
+			res = v
+		}
+	}
+
+	return
+}
+
+// MaxFloat32 32位浮点数序列求最大值.
+func (kn *LkkNumber) MaxFloat32(nums ...float32) (res float32) {
+	if len(nums) < 1 {
+		panic("[MaxFloat32]` nums length is less than 1")
 	}
 
 	res = nums[0]
@@ -242,10 +274,40 @@ func (kn *LkkNumber) Max(nums ...interface{}) (res float64) {
 	return
 }
 
-// MinInt 整数序列求最小值.
+// MinInt int整数序列求最小值.
 func (kn *LkkNumber) MinInt(nums ...int) (res int) {
 	if len(nums) < 1 {
 		panic("[MinInt]` nums length is less than 1")
+	}
+	res = nums[0]
+	for _, v := range nums {
+		if v < res {
+			res = v
+		}
+	}
+
+	return
+}
+
+// MinInt64 int64整数序列求最小值.
+func (kn *LkkNumber) MinInt64(nums ...int64) (res int64) {
+	if len(nums) < 1 {
+		panic("[MinInt64]` nums length is less than 1")
+	}
+	res = nums[0]
+	for _, v := range nums {
+		if v < res {
+			res = v
+		}
+	}
+
+	return
+}
+
+// MinFloat32 32位浮点数序列求最小值.
+func (kn *LkkNumber) MinFloat32(nums ...float32) (res float32) {
+	if len(nums) < 1 {
+		panic("[MinFloat32]` nums length is less than 1")
 	}
 	res = nums[0]
 	for _, v := range nums {
