@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.3.9]- 2023-01-30
+
+#### Added
+
+- 新增`LkkNumber.SumInt64`,int64整数求和
+- 新增`LkkNumber.SumFloat32`,32位浮点数求和
+- 新增`LkkNumber.AverageInt64`,对int64整数序列求平均值
+- 新增`LkkNumber.AverageFloat32`,对32位浮点数序列求平均值
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- none
+
+#### Removed
+
+- none
+
 ## [v0.3.8]- 2023-01-02
 
 #### Added
