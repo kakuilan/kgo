@@ -491,7 +491,7 @@ func (kn *LkkNumber) InRange(value interface{}, left interface{}, right interfac
 	return false
 }
 
-// SumInt 整数求和.
+// SumInt int整数求和.
 func (kn *LkkNumber) SumInt(nums ...int) int {
 	var sum int
 	for _, v := range nums {
@@ -500,7 +500,25 @@ func (kn *LkkNumber) SumInt(nums ...int) int {
 	return sum
 }
 
-// SumFloat64 浮点数求和.
+// SumInt64 int64整数求和.
+func (kn *LkkNumber) SumInt64(nums ...int64) int64 {
+	var sum int64
+	for _, v := range nums {
+		sum += v
+	}
+	return sum
+}
+
+// SumFloat32 32位浮点数求和.
+func (kn *LkkNumber) SumFloat32(nums ...float32) float32 {
+	var sum float32
+	for _, v := range nums {
+		sum += v
+	}
+	return sum
+}
+
+// SumFloat64 64位浮点数求和.
 func (kn *LkkNumber) SumFloat64(nums ...float64) float64 {
 	var sum float64
 	for _, v := range nums {
@@ -523,7 +541,7 @@ func (kn *LkkNumber) Sum(nums ...interface{}) (res float64) {
 	return
 }
 
-// AverageInt 对整数序列求平均值.
+// AverageInt 对int整数序列求平均值.
 func (kn *LkkNumber) AverageInt(nums ...int) (res float64) {
 	length := len(nums)
 	if length == 0 {
@@ -538,7 +556,37 @@ func (kn *LkkNumber) AverageInt(nums ...int) (res float64) {
 	return
 }
 
-// AverageFloat64 对浮点数序列求平均值.
+// AverageInt64 对int64整数序列求平均值.
+func (kn *LkkNumber) AverageInt64(nums ...int64) (res float64) {
+	length := len(nums)
+	if length == 0 {
+		return
+	} else if length == 1 {
+		res = float64(nums[0])
+	} else {
+		total := kn.SumInt64(nums...)
+		res = float64(total) / float64(length)
+	}
+
+	return
+}
+
+// AverageFloat32 对32位浮点数序列求平均值.
+func (kn *LkkNumber) AverageFloat32(nums ...float32) (res float32) {
+	length := len(nums)
+	if length == 0 {
+		return
+	} else if length == 1 {
+		res = nums[0]
+	} else {
+		total := kn.SumFloat32(nums...)
+		res = total / float32(length)
+	}
+
+	return
+}
+
+// AverageFloat64 对64位浮点数序列求平均值.
 func (kn *LkkNumber) AverageFloat64(nums ...float64) (res float64) {
 	length := len(nums)
 	if length == 0 {

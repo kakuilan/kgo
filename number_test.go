@@ -1023,6 +1023,34 @@ func BenchmarkNumber_SumInt(b *testing.B) {
 	}
 }
 
+func TestNumber_SumInt64(t *testing.T) {
+	var res int64
+
+	res = KNum.SumInt64(int64Slc[:]...)
+	assert.Equal(t, res, int64(159))
+}
+
+func BenchmarkNumber_SumInt64(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.SumInt64(int64Slc...)
+	}
+}
+
+func TestNumber_SumFloat32(t *testing.T) {
+	var res float32
+
+	res = KNum.SumFloat32(flo32Slc...)
+	assert.Equal(t, "11.59777069", KNum.NumberFormat(float64(res), 8, ".", ""))
+}
+
+func BenchmarkNumber_SumFloat32(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.SumFloat32(flo32Slc...)
+	}
+}
+
 func TestNumber_SumFloat64(t *testing.T) {
 	var res float64
 
@@ -1068,8 +1096,8 @@ func TestNumber_AverageInt(t *testing.T) {
 	res = KNum.AverageInt()
 	assert.Equal(t, 0.0, res)
 
-	res = KNum.AverageInt(intTen)
-	assert.Equal(t, float64(intTen), res)
+	res = KNum.AverageInt(intSpeedLight)
+	assert.Equal(t, float64(intSpeedLight), res)
 
 	res = KNum.AverageInt(naturalArr[:]...)
 	assert.Equal(t, 5.0, res)
@@ -1079,6 +1107,46 @@ func BenchmarkNumber_AverageInt(b *testing.B) {
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		KNum.AverageInt(intSlc...)
+	}
+}
+
+func TestNumber_AverageInt64(t *testing.T) {
+	var res float64
+
+	res = KNum.AverageInt64()
+	assert.Equal(t, 0.0, res)
+
+	res = KNum.AverageInt64(intAstronomicalUnit)
+	assert.Equal(t, float64(intAstronomicalUnit), res)
+
+	res = KNum.AverageInt64(int64Slc[:]...)
+	assert.Equal(t, "7.227273", KNum.NumberFormat(res, 6, ".", ""))
+}
+
+func BenchmarkNumber_AverageInt64(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.AverageInt64(int64Slc...)
+	}
+}
+
+func TestNumber_AverageFloat32(t *testing.T) {
+	var res float32
+
+	res = KNum.AverageFloat32()
+	assert.Equal(t, float32(0.0), res)
+
+	res = KNum.AverageFloat32(floSpeedLight)
+	assert.Equal(t, floSpeedLight, res)
+
+	res = KNum.AverageFloat32(flo32Slc...)
+	assert.Equal(t, "1.9330", KNum.NumberFormat(float64(res), 4, ".", ""))
+}
+
+func BenchmarkNumber_AverageFloat32(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		KNum.AverageFloat32(flo32Slc...)
 	}
 }
 
