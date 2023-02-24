@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.4.0]- 2023-02-24
+
+#### Added
+
+- none
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- `github.com/StackExchange/wmi`不再维护,替换为`github.com/yusufpapurcu/wmi`
+- 更新包依赖
+
+#### Removed
+
+- none
+
 ## [v0.3.9]- 2023-01-30
 
 #### Added
