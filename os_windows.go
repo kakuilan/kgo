@@ -6,7 +6,7 @@ package kgo
 import (
 	"errors"
 	"fmt"
-	"github.com/StackExchange/wmi"
+	"github.com/yusufpapurcu/wmi"
 	"golang.org/x/sys/windows"
 	"strings"
 	"syscall"

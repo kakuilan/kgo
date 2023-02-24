@@ -3,7 +3,7 @@ module github.com/kakuilan/kgo
 go 1.16
 
 require (
-	github.com/StackExchange/wmi v1.2.1
+	github.com/yusufpapurcu/wmi v1.2.2
 	github.com/brianvoe/gofakeit/v6 v6.20.1
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
