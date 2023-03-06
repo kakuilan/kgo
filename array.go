@@ -354,7 +354,7 @@ func (ka *LkkArray) UniqueStrings(strs []string) (res []string) {
 	return
 }
 
-// ArrayDiff 计算数组(数组/切片/字典)的交集,返回在 arr1 中但不在 arr2 里的元素,注意会同时返回键.
+// ArrayDiff 计算数组(数组/切片/字典)的差集,返回在 arr1 中但不在 arr2 里的元素,注意会同时返回键.
 // compareType为两个数组的比较方式,枚举类型,有:
 // COMPARE_ONLY_VALUE 根据元素值比较, 返回在 arr1 中但是不在arr2 里的值;
 // COMPARE_ONLY_KEY 根据 arr1 中的键名和 arr2 进行比较,返回不同键名的项;
@@ -991,7 +991,7 @@ func (ka *LkkArray) ArrayFlip(arr interface{}) map[interface{}]interface{} {
 }
 
 // MergeSlice 合并一个或多个数组/切片.
-// filterZero 是否过滤零值元素(nil,false,0,'',[]),true时排除零值元素,false时保留零值元素.
+// filterZero 是否过滤零值元素(nil,false,0,”,[]),true时排除零值元素,false时保留零值元素.
 // ss是元素为数组/切片的切片.
 func (ka *LkkArray) MergeSlice(filterZero bool, ss ...interface{}) []interface{} {
 	var res []interface{}
