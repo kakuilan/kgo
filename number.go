@@ -702,7 +702,7 @@ func (kn *LkkNumber) NearLogarithm(num, base int, left bool) int {
 	return int(kn.Ceil(res))
 }
 
-// SplitNaturalNum 将自然数 num 按底数 base 进行拆解.
+// SplitNaturalNum 将自然数 num 按底数 base 进行拆解;所得结果的列表累计和为num.
 func (kn *LkkNumber) SplitNaturalNum(num, base int) []int {
 	var res []int
 
