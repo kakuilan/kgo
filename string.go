@@ -2268,6 +2268,14 @@ func (ks *LkkString) PasswordSafeLevel(str string) (res uint8) {
 	if length > 0 {
 		var scoreTotal, scoreAlphaNumber, scoreSpecial int
 
+		//是否弱密码
+		for _, v := range weakPasswords {
+			if v == str || ks.Index(str, v, true) == 0 {
+				res = 1
+				break
+			}
+		}
+
 		//根据长度加分
 		if length >= 6 {
 			scoreTotal += length
@@ -2304,7 +2312,7 @@ func (ks *LkkString) PasswordSafeLevel(str string) (res uint8) {
 		//重复性检查
 		for _, num := range repeatMap {
 			if num > 1 {
-				scoreTotal -= num * 2
+				scoreTotal -= 1
 			}
 		}
 
@@ -2320,13 +2328,6 @@ func (ks *LkkString) PasswordSafeLevel(str string) (res uint8) {
 			res = 4
 		}
 
-		//是否弱密码
-		for _, v := range weakPasswords {
-			if v == str || ks.Index(str, v, true) == 0 {
-				res = 1
-				break
-			}
-		}
 	}
 
 	return

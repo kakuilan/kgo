@@ -3457,12 +3457,14 @@ func TestString_PasswordSafeLevel(t *testing.T) {
 	}{
 		{"", 0},
 		{"12abc", 1},
+		{"01234567890", 1},
 		{"1223456", 1},
 		{"abc123456", 1},
+		{helloEngICase, 1},
 		{"abc@123456", 2},
 		{"abc@123aPPT", 2},
-		{"tcl@123aPPT", 2},
-		{b64Hello, 3},
+		{"tcl@123a#PPT", 3},
+		{b64Hello, 4},
 		{"bom7o++iQ,B)aWxD>a?MkmXR9", 4},
 	}
 	for _, test := range tests {
