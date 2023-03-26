@@ -2272,7 +2272,7 @@ func (ks *LkkString) PasswordSafeLevel(str string) (res uint8) {
 		for _, v := range weakPasswords {
 			if v == str || ks.Index(str, v, true) == 0 {
 				res = 1
-				break
+				return
 			}
 		}
 
