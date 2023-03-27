@@ -30,7 +30,7 @@ golang 常用函数库/工具集,仅测试支持有限的64位系统.
 ### 依赖第三方库
 
 - github.com/json-iterator/go
-- github.com/StackExchange/wmi
+- github.com/yusufpapurcu/wmi
 
 ### 安装使用
 
