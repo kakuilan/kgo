@@ -8,13 +8,13 @@ import (
 	"time"
 )
 
-//类型-接口
+// 类型-接口
 type itfType interface {
 	noRealize() //该方法不实现
 	sayHello(name string) string
 }
 
-//类型-人员
+// 类型-人员
 type sPerson struct {
 	secret string ``
 	Name   string `fake:"{name}" json:"name"`
@@ -25,10 +25,10 @@ type sPerson struct {
 	none   bool
 }
 
-//类型-人群
+// 类型-人群
 type sPersons []sPerson
 
-//类型-组织
+// 类型-组织
 type sOrganization struct {
 	Leader     sPerson  //领导
 	Assistant  sPerson  //副手
@@ -54,22 +54,31 @@ type userAccountJson struct {
 	sPerson
 }
 
-//接口对象
+type userAccountJson2 struct {
+	ID       uint32 `json:"id"`
+	Status   uint8  `json:"status"`
+	Type     uint8  `json:"type"`
+	Nickname string `json:"nickname"`
+	Avatar   string `json:"avatar"`
+	sPerson
+}
+
+// 接口对象
 var itfObj itfType
 
-//结构体-人员
+// 结构体-人员
 var personS1, personS2, personS3, personS4, personS5 sPerson
 
-//结构体-人群
+// 结构体-人群
 var crowd sPersons
 
-//结构体-组织
+// 结构体-组织
 var orgS1 = new(sOrganization) //返回指针
 
-//结构体-用户账号
+// 结构体-用户账号
 var account1 userAccount
 
-//字典-普通人员
+// 字典-普通人员
 var personMp1 = map[string]interface{}{"age": 20, "name": "test1", "naction": "us", "tel": "13712345678"}
 var personMp2 = map[string]interface{}{"age": 21, "name": "test2", "naction": "cn", "tel": "13712345679"}
 var personMp3 = map[string]interface{}{"age": 22, "name": "test3", "naction": "en", "tel": "13712345670"}
@@ -77,10 +86,10 @@ var personMp4 = map[string]interface{}{"age": 23, "name": "test4", "naction": "f
 var personMp5 = map[string]interface{}{"age": 21, "name": "test5", "naction": "cn", "tel": "13712345672"}
 var personMps = []interface{}{personMp1, personMp2, personMp3, personMp4, personMp5}
 
-//字典-结构体人员
+// 字典-结构体人员
 var perStuMps map[string]sPerson
 
-//类型-圆周率
+// 类型-圆周率
 type fPi32 float32
 type fPi64 float64
 
@@ -91,7 +100,7 @@ var flPi4 fPi64 = 3.141592456
 var bytPi5 = []byte{229, 10, 191, 57, 251, 33, 9, 64} //flPi2的字节切片
 var strPi6 = "3.141592456"
 
-//数值
+// 数值
 var intSpeedLight int = 299792458            //光速
 var intAstronomicalUnit int64 = 149597870660 //天文单位
 var intTen = 10
@@ -111,11 +120,11 @@ var floNum5 = 1024000000000.0
 var floNum6 = 1024000000000000000000000000000000000.0
 var floNum7 = -10e-12
 
-//复数
+// 复数
 var cmplNum1 = complex(1, 2)
 var cmplNum2 = complex(3, 4)
 
-//字符串
+// 字符串
 var strHello = "Hello World! 你好！"
 var b64Hello = "SGVsbG8gV29ybGQhIOS9oOWlve+8gQ=="
 var strHelloHex = "48656c6c6f20576f726c642120e4bda0e5a5bdefbc81" //strHello的16进制
@@ -204,7 +213,7 @@ var tesStr43 = "3.0.504"
 var tesStr44 = "-3.14159"
 var tesStr45 = "+3.14159"
 
-//中文名
+// 中文名
 var tesChineseName1 = "李四"
 var tesChineseName2 = "张三a"
 var tesChineseName3 = "赵武灵王"
@@ -213,17 +222,17 @@ var tesChineseName5 = "吉乃•阿衣·依扎嫫"
 var tesChineseName6 = "古丽莎•卡迪尔"
 var tesChineseName7 = "迪丽热巴.迪力木拉提"
 
-//公司名
+// 公司名
 var tesCompName1 = "北京搜狗科技公司"
 var tesCompName2 = "北京搜狗科技发展有限公司"
 var tesCompName3 = "工商发展银行深圳南山科苑梅龙路支行"
 
-//标点符号、特殊字符
+// 标点符号、特殊字符
 var strPunctuation1 = "<>@;.-="
 var strPunctuation2 = "!\"#$%&()<>/+=-_? ~^|.,@`{}[]"
 var strPunctuation3 = "`~!@#$%^&*()_+-=:'|<>?,./\""
 
-//json
+// json
 var strJson1 = `JsonpCallbackFn_abc123etc({"meta":{"Status":200,"Content-Type":"application/json","Content-Length":"19","etc":"etc"},"data":{"name":"yummy"}})`
 var strJson2 = `myFunc([{"Name":"Bob","Age":32,"Company":"IBM","Engineer":true},{"Name":"John","Age":20,"Company":"Oracle","Engineer":false},{"Name":"Henry","Age":45,"Company":"Microsoft","Engineer":false}]);`
 var strJson3 = "call)hello world(done"
@@ -232,7 +241,7 @@ var strJson5 = `{"id":"1"}`
 var strJson6 = `[{"key1":"value1"},{"key2":"value2"}]`
 var strJson7 = `{"message_code":["bb9041bcfd55be4be20243b8e051963b","e5d94d692a4af45397a04c403d89bc3a"],"send_to":"tester","create_time":1641201974,"expire_time":4102415999}`
 
-//email
+// email
 var tesEmail1 = "test@example.com"
 var tesEmail2 = "a@b.c"
 var tesEmail3 = "hello-world@c"
@@ -242,14 +251,14 @@ var tesEmail6 = "copyright@github.com"
 var tesEmail7 = "abc@abc123.com"
 var tesEmail8 = "test@163.com"
 
-//手机号
+// 手机号
 var tesMobilecn1 = "13712345678"
 var tesMobilecn2 = "17796325759"
 var tesMobilecn3 = "15204810099"
 var tesMobilecn4 = "18088664423"
 var tesMobilecn5 = "12345678901"
 
-//电话
+// 电话
 var tesTel01 = "10086"
 var tesTel02 = "010-88888888"
 var tesTel03 = "021-87888822"
@@ -267,7 +276,7 @@ var tesTel14 = "8004-321"
 var tesTel15 = "8004321999"
 var tesTel16 = "8008676014"
 
-//身份证
+// 身份证
 var tesCredno01 = "123123123"
 var tesCredno02 = "510723198006202551"
 var tesCredno03 = "34052419800101001x"
@@ -285,7 +294,7 @@ var tesCredno14 = "110106209901012141"
 var tesCredno15 = "513436200011013606"
 var tesCredno16 = "51343620180101646X"
 
-//颜色值
+// 颜色值
 var tesColor01 = "#ff"
 var tesColor02 = "fff0"
 var tesColor03 = "#ff12FG"
@@ -302,7 +311,7 @@ var tesColor13 = "rgb(01,31,255)"
 var tesColor14 = "rgb(0.6,31,255)"
 var tesColor15 = "rgba(0,31,255)"
 
-//base64
+// base64
 var tesBase64_01 = "Vml2YW11cyBmZXJtZtesting123" //false
 var tesBase64_02 = "TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2NpbmcgZWxpdC4="
 var tesBase64_03 = "Vml2YW11cyBmZXJtZW50dW0gc2VtcGVyIHBvcnRhLg=="
@@ -321,7 +330,7 @@ var tesBase64_10 = "image/gif;base64," + tesBase64_04
 var tesBase64_11 = "data:image/gif;base64," + tesBase64_05
 var tesBase64_12 = "data:text,:;base85," + tesBase64_04
 
-//html
+// html
 var tesHtmlDoc = `
 <!DOCTYPE html>
 <html lang="en">
@@ -407,7 +416,7 @@ var tesHtmlDoc = `
 </html>
 `
 
-//时间
+// 时间
 var strTime1 = "2019-07-11 10:11:23"
 var strTime2 = "2020-02-01 13:39:36"
 var strTime3 = "02/01/2016 15:04:05"
@@ -420,11 +429,11 @@ var myDate1, _ = time.ParseInLocation("2006-01-02 15:04:05", strTime4, time.Loca
 var myDate2, _ = time.ParseInLocation("2006-01-02 15:04:05", strTime5, time.Local)
 var myDate3, _ = time.ParseInLocation("2006-01-02 15:04:05", strTime6, time.Local)
 
-//当前时间
+// 当前时间
 var nowNanoInt = kuptime.UnixNano()
 var nowNanoStr = toStr(kuptime.UnixNano())
 
-//IP
+// IP
 var noneIp = "0.0.0.0"
 var localIp = "127.0.0.1"
 var localIpInt uint32 = 2130706433
@@ -445,7 +454,7 @@ var tesIp6 = "::FFFF:C0A8:1"
 var tesIp7 = "fe80::2c04:f7ff:feaa:33b7"
 var tesIp8 = "8.8.8.8:8080"
 
-//domain
+// domain
 var localHost = "localhost"
 var tesDomain01 = "lÖcalhost"
 var tesDomain02 = "localhost/"
@@ -480,7 +489,7 @@ var tesDomain30 = "baidu.com"
 var tesDomain31 = "golang.google.cn"
 var tesDomain32 = "www.baidu.com"
 
-//mac地址
+// mac地址
 var tesMac01 = "3D-F2-C9-A6-B3:4F"       //false
 var tesMac02 = "fe80::5054:ff:fe4d:77d3" //false
 var tesMac03 = "01:23:45:67:89:ab"
@@ -496,28 +505,28 @@ var tesMac12 = "08:00:27:00:d8:94:00:00"
 var tesMac13 = "02:42:b5:38:df:5a"
 var tesMac14 = "0A-00-27-00-00-0E"
 
-//bom字符
+// bom字符
 var tesBom1 = "\xEF\xBB\xBF"
 var tesBom2 = bomChars + "hello"
 var tesBom3 = tesBom1 + "world"
 
-//自然数数组
+// 自然数数组
 var naturalArr = [...]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, intTen}
 
-//整数切片
+// 整数切片
 var intSlc = []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 11, 12, 13, 14, 15}
 var intSlEmp = []int{}
 var int64Slc = []int64{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 9, 8, 7, 6, 5, 4, 11, 12, 13, 14, 15}
 
-//浮点切片
+// 浮点切片
 var flo32Slc = []float32{1.23, 0.0, flPi1, floSpeedLight, 2.6260755, 1.60217733}
 var flo64Slc = []float64{flPi2, floAvogadro, floPlanck, floGravitional, floPermittivity, floTen}
 var flo64Slc2 = []float64{flPi2, floNum1, floNum2, floNum3, floNum4}
 
-//布尔切片
+// 布尔切片
 var booSlc = []bool{true, true, false, true, false, true, true}
 
-//字节切片
+// 字节切片
 var bytsHello = []byte(strHello)
 var runesHello = []rune(strHello)
 var bytSpeedLight = []byte(strSpeedLight)
@@ -528,42 +537,42 @@ var bytsGbkHello = []byte{0xC4, 0xE3, 0xBA, 0xC3, 0xA3, 0xAC, 0xCA, 0xC0, 0xBD, 
 var bytsUuidNamespaceDNS = bytes.Replace([]byte(uuidNamespaceDNS), bytMinus, bytEmpty, -1)
 var bytsUuidNamespaceUrl = bytes.Replace([]byte(uuidNamespaceURL), bytMinus, bytEmpty, -1)
 
-//单字符切片
+// 单字符切片
 var ssSingle = []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"}
 
-//字符串map
+// 字符串map
 var strMp1 = map[string]string{"a": "1", "b": "2", "c": "3", "d": "4", "e": "", "2": "cc", "3": "no"}
 var strMp2 = map[string]string{"a": "0", "b": "2", "c": "4", "g": "4", "h": "", "2": "cc"}
 var strMpEmp = make(map[string]string)
 var colorMp = map[string]string{"a": "green", "0": "red", "b": "green", "1": "blue", "2": "red", "c": "yellow", "n": ""}
 
-//字符串切片
+// 字符串切片
 var strSl1 = []string{"aa", "bb", "cc", "dd", "ee", "", "hh", "ii"}
 var strSl2 = []string{"bb", "cc", "ff", "gg", "ee", "", "gg"}
 var strSl3 = []string{"hehe,php lang", "Hello,go language", "HeLlo,python!", "haha,java", "I`m going."}
 var strSlEmp = []string{}
 
-//接口切片
+// 接口切片
 var slItf = []interface{}{99, 0, 1, 2, 0.0, 3, false, 3.14, 6.67428, true, 'a', "", 'b', nil, 'c', intSpeedLight, "hello", nowNanoInt, floAvogadro, strSlEmp, "你好", floNum3}
 var slItf2 = []interface{}{1, 0, 1.2, -3, false, nil, "4"}
 
-//persons JSON串
+// persons JSON串
 var personsMapJson = `{"person1":{"name":"zhang3","age":23,"sex":1},"person2":{"name":"li4","age":30,"sex":1},"person3":{"name":"wang5","age":25,"sex":0},"person4":{"name":"zhao6","age":50,"sex":0}}`
 var personsArrJson = `[{"age":20,"naction":"us","name":"test1","tel":"13712345678"},{"age":21,"naction":"cn","name":"test2","tel":"13712345679"},{"age":22,"naction":"en","name":"test3","tel":"13712345670"},{"age":23,"naction":"fr","name":"test4","tel":"13712345671"},{"age":21,"naction":"cn","name":"test5","tel":"13712345672"}]`
 
-//回调函数
+// 回调函数
 var fnCb1 CallBack
 var fnPtr1 = &fnCb1
 
-//rsa相关
-//错误的公钥
+// rsa相关
+// 错误的公钥
 var rsaPublicErrStr = `-----BEGIN RSA PUBLIC KEY-----
 MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDteXRcRyppm5sOVvteo37Dmaid
 bx6YrV6QWZ0L9mGfCmSW1a/Ad61kT6OoU0Z3DyId7vA9TtvULucEUpywPpSoP/r+
 820UHFihdyhcb1iy8Z3v6KUcarWzUOZpo0mc+o4hW2O1VnzNxLcXmhQOA9NdEOV/
 -----END RSA PUBLIC KEY`
 
-//错误的私钥
+// 错误的私钥
 var rsaPrivateErrStr = `-----BEGIN RSA PRIVATE KEY-----
 MIICXAIBAAKBgQDteXRcRyppm5sOVvteo37Dmaidbx6YrV6QWZ0L9mGfCmSW1a/A
 d61kT6OoU0Z3DyId7vA9TtvULucEUpywPpSoP/r+820UHFihdyhcb1iy8Z3v6KUc
@@ -578,8 +587,8 @@ DlDCo0fApx8F5UOQaJnvPd8HOme5HTIs/6IM9RIL879e4IrTMtdSAfad+QJBANAc
 Opmv0mBgAnPItT8cPsvvrGCfdwuO6x2xemTkPE9hikLZSctlaOUfVNeem6f/3SWi
 -----END RSA PRIVATE KEY-----`
 
-//RSA公钥
-//正确的
+// RSA公钥
+// 正确的
 var tesRsaPubKey01 = `MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvncDCeibmEkabJLmFec7x9y86RP6dIvkVxxbQoOJo06E+p7tH6vCmiGHKnuu
 XwKYLq0DKUE3t/HHsNdowfD9+NH8caLzmXqGBx45/Dzxnwqz0qYq7idK+Qff34qrk/YFoU7498U1Ee7PkKb7/VE9BmMEcI3uoKbeXCbJRI
 HoTp8bUXOpNTSUfwUNwJzbm2nsHo2xu6virKtAZLTsJFzTUmRd11MrWCvj59lWzt1/eIMN+ekjH8aXeLOOl54CL+kWp48C+V9BchyKCShZ
@@ -594,7 +603,7 @@ imFvjHTtuxziXZQRO7HlcsBOa0WwvDJnRnskdyoD31s4F4jpKEYBJNWTo63v6lUv
 bQIDAQAB
 -----END PUBLIC KEY-----`
 
-//错误的
+// 错误的
 var tesRsaPubKey03 = `-----BEGIN PRIVATE KEY-----
 MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAKn4X6phG2ZsKjof
 ytRsM8zC7VTZmQSi9hr7ZqHxsIe+UeGToXLSqfJ8ikWWMg15N8PTbzIG11GTexyd
@@ -633,7 +642,7 @@ TQ3WVV0EekGzoIrPw7BkGgb71UBedEt9AqkLSnW6KzQ1A1ILokX8Yq9oWLASea3F
 xVZ+SCC8Wd6nIK4FyZbYaa3Jz7GkqHdMelsl
 -----END PUBLIC KEY-----`
 
-//文件
+// 文件
 var rootDir = "/root"
 var rootDir2 = "/root/hello/directory"
 var rootFile1 = "/root/hello/world"
@@ -691,7 +700,7 @@ var zipfile1 = "./testdata/zip/test1.zip"
 var zipfile2 = "./testdata/zip/test2.zip"
 var unzippath1 = "./testdata/zip/un1"
 
-//uri
+// uri
 var tesUri1 = `?first=value&arr[]=foo+bar&arr[]=baz`
 var tesUri2 = `f1=m&f2=n`
 var tesUri3 = `f[a]=m&f[b]=n`
@@ -721,7 +730,7 @@ var tesUri26 = `he&]=5`
 var tesUri27 = `he&a=1`
 var tesUri28 = `he&e=%&b=4`
 
-//url
+// url
 var tesUrl01 = `https://www.google.com/search?source=hp&ei=tDUwXejNGs6DoATYkqCYCA&q=golang&oq=golang&gs_l=psy-ab.3..35i39l2j0i67l8.1729.2695..2888...1.0..0.126.771.2j5......0....1..gws-wiz.....10..0.fFQmXkC_LcQ&ved=0ahUKEwjo9-H7jb7jAhXOAYgKHVgJCIMQ4dUDCAU&uact=5`
 var tesUrl02 = `sg>g://asdf43123412341234`
 var tesUrl03 = "abc.com"
@@ -763,15 +772,15 @@ var tesUrl38 = "xyz://foobar.com"
 var tesUrl39 = "https://www.baidu.com/"
 var tesUrl40 = "https://www.w3.org/"
 
-//下载文件
+// 下载文件
 var downloadfile01 = "./testdata/download/test001/file001"
 
-//命令
+// 命令
 var tesCommand01 = " ls -a -h"
 var tesCommand02 = " ls -a\"\" -h 'hehe'"
 var tesCommand03 = "cmd /C dir "
 
-//等式
+// 等式
 var equationStr01 = "190000017056834?utm_source=tag-newest "
 var equationStr02 = `String str = "AB==2LSKF=5!@!=$%^()==AD=";`
 var equationStr03 = `    | | |   {
@@ -817,7 +826,7 @@ var equationStr03 = `    | | |   {
     | | }
     | |     `
 
-//表情符
+// 表情符
 var tesEmoji1 = `Lorem ipsum 🥊dolor 🤒sit amet, consectetur adipiscing 🍂 elit. 🍁🍃🍂🌰🍁🌿🌾🌼🌻سلام تست شد hell中文
 😀😁😂😃😄😅😆😉😊😋😎😍😘😗😙😚☺😇😐😑😶😏😣😥😮😯😪😫😴😌😛😜😝😒😓😔😕😲😷😖😞😟😤😢😭😦😧😨😬😰😱😳😵😡😠
 👦👧👨👩👴👵👶👱👮👲👳👷👸💂🎅👰👼💆💇🙍🙎🙅🙆💁🙋🙇🙌🙏👤👥🚶🏃👯💃👫👬👭💏💑👪

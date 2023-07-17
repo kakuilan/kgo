@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"math"
 	"math/rand"
@@ -1175,13 +1176,14 @@ func (ka *LkkArray) NewStrMapStr() map[string]string {
 
 // CopyStruct 将resources的值拷贝到dest目标结构体;
 // 要求dest必须是结构体指针,resources为多个源结构体;若resources存在多个相同字段的元素,结果以最后的为准;
-// 只简单核对字段名,无错误处理,需开发自行检查dest和resources字段类型才可操作.
-func (ka *LkkArray) CopyStruct(dest interface{}, resources ...interface{}) interface{} {
+// 只简单核对字段名,不做深层校验处理,需开发者自行检查dest和resources字段类型符合才可操作.
+func (ka *LkkArray) CopyStruct(dest interface{}, resources ...interface{}) (err error) {
 	dVal := reflect.ValueOf(dest)
 	dTyp := reflect.TypeOf(dest)
 
 	if dTyp.Kind() != reflect.Ptr {
-		return nil
+		err = errors.New("[CopyStruct]`dest must be a pointer")
+		return
 	}
 
 	//dest是指针,需要.Elem()取得指针指向的value
@@ -1190,7 +1192,8 @@ func (ka *LkkArray) CopyStruct(dest interface{}, resources ...interface{}) inter
 
 	// 非结构体
 	if dVal.Kind() != reflect.Struct {
-		return nil
+		err = errors.New("[CopyStruct]`dest must be a struct")
+		return
 	}
 
 	//目标结构体可导出的字段
@@ -1210,11 +1213,17 @@ func (ka *LkkArray) CopyStruct(dest interface{}, resources ...interface{}) inter
 			for i := 0; i < rTyp.NumField(); i++ {
 				field = rTyp.Field(i).Name
 				if typ, ok := dFields[field]; ok {
-					dVal.FieldByName(field).Set(rVal.FieldByName(field).Convert(typ))
+					oTyp := rVal.FieldByName(field).Type()
+					if oTyp != typ {
+						err = fmt.Errorf("the field[%s]`type does not match, %s[resource] -> %s[dest]", field, oTyp, typ)
+						return
+					} else {
+						dVal.FieldByName(field).Set(rVal.FieldByName(field).Convert(typ))
+					}
 				}
 			}
 		}
 	}
 
-	return dest
+	return
 }

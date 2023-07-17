@@ -1319,53 +1319,57 @@ func BenchmarkArray_NewStrMapStr(b *testing.B) {
 func TestArray_CopyStruct(t *testing.T) {
 	var acc1 userAccountJson
 	var acc2 = new(userAccountJson)
-	var res interface{}
+	var acc3 = new(userAccountJson)
+	var acc4 = new(userAccountJson)
+	var acc5 = new(userAccountJson2)
+	var err error
 
 	//目标非指针
-	res = KArr.CopyStruct(acc1)
-	assert.Nil(t, res)
+	err = KArr.CopyStruct(acc1)
+	assert.NotNil(t, err)
 
 	//目标非结构体
-	res = KArr.CopyStruct(&ssSingle)
-	assert.Nil(t, res)
+	err = KArr.CopyStruct(&ssSingle)
+	assert.NotNil(t, err)
 
 	//没有复制源
-	res = KArr.CopyStruct(acc2)
-	assert.Equal(t, res, acc2)
+	err = KArr.CopyStruct(acc2)
+	assert.Nil(t, err)
+	assert.Equal(t, acc2, acc3)
 
-	//正常
-	res = KArr.CopyStruct(acc2, account1, personS5)
-	user, ok := res.(*userAccountJson)
-	assert.NotEmpty(t, user)
-	assert.True(t, ok)
-	assert.Equal(t, user.ID, account1.ID)
-	assert.Equal(t, user.Type, account1.Type)
-	assert.Equal(t, user.Nickname, account1.Nickname)
-	assert.Equal(t, user.Avatar, account1.Avatar)
-	assert.Equal(t, user.Name, personS5.Name)
-	assert.Equal(t, user.Addr, personS5.Addr)
-	assert.Equal(t, user.Age, personS5.Age)
-	assert.Equal(t, user.Gender, personS5.Gender)
+	//源数据是正常的结构体
+	err = KArr.CopyStruct(acc2, account1, personS5)
+	assert.Nil(t, err)
+	assert.Equal(t, acc2.ID, account1.ID)
+	assert.Equal(t, acc2.Type, account1.Type)
+	assert.Equal(t, acc2.Nickname, account1.Nickname)
+	assert.Equal(t, acc2.Avatar, account1.Avatar)
+	assert.Equal(t, acc2.Name, personS5.Name)
+	assert.Equal(t, acc2.Addr, personS5.Addr)
+	assert.Equal(t, acc2.Age, personS5.Age)
+	assert.Equal(t, acc2.Gender, personS5.Gender)
 
-	//引用
-	res = KArr.CopyStruct(acc2, &account1, &personS5)
-	user, ok = res.(*userAccountJson)
-	assert.NotEmpty(t, user)
-	assert.True(t, ok)
-	assert.Equal(t, user.ID, account1.ID)
-	assert.Equal(t, user.Type, account1.Type)
-	assert.Equal(t, user.Nickname, account1.Nickname)
-	assert.Equal(t, user.Avatar, account1.Avatar)
-	assert.Equal(t, user.Name, personS5.Name)
-	assert.Equal(t, user.Addr, personS5.Addr)
-	assert.Equal(t, user.Age, personS5.Age)
-	assert.Equal(t, user.Gender, personS5.Gender)
+	//源数据是引用的结构体
+	err = KArr.CopyStruct(acc4, &account1, &personS5)
+	assert.Nil(t, err)
+	assert.Equal(t, acc4.ID, account1.ID)
+	assert.Equal(t, acc4.Type, account1.Type)
+	assert.Equal(t, acc4.Nickname, account1.Nickname)
+	assert.Equal(t, acc4.Avatar, account1.Avatar)
+	assert.Equal(t, acc4.Name, personS5.Name)
+	assert.Equal(t, acc4.Addr, personS5.Addr)
+	assert.Equal(t, acc4.Age, personS5.Age)
+	assert.Equal(t, acc4.Gender, personS5.Gender)
+
+	//字段类型不同-Status
+	err = KArr.CopyStruct(acc5, account1, personS5)
+	assert.NotNil(t, err)
 }
 
 func BenchmarkLkkArray_CopyStruct(b *testing.B) {
 	b.ResetTimer()
 	var acc = new(userAccountJson)
 	for i := 0; i < b.N; i++ {
-		KArr.CopyStruct(acc, account1)
+		_ = KArr.CopyStruct(acc, account1)
 	}
 }
