@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.4.2]- 2023-07-17
+
+#### Added
+
+- none
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- 修改`KArr.CopyStruct`,返回值类型为error
+
+#### Removed
+
+- none
+
 ## [v0.4.1]- 2023-03-27
 
 #### Added
@@ -17,6 +35,8 @@ All notable changes to this project will be documented in this file.
 - 修改`KStr.PasswordSafeLevel`,先检查是否弱密码
 
 #### Removed
+
+- none
 
 ## [v0.4.0]- 2023-02-24
 
