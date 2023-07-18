@@ -1322,6 +1322,7 @@ func TestArray_CopyStruct(t *testing.T) {
 	var acc3 = new(userAccountJson)
 	var acc4 = new(userAccountJson)
 	var acc5 = new(userAccountJson2)
+	var acc6 = new(SPerson)
 	var err error
 
 	//目标非指针
@@ -1364,6 +1365,18 @@ func TestArray_CopyStruct(t *testing.T) {
 	//字段类型不同-Status
 	err = KArr.CopyStruct(acc5, account1, personS5)
 	assert.NotNil(t, err)
+
+	//匿名字段
+	err = KArr.CopyStruct(acc3, account2)
+	assert.Nil(t, err)
+	assert.Equal(t, acc3.Nickname, account2.Nickname)
+	assert.Equal(t, acc3.Addr, account2.Addr)
+
+	err = KArr.CopyStruct(acc6, acc3)
+	assert.Nil(t, err)
+	assert.Equal(t, acc6.Name, acc3.Name)
+	assert.Equal(t, acc6.Age, acc3.Age)
+	assert.Equal(t, acc6.Gender, acc3.Gender)
 }
 
 func BenchmarkLkkArray_CopyStruct(b *testing.B) {

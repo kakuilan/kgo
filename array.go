@@ -1212,7 +1212,12 @@ func (ka *LkkArray) CopyStruct(dest interface{}, resources ...interface{}) (err 
 		if rVal.Kind() == reflect.Struct {
 			for i := 0; i < rTyp.NumField(); i++ {
 				field = rTyp.Field(i).Name
-				if typ, ok := dFields[field]; ok {
+				if rTyp.Field(i).Anonymous && rVal.FieldByName(field).Kind() == reflect.Struct { //匿名字段结构体
+					err = ka.CopyStruct(dest, rVal.FieldByName(field).Interface())
+					if err != nil {
+						return
+					}
+				} else if typ, ok := dFields[field]; ok {
 					oTyp := rVal.FieldByName(field).Type()
 					if oTyp != typ {
 						err = fmt.Errorf("the field[%s]`type does not match, %s[resource] -> %s[dest]", field, oTyp, typ)
