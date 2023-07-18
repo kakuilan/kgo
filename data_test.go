@@ -25,6 +25,8 @@ type sPerson struct {
 	none   bool
 }
 
+type SPerson = sPerson
+
 // 类型-人群
 type sPersons []sPerson
 
@@ -51,7 +53,7 @@ type userAccountJson struct {
 	Type     uint8  `json:"type"`
 	Nickname string `json:"nickname"`
 	Avatar   string `json:"avatar"`
-	sPerson
+	SPerson
 }
 
 type userAccountJson2 struct {
@@ -77,6 +79,7 @@ var orgS1 = new(sOrganization) //返回指针
 
 // 结构体-用户账号
 var account1 userAccount
+var account2 userAccountJson
 
 // 字典-普通人员
 var personMp1 = map[string]interface{}{"age": 20, "name": "test1", "naction": "us", "tel": "13712345678"}
@@ -865,6 +868,7 @@ func init() {
 	_ = gofakeit.Struct(&personS4)
 	_ = gofakeit.Struct(&personS5)
 	_ = gofakeit.Struct(&account1)
+	_ = gofakeit.Struct(&account2)
 
 	crowd = append(crowd, personS1, personS2, personS3, personS4, personS5)
 
