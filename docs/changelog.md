@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.4.3]- 2023-07-19
+
+#### Added
+
+- none
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- 修改`KArr.CopyStruct`,支持嵌套结构体
+
+#### Removed
+
+- none
+
 ## [v0.4.2]- 2023-07-17
 
 #### Added
