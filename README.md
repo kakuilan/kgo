@@ -22,6 +22,7 @@ golang 常用函数库/工具集,仅测试支持有限的64位系统.
     - 1.18.x
     - 1.19.x
     - 1.20.x
+    - 1.21.x
 - OS系统
     - ubuntu-latest
     - macos-latest
