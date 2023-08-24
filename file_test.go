@@ -1005,6 +1005,15 @@ func TestFile_Pathinfo(t *testing.T) {
 	//文件名没有后缀
 	res = KFile.Pathinfo(rootFile1, -1)
 	assert.Equal(t, res["basename"], res["filename"])
+
+	//url-?
+	res = KFile.Pathinfo(tesUrl41, -1)
+	assert.Equal(t, res["basename"], "d319bec8fbd9e64.png")
+	assert.Equal(t, res["extension"], "png")
+	//url-#
+	res = KFile.Pathinfo(tesUrl07, -1)
+	assert.Equal(t, res["basename"], "archives.html")
+	assert.Equal(t, res["extension"], "html")
 }
 
 func BenchmarkFile_Pathinfo(b *testing.B) {

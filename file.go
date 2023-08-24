@@ -704,6 +704,22 @@ func (kf *LkkFile) Pathinfo(fpath string, option int) map[string]string {
 	if option == -1 {
 		option = 1 | 2 | 4 | 8
 	}
+
+	//支持URL
+	if KStr.IsUrl(fpath) {
+		urlMp, _ := KStr.ParseUrl(fpath, 32)
+		fpath, _ = urlMp["path"]
+	}
+
+	//检查?和#
+	var idx1, idx2, idx3 int
+	idx1 = KNum.MaxInt(-1, strings.Index(fpath, "?"))
+	idx2 = KNum.MaxInt(-1, strings.Index(fpath, "#"))
+	idx3 = KNum.MinInt(idx1, idx2)
+	if idx3 != -1 {
+		fpath = fpath[:idx3]
+	}
+
 	res := make(map[string]string)
 	if (option & 1) == 1 {
 		res["dirname"] = filepath.Dir(fpath)
@@ -718,6 +734,7 @@ func (kf *LkkFile) Pathinfo(fpath string, option int) map[string]string {
 		} else {
 			basename = filepath.Base(fpath)
 		}
+
 		p := strings.LastIndex(basename, ".")
 		filename, extension := "", ""
 		if p > 0 {

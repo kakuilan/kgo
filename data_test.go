@@ -740,7 +740,7 @@ var tesUrl03 = "abc.com"
 var tesUrl04 = "abc.com/hello?a=1"
 var tesUrl05 = `http://login.localhost:3000\/ab//cd/ef///hi\\12/33\`
 var tesUrl06 = "https://play.golang.com:3000/p/3R1TPyk8qck"
-var tesUrl07 = "https://www.siongui.github.io/pali-chanting/zh/archives.html"
+var tesUrl07 = "https://www.siongui.github.io/pali-chanting/zh/archives.html#how"
 var tesUrl08 = "http://foobar.中文网/"
 var tesUrl09 = "foobar.com/abc/efg/h=1"
 var tesUrl10 = "https://github.com/kakuilan/kgo"
@@ -774,6 +774,7 @@ var tesUrl37 = "rtmp://foobar.com"
 var tesUrl38 = "xyz://foobar.com"
 var tesUrl39 = "https://www.baidu.com/"
 var tesUrl40 = "https://www.w3.org/"
+var tesUrl41 = "http://test.loc/imgs/1234/abc/230223/d319bec8fbd9e64.png?jwt=eyJhbGciOiJIUzI1Nc8&mode=fit&width=100&height=100"
 
 // 下载文件
 var downloadfile01 = "./testdata/download/test001/file001"
