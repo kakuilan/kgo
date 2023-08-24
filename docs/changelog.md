@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.4.4]- 2023-08-25
+
+#### Added
+
+- none
+
+#### Fixed
+
+- 修改`KFile.Pathinfo`,支持URL
+
+#### Changed
+
+- none
+
+#### Removed
+
+- none
+
 ## [v0.4.3]- 2023-07-19
 
 #### Added
