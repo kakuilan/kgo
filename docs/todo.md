@@ -1,4 +1,10 @@
+### TODO
+
+- 1.x版本使用泛型重构
+- 模糊测试
+
 ### 参考项目
+
 - https://www.php2golang.com/
 - https://github.com/alessiosavi/GoGPUtils -x
 - https://github.com/b3log/gulu -x
@@ -118,9 +124,18 @@
 - https://gitee.com/tym_hmm/go-helper
 - https://github.com/hyacinthus/x
 - https://github.com/fufuok/utils
-
+- https://github.com/ScathonLin/scago
+- https://github.com/duke-git/lancet
+- https://github.com/samber/lo
+- https://github.com/elliotchance/pie
+- https://github.com/awesee/php2go
+- https://github.com/leeqvip/gophp
+- https://github.com/wulijun/go-php-serialize
+- https://github.com/elliotchance/phpserialize
+- 
 
 ### 其他库
+
 - https://github.com/lalamove/konfig
 - https://github.com/jinzhu/configor
 - https://github.com/denisbrodbeck/machineid
@@ -133,8 +148,8 @@
 - https://github.com/matishsiao/goInfo
 - https://github.com/badoux/checkmail
 
+### TODO
 
-### TODO 
 - 时间轮定时器
 - 简单http请求
 - 增加sync.go
@@ -144,7 +159,6 @@ https://github.com/bitnami/gonit/blob/master/utils/process.go
 https://github.com/henrylee2cn/goutil/blob/master/pid_file.go
 https://github.com/facebookarchive/pidfile/blob/master/pidfile.go
 https://github.com/struCoder/pidusage/blob/master/pidusage.go
-
 
 ping
 https://github.com/bocajim/helpers/blob/master/ping.go
@@ -162,8 +176,6 @@ https://github.com/h2non/gentleman
 https://github.com/guonaihong/gout
 https://github.com/levigross/grequests
 https://github.com/alessiosavi/Requests
-
-
 
 queue
 https://github.com/evilsocket/islazy/blob/master/async/queue.go
@@ -256,7 +268,6 @@ https://stackoverflow.com/questions/8039552/byte-endian-convert-by-using-encodin
 https://studygolang.com/articles/2791
 https://www.reddit.com/r/golang/comments/7pwlh6/binary_string_to_readable_string/
 
-
 go get current package name
 https://stackoverflow.com/questions/25262754/how-to-get-name-of-current-package-in-go
 
@@ -264,7 +275,6 @@ go get current file path
 https://coderwall.com/p/_fmbug/go-get-path-to-current-file
 https://github.com/unknwon/gcblog/blob/master/content/04-go-caller.md
 https://colobu.com/2018/11/03/get-function-name-in-go/
-
 
 DeleteSlice 删除切片元素/多个
 https://blog.csdn.net/yue7603835/article/details/71196181
@@ -279,7 +289,6 @@ https://github.com/golang/go/issues/33814
 https://www.btaz.com/mac-os-x/find-the-process-listening-to-port-on-mac-os-x/
 https://blog.jayway.com/2012/09/08/finding-the-pid-listening-on-a-specific-port-on-mac-os-x/
 https://stackoverflow.com/questions/3855127/find-and-kill-process-locking-port-3000-on-mac
-
 
 结构体转MAP
 https://github.com/fatih/structs
