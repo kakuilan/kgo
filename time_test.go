@@ -489,3 +489,52 @@ func BenchmarkTime_IsDate2time(b *testing.B) {
 		_, _ = KTime.IsDate2time(strTime7)
 	}
 }
+
+func TestTime_FormatDuration(t *testing.T) {
+	var res1, res2 string
+
+	ds := []time.Duration{
+		testDuration1 + testDuration2 + testDuration3,
+		testDuration1 + testDuration2,
+		testDuration1 + testDuration3,
+		testDuration2 + testDuration3,
+		testDuration1,
+		testDuration2,
+		testDuration3,
+	}
+	for _, d := range ds {
+		res1 = KTime.FormatDuration(d, true)
+		assert.Contains(t, res1, ":")
+		res2 = KTime.FormatDuration(d, false)
+		assert.NotEmpty(t, res2)
+	}
+
+	res1 = KTime.FormatDuration(testDuration0, true)
+	res2 = KTime.FormatDuration(testDuration0, false)
+	assert.Equal(t, res1, "0:00:00")
+	assert.Equal(t, res2, "0s")
+
+	res1 = KTime.FormatDuration(testDuration4, true)
+	res2 = KTime.FormatDuration(testDuration4, false)
+	assert.Equal(t, res1, "24:01:53")
+	assert.Equal(t, res2, "24h1m53s")
+
+	res1 = KTime.FormatDuration(testDuration5, true)
+	res2 = KTime.FormatDuration(testDuration5, false)
+	assert.Equal(t, res1, "1354:22:13")
+	assert.Equal(t, res2, "1354h22m13.055s")
+}
+
+func BenchmarkTime_FormatDuration0(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = KTime.FormatDuration(testDuration5, false)
+	}
+}
+
+func BenchmarkTime_FormatDuration1(b *testing.B) {
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		_ = KTime.FormatDuration(testDuration5, true)
+	}
+}

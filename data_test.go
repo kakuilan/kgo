@@ -776,6 +776,14 @@ var tesUrl39 = "https://www.baidu.com/"
 var tesUrl40 = "https://www.w3.org/"
 var tesUrl41 = "http://test.loc/imgs/1234/abc/230223/d319bec8fbd9e64.png?jwt=eyJhbGciOiJIUzI1Nc8&mode=fit&width=100&height=100"
 
+// 时长
+var testDuration0 = 0
+var testDuration1 = 128 * time.Hour
+var testDuration2 = 45 * time.Minute
+var testDuration3 = 23 * time.Second
+var testDuration4 = 86513.5
+var testDuration5 = (1354 * time.Hour) + (22 * time.Minute) + (13 * time.Second) + (55 * time.Millisecond) + (100 * time.Microsecond)
+
 // 下载文件
 var downloadfile01 = "./testdata/download/test001/file001"
 

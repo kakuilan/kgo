@@ -2,6 +2,7 @@ package kgo
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 	"time"
 )
@@ -363,4 +364,38 @@ func (kt *LkkTime) IsDate2time(str string) (bool, int64) {
 	}
 
 	return true, tim
+}
+
+// FormatDuration 格式化时长为字符串(如*h*m*s);其中t为时长,默认为秒;colon为是否使用冒号.
+func (kt *LkkTime) FormatDuration(t interface{}, colon bool) string {
+	var dr time.Duration
+	var res string
+
+	if v, ok := t.(time.Duration); ok {
+		dr = v
+	} else {
+		i := toInt(t)
+		dr = time.Second * time.Duration(i)
+	}
+
+	if colon {
+		h := dr / time.Hour
+		dr -= h * time.Hour
+		m := dr / time.Minute
+		dr -= m * time.Minute
+		s := dr / time.Second
+		res = fmt.Sprintf("%d:%02d:%02d", h, m, s)
+	} else {
+		s := dr.Round(time.Millisecond).String()
+		if strings.HasSuffix(s, "m0s") {
+			s = s[:len(s)-2]
+		}
+		if strings.HasSuffix(s, "h0m") {
+			s = s[:len(s)-2]
+		}
+
+		res = s
+	}
+
+	return res
 }
