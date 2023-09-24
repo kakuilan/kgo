@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.4.5]- 2023-09-24
+
+#### Added
+
+- 新增`KTime.FormatDuration`,格式化时长为字符串
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- none
+
+#### Removed
+
+- none
+
 ## [v0.4.4]- 2023-08-25
 
 #### Added
