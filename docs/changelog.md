@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.4.6]- 2023-10-21
+
+#### Added
+
+- none
+
+#### Fixed
+
+- 修复`isUrl`,字符串是否URL
+- 修复`KStr.RemoveBefore`,移除before之前的字符串
+- 修复`KStr.RemoveAfter`,移除after之后的字符串
+
+#### Changed
+
+- 优化`KFile.Pathinfo`,获取文件路径的信息
+
+#### Removed
+
+- none
+
 ## [v0.4.5]- 2023-09-24
 
 #### Added
