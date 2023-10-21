@@ -222,12 +222,33 @@ func isUrl(str string) bool {
 		return false
 	}
 
-	res, err := url.ParseRequestURI(str)
+	u, err := url.Parse(str)
+
+	//Couldn't even parse the url
 	if err != nil {
-		return false //Couldn't even parse the url
+		return false
 	}
-	if len(res.Scheme) == 0 {
-		return false //No Scheme found
+
+	//Invalid host
+	if u.Host == "" || strings.HasPrefix(u.Host, ".") || strings.HasSuffix(u.Host, ":") {
+		return false
+	}
+
+	//No Scheme found
+	if u.Scheme == "" {
+		return false
+	}
+
+	var inScheme bool
+	var schemes = []string{"ftp", "tcp", "udp", "irc", "rtmp", "ws", "wss", "http", "https"}
+	for _, s := range schemes {
+		if u.Scheme == s {
+			inScheme = true
+			break
+		}
+	}
+	if !inScheme {
+		return false
 	}
 
 	return true
@@ -365,7 +386,7 @@ func shaXReader(reader io.Reader, x uint16) (res []byte, err error) {
 }
 
 // arrayValues 返回arr(数组/切片/字典/结构体)中所有的值.
-// filterZero 是否过滤零值元素(nil,false,0,'',[]),true时排除零值元素,false时保留零值元素.
+// filterZero 是否过滤零值元素(nil,false,0,”,[]),true时排除零值元素,false时保留零值元素.
 func arrayValues(arr interface{}, filterZero bool) []interface{} {
 	var res []interface{}
 	var fieldVal reflect.Value

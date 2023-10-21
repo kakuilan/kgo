@@ -696,7 +696,7 @@ func (kf *LkkFile) ShaXReader(reader io.Reader, x uint16) (string, error) {
 	return string(res), err
 }
 
-// Pathinfo 获取文件路径的信息.
+// Pathinfo 获取文件路径的信息(支持URL).
 // option为要返回的信息,枚举值如下:
 // -1: all; 1: dirname; 2: basename; 4: extension; 8: filename;
 // 若要查看某几项,则为它们之间的和.
@@ -709,15 +709,15 @@ func (kf *LkkFile) Pathinfo(fpath string, option int) map[string]string {
 	if KStr.IsUrl(fpath) {
 		urlMp, _ := KStr.ParseUrl(fpath, 32)
 		fpath, _ = urlMp["path"]
-	}
 
-	//检查?和#
-	var idx1, idx2, idx3 int
-	idx1 = KNum.MaxInt(-1, strings.Index(fpath, "?"))
-	idx2 = KNum.MaxInt(-1, strings.Index(fpath, "#"))
-	idx3 = KNum.MinInt(idx1, idx2)
-	if idx3 != -1 {
-		fpath = fpath[:idx3]
+		//检查?和#
+		var idx1, idx2, idx3 int
+		idx1 = KNum.MaxInt(-1, strings.Index(fpath, "?"))
+		idx2 = KNum.MaxInt(-1, strings.Index(fpath, "#"))
+		idx3 = KNum.MinInt(idx1, idx2)
+		if idx3 != -1 {
+			fpath = fpath[:idx3]
+		}
 	}
 
 	res := make(map[string]string)

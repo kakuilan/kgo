@@ -1938,9 +1938,11 @@ func TestString_IsUrl(t *testing.T) {
 		{tesUrl33, true},
 		{tesUrl34, false},
 		{tesUrl35, true},
-		{tesUrl36, true},
+		{tesUrl36, false},
 		{tesUrl37, true},
-		{tesUrl38, true},
+		{tesUrl38, false},
+		{tesUrl42, false},
+		{testBook1, false},
 	}
 	for _, test := range tests {
 		actual := KStr.IsUrl(test.param)

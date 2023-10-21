@@ -702,6 +702,7 @@ var untarpath1 = "./testdata/targz/un1"
 var zipfile1 = "./testdata/zip/test1.zip"
 var zipfile2 = "./testdata/zip/test2.zip"
 var unzippath1 = "./testdata/zip/un1"
+var testBook1 = "E:/books/a-a/Alien：Sea of Sorrows (Novel #2 - James· A. Moore.azw3"
 
 // uri
 var tesUri1 = `?first=value&arr[]=foo+bar&arr[]=baz`
@@ -746,7 +747,7 @@ var tesUrl09 = "foobar.com/abc/efg/h=1"
 var tesUrl10 = "https://github.com/kakuilan/kgo"
 var tesUrl11 = "////google.com/test?name=hello"
 var tesUrl12 = "google.com/test?name=hello////"
-var tesUrl13 = ".com"
+var tesUrl13 = ".com.cn"
 var tesUrl14 = "ftp://foobar.ru/"
 var tesUrl15 = "http://127.0.0.1/"
 var tesUrl16 = "http://duckduckgo.com/?q=%2F"
@@ -766,7 +767,7 @@ var tesUrl29 = "http://www.foo_bar.com/"
 var tesUrl30 = "http://www.foobar.com/~foobar"
 var tesUrl31 = "http://www.xn--froschgrn-x9a.net/"
 var tesUrl32 = "https://foobar.com"
-var tesUrl33 = "https://foobar.org/"
+var tesUrl33 = "HTTPS://foobar.org/"
 var tesUrl34 = "invalid."
 var tesUrl35 = "irc://irc.server.org/channel"
 var tesUrl36 = "mailto:someone@example.com"
@@ -775,6 +776,7 @@ var tesUrl38 = "xyz://foobar.com"
 var tesUrl39 = "https://www.baidu.com/"
 var tesUrl40 = "https://www.w3.org/"
 var tesUrl41 = "http://test.loc/imgs/1234/abc/230223/d319bec8fbd9e64.png?jwt=eyJhbGciOiJIUzI1Nc8&mode=fit&width=100&height=100"
+var tesUrl42 = "https://https://https://../google.com"
 
 // 时长
 var testDuration0 = 0

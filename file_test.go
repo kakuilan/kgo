@@ -980,8 +980,10 @@ func TestFile_Pathinfo(t *testing.T) {
 	var res map[string]string
 
 	//所有信息
-	res = KFile.Pathinfo(imgPng, -1)
+	res = KFile.Pathinfo(testBook1, -1)
 	assert.Equal(t, 4, len(res))
+	assert.Equal(t, "azw3", res["extension"])
+	assert.True(t, strings.Contains(res["filename"], "#"))
 
 	//仅目录
 	res = KFile.Pathinfo(imgPng, 1)
