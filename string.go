@@ -1808,14 +1808,19 @@ func (ks *LkkString) ToKebabCase(str string) string {
 // include为是否移除包括before本身;
 // ignoreCase为是否忽略大小写.
 func (ks *LkkString) RemoveBefore(str, before string, include, ignoreCase bool) string {
+	if str == "" || before == "" {
+		return str
+	}
+
 	i := ks.Index(str, before, ignoreCase)
-	if i > 0 {
+	if i != -1 {
 		if include {
 			str = str[i+len(before):]
 		} else {
 			str = str[i:]
 		}
 	}
+
 	return str
 }
 
@@ -1823,14 +1828,19 @@ func (ks *LkkString) RemoveBefore(str, before string, include, ignoreCase bool) 
 // include为是否移除包括after本身;
 // ignoreCase为是否忽略大小写.
 func (ks *LkkString) RemoveAfter(str, after string, include, ignoreCase bool) string {
+	if str == "" || after == "" {
+		return str
+	}
+
 	i := ks.Index(str, after, ignoreCase)
-	if i > 0 {
+	if i != -1 {
 		if include {
 			str = str[0:i]
 		} else {
 			str = str[0 : i+len(after)]
 		}
 	}
+
 	return str
 }
 

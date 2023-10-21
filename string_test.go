@@ -2871,6 +2871,7 @@ func TestString_RemoveBefore(t *testing.T) {
 	}{
 		{"", "", false, false, ""},
 		{helloEng, "", false, false, helloEng},
+		{helloOther2, "Hello", true, false, " 你好, World 世界！"},
 		{helloOther2, "world", false, false, helloOther2},
 		{helloOther2, "World", false, false, "World 世界！"},
 		{helloOther2, "World", true, false, " 世界！"},
@@ -2901,6 +2902,7 @@ func TestString_RemoveAfter(t *testing.T) {
 	}{
 		{"", "", false, false, ""},
 		{helloEng, "", false, false, helloEng},
+		{helloOther2, "Hello", true, false, ""},
 		{helloOther2, "world", false, false, helloOther2},
 		{helloOther2, "World", false, false, "Hello 你好, World"},
 		{helloOther2, "World", true, false, "Hello 你好, "},
