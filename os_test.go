@@ -173,7 +173,7 @@ func TestOS_Hostname_GetIpByHostname(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotEmpty(t, res)
 
-	res, err = KOS.GetIpByHostname(res)
+	res, err = KOS.GetIpByHostname(tesDomain32)
 	assert.Nil(t, err)
 	assert.NotEmpty(t, res)
 
