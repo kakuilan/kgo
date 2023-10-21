@@ -490,7 +490,7 @@ var tesDomain28 = "漢字汉字:2"
 var tesDomain29 = tesDomain21 + ":2000"
 var tesDomain30 = "baidu.com"
 var tesDomain31 = "golang.google.cn"
-var tesDomain32 = "www.baidu.com"
+var tesDomain32 = "cn.bing.com"
 
 // mac地址
 var tesMac01 = "3D-F2-C9-A6-B3:4F"       //false
