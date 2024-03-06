@@ -1,7 +1,6 @@
 package kgo
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -63,29 +62,42 @@ func (kt *LkkTime) MicroTime() int64 {
 	return time.Now().UnixNano() / int64(time.Microsecond)
 }
 
-// Str2Timestruct 将字符串转换为时间结构.
+// Str2Timestruct 将字符串转换为时间结构,默认为本地时区.
 // str 为要转换的字符串;
-// format 为该字符串的格式,默认为"2006-01-02 15:04:05" .
-func (kt *LkkTime) Str2Timestruct(str string, format ...string) (time.Time, error) {
-	var f string
-	if len(format) > 0 {
-		f = strings.Trim(format[0], " ")
+// option 为时间选项TimeOption.
+func (kt *LkkTime) Str2Timestruct(str string, option ...TimeOption) (res time.Time, err error) {
+	var opt TimeOption
+	if len(option) > 0 {
+		opt = option[0]
 	} else {
-		f = "2006-01-02 15:04:05"
+		opt = DefaultTimeOption
+	}
+	if opt.Layout == "" {
+		opt.Layout = DefaultTimeOption.Layout
 	}
 
-	if len(str) != len(f) {
-		return time.Now(), errors.New("[Str2Timestruct]`format error")
+	if opt.IsUTC {
+		res, err = time.Parse(opt.Layout, str)
+	} else if opt.Location != nil {
+		res, err = time.ParseInLocation(opt.Layout, str, opt.Location)
+	} else if opt.Zone != "" {
+		var loc *time.Location
+		loc, err = time.LoadLocation(opt.Zone)
+		if err == nil {
+			res, err = time.ParseInLocation(opt.Layout, str, loc)
+		}
+	} else {
+		res, err = time.ParseInLocation(opt.Layout, str, kuptime.Location())
 	}
 
-	return time.ParseInLocation(f, str, kuptime.Location())
+	return
 }
 
-// Str2Timestamp 将字符串转换为时间戳,秒.
+// Str2Timestamp 将字符串转换为时间戳(默认为本地时区),秒.
 // str 为要转换的字符串;
-// format 为该字符串的格式,默认为"2006-01-02 15:04:05" .
-func (kt *LkkTime) Str2Timestamp(str string, format ...string) (int64, error) {
-	tim, err := kt.Str2Timestruct(str, format...)
+// option 为时间选项TimeOption.
+func (kt *LkkTime) Str2Timestamp(str string, option ...TimeOption) (int64, error) {
+	tim, err := kt.Str2Timestruct(str, option...)
 	if err != nil {
 		return 0, err
 	}
@@ -325,6 +337,7 @@ func (kt *LkkTime) DaysBetween(fromDate, toDate time.Time) int {
 }
 
 // IsDate2time 检查字符串是否日期格式,并转换为时间戳.注意,时间戳可能为负数(小于1970年时).
+// option 为时间选项TimeOption.
 // 匹配如:
 //
 //	0000
@@ -340,7 +353,7 @@ func (kt *LkkTime) DaysBetween(fromDate, toDate time.Time) int {
 //	0000/00/00 00:00:00
 //
 // 等日期格式.
-func (kt *LkkTime) IsDate2time(str string) (bool, int64) {
+func (kt *LkkTime) IsDate2time(str string, option ...TimeOption) (bool, int64) {
 	if str == "" {
 		return false, 0
 	} else if strings.ContainsRune(str, '/') {
@@ -358,12 +371,12 @@ func (kt *LkkTime) IsDate2time(str string) (bool, int64) {
 		str = str + reference[leng:19]
 	}
 
-	tim, err := KTime.Str2Timestamp(str)
+	ts, err := KTime.Str2Timestamp(str, option...)
 	if err != nil {
 		return false, 0
 	}
 
-	return true, tim
+	return true, ts
 }
 
 // FormatDuration 格式化时长为字符串(如*h*m*s);其中t为时长,默认为秒;colon为是否使用冒号.

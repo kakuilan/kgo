@@ -35,6 +35,13 @@ type (
 	LkkDebug struct {
 	}
 
+	TimeOption struct {
+		IsUTC    bool           //是否UTC
+		Layout   string         //时间格式
+		Zone     string         //时区名称
+		Location *time.Location //本地化
+	}
+
 	// LkkFileCover 枚举类型,文件是否覆盖
 	LkkFileCover int8
 	// LkkFileType 枚举类型,文件类型
@@ -417,5 +424,13 @@ var (
 		"qqqqqqqqqq",
 		"qwertyuiop",
 		"zxcvbnm",
+	}
+
+	//默认时间选项
+	DefaultTimeOption = TimeOption{
+		IsUTC:    false,
+		Layout:   "2006-01-02 15:04:05",
+		Zone:     "",
+		Location: kuptime.Location(),
 	}
 )
