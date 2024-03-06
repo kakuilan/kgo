@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.4.7]- 2024-03-06
+
+#### Added
+
+- none
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- 修改`KTime.Str2Timestruct`,将`format`参数改为`option`,以支持UTC和本地时区
+- 修改`KTime.Str2Timestamp`,将`format`参数改为`option`,以支持UTC和本地时区
+- 修改`KTime.IsDate2time`,增加参数`option`,以支持UTC和本地时区
+
+#### Removed
+
+- none
+
 ## [v0.4.6]- 2023-10-21
 
 #### Added

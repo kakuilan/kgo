@@ -337,7 +337,7 @@ func (kt *LkkTime) DaysBetween(fromDate, toDate time.Time) int {
 }
 
 // IsDate2time 检查字符串是否日期格式,并转换为时间戳.注意,时间戳可能为负数(小于1970年时).
-// option 为时间选项TimeOption.
+// option 为时间选项TimeOption,默认为本地时区.
 // 匹配如:
 //
 //	0000
