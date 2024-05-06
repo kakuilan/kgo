@@ -84,7 +84,7 @@ func (ke *LkkEncrypt) Base64UrlDecode(str []byte) ([]byte, error) {
 
 // AuthCode 授权码编码或解码;
 // encode为true时编码,为false解码;
-// expiry为加密时的有效期,单位秒,为0时代表永久(100年);
+// expiry为加密时的有效期,单位秒,0为永久(100年),负数为已过期;
 // 返回结果为加密/解密的字符串和有效期时间戳.
 func (ke *LkkEncrypt) AuthCode(str, key []byte, encode bool, expiry int64) ([]byte, int64) {
 	// DYNAMIC_KEY_LEN 动态密钥长度，相同的明文会生成不同密文就是依靠动态密钥

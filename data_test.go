@@ -129,6 +129,10 @@ var cmplNum2 = complex(3, 4)
 
 // 字符串
 var strHello = "Hello World! 你好！"
+var strHello2 = "Hello World! 你好，世界！"
+var strHelloEmoji = "Hello World! 你好，世界！안녕, 세계！ Olá mundo,With Emojis:😃🐳📜💯⌚"
+var strJson = `{"id":9999,"url":"https://baidu.com"}`
+var strEmptyMd5 = "d41d8cd98f00b204e9800998ecf8427e"
 var b64Hello = "SGVsbG8gV29ybGQhIOS9oOWlve+8gQ=="
 var strHelloHex = "48656c6c6f20576f726c642120e4bda0e5a5bdefbc81" //strHello的16进制
 var utf8Hello = "你好，世界！"

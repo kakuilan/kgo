@@ -26,13 +26,15 @@ func TestString_Md5Byte_Md5_IsMd5(t *testing.T) {
 	res2 = KStr.Md5Byte(bytsHello)
 	res4 = KStr.Md5(strHello)
 	assert.Equal(t, string(res2), res4)
+	chk = KStr.IsMd5(res4)
+	assert.True(t, chk)
+
+	res3 = KStr.Md5("")
+	assert.Equal(t, res3, strEmptyMd5)
 
 	res3 = KStr.Md5(strHello, 16)
 	chk = KStr.IsMd5(res3)
 	assert.False(t, chk)
-
-	chk = KStr.IsMd5(res4)
-	assert.True(t, chk)
 }
 
 func BenchmarkString_Md5Byte(b *testing.B) {
