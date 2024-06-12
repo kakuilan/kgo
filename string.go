@@ -2343,13 +2343,13 @@ func (ks *LkkString) PasswordSafeLevel(str string) (res uint8) {
 	return
 }
 
-// StrOffset 字符串整体偏移.
-func (ks *LkkString) StrOffset(str string, num int) string {
+// StrOffset 字符串整体偏移,其中offset为偏移量.
+func (ks *LkkString) StrOffset(str string, offset int) string {
 	var buffer bytes.Buffer
 	var all = len(str)
 	if all > 0 {
 		//取余
-		rem := num % 256
+		rem := offset % 256
 		if rem < 0 {
 			rem += 256
 		}
