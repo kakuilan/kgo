@@ -698,7 +698,11 @@ func (kf *LkkFile) ShaXReader(reader io.Reader, x uint16) (string, error) {
 
 // Pathinfo 获取文件路径的信息(支持URL).
 // option为要返回的信息,枚举值如下:
-// -1: all; 1: dirname; 2: basename; 4: extension; 8: filename;
+// -1: 返回全部信息;
+// 1: 仅返回目录信息,键为dirname;
+// 2: 仅返回文件信息(包括后缀),键为basename;
+// 4: 仅返回文件后缀,键为extension;
+// 8: 仅返回文件名(不包括后缀),键为filename;
 // 若要查看某几项,则为它们之间的和.
 func (kf *LkkFile) Pathinfo(fpath string, option int) map[string]string {
 	if option == -1 {
