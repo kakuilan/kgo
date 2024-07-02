@@ -132,7 +132,7 @@
 - https://github.com/leeqvip/gophp
 - https://github.com/wulijun/go-php-serialize
 - https://github.com/elliotchance/phpserialize
-- 
+- github.com/jefferyjob/go-easy-utils 泛型
 
 ### 其他库
 
