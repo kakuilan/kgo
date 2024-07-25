@@ -434,6 +434,11 @@ func TestArray_UniqueStrings(t *testing.T) {
 	sl = append(sl, "a", "b", "c", "d", "e")
 	res := KArr.UniqueStrings(sl)
 	assert.Equal(t, len(ssSingle), len(res))
+
+	//也会移除空字符串
+	sl = append(sl, "")
+	res = KArr.UniqueStrings(sl)
+	assert.Equal(t, len(ssSingle), len(res))
 }
 
 func BenchmarkArray_UniqueStrings(b *testing.B) {
