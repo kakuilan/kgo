@@ -70,6 +70,7 @@ func BenchmarkOS_Darwin_Uptime(b *testing.B) {
 
 func TestOS_Darwin_GetBiosInfo(t *testing.T) {
 	res := KOS.GetBiosInfo()
+	KDbug.DumpPrint(res)
 	assert.NotNil(t, res)
 	assert.NotEmpty(t, res.Version)
 }
@@ -83,7 +84,6 @@ func BenchmarkOS_Darwin_GetBiosInfo(b *testing.B) {
 
 func TestOS_Darwin_GetBoardInfo(t *testing.T) {
 	res := KOS.GetBoardInfo()
-	KDbug.DumpPrint(res)
 	assert.NotNil(t, res)
 	assert.NotEmpty(t, res.Name)
 	assert.NotEmpty(t, res.Version)
