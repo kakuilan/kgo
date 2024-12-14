@@ -101,8 +101,8 @@ func TestOS_Darwin_GetCpuInfo(t *testing.T) {
 	res := KOS.GetCpuInfo()
 	KDbug.DumpPrint(res)
 	assert.NotNil(t, res)
-	assert.NotEmpty(t, res.Vendor)
 	assert.NotEmpty(t, res.Model)
+	assert.NotEmpty(t, res.Threads)
 }
 
 func BenchmarkOS_Darwin_GetCpuInfo(b *testing.B) {

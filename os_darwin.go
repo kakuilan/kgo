@@ -174,10 +174,6 @@ func (ko *LkkOS) GetCpuInfo() *CpuInfo {
 		Threads: 0,
 	}
 
-	//打印CPU信息
-	_, cpuInfos, _ := ko.System("sysctl machdep.cpu")
-	println("cpuInfos: ", cpuInfos)
-
 	//调用系统命令获取,例如
 	//$ sysctl machdep.cpu
 	//machdep.cpu.cores_per_package: 10
@@ -189,24 +185,17 @@ func (ko *LkkOS) GetCpuInfo() *CpuInfo {
 	//machdep.cpu.feature_bits: 151121000215084031
 	//machdep.cpu.family: 6
 
-	res.Model, _ = unix.Sysctl("machdep.cpu.brand_string")
-	res.Vendor, _ = unix.Sysctl("machdep.cpu.vendor")
+	//打印CPU信息
+	//cpuInfos, _ := unix.Sysctl("machdep.cpu")
+	//println("cpuInfos: ", cpuInfos)
 
-	cacheSize, _ := unix.SysctlUint32("machdep.cpu.cache.size")
+	res.Model, _ = unix.Sysctl("machdep.cpu.brand_string")
+	res.Vendor, _ = unix.Sysctl("machdep.cpu.vendor") //有可能为空
+
+	cacheSize, _ := unix.SysctlUint32("machdep.cpu.cache.size") //有可能为空
 	cpus, _ := unix.SysctlUint32("hw.physicalcpu")
 	cores, _ := unix.SysctlUint32("machdep.cpu.core_count")
 	threads, _ := unix.SysctlUint32("machdep.cpu.thread_count")
-
-	if cpus == 0 {
-		infos := ko.getIOInfos()
-		if len(infos) > 0 {
-			infoStr := string(infos)
-			tmpStr := trim(KStr.GetEquationValue(infoStr, "AppleARMCPU"), "<", ">", `"`, `'`)
-			if tmpStr != "" {
-				cpus = uint32(KConv.ToInt(tmpStr))
-			}
-		}
-	}
 
 	res.Cache = uint(cacheSize)
 	res.Cpus = uint(cpus)
