@@ -132,12 +132,6 @@ func (ko *LkkOS) GetBiosInfo() *BiosInfo {
 		Date:    "",
 	}
 
-	infos := ko.getIOInfos()
-	if len(infos) > 0 {
-		infoStr := string(infos)
-		res.Version = trim(KStr.GetEquationValue(infoStr, "SMBIOS-EPS"), "<", ">", `"`, `'`)
-	}
-
 	return res
 }
 
