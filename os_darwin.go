@@ -17,7 +17,7 @@ import (
 // cachedBootTime must be accessed via atomic.Load/StoreUint64
 var cachedBootTime uint64
 
-//系统IO信息
+// 系统IO信息
 var cacheIOInfos []byte
 
 // bootTime 获取系统启动时间,秒.
@@ -174,6 +174,21 @@ func (ko *LkkOS) GetCpuInfo() *CpuInfo {
 		Threads: 0,
 	}
 
+	//打印CPU信息
+	_, cpuInfos, _ = ko.System("machdep.cpu")
+	println("cpuInfos: ", cpuInfos)
+
+	//调用系统命令获取,例如
+	//$ sysctl machdep.cpu
+	//machdep.cpu.cores_per_package: 10
+	//machdep.cpu.core_count: 10
+	//machdep.cpu.logical_per_package: 10
+	//machdep.cpu.thread_count: 10
+	//machdep.cpu.brand_string: Apple M1 Pro
+	//machdep.cpu.features: FPU VME DE PSE TSC MSR PAE MCE CX8 APIC SEP MTRR PGE MCA CMOV PAT PSE36 CLFSH DS ACPI MMX FXSR SSE SSE2 SS HTT TM PBE SSE3 PCLMULQDQ DTSE64 MON DSCPL VMX EST TM2 SSSE3 CX16 TPR PDCM SSE4.1 SSE4.2 AES SEGLIM64
+	//machdep.cpu.feature_bits: 151121000215084031
+	//machdep.cpu.family: 6
+
 	res.Model, _ = unix.Sysctl("machdep.cpu.brand_string")
 	res.Vendor, _ = unix.Sysctl("machdep.cpu.vendor")
 
@@ -181,6 +196,18 @@ func (ko *LkkOS) GetCpuInfo() *CpuInfo {
 	cpus, _ := unix.SysctlUint32("hw.physicalcpu")
 	cores, _ := unix.SysctlUint32("machdep.cpu.core_count")
 	threads, _ := unix.SysctlUint32("machdep.cpu.thread_count")
+
+	if cpus == 0 {
+		infos := ko.getIOInfos()
+		if len(infos) > 0 {
+			infoStr := string(infos)
+			tmpStr := trim(KStr.GetEquationValue(infoStr, "AppleARMCPU"), "<", ">", `"`, `'`)
+			if tmpStr != "" {
+				cpus = uint32(KConv.ToInt(tmpStr))
+			}
+		}
+	}
+
 	res.Cache = uint(cacheSize)
 	res.Cpus = uint(cpus)
 	res.Cores = uint(cores)
