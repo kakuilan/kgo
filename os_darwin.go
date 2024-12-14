@@ -175,7 +175,7 @@ func (ko *LkkOS) GetCpuInfo() *CpuInfo {
 	}
 
 	//打印CPU信息
-	_, cpuInfos, _ := ko.System("machdep.cpu")
+	_, cpuInfos, _ := ko.System("sysctl machdep.cpu")
 	println("cpuInfos: ", cpuInfos)
 
 	//调用系统命令获取,例如
