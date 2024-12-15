@@ -10,8 +10,8 @@ http://192.168.1.1:6060/pkg/github.com/kakuilan
 ### 生成markdown
 
 ```sh
-go get -d github.com/robertkrimen/godocdown/godocdown
-godocdown . > docs/v0.4.7.md
+go install github.com/robertkrimen/godocdown/godocdown@latest
+godocdown . > docs/v0.4.8.md
 ```
 
 ### 安装依赖

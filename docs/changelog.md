@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.4.8]- 2024-12-15
+
+#### Added
+
+- none
+
+#### Fixed
+- 修改darwin的`KOS.GetBiosInfo`,返回空信息,因为苹果系统无BIOS.
+
+- none
+
+#### Changed
+
+- 修改一些单元测试和注释
+
+#### Removed
+
+- none
+
 ## [v0.4.7]- 2024-03-06
 
 #### Added
