@@ -11,7 +11,7 @@ http://192.168.1.1:6060/pkg/github.com/kakuilan
 
 ```sh
 go install github.com/robertkrimen/godocdown/godocdown@latest
-godocdown . > docs/v0.4.8.md
+godocdown . > docs/v0.4.9.md
 ```
 
 ### 安装依赖

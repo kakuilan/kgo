@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.4.9]- 2025-01-09
+
+#### Added
+
+- none
+
+#### Fixed
+- none
+
+#### Changed
+
+- 修改`KEncr.AuthCode`,返回结果增加`error`
+
+#### Removed
+
+- none
+
 ## [v0.4.8]- 2024-12-15
 
 #### Added
@@ -11,7 +28,6 @@ All notable changes to this project will be documented in this file.
 #### Fixed
 - 修改darwin的`KOS.GetBiosInfo`,返回空信息,因为苹果系统无BIOS.
 
-- none
 
 #### Changed
 
