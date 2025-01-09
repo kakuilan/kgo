@@ -92,29 +92,34 @@ func BenchmarkEncrypt_Base64UrlDecode(b *testing.B) {
 func TestEncrypt_AuthCode(t *testing.T) {
 	var res, res2 []byte
 	var exp int64
+	var err error
 
-	res, exp = KEncr.AuthCode(bytsHello, bytSpeedLight, true, 0)
+	res, exp, err = KEncr.AuthCode(bytsHello, bytSpeedLight, true, 0)
 	assert.NotNil(t, res)
+	assert.Nil(t, err)
 
-	res2, exp = KEncr.AuthCode(res, bytSpeedLight, false, 0)
+	res2, exp, err = KEncr.AuthCode(res, bytSpeedLight, false, 0)
 	assert.Equal(t, string(bytsHello), string(res2))
+	assert.Nil(t, err)
 
 	//过期
-	res, exp = KEncr.AuthCode(bytsHello, bytSpeedLight, true, -3600)
-	res2, exp = KEncr.AuthCode(res, bytSpeedLight, false, 0)
+	res, exp, err = KEncr.AuthCode(bytsHello, bytSpeedLight, true, -3600)
+	res2, exp, err = KEncr.AuthCode(res, bytSpeedLight, false, 0)
 	assert.Empty(t, res2)
 	assert.Greater(t, exp, int64(0))
+	assert.NotNil(t, err)
 
 	//空串
-	res, exp = KEncr.AuthCode(bytEmpty, bytSpeedLight, true, 0)
+	res, exp, err = KEncr.AuthCode(bytEmpty, bytSpeedLight, true, 0)
 	assert.Empty(t, res)
+	assert.NotNil(t, err)
 
 	//空密钥
-	res, exp = KEncr.AuthCode(bytsHello, bytEmpty, true, 0)
+	res, exp, err = KEncr.AuthCode(bytsHello, bytEmpty, true, 0)
 	assert.NotEmpty(t, res)
 
 	//解密校验
-	res2, exp = KEncr.AuthCode([]byte(strSha512), bytSpeedLight, false, 0)
+	res2, exp, err = KEncr.AuthCode([]byte(strSha512), bytSpeedLight, false, 0)
 	assert.Empty(t, res2)
 
 	//其他
@@ -122,14 +127,17 @@ func TestEncrypt_AuthCode(t *testing.T) {
 	str2 := []byte("b42374af3DqX22zi207OJXsz6xP2vEXto39TPK_UzcJOdDZV0kQHPUFm5JOw-aWISFi0snglsrYtp5tpYGRuhgw50TPY8UnFSf912uZI38vGON0KHqAgCatmtdoBZ4VJI6IkHio-JLxbt8hkuCz1HCOElUkZxBMnGUle")
 	str3 := []byte("52a0945eK4NyxvnjEBnPlToROzO4KLKE9VvrqtxAiLPVPDK-HkvzahyMbxydmSifc3TQIo4mbsi9gzq7vbJ64YzpB_DP")
 
-	res2, exp = KEncr.AuthCode(str1, []byte(strEmptyMd5), false, 0)
+	res2, exp, err = KEncr.AuthCode(str1, []byte(strEmptyMd5), false, 0)
 	assert.Equal(t, string(res2), strHello2)
+	assert.Nil(t, err)
 
-	res2, exp = KEncr.AuthCode(str2, []byte(strEmptyMd5), false, 0)
+	res2, exp, err = KEncr.AuthCode(str2, []byte(strEmptyMd5), false, 0)
 	assert.Equal(t, string(res2), strHelloEmoji)
+	assert.Nil(t, err)
 
-	res2, exp = KEncr.AuthCode(str3, []byte(strEmptyMd5[0:16]), false, 0)
+	res2, exp, err = KEncr.AuthCode(str3, []byte(strEmptyMd5[0:16]), false, 0)
 	assert.Equal(t, string(res2), strJson)
+	assert.Nil(t, err)
 
 	//不合法
 	KEncr.AuthCode([]byte("7caeNfPt/N1zHdj5k/7i7pol6NHsVs0Cji7c15h4by1RYcrBoo7EEw=="), bytSpeedLight, false, 0)
