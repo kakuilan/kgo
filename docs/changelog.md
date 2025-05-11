@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.5.0]- 2025-05-11
+
+#### Added
+
+- none
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- 修改`KEncr.RsaPrivateDecrypt`,兼容PKCS#8
+
+#### Removed
+
+- none
+
 ## [v0.4.9]- 2025-01-09
 
 #### Added
@@ -9,6 +27,7 @@ All notable changes to this project will be documented in this file.
 - none
 
 #### Fixed
+
 - none
 
 #### Changed
@@ -26,8 +45,8 @@ All notable changes to this project will be documented in this file.
 - none
 
 #### Fixed
-- 修改darwin的`KOS.GetBiosInfo`,返回空信息,因为苹果系统无BIOS.
 
+- 修改darwin的`KOS.GetBiosInfo`,返回空信息,因为苹果系统无BIOS.
 
 #### Changed
 
