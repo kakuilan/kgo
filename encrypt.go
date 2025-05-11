@@ -524,6 +524,13 @@ func (ke *LkkEncrypt) RsaPrivateDecrypt(cipherText, privateKey []byte) ([]byte, 
 	// 解析PKCS1格式的私钥
 	priv, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 	if err != nil {
+		// 解析PKCS8格式的私钥
+		priv2, err2 := x509.ParsePKCS8PrivateKey(block.Bytes)
+		priv3, ok := priv2.(*rsa.PrivateKey)
+		if err2 == nil && ok {
+			return rsa.DecryptPKCS1v15(rand.Reader, priv3, cipherText)
+		}
+
 		return nil, err
 	}
 
