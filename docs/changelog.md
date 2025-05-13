@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v0.5.1]- 2025-05-13
+
+#### Added
+
+- none
+
+#### Fixed
+
+- none
+
+#### Changed
+
+- 修改`KEncr.RsaPrivateEncrypt`,兼容PKCS#8
+- 修改`KEncr.RsaPrivateDecryptLong`,兼容PKCS#8
+- 修改`KEncr.RsaPrivateEncryptLong`,兼容PKCS#8
+
+#### Removed
+
+- none
+
 ## [v0.5.0]- 2025-05-11
 
 #### Added
