@@ -458,7 +458,7 @@ func (ke *LkkEncrypt) AesOFBDecrypt(cipherText, key []byte) ([]byte, error) {
 	return ke.aesDecrypt(cipherText, key, "OFB", PKCS_NONE)
 }
 
-// GenerateRsaKeys 生成RSA密钥对.bits为密钥位数,必须是64的倍数,范围为512-65536,通常为1024或2048.
+// GenerateRsaKeys 生成RSA密钥对.bits为密钥位数,必须是64的倍数,范围为512-65536,通常为1024/2048或4096.
 func (ke *LkkEncrypt) GenerateRsaKeys(bits int) (private []byte, public []byte, err error) {
 	// 生成私钥文件
 	var privateKey *rsa.PrivateKey
@@ -472,7 +472,10 @@ func (ke *LkkEncrypt) GenerateRsaKeys(bits int) (private []byte, public []byte, 
 		Bytes: derStream,
 	}
 	privateBuff := new(bytes.Buffer)
-	_ = pem.Encode(privateBuff, block)
+	err = pem.Encode(privateBuff, block)
+	if err != nil {
+		return
+	}
 
 	// 生成公钥文件
 	var derPkix []byte
@@ -483,7 +486,10 @@ func (ke *LkkEncrypt) GenerateRsaKeys(bits int) (private []byte, public []byte, 
 		Bytes: derPkix,
 	}
 	publicBuff := new(bytes.Buffer)
-	_ = pem.Encode(publicBuff, block)
+	err = pem.Encode(publicBuff, block)
+	if err != nil {
+		return
+	}
 
 	private = privateBuff.Bytes()
 	public = publicBuff.Bytes()
@@ -550,7 +556,14 @@ func (ke *LkkEncrypt) RsaPrivateEncrypt(clearText, privateKey []byte) ([]byte, e
 	// 解析PKCS1格式的私钥
 	priv, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 	if err != nil {
-		return nil, err
+		// 解析PKCS8格式的私钥
+		priv2, err2 := x509.ParsePKCS8PrivateKey(block.Bytes)
+		priv3, ok := priv2.(*rsa.PrivateKey)
+		if err2 == nil && ok {
+			priv = priv3
+		} else {
+			return nil, err
+		}
 	}
 
 	return rsa.SignPKCS1v15(nil, priv, crypto.Hash(0), clearText)
