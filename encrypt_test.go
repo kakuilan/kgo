@@ -709,6 +709,8 @@ func TestEncrypt_RsaPublicEncryptPrivateDecrypt_Long(t *testing.T) {
 	priFileBs, _ := os.ReadFile(filePriPem)
 	pubFileBs2048, _ := os.ReadFile(filePubPem2048)
 	priFileBs2048, _ := os.ReadFile(filePriPem2048)
+	pubFileBs2048PKCS8, _ := os.ReadFile(filePubPem2048PKCS8)
+	priFileBs2048PKCS8, _ := os.ReadFile(filePriPem2048PKCS8)
 
 	//1024-过长
 	enc, err = KEncr.RsaPublicEncrypt(cont, pubFileBs)
@@ -737,6 +739,13 @@ func TestEncrypt_RsaPublicEncryptPrivateDecrypt_Long(t *testing.T) {
 
 	des, err = KEncr.RsaPrivateDecryptLong(enc, priFileBs2048)
 	assert.NotEmpty(t, des)
+	assert.Nil(t, err)
+	assert.Equal(t, tesHtmlDoc, string(des))
+
+	//PKCS8的私钥
+	enc, err = KEncr.RsaPublicEncryptLong(cont, pubFileBs2048PKCS8)
+	assert.Nil(t, err)
+	des, err = KEncr.RsaPrivateDecryptLong(enc, priFileBs2048PKCS8)
 	assert.Nil(t, err)
 	assert.Equal(t, tesHtmlDoc, string(des))
 
