@@ -1,17 +1,23 @@
 module github.com/kakuilan/kgo
 
-go 1.16
+go 1.24.0
 
 require (
-	github.com/yusufpapurcu/wmi v1.2.2
 	github.com/brianvoe/gofakeit/v6 v6.16.0
-	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/json-iterator/go v1.1.12
-	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/stretchr/testify v1.7.1
-	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e
-	golang.org/x/net v0.0.0-20220722155237-a158d28d115b
-	golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f
-	golang.org/x/text v0.3.8
+	github.com/yusufpapurcu/wmi v1.2.2
+	golang.org/x/crypto v0.45.0
+	golang.org/x/net v0.47.0
+	golang.org/x/sys v0.38.0
+	golang.org/x/text v0.31.0
+)
+
+require (
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/go-ole/go-ole v1.2.6 // indirect
+	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
+	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
